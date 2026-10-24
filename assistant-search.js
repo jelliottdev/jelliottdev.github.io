@@ -103,9 +103,28 @@
       if(needle.every((word,j)=>haystack[i+j]===word))count++;
     return count;
   }
+  function positiveOccurrences(haystack,needle) {
+    let count=0;
+    for(let i=0;i<=haystack.length-needle.length;i++)if(needle.every((word,j)=>haystack[i+j]===word)){
+      // Explicitly excluded names cannot activate a positive method rescue.
+      // Fall back to lexical candidates rather than interpret the exclusion.
+      if(['no','non','not','without','exclude','excluding','avoid'].includes(haystack[i-1])||
+        ['excluded','avoided'].includes(haystack[i+needle.length]))continue;
+      count++;
+    }
+    return count;
+  }
   function authoredWords(document) {
     const r=document.retrieval;
     return r?tokens([document.title,r.question,...r.tags].join(' ')):[];
+  }
+  function methodAnchor(document,needle) {
+    // A title or authored tag names a record's subject more directly than a
+    // question mentioning a method as a contrast or exclusion. This ranks
+    // candidates only; an anchor never establishes executed coverage.
+    if(occurrences(tokens(document.title),needle))return 4;
+    if((document.retrieval?.tags||[]).some(tag=>occurrences(tokens(tag),needle)))return 3;
+    return occurrences(tokens(document.retrieval?.question||''),needle)?2:0;
   }
   function methodIntent(documents,query) {
     const words=tokens(techniqueQuery(query));
@@ -119,7 +138,7 @@
     }
     const intents=[];
     for(const family of families.values())for(const alias of family.aliases){
-      const needle=tokens(alias),count=occurrences(words,needle);
+      const needle=tokens(alias),count=positiveOccurrences(words,needle);
       if(!count||needle.join('').length<6)continue;
       const matched=documents.filter(document=>document.kind==='experiment'&&
         occurrences(authoredWords(document),needle));
@@ -146,7 +165,12 @@
     // A precise measurement can match substantially more of a stated formula
     // than a generic named-method record. Preserve that stronger evidence.
     if(top&&coverage(top)>=bestCoverage+2)return null;
-    if(top&&occurrences(authoredWords(top),intent.needle)&&bestCoverage-coverage(top)<2)return null;
+    const bestAnchor=Math.max(...candidates.map(document=>methodAnchor(document,intent.needle)));
+    const topAnchor=top?methodAnchor(top,intent.needle):0;
+    // Preserve explicit title/tag matches and direct diagnostics. Only reopen
+    // an otherwise close method match whose name occurs in its question alone.
+    if(top&&occurrences(authoredWords(top),intent.needle)&&bestCoverage-coverage(top)<2&&
+      (!['method','replay'].includes(top.recordType||'method')||topAnchor>=3||topAnchor>=bestAnchor))return null;
     // Score only concise authored fields for this rescue. Long motif prose cannot
     // swamp the explicitly named operation, but full evidence remains unchanged.
     const ranked=search(candidates.map(document=>({

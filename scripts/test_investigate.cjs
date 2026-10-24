@@ -87,6 +87,25 @@ test('source and answer HTML are escaped and native citations stay local',()=>{
  assert(!html.includes('<script>'));assert(html.includes('&lt;script&gt;'));assert(html.includes('href="index.html#/experiments/fibonacci-stream-skip-grid"'));
  assert(html.includes('&lt;img'));
 });
+test('source inspection shows actual method and bounds, compact page holes, and no invented coverage',()=>{
+ const record=registry.records.find(r=>r.id==='fibonacci-stream-skip-grid'),doc=docs.find(d=>d.id===record.id),before=JSON.stringify(record);
+ const encoded=value=>value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+ const html=I.sourceHTML(doc,[record]);
+ assert(html.includes('LP2-00–49, LP2-51–55'));assert(!html.includes('LP2-00–55'));
+ for(const field of ['procedure','representation','parameters','exclusions'])assert(html.includes(encoded(record.scope[field])));
+ assert(!html.includes(record.reader_finding)); // Findings already precede these source details.
+ assert(html.includes(record.reader_limit));assert(!html.includes('<details'));assert(!html.includes('sha256'));
+ const preview=I.sourceHTML(doc,[record],{preview:true});assert(preview.includes(record.reader_finding));assert(!preview.includes('source-facts'));
+ const packet=I.sourceHTML(doc,[record],{packet:true});assert(packet.includes(record.reader_finding));assert(packet.includes(encoded(record.reproduction.command)));
+ assert.equal(JSON.stringify(record),before);
+ const unknown={...record,scope:{},reader_limit:'',limitations:'No independent transcription check. Human review pending.'};
+ const unknownHTML=I.sourceHTML(doc,[unknown]);assert(unknownHTML.includes('Not specified in this record'));assert(unknownHTML.includes('No independent transcription check.'));assert(!unknownHTML.includes('Human review pending'));
+ assert(unknown.limitations.endsWith('Human review pending.'));
+ const payload={...unknown,scope:{procedure:'<img src=x onerror=alert(1)>',parameters:'a < 7 & b > 3'}};
+ const safe=I.sourceHTML(doc,[payload]);assert(!safe.includes('<img'));assert(safe.includes('a &lt; 7 &amp; b &gt; 3'));
+ assert(I.sourceHTML({id:'context',title:'Page context',href:'#/pages/lp2-15'},[]).includes('not evidence that the idea was tested'));
+});
+
 test('compact retrieval avoids unknown-field scaffolding on actual published records',()=>{
  for(const text of ['Fibonacci keys on LP2-15','Test fixed invertible Hill matrix keys in two-rune blocks on LP2-15','Compare word lengths with other languages']){
   const c=C.confirm(I.initialDraft(text),{id:'x',at}),q=C.retrievalQuery(c).query;

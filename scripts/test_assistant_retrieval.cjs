@@ -111,3 +111,34 @@ for(const [query,expected] of [
  assert.equal(Search.select(withPages,query)[0].id,expected,'Worker evidence and the first visible result must agree');
 }
 console.log('PASS: crib-derived feedback and full-book known-key questions reach their distinct scoped records.');
+
+// Source-preserving method labels may repeat scope prose. Such wording must
+// not let a question's negative mention outrank the actual named-method title.
+const C=require('../claim-specification.js'),R=require('../claim-research.js'),I=require('../investigate.js');
+const fibonacciQueries=[
+ 'Use Fibonacci numeric streams with up to 3 conditional key skips.',
+ 'Use Fibonacci numeric streams with up to 3 conditional key skips on all unsolved LP2 pages.'
+];
+for(const raw of fibonacciQueries){
+ const draft=C.revise(I.initialDraft(raw),{aim:C.field('specified','Find readable text')});
+ const confirmed=C.confirm(draft,{id:'retrieval-regression',at:'2026-10-24'}),before=C.serialize(confirmed),request=R.prepare(confirmed);
+ const found=Search.select(withPages,request.query,request.pages);
+ assert.equal(found[0]?.id,'fibonacci-stream-skip-grid','A title-named Fibonacci replay must survive extra scope wording');
+ assert.equal(Search.classify(withPages,request.query,request.pages).tests[0]?.document.id,found[0].id);
+ assert.equal(C.serialize(confirmed),before,'Ranking cannot rewrite ordered operations, scope or unknown conditions');
+ assert.equal(found[0].text,docs.find(doc=>doc.id===found[0].id).text,'The full procedure, screen/full gates and exclusions remain evidence');
+ assert.equal(JSON.stringify(ids(browser.AssistantSearch.select(withPages,request.query,request.pages))),JSON.stringify(ids(found)));
+ if(raw.includes('all unsolved'))assert.equal(request.pages.length,56,'All exact scope hints remain available; an empty page is not executed coverage');
+}
+for(const query of [
+ 'Use non-Fibonacci numeric streams with conditional key skips on all unsolved LP2 pages.',
+ 'Use numeric streams excluding Fibonacci with conditional key skips.',
+ 'Do not use Fibonacci; use numeric streams with conditional key skips.',
+ 'Use Fibonacci streams then autokey with key ABC, preserving word boundaries.'
+])assert.deepEqual(ids(Search.select(docs,query)),ids(Search.select(lexicalDocs,query)),
+ 'Excluded names or equally named compound families must not activate a positive single-method rescue: '+query);
+
+// A title match cannot replace a directly relevant diagnostic merely because
+// its question also names a broader method (the earlier O/A/AE case above).
+assert.equal(Search.select(docs,'Could confusing O A AE rune readings explain low doublets?')[0].id,'oae-uniform-remapping');
+console.log('PASS: named-method anchors survive scope wording; exclusions/mixed methods retain lexical uncertainty, exact source scopes and browser/Worker parity.');

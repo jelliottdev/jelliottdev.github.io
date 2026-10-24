@@ -221,16 +221,25 @@
  }).join('')+(spec.unresolved.length?'<div class="tag-row"><dt>Other details</dt><dd class="unresolved-details">'+spec.unresolved.map(item=>{const value={...item};delete value.provenance;const noteKeys=value.kind==='custom_interpretation'?['kind','question','text']:value.kind==='source_note'?['kind','text']:null;const readable=typeof value.text==='string'&&(Object.keys(value).length===1||noteKeys&&Object.keys(value).every(key=>noteKeys.includes(key))); return '<p>'+esc(readable?value.text:JSON.stringify(value))+'</p>';}).join('')+'</dd></div>':'')+'</dl>';}
  function methodText(spec){return C.reviewRows(spec).find(r=>r.label==='Method').tags.map(t=>t.text).join('; then ');}
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
- function sourceHTML(doc,records,full=false){
+ // Editorial status belongs to the record workflow; preserve substantive uncertainty.
+ function readerLimit(record){return String(record.reader_limit||record.limitations||'').replace(/\s*Human review pending\.?\s*$/i,'').trim();}
+ function sourceHTML(doc,records,{packet=false,preview=false}={}){
   const record=records.find(r=>r.id===doc.id);
-  return '<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(doc.title)+'</a></h3>'+
-   (record?'<p>'+esc(record.reader_finding||record.finding)+'</p><p><strong>Limit:</strong> '+esc(record.reader_limit||record.limitations)+'</p>'+(full?'<dl class="source-facts">'+[['Pages',(record.scope.pages||[]).map(p=>p.toUpperCase()).join(', ')||'No manuscript page selection'],['Method',record.scope.procedure],['Bounds',record.scope.parameters],['Not tested',record.scope.exclusions],['Run',record.reproduction?.command],['Inputs',(record.reproduction?.inputs||[]).map(f=>f.path).join(', ')]].filter(([,value])=>value).map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>':''):'<p>Supporting manuscript context, not evidence that the idea was tested.</p>')+'</section>';
+  const heading='<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(doc.title)+'</a></h3>';
+  if(!record)return heading+'<p>Supporting manuscript context, not evidence that the idea was tested.</p></section>';
+  const scope=record.scope||{},limit=readerLimit(record),finding=record.reader_finding||record.finding;
+  const pages=Array.isArray(scope.pages)&&scope.pages.length?compactPages(scope.pages).map(p=>p.text).join(', '):'Not specified in this record';
+  const facts=[['Page scope',pages],['Method',scope.procedure],['Input',scope.representation],['Bounds',scope.parameters],['Not tested',scope.exclusions]];
+  if(packet)facts.push(['Run',record.reproduction?.command],['Inputs',(record.reproduction?.inputs||[]).map(f=>f.path).join(', ')]);
+  return heading+((packet||preview)&&finding?'<p>'+esc(finding)+'</p>':'')+
+   (preview?'':'<dl class="source-facts">'+facts.filter(([,value])=>value).map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>')+
+   (limit?'<p class="source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
  }
  function packetHTML(packet){
   const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[];
   return '<h1>Liberpedia · Research note</h1><p>'+esc(r.at)+'</p>'+rowsHTML(s)+
    '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
-   (docs.length?'<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,true)).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
+   (docs.length?'<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,{packet:true})).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
  function disclosureNodes(host){
@@ -471,7 +480,7 @@
    if(result)return '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls+(result.noMatch?'':'<p class="small answer-note">AI comparison based on the linked records.</p>');
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
    const related=q.query?S.select(documents,q.query,scope.pages||[]).filter(d=>d.kind==='experiment').slice(0,2):[];
-   return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records)).join(''):'');
+   return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true})).join(''):'');
   }
   function bind(){
    doc.getElementById('cancel-interpretation')?.addEventListener('click',()=>{stopInterpretation();stage='input';error='';message='';render();focus('#idea');});
@@ -667,7 +676,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);
