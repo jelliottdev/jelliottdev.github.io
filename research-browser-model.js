@@ -52,7 +52,7 @@
     return {view:['solving','analytics'].includes(q.get('view'))?q.get('view'):'all',branch:q.get('branch')||'',record:/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(q.get('record')||'')?q.get('record'):'',
       page:/^lp[12]-\d{2}$/.test(q.get('page')||'')?q.get('page'):'',colour:q.get('colour')==='results'?'results':'methods',
       result:['supported','not-supported','inconclusive'].includes(result)?result:shared.outcome,mode:['graph','list'].includes(q.get('mode'))?q.get('mode'):oldList?'list':preferredMode,
-      q:shared.q,type:shared.type,method:shared.method,family:shared.family,sort:shared.sort,
+      q:shared.q,type:shared.type,method:shared.method,family:shared.family,sort:shared.sort,followups:q.get('followups')==='1'?'1':'',
       p:Math.max(1,Math.min(100000,parseInt(q.get('p')||(oldList?q.get('page'):'1'),10)||1))};
   }
   const api={build,read};if(typeof module!=='undefined')module.exports=api;else root.ResearchBrowserModel=api;

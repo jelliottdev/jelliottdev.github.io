@@ -29,10 +29,12 @@ assert(exact.allRecords.length>0);assert(exact.allRecords.every(r=>r.scope.pages
 const added=structuredClone(registry),fresh=structuredClone(published[0]);fresh.id='future-record';fresh.title='A new record';added.records.push(fresh);
 const future=Browser.build(source,added),unplaced=future.views.all.nodes.find(n=>n.id==='aim:unplaced');
 assert(unplaced.members.includes(fresh.id),'New records stay accessible without inventing method classification');
-assert.deepEqual(Browser.read('#/research?q=autokey&page=4&type=method','graph',Index.state),{view:'all',branch:'',record:'',page:'',colour:'methods',result:'',mode:'list',q:'autokey',type:'method',method:'',family:'',sort:'title',p:4});
+assert.deepEqual(Browser.read('#/research?q=autokey&page=4&type=method','graph',Index.state),{view:'all',branch:'',record:'',page:'',colour:'methods',result:'',mode:'list',q:'autokey',type:'method',method:'',family:'',sort:'title',followups:'',p:4});
 assert.equal(Browser.read('#mode=graph','list',Index.state).mode,'graph');
 assert.equal(Browser.read('','list',Index.state).mode,'list');
 assert.equal(Browser.read('#page=lp2-15&mode=list','graph',Index.state).page,'lp2-15');
+assert.equal(Browser.read('#followups=1&mode=list&branch=solve-lp2','graph',Index.state).followups,'1');
+for(const value of ['','0','true','2','<img>'])assert.equal(Browser.read('#followups='+encodeURIComponent(value),'graph',Index.state).followups,'','Only explicit followups=1 activates the filter');
 const html=fs.readFileSync(path.join(root,'research.html'),'utf8');
 assert.equal((html.match(/src="research-index\.js/g)||[]).length,1);
 assert(!/map-index-model|map-search-engine|map-study-data|\/archive\//.test(html));
