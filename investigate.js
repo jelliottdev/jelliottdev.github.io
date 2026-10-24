@@ -4,6 +4,7 @@
  const C=typeof module!=='undefined'?require('./claim-specification.js'):root.ClaimSpecification;
  const M=typeof module!=='undefined'?require('./assistant-markdown.js'):root.AssistantMarkdown;
  const S=typeof module!=='undefined'?require('./assistant-search.js'):root.AssistantSearch;
+ const H=typeof module!=='undefined'?require('./claim-share.js'):root.ClaimShare;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -111,6 +112,51 @@
    return clarified({description:text.trim()});
   }
  }
+ function scopeEditorText(scope){
+  if(scope.status!=='specified')return '';
+  return typeof scope.value.description==='string'&&scope.value.description?
+   scope.value.description:(scope.value.pages||[]).map(p=>p.toUpperCase()).join(', ');
+ }
+ function scopeEdit(scope,text){
+  const value=text.trim();
+  if(value===scopeEditorText(scope).trim())return undefined;
+  // This control owns pages/passage only. Other supplied inputs, versions,
+  // artifacts and exclusions remain exact, including when selection is cleared.
+  const retained=scope.status==='specified'?Object.fromEntries(Object.entries(scope.value).filter(([key])=>!['pages','description'].includes(key))):{};
+  const selection=value?chosenScope(value):C.field();
+  const combined={...retained,...(selection.status==='specified'?selection.value:{})};
+  return Object.keys(combined).length?clarified(combined):C.field();
+ }
+ function ruleNotesText(rules){
+  const notes=rules.exceptionalCases;
+  return notes.status==='specified'?(typeof notes.value==='string'?notes.value:JSON.stringify(notes.value)):'';
+ }
+ function ruleEdits(rules,text,removed=[]){
+  if(!Array.isArray(removed)||removed.some(key=>!C.RULES.includes(key)))throw Error('Choose an existing condition to remove.');
+  const patch=Object.fromEntries(removed.map(key=>[key,C.field()]));
+  const value=text.trim();
+  if(value!==ruleNotesText(rules).trim()){
+   if(removed.includes('exceptionalCases')&&value)throw Error('Choose either removing the additional condition or replacing its text.');
+   patch.exceptionalCases=value?clarified(value):C.field();
+  }
+  return Object.keys(patch).length?patch:undefined;
+ }
+ function scopeRetainedHTML(scope){
+  const extras=scope.status==='specified'?Object.entries(scope.value).filter(([key])=>!['pages','description'].includes(key)):[];
+  if(!extras.length)return '';
+  return '<details class="small"><summary>Other supplied scope details are kept</summary><dl>'+extras.map(([key,value])=>'<div><dt>'+esc(key)+'</dt><dd>'+esc(typeof value==='string'?value:JSON.stringify(value))+'</dd></div>').join('')+'</dl></details>';
+ }
+ function retainedRulesHTML(draft){
+  const visible=new Map(C.reviewRows(draft).find(row=>row.label==='Rules').tags.map(tag=>[tag.id,tag.text]));
+  const keys=C.RULES.filter(key=>draft.rules[key].status!=='unspecified'&&
+   (key!=='exceptionalCases'||draft.rules[key].status!=='specified'));
+  if(!keys.length)return '';
+  return '<div class="retained-rules"><p class="small">Recorded conditions are kept unless you remove one.</p>'+keys.map(key=>{
+   const label=key.replace(/([a-z])([A-Z])/g,'$1 $2');
+   const text=visible.get('rule:'+key)||label.charAt(0).toUpperCase()+label.slice(1)+': not applicable';
+   return '<label class="retained-rule small"><input type="checkbox" id="remove-rule-'+key+'"><span>Remove: '+esc(text)+'</span></label>';
+  }).join('')+'</div>';
+ }
  function answerIntake(draft,id,choice,text=''){
   if(!['aim','method','scope'].includes(id))return C.clarify(draft,id,choice,text);
   const question=intakeQuestions(draft).find(q=>q.id===id),option=question?.choices.find(c=>c.id===choice);
@@ -178,12 +224,18 @@
    (docs.length?'<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,true)).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
- function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout}={}){
+ function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout,sharer=H.share,renderCard=H.renderPNG}={}){
   const host=doc.getElementById('investigate'),printHost=doc.getElementById('print-snapshot');
   let stage='input',draft=null,confirmed=null,result=null,packet=null,editing=false,editingBackup=null,raw='',records=[],documents=[],endpoint=null,loaded=false,loadError='',message='',error='',busy=false,controller=null,generation=0,registryId='';
   const incoming=new URLSearchParams(doc.defaultView?.location?.search||'');
   raw=incoming.get('q')||'';
   let legacyScope=null;
+  let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
+  const fragment=doc.defaultView?.location?.hash||'';
+  if(fragment.startsWith('#idea=')){
+   try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
+   catch{error='This shared idea link could not be read. Ask for a new link or enter the idea below.';}
+  }
   const pageHint=incoming.getAll('pages').join(',');
   if(pageHint){try{legacyScope=parseScope(pageHint,{kind:'supplied',refs:['URL page hint']});}catch{message='The linked page selection could not be read. You can enter exact pages when reviewing the idea.';}}
   const focus=selector=>doc.querySelector(selector)?.focus();
@@ -195,8 +247,8 @@
     host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="1500" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
    }else{
     host.innerHTML='<button class="back" id="back" type="button">Back to idea</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+
-     (pending?'':(stage==='research'?'<details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
-     '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>':'</section>')+
+     (pending?'':(stage==='research'?'<section class="confirmed-card"><button id="share-idea" class="share-icon" type="button" aria-label="Share confirmed idea" title="Share idea"'+(shareBusy?' disabled':'')+'><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-4 4 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/></svg></button><details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
+     '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details><p id="share-status" class="small" role="status">'+esc(shareNotice)+'</p><div id="share-fallback"></div></section>':'</section>')+
      '')+(editing?editorHTML():questionsHTML())+(pending?'<button id="edit" type="button">Edit interpretation</button>':'')+
      (stage==='review'?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="index.html#/research">Browse the research index</a> for approaches.</p>':'')+
@@ -207,12 +259,70 @@
    bind();
    if(prior&&doc.getElementById(prior))focus('#'+prior);
   }
+  function prepareCard(){
+   const snapshot=confirmed;preparedFor=snapshot;preparedCard=null;shareNotice='';shareFallback=null;
+   Promise.resolve().then(()=>renderCard(snapshot,{document:doc})).then(blob=>{if(preparedFor===snapshot)preparedCard=blob;}).catch(()=>{});
+  }
+  function updateShare(){
+   const button=doc.getElementById('share-idea');if(button)button.disabled=shareBusy;
+   const status=doc.getElementById('share-status');if(status)status.textContent=shareNotice;
+   const fallback=doc.getElementById('share-fallback');if(!fallback)return;
+   fallback.innerHTML=shareFallback?'<label for="share-link">Idea link</label><input id="share-link" readonly value="'+esc(shareFallback.url)+'">'+(shareFallback.png?'<button id="download-idea" type="button">Download card image</button>':''):'';
+   doc.getElementById('share-link')?.addEventListener('click',event=>event.target.select());
+   doc.getElementById('download-idea')?.addEventListener('click',()=>{const url=URL.createObjectURL(shareFallback.png),a=doc.createElement('a');a.href=url;a.download='liber-primus-idea.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+  }
+  async function shareIdea(){
+   if(!confirmed||shareBusy)return;
+   const snapshot=confirmed;shareBusy=true;shareNotice='';shareFallback=null;updateShare();
+   try{
+    const base='https://jelliottdev.github.io/investigate.html';
+    const response=await sharer(snapshot,base,{document:doc,preparedPNG:preparedFor===snapshot?preparedCard:null});
+    if(confirmed!==snapshot)return;
+    if(response.status==='shared')shareNotice='';
+    else if(response.status==='copied'){shareNotice='Idea link copied.';shareFallback=response;}
+    else if(response.status==='fallback'){shareNotice='Copy the link below to share this idea.';shareFallback=response;}
+   }catch(e){if(confirmed===snapshot)shareNotice='Could not share this card. '+e.message;}
+   finally{shareBusy=false;if(confirmed===snapshot)updateShare();}
+  }
+  const methodOperations=()=>draft?.method.status==='specified'?draft.method.value.operations:[];
+  const stepText=operation=>operation.label??operation.sourceText??operation.id;
+  function methodStepsHTML(){
+   const operations=methodOperations(),classified=C.classifyMethod(draft.method).operations;
+   return '<ol class="method-editor-list" id="method-step-list">'+operations.map((operation,index)=>{
+    const family=classified[index],textId=index?'edit-method-'+index:'edit-method';
+    const automatic=family.familyId==='unclassified'?'No detected category':'Detected: '+family.label;
+    return '<li><div class="method-step-heading">Step '+(index+1)+'</div><label for="edit-method-family-'+index+'">Category</label><select id="edit-method-family-'+index+'"><option value="">'+esc(automatic)+'</option>'+Object.entries(C.METHOD_FAMILIES).map(([id,label])=>'<option value="'+esc(id)+'"'+(operation.declaredFamilyId===id?' selected':'')+'>'+esc(label)+'</option>').join('')+'</select><label for="'+textId+'">Exact rule for step '+(index+1)+'</label><textarea id="'+textId+'" required maxlength="1200">'+esc(stepText(operation))+'</textarea>'+(family.basis==='category_conflict'?'<p class="small">The category differs from the recorded rule. The exact rule is retained.</p>':'')+'<div class="method-step-actions"><button type="button" id="method-up-'+index+'" aria-label="Move step '+(index+1)+' earlier"'+(index===0?' disabled':'')+'>Earlier</button><button type="button" id="method-down-'+index+'" aria-label="Move step '+(index+1)+' later"'+(index===operations.length-1?' disabled':'')+'>Later</button><button type="button" id="method-remove-'+index+'" aria-label="Remove step '+(index+1)+'">Remove</button></div></li>';
+   }).join('')+'</ol>';
+  }
+  function flushMethodSteps(){
+   const operations=methodOperations().slice();
+   operations.forEach((operation,index)=>{
+    const text=doc.getElementById(index?'edit-method-'+index:'edit-method')?.value.trim()??stepText(operation);
+    const family=doc.getElementById('edit-method-family-'+index)?.value||null;
+    if(text!==stepText(operation))draft=C.applyMethodEdit(draft,{type:'wording',index,text});
+    if(family!==(methodOperations()[index].declaredFamilyId||null))draft=C.applyMethodEdit(draft,{type:'category',index,familyId:family});
+   });
+  }
+  function refreshMethodSteps(target){
+   const list=doc.getElementById('method-step-list');
+   if(list){const html=methodStepsHTML();list.innerHTML=html.slice(html.indexOf('>')+1,html.lastIndexOf('</ol>'));bindMethodSteps();focus(target);}
+  }
+  function editMethodStep(edit,target){
+   try{flushMethodSteps();draft=C.applyMethodEdit(draft,edit);error='';doc.getElementById('error').textContent='';refreshMethodSteps(target);}
+   catch(e){error=e.message;doc.getElementById('error').textContent=error;}
+  }
+  function bindMethodSteps(){
+   methodOperations().forEach((operation,index)=>{
+    doc.getElementById('method-up-'+index)?.addEventListener('click',()=>editMethodStep({type:'move',index,toIndex:index-1},'#'+(index===1?'edit-method':'edit-method-'+(index-1))));
+    doc.getElementById('method-down-'+index)?.addEventListener('click',()=>editMethodStep({type:'move',index,toIndex:index+1},'#edit-method-'+(index+1)));
+    doc.getElementById('method-remove-'+index)?.addEventListener('click',()=>editMethodStep({type:'remove',index},methodOperations().length===1?'#method-add':'#'+(index===0?'edit-method':'edit-method-'+(index-1))));
+   });
+  }
   function editorHTML(){
-   const scope=draft.scope.status==='specified'?(draft.scope.value.description||(draft.scope.value.pages||[]).map(p=>p.toUpperCase()).join(', ')):'';
-   const method=draft.method.status==='specified'?methodText(draft):'';
-   const rule=C.reviewRows(draft).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text).join('\n');
+   const scope=scopeEditorText(draft.scope);
+   const rule=ruleNotesText(draft.rules);
    const outcome=draft.aim.status==='specified'?C.normalizeOutcome(draft.aim.value):{id:'',wording:'',detail:''};
-   return '<form class="editor" id="editor"><label for="edit-aim">Outcome</label><select id="edit-aim"><option value="">Undecided</option>'+Object.entries(C.OUTCOMES).map(([id,label])=>'<option value="'+esc(id)+'"'+(outcome.id===id?' selected':'')+'>'+esc(label)+'</option>').join('')+'<option value="unclassified"'+(outcome.id==='unclassified'?' selected':'')+'>None of these fits</option></select><label for="edit-objective">Objective detail <span class="small">(optional)</span></label><textarea id="edit-objective" maxlength="600">'+esc(outcome.detail||outcome.wording)+'</textarea><label for="edit-method">Method</label><textarea id="edit-method" required maxlength="1200">'+esc(method)+'</textarea><label for="edit-scope">Pages or passage <span class="small">(optional)</span></label><input type="text" id="edit-scope" value="'+esc(scope)+'" placeholder="LP2-15, LP2-17"><label for="edit-rules">Bounds and rules <span class="small">(optional)</span></label><textarea id="edit-rules" maxlength="600">'+esc(rule)+'</textarea><div class="actions"><button id="cancel-edit" type="button">Cancel</button><button class="primary" type="submit">Review changes</button></div></form>';
+   return '<form class="editor" id="editor"><label for="edit-aim">Outcome</label><select id="edit-aim"><option value="">Undecided</option>'+Object.entries(C.OUTCOMES).map(([id,label])=>'<option value="'+esc(id)+'"'+(outcome.id===id?' selected':'')+'>'+esc(label)+'</option>').join('')+'<option value="unclassified"'+(outcome.id==='unclassified'?' selected':'')+'>None of these fits</option></select><label for="edit-objective">Objective detail <span class="small">(optional)</span></label><textarea id="edit-objective" maxlength="600">'+esc(outcome.detail||outcome.wording)+'</textarea><fieldset class="method-editor"><legend>Method steps</legend>'+methodStepsHTML()+'<button id="method-add" type="button">Add step</button></fieldset><label for="edit-scope">Pages or passage <span class="small">(optional)</span></label><input type="text" id="edit-scope" value="'+esc(scope)+'" placeholder="LP2-15, LP2-17">'+scopeRetainedHTML(draft.scope)+retainedRulesHTML(draft)+'<label for="edit-rules">Additional conditions <span class="small">(optional)</span></label><textarea id="edit-rules" maxlength="600">'+esc(rule)+'</textarea><div class="actions"><button id="cancel-edit" type="button">Cancel</button><button class="primary" type="submit">Review changes</button></div></form>';
   }
   function questionsHTML(){
    if(stage!=='review')return '';
@@ -226,6 +336,10 @@
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records)).join(''):'');
   }
   function bind(){
+   doc.getElementById('share-idea')?.addEventListener('click',shareIdea);
+   if(stage==='research')updateShare();
+   bindMethodSteps();
+   doc.getElementById('method-add')?.addEventListener('click',()=>editMethodStep({type:'add',index:methodOperations().length,operation:{id:'described_method',label:''}},'#'+(methodOperations().length?'edit-method-'+methodOperations().length:'edit-method')));
    doc.getElementById('idea')?.addEventListener('input',event=>{raw=event.target.value;});
    doc.getElementById('intake')?.addEventListener('submit',event=>{
     event.preventDefault();raw=doc.getElementById('idea').value;if(!raw.trim())return;
@@ -236,19 +350,18 @@
    doc.getElementById('cancel-edit')?.addEventListener('click',()=>{editing=false;if(editingBackup){({stage,draft,confirmed,result,packet,message,error}=editingBackup);editingBackup=null;if(packet)printHost.innerHTML=packetHTML(packet);}render();focus('#edit');});
    doc.getElementById('editor')?.addEventListener('submit',event=>{
     event.preventDefault();try{
-     const wording=doc.getElementById('edit-method').value.trim();
-     const current=draft.method.status==='specified'?methodText(draft):'';
+     flushMethodSteps();
      const ruleText=doc.getElementById('edit-rules').value.trim();
-     const previousRules=C.reviewRows(draft).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text).join('\n');
      const scopeText=doc.getElementById('edit-scope').value.trim();
      const outcomeId=doc.getElementById('edit-aim').value,objective=doc.getElementById('edit-objective').value.trim();
      const priorOutcome=draft.aim.status==='specified'?C.normalizeOutcome(draft.aim.value):{id:'',wording:'',detail:''};
-     const patch={scope:scopeText?chosenScope(scopeText):C.field()};
+     const patch={},scopeChange=scopeEdit(draft.scope,scopeText);
+     if(scopeChange!==undefined)patch.scope=scopeChange;
      if(outcomeId!==priorOutcome.id||objective!==(priorOutcome.detail||priorOutcome.wording))patch.aim=outcomeId?clarified({outcomeId:outcomeId==='unclassified'?C.normalizeOutcome(objective).id:outcomeId,wording:outcomeId==='unclassified'?objective:priorOutcome.wording||objective,detail:objective}):objective?clarified({outcomeId:'unclassified',wording:objective,detail:objective}):C.field();
-     if(ruleText!==previousRules){patch.rules=Object.fromEntries(C.RULES.map(k=>[k,C.field()]));patch.rules.exceptionalCases=ruleText?clarified(ruleText):C.field();}
-     if(wording!==current)patch.method=clarified({operations:[{id:'described_method',label:wording}]});
+     const removed=C.RULES.filter(key=>doc.getElementById('remove-rule-'+key)?.checked);
+     const rulesChange=ruleEdits(draft.rules,ruleText,removed);
+     if(rulesChange)patch.rules=rulesChange;
      draft=C.revise(draft,patch);
-     if(patch.method)draft.unresolved=draft.unresolved.filter(c=>!['operation_ambiguity','custom_interpretation'].includes(c.kind));
      editing=false;editingBackup=null;error='';render();focus('#review-title');
     }catch(e){error=e.message;doc.getElementById('error').textContent=error;}
    });
@@ -271,7 +384,7 @@
     try{if(draft.method.status!=='specified')throw Error('Choose a method before comparing prior tests.');if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
      if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
      if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
-     stage='research';error='';message='';compare();
+     stage='research';error='';message='';prepareCard();compare();
     }catch(e){error=e.message;render();}
    });
    doc.getElementById('cancel')?.addEventListener('click',()=>{stop();message='Stopped waiting. Your confirmed idea is kept.';error='';render();});
@@ -336,7 +449,7 @@
   render();load();
   return {getSnapshot:()=>({stage,draft,confirmed,result,packet,busy}),destroy:stop};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

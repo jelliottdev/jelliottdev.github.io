@@ -88,6 +88,39 @@ meaningful method is absent. Compact retrieval puts method/scope/rules first,
 omits generic outcome labels, and retains unmatched specific aim wording. Full
 confirmed context still includes all exact intent, source and protocol fields.
 
+### Ordered method editing
+
+`applyMethodEdit(draft, edit)` returns a fresh revised draft. Supported edits:
+`{type:'add',index,operation}`, `{type:'remove',index}`,
+`{type:'move',index,toIndex}`, `{type:'wording',index,text}`,
+`{type:'replace',index,operation}`, and `{type:'category',index,familyId}`.
+Indices refer to the current ordered list; move destinations refer to its final
+position. Add accepts the end index. Removing the last step makes the method
+unspecified, so automatic research is blocked. Source text is never modified.
+
+Untouched steps retain their exact JSON, including parameters and provenance.
+Wording edits deliberately create an opaque `described_method`, retaining exact
+new wording and original source correspondence but retiring the previous ID and
+parameters. Structured replacement requires the caller's deliberate full new
+operation. `draft.methodEdits` retains previous complete operations, removed
+constraints and index mappings separately from active method semantics. History
+is part of snapshot binding, but does not supply active keys or readiness rules.
+
+Indexed constraints follow their original step through moves/additions. Removing
+or replacing its step retires those constraints into history; independent
+constraints remain active. A formerly implicit single-step ambiguity gets an
+explicit index before a sibling is added. Explicit reversal boundary handling is
+retained when an independent cipher is appended or unchanged steps are moved;
+changing/removing the reversal itself requires a new boundary answer.
+
+Category edits store a separate `declaredFamilyId` annotation (`null` clears it)
+without replacing exact operations or parameters. Classification reports a
+conflicting declaration as `category_conflict`, never silently redefines the
+operation. Opaque safe wording can receive a declared family without acquiring
+execution rules. Editors should use local draft copies until Review changes;
+Cancel restores the original confirmed/result snapshot. Scope/rule editors
+should similarly patch only changed fields rather than reconstructing defaults.
+
 ## Interpretation and clarification boundary
 
 `fromText(text,materials)` only creates an uninterpreted draft. It is deliberately

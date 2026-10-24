@@ -122,7 +122,12 @@
           if(familyId!=='unclassified')basis='anchored_name';
         }
       }
-      return {index,familyId,label:own(METHOD_FAMILIES,familyId)?METHOD_FAMILIES[familyId]:'Method not classified',basis,operation:copy(operation)};
+      if(own(METHOD_FAMILIES,operation.declaredFamilyId)){
+        if(familyId!=='unclassified'&&familyId!==operation.declaredFamilyId){familyId='unclassified';basis='category_conflict';}
+        else if(!unsafe){familyId=operation.declaredFamilyId;basis='declared_family';}
+      }
+      return {index,familyId,label:own(METHOD_FAMILIES,familyId)?METHOD_FAMILIES[familyId]:'Method not classified',basis,
+        ...(own(operation,'declaredFamilyId')?{declaredFamilyId:operation.declaredFamilyId}:{}),operation:copy(operation)};
     });
     return {familyIds:[...new Set(rows.filter(r=>r.familyId!=='unclassified').map(r=>r.familyId))],complete:rows.every(r=>r.familyId!=='unclassified'),operations:rows};
   }
@@ -146,7 +151,7 @@
     }
     return f;
   }
-  function createDraft({source,aim=field(),method=field(),scope=field(),rules={},unresolved=[]}={}) {
+  function createDraft({source,aim=field(),method=field(),scope=field(),rules={},unresolved=[],methodEdits=[]}={}) {
     if(!source||typeof source.text!=='string')throw Error('Preserve original source text');
     if(!Array.isArray(source.materials??[]))throw Error('Invalid material list');
     const material=(source.materials??[]).map(m=>{
@@ -157,9 +162,10 @@
     for(const key of RULES)knownRules[key]=own(rules,key)?checkedField(rules[key]):field();
     for(const key of Object.keys(rules))if(!RULES.includes(key))throw Error('Preserve unknown rules in unresolved constraints');
     if(!Array.isArray(unresolved))throw Error('Unresolved constraints must be a list');
+    if(!Array.isArray(methodEdits))throw Error('Method history must be a list');
     return {schema:SCHEMA,revision:1,status:'draft',execution:'not_run',
       source:{...copy(source),materials:material},aim:normalizeAim(aim),method:normalizeMethod(method),scope:normalizeScope(scope),
-      rules:knownRules,unresolved:copy(unresolved),clarifications:[],confirmation:null};
+      rules:knownRules,unresolved:copy(unresolved),methodEdits:copy(methodEdits),clarifications:[],confirmation:null};
   }
   // Arbitrary prose/code is preserved, never interpreted through fictional fixtures.
   function fromText(text,materials=[]){return createDraft({source:{text,materials}});}
@@ -198,11 +204,67 @@
       if(!Array.isArray(patch.appendUnresolved))throw Error('Invalid constraints');
       next.unresolved.push(...copy(patch.appendUnresolved));
     }
-    // Changed procedures must revalidate the interpretation, never inherit a
-    // now-inapplicable boundary answer when switching away and back.
-    if(own(patch,'method')&&stable(draft.method)!==stable(next.method)&&!own(patch.rules||{},'boundaryMode')){
+    // Boundary handling belongs to the reversal operation, not every sibling
+    // cipher. Adding an independent step must not erase its explicit answer.
+    const reversalMeaning=s=>operations(s).filter(o=>o.id==='reverse_row_runes').map(o=>{
+      const semantic=copy(o);delete semantic.declaredFamilyId;return semantic;
+    });
+    if(own(patch,'method')&&stable(reversalMeaning(draft))!==stable(reversalMeaning(next))&&!own(patch.rules||{},'boundaryMode')){
       next.rules.boundaryMode=field();
     }
+    return next;
+  }
+  function applyMethodEdit(draft,edit){
+    if(!edit||!['add','remove','move','wording','replace','category'].includes(edit.type))throw Error('Unknown method edit');
+    const prior=operations(draft),list=copy(prior),count=list.length;
+    const add=edit.type==='add';
+    if(!Number.isInteger(edit.index)||edit.index<0||edit.index>(add?count:count-1))throw Error('Invalid operation index');
+    const map=Array.from({length:count},(_,i)=>i),archived=[];
+    const old=edit.index<count?copy(list[edit.index]):null;
+    let changedIndex=null;
+    if(edit.type==='add'){
+      list.splice(edit.index,0,copy(edit.operation));
+      for(let i=edit.index;i<count;i++)map[i]++;
+    }else if(edit.type==='remove'){
+      list.splice(edit.index,1);map[edit.index]=null;
+      for(let i=edit.index+1;i<count;i++)map[i]--;
+    }else if(edit.type==='move'){
+      if(!Number.isInteger(edit.toIndex)||edit.toIndex<0||edit.toIndex>=count)throw Error('Invalid destination index');
+      const order=Array.from({length:count},(_,i)=>i),[moved]=order.splice(edit.index,1);order.splice(edit.toIndex,0,moved);
+      list.splice(0,count,...order.map(i=>copy(prior[i])));order.forEach((original,current)=>{map[original]=current;});
+    }else if(edit.type==='wording'){
+      if(typeof edit.text!=='string'||!edit.text.trim())throw Error('Operation wording required');
+      const current=old.label||OPERATIONS[old.id]||old.id;
+      if(edit.text===current)return copy(draft);
+      list[edit.index]={id:'described_method',label:edit.text,
+        sourceText:typeof old.sourceText==='string'?old.sourceText:current,
+        provenance:{kind:'user_clarification',refs:['method:operation:'+edit.index]}};
+      changedIndex=edit.index;
+    }else if(edit.type==='replace'){
+      list[edit.index]=copy(edit.operation);changedIndex=edit.index;
+    }else{
+      if(edit.familyId!==null&&!own(METHOD_FAMILIES,edit.familyId))throw Error('Unknown method family');
+      if(edit.familyId===null)delete list[edit.index].declaredFamilyId;
+      else list[edit.index].declaredFamilyId=edit.familyId;
+    }
+    const unresolved=[];
+    for(const constraint of draft.unresolved){
+      const implicitSingle=constraint?.kind==='operation_ambiguity'&&!own(constraint,'operationIndex')&&count===1;
+      if(!Number.isInteger(constraint?.operationIndex)&&!implicitSingle){unresolved.push(copy(constraint));continue;}
+      const i=implicitSingle?0:constraint.operationIndex;
+      if(i<0||i>=count)throw Error('Constraint references missing operation');
+      if(map[i]===null||i===changedIndex){archived.push(copy(constraint));continue;}
+      unresolved.push({...copy(constraint),operationIndex:map[i]});
+    }
+    const value=draft.method.status==='specified'?copy(draft.method.value):{operations:[]};
+    value.operations=list;
+    const receipt={revision:draft.revision+1,type:edit.type,index:edit.index,
+      ...(edit.type==='move'?{toIndex:edit.toIndex}:{}),indexMap:map,
+      ...(old?{previousOperation:old}:{}),...(archived.length?{retiredConstraints:archived}:{})};
+    // Empty method retains its history outside active semantics.
+    const method=list.length?field('specified',value,{kind:'user_clarification',refs:['method:edit']}):field();
+    const next=revise(draft,{method});next.unresolved=unresolved;
+    next.methodEdits=[...(draft.methodEdits||[]),receipt];
     return next;
   }
   function clarify(draft,id,choice,text=''){
@@ -286,7 +348,7 @@
       ...(spec.unresolved.length?[{label:'Unresolved',details:copy(spec.unresolved)}]:[])
     ];
   }
-  function meaning(spec){return {aim:spec.aim,method:spec.method,scope:spec.scope,rules:spec.rules,unresolved:spec.unresolved};}
+  function meaning(spec){return {aim:spec.aim,method:spec.method,scope:spec.scope,rules:spec.rules,unresolved:spec.unresolved,methodEdits:spec.methodEdits||[]};}
   function summary(spec){return reviewRows(spec).filter(r=>r.label!=='Unresolved'&&r.tags.length).map(r=>r.label+': '+r.tags.map(t=>t.text).join('; ')).join('. ')+'.';}
   function confirm(draft,{id,at}={}){
     if(!id||typeof id!=='string'||!at||!Number.isFinite(Date.parse(at)))throw Error('Confirmation needs an ID and timestamp');
@@ -361,6 +423,6 @@
     return freeze({schema:'liberpedia-claim-packet-v1',confirmed:snapshot,research:copy(result)});
   }
   const api={SCHEMA,STATES,RULES,BOUNDARIES,OUTCOMES,METHOD_FAMILIES,METHODS:METHOD_FAMILIES,normalizeOutcome,normalizeAim,outcomeLabel,classifyMethod,field,pages,createDraft,fromText,revise,clarify,questions,
-    completeness,reviewRows,summary,confirm,validateConfirmed,binding,queryForResearch,retrievalQuery,bindResearch,packetSnapshot,serialize:stable};
+    completeness,reviewRows,summary,confirm,validateConfirmed,binding,queryForResearch,retrievalQuery,bindResearch,packetSnapshot,applyMethodEdit,serialize:stable};
   if(typeof module!=='undefined')module.exports=api;else root.ClaimSpecification=api;
 })(globalThis);

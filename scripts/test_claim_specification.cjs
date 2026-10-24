@@ -102,6 +102,41 @@ test('method classification does not infer from negative/code/compound snippets 
  assert.equal(C.classifyMethod(known({operations:[{id:'reverse_value_digits',label:'Reverse decimal digits of each prime value'}]})).operations[0].familyId,'prime-indices');
  assert.equal(C.classifyMethod(known({operations:[{id:'described_method',label:'Caesar with shift 3'}]})).operations[0].familyId,'fixed-substitution');
 });
+test('ordered step edits preserve untouched parameters/source and remap only related constraints',()=>{
+ const d=draft({method:known({operations:[{id:'reverse_row_runes',reset:'row',sourceText:'Reverse rows'},
+  {id:'vigenere',key:'FOO',reset:'page',nested:{offset:7}}]}),
+  rules:{wordBoundaries:known('preserve'),boundaryMode:known('within_words')},
+  unresolved:[{kind:'operation_ambiguity',operationIndex:0,text:'Which reverse?'},{kind:'custom',text:'Keep all exceptions'}]});
+ const before=C.serialize(d),moved=C.applyMethodEdit(d,{type:'move',index:1,toIndex:0});
+ assert.deepEqual(moved.method.value.operations,[d.method.value.operations[1],d.method.value.operations[0]]);
+ assert.equal(moved.unresolved[0].operationIndex,1);assert.deepEqual(moved.unresolved[1],d.unresolved[1]);
+ assert.deepEqual(moved.rules,d.rules);assert.deepEqual(moved.source,d.source);assert.equal(C.serialize(d),before);
+ const added=C.applyMethodEdit(d,{type:'add',index:2,operation:{id:'atbash',sourceText:'Then Atbash'}});
+ assert.deepEqual(added.method.value.operations.slice(0,2),d.method.value.operations);assert.deepEqual(added.rules,d.rules);
+ const removed=C.applyMethodEdit(d,{type:'remove',index:0});
+ assert.deepEqual(removed.method.value.operations,[d.method.value.operations[1]]);
+ assert.deepEqual(removed.unresolved,[d.unresolved[1]]);assert.equal(removed.rules.boundaryMode.status,'unspecified');
+ assert.deepEqual(removed.methodEdits.at(-1).retiredConstraints,[d.unresolved[0]]);
+ assert.equal(C.applyMethodEdit(removed,{type:'remove',index:0}).method.status,'unspecified');
+ const single=draft({unresolved:[{kind:'operation_ambiguity',text:'Reverse?'}]});
+ const prepend=C.applyMethodEdit(single,{type:'add',index:0,operation:{id:'vigenere',key:'FOO'}});
+ assert.equal(prepend.unresolved[0].operationIndex,1);
+ assert.equal(C.clarify(prepend,'operation','reverse_value_digits').method.value.operations[1].id,'reverse_value_digits');
+});
+test('changed wording retires exact semantics with full history; category is separate from execution',()=>{
+ const old={id:'vigenere',key:'FOO',reset:'page',sourceText:'Use Vigenere FOO',provenance:{kind:'supplied',refs:['line2']}};
+ const d=draft({method:known({operations:[old,{id:'atbash'}]}),unresolved:[{kind:'operation_ambiguity',operationIndex:0,text:'Old question'},{kind:'custom',text:'Independent'}]});
+ const changed=C.applyMethodEdit(d,{type:'wording',index:0,text:'Use a different cipher with key BAR'});
+ const op=changed.method.value.operations[0];assert.equal(op.id,'described_method');assert.equal(op.key,undefined);assert.equal(op.reset,undefined);
+ assert.equal(op.sourceText,old.sourceText);assert.equal(op.label,'Use a different cipher with key BAR');
+ assert.deepEqual(changed.methodEdits.at(-1).previousOperation,old);assert.deepEqual(changed.unresolved,[d.unresolved[1]]);
+ assert.deepEqual(changed.method.value.operations[1],d.method.value.operations[1]);
+ const categorized=C.applyMethodEdit(d,{type:'category',index:0,familyId:'transposition'});
+ assert.equal(categorized.method.value.operations[0].key,'FOO');assert.equal(C.classifyMethod(categorized.method).operations[0].basis,'category_conflict');
+ const cleared=C.applyMethodEdit(categorized,{type:'category',index:0,familyId:null});assert.deepEqual(cleared.method.value.operations[0],old);
+ const replaced=C.applyMethodEdit(d,{type:'replace',index:0,operation:{id:'caesar_shift',shift:3}});assert.equal(replaced.method.value.operations[0].key,undefined);
+ assert.throws(()=>C.applyMethodEdit(d,{type:'move',index:0,toIndex:2}));assert.throws(()=>C.applyMethodEdit(d,{type:'category',index:0,familyId:'visitor-family'}));
+});
 test('exact scope normalizes harmless order/duplicates but keeps holes and explicit empty sets',()=>{
  assert.deepEqual(draft().scope.value.pages,['lp2-15','lp2-17']);
  assert.deepEqual(C.pages(['lp2-57','lp1-16']),['lp1-16','lp2-57']);

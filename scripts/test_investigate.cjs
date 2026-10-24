@@ -196,7 +196,7 @@ function fakeDocument(search=''){
  return {defaultView:{location:{search}},activeElement:null,
   getElementById(id){
    if(id==='investigate')return host;if(id==='print-snapshot')return print;
-   if(!host.html.includes('id="'+id+'"'))return null;
+   if(!host.html.includes('id="'+id+'"')&&!cache.get('method-step-list')?.html.includes('id="'+id+'"'))return null;
    if(!cache.has(id))cache.set(id,new Element(id));return cache.get(id);
   },querySelector(selector){if(selector==='input[name=choice]:checked')return this.selectedChoice?{value:this.selectedChoice}:null;if(selector==='.privacy')return null;if(selector.startsWith('#'))return this.getElementById(selector.slice(1));return null;},
   host,print};
@@ -292,4 +292,36 @@ function answerInDOM(doc,choice,text=''){
  assert(journey.host.html.includes('What method do you want to check?'));answerInDOM(journey,'undecided');answerInDOM(journey,'undecided');
  assert.equal(journey.getElementById('confirm'),null);assert(journey.host.html.includes('Browse the research index'));assert.equal(requests.length,beforeGoalOnly,'A goal without method sends no research request');
  application.destroy();console.log('PASS mocked full journey: success, exact print packet, edit/cancel restoration, new confirmation, cancel/retry, stale response guard and request-local timeout.');
+})().catch(error=>{console.error(error);process.exitCode=1;});
+
+(async()=>{
+ const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async url=>Response.json(url==='data/experiments.json'?registry:url==='data/assistant.json'?{endpoint:'https://mock.example/ask'}:{documents:[]})});
+ await new Promise(resolve=>setTimeout(resolve,15));
+ const source='Reverse each row on LP2-15, then apply Vigenere with key FIRFUMFERENFE';
+ doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');answerInDOM(doc,'decipher');
+ const original=app.getSnapshot().draft;
+ original.method.value.operations[1].parameters={key:'FIRFUMFERENFE',offset:7};
+ original.unresolved.push({kind:'source_note',text:'Preserve this independent constraint'});
+ const initial=C.serialize(original.method),first=C.serialize(original.method.value.operations[0]);
+ doc.getElementById('edit').fire('click');
+ assert(doc.host.html.includes('Exact rule for step 1'));assert(doc.host.html.includes('Exact rule for step 2'));
+ const fillSteps=()=>app.getSnapshot().draft.method.value.operations.forEach((op,index)=>{
+  doc.getElementById(index?'edit-method-'+index:'edit-method').value=op.label||op.sourceText||'';
+  doc.getElementById('edit-method-family-'+index).value=op.declaredFamilyId||'';
+ });
+ fillSteps();doc.getElementById('edit-objective').value='An unsaved objective';
+ doc.getElementById('edit-method-1').value='Apply ciphertext autokey';doc.getElementById('method-up-1').fire('click');
+ let state=app.getSnapshot().draft;
+ assert.equal(state.method.value.operations[0].label,'Apply ciphertext autokey');assert.equal(C.serialize(state.method.value.operations[1]),first);
+ assert(state.methodEdits.some(edit=>edit.previousOperation?.parameters?.offset===7));
+ assert(state.unresolved.some(note=>note.text==='Preserve this independent constraint'));assert.equal(doc.getElementById('edit-objective').value,'An unsaved objective','Step actions preserve other unsaved editor inputs');
+ fillSteps();doc.getElementById('method-add').fire('click');assert.equal(app.getSnapshot().draft.method.value.operations.length,3);
+ fillSteps();doc.getElementById('edit-method-2').value='Shift each rune by three';doc.getElementById('method-up-2').fire('click');
+ assert.equal(app.getSnapshot().draft.method.value.operations[1].label,'Shift each rune by three');
+ fillSteps();doc.getElementById('edit-method-family-2').value='feedback';doc.getElementById('method-remove-1').fire('click');
+ state=app.getSnapshot().draft;assert.equal(state.method.value.operations.length,2);
+ assert.equal(state.method.value.operations[1].declaredFamilyId,'feedback');assert.equal(C.classifyMethod(state.method).operations[1].basis,'category_conflict');
+ assert.equal(state.source.text,source);assert.equal(doc.getElementById('edit-objective').value,'An unsaved objective');
+ doc.getElementById('cancel-edit').fire('click');assert.equal(C.serialize(app.getSnapshot().draft.method),initial,'Cancel restores the original ordered operations and parameters');
+ app.destroy();console.log('PASS method editor DOM: independent exact steps, add/remove/reorder/category, retained metadata/history/constraints, unsaved other inputs and cancel restoration.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
