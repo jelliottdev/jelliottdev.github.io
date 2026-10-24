@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 297,
+    "records": 301,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -127,6 +127,144 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/alberti-branch-arithmetic.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/alberti-branch-arithmetic/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/alberti-branch-arithmetic.zip"
+    },
+    {
+      "id": "alternating-alphabet-interruption-clocks",
+      "title": "Alternating alphabets with two interruption clocks",
+      "question": "Do two known keys, alternating GP/reversed-GP cipher alphabets and either of two ciphertext-F pause rules recover a declared page opening?",
+      "summary": "Neither F-clock rule recovered a declared twelve-rune opening in 55 LP2 pages.",
+      "tags": [
+        "alternating alphabets",
+        "two clocks",
+        "F interruption",
+        "Vigenere",
+        "known keys",
+        "page openings"
+      ],
+      "finding": "Neither rule revealed a known opening. Pausing just the key or both clocks was tested with both known keys, every starting phase, and both arithmetic directions.",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      },
+      "method_topics": [
+        {
+          "id": "polyalphabetic",
+          "title": "Repeating-key and polyalphabetic ciphers",
+          "aliases": [
+            "Vigenere",
+            "Beaufort",
+            "repeating key",
+            "polyalphabetic",
+            "repeating key cipher",
+            "substitution",
+            "polyalphabetic substitution"
+          ]
+        },
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "cribs",
+          "title": "Known plaintext and crib searches",
+          "aliases": [
+            "crib",
+            "known plaintext",
+            "guessed word",
+            "known plaintext attack",
+            "crib search"
+          ]
+        },
+        {
+          "id": "interleaving",
+          "title": "Interleaved streams and separate decoding",
+          "aliases": [
+            "interleaving",
+            "interleaved streams",
+            "odd and even",
+            "odd even",
+            "separate streams"
+          ]
+        }
+      ],
+      "family": {
+        "id": "known-vigenere-key-reuse",
+        "title": "Reuse of known repeating keys",
+        "question": "Do specified known key vectors recover explicitly declared openings under fixed alignment rules?",
+        "baseline": "lp2-known-vigenere-keys"
+      },
+      "variant_label": "Alternating cipher alphabets and F-paused clocks",
+      "pages": [
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37",
+        "lp2-38",
+        "lp2-39",
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-44",
+        "lp2-45",
+        "lp2-46",
+        "lp2-47",
+        "lp2-48",
+        "lp2-49",
+        "lp2-51",
+        "lp2-52",
+        "lp2-53",
+        "lp2-54",
+        "lp2-55"
+      ],
+      "artifacts": [],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/alternating-alphabet-interruption-clocks",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/alternating-alphabet-interruption-clocks.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/alternating-alphabet-interruption-clocks/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/alternating-alphabet-interruption-clocks.zip"
     },
     {
       "id": "b04-source-seeds-opening-cribs",
@@ -4543,6 +4681,87 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-nonenglish-control-gate.zip"
     },
     {
+      "id": "dukotah-offset-model-integrity",
+      "title": "The offset screen changes when training books are missing",
+      "question": "Do matching planted-control totals mean a fallback prefilter selects the same key offsets as the pinned four-book source model?",
+      "summary": "Yes. Both kept 26 of 40 planted true offsets, but five individual trial rankings changed; the first-ranked count was 21 versus 22, and one full million-offset target unit chose a different best position.",
+      "tags": [
+        "source input",
+        "offset search",
+        "prefilter",
+        "trigram",
+        "planted control",
+        "reproducibility"
+      ],
+      "finding": "The one-book screen passed the same headline controls as the original, but ranked five of the 40 trials differently. It also selected a different best key position in one search unit.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "alignment",
+          "title": "Offsets and key alignment",
+          "aliases": [
+            "offset",
+            "alignment",
+            "key alignment"
+          ]
+        },
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        },
+        {
+          "id": "provenance",
+          "title": "Source verification and transcription audits",
+          "aliases": [
+            "signature",
+            "provenance",
+            "transcription",
+            "source audit",
+            "input verification",
+            "wrong file",
+            "missing rows"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/dukotah-offset-model-integrity/source-lib_padsweep.py",
+        "experiments/records/dukotah-offset-model-integrity/source-capsule-manifest.json",
+        "experiments/records/dukotah-offset-model-integrity/source-control-offset.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-offset-model-integrity",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-offset-model-integrity.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-offset-model-integrity/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-offset-model-integrity.zip"
+    },
+    {
       "id": "dukotah-ornament-fresh-reader-gate",
       "title": "Can the rebuilt reader inspect ornament bands?",
       "question": "Does the fresh 229-class image reader pass the source's direct solved-page control before it is used on artwork-adjacent bands?",
@@ -8437,6 +8656,88 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/known-reading-languages.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/known-reading-languages/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/known-reading-languages.zip"
+    },
+    {
+      "id": "l7-score-recovery-controls",
+      "title": "Can one score cutoff judge every decode?",
+      "question": "Under the original source beam and English model, how do planted recovery, text register and length/beam setting affect the interpretation of a fixed −5.5 cutoff?",
+      "summary": "Four of 28 synthetic decodes pass the English-score cutoff while recovering less than 90% of the planted text. Five source text registers and three fresh conditional-null settings show why the same cutoff needs matched controls.",
+      "tags": [
+        "source controls",
+        "English scorer",
+        "rune recovery",
+        "beam decoding",
+        "key skipping",
+        "language registers",
+        "conditional null",
+        "score cutoff"
+      ],
+      "finding": "Four synthetic decodes passed the score cutoff while recovering less than 90% of the known text. The score ranges also changed across text registers and decoder settings, so a score alone cannot certify a correct reading.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "language",
+          "title": "Language and corpus identification",
+          "aliases": [
+            "Welsh",
+            "language identification",
+            "corpus",
+            "different language",
+            "another language",
+            "non English",
+            "other languages"
+          ]
+        },
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/l7-score-recovery-controls/fixtures.json"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/l7-score-recovery-controls",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/l7-score-recovery-controls.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/l7-score-recovery-controls/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/l7-score-recovery-controls.zip"
     },
     {
       "id": "large-gap-file-size-replay",
@@ -18746,6 +19047,97 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/rune-matched-scorer-calibration.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/rune-matched-scorer-calibration/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/rune-matched-scorer-calibration.zip"
+    },
+    {
+      "id": "rune-reading-sensitivity-t3",
+      "title": "How disputed rune readings change the measurements",
+      "question": "If the 450 located O/A/AE machine disagreements were read differently, which manuscript statistics move, and how does one known-key decoder respond to separately simulated transcription errors?",
+      "summary": "Hypothetically replacing all 450 source-suggested O/A/AE alternatives raises joined-stream adjacent repeats from 86 (0.664%) to 103 (0.795%), below the source comparison floor of 126, but shifts normalized IoC from 0.999874 to 1.013823. Known-key LP1 decoder fixtures degrade with separate random ciphertext errors. The reader controls reuse global canonical labels and do not establish independent transcription accuracy. A separately recovered exact KJV input also permits the source's six-level full-book decoder replay; its results are fixture-specific.",
+      "tags": [
+        "LP2",
+        "transcription sensitivity",
+        "rune readings",
+        "doublets",
+        "index of coincidence",
+        "O/A/AE",
+        "known-key decoder",
+        "source replay"
+      ],
+      "finding": "Changing all 450 proposed rune readings adds 17 adjacent repeats and shifts the frequency statistic. These are hypothetical alternatives, not 450 confirmed errors. In a separate full-length known-key fixture, 450 random changes reduce median recovery to 86%.",
+      "record_type": {
+        "id": "measurement",
+        "label": "Manuscript measurement",
+        "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+      },
+      "method_topics": [
+        {
+          "id": "repetition",
+          "title": "Repeats, doublets and word structure",
+          "aliases": [
+            "doublets",
+            "repeated words",
+            "ngrams",
+            "repeated sequences",
+            "bigrams",
+            "trigrams"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        },
+        {
+          "id": "provenance",
+          "title": "Source verification and transcription audits",
+          "aliases": [
+            "signature",
+            "provenance",
+            "transcription",
+            "source audit",
+            "input verification",
+            "wrong file",
+            "missing rows"
+          ]
+        },
+        {
+          "id": "distributions",
+          "title": "Rune frequencies and distribution diagnostics",
+          "aliases": [
+            "frequency analysis",
+            "rune frequencies",
+            "letter frequencies",
+            "symbol frequencies",
+            "entropy",
+            "IoC",
+            "index of coincidence"
+          ]
+        }
+      ],
+      "family": {
+        "id": "transcription-correction-sensitivity",
+        "title": "Archived versus reviewed manuscript text",
+        "question": "Which downstream conclusions actually move when a documented transcription choice changes?",
+        "baseline": "transcription-correction-sensitivity"
+      },
+      "variant_label": "Hypothetical source-rune alternatives and planted decoder errors",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/rune-reading-sensitivity-t3/input-snapshot.json",
+        "experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/rune-reading-sensitivity-t3",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/rune-reading-sensitivity-t3.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/rune-reading-sensitivity-t3/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/rune-reading-sensitivity-t3.zip"
     },
     {
       "id": "search-maximum-controls",

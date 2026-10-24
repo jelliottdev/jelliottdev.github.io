@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GENERATED_RELEASE_OUTPUTS = {
     'data/catalog.json',
     'data/experiment-index.json',
+    'data/checker-records.json',
     'data/articles.json',
     'data/article-search.json',
     'data/guide-index.json',

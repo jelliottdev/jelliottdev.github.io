@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 37,
+    "published_followup_records": 38,
     "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
@@ -2238,16 +2238,22 @@
       "source_idea_ids": [
         "3.5"
       ],
-      "state": "needs-rule",
-      "next_action": "Specify whether a marker pauses alphabet alternation or only the selected key; prove planted round trips for both state machines.",
+      "state": "bounded-followup-recorded",
+      "next_action": "Require a distinct state rule or predicted continuation before extending the declared baseline.",
       "existing_record_ids": [
         "four-phase-ioc"
       ],
       "scope_and_gates": [
         "No source-defined two-alphabet cipher with the two pause semantics. Freeze alternation schedule and key-advance rule."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "alternating-alphabet-interruption-clocks"
+        ],
+        "scope": "Newly specified baseline: two known keys, normal/reversed cipher alphabets, F pauses selected key only or both key and alphabet; all phases/signs/first alphabets; 55 page heads against nine fixed12-rune openings. 1664settings/823680comparisons, noexactmatches; independentstatecensus androundtripspass.",
+        "remaining_scope": "Other alphabets/keys, markers removed or passed through, reset/word clocks and unknown/noninitial plaintext openings remain untested. Not a historical exact-rule replay."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "classical-key-schedule-variants"
       ]

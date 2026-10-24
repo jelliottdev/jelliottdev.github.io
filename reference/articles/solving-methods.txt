@@ -42,7 +42,7 @@ Two letter-encoding bounds on LP2 · Bounded solving test
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-37 related records
+38 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -116,6 +116,8 @@ A rotating-key search stopped at its first screen · Method replay
 A column solver with a short-key limit · Bounded solving test
 
 Interrupt-key fits needed a stronger known-text check · Method replay
+
+Alternating alphabets with two interruption clocks · Bounded solving test
 
 
 
@@ -345,7 +347,7 @@ Four archived texts as running keys · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-30 related records
+32 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -406,12 +408,16 @@ Mirror and alternating-group interrupt scores · Method replay
 
 Saved autokey scores with selectable interruptions · Method replay
 
+Alternating alphabets with two interruption clocks · Bounded solving test
+
+Can one score cutoff judge every decode? · Control
+
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-14 related records
+15 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -439,6 +445,8 @@ Can the decoder follow a known key through a full book? · Control
 Can a correct key look wrong to the decoder? · Control
 
 Cryptographic seed streams across the unsolved pages · Method replay
+
+The offset screen changes when training books are missing · Control
 
 
 
@@ -654,10 +662,12 @@ Collision edits for scarce adjacent doublets · Control
 Interleaved streams and separate decoding
 Split by a declared assignment, decode each stream, and specify whether outputs are interleaved again or concatenated.
 
-2 related records
+3 related records
 Four alternating rune streams: concentration check · Manuscript measurement
 
 Deor and interlocking rune streams · Method replay
+
+Alternating alphabets with two interruption clocks · Bounded solving test
 
 
 
@@ -1001,7 +1011,7 @@ Language, clues and search
 Language and corpus identification
 Compare declared observables with suitable language controls under explicit cipher assumptions.
 
-6 related records
+7 related records
 Could the unsolved text be another language? Eight aligned translations · Manuscript measurement
 
 Language controls with exactly 2,896 tokens per sample · Manuscript measurement
@@ -1014,12 +1024,14 @@ Language comparison: shorter aligned passage controls · Manuscript measurement
 
 Two language-scoring controls missed their frozen rules · Source or input audit
 
+Can one score cutoff judge every decode? · Control
+
 
 
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-23 related records
+24 related records
 Does matching the opening text identify a seed? · Control
 
 LP2-39: twenty proposed red-header cribs · Bounded solving test
@@ -1066,12 +1078,14 @@ Do the proposed two-time-pad regions match? · Method replay
 
 Can a guessed word seed a short feedback key? · Method replay
 
+Alternating alphabets with two interruption clocks · Bounded solving test
+
 
 
 Automatic search and language scoring
 Explore a bounded model with a scorer whose ability and false positives have been checked.
 
-12 related records
+14 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -1095,6 +1109,10 @@ A keyword that shifts with each rune · Method replay
 Four archived texts as running keys · Method replay
 
 Three-rune shift display: recovery control · Control
+
+The offset screen changes when training books are missing · Control
+
+Can one score cutoff judge every decode? · Control
 
 
 
@@ -1176,7 +1194,7 @@ Mirror and alternating-group interrupt scores · Method replay
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-31 related records
+32 related records
 LP2-00–55: repeated trigrams against page shuffles · Manuscript measurement
 
 LP2-00–55: doublets across words, wraps and stored corrections · Manuscript measurement
@@ -1239,6 +1257,8 @@ What separates LP2’s surviving doublets? · Method replay
 
 Do LP2 grid bytes track doublet gaps? Source varint matrix · Manuscript measurement
 
+How disputed rune readings change the measurements · Manuscript measurement
+
 
 
 Invariants and bounded exclusions
@@ -1272,7 +1292,7 @@ Keyword decryption and rearrangement · Method replay
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-55 related records
+58 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -1383,12 +1403,18 @@ Mirror and alternating-group interrupt scores · Method replay
 
 Saved autokey scores with selectable interruptions · Method replay
 
+The offset screen changes when training books are missing · Control
+
+Can one score cutoff judge every decode? · Control
+
+How disputed rune readings change the measurements · Manuscript measurement
+
 
 
 Source verification and transcription audits
 Verify the input and the scope of its authenticity or transcription evidence.
 
-13 related records
+15 related records
 Can image-only detection find every rune row? · Source or input audit
 
 Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
@@ -1415,12 +1441,16 @@ Which bytes are printed in the base-60 grid? · Manuscript measurement
 
 Which archived Cicada signatures verify? · Source or input audit
 
+The offset screen changes when training books are missing · Control
+
+How disputed rune readings change the measurements · Manuscript measurement
+
 
 
 Rune frequencies and distribution diagnostics
 Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own.
 
-12 related records
+13 related records
 Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
 
 LP2 sections: rune collisions and adjacent repeats · Manuscript measurement
@@ -1444,6 +1474,8 @@ Does LP2's rune order reveal a generator? · Manuscript measurement
 Raw grid bytes and RSA-modulus readings · Manuscript measurement
 
 When wrong keys cross a language-score line · Control
+
+How disputed rune readings change the measurements · Manuscript measurement
 
 
 
@@ -1574,6 +1606,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/d4v1-column-unigram-key-recovery
 - Interrupt-key fits needed a stronger known-text check
   https://jelliottdev.github.io/#/experiments/relikd-interrupt-db-keyfit
+- Alternating alphabets with two interruption clocks
+  https://jelliottdev.github.io/#/experiments/alternating-alphabet-interruption-clocks
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Does the fractionation reversal undo its own shuffle?
@@ -1760,6 +1794,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/round19-decoder-repair-controls
 - Mirror and alternating-group interrupt scores
   https://jelliottdev.github.io/#/experiments/relikd-interrupt-pattern-database
+- Can one score cutoff judge every decode?
+  https://jelliottdev.github.io/#/experiments/l7-score-recovery-controls
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - LP2: pair the 2,883-rune sections by subtraction
@@ -1774,6 +1810,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-page-pair-alignment
 - When wrong keys cross a language-score line
   https://jelliottdev.github.io/#/experiments/round19-decoder-null-bars
+- The offset screen changes when training books are missing
+  https://jelliottdev.github.io/#/experiments/dukotah-offset-model-integrity
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - LP2-40: replay the FOR EVERY opening arithmetic
@@ -2152,6 +2190,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/r18-filter-locus-replay
 - Does the A-03 image audit bound missed doubled runes?
   https://jelliottdev.github.io/#/experiments/a03-haplography-source-gate
+- How disputed rune readings change the measurements
+  https://jelliottdev.github.io/#/experiments/rune-reading-sensitivity-t3
 - Invariants and bounded exclusions
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - Literal prime alphabet: affine permutations for every modulus above 109

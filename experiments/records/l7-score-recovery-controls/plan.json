@@ -1,0 +1,11 @@
+{
+  "schema": "liberpedia-l7-control-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "purpose": "Measure source scorer/recovery behavior on finite known-plaintext controls; no real manuscript key search.",
+  "timing": "Source-derived counts and parameters were fixed in the batch wrappers before execution. This archival plan is compiled after that execution; it is not an independent prospective preregistration.",
+  "language_controls": {"registers": ["EN_KJV", "LP1_REAL", "LATIN", "OE", "DE"], "length": 120, "replicates_each": 3, "correct_and_wrong_keys": true},
+  "mechanism_controls": {"cases": ["baseline", "paired rejection", "one free advance", "free advance q=.02"], "length": 240, "replicates_each": 7, "beam_width": 400, "max_skip": 3, "score_cutoff": -5.5, "recovery_comparison": 0.9},
+  "conditional_nulls": {"settings": [[31, 120], [120, 400], [400, 120]], "draws_each": 120, "tail_quantile": 0.9, "shuffle_seed0": 70000},
+  "exclusions": ["Missing original EN_MODERN and Welsh corpora and derived vowel-deletion panels", "Full 67-case source decoder envelope", "A family-wide threshold for any large key search", "Real LP2 key identification", "Universal claims about natural language or encryption"],
+  "numerics": "Saved floating values rounded to ten decimal places after calculation; input indices and counts remain exact."
+}

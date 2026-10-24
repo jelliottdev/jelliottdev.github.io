@@ -1,0 +1,207 @@
+{
+  "schema": "liberpedia-source-batch-plan-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "ledger_sha256": "7718bf90fb4cc6cc0fb98464d65ab898dd0e776da33d9b056bcd908d3b60558d",
+  "purpose": "Second twenty-entry batch; prioritize executable controls and fresh measurements before source-only bookkeeping. No whole-method exclusions from partial scope.",
+  "groups": [
+    {
+      "worker": "worker-a",
+      "entries": [
+        {
+          "source_id": "B-02",
+          "claim": "Keystream offset != 0. Round 8 states its sweep \"assumes key index 0 aligns with the first rune of LP2 page 0\"; B-04 covered 10 offsets, and R16-KDF and R16-PRNG covered offset 0 only. An author who enciphered LP1 first, skipped a file header, or started a generated pad mid-file is invisible to all of them. PARKED P-10 scores the omission at x8,192 for a modest range and notes it multiplies EVERY generator.",
+          "source_evidence": [
+            "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A2.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/control_offset.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/audit.json"
+          ],
+          "original_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && python3 scripts/audit_builders.py && python3 scripts/control_offset.py && python3 scripts/sweep_offset.py --stage A1 && python3 scripts/sweep_offset.py --stage A2"
+        },
+        {
+          "source_id": "B-08",
+          "claim": "SEED residue - >2^32 seeds, other generators, nonzero keystream offset.",
+          "source_evidence": [
+            "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A2.json"
+          ],
+          "original_command": "as B-02"
+        },
+        {
+          "source_id": "B-13-MARSAGLIA",
+          "claim": "The LP2 keystream is a window of the Marsaglia Random Number CDROM (1995) - 634,124,288 bytes of published physical randomness with published SHA-256s. round17/SYNTHESIS.md named it the single live, reachable, unswept public-pad item and \"the cheapest live item in this branch\"; lane P2 found it, recorded its identifier and a verified HTTP 206, and left it unswept.",
+          "source_evidence": [
+            "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/data/MANIFEST.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/control_marsaglia.json"
+          ],
+          "original_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && bash scripts/fetch_marsaglia.sh && python3 scripts/verify_marsaglia.py && python3 scripts/control_marsaglia.py && python3 scripts/sweep_marsaglia.py"
+        },
+        {
+          "source_id": "R19-C2-PREFILTER-REGISTER",
+          "claim": "round17/lib_padsweep.dense_scan's English rune-index trigram prefilter — which selects which offsets ever reach the beam in EVERY dense pad sweep in this repository — retains a non-English true offset at a materially lower rate than an English one. round18/L7-redteam/RESULTS.md §A.7 names this quantity as never measured.",
+          "source_evidence": [
+            "liber-primus/analysis/round19/C2/PREREG.md",
+            "liber-primus/analysis/round19/C2/RESULTS.md",
+            "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+            "liber-primus/analysis/round19/C2/out_prefilter_union.json",
+            "liber-primus/analysis/round19/C2/scripts/prefilter_register_power.py"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "R19-C2-B02-ACCOUNTING",
+          "claim": "How much of the keystream OFFSET axis does this repository's published coverage actually touch? B-02 has carried status `open` / raw_status `scope-limited` since Round 10 with every field except `hypothesis` set to null.",
+          "source_evidence": [
+            "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+            "liber-primus/analysis/round19/C2/RESULTS.md",
+            "research/ROUND-8-RESULTS.md",
+            "liber-primus/analysis/round13/B04/sweep.py",
+            "liber-primus/analysis/round13/B05/sweep_results.json"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "R19-C2-MARSAGLIA-GATE",
+          "claim": "The 1.2 GB of Marsaglia CDROM material in round18/L6-offset-marsaglia/data/ is byte-identical to the published archive. (Round 12 was burned twice: a silent 60.4% prefix of _560.00, and a 134-byte Git-LFS pointer standing in for DATA/560.13.)",
+          "source_evidence": [
+            "liber-primus/analysis/round19/C2/out_verify.json",
+            "liber-primus/analysis/round19/C2/scripts/verify_marsaglia_independent.py",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/data/checksums.sha256.txt",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/data/marsaglia-cdrom_files.xml"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "R19-C2-MARSAGLIA-COST",
+          "claim": "Round 17 called the Marsaglia CDROM 'the cheapest live item in this branch' without ever costing it. How big is its offset space and what does finishing it cost?",
+          "source_evidence": [
+            "liber-primus/analysis/round19/C2/out_marsaglia_space.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "B-02-C2-CORRECTION",
+          "claim": "PROPOSED CORRECTION to a status field, not a new experiment. round18/L6-offset-marsaglia/ledger.json sets B-02 status = `negative`. B-02's own hypothesis text is an AXIS ('keystream offset != 0'), and an axis is not made negative by a dense sweep of 220 mined configs plus 508/3,024 units of a fresh grid.",
+          "source_evidence": [
+            "liber-primus/analysis/round18/L6-offset-marsaglia/ledger.json",
+            "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+            "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+            "liber-primus/analysis/round18/L7-redteam/RESULTS.md"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "R17-PUBLIC-PAD-C2-RESTATEMENT",
+          "claim": "PROPOSED RESTATEMENT of an existing entry's coverage line, following round18/L7-A.8's precedent. R17-PUBLIC-PAD reports 14,522,916,046 offsets scored and 8,380,000,000 effective after prefilter survival. That survival was measured on ENGLISH plants only (L7-A.7), and L7-A.8 could only say the non-English coverage was 'unmeasured, not zero and not one'.",
+          "source_evidence": [
+            "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+            "liber-primus/analysis/round18/L7-redteam/RESULTS.md",
+            "liber-primus/analysis/round17/SYNTHESIS.md"
+          ],
+          "original_command": null
+        }
+      ]
+    },
+    {
+      "worker": "worker-b",
+      "entries": [
+        {
+          "source_id": "L7-A-SCORER-ENGLISH-ONLY",
+          "claim": "Every adjudication in this repository is decided by lp.score.Quadgram.score_norm, a quadgram model trained on four modern-orthography English books, against a fixed English band (>= -5.5). If the LP2 plaintext is not modern or archaic English, the CORRECT key is scored as noise and every published negative is conditional in a way no ledger entry states.",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-A-ARCHIVE-RESCORE",
+          "claim": "campaign14/REDTEAM-PROPOSALS.md (~line 155), queued and never run for the post-B6 sweeps: language-agnostic and non-English re-scoring of all sweep bests. Any archived 'null' whose decrypt scores high under Old English / Latin, or shows an elevated decrypt IoC.N, is a missed hit.",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-A-HANDOFF-NONCOMPLIANCE",
+          "claim": "Round 10b lane B6 issued a binding handoff requirement - persist a language-agnostic statistic at sweep time, because retro-fitting is impossible once the decodes are thrown away. Later sweeps complied.",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-B-BEAM-ENVELOPE",
+          "claim": "skipdecode.beam_decode admits a key skip only if EVERY skipped key position would have reproduced the previous cipher rune. That validity test is exact for encipher_keyskip and for nothing else, so constructions that desynchronise the key for any other reason are excluded by the decoder's transition relation rather than merely being harder for it.",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-C-HEADLINE-STATS",
+          "claim": "A load-bearing headline statistic is miscounted (a second, independent re-derivation of R12-D2 with fresh code).",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-C-G3-FLOOR-EXTENDED",
+          "claim": "The G3 doublet-deficit floor - min_d Pdp(d) > 0.664% for real plaintexts, therefore the key must be output-aware - is measured on four MODERN ENGLISH corpora only, and is English-conditional in the same way the scorer is.",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-C-THRESHOLD-CALIBRATION",
+          "claim": "benchmark/null.py's threshold_for() is a validated bar wherever the repo has used it.",
+          "source_evidence": [],
+          "original_command": null
+        },
+        {
+          "source_id": "L7-C-B17-TALLY",
+          "claim": "RECON-B item B-17: the multiple-comparisons tally is frozen at 5 across Rounds 8-9.",
+          "source_evidence": [],
+          "original_command": null
+        }
+      ]
+    },
+    {
+      "worker": "worker-c",
+      "entries": [
+        {
+          "source_id": "T3-PROPAGATION-MAP",
+          "claim": "Every load-bearing statistic in this repo is computed from the pinned 12,956-rune stream, but nobody has measured how sensitive any of them is to the transcription. Perturb the stream by k runes and recompute, so that T1's and T2's re-read has a price.",
+          "source_evidence": [
+            "liber-primus/analysis/round19/T3/RESULTS.md",
+            "liber-primus/analysis/round19/T3/out_summary.json",
+            "liber-primus/analysis/round19/T3/out_baseline.json",
+            "liber-primus/analysis/round19/T3/out_random.json",
+            "liber-primus/analysis/round19/T3/out_targeted.json",
+            "liber-primus/analysis/round19/T3/out_decode_L12956_KJV.json",
+            "liber-primus/analysis/round19/T3/dependency_map.json"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "T3-OAE450-STREAM-POSITIONS",
+          "claim": "The 450 located O/A/AE disagreements (RECON-A item A-02, RECON-B item B-13) can be placed in 12,956-rune stream coordinates, making them a directly testable finite object rather than a glyph-index list.",
+          "source_evidence": [
+            "liber-primus/analysis/round19/T3/t3_lib.py",
+            "liber-primus/analysis/round19/T3/out_baseline.json",
+            "liber-primus/analysis/round19/T3/out_targeted.json"
+          ],
+          "original_command": null
+        },
+        {
+          "source_id": "T3-S2-DECODE-FRAGILITY",
+          "claim": "The repo's ~10^10 sweep negatives are properties of a DECODE of this exact ciphertext, not of a summary statistic, so they inherit a different and steeper transcription-sensitivity curve than the doublet rate does.",
+          "source_evidence": [
+            "liber-primus/analysis/round19/T3/out_decode_L12956_KJV.json",
+            "liber-primus/analysis/round19/T3/out_decode_L400_LP1.json",
+            "liber-primus/analysis/round19/T3/out_decode_L120_LP1.json",
+            "liber-primus/analysis/round19/T3/RESULTS.md"
+          ],
+          "original_command": null
+        }
+      ]
+    }
+  ]
+}

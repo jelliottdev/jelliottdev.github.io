@@ -1,0 +1,96 @@
+{
+  "schema": "liberpedia-offset-model-integrity-plan-v1",
+  "timing": "Retrospective source-input/control audit after the pinned source outcomes were known; not an independent preregistration of a cipher test.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "question": "Can matching control totals establish exact offset screening when two source training books are absent?",
+  "scope": "One 40-trial planted offset control and one preselected source A1 unit-0 checkpoint; saved C2 arithmetic is supporting evidence only.",
+  "source_model": "Four Gutenberg books: KJV, Moby-Dick, Pride and Prejudice, War and Peace, using GP29 greedy transliteration and a 29x29x29 trigram table.",
+  "fallback_model": "Only exact KJV was present when source trigram_model silently skipped missing books. The resulting .npy is included and independently rebuilt.",
+  "inputs": [
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/LICENSE.source",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-lib_padsweep.py",
+      "sha256": "6015edcd7b5eba8534d9cccef5802ce5dd3a9708578fd34f89344158e79c450a"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-skipdecode.py",
+      "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-lib_l6.py",
+      "sha256": "0e60005ff4e390f2ee0e9ae7bbd0663d863cd34956f9142b954d39fac9907b87"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-control_offset.py",
+      "sha256": "47de35c957a303766b0497e242cd1f31ce3a341da990e09cbfaa0f4bacdff4fc"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-audit_builders.py",
+      "sha256": "c7dc3366f4a4a840e15b03a7428a990a4111aa13a22dbbadf5ac3d2f3191f42e"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-sweep_offset.py",
+      "sha256": "ad68dfb94d80594617e9391641b5bef6b8ffcf62becee5f2581c4dd48925e522"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-capsule-manifest.json",
+      "sha256": "d14d852ebed803bd41ef986caf30044366645eedfdbe4d808f86098a2dba9546"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+      "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-control-offset.json",
+      "sha256": "703a4ee1e86d3f078f0a3648bfeed5bfe2dc3be12a6c736e2275cfc0a01a44f3"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-checkpoint-A1-0.json",
+      "sha256": "31e5beb9ecaf1589f3b49725374a9f1bded0b5b43e0e1a1741d80578ee9056c2"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/audit.json",
+      "sha256": "62912fbe2ca37f29c8241cbdd44adda0a5674cb4474b73aca810294d1abd90b6"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/control_offset.json",
+      "sha256": "7bdbd80436a702c5650bc71aad175c6692c3d4852a1192995faca935ba86ea53"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/input-reconstruction.json",
+      "sha256": "5b15b3b14565667a2befe1fe61f30a01a2d72da04a258796b1274eb822c06d79"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/pilot-a1.json",
+      "sha256": "1f3baf9b2d58cc8fe4c05975f25bbdda2eb63b7272fc61a710f9e17e0a2be9b8"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/corpora-receipt.json",
+      "sha256": "793dcd6fe78892ff83e8489ec4fa6ed52bd91ee9cc4d2ae8a3e02d1a3670ac60"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/corpus-recovery-check.json",
+      "sha256": "2ff69727fb73a562a97d4c3f0147197aa24f4cb50d6909845fbd661a755b4924"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/saved-check.json",
+      "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/trigram-kjv-only.npy",
+      "sha256": "efee35408aefaf2e47057a57b8aae402203d231b6e57ef7457635aea08ead32b"
+    }
+  ],
+  "limitations": [
+    "No exact four-book model or Marsaglia pad bytes were recovered.",
+    "No full L6 target sweep was rerun or judged negative.",
+    "Current Gutenberg Moby/Pride bytes differ from source capsule pins."
+  ]
+}

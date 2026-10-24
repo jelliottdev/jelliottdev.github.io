@@ -1,0 +1,72 @@
+{
+  "plan_sha256": "fa69230196a0b4c16b824614581ce867d7e84102e6eabd3bf386ac4328163ca3",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "baseline": {
+    "runes": 12956,
+    "doublets": 86,
+    "doublet_pct": 0.663836356619066,
+    "ioc29": 0.9998735380706649
+  },
+  "all_450_source_alternatives": {
+    "doublets": 103,
+    "doublet_pct": 0.7950598224623697,
+    "ioc29": 1.0138229811818025
+  },
+  "source_german_comparison_floor_pct": 0.972,
+  "source_german_comparison_floor_doublets": 126,
+  "targeted_sample": {
+    "P-OAE450": {
+      "k": 450,
+      "median_doublet_pct": 0.7950598224623697
+    },
+    "P-OAE450R": {
+      "k": 450,
+      "median_doublet_pct": 0.8413739868776533
+    },
+    "P-OAEFAM": {
+      "k": 1385,
+      "median_doublet_pct": 0.8104978772674644
+    }
+  },
+  "decoder_fixture": {
+    "120": {
+      "register": "LP1",
+      "replicates_per_level": 120,
+      "levels": 14,
+      "first_below_90pct_recovery_k_book": 1800,
+      "first_score_overlap_k_book": 1800,
+      "at_450_recovery": 0.9666666666666667
+    },
+    "400": {
+      "register": "LP1",
+      "replicates_per_level": 60,
+      "levels": 14,
+      "first_below_90pct_recovery_k_book": 900,
+      "first_score_overlap_k_book": 3600,
+      "at_450_recovery": 0.96375
+    },
+    "12956": {
+      "register": "KJV",
+      "replicates_per_level": 6,
+      "levels": 6,
+      "first_below_90pct_recovery_k_book": 450,
+      "first_score_overlap_k_book": 900,
+      "at_450_recovery": 0.8615313368323556
+    }
+  },
+  "source_reader_receipt": {
+    "solved_control": "180/180 source-canon agreement",
+    "oae_adjudication_rows": 450,
+    "whole_corpus_agreement": [
+      13088,
+      13136
+    ],
+    "training_limit": "Global canon-derived alignment and labels include test pages; these are transductive source-consistency checks, not independent image truth."
+  },
+  "limits": [
+    "450 machine disagreements are possible alternatives, not verified errors",
+    "Decode corruption uses synthetic known-key LP1 or KJV passages, not actual LP2 plaintext",
+    "Full-book decoder fixture uses KJV plaintext, not LP1; passage length and text register both change",
+    "KJV source output hardcodes LP1_REAL in conditionals.register despite its top-level register=KJV"
+  ]
+}

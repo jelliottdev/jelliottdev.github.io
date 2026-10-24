@@ -111,7 +111,7 @@ class BundleSelectionTest(unittest.TestCase):
         self.records.append(self.record('gamma'))
         self.write('data/experiments.json', json.dumps({'records': self.records}))
         self.write('downloads/experiments/gamma.zip', 'new archive\n')
-        for path in ('data/catalog.json', 'data/experiment-index.json',
+        for path in ('data/catalog.json', 'data/experiment-index.json', 'data/checker-records.json',
                      'data/articles.json', 'data/article-search.json',
                      'data/guide-index.json', 'data/method-families.json',
                      'downloads/SHA256SUMS.txt', 'downloads/reference-data.zip'):

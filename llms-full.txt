@@ -6709,7 +6709,7 @@ Two letter-encoding bounds on LP2 · Bounded solving test
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-37 related records
+38 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -6783,6 +6783,8 @@ A rotating-key search stopped at its first screen · Method replay
 A column solver with a short-key limit · Bounded solving test
 
 Interrupt-key fits needed a stronger known-text check · Method replay
+
+Alternating alphabets with two interruption clocks · Bounded solving test
 
 
 
@@ -7012,7 +7014,7 @@ Four archived texts as running keys · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-30 related records
+32 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -7073,12 +7075,16 @@ Mirror and alternating-group interrupt scores · Method replay
 
 Saved autokey scores with selectable interruptions · Method replay
 
+Alternating alphabets with two interruption clocks · Bounded solving test
+
+Can one score cutoff judge every decode? · Control
+
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-14 related records
+15 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -7106,6 +7112,8 @@ Can the decoder follow a known key through a full book? · Control
 Can a correct key look wrong to the decoder? · Control
 
 Cryptographic seed streams across the unsolved pages · Method replay
+
+The offset screen changes when training books are missing · Control
 
 
 
@@ -7321,10 +7329,12 @@ Collision edits for scarce adjacent doublets · Control
 Interleaved streams and separate decoding
 Split by a declared assignment, decode each stream, and specify whether outputs are interleaved again or concatenated.
 
-2 related records
+3 related records
 Four alternating rune streams: concentration check · Manuscript measurement
 
 Deor and interlocking rune streams · Method replay
+
+Alternating alphabets with two interruption clocks · Bounded solving test
 
 
 
@@ -7668,7 +7678,7 @@ Language, clues and search
 Language and corpus identification
 Compare declared observables with suitable language controls under explicit cipher assumptions.
 
-6 related records
+7 related records
 Could the unsolved text be another language? Eight aligned translations · Manuscript measurement
 
 Language controls with exactly 2,896 tokens per sample · Manuscript measurement
@@ -7681,12 +7691,14 @@ Language comparison: shorter aligned passage controls · Manuscript measurement
 
 Two language-scoring controls missed their frozen rules · Source or input audit
 
+Can one score cutoff judge every decode? · Control
+
 
 
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-23 related records
+24 related records
 Does matching the opening text identify a seed? · Control
 
 LP2-39: twenty proposed red-header cribs · Bounded solving test
@@ -7733,12 +7745,14 @@ Do the proposed two-time-pad regions match? · Method replay
 
 Can a guessed word seed a short feedback key? · Method replay
 
+Alternating alphabets with two interruption clocks · Bounded solving test
+
 
 
 Automatic search and language scoring
 Explore a bounded model with a scorer whose ability and false positives have been checked.
 
-12 related records
+14 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -7762,6 +7776,10 @@ A keyword that shifts with each rune · Method replay
 Four archived texts as running keys · Method replay
 
 Three-rune shift display: recovery control · Control
+
+The offset screen changes when training books are missing · Control
+
+Can one score cutoff judge every decode? · Control
 
 
 
@@ -7843,7 +7861,7 @@ Mirror and alternating-group interrupt scores · Method replay
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-31 related records
+32 related records
 LP2-00–55: repeated trigrams against page shuffles · Manuscript measurement
 
 LP2-00–55: doublets across words, wraps and stored corrections · Manuscript measurement
@@ -7906,6 +7924,8 @@ What separates LP2’s surviving doublets? · Method replay
 
 Do LP2 grid bytes track doublet gaps? Source varint matrix · Manuscript measurement
 
+How disputed rune readings change the measurements · Manuscript measurement
+
 
 
 Invariants and bounded exclusions
@@ -7939,7 +7959,7 @@ Keyword decryption and rearrangement · Method replay
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-55 related records
+58 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -8050,12 +8070,18 @@ Mirror and alternating-group interrupt scores · Method replay
 
 Saved autokey scores with selectable interruptions · Method replay
 
+The offset screen changes when training books are missing · Control
+
+Can one score cutoff judge every decode? · Control
+
+How disputed rune readings change the measurements · Manuscript measurement
+
 
 
 Source verification and transcription audits
 Verify the input and the scope of its authenticity or transcription evidence.
 
-13 related records
+15 related records
 Can image-only detection find every rune row? · Source or input audit
 
 Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
@@ -8082,12 +8108,16 @@ Which bytes are printed in the base-60 grid? · Manuscript measurement
 
 Which archived Cicada signatures verify? · Source or input audit
 
+The offset screen changes when training books are missing · Control
+
+How disputed rune readings change the measurements · Manuscript measurement
+
 
 
 Rune frequencies and distribution diagnostics
 Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own.
 
-12 related records
+13 related records
 Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
 
 LP2 sections: rune collisions and adjacent repeats · Manuscript measurement
@@ -8111,6 +8141,8 @@ Does LP2's rune order reveal a generator? · Manuscript measurement
 Raw grid bytes and RSA-modulus readings · Manuscript measurement
 
 When wrong keys cross a language-score line · Control
+
+How disputed rune readings change the measurements · Manuscript measurement
 
 
 
@@ -8241,6 +8273,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/d4v1-column-unigram-key-recovery
 - Interrupt-key fits needed a stronger known-text check
   https://jelliottdev.github.io/#/experiments/relikd-interrupt-db-keyfit
+- Alternating alphabets with two interruption clocks
+  https://jelliottdev.github.io/#/experiments/alternating-alphabet-interruption-clocks
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Does the fractionation reversal undo its own shuffle?
@@ -8427,6 +8461,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/round19-decoder-repair-controls
 - Mirror and alternating-group interrupt scores
   https://jelliottdev.github.io/#/experiments/relikd-interrupt-pattern-database
+- Can one score cutoff judge every decode?
+  https://jelliottdev.github.io/#/experiments/l7-score-recovery-controls
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - LP2: pair the 2,883-rune sections by subtraction
@@ -8441,6 +8477,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-page-pair-alignment
 - When wrong keys cross a language-score line
   https://jelliottdev.github.io/#/experiments/round19-decoder-null-bars
+- The offset screen changes when training books are missing
+  https://jelliottdev.github.io/#/experiments/dukotah-offset-model-integrity
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - LP2-40: replay the FOR EVERY opening arithmetic
@@ -8819,6 +8857,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/r18-filter-locus-replay
 - Does the A-03 image audit bound missed doubled runes?
   https://jelliottdev.github.io/#/experiments/a03-haplography-source-gate
+- How disputed rune readings change the measurements
+  https://jelliottdev.github.io/#/experiments/rune-reading-sensitivity-t3
 - Invariants and bounded exclusions
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - Literal prime alphabet: affine permutations for every modulus above 109
@@ -30132,7 +30172,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 297 published reproducible records: 63 bounded solving or extraction tests, 93 proposed-method replay, 76 manuscript measurements, 28 controls, 34 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 301 published reproducible records: 64 bounded solving or extraction tests, 93 proposed-method replay, 77 manuscript measurements, 30 controls, 34 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -32858,6 +32898,604 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "repeating key cipher",
         "substitution",
         "polyalphabetic substitution"
+      ]
+    }
+  ]
+}
+
+---
+
+{
+  "id": "alternating-alphabet-interruption-clocks",
+  "status": "published",
+  "title": "Alternating alphabets with two interruption clocks",
+  "question": "Do two known keys, alternating GP/reversed-GP cipher alphabets and either of two ciphertext-F pause rules recover a declared page opening?",
+  "reader_question": "Could F pause the key, the alphabet, or both?",
+  "summary": "Neither F-clock rule recovered a declared twelve-rune opening in 55 LP2 pages.",
+  "finding": "No exact opening among 823,680 comparisons across 1,664 settings. The longest shared prefix was three runes. All state-machine roundtrips and the independent closed-form census pass.",
+  "reader_finding": "Neither rule revealed a known opening. Pausing just the key or both clocks was tested with both known keys, every starting phase, and both arithmetic directions.",
+  "reader_limit": "This checks two specified ciphers and nine predicted beginnings. Other keys, interruption rules and unknown openings remain possible.",
+  "limitations": "Other keys, cipher alphabet permutations, literal/removed F, other interruption runes, word resets, additional layers, noninitial starts and unknown plaintext openings. No historical exact-method replay is claimed.",
+  "next_steps": "Require a new key, state transition or independently predicted continuation before extending this baseline.",
+  "tags": [
+    "alternating alphabets",
+    "two clocks",
+    "F interruption",
+    "Vigenere",
+    "known keys",
+    "page openings"
+  ],
+  "family": {
+    "id": "known-vigenere-key-reuse",
+    "title": "Reuse of known repeating keys",
+    "question": "Do specified known key vectors recover explicitly declared openings under fixed alignment rules?",
+    "baseline": "lp2-known-vigenere-keys"
+  },
+  "variant": {
+    "label": "Alternating cipher alphabets and F-paused clocks",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "after": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "reason": "Define and test the proposed two-clock extension without treating the uninterrupted baseline as coverage."
+      },
+      {
+        "field": "representation",
+        "before": "Complete archived rune stream including headings; remove non-alphabet characters; no corrections or reversal.",
+        "after": "First twelve GP29 runes, including headings, of LP2-00–55; omit runeless LP2-50. Page-local state. Other characters do not advance it.",
+        "reason": "Define and test the proposed two-clock extension without treating the uninterrupted baseline as coverage."
+      },
+      {
+        "field": "procedure",
+        "before": "Apply each known key with every phase, both addition and subtraction modulo 29. Compare the first 12 output indices against each of nine known-opening vectors. Retain complete candidates.",
+        "after": "Alternate ordinary/reversed cipher alphabets, each with its own known repeating key. Decode F normally but hold the selected key position there. Compare always-toggling versus F-paused alphabet clocks; compare each head with nine fixed twelve-rune known-reading openings.",
+        "reason": "Define and test the proposed two-clock extension without treating the uninterrupted baseline as coverage."
+      },
+      {
+        "field": "parameters",
+        "before": "Two vectors of lengths 8 and 13; all 21 phases; two signs; 56 pages; 2352 candidates and 21168 exact comparisons. Reset per page. No interruptions.",
+        "after": "2 key assignments × 104 phase pairs × 2 first alphabets × 2 signs × 2 clock policies = 1,664 settings; 55 pages; 823,680 exact comparisons. 1,664 roundtrips on 87 prescribed runes plus 1,664 forced-marker controls.",
+        "reason": "Define and test the proposed two-clock extension without treating the uninterrupted baseline as coverage."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other keys, interruption placement, noninitial positions, heading removal, cross-page carry, alternative alphabets, transposition and language scoring.",
+        "after": "Other keys, cipher alphabet permutations, literal/removed F, other interruption runes, word resets, additional layers, noninitial starts and unknown plaintext openings. No historical exact-method replay is claimed.",
+        "reason": "Define and test the proposed two-clock extension without treating the uninterrupted baseline as coverage."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "First twelve GP29 runes, including headings, of LP2-00–55; omit runeless LP2-50. Page-local state. Other characters do not advance it.",
+    "procedure": "Alternate ordinary/reversed cipher alphabets, each with its own known repeating key. Decode F normally but hold the selected key position there. Compare always-toggling versus F-paused alphabet clocks; compare each head with nine fixed twelve-rune known-reading openings.",
+    "parameters": "2 key assignments × 104 phase pairs × 2 first alphabets × 2 signs × 2 clock policies = 1,664 settings; 55 pages; 823,680 exact comparisons. 1,664 roundtrips on 87 prescribed runes plus 1,664 forced-marker controls.",
+    "exclusions": "Other keys, cipher alphabet permutations, literal/removed F, other interruption runes, word resets, additional layers, noninitial starts and unknown plaintext openings. No historical exact-method replay is claimed."
+  },
+  "outcome": "not-supported",
+  "reproduction": {
+    "command": "python experiments/records/alternating-alphabet-interruption-clocks/run.py --check",
+    "environment": "Python 3.9 or later, standard library only. Run check.py for the independent census and plot.py --check for the figure.",
+    "script": "experiments/records/alternating-alphabet-interruption-clocks/run.py",
+    "script_sha256": "aa8d181edd50f9a662f8d479cd2e4781ee5afcafa7ef87d9d78ea73915a2faa4",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/plan.json",
+        "sha256": "b94a45c74ae2160384afb6278987d059629f1e330ebc33d1d73dde69f3dbd122"
+      },
+      {
+        "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
+        "sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/run.py",
+        "sha256": "aa8d181edd50f9a662f8d479cd2e4781ee5afcafa7ef87d9d78ea73915a2faa4"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/check.py",
+        "sha256": "6cdb569d4473561a08b1a8f62ec5fce3cf6ac7f96b5b68edec5b366e061b8054"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/plot.py",
+        "sha256": "24c129c37dbf47cb8c8384619df7d67b807128a9f3c5f9e0ca07f8de4b1e3437"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/package.py",
+        "sha256": "88a281645c0bc44b9702ac5f9d16471cff0c07244e6b8571bdc1505180415d95"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/article.md",
+        "sha256": "9cd835cdde711d0334a49236516a686a2551a28a195776537cb2d80b99e1e8a1"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/results.json",
+        "sha256": "f1aefa5d641747c5284ab8fbf542687d5b006dc3e46c0d630c7c0feab6ca885f"
+      },
+      {
+        "path": "experiments/records/alternating-alphabet-interruption-clocks/clocks.svg",
+        "sha256": "73b98715c3c56362128ceac9d5fdc7a55e2b2d1c276b1e2097d3651f55d06cc3"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Independent closed-form clock census and all-setting roundtrip controls",
+    "retested_on": "2026-10-23",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Known Vigenère methods and alignment",
+      "url": "https://jelliottdev.github.io/#/wiki/vigenere"
+    },
+    {
+      "label": "Published key and interruption parameters",
+      "url": "https://jelliottdev.github.io/data/evidence/reading-methods.json"
+    }
+  ],
+  "related": [
+    "lp2-known-vigenere-keys",
+    "four-phase-ioc",
+    "grouped-key-advance-openings"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/alternating-alphabet-interruption-clocks/clocks.svg",
+      "caption": "F pauses the selected key in both versions. The two rows show whether the cipher alphabet switches anyway or pauses with it."
+    }
+  ],
+  "article": "## Finding\n\n**Neither clock rule revealed a declared opening.** The test tried two known Liber Primus keys with alternating cipher alphabets on 55 LP2 pages. Across **1,664 settings and 823,680 comparisons**, no output matched any of the nine fixed twelve-rune openings. The longest matching beginning was three runes.\n\nThis checks one specific way an F rune might interrupt a cipher. It does not show that alternating alphabets or interruptions are absent from LP2. A real plaintext could simply begin differently from every opening in this test.\n\n![Two rows show which alphabet reads each rune when F pauses just the key or both clocks.](experiments/records/alternating-alphabet-interruption-clocks/clocks.svg)\n\n## What changes at an F?\n\nEach alphabet has its own repeating key. Alphabet A uses ordinary GP rune order; B reverses that order. Normally the decoder switches between A and B after every rune, advancing the key it just used.\n\nThe two policies differ when the **ciphertext** rune is F:\n\n| Rule | Selected key | Alphabet for the next rune |\n|---|---|---|\n| Pause the key | Keep its current position | Switch A ↔ B |\n| Pause both clocks | Keep its current position | Keep the same alphabet |\n\n**F is still decoded using the current key.** It is not removed, copied into the plaintext, or treated as a verified word separator. That distinction matters: those would be different ciphers.\n\n## What was tested?\n\nThe two key vectors are the previously documented Welcome and second-koan keys. Both assignments to A/B are tested. Each key may start at any phase; either alphabet can go first; and both addition and subtraction are included. All state resets at the beginning of each page. Spaces, punctuation and other non-runes do not advance either clock.\n\n| Test | Pause key | Pause both |\n|---|---:|---:|\n| Settings | 832 | 832 |\n| Page openings decoded | 45,760 | 45,760 |\n| Exact comparisons | 411,840 | 411,840 |\n| Twelve-rune matches | **0** | **0** |\n| Longest matching prefix | 3 | 3 |\n\nThe target pages are LP2-00–55, including headings. LP2-50 contains no recognized runes in the archived text layer and is excluded, leaving 55 pages. Each decoded head is compared with the same nine openings used in the [known-key baseline](#/experiments/lp2-known-vigenere-keys). No English score decides success, and no crib was chosen after inspecting the outputs. Counts include every named setting; they are not claims of independent trials or distinct outputs.\n\n## Controls and limits\n\nAll **1,664 settings** encrypt and recover an 87-rune prescribed sequence exactly. A second control places ciphertext F at three fixed positions, including two consecutive markers. Every setting reconstructs that ciphertext after decoding and re-encrypting. The two policies produce different control plaintexts, confirming that the test exercises the clock distinction.\n\nAn independent checker calculates alphabet choices from the number of earlier F/non-F symbols rather than using the producer's state machine. It reproduces every comparison and the digest of every decoded head.\n\nThese controls establish that the specified decoder is reversible and the census is reproducible. They do not establish that Cicada used these rules. Other keys, alphabet permutations, interruption runes, resets, noninitial starts and plaintexts remain outside the test. This is a **newly specified baseline** for an underdefined proposal, not a reproduction of a historical solver's exact cipher.\n\n## Reproduce\n\nThe downloadable bundle includes the input text layers, frozen plan, results and both programs. Extract it without flattening folders, then run:\n\n```text\npython experiments/records/alternating-alphabet-interruption-clocks/run.py --check\npython experiments/records/alternating-alphabet-interruption-clocks/check.py\npython experiments/records/alternating-alphabet-interruption-clocks/plot.py --check\n```\n\nPython 3.9 or later is sufficient; no model, network access or external library is needed. The target settings were frozen before the census. Input-consistency checks and explicit assertions of the forced-marker clock states were added after the census during review. They change no cipher setting, comparison or saved result.\n",
+  "article_path": "experiments/records/alternating-alphabet-interruption-clocks/article.md",
+  "script_sha256": "aa8d181edd50f9a662f8d479cd2e4781ee5afcafa7ef87d9d78ea73915a2faa4",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "method_topics": [
+    {
+      "id": "polyalphabetic",
+      "title": "Repeating-key and polyalphabetic ciphers",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key",
+        "polyalphabetic",
+        "repeating key cipher",
+        "substitution",
+        "polyalphabetic substitution"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
+      ]
+    },
+    {
+      "id": "cribs",
+      "title": "Known plaintext and crib searches",
+      "aliases": [
+        "crib",
+        "known plaintext",
+        "guessed word",
+        "known plaintext attack",
+        "crib search"
+      ]
+    },
+    {
+      "id": "interleaving",
+      "title": "Interleaved streams and separate decoding",
+      "aliases": [
+        "interleaving",
+        "interleaved streams",
+        "odd and even",
+        "odd even",
+        "separate streams"
       ]
     }
   ]
@@ -50330,6 +50968,314 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "dukotah-offset-model-integrity",
+  "status": "published",
+  "title": "The offset screen changes when training books are missing",
+  "question": "Do matching planted-control totals mean a fallback prefilter selects the same key offsets as the pinned four-book source model?",
+  "reader_question": "Can two screens pass the same number of tests but choose different key positions?",
+  "reader_finding": "The one-book screen passed the same headline controls as the original, but ranked five of the 40 trials differently. It also selected a different best key position in one search unit.",
+  "reader_limit": "This does not reproduce the original four-book search or identify an LP2 key. Two exact training books and the separate random-pad archive remain unavailable.",
+  "summary": "Yes. Both kept 26 of 40 planted true offsets, but five individual trial rankings changed; the first-ranked count was 21 versus 22, and one full million-offset target unit chose a different best position.",
+  "finding": "The exact source builder/sharding audit passed on locally available inputs. A KJV-only retraining independently rebuilds the fallback trigram cache. Both source and fallback controls recovered 40/40 planted messages and retained 26/40 true offsets; only 35/40 complete trial rows matched. Source ranked the true offset first 21/40 times, fallback 22/40. A1 unit 0 chose offset 400,310 in the archived four-book source checkpoint and 673,662 with the fallback model.",
+  "limitations": "This is a retrospective instrument/input control, not an LP2 decryption or a source-exact replay of the full L6 sweep. The pinned Moby-Dick and Pride and Prejudice bytes are absent; their current official downloads fail the capsule hashes, and the 1.2 GB Marsaglia files are absent. The single changed A1 unit does not isolate model drift from every possible environment difference. Archived C2/offset arithmetic was recounted from saved output, not fresh pad scans.",
+  "next_steps": "Recover the exact two missing scorer books and Marsaglia bytes, verify their pinned hashes, rebuild the four-book trigram table, then replay the source controls and checkpoint units before extending any target sweep.",
+  "outcome": "not-supported",
+  "tags": [
+    "source input",
+    "offset search",
+    "prefilter",
+    "trigram",
+    "planted control",
+    "reproducibility"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-offset-model-integrity/source-lib_padsweep.py",
+      "experiments/records/dukotah-offset-model-integrity/source-capsule-manifest.json",
+      "experiments/records/dukotah-offset-model-integrity/source-control-offset.json"
+    ],
+    "representation": "The source 12,956-rune unsolved stream supplies the first 24-rune screening window and 400-rune beam head in one A1 unit; forty source-planted 372-rune English messages test offset recovery. This record makes no page-wide solving claim.",
+    "procedure": "Rebuild the fallback 29^3 trigram table independently from pinned KJV; verify four book hash gates; recount paired source/fallback control rows; compare one complete 2^20-offset A1 source checkpoint with a changed-model pilot.",
+    "parameters": "40 paired source/fallback planted controls; 1,048,576 offsets in A1 unit 0; GP29, 24-rune screen, 400-rune head, max_skip 8. Archived C2 300-row summaries and offset totals are supporting saved-output arithmetic only.",
+    "exclusions": "No exact four-book model reconstruction, no fresh full A1/A2 or Marsaglia sweep, no new negative LP2 key verdict, no general statement that all scorer variants disagree."
+  },
+  "review": {
+    "reviewer": "Independent KJV-only model reconstruction, exact-hash corpus gate, paired row recount and source checkpoint comparison",
+    "kind": "source input and decoder control",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python -X utf8 experiments/records/dukotah-offset-model-integrity/check.py",
+    "environment": "Python 3 and NumPy; bundled exact KJV, source snapshots, trigram cache and paired receipts. replay.py runs the pinned source in a temporary tree, offline; --controls-only is the shorter run.",
+    "script": "experiments/records/dukotah-offset-model-integrity/check.py",
+    "script_sha256": "f0432ab2b8ec217b90e1e66e67deb1bb2e98ee691642eaba75b3f4ac71b7af69",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/plan.json",
+        "sha256": "0ca794be8fbfc0fcef554853979bc411bd3b150a6317a7798117341b35ac1167"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/check.py",
+        "sha256": "f0432ab2b8ec217b90e1e66e67deb1bb2e98ee691642eaba75b3f4ac71b7af69"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/replay.py",
+        "sha256": "5fc88f7cf3b4f033041f1dbbd763137c10c0900169dbd09dd349390923cc5a93"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/plot.py",
+        "sha256": "00b29540cf1b0aff01dc27a86b9e892c64da3d3d13be2e77e6916ab791311175"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/article.md",
+        "sha256": "a2f0951fc12ccfd18dacb8f68ee8a0ab610af14f61544f0310aa277f5d15bc0c"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-lib_padsweep.py",
+        "sha256": "6015edcd7b5eba8534d9cccef5802ce5dd3a9708578fd34f89344158e79c450a"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-lib_l6.py",
+        "sha256": "0e60005ff4e390f2ee0e9ae7bbd0663d863cd34956f9142b954d39fac9907b87"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-control_offset.py",
+        "sha256": "47de35c957a303766b0497e242cd1f31ce3a341da990e09cbfaa0f4bacdff4fc"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-audit_builders.py",
+        "sha256": "c7dc3366f4a4a840e15b03a7428a990a4111aa13a22dbbadf5ac3d2f3191f42e"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-sweep_offset.py",
+        "sha256": "ad68dfb94d80594617e9391641b5bef6b8ffcf62becee5f2581c4dd48925e522"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-capsule-manifest.json",
+        "sha256": "d14d852ebed803bd41ef986caf30044366645eedfdbe4d808f86098a2dba9546"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-control-offset.json",
+        "sha256": "703a4ee1e86d3f078f0a3648bfeed5bfe2dc3be12a6c736e2275cfc0a01a44f3"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-checkpoint-A1-0.json",
+        "sha256": "31e5beb9ecaf1589f3b49725374a9f1bded0b5b43e0e1a1741d80578ee9056c2"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/audit.json",
+        "sha256": "62912fbe2ca37f29c8241cbdd44adda0a5674cb4474b73aca810294d1abd90b6"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/control_offset.json",
+        "sha256": "7bdbd80436a702c5650bc71aad175c6692c3d4852a1192995faca935ba86ea53"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/input-reconstruction.json",
+        "sha256": "5b15b3b14565667a2befe1fe61f30a01a2d72da04a258796b1274eb822c06d79"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/pilot-a1.json",
+        "sha256": "1f3baf9b2d58cc8fe4c05975f25bbdda2eb63b7272fc61a710f9e17e0a2be9b8"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/corpora-receipt.json",
+        "sha256": "793dcd6fe78892ff83e8489ec4fa6ed52bd91ee9cc4d2ae8a3e02d1a3670ac60"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/corpus-recovery-check.json",
+        "sha256": "2ff69727fb73a562a97d4c3f0147197aa24f4cb50d6909845fbd661a755b4924"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/saved-check.json",
+        "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/trigram-kjv-only.npy",
+        "sha256": "efee35408aefaf2e47057a57b8aae402203d231b6e57ef7457635aea08ead32b"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-ks.py",
+        "sha256": "1b332b0da0cf8febf89f3d57a4dbdee09a6d5802de847610e7ae41e1e50d0edb"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-seeds.py",
+        "sha256": "6921c49a2f7250633c5ac311d94cfb560251c5181051ad2f0d2aa1975d379c7a"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-results_A.json",
+        "sha256": "5957e2b61bd28c2d06d5619bd5b1a2e7da353f95cf8f20f87ebf63f68d936000"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-results_B.json",
+        "sha256": "ccfdad7f6970902c85397c057146d3f86074de4ca7384807d9aaace489933eff"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-results_C.json",
+        "sha256": "a81ac5ae3357c2840da777d3bf7efb14d5c8b0c9db2cfe87b312dc7227fe7ec0"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kdf.py",
+        "sha256": "af53f1e4bdac90a335a8391feb35e844641dc54b2cd295cff82f3911a930ac8c"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kdf-results_A.json",
+        "sha256": "e7e1b9b3053c5e4daa09feab8f3164b79acbc4fb887875f88b4bcbc27b637a14"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-prng_sweep.py",
+        "sha256": "d4de5e17094f3bf6461221fc2b345717ca32c1b089222c5a5d8bc683ee4c9283"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-prng-results.json",
+        "sha256": "f982e35cc2866f4a2a7655063e8f3390d15ccd6629742680e190f9a1219614e8"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-null.py",
+        "sha256": "191f3e7ec0cf9a902b10d98e92f9539267e58f132f0ec605c383edfa1ea362e4"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/results.json",
+        "sha256": "670125a50a06570196a35d042bd77f2737ed8b36b49769de52d72872dd11a25a"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/comparison.svg",
+        "sha256": "2624682879dd58f9fb7182a6277163d998d627e6ad4b30817d5e8953058815b1"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/comparison.svg",
+      "caption": "The source and KJV-only screens kept the same number of true offsets while ranking five individual trials differently."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Round 18 offset source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L6-offset-marsaglia"
+    },
+    {
+      "label": "Pinned Round 19 prefilter audit",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C2"
+    }
+  ],
+  "related": [
+    "english-scorer-controls",
+    "dukotah-nonenglish-control-gate"
+  ],
+  "article": "# Matching control totals can hide a different scorer\n\nThe public offset search screens millions of possible key positions before trying its decoder. That screen learns rune patterns from four books. In the available checkout, three training books were missing, so the source code quietly built a different screen from the KJV alone.\n\nThe source and fallback both recovered the known message in **40/40** planted trials and both kept its true offset in **26/40**. Those totals look reassuring. The individual rankings changed in **5 of 40** trials; the true offset ranked first in **21** source trials and **22** fallback trials. When we reran one of the source's million-offset target units, its best offset changed from **400,310** to **673,662**. The scores changed too. Matching control totals therefore do not establish that the same candidates reached the decoder.\n\n![Source and KJV-only controls kept the same number of true offsets, but ranked different ones first.](experiments/records/dukotah-offset-model-integrity/comparison.svg)\n\nThis is an input and instrument check, **not a result about an LP2 key**. The original converter, sharding, and planted beam checks passed on the available inputs. An independent reconstruction matched the saved KJV-only trigram table exactly. The source's four-book model cannot be rebuilt from this checkout: the pinned hashes match KJV and *War and Peace*, while current official *Moby-Dick* and *Pride and Prejudice* downloads differ. Newline and BOM variants, plus an existing cached *Pride and Prejudice* file, did not restore the pinned bytes.\n\nThe separately archived C2 trial counts, offset-coverage fractions, and Marsaglia case-space arithmetic also recount correctly from their saved rows. That is an **arithmetic check of saved output**. The 1.2 GB of source Marsaglia pad data are gitignored and absent here, so their hashes and pad scans were not replayed. We cannot present the source's large negative sweep totals as independently reproduced under the exact screening model.\n\nRun `python -X utf8 experiments/records/dukotah-offset-model-integrity/check.py` to verify the bundled input hashes, independently rebuild the fallback model from KJV, recount all 40 trial rows, and compare the pinned A1 checkpoint. NumPy is required. Run `python -X utf8 experiments/records/dukotah-offset-model-integrity/plot.py --check` to verify the figure. The retrospective [plan](experiments/records/dukotah-offset-model-integrity/plan.json) lists every exact input and explicitly does not claim advance registration.\n\nTo rerun the source code offline, use `python -X utf8 experiments/records/dukotah-offset-model-integrity/replay.py --controls-only` for all 40 planted trials. Omit `--controls-only` to also run the preselected million-offset A1 unit. The harness reconstructs the source tree in a temporary folder from bundled, hash-checked files, supplies the exact source ciphertext bytes, and compares fresh output with the saved KJV-only receipts; it never changes the pinned source or fetches another book.\n\nThe source rules and archived results are pinned to [Dukotah/cicada3301 at f08b20b](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L6-offset-marsaglia). To replay the original full offset or Marsaglia searches, first restore the exact four scorer books and pad bytes, verify their hashes, then run the source controls and target grids unchanged.\n",
+  "article_path": "experiments/records/dukotah-offset-model-integrity/article.md",
+  "script_sha256": "f0432ab2b8ec217b90e1e66e67deb1bb2e98ee691642eaba75b3f4ac71b7af69",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "alignment",
+      "title": "Offsets and key alignment",
+      "aliases": [
+        "offset",
+        "alignment",
+        "key alignment"
+      ]
+    },
+    {
+      "id": "automatic-search",
+      "title": "Automatic search and language scoring",
+      "aliases": [
+        "hill climbing",
+        "simulated annealing",
+        "genetic algorithm",
+        "brute force",
+        "automatic search",
+        "beam search"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    },
+    {
+      "id": "provenance",
+      "title": "Source verification and transcription audits",
+      "aliases": [
+        "signature",
+        "provenance",
+        "transcription",
+        "source audit",
+        "input verification",
+        "wrong file",
+        "missing rows"
+      ]
+    }
+  ]
+}
+
+---
+
+{
   "id": "dukotah-ornament-fresh-reader-gate",
   "status": "published",
   "title": "Can the rebuilt reader inspect ornament bands?",
@@ -64663,6 +65609,218 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "another language",
         "non English",
         "other languages"
+      ]
+    }
+  ]
+}
+
+---
+
+{
+  "id": "l7-score-recovery-controls",
+  "status": "published",
+  "title": "Can one score cutoff judge every decode?",
+  "question": "Under the original source beam and English model, how do planted recovery, text register and length/beam setting affect the interpretation of a fixed −5.5 cutoff?",
+  "reader_question": "Could a good-looking score hide an incorrect decode?",
+  "summary": "Four of 28 synthetic decodes pass the English-score cutoff while recovering less than 90% of the planted text. Five source text registers and three fresh conditional-null settings show why the same cutoff needs matched controls.",
+  "finding": "In 28 source-derived L7 mechanism plants at 240 runes, four runs clear −5.5 while recovering less than 90% of the planted runes. Seven baseline plants recover exactly; paired rejection has 25.8% median recovery, one free advance 95%, and free advances at q=.02 give 72.1%. Fifteen correct/wrong-key register pairs reproduce the corresponding saved source subset. Fresh 120-draw nulls at L31/bw120, L120/bw400 and L400/bw120 give tail-excess scales 0.35236, 0.13471 and 0.06090; each uses only 11 upper-tail exceedances.",
+  "reader_finding": "Four synthetic decodes passed the score cutoff while recovering less than 90% of the known text. The score ranges also changed across text registers and decoder settings, so a score alone cannot certify a correct reading.",
+  "limitations": "Finite source-derived controls, not an LP2 key search. Missing original modern-English/Mabinogion and Welsh inputs and derived vowel-deletion panels are excluded. Five available registers include two English texts, not five languages. Null settings change both length and beam width and have only 120 draws each; the eleven-point tail estimates do not calibrate a large-search error rate. The archived fixtures support exact finite replay, not full corpus reconstruction; the packaged plan was written after execution.",
+  "reader_limit": "These controls do not identify LP2’s language or cipher. The null samples are too small to validate a cutoff for a large key search.",
+  "next_steps": "For a proposed solving tool, predeclare its complete search rule and verify recovery of held-out planted texts plus a matched search-maximum null before interpreting a high score.",
+  "outcome": "supported",
+  "tags": [
+    "source controls",
+    "English scorer",
+    "rune recovery",
+    "beam decoding",
+    "key skipping",
+    "language registers",
+    "conditional null",
+    "score cutoff"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/l7-score-recovery-controls/fixtures.json"
+    ],
+    "representation": "Fixed source-derived GP29 plaintext/ciphertext/key fixtures, English quadgram counts and a source ciphertext prefix used only for order-destroying conditional controls.",
+    "procedure": "Replay the unchanged source beam on fifteen paired register plants and twenty-eight mechanism plants; generate 120 fixed-seed shuffled-prefix nulls per setting; independently recalculate rune recovery, quadgram scores and null summaries.",
+    "parameters": "Five registers × three L120 trials with correct and wrong keys; four mechanisms × seven L240 plants; source beam width 400/max_skip 3; score cutoff −5.5 and recovery reference 90%; three null settings L31/bw120,L120/bw400,L400/bw120 × 120 draws.",
+    "exclusions": "Full 67-case L7 envelope; original missing EN_MODERN/CY and derived vowel panels; six-model archive rescoring; G3 difference-floor census; independently preregistered corpus selection; large-search tail calibration; real LP2 keys or cipher exclusions."
+  },
+  "review": {
+    "reviewer": "Exact-source finite replay plus independent stored-trace score/recovery/null arithmetic checks",
+    "kind": "Grouped instrument controls",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/l7-score-recovery-controls/run.py --check && python experiments/records/l7-score-recovery-controls/check.py && python experiments/records/l7-score-recovery-controls/plot.py --check",
+    "script": "experiments/records/l7-score-recovery-controls/run.py",
+    "script_sha256": "ef5fc1e79631812330d253b5be3c7b1c0839e63c215656ad3bd69ff6233cb1fb",
+    "environment": "Python 3 standard library only. No network, external corpus, GnuPG, NumPy or AI calls are needed for the packaged replay.",
+    "inputs": [
+      {
+        "path": "experiments/records/l7-score-recovery-controls/plan.json",
+        "sha256": "c2adaf6101200af3abb088045183f684a7d67f6605769894226999babe800601"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/fixtures.json",
+        "sha256": "d851843c8cb3288be13bbdd4434ad880f2c5e4a1096527f3b47d11dbb1df95f3"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-manifest.json",
+        "sha256": "96157ff9ce6616152876a034633553771cfdf6deeb7dc23645bbeaa867597cff"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/lp/__init__.py",
+        "sha256": "b1ff3e24ada8ebf314b8d9712404627c2b17bbd74964d066d91a9de0ce26e8c0"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-a1.py",
+        "sha256": "d3780ffa2d7a1edd91c0697922dbb6934358bb9a880cdec21b6e27909f352bf3"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-b1.py",
+        "sha256": "8b8506a28bb45c3ccd69e528ebb477b4650256a063ae38c0bd531b9c32110653"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-c1.py",
+        "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/check.py",
+        "sha256": "bfacc76585dde80554b6f1e011d68c8124722c538886d7362ad9220e24d3892b"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/plot.py",
+        "sha256": "337eb0df5e68a5af2b2bd3ca214022a7a1fdc792de8c926ac3386bafa4c4d5ae"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/l7-score-recovery-controls/results.json",
+        "sha256": "8949d0d48698d56396784ce6e153ff6259821e60740bf5cf50161b6ee88e23fc"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/register-scores.svg",
+        "sha256": "494f70297012d42ecd3aabb8b290bb6e067b7d022171a698b12d14e1eaf64a1a"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/score-recovery.svg",
+        "sha256": "e688c8a03c1164a31f58116ec75780d03e8c92cedfd52711fdac164aaf6ddd07"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/conditional-nulls.svg",
+        "sha256": "2fcaaac5bc3b211f35a9261d578852036530279a13fb9d5f1b93c59fb56ced23"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned original L7 instrument and controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L7-redteam/RESULTS.md"
+    },
+    {
+      "label": "Original English model and normalization",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/src/lp/score.py"
+    }
+  ],
+  "related": [
+    "english-scorer-controls",
+    "decoder-skip-controls",
+    "round19-decoder-repair-controls",
+    "round19-decoder-null-bars",
+    "r18-keyskip-drift-power"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/l7-score-recovery-controls/score-recovery.svg",
+      "caption": "Median planted rune recovery for four original L7 mechanisms. Four of twenty-eight decodes clear the score cutoff but recover less than 90% of the text."
+    },
+    {
+      "path": "experiments/records/l7-score-recovery-controls/register-scores.svg",
+      "caption": "Five text registers use the same marks and axis; each has three correct-key plants. The dashed line is the source −5.5 cutoff."
+    },
+    {
+      "path": "experiments/records/l7-score-recovery-controls/conditional-nulls.svg",
+      "caption": "Observed ranges and means of 120 shuffled controls at each length/beam setting. These small samples do not calibrate large-search tail probabilities."
+    }
+  ],
+  "article": "# Can one score cutoff judge every decode?\n\n## Finding\n\n**A convincing score can hide an incorrect decode.** In these 28 known-key controls, four decodes passed the source's English-score cutoff while recovering less than 90% of the text we put in. The key was correct; the decoder's assumptions were not always right.\n\n![Median rune recovery for four synthetic encryption rules; 4 of 28 controls passed the score cutoff while recovering less than 90% of the planted text.](experiments/records/l7-score-recovery-controls/score-recovery.svg)\n\nA score measures resemblance to the model's English. Recovery measures whether the output actually matches the known text. Check both when testing a solving tool.\n\n## Why check recovery?\n\nThe original key-skipping rule recovered every rune in all seven baseline plants. When rejecting a repeated output consumed two key draws instead of one, median recovery fell to 25.8%. Extra key advances produced intermediate results: a single extra advance gave 95% median recovery; a 2% chance of an extra advance gave 72.1%.\n\nThese are synthetic controls, not proposed readings of LP2. [Decoder repair controls](#/experiments/round19-decoder-repair-controls) already examine paired skips and drift across a larger set of constructions. This record replays four original L7 cases and combines them with its scorer and length/beam checks; it does not introduce another solving-method family.\n\n## Different text, the same cutoff\n\nThe same correct-key trial was run three times for each of five text registers: KJV English, LP1 English, Latin, Old English and German. The Latin and Old English medians passed the −5.5 line; German's median fell just below it. That is a property of these texts, transformations and short trials—not a ranking of possible LP2 languages.\n\n![Five registers use identical marks to compare their median correct-key scores with the fixed minus 5.5 cutoff.](experiments/records/l7-score-recovery-controls/register-scores.svg)\n\nThe original modern-English/Mabinogion and Welsh inputs were missing, so their results and the derived vowel-deletion panels are excluded. [Matched-language scorer controls](#/experiments/english-scorer-controls) compare eight languages using aligned corpus material; this smaller replay instead preserves the original L7 trial settings and the available source texts.\n\n## Changing the decoder setting\n\nFor each of three length/beam settings, 120 controls shuffled the same source ciphertext prefix while preserving its rune counts. The score ranges changed with the setting. Each setting therefore needs a matched control; one cutoff cannot acquire a measured error rate merely by being reused.\n\n![Observed score ranges and means for 120 shuffled controls at each of three length and beam-width settings.](experiments/records/l7-score-recovery-controls/conditional-nulls.svg)\n\nThe source's tail-scale calculation gives about **0.352, 0.135 and 0.061**, compared with its fixed default of 0.0725. Each estimate uses only **11 values above the 90th-percentile cutoff**. These are exploratory measurements, not a calibrated threshold for millions or billions of guesses. [Decoder-specific null bars](#/experiments/round19-decoder-null-bars) separately examine changes to the decoder's transition rules.\n\n## Scope\n\nThere are 15 paired correct/wrong-key register trials, 28 mechanism plants and 360 shuffled null decodes. The original scorer, alphabet and beam modules are preserved unchanged. Compact fixtures preserve the actual rune sequences and keys used, so reproduction does not need the missing books or the larger source checkout. This package tests the saved controls; it does not re-create the entire original corpus selection.\n\nThe counts and parameters were fixed in the batch scripts before execution. The packaged plan was compiled afterward, so this is not an independent prospective preregistration. No real LP2 candidate key was searched, and no encryption method or plaintext language is ruled out.\n\n## Reproduce\n\nFrom the repository root or the extracted experiment folder:\n\n```text\npython experiments/records/l7-score-recovery-controls/run.py --check\npython experiments/records/l7-score-recovery-controls/check.py\npython experiments/records/l7-score-recovery-controls/plot.py --check\n```\n\nThe first command repeats the source beam. The independent checker calculates rune recovery and English scores directly from the saved traces, then checks the null summaries. It does not reuse the beam to verify those calculations. The three figure files are generated from the same results.\n\n## Sources\n\n- [Pinned L7 source investigation](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L7-redteam/RESULTS.md).\n- [Original conditional-null calculation](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L7-redteam/c1_bars.py).\n",
+  "article_path": "experiments/records/l7-score-recovery-controls/article.md",
+  "script_sha256": "ef5fc1e79631812330d253b5be3c7b1c0839e63c215656ad3bd69ff6233cb1fb",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
+      ]
+    },
+    {
+      "id": "language",
+      "title": "Language and corpus identification",
+      "aliases": [
+        "Welsh",
+        "language identification",
+        "corpus",
+        "different language",
+        "another language",
+        "non English",
+        "other languages"
+      ]
+    },
+    {
+      "id": "automatic-search",
+      "title": "Automatic search and language scoring",
+      "aliases": [
+        "hill climbing",
+        "simulated annealing",
+        "genetic algorithm",
+        "brute force",
+        "automatic search",
+        "beam search"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
       ]
     }
   ]
@@ -82031,7 +83189,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "visuals": [
     {
       "path": "experiments/records/magic-square-freedom/fixed-center.svg",
-      "caption": "A constructed change to LP1-16: two +1 and two âˆ’1 adjustments preserve every line sum, half-turn symmetry and the center 809. Zero marks unchanged cells; this is not an original image."
+      "caption": "A constructed change to LP1-16: two +1 and two −1 adjustments preserve every line sum, half-turn symmetry and the center 809. Zero marks unchanged cells; this is not an original image."
     }
   ],
   "article": "# How much freedom remains in a magic square?\n\n## Question\nDoes a fixed line sum, half-turn symmetry and one fixed entry determine the rest of a five-by-five magic square?\n\nNo. Under precisely these conditions, five rational degrees of freedom remain. We also construct positive-integer alternatives to both LP1 examples, keeping any one chosen cell unchanged. This tests uniqueness of numerical grids, not a cipher or the authors’ intentions.\n\n## Why this matters\nIt is tempting to count twelve line-sum equations, subtract twelve from the number of cells, and conclude that almost everything is forced. That subtraction only works for independent equations. For example, the sum of all row totals already equals the sum of all column totals. Symmetry creates further dependencies.\n\nA **degree of freedom** is an independent parameter that can vary while all the equations remain satisfied. It is not a count of solutions and does not mean that every integer assigned to those parameters produces an allowed square.\n\n## Scope and plan\nThe [recorded plan](experiments/records/magic-square-freedom/plan.json) specifies orders 3, 5 and 7, with four symmetry conditions each. Every row, column and both main diagonals have the same fixed sum. We distinguish:\n\n- No additional symmetry.\n- Half-turn symmetry: the cell at row r, column c equals its opposite after a 180-degree rotation.\n- Transpose symmetry: swapping row and column leaves the entry unchanged.\n- Both symmetries together.\n\nThe actual LP1-05 converted square and LP1-16 printed square have half-turn symmetry. Neither is transpose-symmetric: compare their cells at row 1, column 2 and row 2, column 1. Imposing transpose symmetry would therefore change the model and exclude both observed grids.\n\nThe supplied discussion had already proposed uniqueness, retracted that claim, and suggested possible dimensions. Those claims were known before calculation. This is a deterministic audit, not a blind prediction or significance test. The plan was written before running but was not externally timestamped or preregistered.\n\n## Method\nLet A be an existing square and D a change to it. The square A+D retains the same line sums exactly when every row, column and diagonal of D sums to zero. The same symmetry equations apply to D. Keeping one cell unchanged adds the equation that its change is zero.\n\nThe script forms these linear equations and reduces them with exact rational arithmetic. Rank counts the independent equations; dimension equals the number of cells minus rank. The saved nullspace basis describes all rational changes satisfying the equations. A uniform rational grid with entry equal to the line sum divided by the order supplies a solution for every prescribed rational sum, so the reported affine dimensions are not dimensions of an empty set.\n\nFor each of the 25 cell positions in each actual five-by-five square, the script selects the first basis vector that preserves that cell, clears denominators, and divides out the common integer factor. It tries adding that primitive change, then subtracting it. It stops after those two possibilities; this is not an exhaustive positive-integer enumeration.\n\n## Results\nAll twelve comparison models completed. These dimensions assume a fixed common line sum:\n\n| Order | No symmetry | Half-turn | Transpose | Both |\n| --- | --- | --- | --- | --- |\n| 3 | 2 | 0 | 1 | 0 |\n| 5 | 14 | 6 | 8 | 4 |\n| 7 | 34 | 16 | 19 | 10 |\n\nFor order five, fixing any one cell reduces the half-turn dimension from six to five. For order seven it reduces sixteen to fifteen. This is not a statement about an audited historical seven-by-seven square; order seven here is a mathematical comparison. For order three, the half-turn model already has dimension zero: with a fixed sum, it forces the uniform rational square.\n\nEvery one of the **50 fixed-cell tests** produced a different positive-integer square. Each preserves its original line sum and half-turn symmetry, and keeps the chosen entry unchanged. The complete [results and witnesses](experiments/records/magic-square-freedom/results.json) include all cases, bases, positions and input hashes.\n\n### An example you can check by hand\nKeep the center 809 in LP1-16. Add 1 to row 2, column 1 and row 4, column 5; subtract 1 from row 2, column 5 and row 4, column 1. Leave every other cell alone.\n\n```text\n 434 1311 312  278  966\n 205  812 934  280 1070\n 626  620 809  620  626\n1070  280 934  812  205\n 966  278 312 1311  434\n```\n\nEach affected row and column gains one and loses one. Neither diagonal changes. Opposite entries still agree, all entries remain positive, and every line still sums to 3301. Thus the center value 809 cannot uniquely determine the original grid under these rules. These numbers are a constructed counterexample, not a transcription correction.\n\n## Reproduce\nPython 3.12 standard library; no network, packages or AI calls. From the repository root, run:\n\n```sh\npython experiments/records/magic-square-freedom/run.py --check\npython experiments/records/magic-square-freedom/check.py\n```\n\nThe first command recomputes every case and compares the complete report. The second independently constructs the equations and checks rank modulo two large primes. It directly verifies every rational null vector and its independence. A matching modular rank gives a lower bound; the independent null vectors give the matching upper bound, certifying the rational rank. It also checks every positive-integer counterexample by summing its actual rows, columns and diagonals and comparing opposite cells.\n\nUse `--write` instead of `--check` to regenerate results. Preserve the old output if changing the plan or input transcriptions.\n\n## Retest and changes\nOn 20 October 2026, Codex recomputed the saved result and ran the separate checker. All twelve ranks, fixed-cell dimensions and fifty witnesses passed. This is computational review by the same agent; independent human review is pending. No model, bounds or criterion changed after inspecting the results.\n\n## What remains open\nThis disproves uniqueness under the stated constraints. It does not count all positive-integer solutions, impose prime patterns or distinct entries, reconstruct a historical server validator, or show which values the authors deliberately selected. A rational basis is not automatically a basis for all integer solutions: clearing each vector’s denominators is enough to construct these witnesses, but is not an integer-lattice enumeration method.\n\nAn extra requirement can shrink the space. To test one, state it as a separate variant and show exactly which constraints changed. A theory that fixes many cells, restricts values to a list, or imposes a primality pattern is not ruled out by this result.\n\nSee [the magic-square guide](#/wiki/magic-squares) for the original images and rune-value conversion, and [search space and bounds](#/wiki/search-space) for why a claim must name the space it covers.\n",
@@ -94882,7 +96040,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "experiments/records/r18-drift-ladder-replay/plan.json",
       "experiments/records/r18-drift-ladder-replay/plan-amendment.json"
     ],
-    "representation": "Gematria Primus indices from the source transcription; 55 nonempty LP2-00â€“55 pages, with source ordinal 52 mapped to LP2-53.",
+    "representation": "Gematria Primus indices from the source transcription; 55 nonempty LP2-00–55 pages, with source ordinal 52 mapped to LP2-53.",
     "procedure": "Run F0 parity gate, replay the three-page planted offset control, and search 230 source-mined key candidates at 5,961 offsets each over first 100 runes of every nonempty page; compare all candidate rows with pinned source output.",
     "parameters": "Suppression 0.8129; beam width 400; maximum three skipped draws; predicted key offset start+rho*start with +/-4 standard deviations, plus uncorrected and restart controls; English-score gate -5.5.",
     "exclusions": "Keys outside earlier top lists, other global key origins, text after each page first 100 runes, alternate boundaries or filter laws, source B5 skip-count channel."
@@ -102474,6 +103632,281 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "rune-reading-sensitivity-t3",
+  "status": "published",
+  "title": "How disputed rune readings change the measurements",
+  "question": "If the 450 located O/A/AE machine disagreements were read differently, which manuscript statistics move, and how does one known-key decoder respond to separately simulated transcription errors?",
+  "reader_question": "How much could disputed rune readings change what we measure?",
+  "summary": "Hypothetically replacing all 450 source-suggested O/A/AE alternatives raises joined-stream adjacent repeats from 86 (0.664%) to 103 (0.795%), below the source comparison floor of 126, but shifts normalized IoC from 0.999874 to 1.013823. Known-key LP1 decoder fixtures degrade with separate random ciphertext errors. The reader controls reuse global canonical labels and do not establish independent transcription accuracy. A separately recovered exact KJV input also permits the source's six-level full-book decoder replay; its results are fixture-specific.",
+  "finding": "A fresh source replay maps all 450 alternatives and reproduces the full 400-trial perturbation grids. Exact all-450 changes add 17 joined-stream adjacent repeats (86/12955 pairs, 0.664%; to 103/12955, 0.795%) and shift normalized IoC 0.999874→1.013823. In separate planted LP1 key-skip fixtures, median recovery first falls below 90% at book-equivalent k=1800 (L120) and k=900 (L400). In the separate 12,956-rune KJV fixture (six replicates per level), median recovery first falls below 90% at k=450, when correct/wrong-key scores still separate; score distributions overlap at k=900. Fresh nested results match the archived source apart from elapsed seconds.",
+  "limitations": "The 450 source-reader disagreements are not adjudicated image errors. Source T1 controls are transductive because global canon-derived labels include the test pages. The decoder corrupts synthetic LP1 ciphertext uniformly, not the 450 LP2 locations, and tests one key-skip model with English scoring. The exact full-book KJV fixture was replayed, but uses a different plaintext register as well as length and has six replicates per level. The source dependency graph was not freshly rebuilt. No broad LP2 cipher exclusion follows.",
+  "next_steps": "Rebuild glyph labels with solved controls strictly held out before estimating transcription error; then test predeclared image-adjudicated alternatives and decoder controls that match the proposed cipher and error locations.",
+  "outcome": "supported",
+  "tags": [
+    "LP2",
+    "transcription sensitivity",
+    "rune readings",
+    "doublets",
+    "index of coincidence",
+    "O/A/AE",
+    "known-key decoder",
+    "source replay"
+  ],
+  "related": [
+    "transcription-correction-sensitivity",
+    "dukotah-image-template-rebuild"
+  ],
+  "family": {
+    "id": "transcription-correction-sensitivity",
+    "title": "Archived versus reviewed manuscript text",
+    "question": "Which downstream conclusions actually move when a documented transcription choice changes?",
+    "baseline": "transcription-correction-sensitivity"
+  },
+  "variant": {
+    "label": "Hypothetical source-rune alternatives and planted decoder errors",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-10",
+          "lp2-05",
+          "lp2-07",
+          "lp2-11",
+          "lp2-15",
+          "lp2-35",
+          "lp2-37",
+          "lp2-38"
+        ],
+        "after": [],
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "representation",
+        "before": "Archived raw and separate reviewed_text fields in the eight current page records; joined LP2-00–55 corpus with the seven LP2 reviewed layers substituted and all other pages archived.",
+        "after": "Pinned source LP2 pages 0–54 joined as 12,956 GP rune indices. The 450 O/A/AE alternatives are source-reader locations. Separate LP1 planted passages of 120 and 400 runes provide decoder controls. A separate 12,956-rune planted KJV passage is the full-book decoder control.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "procedure",
+        "before": "Check ordered rune equality, rune multiset and whole-stream IoC pair counts. Remove slash/CR/LF wraps; tokenize rune runs with optional internal apostrophes, retaining headings and joining pages. Compare ordered normalized rune tokens, word-length histograms and ordered bigrams. Independently reconstruct edit strings and scan tokens.",
+        "after": "Rerun source baseline and 400-trial random, dense and targeted substitution grids; apply all 450 exact alternative readings; rerun source 14-level LP1 decoder grids at 120 and 400 runes; compare numeric source outputs and independently recount repeats and IoC from the pinned stream. Replay the exact source six-level KJV full-book fixture using a recovered hash-matched input; compare every fresh result field with the pinned source output except elapsed seconds.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "parameters",
+        "before": "29-symbol stored alphabet; eight reviewed pages; LP2-00–55 in order; no search, random trial or significance threshold. Each of 57 source files and the plan is SHA-256 pinned.",
+        "after": "450 unique mapped source alternatives; 400 trials per sampled perturbation level; source fixed seeds/levels; 120×14 L120 and 60×14 L400 LP1 decoder cells; F0 parity gate; source German-corpus comparison floor 0.972% corresponds to 126 repeats. Six KJV full-book error levels [0,50,100,200,450,900] with six replicates each; optional 1–4 level-isolated replay workers.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "exclusions",
+        "before": "Unrecorded disputed marks; new photographic review; alternative word delimiters; punctuation-driven cipher resets; page-local tokenization; LP2-56–57; any claim that the entire transcription is correct.",
+        "after": "No independent hardcopy image review, strict held-out glyph training, regenerated historical dependency graph, alternative cipher model, or actual LP2 plaintext/key recovery.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/rune-reading-sensitivity-t3/input-snapshot.json",
+      "experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip"
+    ],
+    "representation": "Pinned source LP2 pages 0–54 joined as 12,956 GP rune indices. The 450 O/A/AE alternatives are source-reader locations. Separate LP1 planted passages of 120 and 400 runes provide decoder controls. A separate 12,956-rune planted KJV passage is the full-book decoder control.",
+    "procedure": "Rerun source baseline and 400-trial random, dense and targeted substitution grids; apply all 450 exact alternative readings; rerun source 14-level LP1 decoder grids at 120 and 400 runes; compare numeric source outputs and independently recount repeats and IoC from the pinned stream. Replay the exact source six-level KJV full-book fixture using a recovered hash-matched input; compare every fresh result field with the pinned source output except elapsed seconds.",
+    "parameters": "450 unique mapped source alternatives; 400 trials per sampled perturbation level; source fixed seeds/levels; 120×14 L120 and 60×14 L400 LP1 decoder cells; F0 parity gate; source German-corpus comparison floor 0.972% corresponds to 126 repeats. Six KJV full-book error levels [0,50,100,200,450,900] with six replicates each; optional 1–4 level-isolated replay workers.",
+    "exclusions": "No independent hardcopy image review, strict held-out glyph training, regenerated historical dependency graph, alternative cipher model, or actual LP2 plaintext/key recovery."
+  },
+  "review": {
+    "kind": "pinned-source computational replay with independent rune-count checker",
+    "retested_on": "2026-10-23",
+    "reviewer": "Fresh complete available T3 grids, source-output parity, source-reader receipt audit and direct repeat/IoC arithmetic; full-book KJV source-output parity",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/rune-reading-sensitivity-t3/run.py --check && python experiments/records/rune-reading-sensitivity-t3/plot.py --check && python experiments/records/rune-reading-sensitivity-t3/check_fullbook.py",
+    "environment": "Python 3 standard library for --check. Full --replay needs NumPy and SciPy because the pinned source imports its image-pipeline module; no network or Git access needed. The exact KJV corpus is a declared cross-record input; --jobs 2–4 parallelizes only independent full-book error levels.",
+    "script": "experiments/records/rune-reading-sensitivity-t3/run.py",
+    "script_sha256": "d2ab554ca009160be1e39ce1bbce2c6c56ae4a3bedbfa240bfb3872467dbe057",
+    "inputs": [
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/plan.json",
+        "sha256": "fa69230196a0b4c16b824614581ce867d7e84102e6eabd3bf386ac4328163ca3"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/input-snapshot.json",
+        "sha256": "2a63a10c4d97ec9c3f9955e382ba157416a3271d737b24af0f2dd04fe8c932bf"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_baseline.json",
+        "sha256": "cefb068f97e2481de0836df25462ddf93cbf0cf7f9a6ac2c30af88ccc46be4d3"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_random.json",
+        "sha256": "65dcd3fcf2724253b98c88052a5810301ce77a6cff4f2194688b470b39d7f721"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_targeted.json",
+        "sha256": "f4c759d0ec5e289c258cbcdc9ebff2d1b64b050312561a577f222523df4a2f0e"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L120_LP1.json",
+        "sha256": "f35059ee9a1de20cbe701b34c4871e353bf843a5fbca69330bce4c8fa4313921"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L400_LP1.json",
+        "sha256": "92965924ee34f3321baf739a5fd01b819bbd2c30f9a7e76479c49d8ea0fc0bad"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_gread_lp2.json",
+        "sha256": "232f4ec2782016b37ec283f9c5b5891c827dca23f7cf1b4fbaf1e285568aa5ea"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_loo.json",
+        "sha256": "d3bbdcc928ad37e33f50ae80712a19fb5cad3e996b5489f9e1c435750f22daa0"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/adjudication.json",
+        "sha256": "091037fc350d33545bd044d174aa015dc96a8f21ab34bda000cef3c556fe79cf"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_corpus_lp2.json",
+        "sha256": "63c7a4f76b39b5af25c7fa3d5d8d43011cf4f65e90674ded6c0f3e82cb3ceaeb"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip",
+        "sha256": "f629e47b24576c9649c40aa9eb9d139059131c1bf6725545bbafd969368c9cdc"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/source-snapshot-manifest.json",
+        "sha256": "b912867696f2bf6f8c5abc02ed65309afdecc077fbfca92cf981ad0a29c23eeb"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/plot.py",
+        "sha256": "f7a6c9aaee97e09e0e7fa2b283859f317027fe887c2f984f03423d98fe9d487b"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/worker-plan.json",
+        "sha256": "96df11a9a869ee98bb6727235adea921b8a2b381140b7e22267a47f50a49c2c4"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/fullbook-plan.json",
+        "sha256": "809a353ee246dc745ac7235ad4793d82b660106417a80d7e3a24cf1a2b3d0dd0"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.json",
+        "sha256": "63476a8a8f91652afa5f6653c35051b7eed5221fda53818a3147a2f2c77440fc"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.source.json",
+        "sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/replay_fullbook_parallel.py",
+        "sha256": "47f77192b217e7a5f06c2a744bce3cccae03eb9c9e607260dcb9f81a5e9405e6"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/check_fullbook.py",
+        "sha256": "33435e8c878f8e4efd59ba8b505024144321bd03594906ad8c40395f126f6ed0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/results.json",
+        "sha256": "a285f9cedb884d59c229ea040b7e44a3a6fbb5c8d49bfff8304cac768caca212"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/comparison.svg",
+        "sha256": "5c2c0ef4861e0a19c64baef06db9fee69512fb66edb536058f7d1dfb926d212a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/comparison.svg",
+      "caption": "The 450 source alternatives add 17 adjacent repeats; 40 would be required to reach the source German comparison floor."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source T3 preregistration and programs",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T3/PREREG.md"
+    },
+    {
+      "label": "Pinned source T1 reader controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T1/RESULTS.md"
+    }
+  ],
+  "reader_finding": "Changing all 450 proposed rune readings adds 17 adjacent repeats and shifts the frequency statistic. These are hypothetical alternatives, not 450 confirmed errors. In a separate full-length known-key fixture, 450 random changes reduce median recovery to 86%.",
+  "reader_limit": "The reader was trained using canonical labels from the control pages too, so its agreement does not independently establish accuracy. The decoder controls cover one model and simulated errors. The short and full-length fixtures also use different plaintext texts.",
+  "article": "Hypothetically changing all **450 O/A/AE rune readings** disputed by one source reader to that reader’s suggested alternatives raises adjacent repeats from **86 (0.664%) to 103 (0.795%)**. A German-corpus comparison floor used in this source analysis would require **126**; it is not a universal language threshold. The 450 suggestions have **not** been established as 450 mistakes. These counts use adjacent rune pairs in the joined stored stream, including line and page joins.\n\n![Three adjacent-repeat counts: stored text 86, all 450 alternatives 103, and the source comparison floor 126.](experiments/records/rune-reading-sensitivity-t3/comparison.svg)\n\nThe same substitutions move the normalized index of coincidence from **0.999874 to 1.013823**. That is a substantial change to a different statistic, so the result is not “transcription does not matter.” In the source’s 400-trial targeted grids, the located alternatives and the broader O/A/AE family give different repeat counts. A family-wide random change is not the same experiment as replacing the 450 located readings. [See the saved grid](experiments/records/rune-reading-sensitivity-t3/out_targeted.json).\n\nThe reader behind those alternatives matched its own canonical labels on **13,088 of 13,136** corpus runes and returned **180/180** on the solved-page control. Its 450 disagreements were also adjudicated using the same source pipeline. The pipeline builds a global label alignment using canonical text from *all* pages, including the pages later treated as controls. Excluding a page’s direct votes afterward does not make that test independently held out. These figures describe **agreement with the source transcription**, not a measured error rate for the original images. The separate [stored correction check](#/experiments/transcription-correction-sensitivity) concerns seven documented LP2 notation edits; it did not test these 450 hypothetical substitutions.\n\nThe source also tests a different question: can its known-key, key-skip decoder recover a planted passage after *uniformly random ciphertext substitutions*? In fresh source runs, median recovery first drops below 90% at a book-equivalent **1,800 changes** for 120-rune LP1 passages and **900** for 400-rune LP1 passages. At 450 equivalent changes, the medians are **96.7%** and **96.4%**. [Inspect the 120-rune](experiments/records/rune-reading-sensitivity-t3/out_decode_L120_LP1.json) and [400-rune](experiments/records/rune-reading-sensitivity-t3/out_decode_L400_LP1.json) results.\n\nAn exact-hash KJV input recovered from a separate source capsule also let us replay the source’s **12,956-rune, six-replicate full-book fixture**. Its six declared error levels match the saved source results. At 450 substitutions, median known-key recovery is **86.2%**, though the correct-key scores still separate from wrong-key scores; at 900, median recovery is **19.9%** and the score distributions overlap. [Inspect the full-book fixture](experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.json). The short fixtures use LP1 text while the full-book fixture uses KJV text, so their difference cannot be attributed to length alone. Six replicates do not measure broad decoder sensitivity. None of these fixtures tests errors specifically at the 450 O/A/AE locations or establishes that an actual LP2 key would fail. The source output’s inner `conditionals.register` label is hardcoded `LP1_REAL`; the run command and top-level `register` correctly identify this fixture as KJV.\n\n## What was run\n\nThe pinned 12,956-rune stream passed all 13 source baseline checks. All 450 source alternatives mapped to distinct matching positions. The source’s planted doublet control and 20-case beam parity gate passed. We then reran the complete declared random, dense and O/A/AE **400-trial grids**, the 14 error levels for each LP1 decoder fixture (120 replicates at 120 runes; 60 at 400 runes), and the source’s separate six-level KJV full-book fixture (six replicates per level). Fresh aggregates match the pinned source numerically; runtime fields and insignificant floating-order differences vary. A separate checker recounts adjacent repeats and IoC directly from the [stored rune/alternative snapshot](experiments/records/rune-reading-sensitivity-t3/input-snapshot.json).\n\nRun `python experiments/records/rune-reading-sensitivity-t3/run.py --check` to verify the inputs, source archive and saved results; `python experiments/records/rune-reading-sensitivity-t3/check_fullbook.py` independently compares the archived and fresh KJV rows. Add `--replay` to rerun the source grids from the [MIT-licensed source snapshot](experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip); `--jobs 3` runs independent full-book error levels in isolated source trees and merges them in their original order. The exact KJV bytes come from the separately hosted [pinned source corpus](experiments/records/dukotah-offset-model-integrity/source-kjv.txt) and are hash-checked before use. Replay takes several minutes and needs NumPy and SciPy for the source image-pipeline module. The ordinary checks use only Python’s standard library.\n\nThe six-level full-book replay was added after the earlier LP1 work when the pinned KJV bytes became available. Its [separate frozen plan](experiments/records/rune-reading-sensitivity-t3/fullbook-plan.json) records that timing and the exact source settings. We did not regenerate the historical 62-entry dependency graph. The result does not verify the manuscript transcription or close other possible error patterns, cipher models or language registers.\n",
+  "article_path": "experiments/records/rune-reading-sensitivity-t3/article.md",
+  "script_sha256": "d2ab554ca009160be1e39ce1bbce2c6c56ae4a3bedbfa240bfb3872467dbe057",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  },
+  "method_topics": [
+    {
+      "id": "repetition",
+      "title": "Repeats, doublets and word structure",
+      "aliases": [
+        "doublets",
+        "repeated words",
+        "ngrams",
+        "repeated sequences",
+        "bigrams",
+        "trigrams"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    },
+    {
+      "id": "provenance",
+      "title": "Source verification and transcription audits",
+      "aliases": [
+        "signature",
+        "provenance",
+        "transcription",
+        "source audit",
+        "input verification",
+        "wrong file",
+        "missing rows"
+      ]
+    },
+    {
+      "id": "distributions",
+      "title": "Rune frequencies and distribution diagnostics",
+      "aliases": [
+        "frequency analysis",
+        "rune frequencies",
+        "letter frequencies",
+        "symbol frequencies",
+        "entropy",
+        "IoC",
+        "index of coincidence"
+      ]
+    }
+  ]
+}
+
+---
+
+{
   "id": "search-maximum-controls",
   "title": "How does trying more keys change the best score?",
   "status": "published",
@@ -105838,9 +107271,9 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "lp1-14",
       "lp1-15"
     ],
-    "representation": "Five decoded source sections spanning ten LP1 images. Source section order is 01, 05, 06Ã¢â‚¬â€œ09, 03Ã¢â‚¬â€œ04, 14Ã¢â‚¬â€œ15; the concatenation is not manuscript order.",
+    "representation": "Five decoded source sections spanning ten LP1 images. Source section order is 01, 05, 06–09, 03–04, 14–15; the concatenation is not manuscript order.",
     "procedure": "Replay and audit the pinned R22-A every-k/diagonal selections and R23-A2 first/last printed-line/word reads. Compare planted-control scores with both the length-specific bars they were tested against and the final family bars actually applied to manuscript reads.",
-    "parameters": "R22-A: 1,754 selection functions for each of letter and rune streams (3,508); R23-A2: four read types Ãƒâ€” six scopes Ãƒâ€” two directions (48). Both use seed 3301 and 1,000 source null shuffles per distinct length.",
+    "parameters": "R22-A: 1,754 selection functions for each of letter and rune streams (3,508); R23-A2: four read types × six scopes × two directions (48). Both use seed 3301 and 1,000 source null shuffles per distinct length.",
     "exclusions": "No new LP1 image-checked transcription, no new whole-search null or end-to-end power estimate, no LP2 ciphertext search, and no claim that all acrostic or selection methods have been excluded."
   },
   "review": {

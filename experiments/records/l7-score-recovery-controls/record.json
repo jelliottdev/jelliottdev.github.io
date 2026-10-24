@@ -1,0 +1,153 @@
+{
+  "id": "l7-score-recovery-controls",
+  "status": "published",
+  "title": "Can one score cutoff judge every decode?",
+  "question": "Under the original source beam and English model, how do planted recovery, text register and length/beam setting affect the interpretation of a fixed −5.5 cutoff?",
+  "reader_question": "Could a good-looking score hide an incorrect decode?",
+  "summary": "Four of 28 synthetic decodes pass the English-score cutoff while recovering less than 90% of the planted text. Five source text registers and three fresh conditional-null settings show why the same cutoff needs matched controls.",
+  "finding": "In 28 source-derived L7 mechanism plants at 240 runes, four runs clear −5.5 while recovering less than 90% of the planted runes. Seven baseline plants recover exactly; paired rejection has 25.8% median recovery, one free advance 95%, and free advances at q=.02 give 72.1%. Fifteen correct/wrong-key register pairs reproduce the corresponding saved source subset. Fresh 120-draw nulls at L31/bw120, L120/bw400 and L400/bw120 give tail-excess scales 0.35236, 0.13471 and 0.06090; each uses only 11 upper-tail exceedances.",
+  "reader_finding": "Four synthetic decodes passed the score cutoff while recovering less than 90% of the known text. The score ranges also changed across text registers and decoder settings, so a score alone cannot certify a correct reading.",
+  "limitations": "Finite source-derived controls, not an LP2 key search. Missing original modern-English/Mabinogion and Welsh inputs and derived vowel-deletion panels are excluded. Five available registers include two English texts, not five languages. Null settings change both length and beam width and have only 120 draws each; the eleven-point tail estimates do not calibrate a large-search error rate. The archived fixtures support exact finite replay, not full corpus reconstruction; the packaged plan was written after execution.",
+  "reader_limit": "These controls do not identify LP2’s language or cipher. The null samples are too small to validate a cutoff for a large key search.",
+  "next_steps": "For a proposed solving tool, predeclare its complete search rule and verify recovery of held-out planted texts plus a matched search-maximum null before interpreting a high score.",
+  "outcome": "supported",
+  "tags": [
+    "source controls",
+    "English scorer",
+    "rune recovery",
+    "beam decoding",
+    "key skipping",
+    "language registers",
+    "conditional null",
+    "score cutoff"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/l7-score-recovery-controls/fixtures.json"
+    ],
+    "representation": "Fixed source-derived GP29 plaintext/ciphertext/key fixtures, English quadgram counts and a source ciphertext prefix used only for order-destroying conditional controls.",
+    "procedure": "Replay the unchanged source beam on fifteen paired register plants and twenty-eight mechanism plants; generate 120 fixed-seed shuffled-prefix nulls per setting; independently recalculate rune recovery, quadgram scores and null summaries.",
+    "parameters": "Five registers × three L120 trials with correct and wrong keys; four mechanisms × seven L240 plants; source beam width 400/max_skip 3; score cutoff −5.5 and recovery reference 90%; three null settings L31/bw120,L120/bw400,L400/bw120 × 120 draws.",
+    "exclusions": "Full 67-case L7 envelope; original missing EN_MODERN/CY and derived vowel panels; six-model archive rescoring; G3 difference-floor census; independently preregistered corpus selection; large-search tail calibration; real LP2 keys or cipher exclusions."
+  },
+  "review": {
+    "reviewer": "Exact-source finite replay plus independent stored-trace score/recovery/null arithmetic checks",
+    "kind": "Grouped instrument controls",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/l7-score-recovery-controls/run.py --check && python experiments/records/l7-score-recovery-controls/check.py && python experiments/records/l7-score-recovery-controls/plot.py --check",
+    "script": "experiments/records/l7-score-recovery-controls/run.py",
+    "script_sha256": "ef5fc1e79631812330d253b5be3c7b1c0839e63c215656ad3bd69ff6233cb1fb",
+    "environment": "Python 3 standard library only. No network, external corpus, GnuPG, NumPy or AI calls are needed for the packaged replay.",
+    "inputs": [
+      {
+        "path": "experiments/records/l7-score-recovery-controls/plan.json",
+        "sha256": "c2adaf6101200af3abb088045183f684a7d67f6605769894226999babe800601"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/fixtures.json",
+        "sha256": "d851843c8cb3288be13bbdd4434ad880f2c5e4a1096527f3b47d11dbb1df95f3"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-manifest.json",
+        "sha256": "96157ff9ce6616152876a034633553771cfdf6deeb7dc23645bbeaa867597cff"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/lp/__init__.py",
+        "sha256": "b1ff3e24ada8ebf314b8d9712404627c2b17bbd74964d066d91a9de0ce26e8c0"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/vendor/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-a1.py",
+        "sha256": "d3780ffa2d7a1edd91c0697922dbb6934358bb9a880cdec21b6e27909f352bf3"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-b1.py",
+        "sha256": "8b8506a28bb45c3ccd69e528ebb477b4650256a063ae38c0bd531b9c32110653"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/source-c1.py",
+        "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/check.py",
+        "sha256": "bfacc76585dde80554b6f1e011d68c8124722c538886d7362ad9220e24d3892b"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/plot.py",
+        "sha256": "337eb0df5e68a5af2b2bd3ca214022a7a1fdc792de8c926ac3386bafa4c4d5ae"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/l7-score-recovery-controls/results.json",
+        "sha256": "8949d0d48698d56396784ce6e153ff6259821e60740bf5cf50161b6ee88e23fc"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/register-scores.svg",
+        "sha256": "494f70297012d42ecd3aabb8b290bb6e067b7d022171a698b12d14e1eaf64a1a"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/score-recovery.svg",
+        "sha256": "e688c8a03c1164a31f58116ec75780d03e8c92cedfd52711fdac164aaf6ddd07"
+      },
+      {
+        "path": "experiments/records/l7-score-recovery-controls/conditional-nulls.svg",
+        "sha256": "2fcaaac5bc3b211f35a9261d578852036530279a13fb9d5f1b93c59fb56ced23"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned original L7 instrument and controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L7-redteam/RESULTS.md"
+    },
+    {
+      "label": "Original English model and normalization",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/src/lp/score.py"
+    }
+  ],
+  "related": [
+    "english-scorer-controls",
+    "decoder-skip-controls",
+    "round19-decoder-repair-controls",
+    "round19-decoder-null-bars",
+    "r18-keyskip-drift-power"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/l7-score-recovery-controls/score-recovery.svg",
+      "caption": "Median planted rune recovery for four original L7 mechanisms. Four of twenty-eight decodes clear the score cutoff but recover less than 90% of the text."
+    },
+    {
+      "path": "experiments/records/l7-score-recovery-controls/register-scores.svg",
+      "caption": "Five text registers use the same marks and axis; each has three correct-key plants. The dashed line is the source −5.5 cutoff."
+    },
+    {
+      "path": "experiments/records/l7-score-recovery-controls/conditional-nulls.svg",
+      "caption": "Observed ranges and means of 120 shuffled controls at each length/beam setting. These small samples do not calibrate large-search tail probabilities."
+    }
+  ]
+}

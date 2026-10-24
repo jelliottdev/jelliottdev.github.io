@@ -1,0 +1,17 @@
+# Matching control totals can hide a different scorer
+
+The public offset search screens millions of possible key positions before trying its decoder. That screen learns rune patterns from four books. In the available checkout, three training books were missing, so the source code quietly built a different screen from the KJV alone.
+
+The source and fallback both recovered the known message in **40/40** planted trials and both kept its true offset in **26/40**. Those totals look reassuring. The individual rankings changed in **5 of 40** trials; the true offset ranked first in **21** source trials and **22** fallback trials. When we reran one of the source's million-offset target units, its best offset changed from **400,310** to **673,662**. The scores changed too. Matching control totals therefore do not establish that the same candidates reached the decoder.
+
+![Source and KJV-only controls kept the same number of true offsets, but ranked different ones first.](experiments/records/dukotah-offset-model-integrity/comparison.svg)
+
+This is an input and instrument check, **not a result about an LP2 key**. The original converter, sharding, and planted beam checks passed on the available inputs. An independent reconstruction matched the saved KJV-only trigram table exactly. The source's four-book model cannot be rebuilt from this checkout: the pinned hashes match KJV and *War and Peace*, while current official *Moby-Dick* and *Pride and Prejudice* downloads differ. Newline and BOM variants, plus an existing cached *Pride and Prejudice* file, did not restore the pinned bytes.
+
+The separately archived C2 trial counts, offset-coverage fractions, and Marsaglia case-space arithmetic also recount correctly from their saved rows. That is an **arithmetic check of saved output**. The 1.2 GB of source Marsaglia pad data are gitignored and absent here, so their hashes and pad scans were not replayed. We cannot present the source's large negative sweep totals as independently reproduced under the exact screening model.
+
+Run `python -X utf8 experiments/records/dukotah-offset-model-integrity/check.py` to verify the bundled input hashes, independently rebuild the fallback model from KJV, recount all 40 trial rows, and compare the pinned A1 checkpoint. NumPy is required. Run `python -X utf8 experiments/records/dukotah-offset-model-integrity/plot.py --check` to verify the figure. The retrospective [plan](experiments/records/dukotah-offset-model-integrity/plan.json) lists every exact input and explicitly does not claim advance registration.
+
+To rerun the source code offline, use `python -X utf8 experiments/records/dukotah-offset-model-integrity/replay.py --controls-only` for all 40 planted trials. Omit `--controls-only` to also run the preselected million-offset A1 unit. The harness reconstructs the source tree in a temporary folder from bundled, hash-checked files, supplies the exact source ciphertext bytes, and compares fresh output with the saved KJV-only receipts; it never changes the pinned source or fetches another book.
+
+The source rules and archived results are pinned to [Dukotah/cicada3301 at f08b20b](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L6-offset-marsaglia). To replay the original full offset or Marsaglia searches, first restore the exact four scorer books and pad bytes, verify their hashes, then run the source controls and target grids unchanged.

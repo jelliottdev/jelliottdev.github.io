@@ -1,0 +1,55 @@
+{
+  "schema": "liberpedia-b10-outguess02-runtime-gate-v1",
+  "source_id": "B-10",
+  "state": "blocked",
+  "checked_on": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_claim": {
+    "path": "liber-primus/analysis/stego/STEGO-VERDICT.md",
+    "sha256": "b96c747264cf1eb192b5155f1d5d3abf91aaa9a90d8421e16c1903ae5565824d",
+    "relevant_lines": "83-96",
+    "status": "pending Linux OutGuess 0.2 blank/control JPEG plus seven named passphrases; no source execution reported"
+  },
+  "existing_records": [
+    {
+      "id": "outguess-default-key",
+      "sha256": "c572dd63b6d5f1c671baeec8548b1c80babdaa01c79000ecfe2300d51a0801fe",
+      "scope": "77 original images, Windows baseline build, default key"
+    },
+    {
+      "id": "outguess-guard-sweep",
+      "sha256": "bb6c81df929243eacbc75879be23e2204bc7bdbdac499e9333a3b838d289d80a",
+      "scope": "same 77 images, guarded Windows build, not Linux 0.2"
+    }
+  ],
+  "author_source": {
+    "page": "https://www.provos.org/p/outguess-and-stegdetect-downloads/",
+    "archive": "https://www.provos.org/uploads/outguess-0.2.tar.gz",
+    "head_status": 200,
+    "content_length": 470638,
+    "content_type": "application/gzip",
+    "downloaded": false,
+    "local_source_hash": null
+  },
+  "runtime": {
+    "wsl_binary_present": true,
+    "wsl_distro_installed": false,
+    "docker_present": false,
+    "podman_present": false,
+    "gcc_windows_present": true,
+    "ghostscript_present": false,
+    "local_linux_outguess02": false
+  },
+  "format_control": {
+    "required": "blank 2400x3600 JPEG produced by the same 400-DPI Ghostscript/Artifex then ImageMagick workflow",
+    "pinned_original_control_sha256": null,
+    "available": false
+  },
+  "execution": [],
+  "gate": "Exact author source URL is live, but no local Linux runtime, 0.2 executable, or format-matched blank JPEG with pinned bytes; no finite historical control can be interpreted.",
+  "not_concluded": [
+    "the 1417-byte shared prefix is proven an artifact",
+    "the seven passphrases fail",
+    "all unsolved images lack OutGuess payloads"
+  ]
+}

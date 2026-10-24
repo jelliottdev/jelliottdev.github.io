@@ -1,0 +1,13 @@
+{
+  "schema": "liberpedia-t3-worker-plan-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "copied_source_manifest_sha256": "d1726867bfb75c811fb632d7b4c8235b64fafde5ac126341e1844a29085ff673",
+  "scope": "Exact source T3 baseline, random/dense and O/A/AE perturbation grids; separately benchmark source L120/L400 LP1 decoder fixtures before any full decoder run. The unavailable KJV book is excluded.",
+  "input": "Pinned 12,956-rune LP2 stream, sha256 of comma-delimited indices 023312066df471005264b9cbe7997cb77d2a9a6a2dc9b3316d22674023af1585; 450 located O/A/AE source alternatives must map to distinct positions and match canonical input.",
+  "gates": ["All 13 baseline published statistics within source tolerances", "Planted doublet count exact at every declared k", "450/450 coordinate match", "F0 beam parity before decode"],
+  "random_grid": {"models": ["P-ADV deterministic", "P-RAND", "P-DENSE"], "trials": 400, "k": [1, 2, 5, 10, 20, 50, 100, 200, 450, 1000, 2000, 4000, 8000, 12956], "seeds": [3301, 4402]},
+  "targeted_grid": {"models": ["P-OAE450", "P-OAE450R", "P-OAEFAM", "ALL450 exact", "ALL450 adversarial", "ALLFAMILY adversarial"], "trials": 400, "k450": [1, 2, 5, 10, 20, 50, 100, 200, 300, 450]},
+  "decode_grid": {"register": "LP1", "lengths_and_reps": [[120, 120], [400, 60]], "k_book": [0, 5, 10, 20, 30, 50, 100, 200, 450, 900, 1800, 3600, 6478, 12956], "decision": "Run only after a representative cell benchmark and F0 gate; do not narrow silently."},
+  "interpretation_limits": ["Perturbations are hypothetical changes to a canonical transcription, not verified errors in manuscript images", "T1's canon-derived global label cache is transductive, not strictly held out", "A source statistic or planted decoding fixture does not identify the actual LP2 cipher"]
+}

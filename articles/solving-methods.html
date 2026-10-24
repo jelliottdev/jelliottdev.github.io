@@ -16,7 +16,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-polyalphabetic"><h3><a href="#/wiki/vigenere">Repeating-key and polyalphabetic ciphers</a></h3><p>Change the substitution according to position in a repeated key.</p>
-<details><summary>37 related records</summary><ul>
+<details><summary>38 related records</summary><ul>
 <li><a href="#/experiments/lp2-known-vigenere-keys">LP2-00–55: two known Vigenère keys and nine openings</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/alberti-branch-arithmetic">Alberti branch proposal: LP2-39 row and modulo-31 arithmetic</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/public-wordlist-vigenere">Public 43-key Vigenère sweep</a> <span class="small muted">· Method replay</span></li>
@@ -54,6 +54,7 @@
 <li><a href="#/experiments/relikd-rotated-key-source-gate">A rotating-key search stopped at its first screen</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/d4v1-column-unigram-key-recovery">A column solver with a short-key limit</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/relikd-interrupt-db-keyfit">Interrupt-key fits needed a stronger known-text check</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/alternating-alphabet-interruption-clocks">Alternating alphabets with two interruption clocks</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-fractionation"><h3><a href="#/wiki/method-fractionation">Fractionation and coordinate alphabets</a></h3><p>Split symbols into coordinates, rearrange the components, then regroup.</p>
@@ -176,7 +177,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-interruptions"><h3><a href="#/wiki/interruptions">Keystream interruptions and reset rules</a></h3><p>Specify when key or feedback state pauses, advances or restarts.</p>
-<details><summary>30 related records</summary><ul>
+<details><summary>32 related records</summary><ul>
 <li><a href="#/experiments/decoder-skip-controls">Can a correct key fail under the wrong alignment rule?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/round19-decoder-baseline-control">When a pair-skip decoder loses a known key</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/im-near-f-markers">I/M rune proximity to F interruptions</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -207,10 +208,12 @@
 <li><a href="#/experiments/relikd-interrupt-db-keyfit">Interrupt-key fits needed a stronger known-text check</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/relikd-interrupt-pattern-database">Mirror and alternating-group interrupt scores</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/relikd-autokey-interrupt-database">Saved autokey scores with selectable interruptions</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/alternating-alphabet-interruption-clocks">Alternating alphabets with two interruption clocks</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/l7-score-recovery-controls">Can one score cutoff judge every decode?</a> <span class="small muted">· Control</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-alignment"><h3><a href="#/wiki/key-alignment">Offsets and key alignment</a></h3><p>Search starting positions and a bounded set of alignment changes.</p>
-<details><summary>14 related records</summary><ul>
+<details><summary>15 related records</summary><ul>
 <li><a href="#/experiments/decoder-skip-controls">Can a correct key fail under the wrong alignment rule?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/round19-decoder-baseline-control">When a pair-skip decoder loses a known key</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/spiral-branches-paired-subtraction">LP2: pair the 2,883-rune sections by subtraction</a> <span class="small muted">· Bounded solving test</span></li>
@@ -225,6 +228,7 @@
 <li><a href="#/experiments/round19-full-book-decoder-power">Can the decoder follow a known key through a full book?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/round19-decoder-repair-controls">Can a correct key look wrong to the decoder?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/dukotah-b04-full-source-replay">Cryptographic seed streams across the unsolved pages</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/dukotah-offset-model-integrity">The offset screen changes when training books are missing</a> <span class="small muted">· Control</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-composition"><h3><a href="#/wiki/method-composition">Cipher composition and ordered pipelines</a></h3><p>Combine a bounded set of transformations in a declared order, tracking intermediate representations.</p>
@@ -345,9 +349,10 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-interleaving"><h3><a href="#/wiki/method-interleaving">Interleaved streams and separate decoding</a></h3><p>Split by a declared assignment, decode each stream, and specify whether outputs are interleaved again or concatenated.</p>
-<details><summary>2 related records</summary><ul>
+<details><summary>3 related records</summary><ul>
 <li><a href="#/experiments/four-phase-ioc">Four alternating rune streams: concentration check</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/wulfic-deor-interlocking-streams">Deor and interlocking rune streams</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/alternating-alphabet-interruption-clocks">Alternating alphabets with two interruption clocks</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 </div></details></section>
@@ -536,17 +541,18 @@
 </div></details></section>
 <section class="method-group"><h2 id="language-clues-and-search">Language, clues and search</h2><details><summary>7 method families</summary><div class="method-family-list">
 <section class="method-family" id="family-language"><h3><a href="#/wiki/method-language-identification">Language and corpus identification</a></h3><p>Compare declared observables with suitable language controls under explicit cipher assumptions.</p>
-<details><summary>6 related records</summary><ul>
+<details><summary>7 related records</summary><ul>
 <li><a href="#/experiments/parallel-languages">Could the unsolved text be another language? Eight aligned translations</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/target-sized-languages">Language controls with exactly 2,896 tokens per sample</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/known-reading-languages">Language comparison checked against known LP readings</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/corpus-prefix-census">Word lengths across the complete historical reference corpus</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/parallel-language-blocks">Language comparison: shorter aligned passage controls</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/dukotah-nonenglish-control-gate">Two language-scoring controls missed their frozen rules</a> <span class="small muted">· Source or input audit</span></li>
+<li><a href="#/experiments/l7-score-recovery-controls">Can one score cutoff judge every decode?</a> <span class="small muted">· Control</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-cribs"><h3><a href="#/wiki/method-cribs">Known plaintext and crib searches</a></h3><p>Use a declared plaintext hypothesis to constrain a defined cipher model.</p>
-<details><summary>23 related records</summary><ul>
+<details><summary>24 related records</summary><ul>
 <li><a href="#/experiments/seed-crib-controls">Does matching the opening text identify a seed?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/lp2-39-header-cribs">LP2-39: twenty proposed red-header cribs</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/word-sum-corpus-control">LP1 square: dictionary candidate space for the selected phrase</a> <span class="small muted">· Control</span></li>
@@ -570,10 +576,11 @@
 <li><a href="#/experiments/wulfic-periodic-word-crib-votes">Can word cribs predict a periodic key?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-two-time-pad-premise">Do the proposed two-time-pad regions match?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-crib-lfsr-recurrence">Can a guessed word seed a short feedback key?</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/alternating-alphabet-interruption-clocks">Alternating alphabets with two interruption clocks</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-automatic-search"><h3><a href="#/wiki/method-automatic-search">Automatic search and language scoring</a></h3><p>Explore a bounded model with a scorer whose ability and false positives have been checked.</p>
-<details><summary>12 related records</summary><ul>
+<details><summary>14 related records</summary><ul>
 <li><a href="#/experiments/search-maximum-controls">How does trying more keys change the best score?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/english-scorer-controls">Would an English scorer accept other languages?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/rune-matched-scorer-calibration">Does a rune-matched scorer improve candidate screening?</a> <span class="small muted">· Control</span></li>
@@ -586,6 +593,8 @@
 <li><a href="#/experiments/wulfic-keyword-ramp">A keyword that shifts with each rune</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-advanced-running-keys">Four archived texts as running keys</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/relikd-trigram-shift-control">Three-rune shift display: recovery control</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/dukotah-offset-model-integrity">The offset screen changes when training books are missing</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/l7-score-recovery-controls">Can one score cutoff judge every decode?</a> <span class="small muted">· Control</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-symbol-systems"><h3><a href="#/wiki/method-symbol-systems">Alternative alphabets and symbolic notations</a></h3><p>Define a symbol inventory and an encoding rule before interpreting resemblance.</p>
@@ -631,7 +640,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-repetition"><h3><a href="#/wiki/rune-ngrams">Repeats, doublets and word structure</a></h3><p>Test structural constraints without automatically converting them into a cipher identification.</p>
-<details><summary>31 related records</summary><ul>
+<details><summary>32 related records</summary><ul>
 <li><a href="#/experiments/lp2-trigram-repeats">LP2-00–55: repeated trigrams against page shuffles</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/doublet-boundaries">LP2-00–55: doublets across words, wraps and stored corrections</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/doublet-context">Ciphertext symbols and differences around LP2 doublets</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -663,6 +672,7 @@
 <li><a href="#/experiments/wulfic-letter-encoding-bounds">Two letter-encoding bounds on LP2</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/wulfic-doublet-leak-h-o">What separates LP2’s surviving doublets?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/dukotah-payload-varint-matrix">Do LP2 grid bytes track doublet gaps? Source varint matrix</a> <span class="small muted">· Manuscript measurement</span></li>
+<li><a href="#/experiments/rune-reading-sensitivity-t3">How disputed rune readings change the measurements</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-invariants"><h3><a href="#/wiki/cipher-invariants">Invariants and bounded exclusions</a></h3><p>State the assumptions under which an operation preserves or forbids an observed property.</p>
@@ -681,7 +691,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-controls"><h3><a href="#/wiki/null-models">Null models and selection effects</a></h3><p>Repeat the whole selection procedure on controls, not just the final attractive candidate.</p>
-<details><summary>55 related records</summary><ul>
+<details><summary>58 related records</summary><ul>
 <li><a href="#/experiments/search-maximum-controls">How does trying more keys change the best score?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/english-scorer-controls">Would an English scorer accept other languages?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/lp1-section-balance">LP1 column balance with section-preserving shuffles</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -737,10 +747,13 @@
 <li><a href="#/experiments/d4v1-missing-prime-anchor-gate">Missing-prime keys and routes: checking the score</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/relikd-interrupt-pattern-database">Mirror and alternating-group interrupt scores</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/relikd-autokey-interrupt-database">Saved autokey scores with selectable interruptions</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/dukotah-offset-model-integrity">The offset screen changes when training books are missing</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/l7-score-recovery-controls">Can one score cutoff judge every decode?</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/rune-reading-sensitivity-t3">How disputed rune readings change the measurements</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-provenance"><h3><a href="#/wiki/method-source-audits">Source verification and transcription audits</a></h3><p>Verify the input and the scope of its authenticity or transcription evidence.</p>
-<details><summary>13 related records</summary><ul>
+<details><summary>15 related records</summary><ul>
 <li><a href="#/experiments/image-row-coverage">Can image-only detection find every rune row?</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/transcription-correction-sensitivity">Stored transcription corrections: LP2 word lengths and IoC</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/page-join-sensitivity">LP2 page joins: sensitivity of word-length counts</a> <span class="small muted">· Source or input audit</span></li>
@@ -754,10 +767,12 @@
 <li><a href="#/experiments/dukotah-t2-fresh-template-loo">Does a fresh image-template bank change T2&#x27;s rune choices?</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/dukotah-grid-cell-adjudication">Which bytes are printed in the base-60 grid?</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/dukotah-g02-signature-corpus">Which archived Cicada signatures verify?</a> <span class="small muted">· Source or input audit</span></li>
+<li><a href="#/experiments/dukotah-offset-model-integrity">The offset screen changes when training books are missing</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/rune-reading-sensitivity-t3">How disputed rune readings change the measurements</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-distributions"><h3><a href="#/wiki/index-of-coincidence">Rune frequencies and distribution diagnostics</a></h3><p>Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own.</p>
-<details><summary>12 related records</summary><ul>
+<details><summary>13 related records</summary><ul>
 <li><a href="#/experiments/transcription-correction-sensitivity">Stored transcription corrections: LP2 word lengths and IoC</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/sectionwise-rune-profile">LP2 sections: rune collisions and adjacent repeats</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/jpeg-byte-mode-replay">JPEG byte histograms: the four-page split</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -770,6 +785,7 @@
 <li><a href="#/experiments/dukotah-mdl-order-profile">Does LP2&#x27;s rune order reveal a generator?</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/wulfic-grid-rsa-modulus-screen">Raw grid bytes and RSA-modulus readings</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/round19-decoder-null-bars">When wrong keys cross a language-score line</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/rune-reading-sensitivity-t3">How disputed rune readings change the measurements</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 </div></details></section>

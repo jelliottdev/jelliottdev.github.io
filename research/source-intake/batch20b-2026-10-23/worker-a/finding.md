@@ -1,0 +1,9 @@
+# Offset and prefilter source gate
+
+The pinned Round 18 offset code can find a planted message when given its real generator. In a fresh 40-trial run, the decoder recovered the known text in 40/40 trials. The first screening step retained the true key offset in 26/40; the complete screening-and-ranking pipeline placed it first in 22/40. The source saved 40/40, 26/40, and 21/40 respectively. Similar totals conceal a changed selection: only 35 of 40 trial rows matched exactly.
+
+The difference has a concrete input gate. The source prefilter is trained on four books, but this sparse checkout contained only KJV. Its code silently omits missing books and cached a KJV-only trigram table. The source capsule pins all four book hashes. KJV and *War and Peace* can be recovered byte-for-byte; current official *Moby-Dick* and *Pride and Prejudice* downloads do not match the pinned versions. Simple newline and BOM conversions do not repair them. With that fallback model, a fresh 1,048,576-offset A1 unit chose a different best offset and score from the pinned source checkpoint.
+
+This is **an instrument reproducibility finding**, not evidence for or against an LP2 key. The source's dense prefilter decides which offsets reach its decoder. Until its exact four-text model is restored, matching a headline survival count does not establish matching candidate selection, and fresh target scans cannot be called exact source replays. The separately archived 300 C2 register trials, offset-accounting fractions, and Marsaglia offset-space arithmetic were independently recounted from their saved rows; the actual Marsaglia bytes are gitignored and absent here, so their hashes and pad-specific scans were not rerun.
+
+The scoped receipt is [receipt.json](receipt.json). It separates all nine source IDs into partial, blocked, and bookkeeping restatements and preserves every command, exit code, and pinned evidence hash.

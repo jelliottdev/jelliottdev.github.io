@@ -1,0 +1,355 @@
+{
+  "schema": "liberpedia-batch20b-worker-a-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "method_note": "State describes independent work in this worker, not source author status. Missing gitignored files are not asserted unavailable everywhere.",
+  "exact_model_gate": {
+    "required": [
+      "kjv.txt",
+      "moby.txt",
+      "pride.txt",
+      "war.txt"
+    ],
+    "pinned_hashes_matched": [
+      "kjv.txt",
+      "war.txt"
+    ],
+    "pinned_hashes_failed_current_download": [
+      "moby.txt",
+      "pride.txt"
+    ],
+    "fallback_note": "The 40-trial control uses a KJV-only retrained trigram prefilter; it is not source-exact despite similar aggregate survival."
+  },
+  "entries": [
+    {
+      "source_id": "B-02",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+          "sha256": "1c57238fe7ab16fbb369e058bcc7c025ece6ad023b34efe2404b9330cab35288"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/scripts/audit_builders.py",
+          "sha256": "c7dc3366f4a4a840e15b03a7428a990a4111aa13a22dbbadf5ac3d2f3191f42e"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/scripts/control_offset.py",
+          "sha256": "47de35c957a303766b0497e242cd1f31ce3a341da990e09cbfaa0f4bacdff4fc"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+          "sha256": "4f4905b83e60ba104ec92c09b86826664d62f4edd5f0d236ed0cd8c56e25600e"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A2.json",
+          "sha256": "dcfd2b2ac4e5aea303cfc3edc687853077660661b4c9df4aa18b0771e55e77f4"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/audit.json",
+          "sha256": "62912fbe2ca37f29c8241cbdd44adda0a5674cb4474b73aca810294d1abd90b6"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/control_offset.json",
+          "sha256": "7bdbd80436a702c5650bc71aad175c6692c3d4852a1192995faca935ba86ea53"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/input-reconstruction.json",
+          "sha256": "5b15b3b14565667a2befe1fe61f30a01a2d72da04a258796b1274eb822c06d79"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/pilot-a1.json",
+          "sha256": "1f3baf9b2d58cc8fe4c05975f25bbdda2eb63b7272fc61a710f9e17e0a2be9b8"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/corpora-receipt.json",
+          "sha256": "793dcd6fe78892ff83e8489ec4fa6ed52bd91ee9cc4d2ae8a3e02d1a3670ac60"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/corpus-recovery-check.json",
+          "sha256": "2ff69727fb73a562a97d4c3f0147197aa24f4cb50d6909845fbd661a755b4924"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 -c \"...run_path(pinned audit_builders.py) with X.OUT=worker-a\"",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/audit.json"
+        },
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/run_control_offset.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/control_offset.json"
+        },
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/run_a1_pilot.py",
+          "exit_code": 1,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/pilot-a1.json"
+        },
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/fetch_pinned_corpora.py",
+          "exit_code": 1,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/corpora-receipt.json"
+        }
+      ],
+      "covered_subclaim": "Fresh converter/sharding/beam audit passes. Reconstructed 12,956-rune ciphertext supports a 40/40 planted decoder control; top-1000 offset survival is 26/40. These are a KJV-only prefilter replay, not exact source-model parity. Source-saved A1 covers 220/220 units and A2 508/3024; arithmetic independently checked.",
+      "remaining": [
+        "Pinned four-corpus trigram model cannot be rebuilt: exact Moby/Pride bytes absent; current Gutenberg hashes differ.",
+        "A1 unit 0 replay on fallback model disagrees with pinned checkpoint score/rank; no source-exact target negative is reproduced. Matching aggregate control counts cannot validate which true offsets survive.",
+        "A2 2516 source units and other generators/offsets remain unrun."
+      ]
+    },
+    {
+      "source_id": "B-08",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+          "sha256": "1c57238fe7ab16fbb369e058bcc7c025ece6ad023b34efe2404b9330cab35288"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+          "sha256": "4f4905b83e60ba104ec92c09b86826664d62f4edd5f0d236ed0cd8c56e25600e"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A2.json",
+          "sha256": "dcfd2b2ac4e5aea303cfc3edc687853077660661b4c9df4aa18b0771e55e77f4"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json",
+          "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/audit_saved.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json"
+        }
+      ],
+      "covered_subclaim": "Source-saved A1/A2 finite offsets and seed/generator configurations are counted independently. Offset dimension is not the >2^32 seed dimension.",
+      "remaining": [
+        "Seeds above 2^32, other generator families, and broad nonzero-offset combinations remain outside the finite source grids.",
+        "Exact four-corpus source scorer unavailable locally."
+      ]
+    },
+    {
+      "source_id": "B-13-MARSAGLIA",
+      "state": "blocked",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+          "sha256": "1c57238fe7ab16fbb369e058bcc7c025ece6ad023b34efe2404b9330cab35288"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+          "sha256": "8e83fd95c6855e9b11b3f79caf53ddf8f564885146c6e8c59a7c99892872ff81"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/out_marsaglia_space.json",
+          "sha256": "5cd13a5ed3e919cb89ca205ec04fa45570c3da07202922b624704a6e5db0c0ea"
+        }
+      ],
+      "executions": [],
+      "covered_subclaim": "Pinned source reports a partial Marsaglia sweep; independent arithmetic confirms 17,639,963,712 planned pad-offset cases.",
+      "remaining": [
+        "The 1.2 GB gitignored CDROM data are not in the pinned Git checkout; no fresh pad hash verification or sweep was run.",
+        "Current English scorer corpus also fails exact hash gate."
+      ]
+    },
+    {
+      "source_id": "R19-C2-PREFILTER-REGISTER",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+          "sha256": "854a9e65b8ebcbb09e222253364de5170dd15e8189f795837301094c9aead26b"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/out_prefilter_union.json",
+          "sha256": "89a758c7176003ef6171f4bce50ac89ef8b8c704e556b1226ca0352f638c2b60"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/scripts/prefilter_register_power.py",
+          "sha256": "9a8debbc7593e69effd9416d17f42de94e77086088fcf44b549be380edc946c3"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json",
+          "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/audit_saved.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json"
+        }
+      ],
+      "covered_subclaim": "Independently recounted all 300 saved trial rows, per-register summaries, and four-screen unions; source-saved English top-1000 23-24/30, no-vowel 0/30.",
+      "remaining": [
+        "This checks archived arithmetic only. Exact Marsaglia pad and exact four-corpus model are absent; source 300 planted scans were not rerun."
+      ]
+    },
+    {
+      "source_id": "R19-C2-B02-ACCOUNTING",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+          "sha256": "20cfa616cf3f807d9b0fc1bdbbd9a7732213cf63bca88f85a4bccad26ad485dd"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/scripts/offset_coverage.py",
+          "sha256": "f41a329a56f991a5bf5cd4486d1fcd270d990aab79501008b6d12b6e707d3e13"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+          "sha256": "4f4905b83e60ba104ec92c09b86826664d62f4edd5f0d236ed0cd8c56e25600e"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A2.json",
+          "sha256": "dcfd2b2ac4e5aea303cfc3edc687853077660661b4c9df4aa18b0771e55e77f4"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json",
+          "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/audit_saved.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json"
+        }
+      ],
+      "covered_subclaim": "Independently recomputed saved B-02 percentages and L6 A1/A2 unit × offset arithmetic; source reports 16 pre-L6 distinct key offsets against its chosen 2^20 bound.",
+      "remaining": [
+        "The 2^20 denominator is a declared mechanism bound, not a natural limit on arbitrary generators.",
+        "Full originating-lane raw rows/checkpoint collection and full C2 script execution were not independently reproduced."
+      ]
+    },
+    {
+      "source_id": "R19-C2-MARSAGLIA-GATE",
+      "state": "blocked",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C2/out_verify.json",
+          "sha256": "7ef53c1fe887c45514a41b82dcf52b1aa0929dd6b55d5cea57bb9bf8c8b8e8fb"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/scripts/verify_marsaglia_independent.py",
+          "sha256": "68933750b2372901bbb01d6bc8b4fa7baa527d44423aff99349062db57a1b309"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/corpora-receipt.json",
+          "sha256": "793dcd6fe78892ff83e8489ec4fa6ed52bd91ee9cc4d2ae8a3e02d1a3670ac60"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/corpus-recovery-check.json",
+          "sha256": "2ff69727fb73a562a97d4c3f0147197aa24f4cb50d6909845fbd661a755b4924"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/fetch_pinned_corpora.py",
+          "exit_code": 1,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/corpora-receipt.json"
+        }
+      ],
+      "covered_subclaim": "Saved source verification claims 112/112 input items passed; current exact-input check separately found two scorer corpus mismatches.",
+      "remaining": [
+        "CDROM and extracted 10 MB pads are gitignored and absent locally, so the 112 file digests were not independently reverified."
+      ]
+    },
+    {
+      "source_id": "R19-C2-MARSAGLIA-COST",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C2/out_marsaglia_space.json",
+          "sha256": "5cd13a5ed3e919cb89ca205ec04fa45570c3da07202922b624704a6e5db0c0ea"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/scripts/marsaglia_space.py",
+          "sha256": "883489893eecf7650d454bce7710c4a9e47e63eca89a88fcd1275ff2e9bb74db"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json",
+          "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/audit_saved.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json"
+        }
+      ],
+      "covered_subclaim": "Independently recomputed the 63-pad, six-builder, two-order, two-sign offset total (17,639,963,712) and ISO total from declared byte sizes.",
+      "remaining": [
+        "The source wall-time estimate depends on missing original checkpoint mtimes and machine conditions; no new pad throughput benchmark was run."
+      ]
+    },
+    {
+      "source_id": "B-02-C2-CORRECTION",
+      "state": "duplicate",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/ledger.json",
+          "sha256": "aeb82ba135725d42ee37f4f7351b5c16546ea6f496cad5a9750995ada6e7927c"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+          "sha256": "20cfa616cf3f807d9b0fc1bdbbd9a7732213cf63bca88f85a4bccad26ad485dd"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+          "sha256": "854a9e65b8ebcbb09e222253364de5170dd15e8189f795837301094c9aead26b"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json",
+          "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/audit_saved.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json"
+        }
+      ],
+      "covered_subclaim": "This is a status correction for B-02, not a new cipher test. The saved partial A2 coverage and measured prefilter loss support a scope-limited reading.",
+      "remaining": [
+        "Only the source owner can amend its ledger; Liberpedia must not inherit a whole-axis negative from this source status."
+      ]
+    },
+    {
+      "source_id": "R17-PUBLIC-PAD-C2-RESTATEMENT",
+      "state": "duplicate",
+      "evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+          "sha256": "854a9e65b8ebcbb09e222253364de5170dd15e8189f795837301094c9aead26b"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C2/out_prefilter_union.json",
+          "sha256": "89a758c7176003ef6171f4bce50ac89ef8b8c704e556b1226ca0352f638c2b60"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json",
+          "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python -X utf8 research/source-intake/batch20b-2026-10-23/worker-a/audit_saved.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-a/saved-check.json"
+        }
+      ],
+      "covered_subclaim": "This is a coverage-line restatement, not a new pad search. Source-saved 300 plants show register-dependent prefilter survival, so its English survival factor is not universal.",
+      "remaining": [
+        "No exact pad-level R17 negative was reproduced; non-English candidate coverage remains conditional."
+      ]
+    }
+  ]
+}

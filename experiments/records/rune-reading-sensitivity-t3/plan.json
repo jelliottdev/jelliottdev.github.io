@@ -1,0 +1,84 @@
+{
+  "schema": "liberpedia-t3-publication-wrapper-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "frozen_worker_plan_sha256": "96df11a9a869ee98bb6727235adea921b8a2b381140b7e22267a47f50a49c2c4",
+  "source_frozen_prereg_sha256": "9ab28491ab967fc76bcfce4b62d52fab5f3f3ef922c08f8ae81c7582459c82df",
+  "method": "Package fresh exact-source T3 baseline, 400-trial perturbation grids, LP1 L120/L400 known-key decoder fixtures, the source-exact six-level L12956 KJV known-key fixture, and previously fresh T1 source-reader receipts. This publication wrapper was assembled after scoring; the source PREREG, worker plan and separate fullbook-plan preserve the corresponding frozen rules.",
+  "inputs": [
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/input-snapshot.json",
+      "sha256": "2a63a10c4d97ec9c3f9955e382ba157416a3271d737b24af0f2dd04fe8c932bf"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_baseline.json",
+      "sha256": "cefb068f97e2481de0836df25462ddf93cbf0cf7f9a6ac2c30af88ccc46be4d3"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_random.json",
+      "sha256": "65dcd3fcf2724253b98c88052a5810301ce77a6cff4f2194688b470b39d7f721"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_targeted.json",
+      "sha256": "f4c759d0ec5e289c258cbcdc9ebff2d1b64b050312561a577f222523df4a2f0e"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L120_LP1.json",
+      "sha256": "f35059ee9a1de20cbe701b34c4871e353bf843a5fbca69330bce4c8fa4313921"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L400_LP1.json",
+      "sha256": "92965924ee34f3321baf739a5fd01b819bbd2c30f9a7e76479c49d8ea0fc0bad"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.json",
+      "sha256": "63476a8a8f91652afa5f6653c35051b7eed5221fda53818a3147a2f2c77440fc"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.source.json",
+      "sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/fullbook-plan.json",
+      "sha256": "809a353ee246dc745ac7235ad4793d82b660106417a80d7e3a24cf1a2b3d0dd0"
+    },
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+      "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_gread_lp2.json",
+      "sha256": "232f4ec2782016b37ec283f9c5b5891c827dca23f7cf1b4fbaf1e285568aa5ea"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_loo.json",
+      "sha256": "d3bbdcc928ad37e33f50ae80712a19fb5cad3e996b5489f9e1c435750f22daa0"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/adjudication.json",
+      "sha256": "091037fc350d33545bd044d174aa015dc96a8f21ab34bda000cef3c556fe79cf"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/out_corpus_lp2.json",
+      "sha256": "63c7a4f76b39b5af25c7fa3d5d8d43011cf4f65e90674ded6c0f3e82cb3ceaeb"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip",
+      "sha256": "f629e47b24576c9649c40aa9eb9d139059131c1bf6725545bbafd969368c9cdc"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/source-snapshot-manifest.json",
+      "sha256": "b912867696f2bf6f8c5abc02ed65309afdecc077fbfca92cf981ad0a29c23eeb"
+    },
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/worker-plan.json",
+      "sha256": "96df11a9a869ee98bb6727235adea921b8a2b381140b7e22267a47f50a49c2c4"
+    }
+  ],
+  "exclusions": [
+    "No claim all 450 source-reader disagreements are actual transcription errors",
+    "No strict held-out reader validation",
+    "No direct comparison of passage length alone: the full-book fixture also changes plaintext register from LP1 to KJV",
+    "No fresh regeneration of T3 dependency_map.json or broad source ledger exclusions"
+  ],
+  "packaging_amendment": "After the original LP1 computations, the portable source archive was extended to preserve the exact pinned PREREG.md and RESULTS.md. A later exact-hash recovery of the KJV input enabled a separate source-exact six-level full-book replay; its additional plan was frozen before local execution, while the historical source output already existed. Earlier experimental settings, source code and numerical outcomes were not changed."
+}

@@ -1,0 +1,318 @@
+{
+  "schema": "liberpedia-source-intake-worker-v1",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "worker": "b",
+  "entries": [
+    {
+      "source_id": "L7-A-SCORER-ENGLISH-ONLY",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/a1_scorer_language.py",
+          "sha256": "d3780ffa2d7a1edd91c0697922dbb6934358bb9a880cdec21b6e27909f352bf3",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/a1_scorer_language.py",
+          "git_object": "8837f5ec888c5f65c3a33c1b9a4d6a18166121f6"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_a1.json",
+          "sha256": "4dbac44b627076441c547f0700cc66836a8b25462a55e8a1fa38cece224e1c2f",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_a1.json",
+          "git_object": "3eb744bbdac5be1585b42cc7c67ff9855561c8aa"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/fresh-controls.json",
+          "sha256": "0e5b11491ee57de77bf04a23f2daab6c13fb399360f87117abe30cac89c60e69"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.json",
+          "sha256": "0eb361d62faefa9ebb3f028fc1a2d25f759bc752033eff457ba3bfb9bbf7fa5f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_controls.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/controls.log"
+        }
+      ],
+      "covered_subclaim": "Fresh exact source trial function:15 planted correct/wrong-key pairs over5available complete source registers atL120,3replicates each; all source row fields agree with the saved matching subset. FixedEnglish score medians:KJV−4.337,LP1−4.137,Latin−5.226,OE−5.379,German−5.534 versus−5.5 cutoff. Actual scorer and modelcount7266795 used, no substituted model.",
+      "remaining": [
+        "Full source EN_MODERN,Mabinogion/Welsh and derived vowel-deletion panels unavailable; exact files absent.",
+        "KJV input available locally but untracked in pinnedGit; bytes hashed in dependency receipt and finite trial rows match original source.",
+        "This is power for one source instrument and fixed plants, not a claim that every past method or every nonEnglish text is invisible."
+      ]
+    },
+    {
+      "source_id": "L7-A-ARCHIVE-RESCORE",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/a2_rescore_archive.py",
+          "sha256": "4952f371761c810d3e590202633aa7e62bd1d5ac8dfbd8fe0a3e081b7b7afe7d",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/a2_rescore_archive.py",
+          "git_object": "eed60d5469a931fb3020d3017fd9145ecf883234"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_a2.json",
+          "sha256": "0797f0ba8c398c43f0476a0dc6418cbebefa47b4ce19e6ba20078460df259d1e",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_a2.json",
+          "git_object": "a2ae4467c9772afecbe9e662aaf8009463c782a4"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.json",
+          "sha256": "0eb361d62faefa9ebb3f028fc1a2d25f759bc752033eff457ba3bfb9bbf7fa5f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_archive_audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.log"
+        }
+      ],
+      "covered_subclaim": "Fresh source harvest obtains340retained strings from15specified source files. All340 were newly rescored under4available exact source rune-trigram models(Latin,OldEnglish,German,LP1) plusIoC.N, with400uniform-rune null draws per observed length. This reviews saved English-selected survivors, not discarded decodes.",
+      "remaining": [
+        "EN_MODERN andCYmodels not constructed because exactcorpora missing; complete6model source procedure/Englishcontrast correction not replayed.",
+        "Exploratory uniform-nullz scores are not selection-adjusted or calibrated evidence of plaintext.",
+        "Original sweeps discarded most decodes; rescoring survivors cannot recover missing candidates or imply whole-search coverage."
+      ]
+    },
+    {
+      "source_id": "L7-A-HANDOFF-NONCOMPLIANCE",
+      "state": "replayed",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/a2_rescore_archive.py",
+          "sha256": "4952f371761c810d3e590202633aa7e62bd1d5ac8dfbd8fe0a3e081b7b7afe7d",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/a2_rescore_archive.py",
+          "git_object": "eed60d5469a931fb3020d3017fd9145ecf883234"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.json",
+          "sha256": "0eb361d62faefa9ebb3f028fc1a2d25f759bc752033eff457ba3bfb9bbf7fa5f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_archive_audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.log"
+        }
+      ],
+      "covered_subclaim": "Fresh15file retained-row inventory matches340source candidate harvest. Independently checks every retained row, not only source first5: no per-row field names indicating IoC,languageLM,entropy,distinctness or agnostic statistic appear. All recorded row keys are retained in source provenance. Thus source proposition that laterlisted sweeps complied is not supported by these saved rows.",
+      "remaining": [
+        "Inventory is limited to15named postB6retained artifacts, not every public sweep.",
+        "A separate undiscovered sidecar is not ruled out; source sweep-level English histograms are not independent language-free statistics."
+      ]
+    },
+    {
+      "source_id": "L7-B-BEAM-ENVELOPE",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/b1_power_envelope.py",
+          "sha256": "8b8506a28bb45c3ccd69e528ebb477b4650256a063ae38c0bd531b9c32110653",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/b1_power_envelope.py",
+          "git_object": "9060d0180b9dacf088e4247e45473fbbebc17172"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_b1.json",
+          "sha256": "4655134d148e410046526404a3239c6eec2c9f9f29ca2379b222d3df876a9f17",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_b1.json",
+          "git_object": "34e097617404fbc58cb0085b3854a50dec94f268"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/fresh-controls.json",
+          "sha256": "0e5b11491ee57de77bf04a23f2daab6c13fb399360f87117abe30cac89c60e69"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_controls.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/controls.log"
+        }
+      ],
+      "covered_subclaim": "Fresh28source plants:7permechanism atL240,bw400,maxskip3. Baseline keyskip median100%recovery; pairedrejection25.8%; onefreeadvance95%; freeadvanceq=.02 median72.1%. Four of28runs pass−5.5score while recovering<90%ofplanted runes. This measures correct-key detector failure under specified synthetic mechanisms.",
+      "remaining": [
+        "Only4of67sourcecase configurations rerun; lowentropy repeated-pad regimes, other budgets, placements and full envelope remain untested here.",
+        "Does not establish that LP2 uses any tested filter; high score and known key are not sufficient without actual recovery on controls."
+      ]
+    },
+    {
+      "source_id": "L7-C-HEADLINE-STATS",
+      "state": "replayed",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/c1_bars.py",
+          "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/c1_bars.py",
+          "git_object": "7993868377b66deae733a6001cc84ca4bfb6bdef"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_c1.json",
+          "sha256": "67cc0d0ac3f20c06cab5810275ab034f0decf5c51ab2d8ea2cb009a43d3c37fc",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_c1.json",
+          "git_object": "b0838a2f76341d8d8b3069329159241eb90a84b2"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/fresh-controls.json",
+          "sha256": "0e5b11491ee57de77bf04a23f2daab6c13fb399360f87117abe30cac89c60e69"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.json",
+          "sha256": "0eb361d62faefa9ebb3f028fc1a2d25f759bc752033eff457ba3bfb9bbf7fa5f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_controls.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/controls.log"
+        }
+      ],
+      "covered_subclaim": "Exactsource stream newly measured:12956runes,86adjacent repeats(0.663836%),IoC×29=0.999873538,entropy4.856503614bits; observed repeat deficit80.7463%relative to its own unigramcollision expectation. Inputtranscription SHA recorded. Sourceclaims reproduce numerically on that stream.",
+      "remaining": [
+        "Stream is the source pinned krisyotam segmentation/normalization, not automatically every Liberpedia text-layer version or boundary convention.",
+        "These summary statistics do not identify an OTP, output-aware encryption algorithm, plaintext language or cause of repeated-rune scarcity."
+      ]
+    },
+    {
+      "source_id": "L7-C-G3-FLOOR-EXTENDED",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/c1_bars.py",
+          "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/c1_bars.py",
+          "git_object": "7993868377b66deae733a6001cc84ca4bfb6bdef"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_c1.json",
+          "sha256": "67cc0d0ac3f20c06cab5810275ab034f0decf5c51ab2d8ea2cb009a43d3c37fc",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_c1.json",
+          "git_object": "b0838a2f76341d8d8b3069329159241eb90a84b2"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/fresh-controls.json",
+          "sha256": "0e5b11491ee57de77bf04a23f2daab6c13fb399360f87117abe30cac89c60e69"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_controls.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/controls.log"
+        }
+      ],
+      "covered_subclaim": "Fresh difference-distribution minima for5available sourcepanels:KJV1.43575%,LP1=1.58461%,Latin1.42450%,OldEnglish2.07449%,German0.97247%. German lowers the four-English-corpus bound while all5remain above0.664%. Exact finite data and counts stored, no universal natural-language conclusion.",
+      "remaining": [
+        "Missing original EN_MODERN/CY and derivedvowel-deletion sourcepanels; cannot repeat fullregister extension.",
+        "Bound applies only under stated plaintext/keydifference independence and additive model; not every cipher mechanism or possible text.",
+        "KJV file is hashed but not pinnedGittracked; no hidden replacement used."
+      ]
+    },
+    {
+      "source_id": "L7-C-THRESHOLD-CALIBRATION",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/c1_bars.py",
+          "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/c1_bars.py",
+          "git_object": "7993868377b66deae733a6001cc84ca4bfb6bdef"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/null.py",
+          "sha256": "191f3e7ec0cf9a902b10d98e92f9539267e58f132f0ec605c383edfa1ea362e4",
+          "source_path": "liber-primus/benchmark/null.py",
+          "git_object": "7dab4892768130c6692b51571a4e5102b21073fd"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_c4.json",
+          "sha256": "3a0439c02e7d7ecca553a5ab68f02fcbc91cdf325bedd69aa35eb213f30b2083",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_c4.json",
+          "git_object": "2e2874f000e20894fa5b33cb0a4a58fd3106ea08"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/fresh-nulls.json",
+          "sha256": "4072a20aa8cb4c5febb8fd721ac85bfae03a61f783fd362004f601a1c7663161"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.json",
+          "sha256": "0eb361d62faefa9ebb3f028fc1a2d25f759bc752033eff457ba3bfb9bbf7fa5f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_nulls.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/nulls.log"
+        },
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_archive_audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.log"
+        }
+      ],
+      "covered_subclaim": "Measured360fresh exact-source shuffled-ciphertext beam nulls:120each forL31bw120,L120bw400,L400bw120. Estimated90%tail-excess scales differ by4.86×,1.86×,0.84×from default0.0725. Four independent scalarCDFunitchecks confirm thresholdformula algebra; functionsegment_len argument is unused. Twoanchor solve haszeroresidualdegreesoffreedom; saved out-of-sample residual arithmetic rerun.",
+      "remaining": [
+        "120draws/settings yieldonly11upper-tail exceedances, not reliable billion-trial calibration or fullsource400draw experiment.",
+        "No universalGumbeldistribution, cross-register threshold validity or family-wide falsepositive rate established.",
+        "No manuscriptdecryption negative follows from these null controls."
+      ]
+    },
+    {
+      "source_id": "L7-C-B17-TALLY",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/c1_bars.py",
+          "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/c1_bars.py",
+          "git_object": "7993868377b66deae733a6001cc84ca4bfb6bdef"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/sources/out_c1.json",
+          "sha256": "67cc0d0ac3f20c06cab5810275ab034f0decf5c51ab2d8ea2cb009a43d3c37fc",
+          "source_path": "liber-primus/analysis/round18/L7-redteam/out_c1.json",
+          "git_object": "b0838a2f76341d8d8b3069329159241eb90a84b2"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.json",
+          "sha256": "0eb361d62faefa9ebb3f028fc1a2d25f759bc752033eff457ba3bfb9bbf7fa5f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20b-2026-10-23/worker-b/run_archive_audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-b/archive-audit.log"
+        }
+      ],
+      "covered_subclaim": "Fresh exactsource c6_tally on current pinned ledger finds172entries,87withthresholdfields; sourcefixed breakdown sums17058157809scored decodes/offsets andusesitsR17discount convention. Hypothesiscount, ledgercount and primitiveoperations are explicitly different tallies, not independenttests or8newexperiments.",
+      "remaining": [
+        "17.06billion figure is a sum of source-reported run sizes; not an independently rerun search or a proven effective multiplicity.",
+        "Currentpinnedledger snapshot differs from historicalL7executiontime; recorded counts must carry snapshotdate/revision.",
+        "Dependence, selection and prefilter survival prevent reading rawcount as calibratedfamilywisealpha."
+      ]
+    }
+  ],
+  "outstanding_entries": [],
+  "counts": {
+    "entries_reviewed": 8,
+    "replayed": 2,
+    "partial": 6,
+    "blocked": 0,
+    "duplicate": 0
+  },
+  "fresh_executions": {
+    "a1_paired_trials": 15,
+    "a1_beam_decodes": 30,
+    "b1_plants": 28,
+    "conditional_null_beam_decodes": 360,
+    "retained_candidates_rescored": 340,
+    "available_archive_lms": 4
+  },
+  "important_qualification": "8sourceentriesprocessed, not8newcipherexperiments or closures. One grouped instrument/control publication is being prepared separately."
+}

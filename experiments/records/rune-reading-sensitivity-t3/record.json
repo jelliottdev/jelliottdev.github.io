@@ -1,0 +1,213 @@
+{
+  "id": "rune-reading-sensitivity-t3",
+  "status": "published",
+  "title": "How disputed rune readings change the measurements",
+  "question": "If the 450 located O/A/AE machine disagreements were read differently, which manuscript statistics move, and how does one known-key decoder respond to separately simulated transcription errors?",
+  "reader_question": "How much could disputed rune readings change what we measure?",
+  "summary": "Hypothetically replacing all 450 source-suggested O/A/AE alternatives raises joined-stream adjacent repeats from 86 (0.664%) to 103 (0.795%), below the source comparison floor of 126, but shifts normalized IoC from 0.999874 to 1.013823. Known-key LP1 decoder fixtures degrade with separate random ciphertext errors. The reader controls reuse global canonical labels and do not establish independent transcription accuracy. A separately recovered exact KJV input also permits the source's six-level full-book decoder replay; its results are fixture-specific.",
+  "finding": "A fresh source replay maps all 450 alternatives and reproduces the full 400-trial perturbation grids. Exact all-450 changes add 17 joined-stream adjacent repeats (86/12955 pairs, 0.664%; to 103/12955, 0.795%) and shift normalized IoC 0.999874→1.013823. In separate planted LP1 key-skip fixtures, median recovery first falls below 90% at book-equivalent k=1800 (L120) and k=900 (L400). In the separate 12,956-rune KJV fixture (six replicates per level), median recovery first falls below 90% at k=450, when correct/wrong-key scores still separate; score distributions overlap at k=900. Fresh nested results match the archived source apart from elapsed seconds.",
+  "limitations": "The 450 source-reader disagreements are not adjudicated image errors. Source T1 controls are transductive because global canon-derived labels include the test pages. The decoder corrupts synthetic LP1 ciphertext uniformly, not the 450 LP2 locations, and tests one key-skip model with English scoring. The exact full-book KJV fixture was replayed, but uses a different plaintext register as well as length and has six replicates per level. The source dependency graph was not freshly rebuilt. No broad LP2 cipher exclusion follows.",
+  "next_steps": "Rebuild glyph labels with solved controls strictly held out before estimating transcription error; then test predeclared image-adjudicated alternatives and decoder controls that match the proposed cipher and error locations.",
+  "outcome": "supported",
+  "tags": [
+    "LP2",
+    "transcription sensitivity",
+    "rune readings",
+    "doublets",
+    "index of coincidence",
+    "O/A/AE",
+    "known-key decoder",
+    "source replay"
+  ],
+  "related": [
+    "transcription-correction-sensitivity",
+    "dukotah-image-template-rebuild"
+  ],
+  "family": {
+    "id": "transcription-correction-sensitivity",
+    "title": "Archived versus reviewed manuscript text",
+    "question": "Which downstream conclusions actually move when a documented transcription choice changes?",
+    "baseline": "transcription-correction-sensitivity"
+  },
+  "variant": {
+    "label": "Hypothetical source-rune alternatives and planted decoder errors",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-10",
+          "lp2-05",
+          "lp2-07",
+          "lp2-11",
+          "lp2-15",
+          "lp2-35",
+          "lp2-37",
+          "lp2-38"
+        ],
+        "after": [],
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "representation",
+        "before": "Archived raw and separate reviewed_text fields in the eight current page records; joined LP2-00–55 corpus with the seven LP2 reviewed layers substituted and all other pages archived.",
+        "after": "Pinned source LP2 pages 0–54 joined as 12,956 GP rune indices. The 450 O/A/AE alternatives are source-reader locations. Separate LP1 planted passages of 120 and 400 runes provide decoder controls. A separate 12,956-rune planted KJV passage is the full-book decoder control.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "procedure",
+        "before": "Check ordered rune equality, rune multiset and whole-stream IoC pair counts. Remove slash/CR/LF wraps; tokenize rune runs with optional internal apostrophes, retaining headings and joining pages. Compare ordered normalized rune tokens, word-length histograms and ordered bigrams. Independently reconstruct edit strings and scan tokens.",
+        "after": "Rerun source baseline and 400-trial random, dense and targeted substitution grids; apply all 450 exact alternative readings; rerun source 14-level LP1 decoder grids at 120 and 400 runes; compare numeric source outputs and independently recount repeats and IoC from the pinned stream. Replay the exact source six-level KJV full-book fixture using a recovered hash-matched input; compare every fresh result field with the pinned source output except elapsed seconds.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "parameters",
+        "before": "29-symbol stored alphabet; eight reviewed pages; LP2-00–55 in order; no search, random trial or significance threshold. Each of 57 source files and the plan is SHA-256 pinned.",
+        "after": "450 unique mapped source alternatives; 400 trials per sampled perturbation level; source fixed seeds/levels; 120×14 L120 and 60×14 L400 LP1 decoder cells; F0 parity gate; source German-corpus comparison floor 0.972% corresponds to 126 repeats. Six KJV full-book error levels [0,50,100,200,450,900] with six replicates each; optional 1–4 level-isolated replay workers.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      },
+      {
+        "field": "exclusions",
+        "before": "Unrecorded disputed marks; new photographic review; alternative word delimiters; punctuation-driven cipher resets; page-local tokenization; LP2-56–57; any claim that the entire transcription is correct.",
+        "after": "No independent hardcopy image review, strict held-out glyph training, regenerated historical dependency graph, alternative cipher model, or actual LP2 plaintext/key recovery.",
+        "reason": "Compare source-proposed rune alternatives and planted decoder error sensitivity, rather than the existing reviewed text-layer edits."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/rune-reading-sensitivity-t3/input-snapshot.json",
+      "experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip"
+    ],
+    "representation": "Pinned source LP2 pages 0–54 joined as 12,956 GP rune indices. The 450 O/A/AE alternatives are source-reader locations. Separate LP1 planted passages of 120 and 400 runes provide decoder controls. A separate 12,956-rune planted KJV passage is the full-book decoder control.",
+    "procedure": "Rerun source baseline and 400-trial random, dense and targeted substitution grids; apply all 450 exact alternative readings; rerun source 14-level LP1 decoder grids at 120 and 400 runes; compare numeric source outputs and independently recount repeats and IoC from the pinned stream. Replay the exact source six-level KJV full-book fixture using a recovered hash-matched input; compare every fresh result field with the pinned source output except elapsed seconds.",
+    "parameters": "450 unique mapped source alternatives; 400 trials per sampled perturbation level; source fixed seeds/levels; 120×14 L120 and 60×14 L400 LP1 decoder cells; F0 parity gate; source German-corpus comparison floor 0.972% corresponds to 126 repeats. Six KJV full-book error levels [0,50,100,200,450,900] with six replicates each; optional 1–4 level-isolated replay workers.",
+    "exclusions": "No independent hardcopy image review, strict held-out glyph training, regenerated historical dependency graph, alternative cipher model, or actual LP2 plaintext/key recovery."
+  },
+  "review": {
+    "kind": "pinned-source computational replay with independent rune-count checker",
+    "retested_on": "2026-10-23",
+    "reviewer": "Fresh complete available T3 grids, source-output parity, source-reader receipt audit and direct repeat/IoC arithmetic; full-book KJV source-output parity",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/rune-reading-sensitivity-t3/run.py --check && python experiments/records/rune-reading-sensitivity-t3/plot.py --check && python experiments/records/rune-reading-sensitivity-t3/check_fullbook.py",
+    "environment": "Python 3 standard library for --check. Full --replay needs NumPy and SciPy because the pinned source imports its image-pipeline module; no network or Git access needed. The exact KJV corpus is a declared cross-record input; --jobs 2–4 parallelizes only independent full-book error levels.",
+    "script": "experiments/records/rune-reading-sensitivity-t3/run.py",
+    "script_sha256": "d2ab554ca009160be1e39ce1bbce2c6c56ae4a3bedbfa240bfb3872467dbe057",
+    "inputs": [
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/plan.json",
+        "sha256": "fa69230196a0b4c16b824614581ce867d7e84102e6eabd3bf386ac4328163ca3"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/input-snapshot.json",
+        "sha256": "2a63a10c4d97ec9c3f9955e382ba157416a3271d737b24af0f2dd04fe8c932bf"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_baseline.json",
+        "sha256": "cefb068f97e2481de0836df25462ddf93cbf0cf7f9a6ac2c30af88ccc46be4d3"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_random.json",
+        "sha256": "65dcd3fcf2724253b98c88052a5810301ce77a6cff4f2194688b470b39d7f721"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_targeted.json",
+        "sha256": "f4c759d0ec5e289c258cbcdc9ebff2d1b64b050312561a577f222523df4a2f0e"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L120_LP1.json",
+        "sha256": "f35059ee9a1de20cbe701b34c4871e353bf843a5fbca69330bce4c8fa4313921"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L400_LP1.json",
+        "sha256": "92965924ee34f3321baf739a5fd01b819bbd2c30f9a7e76479c49d8ea0fc0bad"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_gread_lp2.json",
+        "sha256": "232f4ec2782016b37ec283f9c5b5891c827dca23f7cf1b4fbaf1e285568aa5ea"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_loo.json",
+        "sha256": "d3bbdcc928ad37e33f50ae80712a19fb5cad3e996b5489f9e1c435750f22daa0"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/adjudication.json",
+        "sha256": "091037fc350d33545bd044d174aa015dc96a8f21ab34bda000cef3c556fe79cf"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_corpus_lp2.json",
+        "sha256": "63c7a4f76b39b5af25c7fa3d5d8d43011cf4f65e90674ded6c0f3e82cb3ceaeb"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/source-snapshot.zip",
+        "sha256": "f629e47b24576c9649c40aa9eb9d139059131c1bf6725545bbafd969368c9cdc"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/source-snapshot-manifest.json",
+        "sha256": "b912867696f2bf6f8c5abc02ed65309afdecc077fbfca92cf981ad0a29c23eeb"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/plot.py",
+        "sha256": "f7a6c9aaee97e09e0e7fa2b283859f317027fe887c2f984f03423d98fe9d487b"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/worker-plan.json",
+        "sha256": "96df11a9a869ee98bb6727235adea921b8a2b381140b7e22267a47f50a49c2c4"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/fullbook-plan.json",
+        "sha256": "809a353ee246dc745ac7235ad4793d82b660106417a80d7e3a24cf1a2b3d0dd0"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.json",
+        "sha256": "63476a8a8f91652afa5f6653c35051b7eed5221fda53818a3147a2f2c77440fc"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.source.json",
+        "sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/replay_fullbook_parallel.py",
+        "sha256": "47f77192b217e7a5f06c2a744bce3cccae03eb9c9e607260dcb9f81a5e9405e6"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/check_fullbook.py",
+        "sha256": "33435e8c878f8e4efd59ba8b505024144321bd03594906ad8c40395f126f6ed0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/results.json",
+        "sha256": "a285f9cedb884d59c229ea040b7e44a3a6fbb5c8d49bfff8304cac768caca212"
+      },
+      {
+        "path": "experiments/records/rune-reading-sensitivity-t3/comparison.svg",
+        "sha256": "5c2c0ef4861e0a19c64baef06db9fee69512fb66edb536058f7d1dfb926d212a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/rune-reading-sensitivity-t3/comparison.svg",
+      "caption": "The 450 source alternatives add 17 adjacent repeats; 40 would be required to reach the source German comparison floor."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source T3 preregistration and programs",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T3/PREREG.md"
+    },
+    {
+      "label": "Pinned source T1 reader controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T1/RESULTS.md"
+    }
+  ],
+  "reader_finding": "Changing all 450 proposed rune readings adds 17 adjacent repeats and shifts the frequency statistic. These are hypothetical alternatives, not 450 confirmed errors. In a separate full-length known-key fixture, 450 random changes reduce median recovery to 86%.",
+  "reader_limit": "The reader was trained using canonical labels from the control pages too, so its agreement does not independently establish accuracy. The decoder controls cover one model and simulated errors. The short and full-length fixtures also use different plaintext texts."
+}

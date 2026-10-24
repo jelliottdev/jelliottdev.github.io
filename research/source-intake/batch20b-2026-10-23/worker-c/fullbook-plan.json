@@ -1,0 +1,28 @@
+{
+  "schema": "liberpedia-t3-fullbook-extension-plan-v1",
+  "date": "2026-10-23",
+  "timing": "Frozen before this agent's local full-book execution; the source's historical output and prior L120/L400 results already existed and are not a prospective discovery target.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_script": "liber-primus/analysis/round19/T3/t3_decode.py",
+  "source_script_sha256": "2bf593acdd73b1f7f6132fadf50c7f5ea10ecec399c97b2a35987282d312889c",
+  "kjv_source": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+  "kjv_bytes": 4436268,
+  "kjv_sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986",
+  "source_saved_output_sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac",
+  "command": "T3_KBOOK=0,50,100,200,450,900 python t3_decode.py 12956 6 KJV",
+  "grid": {
+    "length": 12956,
+    "replicates_per_level": 6,
+    "register": "KJV",
+    "k_book": [0, 50, 100, 200, 450, 900],
+    "beam_width": 400,
+    "max_skip": 3,
+    "suppression": 0.83
+  },
+  "checks": [
+    "Exact KJV bytes and source script match pinned hashes before copying into isolated scratch tree",
+    "Freshly generated output is compared numerically with the source-saved six-level output; elapsed seconds are excluded",
+    "F0 gate passes and all six levels and six replicates are present",
+    "No claim that the source KJV is an independent LP2 plaintext or that the global-canon T1 reader is held out"
+  ]
+}

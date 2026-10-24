@@ -11,14 +11,14 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 101,
-    "reproduced_subclaim": 6,
-    "partial": 57,
+    "source_entries_reviewed": 122,
+    "reproduced_subclaim": 9,
+    "partial": 72,
     "unsupported_source_verdict": 20,
-    "blocked_exact_replay": 11,
+    "blocked_exact_replay": 14,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
-    "source_entries_with_published_record_link": 55,
+    "source_entries_with_published_record_link": 62,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
@@ -31,6 +31,12 @@
       "partial": 12,
       "blocked": 4,
       "duplicate": 1
+    },
+    "batch20b_dispositions": {
+      "partial": 13,
+      "blocked": 2,
+      "duplicate": 2,
+      "replayed": 3
     }
   },
   "entries": [
@@ -2546,6 +2552,377 @@
         "The inherited T3 IoC and delta-spectrum channel impact was not independently recomputed from the fresh 17 substitutions."
       ],
       "audit_note": "Fresh source execution; exact scope and the global training-data limitation are preserved in the receipt. Reproducibility is not independent validation of the canonical transcription.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-02",
+      "source_claim": "Keystream offset != 0. Round 8 states its sweep \"assumes key index 0 aligns with the first rune of LP2 page 0\"; B-04 covered 10 offsets, and R16-KDF and R16-PRNG covered offset 0 only. An author who enciphered LP1 first, skipped a file header, or started a generated pad mid-file is invisible to all of them. PARKED P-10 scores the omission at x8,192 for a modest range and notes it multiplies EVERY generator.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-offset-model-integrity",
+          "covered_subclaim": "Fresh source builder checks and 40 planted controls under an explicitly changed KJV-only screen. Headline totals match, but five trial rankings and one 1,048,576-offset checkpoint differ. This does not reproduce the exact four-book A1/A2 sweep."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Fresh converter/sharding/beam audit passes. Reconstructed 12,956-rune ciphertext supports a 40/40 planted decoder control; top-1000 offset survival is 26/40. These are a KJV-only prefilter replay, not exact source-model parity. Source-saved A1 covers 220/220 units and A2 508/3024; arithmetic independently checked.",
+      "unresolved_parts": [
+        "Pinned four-corpus trigram model cannot be rebuilt: exact Moby/Pride bytes absent; current Gutenberg hashes differ.",
+        "A1 unit 0 replay on fallback model disagrees with pinned checkpoint score/rank; no source-exact target negative is reproduced. Matching aggregate control counts cannot validate which true offsets survive.",
+        "A2 2516 source units and other generators/offsets remain unrun."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-08",
+      "source_claim": "SEED residue - >2^32 seeds, other generators, nonzero keystream offset.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Source-saved A1/A2 finite offsets and seed/generator configurations are counted independently. Offset dimension is not the >2^32 seed dimension.",
+      "unresolved_parts": [
+        "Seeds above 2^32, other generator families, and broad nonzero-offset combinations remain outside the finite source grids.",
+        "Exact four-corpus source scorer unavailable locally."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-13-MARSAGLIA",
+      "source_claim": "The LP2 keystream is a window of the Marsaglia Random Number CDROM (1995) - 634,124,288 bytes of published physical randomness with published SHA-256s. round17/SYNTHESIS.md named it the single live, reachable, unswept public-pad item and \"the cheapest live item in this branch\"; lane P2 found it, recorded its identifier and a verified HTTP 206, and left it unswept.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Pinned source reports a partial Marsaglia sweep; independent arithmetic confirms 17,639,963,712 planned pad-offset cases.",
+      "unresolved_parts": [
+        "The 1.2 GB gitignored CDROM data are not in the pinned Git checkout; no fresh pad hash verification or sweep was run.",
+        "Current English scorer corpus also fails exact hash gate."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-C2-PREFILTER-REGISTER",
+      "source_claim": "round17/lib_padsweep.dense_scan's English rune-index trigram prefilter — which selects which offsets ever reach the beam in EVERY dense pad sweep in this repository — retains a non-English true offset at a materially lower rate than an English one. round18/L7-redteam/RESULTS.md §A.7 names this quantity as never measured.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Independently recounted all 300 saved trial rows, per-register summaries, and four-screen unions; source-saved English top-1000 23-24/30, no-vowel 0/30.",
+      "unresolved_parts": [
+        "This checks archived arithmetic only. Exact Marsaglia pad and exact four-corpus model are absent; source 300 planted scans were not rerun."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-C2-B02-ACCOUNTING",
+      "source_claim": "How much of the keystream OFFSET axis does this repository's published coverage actually touch? B-02 has carried status `open` / raw_status `scope-limited` since Round 10 with every field except `hypothesis` set to null.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Independently recomputed saved B-02 percentages and L6 A1/A2 unit × offset arithmetic; source reports 16 pre-L6 distinct key offsets against its chosen 2^20 bound.",
+      "unresolved_parts": [
+        "The 2^20 denominator is a declared mechanism bound, not a natural limit on arbitrary generators.",
+        "Full originating-lane raw rows/checkpoint collection and full C2 script execution were not independently reproduced."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-C2-MARSAGLIA-GATE",
+      "source_claim": "The 1.2 GB of Marsaglia CDROM material in round18/L6-offset-marsaglia/data/ is byte-identical to the published archive. (Round 12 was burned twice: a silent 60.4% prefix of _560.00, and a 134-byte Git-LFS pointer standing in for DATA/560.13.)",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Saved source verification claims 112/112 input items passed; current exact-input check separately found two scorer corpus mismatches.",
+      "unresolved_parts": [
+        "CDROM and extracted 10 MB pads are gitignored and absent locally, so the 112 file digests were not independently reverified."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-C2-MARSAGLIA-COST",
+      "source_claim": "Round 17 called the Marsaglia CDROM 'the cheapest live item in this branch' without ever costing it. How big is its offset space and what does finishing it cost?",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Independently recomputed the 63-pad, six-builder, two-order, two-sign offset total (17,639,963,712) and ISO total from declared byte sizes.",
+      "unresolved_parts": [
+        "The source wall-time estimate depends on missing original checkpoint mtimes and machine conditions; no new pad throughput benchmark was run."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-02-C2-CORRECTION",
+      "source_claim": "PROPOSED CORRECTION to a status field, not a new experiment. round18/L6-offset-marsaglia/ledger.json sets B-02 status = `negative`. B-02's own hypothesis text is an AXIS ('keystream offset != 0'), and an axis is not made negative by a dense sweep of 220 mined configs plus 508/3,024 units of a fresh grid.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "This is a status correction for B-02, not a new cipher test. The saved partial A2 coverage and measured prefilter loss support a scope-limited reading.",
+      "unresolved_parts": [
+        "Only the source owner can amend its ledger; Liberpedia must not inherit a whole-axis negative from this source status."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R17-PUBLIC-PAD-C2-RESTATEMENT",
+      "source_claim": "PROPOSED RESTATEMENT of an existing entry's coverage line, following round18/L7-A.8's precedent. R17-PUBLIC-PAD reports 14,522,916,046 offsets scored and 8,380,000,000 effective after prefilter survival. That survival was measured on ENGLISH plants only (L7-A.7), and L7-A.8 could only say the non-English coverage was 'unmeasured, not zero and not one'.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "This is a coverage-line restatement, not a new pad search. Source-saved 300 plants show register-dependent prefilter survival, so its English survival factor is not universal.",
+      "unresolved_parts": [
+        "No exact pad-level R17 negative was reproduced; non-English candidate coverage remains conditional."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-A-SCORER-ENGLISH-ONLY",
+      "source_claim": "Every adjudication in this repository is decided by lp.score.Quadgram.score_norm, a quadgram model trained on four modern-orthography English books, against a fixed English band (>= -5.5). If the LP2 plaintext is not modern or archaic English, the CORRECT key is scored as noise and every published negative is conditional in a way no ledger entry states.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "l7-score-recovery-controls",
+          "covered_subclaim": "Fifteen fresh paired correct/wrong-key trials at length 120 across five available exact source registers. Other registers and the full corpus selection are excluded."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Fresh exact source trial function:15 planted correct/wrong-key pairs over5available complete source registers atL120,3replicates each; all source row fields agree with the saved matching subset. FixedEnglish score medians:KJV−4.337,LP1−4.137,Latin−5.226,OE−5.379,German−5.534 versus−5.5 cutoff. Actual scorer and modelcount7266795 used, no substituted model.",
+      "unresolved_parts": [
+        "Full source EN_MODERN,Mabinogion/Welsh and derived vowel-deletion panels unavailable; exact files absent.",
+        "KJV input available locally but untracked in pinnedGit; bytes hashed in dependency receipt and finite trial rows match original source.",
+        "This is power for one source instrument and fixed plants, not a claim that every past method or every nonEnglish text is invisible."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-A-ARCHIVE-RESCORE",
+      "source_claim": "campaign14/REDTEAM-PROPOSALS.md (~line 155), queued and never run for the post-B6 sweeps: language-agnostic and non-English re-scoring of all sweep bests. Any archived 'null' whose decrypt scores high under Old English / Latin, or shows an elevated decrypt IoC.N, is a missed hit.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Fresh source harvest obtains340retained strings from15specified source files. All340 were newly rescored under4available exact source rune-trigram models(Latin,OldEnglish,German,LP1) plusIoC.N, with400uniform-rune null draws per observed length. This reviews saved English-selected survivors, not discarded decodes.",
+      "unresolved_parts": [
+        "EN_MODERN andCYmodels not constructed because exactcorpora missing; complete6model source procedure/Englishcontrast correction not replayed.",
+        "Exploratory uniform-nullz scores are not selection-adjusted or calibrated evidence of plaintext.",
+        "Original sweeps discarded most decodes; rescoring survivors cannot recover missing candidates or imply whole-search coverage."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-A-HANDOFF-NONCOMPLIANCE",
+      "source_claim": "Round 10b lane B6 issued a binding handoff requirement - persist a language-agnostic statistic at sweep time, because retro-fitting is impossible once the decodes are thrown away. Later sweeps complied.",
+      "status": "reproduced-subclaim",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Fresh15file retained-row inventory matches340source candidate harvest. Independently checks every retained row, not only source first5: no per-row field names indicating IoC,languageLM,entropy,distinctness or agnostic statistic appear. All recorded row keys are retained in source provenance. Thus source proposition that laterlisted sweeps complied is not supported by these saved rows.",
+      "unresolved_parts": [
+        "Inventory is limited to15named postB6retained artifacts, not every public sweep.",
+        "A separate undiscovered sidecar is not ruled out; source sweep-level English histograms are not independent language-free statistics."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-B-BEAM-ENVELOPE",
+      "source_claim": "skipdecode.beam_decode admits a key skip only if EVERY skipped key position would have reproduced the previous cipher rune. That validity test is exact for encipher_keyskip and for nothing else, so constructions that desynchronise the key for any other reason are excluded by the decoder's transition relation rather than merely being harder for it.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "l7-score-recovery-controls",
+          "covered_subclaim": "Twenty-eight fresh plants: four original L7 mechanisms at length 240 with seven seeds each. Four score passes recover under 90% of the text. The complete 67-case source envelope is not replayed."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Fresh28source plants:7permechanism atL240,bw400,maxskip3. Baseline keyskip median100%recovery; pairedrejection25.8%; onefreeadvance95%; freeadvanceq=.02 median72.1%. Four of28runs pass−5.5score while recovering<90%ofplanted runes. This measures correct-key detector failure under specified synthetic mechanisms.",
+      "unresolved_parts": [
+        "Only4of67sourcecase configurations rerun; lowentropy repeated-pad regimes, other budgets, placements and full envelope remain untested here.",
+        "Does not establish that LP2 uses any tested filter; high score and known key are not sufficient without actual recovery on controls."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-C-HEADLINE-STATS",
+      "source_claim": "A load-bearing headline statistic is miscounted (a second, independent re-derivation of R12-D2 with fresh code).",
+      "status": "reproduced-subclaim",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Exactsource stream newly measured:12956runes,86adjacent repeats(0.663836%),IoC×29=0.999873538,entropy4.856503614bits; observed repeat deficit80.7463%relative to its own unigramcollision expectation. Inputtranscription SHA recorded. Sourceclaims reproduce numerically on that stream.",
+      "unresolved_parts": [
+        "Stream is the source pinned krisyotam segmentation/normalization, not automatically every Liberpedia text-layer version or boundary convention.",
+        "These summary statistics do not identify an OTP, output-aware encryption algorithm, plaintext language or cause of repeated-rune scarcity."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-C-G3-FLOOR-EXTENDED",
+      "source_claim": "The G3 doublet-deficit floor - min_d Pdp(d) > 0.664% for real plaintexts, therefore the key must be output-aware - is measured on four MODERN ENGLISH corpora only, and is English-conditional in the same way the scorer is.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Fresh difference-distribution minima for5available sourcepanels:KJV1.43575%,LP1=1.58461%,Latin1.42450%,OldEnglish2.07449%,German0.97247%. German lowers the four-English-corpus bound while all5remain above0.664%. Exact finite data and counts stored, no universal natural-language conclusion.",
+      "unresolved_parts": [
+        "Missing original EN_MODERN/CY and derivedvowel-deletion sourcepanels; cannot repeat fullregister extension.",
+        "Bound applies only under stated plaintext/keydifference independence and additive model; not every cipher mechanism or possible text.",
+        "KJV file is hashed but not pinnedGittracked; no hidden replacement used."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-C-THRESHOLD-CALIBRATION",
+      "source_claim": "benchmark/null.py's threshold_for() is a validated bar wherever the repo has used it.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "l7-score-recovery-controls",
+          "covered_subclaim": "360 fresh conditional shuffled-ciphertext nulls: 120 in each of three length/beam settings. These small-tail summaries do not reproduce the original 400 draws per cell or validate large-search tails."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Measured360fresh exact-source shuffled-ciphertext beam nulls:120each forL31bw120,L120bw400,L400bw120. Estimated90%tail-excess scales differ by4.86×,1.86×,0.84×from default0.0725. Four independent scalarCDFunitchecks confirm thresholdformula algebra; functionsegment_len argument is unused. Twoanchor solve haszeroresidualdegreesoffreedom; saved out-of-sample residual arithmetic rerun.",
+      "unresolved_parts": [
+        "120draws/settings yieldonly11upper-tail exceedances, not reliable billion-trial calibration or fullsource400draw experiment.",
+        "No universalGumbeldistribution, cross-register threshold validity or family-wide falsepositive rate established.",
+        "No manuscriptdecryption negative follows from these null controls."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L7-C-B17-TALLY",
+      "source_claim": "RECON-B item B-17: the multiple-comparisons tally is frozen at 5 across Rounds 8-9.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Fresh exactsource c6_tally on current pinned ledger finds172entries,87withthresholdfields; sourcefixed breakdown sums17058157809scored decodes/offsets andusesitsR17discount convention. Hypothesiscount, ledgercount and primitiveoperations are explicitly different tallies, not independenttests or8newexperiments.",
+      "unresolved_parts": [
+        "17.06billion figure is a sum of source-reported run sizes; not an independently rerun search or a proven effective multiplicity.",
+        "Currentpinnedledger snapshot differs from historicalL7executiontime; recorded counts must carry snapshotdate/revision.",
+        "Dependence, selection and prefilter survival prevent reading rawcount as calibratedfamilywisealpha."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T3-PROPAGATION-MAP",
+      "source_claim": "Every load-bearing statistic in this repo is computed from the pinned 12,956-rune stream, but nobody has measured how sensitive any of them is to the transcription. Perturb the stream by k runes and recompute, so that T1's and T2's re-read has a price.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rune-reading-sensitivity-t3",
+          "covered_subclaim": "Fresh source baseline and complete 400-trial random, dense and targeted perturbation grids. The historical dependency graph remains source-reported."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "Fresh source-run baseline and exact 400-trial random, dense and targeted perturbation statistics on the pinned 12,956-rune stream; planted flip, 13 baseline values and 450-position gate passed. Source numeric outputs match its archived rows within floating-order tolerance.",
+      "unresolved_parts": [
+        "The 62-ledger-entry dependency_map.json remains the pinned source's static classification; its entire historical script tree was not rehydrated and t3_depmap.py was not freshly rerun.",
+        "Perturbing source transcription is not image adjudication or a proof of canon correctness."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T3-OAE450-STREAM-POSITIONS",
+      "source_claim": "The 450 located O/A/AE disagreements (RECON-A item A-02, RECON-B item B-13) can be placed in 12,956-rune stream coordinates, making them a directly testable finite object rather than a glyph-index list.",
+      "status": "reproduced-subclaim",
+      "record_links": [
+        {
+          "record_id": "rune-reading-sensitivity-t3",
+          "covered_subclaim": "All 450 source alternatives uniquely mapped. Hypothetical substitution changes joined-stream doublets from 86 to 103 and normalized IoC from 0.999874 to 1.013823. These are not 450 confirmed errors."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "All 450 source O/A/AE disagreements mapped to distinct canonical stream coordinates; changing each to its source alternative changes exact adjacent doublets 86 to 103 and normalized IoC 0.999874 to 1.013823.",
+      "unresolved_parts": [
+        "A mapped machine disagreement is not a confirmed transcription error; source T1 training reuses global canon-derived labels."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T3-S2-DECODE-FRAGILITY",
+      "source_claim": "The repo's ~10^10 sweep negatives are properties of a DECODE of this exact ciphertext, not of a summary statistic, so they inherit a different and steeper transcription-sensitivity curve than the doublet rate does.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rune-reading-sensitivity-t3",
+          "covered_subclaim": "Complete 14-level LP1 known-key error fixtures at lengths 120 and 400, plus the exact six-level KJV full-book fixture; all pass the F0 parity gate. These are planted controls, not replay of historical LP2 key searches."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/batch20b-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "Fresh full 14-level source grids for LP1 L120 (120 replicates) and L400 (60 replicates), plus the distinct six-level KJV full-book grid (six replicates per level), all with F0 beam parity. Recovery first falls below 90% at source k_book=1800, 900 and 450 respectively; the KJV score distributions first overlap at 900. All saved scientific fields match their pinned source outputs except elapsed seconds.",
+      "unresolved_parts": [
+        "The full-book fixture changes both length and plaintext register from LP1 to KJV; six replicates per level do not establish a causal length effect or broad power.",
+        "Fixtures test a known key and English-register scoring, not recovery of an LP2 key or all cipher models; the source's broad historical-search implication is not verified."
+      ],
+      "audit_note": "Grouped fresh controls, measurements and source-only accounting are distinguished in the receipt. Missing corpora, changed instruments and source-reported searches are not silently treated as reproduced negatives.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-10",
+      "source_claim": "OutGuess 0.2 Linux control — \"closed pending\" a run never made",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/b10-runtime-gate-2026-10-23/receipt.json"
+      ],
+      "verified_subclaim": "The named Linux OutGuess 0.2 control remains unexecuted. The author source archive is reachable, but no compatible local Linux runtime or hash-pinned blank JPEG for the proposed control recipe is available. Existing Windows-build tests cover a different setup.",
+      "unresolved_parts": [
+        "Obtain and hash the original source archive; provide the Linux toolchain and declared blank-carrier control, then run the specified planted and passphrase tests.",
+        "This readiness check establishes no payload absence or passphrase result. The proposed blank-carrier recipe is not proof of the original image production pipeline."
+      ],
+      "audit_note": "Finite runtime and input readiness audit; no decoding or extraction was executed.",
       "whole_entry_coverage_verified": false
     }
   ],

@@ -1,0 +1,179 @@
+{
+  "schema": "liberpedia-source-batch-worker-receipt-v1",
+  "worker": "worker-c",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "frozen_plan_sha256": "96df11a9a869ee98bb6727235adea921b8a2b381140b7e22267a47f50a49c2c4",
+  "note": "Fresh pinned-source T3 perturbation, LP1 decoder and six-level full-book KJV decoder outputs. Conditional rune changes are not verified manuscript corrections. T1's reader uses global canon-derived labels, so its checks are transductive rather than independent held-out truth.",
+  "entries": [
+    {
+      "source_id": "T3-PROPAGATION-MAP",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3-input-manifest.json",
+          "sha256": "d1726867bfb75c811fb632d7b4c8235b64fafde5ac126341e1844a29085ff673"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/input-snapshot.json",
+          "sha256": "2a63a10c4d97ec9c3f9955e382ba157416a3271d737b24af0f2dd04fe8c932bf"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_baseline.json",
+          "sha256": "cefb068f97e2481de0836df25462ddf93cbf0cf7f9a6ac2c30af88ccc46be4d3"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_random.json",
+          "sha256": "65dcd3fcf2724253b98c88052a5810301ce77a6cff4f2194688b470b39d7f721"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_targeted.json",
+          "sha256": "f4c759d0ec5e289c258cbcdc9ebff2d1b64b050312561a577f222523df4a2f0e"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3_baseline.fresh.log",
+          "sha256": "c61aa17f65ee5d44a14ac3eed12318d094aa9f369dc0b6f88c376822f8b0052c"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3_sensitivity.fresh.log",
+          "sha256": "1723cb482f40472beb8e4c1714a25a8ee9f116fd461586b3d2f63b087fe93890"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3_targeted.fresh.log",
+          "sha256": "ea4c456ed5f0f7662046d27d7079127c59af3ee7def3a16907f67b3954618b00"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python t3_baseline.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_baseline.json"
+        },
+        {
+          "command": "python t3_sensitivity.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_random.json"
+        },
+        {
+          "command": "python t3_targeted.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_targeted.json"
+        }
+      ],
+      "covered_subclaim": "Fresh source-run baseline and exact 400-trial random, dense and targeted perturbation statistics on the pinned 12,956-rune stream; planted flip, 13 baseline values and 450-position gate passed. Source numeric outputs match its archived rows within floating-order tolerance.",
+      "remaining": [
+        "The 62-ledger-entry dependency_map.json remains the pinned source's static classification; its entire historical script tree was not rehydrated and t3_depmap.py was not freshly rerun.",
+        "Perturbing source transcription is not image adjudication or a proof of canon correctness."
+      ]
+    },
+    {
+      "source_id": "T3-OAE450-STREAM-POSITIONS",
+      "state": "replayed",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/input-snapshot.json",
+          "sha256": "2a63a10c4d97ec9c3f9955e382ba157416a3271d737b24af0f2dd04fe8c932bf"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_baseline.json",
+          "sha256": "cefb068f97e2481de0836df25462ddf93cbf0cf7f9a6ac2c30af88ccc46be4d3"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_targeted.json",
+          "sha256": "f4c759d0ec5e289c258cbcdc9ebff2d1b64b050312561a577f222523df4a2f0e"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3_targeted.fresh.log",
+          "sha256": "ea4c456ed5f0f7662046d27d7079127c59af3ee7def3a16907f67b3954618b00"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python t3_baseline.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_baseline.json"
+        },
+        {
+          "command": "python t3_targeted.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_targeted.json"
+        }
+      ],
+      "covered_subclaim": "All 450 source O/A/AE disagreements mapped to distinct canonical stream coordinates; changing each to its source alternative changes exact adjacent doublets 86 to 103 and normalized IoC 0.999874 to 1.013823.",
+      "remaining": [
+        "A mapped machine disagreement is not a confirmed transcription error; source T1 training reuses global canon-derived labels."
+      ]
+    },
+    {
+      "source_id": "T3-S2-DECODE-FRAGILITY",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3-input-manifest.json",
+          "sha256": "d1726867bfb75c811fb632d7b4c8235b64fafde5ac126341e1844a29085ff673"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t1-input-manifest.json",
+          "sha256": "14a4a895c93232c1f0e4728faf60a80de34e07cf14625aceb8dfde74e46003a5"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_decode_L120_LP1.json",
+          "sha256": "f35059ee9a1de20cbe701b34c4871e353bf843a5fbca69330bce4c8fa4313921"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_decode_L400_LP1.json",
+          "sha256": "92965924ee34f3321baf739a5fd01b819bbd2c30f9a7e76479c49d8ea0fc0bad"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3_decode_L120.fresh.log",
+          "sha256": "5c061ec9eb95968ae05361cbed5c2fd417e3108498d07a0a33193d1b55365eac"
+        },
+        {
+          "path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/t3_decode_L400.fresh.log",
+          "sha256": "bd5338da727bf7d9080cb6d58338ea628623cb0f1b1ffa7f48066d9b2ab48c26"
+        },
+        {
+          "path": "experiments/records/rune-reading-sensitivity-t3/fullbook-plan.json",
+          "sha256": "809a353ee246dc745ac7235ad4793d82b660106417a80d7e3a24cf1a2b3d0dd0"
+        },
+        {
+          "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+          "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+        },
+        {
+          "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.json",
+          "sha256": "63476a8a8f91652afa5f6653c35051b7eed5221fda53818a3147a2f2c77440fc"
+        },
+        {
+          "path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.source.json",
+          "sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac"
+        },
+        {
+          "path": "experiments/records/rune-reading-sensitivity-t3/check_fullbook.py",
+          "sha256": "33435e8c878f8e4efd59ba8b505024144321bd03594906ad8c40395f126f6ed0"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python t3_decode.py 120 120 LP1",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_decode_L120_LP1.json"
+        },
+        {
+          "command": "python t3_decode.py 400 60 LP1",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20b-2026-10-23/worker-c/evidence/out_decode_L400_LP1.json"
+        },
+        {
+          "command": "T3_KBOOK=0,50,100,200,450,900 python t3_decode.py 12956 6 KJV",
+          "exit_code": 0,
+          "output_path": "experiments/records/rune-reading-sensitivity-t3/out_decode_L12956_KJV.json"
+        }
+      ],
+      "covered_subclaim": "Fresh full 14-level source grids for LP1 L120 (120 replicates) and L400 (60 replicates), plus the distinct six-level KJV full-book grid (six replicates per level), all with F0 beam parity. Recovery first falls below 90% at source k_book=1800, 900 and 450 respectively; the KJV score distributions first overlap at 900. All saved scientific fields match their pinned source outputs except elapsed seconds.",
+      "remaining": [
+        "The full-book fixture changes both length and plaintext register from LP1 to KJV; six replicates per level do not establish a causal length effect or broad power.",
+        "Fixtures test a known key and English-register scoring, not recovery of an LP2 key or all cipher models; the source's broad historical-search implication is not verified."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "liberpedia-t3-parallel-benchmark-receipt-v1",
+  "plan_sha256": "bdb67c0ad5ff3258b605b9f203ffd13ec8dd8c3a54bbf76b587cbd4b33214288",
+  "source_script_sha256": "2bf593acdd73b1f7f6132fadf50c7f5ea10ecec399c97b2a35987282d312889c",
+  "kjv_sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986",
+  "helper_sha256": "47f77192b217e7a5f06c2a744bce3cccae03eb9c9e607260dcb9f81a5e9405e6",
+  "logical_cpu_count": 16,
+  "grid": {
+    "L": 12956,
+    "reps": 1,
+    "register": "KJV",
+    "k_book": [
+      0,
+      50
+    ]
+  },
+  "original_one_process": {
+    "seconds": 38.462,
+    "output_sha256": "61410f2fda7503f72cbbf44ffde16e79e35f3760411d5a4faad3173bbe58e329"
+  },
+  "helper_jobs2": {
+    "seconds": 22.139,
+    "output_sha256": "b3952867291760aefec73f0a8491ef411a95b8c29c53f7b4c401d07a08a35f19"
+  },
+  "scientific_fields_equal_except_seconds": true,
+  "source_stdout": "gate F0: {\"cases\": 20, \"max_score_delta\": 8.881784197001252e-15, \"path_mismatches\": 0, \"pass\": true}\nKJV plaintext pool: 42868 runes\n  k_book=     0 (eps=0.0000, k_cell=  0)  correct score med=-4.130 p05=-4.130 rec=1.000 rigid=1.000 derail=0.00 | wrong med=-7.303 p95=-7.303 | sep=True  (16.9s)\n  k_book=    50 (eps=0.0039, k_cell= 50)  correct score med=-4.166 p05=-4.166 rec=0.995 rigid=0.996 derail=0.00 | wrong med=-7.302 p95=-7.302 | sep=True  (17.4s)\nK-REC (median recovery < 0.90) at k_book = None\nK-SEP (correct p05 <= wrong p95) at k_book = None\nwrote out_decode_L12956_KJV.json\n",
+  "helper_stdout": "PASS source level k=50\nPASS source level k=0\nPASS source result comparison (excluding elapsed seconds)\nWrote C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\t3-kjv-fullbook-20261023\\benchmark-parallel.json with 2 ordered levels\n"
+}

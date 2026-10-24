@@ -1,0 +1,250 @@
+{
+  "id": "dukotah-offset-model-integrity",
+  "status": "published",
+  "title": "The offset screen changes when training books are missing",
+  "question": "Do matching planted-control totals mean a fallback prefilter selects the same key offsets as the pinned four-book source model?",
+  "reader_question": "Can two screens pass the same number of tests but choose different key positions?",
+  "reader_finding": "The one-book screen passed the same headline controls as the original, but ranked five of the 40 trials differently. It also selected a different best key position in one search unit.",
+  "reader_limit": "This does not reproduce the original four-book search or identify an LP2 key. Two exact training books and the separate random-pad archive remain unavailable.",
+  "summary": "Yes. Both kept 26 of 40 planted true offsets, but five individual trial rankings changed; the first-ranked count was 21 versus 22, and one full million-offset target unit chose a different best position.",
+  "finding": "The exact source builder/sharding audit passed on locally available inputs. A KJV-only retraining independently rebuilds the fallback trigram cache. Both source and fallback controls recovered 40/40 planted messages and retained 26/40 true offsets; only 35/40 complete trial rows matched. Source ranked the true offset first 21/40 times, fallback 22/40. A1 unit 0 chose offset 400,310 in the archived four-book source checkpoint and 673,662 with the fallback model.",
+  "limitations": "This is a retrospective instrument/input control, not an LP2 decryption or a source-exact replay of the full L6 sweep. The pinned Moby-Dick and Pride and Prejudice bytes are absent; their current official downloads fail the capsule hashes, and the 1.2 GB Marsaglia files are absent. The single changed A1 unit does not isolate model drift from every possible environment difference. Archived C2/offset arithmetic was recounted from saved output, not fresh pad scans.",
+  "next_steps": "Recover the exact two missing scorer books and Marsaglia bytes, verify their pinned hashes, rebuild the four-book trigram table, then replay the source controls and checkpoint units before extending any target sweep.",
+  "outcome": "not-supported",
+  "tags": [
+    "source input",
+    "offset search",
+    "prefilter",
+    "trigram",
+    "planted control",
+    "reproducibility"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-offset-model-integrity/source-lib_padsweep.py",
+      "experiments/records/dukotah-offset-model-integrity/source-capsule-manifest.json",
+      "experiments/records/dukotah-offset-model-integrity/source-control-offset.json"
+    ],
+    "representation": "The source 12,956-rune unsolved stream supplies the first 24-rune screening window and 400-rune beam head in one A1 unit; forty source-planted 372-rune English messages test offset recovery. This record makes no page-wide solving claim.",
+    "procedure": "Rebuild the fallback 29^3 trigram table independently from pinned KJV; verify four book hash gates; recount paired source/fallback control rows; compare one complete 2^20-offset A1 source checkpoint with a changed-model pilot.",
+    "parameters": "40 paired source/fallback planted controls; 1,048,576 offsets in A1 unit 0; GP29, 24-rune screen, 400-rune head, max_skip 8. Archived C2 300-row summaries and offset totals are supporting saved-output arithmetic only.",
+    "exclusions": "No exact four-book model reconstruction, no fresh full A1/A2 or Marsaglia sweep, no new negative LP2 key verdict, no general statement that all scorer variants disagree."
+  },
+  "review": {
+    "reviewer": "Independent KJV-only model reconstruction, exact-hash corpus gate, paired row recount and source checkpoint comparison",
+    "kind": "source input and decoder control",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python -X utf8 experiments/records/dukotah-offset-model-integrity/check.py",
+    "environment": "Python 3 and NumPy; bundled exact KJV, source snapshots, trigram cache and paired receipts. replay.py runs the pinned source in a temporary tree, offline; --controls-only is the shorter run.",
+    "script": "experiments/records/dukotah-offset-model-integrity/check.py",
+    "script_sha256": "f0432ab2b8ec217b90e1e66e67deb1bb2e98ee691642eaba75b3f4ac71b7af69",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/plan.json",
+        "sha256": "0ca794be8fbfc0fcef554853979bc411bd3b150a6317a7798117341b35ac1167"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/check.py",
+        "sha256": "f0432ab2b8ec217b90e1e66e67deb1bb2e98ee691642eaba75b3f4ac71b7af69"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/replay.py",
+        "sha256": "5fc88f7cf3b4f033041f1dbbd763137c10c0900169dbd09dd349390923cc5a93"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/plot.py",
+        "sha256": "00b29540cf1b0aff01dc27a86b9e892c64da3d3d13be2e77e6916ab791311175"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/article.md",
+        "sha256": "a2f0951fc12ccfd18dacb8f68ee8a0ab610af14f61544f0310aa277f5d15bc0c"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-lib_padsweep.py",
+        "sha256": "6015edcd7b5eba8534d9cccef5802ce5dd3a9708578fd34f89344158e79c450a"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-lib_l6.py",
+        "sha256": "0e60005ff4e390f2ee0e9ae7bbd0663d863cd34956f9142b954d39fac9907b87"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-control_offset.py",
+        "sha256": "47de35c957a303766b0497e242cd1f31ce3a341da990e09cbfaa0f4bacdff4fc"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-audit_builders.py",
+        "sha256": "c7dc3366f4a4a840e15b03a7428a990a4111aa13a22dbbadf5ac3d2f3191f42e"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-sweep_offset.py",
+        "sha256": "ad68dfb94d80594617e9391641b5bef6b8ffcf62becee5f2581c4dd48925e522"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-capsule-manifest.json",
+        "sha256": "d14d852ebed803bd41ef986caf30044366645eedfdbe4d808f86098a2dba9546"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-control-offset.json",
+        "sha256": "703a4ee1e86d3f078f0a3648bfeed5bfe2dc3be12a6c736e2275cfc0a01a44f3"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-checkpoint-A1-0.json",
+        "sha256": "31e5beb9ecaf1589f3b49725374a9f1bded0b5b43e0e1a1741d80578ee9056c2"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/audit.json",
+        "sha256": "62912fbe2ca37f29c8241cbdd44adda0a5674cb4474b73aca810294d1abd90b6"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/control_offset.json",
+        "sha256": "7bdbd80436a702c5650bc71aad175c6692c3d4852a1192995faca935ba86ea53"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/input-reconstruction.json",
+        "sha256": "5b15b3b14565667a2befe1fe61f30a01a2d72da04a258796b1274eb822c06d79"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/pilot-a1.json",
+        "sha256": "1f3baf9b2d58cc8fe4c05975f25bbdda2eb63b7272fc61a710f9e17e0a2be9b8"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/corpora-receipt.json",
+        "sha256": "793dcd6fe78892ff83e8489ec4fa6ed52bd91ee9cc4d2ae8a3e02d1a3670ac60"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/corpus-recovery-check.json",
+        "sha256": "2ff69727fb73a562a97d4c3f0147197aa24f4cb50d6909845fbd661a755b4924"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/saved-check.json",
+        "sha256": "096e633c65c191a7e11c45e7a89ad9688ff1644ace229397d0aeec9296e0f6bd"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/trigram-kjv-only.npy",
+        "sha256": "efee35408aefaf2e47057a57b8aae402203d231b6e57ef7457635aea08ead32b"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-ks.py",
+        "sha256": "1b332b0da0cf8febf89f3d57a4dbdee09a6d5802de847610e7ae41e1e50d0edb"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-seeds.py",
+        "sha256": "6921c49a2f7250633c5ac311d94cfb560251c5181051ad2f0d2aa1975d379c7a"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-results_A.json",
+        "sha256": "5957e2b61bd28c2d06d5619bd5b1a2e7da353f95cf8f20f87ebf63f68d936000"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-results_B.json",
+        "sha256": "ccfdad7f6970902c85397c057146d3f86074de4ca7384807d9aaace489933eff"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-b04-results_C.json",
+        "sha256": "a81ac5ae3357c2840da777d3bf7efb14d5c8b0c9db2cfe87b312dc7227fe7ec0"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kdf.py",
+        "sha256": "af53f1e4bdac90a335a8391feb35e844641dc54b2cd295cff82f3911a930ac8c"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-kdf-results_A.json",
+        "sha256": "e7e1b9b3053c5e4daa09feab8f3164b79acbc4fb887875f88b4bcbc27b637a14"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-prng_sweep.py",
+        "sha256": "d4de5e17094f3bf6461221fc2b345717ca32c1b089222c5a5d8bc683ee4c9283"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-prng-results.json",
+        "sha256": "f982e35cc2866f4a2a7655063e8f3390d15ccd6629742680e190f9a1219614e8"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-null.py",
+        "sha256": "191f3e7ec0cf9a902b10d98e92f9539267e58f132f0ec605c383edfa1ea362e4"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/source-english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/results.json",
+        "sha256": "670125a50a06570196a35d042bd77f2737ed8b36b49769de52d72872dd11a25a"
+      },
+      {
+        "path": "experiments/records/dukotah-offset-model-integrity/comparison.svg",
+        "sha256": "2624682879dd58f9fb7182a6277163d998d627e6ad4b30817d5e8953058815b1"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-offset-model-integrity/comparison.svg",
+      "caption": "The source and KJV-only screens kept the same number of true offsets while ranking five individual trials differently."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Round 18 offset source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L6-offset-marsaglia"
+    },
+    {
+      "label": "Pinned Round 19 prefilter audit",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C2"
+    }
+  ],
+  "related": [
+    "english-scorer-controls",
+    "dukotah-nonenglish-control-gate"
+  ]
+}
