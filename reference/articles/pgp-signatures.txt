@@ -6,6 +6,12 @@ Signature validity and identity
 A valid signature ties a signed message to a key. It does not decrypt its body, sign every byte of the enclosing JPEG, or by itself identify a real-world author. Historical association with Cicada is a separate provenance claim.
 The full primary fingerprint of the exported key is 6D854CD7933322A601C3286D181F01E57A35090F. Check the key itself, not its filename or short ID.
 
+Signature dates and manuscript pages
+
+A signature contains a clock value supplied by its signer. A valid signature does not independently authenticate that as the publication date.
+
+In the archived-text date check, all eight signature blocks occur in LP1. Neither of the two checked LP2 text inputs supplies a signature for each encrypted page. These inputs therefore cannot select a dated public pad for each LP2 page. The check does not cover every historical image or distribution.
+
 Verify in a separate keyring
 Install GnuPG, create an empty directory named verify-keyring, and run from the repository root:
 gpg --no-options --homedir verify-keyring --import exports/steganography/cicada-public-key.asc
@@ -69,6 +75,8 @@ For how this check fits the complete evidence trail, see source verification and
 Sources, related references, and files
 - exported key
   https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+- archived-text date check
+  https://jelliottdev.github.io/#/experiments/dukotah-c8-timestamp-join
 - its status-format specification
   https://github.com/gpg/gnupg/blob/master/doc/DETAILS
 - nine-file verification record

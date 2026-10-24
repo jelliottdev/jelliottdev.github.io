@@ -40,7 +40,7 @@ function harness(){
  assert.deepEqual(h.events,['fetch:'+url],'Cold primary load requests only its individual record');
  const shared=h.context.ensureExperimentRecord(fixture.id);assert.equal(h.pending.get(url).length,1,'Same-ID requests share one fetch');
  h.next(url).resolve(okay(fixture));await opening;assert.equal(await shared,fixture);
- assert(h.context.main.innerHTML.includes(esc(fixture.reader_finding||fixture.finding)));
+ assert(h.context.main.innerHTML.replace(/<a\b[^>]*>|<\/a>/g,'').includes(esc(fixture.reader_finding||fixture.finding)));
  assert(h.context.main.innerHTML.includes('downloads/experiments/'+fixture.id+'.zip'));
  assert(h.context.main.innerHTML.includes('data-results='),'Primary native figure renders before metadata');
  assert(h.context.main.innerHTML.includes('id="experiment-family"'),'Family deep-link target exists before metadata arrives');

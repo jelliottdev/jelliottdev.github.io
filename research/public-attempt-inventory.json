@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "e42a65e346142e95e665f981550aacfba58c78396ba7722c488d68db142ad20c",
-    "record_count": 309
+    "sha256": "b82f6b12173d42270a98c56a41595d81a86adbecd8603aff3e9fa960f3bcf0e7",
+    "record_count": 311
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,14 +26,14 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 36,
+    "candidate_overlap": 37,
     "unreconciled": 0,
     "source_entries_reviewed": 172,
     "source_entries_pending_review": 0,
     "pending_review_with_candidate_match": 0,
     "pending_review_without_candidate_match": 0,
     "execution_replay_states": {
-      "partial-execution": 21,
+      "partial-execution": 22,
       "complete-executed-grid": 23,
       "replayed-with-invalid-gate": 6
     },
@@ -2199,7 +2199,19 @@
       "source_supersedes": [],
       "source_superseded_by": null,
       "reconciliation_state": "partial",
-      "candidate_records": [],
+      "candidate_records": [
+        {
+          "record_id": "lp2-shifted-page-pair-differences",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "AUTO_EVOLUTION.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false,
       "reviewed_subclaims": {
         "record_links": [
@@ -2210,6 +2222,10 @@
           {
             "record_id": "lp2-page-pair-english",
             "covered_subclaim": "Existing 4455 zero-offset common-prefix arithmetic streams with English scoring only; excludes shifted/all-offset S1."
+          },
+          {
+            "record_id": "lp2-shifted-page-pair-differences",
+            "covered_subclaim": "S1 forward subtraction/IoC at all331,908 relative alignments with overlap>=120;128 shared-page shuffle global maxima and exact observed recount. Other roadmap lanes and shorter overlaps remain outside scope."
           }
         ],
         "unresolved_parts": [
@@ -2218,7 +2234,11 @@
           "S3 history-dependent phi(prime) extension is not the uninterrupted consecutive-integer totient-opening method; its history rule is unspecified."
         ],
         "rejected_candidates": [],
-        "audit_note": null
+        "audit_note": "AUTO_EVOLUTION contains S1/S2/S3 roadmap proposals beneath Epoch5 as a next-epoch plan, not evidence of Epoch6 execution. Existing page-pair records cover explicit zero-offset subsets only. Fresh bounded S1 grid now recorded; no unusual global maximum against its whole-page shuffle reference."
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "S1 long-overlap forward difference/IoC grid only; excludes shorter overlaps and S2/S3."
       }
     },
     {

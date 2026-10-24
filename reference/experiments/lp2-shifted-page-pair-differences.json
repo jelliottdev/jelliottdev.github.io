@@ -1,0 +1,244 @@
+{
+  "id": "lp2-shifted-page-pair-differences",
+  "status": "published",
+  "title": "One page as another's key, at every long overlap",
+  "question": "Does any forward page-pair difference at a relative offset with at least 120 overlapping runes show exceptional symbol concentration?",
+  "reader_question": "Do any two pages become unusually patterned when one is shifted and subtracted from the other?",
+  "summary": "Across 331,908 page-pair alignments, the strongest difference concentration is exceeded or matched by 77 of 128 shuffled search maxima.",
+  "finding": "Maximum IoC 0.04721080446 occurs for LP2-14 minus LP2-35 at lag-140 over 131 runes; global plus-one empirical comparison 77+1 over 128+1 =0.60465116.331,908 observed counts are independently verified, including 330,582 new nonzero-lag settings.",
+  "reader_finding": "The strongest alignment, LP2-14 against LP2-35, is no stronger than results commonly found in shuffled pages: 77 of 128 shuffled searches matched or exceeded it.",
+  "reader_limit": "Forward differences with overlap at least 120 runes and an IoC statistic only; this does not exclude general shared-key encryption.",
+  "limitations": "52 eligible pages from 55 nonempty LP2-00–55 pages; no shorter overlaps, page reversal, wraparound, repeated/skipped key symbols or additional cipher layer. Shuffles preserve whole-page frequencies rather than each overlap frequency. Shifted-copy controls do not measure sensitivity to unrelated plaintexts encrypted under one key.",
+  "next_steps": "Any broader shared-keystream claim needs a statistic with demonstrated power for its proposed plaintext model; freeze shorter-overlap or reversed-page extensions separately.",
+  "outcome": "not-supported",
+  "tags": [
+    "page-pair differences",
+    "shifted alignment",
+    "shared keystream",
+    "IoC",
+    "B-14",
+    "S1",
+    "manuscript grid"
+  ],
+  "related": [
+    "lp2-page-pair-alignment",
+    "lp2-page-pair-english",
+    "wulfic-two-time-pad-premise"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-shifted-page-pair-differences/plan.json",
+      "experiments/records/lp2-shifted-page-pair-differences/pages.json"
+    ],
+    "representation": "Forward GP29 indices including headings from 55 nonempty LP2-00–55 pages; 52 have at least 120 runes.",
+    "procedure": "Exhaust all unordered page pairs and integer relative lags with>=120 overlap; direct difference modulo29; compare global maximum IoC to128 shared whole-page permutations.",
+    "parameters": "1,326 pairs; 331,908 alignments (330,582 nonzero lags); minimum overlap 120; 128 nulls; seed 330120261024; no wrapping or reversal.",
+    "exclusions": "Shorter overlaps, page reversal, repeated/skipped key, plaintext-family exclusion, general key reuse, whole source S1/S2/S3 roadmap."
+  },
+  "review": {
+    "kind": "Fresh finite manuscript grid with pre-frozen plan",
+    "reviewer": "Independent direct integer recount of all observed alignments, controls, null-winning slices and global comparison",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Pinned S1 all-offset difference-IoC proposal",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/AUTO_EVOLUTION.md",
+      "note": "New bounded implementation of the documented roadmap, not a claim the historical source executed it."
+    },
+    {
+      "label": "Earlier zero-offset page-pair record",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-page-pair-alignment",
+      "note": "1326 overlapping zero-offset differences verified;330582 shifted alignments added."
+    }
+  ],
+  "family": {
+    "id": "lp2-page-pair-alignment",
+    "title": "Page-pair arithmetic",
+    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "baseline": "lp2-page-pair-alignment"
+  },
+  "variant": {
+    "label": "All relative offsets with at least 120-rune overlap",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/lp2-page-pair-alignment/plan.json",
+          "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
+        ],
+        "after": [
+          "experiments/records/lp2-shifted-page-pair-differences/plan.json",
+          "experiments/records/lp2-shifted-page-pair-differences/pages.json"
+        ],
+        "reason": "Bundle the frozen shifted-grid specification and identical manuscript input arrays."
+      },
+      {
+        "field": "representation",
+        "before": "Full GP29 rune streams including headings from 55 rune-bearing LP2-00–55 pages; for each pair use the first min(page lengths) runes.",
+        "after": "Forward GP29 indices including headings from 55 nonempty LP2-00–55 pages; 52 have at least 120 runes.",
+        "reason": "Compare shifted overlap windows of at least120runes instead of only whole common prefixes."
+      },
+      {
+        "field": "procedure",
+        "before": "For every unordered page pair compute aligned sum and difference modulo29, measure output IoC, and compare the global maximum to 256 seeded shared page shuffles within page-length-delimited bands that preserve every compared-prefix histogram.",
+        "after": "Exhaust all unordered page pairs and integer relative lags with>=120 overlap; direct difference modulo29; compare global maximum IoC to128 shared whole-page permutations.",
+        "reason": "Exhaust relative lags for differences only, with shared whole-page shuffle maxima."
+      },
+      {
+        "field": "parameters",
+        "before": "1,485 distinct pairs × 2 arithmetic operations = 2,970 outputs; 256 global-max null trials; seed 330129.",
+        "after": "1,326 pairs; 331,908 alignments (330,582 nonzero lags); minimum overlap 120; 128 nulls; seed 330120261024; no wrapping or reversal.",
+        "reason": "Add330582nonzero-lag alignments; limit overlap to120runes or longer; use128global null trials."
+      },
+      {
+        "field": "exclusions",
+        "before": "Known-opening cribs, other offsets, page reversals and reorders, repeating or interrupted page keys, later positions beyond the common prefix, alternative arithmetic and language scoring.",
+        "after": "Shorter overlaps, page reversal, repeated/skipped key, plaintext-family exclusion, general key reuse, whole source S1/S2/S3 roadmap.",
+        "reason": "Declare the new lag domain and retain untested reversal, wrapping, skip and other cipher rules."
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-shifted-page-pair-differences/global-shift-max.svg",
+      "caption": "The observed shifted-page concentration maximum lies inside128 shuffled search maxima."
+    }
+  ],
+  "reproduction": {
+    "command": "python experiments/records/lp2-shifted-page-pair-differences/run.py --check && python experiments/records/lp2-shifted-page-pair-differences/check.py && python experiments/records/lp2-shifted-page-pair-differences/plot.py --check",
+    "script": "experiments/records/lp2-shifted-page-pair-differences/run.py",
+    "script_sha256": "b5a52040e9b39485bd07b7eba47d9536302b47adaccd3ae6127cd4548f6050d7",
+    "environment": "Python3 and NumPy; offline bundled page arrays, source proposal and frozen plan. One process; all128 null grids take a few minutes.",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/.gitattributes",
+        "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/article.md",
+        "sha256": "89be71e65e5a370737fef2b80eb3cd470cb2baa080ac3f2a1f17227232c566ae"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/check.py",
+        "sha256": "4c9eb75a1884b6c7c0ef605fced0bf731b9d153e4c5efdf4bac0a5e484c9e030"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/pages.json",
+        "sha256": "2145e032a56e0aa70fcded4472b704e66485a97f6bcae98ca64389b28c22963e"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/plan.json",
+        "sha256": "be1fa1b22ded13f7929715763cb2fac10828481cd66712040779ad41b6364c1b"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/plot.py",
+        "sha256": "67df04cd8d79fb5217adb15e73a1bc0eafc44a096835f5b07ea625cbfc576ace"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/run.py",
+        "sha256": "b5a52040e9b39485bd07b7eba47d9536302b47adaccd3ae6127cd4548f6050d7"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/source/AUTO_EVOLUTION.md",
+        "sha256": "176226bbf786cfeb7199c0e59e3550bfef85f75f64999b24e9f30e23f2bf9d4a"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/cases.npz",
+        "sha256": "0e15631d022b78bb5d58c0364ee27957e58812c61eb687c7ade861b20932b6d5"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/global-shift-max.svg",
+        "sha256": "2228375f16c603a0564b1c5c4cfa669932e017da020001d6c0559293e7cc91cb"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-differences/results.json",
+        "sha256": "ddf37bd4c6ccebddc3ce062e0ef856687be4c12da5d8b588e96aedfd43f598d4"
+      }
+    ]
+  },
+  "article": "# One page as another's key, at every long overlap\n\n**Result.** None of the tested page alignments has unusually concentrated differences against the declared shuffled-page reference. We checked **331,908 alignments**, including **330,582 nonzero offsets** absent from the earlier page-pair record. The largest index of coincidence (IoC) is **0.04721**; **77 of 128** shuffled searches reach at least that value. The plus-one global empirical comparison is **0.605**.\n\n![The strongest actual shifted-page difference lies inside the distribution of shuffled search maxima.](experiments/records/lp2-shifted-page-pair-differences/global-shift-max.svg)\n\nThe [pinned source's S1 proposal](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/AUTO_EVOLUTION.md) calls for an all-page, all-offset difference-IoC scan to look for shared keystreams. [The earlier page-pair test](#/experiments/lp2-page-pair-alignment) aligned pages only from their first rune. This record adds shifted alignments within one bounded version of that proposed method.\n\n## The grid\n\nWe used the same 55 nonempty LP2-00–55 page transcriptions as the earlier record, including headings. A pair qualifies when both pages have at least 120 runes: **52 pages and 1,326 unordered pairs**. For each pair, we tested every relative integer offset leaving an overlap of at least 120 runes. Pages stay forward, without wrapping or repeating. Each output is the first page's rune indices minus the second page's indices, modulo 29. Reversing the subtraction only relabels its output symbols, leaving IoC unchanged.\n\nThis gives 331,908 alignments. The 1,326 zero-offset differences are an explicit overlap with the earlier grid; the remaining 330,582 settings extend its alignment scope. They are settings of the same method, not separate solving ideas. The source's unrestricted all-offset proposal also includes shorter overlaps, which this record does not test.\n\nThe highest actual score comes from **LP2-14 minus LP2-35**, pairing positions 0–130 of LP2-14 with positions 140–270 of LP2-35. Its 131-rune output has numerator 804 over denominator 17,030, giving IoC 0.0472108. No reading was selected or proposed from that output.\n\n## A control over the entire search\n\nEach of 128 reference trials independently permutes every complete page, then repeats the **entire** pair-and-offset search using those shared permuted pages. This preserves each page's rune counts and length. It does not preserve every particular overlap window's counts or the page's word and adjacency structure. The reference therefore asks whether the observed maximum is unusual after destroying within-page order while retaining page-level frequencies.\n\nThe median shuffled maximum is **0.04750**, slightly above the actual maximum. Seventy-seven of 128 maxima meet or exceed the actual value; `(77 + 1) / (128 + 1) = 0.60465`. Comparing maxima accounts for selecting the strongest alignment from this complete grid. It does not make the permutation model a generative account of the manuscript.\n\nBefore the manuscript search, planted page copies at offsets **1, 37 and −53**, with a fixed modular symbol shift, each give the expected constant difference and IoC **1.0**. Shuffling the copied page removes that peak, giving maxima between 0.0392 and 0.0417. These controls establish sensitivity to the declared shifted-copy signal. They do not measure power against two unrelated plaintexts encrypted with a shared random key.\n\nIoC measures symbol concentration, not readable plaintext or every possible form of key reuse. A shared key can cancel between two ciphertexts while leaving a plaintext difference close to uniform. Other offsets with fewer than 120 overlapping runes, reversed pages, repeated or skipped key symbols, other arithmetic and further decoding layers remain open.\n\n## Reproduce\n\nThe plan and page hashes were frozen before target scoring. The offline package includes the complete integer count for every observed alignment, all 128 null winners, the planted pages and the input transcript.\n\n```bash\npython experiments/records/lp2-shifted-page-pair-differences/run.py --check\npython experiments/records/lp2-shifted-page-pair-differences/check.py\npython experiments/records/lp2-shifted-page-pair-differences/plot.py --check\n```\n\nPython 3 and NumPy are required. The runner repeats the manuscript grid and all 128 reference searches. The independent checker directly recounts every observed alignment, the earlier zero-offset differences, all planted-control alignments and each null-winning slice, then independently recomputes the global comparison. It does not independently exhaust all alignments within every null trial; those are regenerated by the runner.\n",
+  "article_path": "experiments/records/lp2-shifted-page-pair-differences/article.md",
+  "script_sha256": "b5a52040e9b39485bd07b7eba47d9536302b47adaccd3ae6127cd4548f6050d7",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  },
+  "method_topics": [
+    {
+      "id": "unrestricted-keys",
+      "title": "Unrestricted additive keys and one-time-pad hypotheses",
+      "aliases": [
+        "one time pad",
+        "OTP",
+        "unrestricted key",
+        "arbitrary key"
+      ]
+    }
+  ]
+}

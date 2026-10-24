@@ -1,0 +1,56 @@
+{
+  "schema": "runnable-method-followup-v1",
+  "source_commit": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_id": "B-14",
+  "review_type": "intentional follow-up of partial review",
+  "new_record": "lp2-shifted-page-pair-differences",
+  "plan_sha256": "be1fa1b22ded13f7929715763cb2fac10828481cd66712040779ad41b6364c1b",
+  "existing_overlap": {
+    "record": "lp2-page-pair-alignment",
+    "same_zero_offset_cells": 1326,
+    "genuinely_new_alignment_settings": 330582,
+    "note": "One method-family variant; no new manuscript texts or one-record-per-lag inflation.",
+    "exact_manuscript_input_hashes_matching_baseline": 55
+  },
+  "executed": {
+    "actual_manuscript_cells": 331908,
+    "eligible_pages": 52,
+    "pairs": 1326,
+    "null_global_searches": 128,
+    "observed": {
+      "i": 14,
+      "j": 35,
+      "lag": -140,
+      "overlap": 131,
+      "numerator": 804,
+      "ioc": 0.04721080446271286
+    },
+    "null_exceedances": 77,
+    "global_empirical_plus_one": 0.6046511627906976
+  },
+  "independent_checks": [
+    "all331908observed numerator/overlap counts",
+    "all1326zero-offset differences against existing record",
+    "three planted shifted copies and their shuffled controls",
+    "all128null-winning slices and empirical exceedance arithmetic"
+  ],
+  "limits": [
+    "Independent checker does not exhaust all null grids; runner reproduction does.",
+    "General shared-key sensitivity not measured; concentration test only.",
+    "S2 and S3 source roadmap remain open."
+  ],
+  "c01_candidate_disposition": {
+    "current_held_texts": 94,
+    "current_held_words": 9808699,
+    "archived_source_texts": 224,
+    "archived_source_words": 22643594,
+    "same_name_and_word_count": 93,
+    "one_alias": {
+      "held": "keys/melville_moby_dick.txt",
+      "archived": "data/moby.txt",
+      "word_count": 216482
+    },
+    "limit": "Source saved inventory records names/sizes, not original raw or normalized hashes. Same names/sizes do not prove identical historical bytes. No newly added corpus scope asserted; target skeleton scan not run."
+  },
+  "shared_data_build_commit_changes": false
+}

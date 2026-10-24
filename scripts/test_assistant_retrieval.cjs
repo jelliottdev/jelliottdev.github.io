@@ -67,6 +67,12 @@ for(const [query,id,type] of [
  assert.equal(selected[0]?.id,id,query);
  assert.equal(selected[0]?.recordType,type,query);
 }
+const webMarkers=Search.select(docs,'Have we tried WWW HTTP HTTPS ONION markers with affine rune maps?');
+assert.equal(webMarkers[0]?.id,'url-marker-affine-census');
+assert.equal(webMarkers[0]?.recordType,'measurement','A literal marker census must not become a verified URL solve');
+const shiftedPages=Search.classify(docs,'Have we tried shifting two pages and measuring their difference IoC?');
+assert(shiftedPages.supporting.some(hit=>hit.document.id==='lp2-shifted-page-pair-differences'),
+ 'Shifted-page questions must include the actual all-offset measurement, not only a shared-key control');
 for(const query of [long,short,auditQuery,'OutGuess on LP2-31']){
  const found=Search.select(withPages,query);
  assert(found.filter(doc=>doc.kind==='experiment').reduce((sum,doc)=>sum+doc.text.length,0)<=9000);

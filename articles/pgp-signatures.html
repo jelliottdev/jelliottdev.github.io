@@ -1,5 +1,8 @@
 
 <h2 id="meaning">Signature validity and identity</h2><p>A valid signature ties a signed message to a key. It does not decrypt its body, sign every byte of the enclosing JPEG, or by itself identify a real-world author. Historical association with Cicada is a separate provenance claim.</p><p>The full primary fingerprint of the <a href="exports/steganography/cicada-public-key.asc">exported key</a> is <code>6D854CD7933322A601C3286D181F01E57A35090F</code>. Check the key itself, not its filename or short ID.</p>
+<h2 id="signature-dates">Signature dates and manuscript pages</h2>
+<p>A signature contains a clock value supplied by its signer. A valid signature does not independently authenticate that as the publication date.</p>
+<p>In the <a href="#/experiments/dukotah-c8-timestamp-join">archived-text date check</a>, all eight signature blocks occur in LP1. Neither of the two checked LP2 text inputs supplies a signature for each encrypted page. These inputs therefore cannot select a dated public pad for each LP2 page. The check does not cover every historical image or distribution.</p>
 <h2 id="replicate">Verify in a separate keyring</h2><p>Install GnuPG, create an empty directory named <code>verify-keyring</code>, and run from the repository root:</p><pre><code>gpg --no-options --homedir verify-keyring --import exports/steganography/cicada-public-key.asc
 gpg --no-options --homedir verify-keyring --fingerprint
 gpg --no-options --homedir verify-keyring --verify exports/steganography/lp1-00.signed.asc

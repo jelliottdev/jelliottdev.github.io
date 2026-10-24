@@ -1,6 +1,12 @@
 """Prevent already reviewed source entries being counted as fresh queue work."""
 import importlib.util
+import hashlib
+import json
+import os
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
 
 path = Path(__file__).resolve().parents[1] / 'research/source-intake/select_pending.py'
@@ -29,6 +35,21 @@ class PendingSelectionTests(unittest.TestCase):
                 module.select(self.ledger, self.reviews, wanted)
         with self.assertRaises(ValueError):
             module.select(self.ledger, {'entries': self.reviews['entries'] * 2})
+
+    def test_cli_preserves_unicode_under_legacy_pipe_encoding(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ledger = json.dumps({'entries': [{'id': 'new', 'hypothesis': 'A \u2192 B'}]}).encode()
+            (root / 'ledger.json').write_bytes(ledger)
+            (root / 'reviews.json').write_text(json.dumps({
+                'source': {'ledger_sha256': hashlib.sha256(ledger).hexdigest()},
+                'entries': [],
+            }), encoding='utf-8')
+            result = subprocess.run([
+                sys.executable, str(path), '--ledger', str(root / 'ledger.json'),
+                '--reconciliation', str(root / 'reviews.json'),
+            ], env={**os.environ, 'PYTHONIOENCODING': 'cp1252'}, capture_output=True, check=True)
+            self.assertEqual(json.loads(result.stdout)['entries'][0]['claim'], 'A \u2192 B')
 
 
 if __name__ == '__main__':

@@ -8,7 +8,9 @@ const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const affine=read('experiments/records/word-internal-affine-lags/results.json');
 const blocks=read('experiments/records/block-boundary-doublets/results.json');
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const context={esc,document:{body:{},activeElement:null}};
+const timers=new Map();let timerId=0;
+const context={esc,AbortController,document:{body:{},activeElement:null},
+ setTimeout(fn,ms){assert.equal(ms,10000);timers.set(++timerId,fn);return timerId},clearTimeout(id){timers.delete(id)}};
 vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'experiments.js'),'utf8'),context);
 function element(value=''){
  return {value,disabled:false,hidden:false,innerHTML:'',textContent:'',listeners:{},focus(){context.document.activeElement=this},
@@ -70,10 +72,24 @@ async function stale(kind,fail){
  assert.equal(newer.readout.textContent,'New route');assert.equal(newer.readout.innerHTML,'');
  assert(f.controls.every(c=>!c.listeners.change),'A stale completion attaches no listeners');
 }
+async function timeout(kind,bodyOnly){
+ const f=figure(kind),stalled=deferred();let signal;
+ context.fetch=(url,options)=>{signal=options.signal;return bodyOnly?Promise.resolve({ok:true,json:()=>stalled.promise}):stalled.promise};
+ const pending=bind(f);assert.equal(timers.size,1);[...timers.values()][0]();await pending;
+ assert(signal.aborted);assert.equal(timers.size,0);assert.equal(f.retry.hidden,false);assert.equal(f.retry.disabled,false);
+ assert(f.controls.every(c=>c.disabled),'Timed-out figures expose retry rather than dead selectors');
+ context.fetch=async()=>okay(saved(f));context.document.activeElement=f.retry;await f.retry.fire('click');
+ const recovered=f.readout.innerHTML;assert(f.controls.every(c=>!c.disabled));assert.equal(f.retry.hidden,true);
+ stalled.resolve(bodyOnly?{}:okay({}));await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(f.readout.innerHTML,recovered,'Late timed-out response/body cannot replace a successful retry');
+ assert(f.controls.every(c=>c.listeners.change.length===1),'Late completion cannot attach duplicate handlers');
+ assert.equal(timers.size,0);
+}
 const guard=setTimeout(()=>{console.error('Figure lifecycle test did not finish');process.exitCode=1},5000);
 (async()=>{
  for(const kind of ['affine','block']){
   await recovery(kind);await stale(kind,false);await stale(kind,true);
+  await timeout(kind,false);await timeout(kind,true);
   const retryFigure=figure(kind);context.fetch=async()=>({ok:false});await bind(retryFigure);
   const retryRequest=deferred();context.fetch=()=>retryRequest.promise;context.document.activeElement=retryFigure.retry;
   const retryPending=retryFigure.retry.fire('click');context.document.activeElement=context.document.body;

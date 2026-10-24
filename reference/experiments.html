@@ -1446,6 +1446,9 @@
       &quot;caption&quot;: &quot;Page-start boundary hits at block sizes 5, 7 and 13 compared with central ranges from fixed-count placement controls.&quot;
     }
   ],
+  &quot;reader_question&quot;: &quot;Do repeated neighboring runes mark the ends of fixed-size blocks?&quot;,
+  &quot;reader_finding&quot;: &quot;The 86 adjacent repeats do not gather unusually at the boundaries of five-, seven- or thirteen-rune blocks. Searching 434 combinations of block size and starting offset also found no stronger pattern than the shuffled comparisons commonly produced.&quot;,
+  &quot;reader_limit&quot;: &quot;Counting restarts on each page, with one offset shared across pages. Different offsets for individual pages or interruptions in the count were not tested.&quot;,
   &quot;article&quot;: &quot;## Finding\n\nIf a block operation prevents adjacent repeats *inside* each block but leaves ordinary repeat chances *between* blocks, the few repeats should collect at block boundaries. That concentration is absent for the page-start-anchored sizes raised in prior discussion: **18 of 86** doublets at size 5, **13** at size 7, and **6** at size 13. Conditional on each page&#x27;s observed doublet count, the expected counts are **17.1**, **12.1**, and **6.4**.\n\n![Observed doublets at size-five, seven and thirteen boundaries compared with controls.](experiments/records/block-boundary-doublets/boundaries.svg)\n\nWe also searched sizes 2–29 and every shared offset: **434 placements**. The strongest is size 12, offset 8, with 15 events versus 7.1 expected. But **2,181 of 3,000** matched randomizations produced an equal or stronger best standardized excess somewhere in that same search. Choosing the best-looking size after inspection therefore supplies no evidence for this fixed-boundary model.\n\n## What was counted\n\nFor each page, remove non-rune characters and mark every equal pair at neighboring rune positions. The edge from rune position *i* to *i + 1* has phase `(i + 1) mod block size`; phase zero is the ordinary boundary when counting restarts at each page. The run preserves the complete 86-event ledger in its JSON output. It never joins pages or assumes that a slash or hyphen restarts a block.\n\nThe control randomly places exactly the observed number of events within each page&#x27;s available edges. That deliberately conditions on the scarce overall count and asks only whether **placement** has a periodic signature. It does not model language or an encryption process. A cipher with a separate starting phase on each page, variable-size blocks, or interrupted counter could evade this particular test; those rules would need to be fixed and tested separately.\n\n## Reproduce\n\nPython 3.12 and its standard library suffice:\n\n```text\npython experiments/records/block-boundary-doublets/run.py --check\npython experiments/records/block-boundary-doublets/check.py\n```\n\nThe first command repeats all 3,000 seeded controls. The second independently recounts the event positions and fixed-size boundary hits. The [machine-readable result](experiments/records/block-boundary-doublets/results.json) records every page&#x27;s event positions, input hashes, selected-search control, and the three fixed-size comparisons.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/block-boundary-doublets/article.md&quot;,
   &quot;script_sha256&quot;: &quot;018727aae6a9de85ebca42c311c1e7313388221aadddfc35a2fe3bcdbba396a8&quot;,
@@ -1871,6 +1874,9 @@
       &quot;caption&quot;: &quot;The block-start lookahead is distinct from ordinary lag-one feedback; both fixed zero-key outputs remain flat.&quot;
     }
   ],
+  &quot;reader_question&quot;: &quot;Does feedback from the next block reveal a known opening?&quot;,
+  &quot;reader_finding&quot;: &quot;With the unspecified key set to zero, neither five- nor seven-rune blocks produced any of the 15 known beginnings on 55 LP2 pages. The rule did recover all 15 planted reading controls, confirming that the tested decoder reverses its own encryption.&quot;,
+  &quot;reader_limit&quot;: &quot;The key and out-of-page lookahead value were both fixed to zero because the proposal left them unspecified. Other keys, block alignments and plaintext beginnings remain untested.&quot;,
   &quot;article&quot;: &quot;# A block-start lookahead feedback rule\n\n**Finding.** We made one posted block-feedback formula runnable by fixing its unspecified key to zero and its final lookahead to zero. Blocks of **five** and **seven** round-trip all 15 planted known-reading pages, so the decoder implements the declared rule. On LP2-00–55, neither block size reproduces any of the **15 fixed known 12-rune openings** at the start of any of the **55 nonempty pages** (825 comparisons per size). Its decoded rune distribution remains close to the raw manuscript&#x27;s flat distribution. This is a result for the stated zero-key completion, not a rejection of the posted idea with an unknown key.\n\n![At a block start, the ciphertext depends on a plaintext rune one block ahead. The decoded LP2 distribution remains close to raw LP2 and far from the solved LP1 reading control.](experiments/records/block-lookahead-feedback/lookahead-feedback.svg)\n\nThe source discussion proposed a way for ciphertext feedback to restart at regular boundaries. At ordinary positions, add the previous ciphertext rune; at a block start, add a plaintext rune one block ahead. In zero-based GP-29 indices, our fixed rule is:\n\n```text\nif i mod b != 0:  C[i] = P[i] + C[i-1]   (mod 29)\nif i mod b == 0:  C[i] = P[i] + P[i+b]   (mod 29)\n```\n\nThe source&#x27;s formula also includes a key `k[i]`, but does not specify it. **We set `k[i] = 0` everywhere.** We start a block at each page&#x27;s first rune, and set `P[i+b] = 0` only when the lookahead falls beyond that page. Those are declared choices needed to run the example, not historical facts about LP2.\n\n## What the test shows\n\n| Stream | Rune count | Index of coincidence | F runes |\n| --- | ---: | ---: | ---: |\n| Raw LP2-00–55 | 12,956 | 0.03448 | 458 |\n| Decode with block size 5 | 12,956 | 0.03498 | 171 |\n| Decode with block size 7 | 12,956 | 0.03509 | 142 |\n| Documented LP1 readings, for context | 2,797 | 0.06114 | 44 |\n\nThe solved LP1 sample is a reference for the scale of a known reading, **not** a matched statistical null for every language or every LP2 section. The decoded output&#x27;s index of coincidence and lack of fixed opening matches give no positive reading under this exact completion. Another key, phase, interruption rule or target plaintext is outside it. The source&#x27;s reported synthetic size-five run used additional choices and cannot be reproduced from the supplied excerpt alone.\n\nDecoding is direct: subtract the previous ciphertext rune at non-start positions. At the last block start, subtract the declared terminal zero; then work backward through block starts, subtracting the already recovered next block&#x27;s first plaintext rune. This backward step is what distinguishes this experiment from ordinary lag-one feedback. The [complete report](experiments/records/block-lookahead-feedback/results.json) stores the first 24 decoded indices and a digest of **every full decoded page**, along with each positive-control result.\n\n## Reproduce\n\nThe [plan](experiments/records/block-lookahead-feedback/plan.json) pins every LP2 transcription, the known-reading control file, both block sizes, and the missing-rule completions. Run from the repository root or extracted experiment ZIP with Python 3.12 or later:\n\n```text\npython experiments/records/block-lookahead-feedback/run.py --check\npython experiments/records/block-lookahead-feedback/check.py\npython experiments/records/block-lookahead-feedback/plot.py --check\n```\n\nThe independent checker solves block-start equations as a chain of pair sums and checks all full-page digests. Both implementations recover all 15 known-reading inputs after encoding them. Neither chooses a key or a word after seeing LP2 output.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/block-lookahead-feedback/article.md&quot;,
   &quot;script_sha256&quot;: &quot;fe3cf6b078e27b9b9b132b780eb9ef760268ed59490e3e246bd117889b69a2e4&quot;,
@@ -2910,6 +2916,9 @@
       &quot;caption&quot;: &quot;Threshold-140 adjacent dot spacing, using the same horizontal scale on both rows. Vertical positions are separated for readability.&quot;
     }
   ],
+  &quot;reader_question&quot;: &quot;Can the same three compass radii locate a point on both LP2-33 and LP2-39?&quot;,
+  &quot;reader_finding&quot;: &quot;No, under this construction. Circles centered on the three horizontal dots cannot all meet at a point inside each page when the same radius is assigned to the corresponding dot on both pages.&quot;,
+  &quot;reader_limit&quot;: &quot;This uses the original image scale and keeps the dots in left-to-right order. Rescaling, swapping radii, points outside the pages and other compass constructions were not tested.&quot;,
   &quot;article&quot;: &quot;## The model being tested\n\nOn each of [LP2-33](#/reader/lp2-33) and [LP2-39](#/reader/lp2-39), label the three horizontal dots A, B and C from left to right. Draw three circles centered at those dots. Can the circles meet at one point on each page if **the same ordered radii** are used on both pages?\n\nThe two target points may differ. The radius at A must be the same on both pages, likewise B and C. Both pages remain at their original 2400 × 3600 pixel scale; no resizing or refitting is allowed. This is one precise compass construction, not a general test of compass-related ideas.\n\n**Result: no**, for the measured dot centers at each of the three declared grayscale thresholds. An exact rational distance bound rules out every possible ordered radius triple within this model. It does not require selecting radii from the number square or searching a finite list.\n\n## Measure the centers first\n\nThe script reads the original JPEGs, converts RGB to Pillow’s L grayscale, and finds four-connected dark components inside two declared crop boxes. Pixel coordinates are zero-based, with integer coordinates at pixel centers. Crop right and bottom edges are exclusive.\n\n| Page | Crop (left, top, right, bottom) |\n| --- | --- |\n| LP2-33 | (576, 1656, 1824, 1836) |\n| LP2-39 | (1200, 1638, 1800, 1746) |\n\nFor each threshold 100, 140 and 180, a pixel is dark if its grayscale value is strictly below the threshold. Retain components with area greater than 200 pixels, width/height strictly between 0.7 and 1.3, and filled area greater than 60% of the bounding rectangle. Exactly three components must survive; otherwise the script stops.\n\nEach center is the arithmetic mean of its component’s pixel coordinates. The report stores integer coordinate sums and areas, so the subsequent calculation uses exact fractions rather than rounded coordinates. This measures a particular thresholded shape; it is not an assertion that the author placed the dot at that exact rational point.\n\nThe source-region figure shows decoded original JPEG crops with red center marks. It does not threshold or increase contrast in the displayed image; thresholding is used only to calculate the marked centers. Each crop is fitted to the same display width, so the previews have different scales. The separate spacing diagram uses a common horizontal scale.\n\nAt threshold 140, the adjacent center separations on LP2-33 are approximately 417.47 and 478.23 pixels. On LP2-39 they are 196 and 224.5 pixels. The diagram uses one horizontal scale for both pages and separates the rows vertically for readability. It does not show the original vertical positions.\n\n## Why three distances impose a constraint\n\nLet Q be the perpendicular projection of B onto the line through A and C. Write `Q=(1−t)A+tC` and `e=B−Q`. The dots are almost collinear; e measures the middle dot’s small displacement from that line. Let `K=t(1−t)|C−A|²`.\n\nIf X is a target point with distances rA, rB and rC from the three dots, expanding the squared distances gives:\n\n```text\nrB² − (1−t)rA² − t rC² + K\n  = 2 e·(Q−X) + |e|²\n```\n\nThe right-hand side is an affine function of X. Its minimum and maximum over a rectangle occur at corners, so evaluating the four page corners gives an exact residual interval. No grid sampling of target points is necessary.\n\nNow compare the two pages. Their shared radii cancel except for `(t₂−t₁)(rA²−rC²)`. Each squared radius lies between zero and the squared page diagonal, because both its center and target lie on the page. Consequently:\n\n```text\n|residual₂ − residual₁|\n  ≥ |K₂ − K₁| − |t₂ − t₁| × (2399² + 3599²)\n```\n\nThe two corner intervals also give an upper bound on that absolute difference. If the lower bound exceeds the upper bound, no target pair with shared radii can exist.\n\n## The bounds\n\nThe table rounds displayed values to two decimal places. Decisions use exact fractions saved in the report; the unit is squared pixels.\n\n| Threshold | Required lower bound | Allowed upper bound | Compatible? |\n| --- | --- | --- | --- |\n| 100 | 153,322.33 | 119.47 | No |\n| 140 | 155,146.71 | 14.17 | No |\n| 180 | 153,854.17 | 11.88 | No |\n\nAll three declared threshold variants give the same exclusion. This is a sensitivity check, not a confidence interval or a complete treatment of measurement error. The argument treats each measured center as fixed; it does not quantify every plausible alternative center, crop or dot-selection rule.\n\n## Reproduce\n\nExtract the experiment bundle, then extract the [original-images ZIP](downloads/original-images.zip) into the same folder so that `images/lp2-33.jpg` and `images/lp2-39.jpg` are available. Original images are separate from the small experiment ZIP. Install Pillow 11.3.0 in your Python environment, then verify the required image hashes and run:\n\n```text\npython scripts/verify_bundle.py EXPERIMENT-compass-shared-radii-IMAGE-INPUTS.json\npython experiments/records/compass-shared-radii/run.py --check\npython experiments/records/compass-shared-radii/check.py\n```\n\nThe producer uses Pillow 11.3.0 and Python’s standard library. Its version is recorded so a different image-decoding environment does not silently claim an exact replay. The checker needs only the standard library. Neither command calls AI or accesses the network.\n\nThe producer reruns component measurement, the rational certificate and the annotated source-region SVG. The separate checker verifies source hashes and reconstructs the projection parameter from squared side lengths. It obtains residuals by directly expanding distances to the page corners, without importing the producer. It verifies that identical page geometry is not rejected by the bound. It does **not** independently segment the images or provide a manual review of the dots.\n\nBoth checks passed on 20 October 2026. The procedure and controls were recorded in `plan.txt`; the declared thresholds, crops and target rectangle were unchanged after the run. This freshly reconstructs a constrained claim in the supplied research archive; it is not a new discovery. Human review remains pending.\n\n## What remains outside this result\n\nRescaling one page, using different radii on each page, changing which dots receive which radii, placing a target outside the page, stepping a compass between points, or reading pairwise intersections changes the model. Those alternatives are not excluded here. The result supplies no rune selection or plaintext claim.\n\nFor the distinction between an illustration and a specified cipher, see [compass constructions](#/wiki/compass-cipher-tests). For coordinate conventions and original files, see [image regions](#/wiki/image-regions). For how to state this exclusion without overstating it, see [search space and bounds](#/wiki/search-space).\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/compass-shared-radii/article.md&quot;,
   &quot;script_sha256&quot;: &quot;d92b38320e2e705177213030d546b2a8c134356073026c2138b5898e98284274&quot;,
@@ -3593,6 +3602,9 @@
     &quot;lp2-39-header-cribs&quot;,
     &quot;seed-crib-controls&quot;
   ],
+  &quot;reader_question&quot;: &quot;Can differences from a guessed header word point to a key elsewhere in Liber Primus?&quot;,
+  &quot;reader_finding&quot;: &quot;Subtracting 17 candidate header readings produced nine matching three-rune sequences elsewhere in the manuscript. That was not unusual: 1,499 of 2,000 shuffled comparisons had at least as many matches. These short matches establish neither a key nor a reading.&quot;,
+  &quot;reader_limit&quot;: &quot;Only LP2-39’s three-rune header, a fixed candidate list and forward adjacent matches were tested. Longer guesses, reversed or gapped searches and actual decryption remain untested.&quot;,
   &quot;article&quot;: &quot;# Crib differences as a source-stream search\n\nA proposed approach is to guess a plaintext word, subtract its Gematria Primus indices from the aligned ciphertext indices, and look for that difference sequence elsewhere in *Liber Primus*. This record runs one fixed version of that idea. **Nine exact three-rune matches occur, fewer than the 10.615 mean in 2,000 page-preserving shuffles.** It does not identify a key source or test a decryption.\n\n![Histogram of matching windows across 2,000 within-page shuffles, with the nine observed matches highlighted.](experiments/records/crib-difference-stream-search/matching-windows.svg)\n\nThe suggestion was supplied in a 25 September 2026 discussion. It gave no fixed cribs, positions, direction of subtraction or source scope. Those choices here are ours, made for a bounded test. This is **not** a replay of an unpublished result by the poster.\n\n## Rule fixed before the scan\n\nThe target is the three red runes opening the lower block of [LP2-39](#/page/lp2-39), with zero-based alphabet indices **27, 5, 15**. We reuse the existing [20-word header-crib list](#/experiments/lp2-39-header-cribs) rather than selecting words after seeing source hits. Exact GP spelling and segmentation leave **17 three-rune candidates**, each producing a distinct difference triplet. For a candidate with plaintext indices P and target indices C, the proposed key triplet is `(C − P) mod 29`. For example, WAY becomes indices 7, 24, 26 under the stored alphabet and gives 20, 10, 18. The [plan](experiments/records/crib-difference-stream-search/plan.json) fixes the entire rule.\n\nSearch the other **71 archived text pages**, LP1 and LP2, for an exact forward occurrence of each triplet. Remove punctuation but keep rune order. A three-rune window may cross a printed word or row break within one page; it may not cross a page boundary. No reverse direction, gaps, alphabet rotation, wildcard or prime-value subtraction is allowed. The LP2-39 target page is excluded from its own source search.\n\n| Measure | Result |\n| --- | ---: |\n| Source runes | 15,693 |\n| Three-rune crib candidates | 17 |\n| Matching source windows | 9 |\n| Different candidate triplets with a hit | 9 |\n| Control mean, 2,000 within-page shuffles | 10.615 |\n| Shuffles with at least nine hits | 1,499 / 2,000 |\n\nThe inclusive upper-tail Monte Carlo estimate is `(1499 + 1) / 2001 = 0.7496`. The lower-tail estimate is 0.3833. Neither suggests an unusual excess or deficit of matches under this control. The [complete JSON](experiments/records/crib-difference-stream-search/results.json) lists every candidate spelling, derived triplet, page and zero-based rune offset, plus the complete control histogram. A hit is a sequence coincidence, not a plaintext reading.\n\n## Why the comparison matters\n\nEach shuffled source preserves every page&#x27;s rune count and length while destroying its original order. The same 17 triplets are searched in every shuffled collection. This accounts for trying the entire fixed crib list, rather than judging whichever single candidate happens to match. It does not model an author&#x27;s construction process, and it destroys real repeated words and other local structure. The candidate list and three-rune target were already available before this plan, so the result cannot be treated as a prospective test of the broad idea.\n\nA planted positive control inserts the first derived triplet at rune offset zero of the first source page; the scanner recovers it. A separate checker reconstructs source streams from individual stored lines, independently recomputes the GP differences and all observed hits. The producer reruns the seeded shuffles byte for byte.\n\n## Reproduce and extend\n\nDownload this record&#x27;s experiment bundle and run Python 3.12 or later, with no packages or network connection:\n\n```text\npython experiments/records/crib-difference-stream-search/run.py --check\npython experiments/records/crib-difference-stream-search/check.py\npython experiments/records/crib-difference-stream-search/plot.py --check\n```\n\nAn actual cipher test would need a longer independently chosen crib, a justified key-source location and a rule that predicts **withheld** ciphertext. Searching a longer phrase after seeing these hits, trying both subtraction directions, or allowing interrupted matches creates new search space and needs a new plan and controls. This record leaves those possibilities open; it only tests the rule and source scope above.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/crib-difference-stream-search/article.md&quot;,
   &quot;script_sha256&quot;: &quot;62b7289fabf80ade09d218af5b5c7d06eb7fca4b6a1fca607d38807eb404043a&quot;,
@@ -7617,7 +7629,7 @@
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Direct Hill keys at LP2 page starts&quot;,
   &quot;question&quot;: &quot;Can any invertible direct 2×2 or 3×3 Hill matrix over the GP29 indices recover a fixed 12-rune known-reading opening at an LP2 page start?&quot;,
-  &quot;reader_question&quot;: &quot;Could a two- or three-rune Hill key reveal a known opening?&quot;,
+  &quot;reader_question&quot;: &quot;Could a single Hill-cipher key turn a page opening into a known passage?&quot;,
   &quot;summary&quot;: &quot;A complete matrix-feasibility check finds no direct Hill key for any of 990 fixed page-opening cases.&quot;,
   &quot;finding&quot;: &quot;Neither dimension two nor three admits an invertible direct block matrix for any of the 495 page-opening pairs. All 55 page starts have full ciphertext rank, so each candidate matrix is uniquely determined by its first independent blocks and fails on later blocks.&quot;,
   &quot;limitations&quot;: &quot;Only consecutive blocks from page origin zero, nine fixed openings, canonical GP29 arithmetic and one linear matrix per page are covered. Other plaintexts, offsets, affine rules, changing keys and transposition remain open.&quot;,
@@ -8193,6 +8205,8 @@
       &quot;caption&quot;: &quot;A direct Hill key maps every block with the same matrix and preserves linear relations.&quot;
     }
   ],
+  &quot;reader_finding&quot;: &quot;No key works for any of the 55 tested page starts and nine known twelve-rune openings, using blocks of two or three runes. The check covers every invertible key under that fixed rule.&quot;,
+  &quot;reader_limit&quot;: &quot;Blocks start at the first rune and use the usual 29-rune indices. Other openings, starting positions, added offsets and keys that change between blocks remain untested.&quot;,
   &quot;article&quot;: &quot;# Direct Hill keys at LP2 page starts\n\n**Question.** Can a single invertible linear block key over the 29-rune alphabet turn the first twelve runes of an unsolved LP2 page into a fixed known-reading opening?\n\n**Result.** No such key fits any of the **495 page-and-opening pairs** for two-rune blocks or the **495 pairs** for three-rune blocks. This is a complete key-feasibility check for the stated block rule: it does not sample a few matrices or assume a convenient key.\n\n![One matrix must preserve the relationships among every block.](experiments/records/direct-hill-key-feasibility/block-rule.svg)\n\n## What the test means\n\nEach rune has its usual Gematria Primus index from 0 to 28. We divide the first twelve runes into consecutive blocks of two or three, starting at the first rune of each page. For one proposed opening, the same unknown matrix **D** must satisfy **P = D·C (mod 29)** for *every* corresponding ciphertext and plaintext block. A later block cannot be handled with a different key. The nine target openings were fixed in the earlier known-readings test.\n\nWe do not need to try the enormous set of possible keys. First choose independent ciphertext blocks. Their proposed plaintext blocks determine what D must do on that span. Every other ciphertext block is a combination of those basis blocks, so its target must obey the same combination. Finally the target basis must remain independent; otherwise D cannot be invertible. If the ciphertext span is incomplete, the check counts every possible invertible extension instead of falsely rejecting it. For rank *r* in dimension *n*, that count is the product of **29ⁿ − 29ʲ** for **j = r, …, n−1**.\n\nHere all 55 tested page starts have full ciphertext rank in both dimensions. Their first independent blocks therefore determine a unique possible matrix. In every one of the 990 comparisons, a remaining block disagrees with that matrix. None of the nine opening readings is obtained under this exact direct rule.\n\n## Limits and reproduction\n\nThe test covers **LP2-00–55 except runeless LP2-50**, page-local origin zero, the first twelve runes including headings, dimensions two and three, and nine fixed 12-rune openings. It does not test other plaintexts, later positions, block offsets or directions, an affine constant, padding, transposition, or a key that changes between blocks. It does not test the LP2 number square as a key schedule.\n\nDownload the experiment files and run `python experiments/records/direct-hill-key-feasibility/run.py --check` followed by `python experiments/records/direct-hill-key-feasibility/check.py` from the repository root. The second program reads the independent page JSON, uses a separate stacked-rank criterion for all 990 cases, and checks small-field predictions against **all** invertible 2×2 and 3×3 matrices over F₂ and F₃. Those controls include full-rank, rank-deficient, zero-input, and inconsistent cases. The per-case result file records the page, opening, rank, and number of compatible keys.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/direct-hill-key-feasibility/article.md&quot;,
   &quot;script_sha256&quot;: &quot;76eeecef08f2fb95e9f9b68838e2848b637d9f0bd94273e52c87d96882134533&quot;,
@@ -8800,6 +8814,9 @@
     }
   ],
   &quot;related&quot;: [],
+  &quot;reader_question&quot;: &quot;Could a low-degree polynomial directly produce a page’s rune values?&quot;,
+  &quot;reader_finding&quot;: &quot;No polynomial with integer coefficients and degree at most eight can directly generate any of the 55 tested pages under the fixed-step rule, even allowing any fixed integer modulus greater than one. Both rune indices and GP prime values fail the required check.&quot;,
+  &quot;reader_limit&quot;: &quot;This tests the polynomial as the entire output, not as a key mixed with plaintext. Higher degrees, skipped positions, resets and extra symbol mappings remain untested.&quot;,
   &quot;article&quot;: &quot;# Can a low-degree polynomial directly generate an LP2 page?\n\n**No, under the exact model tested here.** Every nonempty rune page in archived LP2-00–55 fails a necessary condition for direct polynomial generation of degree at most eight, in both rune-index and prime-value coordinates. The obstruction applies to every integer modulus greater than one, not just a searched list of moduli.\n\nThis says nothing about a polynomial **key** added to unknown plaintext. In that model the polynomial generates only the key, while this test compares its output directly with the manuscript symbols.\n\n## The proposed construction\n\nNumber the retained runes on one page i = 0, 1, 2, … . The tested rule is:\n\n```text\nc[i] ≡ P(N + s*i) (mod m)\n```\n\nHere P has integer coefficients and degree at most eight; N is any integer starting position; s is any fixed integer stride, including negative or zero; and m is any fixed integer greater than one. Coefficients, origin, stride and modulus may differ between pages. The output c[i] is either the rune&#x27;s zero-based index or its literal Gematria Primus prime value. There is no additional alphabet mapping.\n\n## Why differences can rule out infinitely many parameters\n\nA forward difference subtracts each value from the next. For the squares 0, 1, 4, 9, 16, the first differences are 1, 3, 5, 7, the second differences are 2, 2, 2, and the third differences are 0, 0. Each difference lowers polynomial degree by at least one. A polynomial of degree at most d therefore has zero differences at order d+1.\n\nReducing a sequence modulo m may change those differences from zero into multiples of m. It cannot change the requirement that **m divides every difference at that order**. Consequently, m must divide their greatest common divisor (gcd). If that gcd is 1, no modulus m &gt; 1 can work.\n\nSubstituting N+s*i into a polynomial does not increase its degree in i. This is why arbitrary origins and fixed strides are covered without enumerating them. The proof uses the algebraic form of the rule; it does not estimate a probability.\n\n## A small example you can check by hand\n\n| Sequence | Values | First differences | Second differences | Third differences |\n| --- | --- | --- | --- | --- |\n| Squares | 0, 1, 4, 9, 16 | 1, 3, 5, 7 | 2, 2, 2 | 0, 0 |\n| Change only the last value | 0, 1, 4, 9, 17 | 1, 3, 5, 8 | 2, 2, 3 | 0, 1 |\n\nThe modified example has gcd(0, 1) = 1 at order three. It cannot be a quadratic polynomial stream modulo any m &gt; 1 under the stated rule. A gcd other than 1 would merely leave possible divisors to investigate; it would not establish that a polynomial exists.\n\n## Manuscript result and coverage\n\nThe retest uses the repository&#x27;s archived rune text, retains headings, removes nonalphabet characters, and starts a separate stream for each page. Decimal labels, separators and line breaks do not advance the position. It tests degrees 1–8 separately; constant polynomials are included within every degree bound.\n\n| Coverage | Count |\n| --- | ---: |\n| Page files LP2-00–55 | 56 |\n| Nonempty rune streams | 55 |\n| Representations per stream | 2 |\n| Degree bounds per representation | 8 |\n| Checks with gcd 1 | 880 of 880 |\n\nLP2-50 contains no alphabet runes in this transcription and is explicitly skipped. Its alphanumeric grid is not converted into a rune stream. LP2-56 and LP2-57 are outside the scope.\n\nFor a concrete witness, LP2-00&#x27;s zero-based rune indices have ninth differences beginning **−1078, 1882, −2478, 1805**. Their successive gcds are 1078, 2, 2, 1. Those four values alone exclude every modulus greater than one for degree at most eight. The downloadable ledger contains all differences and a short gcd-one prefix for each of the 880 checks.\n\n## What would reopen the question?\n\nA polynomial key mixed with plaintext, a higher-degree polynomial, irregularly skipped positions, internal resets, a different rune selection, or an additional output mapping changes the model. Those require their own tests. The result does not eliminate arithmetic ciphers, running keys, recurrences or periodic ciphers as general classes.\n\nThe result is tied to the supplied transcription, not to a new visual audit of every rune. If the transcription changes, rerun the calculation. Agreement between the text and page-JSON versions checks computation and packaging; those versions share their archival source.\n\n## Reproduce and independently check\n\nExtract the experiment ZIP with folders intact, or use the repository. Python 3&#x27;s standard library is sufficient. No network requests, AI calls or additional packages are needed.\n\n```text\npython experiments/records/direct-polynomial-streams/run.py --check\npython experiments/records/direct-polynomial-streams/check.py\n```\n\nThe first command takes successive neighboring differences. The second reads page JSON and computes each difference directly with the binomial-coefficient formula, without importing the first implementation. It also checks 128 synthetic polynomial streams across degrees, moduli, origins and strides, plus the modified-square example above. Both commands must pass.\n\n## Relationship to the earlier archive\n\nThis is a fresh reproduction of the supplied closure register&#x27;s direct-polynomial claim (C10/C22), using the current published corpus. It is not an original discovery. The earlier archive describes formal Lean checks; this package supplies an elementary proof and independently checked integer calculations, and does not claim to rerun that Lean development. Other entries in the register are not certified by this experiment.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/direct-polynomial-streams/article.md&quot;,
   &quot;script_sha256&quot;: &quot;e922e6d45709a30c445a5bcf757302a84824e5a4f53d4be446a98bf3206b8c8e&quot;,
@@ -10738,6 +10755,9 @@
       &quot;caption&quot;: &quot;Lag-three forward differences: all 29 bins, split into within-page and cross-page comparisons. Of the ten +4 matches, three stay within one page and seven cross pages. Brown marks show fixed-event shuffle expectations, not significance thresholds.&quot;
     }
   ],
+  &quot;reader_question&quot;: &quot;Do the extracted repeat symbols reproduce the claimed number pattern?&quot;,
+  &quot;reader_finding&quot;: &quot;Not exactly. Comparing each repeated-rune symbol with the one three events later gives ten +4 shifts in 83 comparisons (12.05%), not the reported 12.9%. The average shortest distance around the 29-rune alphabet for neighboring events is 8.6353, not 8.81.&quot;,
+  &quot;reader_limit&quot;: &quot;This recount follows one fixed event-extraction rule and includes comparisons across pages. The original code is unavailable, and no statistical-significance test was run.&quot;,
   &quot;article&quot;: &quot;# Distances between doublet events\n\nThe proposal asks whether repeated runes, extracted in manuscript order, form a patterned sequence of their own. This recount finds **10 forward +4 differences at lag three, out of 83 comparisons (12.05%)**. It does not reproduce the reported 12.9%, and it does not verify the proposed p-value.\n\n“Not supported” refers to reproducing the exact numerical claims with these inputs and rules. It does not mean that every doublet-based cipher has been tested or rejected.\n\n## What is an event?\n\nRead LP2-00–55 in numerical order, including headings. Retain only the 29 alphabet runes within each page. Count overlapping adjacent equal pairs: AAA contributes two A events. Never create an event across a page boundary. Then join the extracted events in page order. The result is 86 events.\n\nAt lag one, compare each event with the next; at lag three, compare it with the event three places later. For example, in an event sequence A, B, C, D, the first lag-three comparison is A to D. This lag measures **event positions**, not rune positions or page distance.\n\nThe [short rune-lag profile](#/experiments/doublet-lag-profile) instead compares positions in the original rune streams before extracting doublets. Its lag-three denominator is 12,791 rune pairs, not the 83 event pairs counted here.\n\nFor indices a and b, the directed difference is `(b-a) mod 29`. The circular distance is the smaller of that difference and its reverse. Thus +4 and −4 share circular distance 4 but occupy different directed bins, 4 and 25. The proposed +4 claim is directional.\n\n## Complete comparison\n\n| Event lag | Comparisons | Cross-page comparisons | Mean circular distance | Forward +4 | Circular distances 5, 12 or 14 |\n| --- | --- | --- | --- | --- | --- |\n| 1 | 85 | 41 | 734/85 ≈ 8.6353 | 2 | 31 |\n| 2 | 84 | 63 | 52/7 ≈ 7.4286 | 1 | 22 |\n| 3 | 83 | 75 | 626/83 ≈ 7.5422 | 10 | 14 |\n\nThe earlier proposed lag-one mean was 8.81. These inputs instead give 8.6353. The exact reason for the difference cannot be determined without the original event list and counting implementation. The stored output includes all events and every comparison so a future comparison can locate the first divergence.\n\nPage boundaries matter here: 75 of 83 lag-three comparisons cross them. Resetting the comparisons at page boundaries would answer a different question; it is not an interchangeable implementation detail.\n\n## What should the +4 baseline be?\n\nUnder a uniform shuffle of this fixed event multiset, the exact probability of a forward +4 difference between distinct positions is **8/215 ≈ 3.7209%**. It is not exactly 1/29, because these event symbols have unequal frequencies. For counts c(a), sum `c(a) × c((a+4) mod 29)` over all a and divide by `86 × 85`.\n\nThis probability is an expectation for a single ordered comparison. Multiplying it by 83 gives the expected lag-three count, approximately 3.0884. It is **not** the probability of observing ten or more matches: comparisons share events, and a binomial independence assumption is not justified by this calculation.\n\nNo permutation tail probability is calculated here. Selecting +4, lag three, or the group of distances 5, 12 and 14 after inspecting data introduces selection choices. A later significance test must state which choices it addresses. See [null models](#/wiki/null-models) and [search space](#/wiki/search-space).\n\n## Reproduce and inspect\n\nExtract the experiment ZIP with its folders intact. No packages, network access or AI service are required.\n\n```text\npython experiments/records/doublet-event-lags/run.py --check\npython experiments/records/doublet-event-lags/check.py\n```\n\nThe producer uses the included doublet extractor and prints fresh JSON without `--check`. The independent checker uses overlapping regular-expression matches on the archived rune text, then checks every event, lag pair, histogram, distance and boundary flag. It also computes shuffle expectations from symbol frequencies instead of enumerating pairs of event positions.\n\nThese checks establish agreement about the archived transcription. They do not independently settle ambiguous handwriting. The [doublet guide](#/wiki/doublets) explains the source rules and supplies the original pair coordinates.\n\n## Read and reproduce the figure\n\nThe figure shows every possible forward difference, including bins with zero occurrences. Dark bars count within-page comparisons; pale bars count cross-page comparisons. The ten +4 matches split into **three within-page and seven cross-page** comparisons. These counts have different opportunities: only eight lag-three comparisons stay within a page, while 75 cross pages. Comparing raw bar lengths alone would overlook that imbalance.\n\nBrown marks show the expected total count per bin after shuffling the fixed multiset of 86 events. They are not confidence limits or a cutoff for significance. The chart does not assign separate null expectations to the two boundary groups.\n\nThe SVG is included in the download. To regenerate a figure, install Matplotlib in your Python environment, then run:\n\n```text\npython experiments/records/doublet-event-lags/plot.py --output my-distribution.svg\n```\n\nThe script refuses to overwrite an existing file. The numerical producer and independent checker still require only the standard library; plotting is optional.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/doublet-event-lags/article.md&quot;,
   &quot;script_sha256&quot;: &quot;d0b36611edc20cb81d7b7f3ad19c3dfe8239b430f85e03270bc444029eb43bbc&quot;,
@@ -11769,7 +11789,7 @@
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Do doublets fall at particular section positions?&quot;,
   &quot;question&quot;: &quot;Do the 86 unsolved-text doublets cluster by their section-relative positions modulo two through eight?&quot;,
-  &quot;reader_question&quot;: &quot;Are repeated runes placed at regular positions within each section?&quot;,
+  &quot;reader_question&quot;: &quot;Do repeated neighboring runes favor a position within manuscript sections?&quot;,
   &quot;summary&quot;: &quot;The seven source residue vectors reproduce, but 4,316 of 5,000 section-conditioned controls show at least as much selected modulo concentration.&quot;,
   &quot;tags&quot;: [
     &quot;doublets&quot;,
@@ -12127,6 +12147,8 @@
     &quot;doublet-lag-profile&quot;,
     &quot;doublet-context&quot;
   ],
+  &quot;reader_finding&quot;: &quot;The 86 adjacent repeats do not favor any of the tested repeating positions within the nine manuscript sections. The strongest pattern from cycles of two through eight was matched or exceeded in 4,316 of 5,000 shuffled comparisons.&quot;,
+  &quot;reader_limit&quot;: &quot;Counting starts again at each section, and the comparison keeps each section’s repeat count fixed. It does not explain why repeats are rare or test other boundaries or cipher rules.&quot;,
   &quot;article&quot;: &quot;## Finding\n\n**The 86 adjacent equal-rune pairs do not favor a position modulo 2 through 8 within their manuscript sections.** We reproduced the [published section-relative residue counts](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/lag_and_parity.txt) exactly. The strongest of seven adjusted concentration scores is **1.168** (modulo 2). In **4,316 of 5,000** controls, at least one of the seven scores is as high. That comparison retains the observed number of doublets in each section.\n\n![For modulo seven, the 86 doublets spread across all seven positions rather than clustering in one group.](experiments/records/doublet-section-residues/residues.svg)\n\n## What was tested\n\nA *doublet* is a pair of consecutive identical runes. The position used here is the **second rune&#x27;s zero-based position within its section**. The nine unsolved sections are LP2-00–02, 03–07, 08–14, 15–22, 23–26, 27–32, 33–39, 40–53 and 54–55. We scanned every rune in those sections, found 86 doublets and counted their positions modulo 2, 3, 4, 5, 6, 7 and 8. All seven count vectors match the source test; for example, modulo 7 gives **7, 10, 12, 10, 15, 18, 14**.\n\nFor each modulus, the expected count accounts for how many eligible adjacent-pair positions of each residue exist in *each* section. The comparison then randomly places that section&#x27;s **same number of doublet events** among its eligible positions. It repeats this 5,000 times and, in each trial, selects the strongest of the same seven moduli. Using the strongest result on both sides matters: after seeing seven residue plots, one will usually look uneven by chance. The statistic is chi-square divided by its degrees of freedom, so the different moduli can be compared on a common scale.\n\nThe control maximum has a median score of **1.858**; the manuscript&#x27;s strongest score is **1.168**. The saved [results](experiments/records/doublet-section-residues/results.json) include every doublet position, expected count, seven observed score vectors and all 5,000 control maxima. A planted control keeps the nine section event counts but places them all on positions divisible by 7. Its adjusted modulo-7 score is **86.338**, far beyond the control range, confirming that a strong modular placement pattern would be visible.\n\n## Limit of the result\n\nThis does **not** rule out block ciphers or any general mechanism for suppressing adjacent repeats. It only finds no **section-position residue concentration** among the observed doublets for moduli 2–8 under this uniform-placement comparison. The comparison does not preserve possible clustering of events within sections, different word boundaries, or a cipher&#x27;s expected position distribution. It also does not test sentence-relative positions: the public source&#x27;s sentence-token rules cannot be reproduced exactly from the punctuation retained in this site&#x27;s transcription. Those counts need a separate, pinned sentence-boundary inventory.\n\nTo reproduce offline, run `python experiments/records/doublet-section-residues/run.py --check` and `python experiments/records/doublet-section-residues/check.py`. The independent check extracts doublets again from the page text and verifies all seven residue vectors. No external files or network service are needed during replay.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/doublet-section-residues/article.md&quot;,
   &quot;script_sha256&quot;: &quot;19138467d93babfcc2eff457a89349ddf27b32ea352218af0139127625d5346b&quot;,
@@ -12154,7 +12176,7 @@
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Do doublets favor positions within sentences?&quot;,
   &quot;question&quot;: &quot;Do the 86 LP2 doublets cluster by sentence-relative rune position modulo two through eight?&quot;,
-  &quot;reader_question&quot;: &quot;Are repeated runes placed at particular points in sentences?&quot;,
+  &quot;reader_question&quot;: &quot;Do repeated neighboring runes favor a position within sentences?&quot;,
   &quot;summary&quot;: &quot;All seven public sentence-relative residue counts reproduce from pinned punctuation boundaries, but 2,068 of 5,000 section-preserving controls show a best pattern at least as strong.&quot;,
   &quot;finding&quot;: &quot;The strongest tested grouping is modulo three (26, 23, 37 events); its selected score is matched or exceeded in 2,068 of 5,000 controls. A concentrated planted pattern is detected.&quot;,
   &quot;limitations&quot;: &quot;Only position residues modulo 2–8 under the pinned relikd punctuation rule and uniform within-section event-placement control were tested. Other punctuation rules, event clustering and cipher-specific position laws are not covered.&quot;,
@@ -12237,6 +12259,8 @@
       &quot;caption&quot;: &quot;The strongest of the seven tested residue groupings, with its selection-aware section-preserving comparison.&quot;
     }
   ],
+  &quot;reader_finding&quot;: &quot;The 86 adjacent repeats show no unusual pattern when sentence positions are grouped in cycles of two through eight. The strongest pattern was matched or exceeded in 2,068 of 5,000 shuffled comparisons.&quot;,
+  &quot;reader_limit&quot;: &quot;The test uses one source’s sentence boundaries and does not model a cipher. Other punctuation rules or position patterns remain untested.&quot;,
   &quot;article&quot;: &quot;# Do repeated runes favor a sentence position?\n\n## Finding\n\nThe 86 adjacent equal-rune pairs show **no unusual concentration at a sentence-relative position modulo 2 through 8** under a control that keeps each section&#x27;s number of doublets and the visible punctuation fixed. The strongest of the seven patterns is modulo three: **26, 23 and 37** doublets at positions 0, 1 and 2. In **2,068 of 5,000** controls, at least one modulus had a pattern as strong. This is a bounded position test, not a general exclusion of block ciphers or a decryption result.\n\n![Three bars show the strongest observed grouping, 26, 23 and 37 doublets by sentence position modulo three. Expected counts are about 29, 29 and 28. Of 5,000 section-preserving controls, 2,068 found an equal or stronger best grouping across all seven moduli.](experiments/records/doublet-sentence-residues/sentence-residues.svg)\n\n## Counting from a sentence boundary\n\nThe [source test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/lag_and_parity_tests.py) resets the rune-position count after a period, semicolon or section mark; line wraps do not reset it. This site&#x27;s transcription preserves the 12,956 runes but not all of that punctuation. We therefore took just the reset rune ordinals from the [pinned relikd source text](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4/pages). The [boundary file](experiments/records/doublet-sentence-residues/sentence-boundaries.json) gives the source-text hash and reset ordinals for each of the nine sections, without republishing either repository&#x27;s source text or code.\n\nAll nine section lengths, the 86 doublet locations and **all seven published sentence-relative count vectors** reproduce. For each possible second-rune position, we compute its distance from the latest sentence boundary. The comparison randomly relocates the same number of doublets within each section, preserving sentence boundaries and applying the entire seven-modulus scan to every control. A deliberately concentrated modulo-seven placement scores **82.53**, above every control maximum, so the test detects a strong pattern when one is present.\n\nThe result depends on this transcription, its punctuation boundaries, moduli 2–8 and a uniform-placement control. It does not preserve clustering or model a specific cipher&#x27;s event positions. Other sentence definitions and other position rules need separate tests. The related [section-position test](#/experiments/doublet-section-residues) addresses a different coordinate system.\n\n## Reproduce\n\nRun `python experiments/records/doublet-sentence-residues/run.py --check` and `python experiments/records/doublet-sentence-residues/check.py`. To verify the upstream punctuation extraction as well, fetch relikd/LiberPrayground at commit `719380ebee0523ad7f2fbf389c6f960d51bea5a4` and pass its `pages` folder to `check.py --source-pages PATH`. The checker validates each source file&#x27;s SHA-256 and reconstructs every reset ordinal before recounting the doublets.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/doublet-sentence-residues/article.md&quot;,
   &quot;script_sha256&quot;: &quot;d056e80724c491922a80c9653f894e0a6bcc447290c17aedc9159dbad0ceebbd&quot;,
@@ -44181,6 +44205,16 @@
       &quot;caption&quot;: &quot;The strongest observed pairwise IoC lies below the median global maximum of the conditional shuffles.&quot;
     }
   ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;lp2-page-pair-alignment&quot;,
+    &quot;title&quot;: &quot;Page-pair arithmetic&quot;,
+    &quot;question&quot;: &quot;Does direct arithmetic between manuscript pages reveal unusual structure?&quot;,
+    &quot;baseline&quot;: &quot;lp2-page-pair-alignment&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Zero-offset sums and differences&quot;,
+    &quot;changes&quot;: []
+  },
   &quot;article&quot;: &quot;# One LP2 page as another page’s key\n\n**Question.** If two ciphertext pages are aligned from their first rune and added or subtracted rune by rune, does any output show unusually concentrated symbols?\n\n**Result.** No. The strongest of **2,970** direct page-pair streams has an index of coincidence (IoC) of **0.0446**: subtracting LP2-55 from LP2-29 across their first 76 runes. Yet **235 of 256** shuffled-control searches produced a maximum at least this large (global empirical *p* = **0.918**). This particular page-on-page alignment does not stand out under the declared concentration measure.\n\n![The observed strongest page-pair IoC is lower than the median shuffled maximum.](experiments/records/lp2-page-pair-alignment/global-max.svg)\n\n## What was compared\n\nWe took all **55 rune-bearing pages LP2-00–55**, including headings, and paired every two distinct pages. Each pair begins at rune zero and stops when the shorter page runs out; no page key repeats. At each position we computed both **A + B** and **A − B modulo 29**, yielding 1,485 page pairs and 2,970 output streams. Reversing the pages in a subtraction only negates every output symbol, leaving its IoC unchanged, so unordered pairs suffice for this statistic.\n\nThe IoC measures how often two positions in a stream contain the same symbol. It does not tell us whether the stream reads as English. We compared the **largest** observed IoC against the largest in each shuffled trial, so selecting the most attractive pair after viewing all 2,970 outputs is accounted for.\n\nEach trial shuffled all 55 pages once and reused those shared shuffled pages across the entire pair grid. The shuffle was restricted to bands delimited by the observed page lengths. That keeps the exact rune counts in every compared prefix unchanged while disrupting alignment. There were **1,226 bands** across the page set, including 310 one-rune bands; nevertheless **87.8% of rune positions changed** on average. The median control maximum was **0.0476** and its 95th percentile was **0.0531**. The observed maximum was below both.\n\n## What this leaves open\n\nThis is a bounded structural check inspired by the catalogued “one ciphertext page as another’s key” idea; it is not a replay of a documented earlier attempt. It does not rule out a page-derived key with a different offset, order, reversal, repetition, interruption, arithmetic rule, or decoding layer. Nor does an ordinary IoC alone prove the absence of meaningful text. The previously documented LP2-as-pad test used LP2 data against *external* artifacts; it did not perform this page-on-page alignment.\n\nRun `python experiments/records/lp2-page-pair-alignment/run.py --check` and `python experiments/records/lp2-page-pair-alignment/check.py` from the repository root. The independent check reads the page JSON, verifies all 2,970 observed scores, the 256 shared-shuffle global maxima, the preserved band counts, and a planted shifted-copy control. `results.json` contains every pair/operation score and the full null-max distribution.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-page-pair-alignment/article.md&quot;,
   &quot;script_sha256&quot;: &quot;9e07f41fabe09a30d0572caec06a4f7b048c010d14adad9dd7224c67d237f575&quot;,
@@ -44833,6 +44867,53 @@
       &quot;caption&quot;: &quot;The strongest zero-offset subtraction output and its English score against complete shuffled searches.&quot;
     }
   ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;lp2-page-pair-alignment&quot;,
+    &quot;title&quot;: &quot;Page-pair arithmetic&quot;,
+    &quot;question&quot;: &quot;Does direct arithmetic between manuscript pages reveal unusual structure?&quot;,
+    &quot;baseline&quot;: &quot;lp2-page-pair-alignment&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Zero-offset English scoring&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;artifacts&quot;,
+        &quot;before&quot;: [
+          &quot;experiments/records/lp2-page-pair-alignment/plan.json&quot;,
+          &quot;research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt&quot;
+        ],
+        &quot;after&quot;: [
+          &quot;experiments/records/lp2-page-pair-english/plan.json&quot;,
+          &quot;research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt&quot;
+        ],
+        &quot;reason&quot;: &quot;Use this variant’s frozen English-score plan and shared idea source.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;representation&quot;,
+        &quot;before&quot;: &quot;Full GP29 rune streams including headings from 55 rune-bearing LP2-00–55 pages; for each pair use the first min(page lengths) runes.&quot;,
+        &quot;after&quot;: &quot;Canonical GP29 rune indices, including headings, from all 55 rune-bearing LP2-00–55 text transcriptions; independent check re-parses structured page JSON.&quot;,
+        &quot;reason&quot;: &quot;Score canonical Latin rune labels rather than only symbol concentration.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;For every unordered page pair compute aligned sum and difference modulo29, measure output IoC, and compare the global maximum to 256 seeded shared page shuffles within page-length-delimited bands that preserve every compared-prefix histogram.&quot;,
+        &quot;after&quot;: &quot;Align every unordered page pair at rune zero to the shorter length. Compute A+B, A−B, and B−A modulo 29; score GP Latin labels with a fixed English quadgram model. Compare best eligible stream to 256 maxima of complete shared conditional-band page-shuffle searches.&quot;,
+        &quot;reason&quot;: &quot;Test English scores for sum and both subtraction directions at zero offset.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;1,485 distinct pairs × 2 arithmetic operations = 2,970 outputs; 256 global-max null trials; seed 330129.&quot;,
+        &quot;after&quot;: &quot;1,485 pairs × three operations = 4,455 streams, of which 4,136 have ≥100 Latin quadgrams. Each of 256 controls uses Random(33017127+t). Three synthetic planted English outputs check exact arithmetic recovery and the scorer.&quot;,
+        &quot;reason&quot;: &quot;Use the declared three-operation grid, score-length filter and English controls.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Known-opening cribs, other offsets, page reversals and reorders, repeating or interrupted page keys, later positions beyond the common prefix, alternative arithmetic and language scoring.&quot;,
+        &quot;after&quot;: &quot;Offsets, reverse streams, repeated page keys, other operations, changed page order or transcription, later decryption layers, non-English output and historical-negative claims.&quot;,
+        &quot;reason&quot;: &quot;English scoring is included here; shifted alignments remain outside this variant.&quot;
+      }
+    ]
+  },
   &quot;article&quot;: &quot;# Can one LP2 page decode another?\n\n**Question.** If two ciphertext pages are aligned from their first rune, does adding or subtracting their GP rune indices produce English?\n\n**Result.** None of these direct readings stands out. The highest score came from **LP2-18 minus LP2-02** across their first **201 runes**. Its GP labels start `GCIREOONGSNGEASIAJABUSDFPNGEOR…` and score **−6.802** under the fixed English model. In **193 of 256** matched searches on shuffled pages, the best pair and operation scored at least as high (global add-one estimate **194/257 ≈ 0.755**). The displayed output is not a reading.\n\n![The first five arithmetic steps in the strongest pair, followed by its score within the range of complete shuffled searches.](experiments/records/lp2-page-pair-english/pair-scores.svg)\n\n## What was tested\n\nWe paired every two distinct rune-bearing pages from **LP2-00–55**, excluding empty LP2-50: **1,485 page pairs**. For each pair we aligned rune ordinal zero with rune ordinal zero and stopped when the shorter page ended. The three operations were **A + B**, **A − B**, and **B − A**, always modulo 29. A sum needs only one page order; for English scoring the two subtraction directions can read differently. This gives **4,455 candidate streams**. We translated each output index to its canonical GP Latin label and scored English four-letter groups. **4,136** streams cleared the predeclared minimum of 100 groups; shorter ones were not treated as negative results.\n\nThe diagram shows the first five steps of the strongest candidate. For instance, LP2-18 begins with index 28 and LP2-02 with 22; **28 − 22 ≡ 6 (mod 29)**, whose GP Latin label is `G`. The other four displayed differences become `C I R E`. This is arithmetic on the transcribed runes, not a claim that the pages were meant to be paired.\n\nTo account for choosing the best pair after seeing thousands of outputs, every control trial shuffled all 55 pages once and ran the **same complete pair-and-operation search**. Each page was shuffled in bands set by the observed page lengths, preserving the rune histogram of every prefix that any pair compares. All pairs in a trial shared those shuffled pages. The median control maximum was **−6.749**, higher than the observed −6.802. Three synthetic controls planted a known decoded GP reading into each arithmetic operation; each recovered the intended indices exactly and scored **−4.478**, well above the fixed English-recognition gate.\n\nThis extends the [earlier page-pair test](experiments/records/lp2-page-pair-alignment/article.md), which measured symbol concentration rather than readability. It covers only **zero-offset, nonrepeating, forward page arithmetic** and direct English scoring. It does not test shifted alignments, a repeating page key, reversal, additional cipher layers, other languages, or page pairings selected by a separate manuscript clue. Catalog item **7.3** supplied the idea; it did not identify a documented historical experiment to replay.\n\n## Inspect and reproduce\n\n[`results.json`](experiments/records/lp2-page-pair-english/results.json) includes all **4,455** observed case scores, the complete best output and all **256** global control maxima. From the repository root, run `python experiments/records/lp2-page-pair-english/run.py --check` and `python experiments/records/lp2-page-pair-english/check.py` (NumPy and Numba required). The independent checker reads structured page JSON instead of the producer&#x27;s text files and recomputes the whole observed and shuffled search with a separate scoring loop.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-page-pair-english/article.md&quot;,
   &quot;script_sha256&quot;: &quot;e50a7b22e547d847d18bc58f6788cd793baf1c990478bd25edeee74bbdbf6871&quot;,
@@ -48563,6 +48644,249 @@
       ]
     }
   ]
+}</pre></article><article id="lp2-shifted-page-pair-differences"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-shifted-page-pair-differences&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;One page as another&#x27;s key, at every long overlap&quot;,
+  &quot;question&quot;: &quot;Does any forward page-pair difference at a relative offset with at least 120 overlapping runes show exceptional symbol concentration?&quot;,
+  &quot;reader_question&quot;: &quot;Do any two pages become unusually patterned when one is shifted and subtracted from the other?&quot;,
+  &quot;summary&quot;: &quot;Across 331,908 page-pair alignments, the strongest difference concentration is exceeded or matched by 77 of 128 shuffled search maxima.&quot;,
+  &quot;finding&quot;: &quot;Maximum IoC 0.04721080446 occurs for LP2-14 minus LP2-35 at lag-140 over 131 runes; global plus-one empirical comparison 77+1 over 128+1 =0.60465116.331,908 observed counts are independently verified, including 330,582 new nonzero-lag settings.&quot;,
+  &quot;reader_finding&quot;: &quot;The strongest alignment, LP2-14 against LP2-35, is no stronger than results commonly found in shuffled pages: 77 of 128 shuffled searches matched or exceeded it.&quot;,
+  &quot;reader_limit&quot;: &quot;Forward differences with overlap at least 120 runes and an IoC statistic only; this does not exclude general shared-key encryption.&quot;,
+  &quot;limitations&quot;: &quot;52 eligible pages from 55 nonempty LP2-00–55 pages; no shorter overlaps, page reversal, wraparound, repeated/skipped key symbols or additional cipher layer. Shuffles preserve whole-page frequencies rather than each overlap frequency. Shifted-copy controls do not measure sensitivity to unrelated plaintexts encrypted under one key.&quot;,
+  &quot;next_steps&quot;: &quot;Any broader shared-keystream claim needs a statistic with demonstrated power for its proposed plaintext model; freeze shorter-overlap or reversed-page extensions separately.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;page-pair differences&quot;,
+    &quot;shifted alignment&quot;,
+    &quot;shared keystream&quot;,
+    &quot;IoC&quot;,
+    &quot;B-14&quot;,
+    &quot;S1&quot;,
+    &quot;manuscript grid&quot;
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-page-pair-alignment&quot;,
+    &quot;lp2-page-pair-english&quot;,
+    &quot;wulfic-two-time-pad-premise&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/lp2-shifted-page-pair-differences/plan.json&quot;,
+      &quot;experiments/records/lp2-shifted-page-pair-differences/pages.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Forward GP29 indices including headings from 55 nonempty LP2-00–55 pages; 52 have at least 120 runes.&quot;,
+    &quot;procedure&quot;: &quot;Exhaust all unordered page pairs and integer relative lags with&gt;=120 overlap; direct difference modulo29; compare global maximum IoC to128 shared whole-page permutations.&quot;,
+    &quot;parameters&quot;: &quot;1,326 pairs; 331,908 alignments (330,582 nonzero lags); minimum overlap 120; 128 nulls; seed 330120261024; no wrapping or reversal.&quot;,
+    &quot;exclusions&quot;: &quot;Shorter overlaps, page reversal, repeated/skipped key, plaintext-family exclusion, general key reuse, whole source S1/S2/S3 roadmap.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;Fresh finite manuscript grid with pre-frozen plan&quot;,
+    &quot;reviewer&quot;: &quot;Independent direct integer recount of all observed alignments, controls, null-winning slices and global comparison&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned S1 all-offset difference-IoC proposal&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/AUTO_EVOLUTION.md&quot;,
+      &quot;note&quot;: &quot;New bounded implementation of the documented roadmap, not a claim the historical source executed it.&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Earlier zero-offset page-pair record&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/experiments/lp2-page-pair-alignment&quot;,
+      &quot;note&quot;: &quot;1326 overlapping zero-offset differences verified;330582 shifted alignments added.&quot;
+    }
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;lp2-page-pair-alignment&quot;,
+    &quot;title&quot;: &quot;Page-pair arithmetic&quot;,
+    &quot;question&quot;: &quot;Does direct arithmetic between manuscript pages reveal unusual structure?&quot;,
+    &quot;baseline&quot;: &quot;lp2-page-pair-alignment&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;All relative offsets with at least 120-rune overlap&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;artifacts&quot;,
+        &quot;before&quot;: [
+          &quot;experiments/records/lp2-page-pair-alignment/plan.json&quot;,
+          &quot;research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt&quot;
+        ],
+        &quot;after&quot;: [
+          &quot;experiments/records/lp2-shifted-page-pair-differences/plan.json&quot;,
+          &quot;experiments/records/lp2-shifted-page-pair-differences/pages.json&quot;
+        ],
+        &quot;reason&quot;: &quot;Bundle the frozen shifted-grid specification and identical manuscript input arrays.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;representation&quot;,
+        &quot;before&quot;: &quot;Full GP29 rune streams including headings from 55 rune-bearing LP2-00–55 pages; for each pair use the first min(page lengths) runes.&quot;,
+        &quot;after&quot;: &quot;Forward GP29 indices including headings from 55 nonempty LP2-00–55 pages; 52 have at least 120 runes.&quot;,
+        &quot;reason&quot;: &quot;Compare shifted overlap windows of at least120runes instead of only whole common prefixes.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;For every unordered page pair compute aligned sum and difference modulo29, measure output IoC, and compare the global maximum to 256 seeded shared page shuffles within page-length-delimited bands that preserve every compared-prefix histogram.&quot;,
+        &quot;after&quot;: &quot;Exhaust all unordered page pairs and integer relative lags with&gt;=120 overlap; direct difference modulo29; compare global maximum IoC to128 shared whole-page permutations.&quot;,
+        &quot;reason&quot;: &quot;Exhaust relative lags for differences only, with shared whole-page shuffle maxima.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;1,485 distinct pairs × 2 arithmetic operations = 2,970 outputs; 256 global-max null trials; seed 330129.&quot;,
+        &quot;after&quot;: &quot;1,326 pairs; 331,908 alignments (330,582 nonzero lags); minimum overlap 120; 128 nulls; seed 330120261024; no wrapping or reversal.&quot;,
+        &quot;reason&quot;: &quot;Add330582nonzero-lag alignments; limit overlap to120runes or longer; use128global null trials.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Known-opening cribs, other offsets, page reversals and reorders, repeating or interrupted page keys, later positions beyond the common prefix, alternative arithmetic and language scoring.&quot;,
+        &quot;after&quot;: &quot;Shorter overlaps, page reversal, repeated/skipped key, plaintext-family exclusion, general key reuse, whole source S1/S2/S3 roadmap.&quot;,
+        &quot;reason&quot;: &quot;Declare the new lag domain and retain untested reversal, wrapping, skip and other cipher rules.&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/global-shift-max.svg&quot;,
+      &quot;caption&quot;: &quot;The observed shifted-page concentration maximum lies inside128 shuffled search maxima.&quot;
+    }
+  ],
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-shifted-page-pair-differences/run.py --check &amp;&amp; python experiments/records/lp2-shifted-page-pair-differences/check.py &amp;&amp; python experiments/records/lp2-shifted-page-pair-differences/plot.py --check&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;b5a52040e9b39485bd07b7eba47d9536302b47adaccd3ae6127cd4548f6050d7&quot;,
+    &quot;environment&quot;: &quot;Python3 and NumPy; offline bundled page arrays, source proposal and frozen plan. One process; all128 null grids take a few minutes.&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/.gitattributes&quot;,
+        &quot;sha256&quot;: &quot;42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/article.md&quot;,
+        &quot;sha256&quot;: &quot;89be71e65e5a370737fef2b80eb3cd470cb2baa080ac3f2a1f17227232c566ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/check.py&quot;,
+        &quot;sha256&quot;: &quot;4c9eb75a1884b6c7c0ef605fced0bf731b9d153e4c5efdf4bac0a5e484c9e030&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/pages.json&quot;,
+        &quot;sha256&quot;: &quot;2145e032a56e0aa70fcded4472b704e66485a97f6bcae98ca64389b28c22963e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/plan.json&quot;,
+        &quot;sha256&quot;: &quot;be1fa1b22ded13f7929715763cb2fac10828481cd66712040779ad41b6364c1b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/plot.py&quot;,
+        &quot;sha256&quot;: &quot;67df04cd8d79fb5217adb15e73a1bc0eafc44a096835f5b07ea625cbfc576ace&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/run.py&quot;,
+        &quot;sha256&quot;: &quot;b5a52040e9b39485bd07b7eba47d9536302b47adaccd3ae6127cd4548f6050d7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/source/AUTO_EVOLUTION.md&quot;,
+        &quot;sha256&quot;: &quot;176226bbf786cfeb7199c0e59e3550bfef85f75f64999b24e9f30e23f2bf9d4a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/source/LICENSE&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/cases.npz&quot;,
+        &quot;sha256&quot;: &quot;0e15631d022b78bb5d58c0364ee27957e58812c61eb687c7ade861b20932b6d5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/global-shift-max.svg&quot;,
+        &quot;sha256&quot;: &quot;2228375f16c603a0564b1c5c4cfa669932e017da020001d6c0559293e7cc91cb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/results.json&quot;,
+        &quot;sha256&quot;: &quot;ddf37bd4c6ccebddc3ce062e0ef856687be4c12da5d8b588e96aedfd43f598d4&quot;
+      }
+    ]
+  },
+  &quot;article&quot;: &quot;# One page as another&#x27;s key, at every long overlap\n\n**Result.** None of the tested page alignments has unusually concentrated differences against the declared shuffled-page reference. We checked **331,908 alignments**, including **330,582 nonzero offsets** absent from the earlier page-pair record. The largest index of coincidence (IoC) is **0.04721**; **77 of 128** shuffled searches reach at least that value. The plus-one global empirical comparison is **0.605**.\n\n![The strongest actual shifted-page difference lies inside the distribution of shuffled search maxima.](experiments/records/lp2-shifted-page-pair-differences/global-shift-max.svg)\n\nThe [pinned source&#x27;s S1 proposal](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/AUTO_EVOLUTION.md) calls for an all-page, all-offset difference-IoC scan to look for shared keystreams. [The earlier page-pair test](#/experiments/lp2-page-pair-alignment) aligned pages only from their first rune. This record adds shifted alignments within one bounded version of that proposed method.\n\n## The grid\n\nWe used the same 55 nonempty LP2-00–55 page transcriptions as the earlier record, including headings. A pair qualifies when both pages have at least 120 runes: **52 pages and 1,326 unordered pairs**. For each pair, we tested every relative integer offset leaving an overlap of at least 120 runes. Pages stay forward, without wrapping or repeating. Each output is the first page&#x27;s rune indices minus the second page&#x27;s indices, modulo 29. Reversing the subtraction only relabels its output symbols, leaving IoC unchanged.\n\nThis gives 331,908 alignments. The 1,326 zero-offset differences are an explicit overlap with the earlier grid; the remaining 330,582 settings extend its alignment scope. They are settings of the same method, not separate solving ideas. The source&#x27;s unrestricted all-offset proposal also includes shorter overlaps, which this record does not test.\n\nThe highest actual score comes from **LP2-14 minus LP2-35**, pairing positions 0–130 of LP2-14 with positions 140–270 of LP2-35. Its 131-rune output has numerator 804 over denominator 17,030, giving IoC 0.0472108. No reading was selected or proposed from that output.\n\n## A control over the entire search\n\nEach of 128 reference trials independently permutes every complete page, then repeats the **entire** pair-and-offset search using those shared permuted pages. This preserves each page&#x27;s rune counts and length. It does not preserve every particular overlap window&#x27;s counts or the page&#x27;s word and adjacency structure. The reference therefore asks whether the observed maximum is unusual after destroying within-page order while retaining page-level frequencies.\n\nThe median shuffled maximum is **0.04750**, slightly above the actual maximum. Seventy-seven of 128 maxima meet or exceed the actual value; `(77 + 1) / (128 + 1) = 0.60465`. Comparing maxima accounts for selecting the strongest alignment from this complete grid. It does not make the permutation model a generative account of the manuscript.\n\nBefore the manuscript search, planted page copies at offsets **1, 37 and −53**, with a fixed modular symbol shift, each give the expected constant difference and IoC **1.0**. Shuffling the copied page removes that peak, giving maxima between 0.0392 and 0.0417. These controls establish sensitivity to the declared shifted-copy signal. They do not measure power against two unrelated plaintexts encrypted with a shared random key.\n\nIoC measures symbol concentration, not readable plaintext or every possible form of key reuse. A shared key can cancel between two ciphertexts while leaving a plaintext difference close to uniform. Other offsets with fewer than 120 overlapping runes, reversed pages, repeated or skipped key symbols, other arithmetic and further decoding layers remain open.\n\n## Reproduce\n\nThe plan and page hashes were frozen before target scoring. The offline package includes the complete integer count for every observed alignment, all 128 null winners, the planted pages and the input transcript.\n\n```bash\npython experiments/records/lp2-shifted-page-pair-differences/run.py --check\npython experiments/records/lp2-shifted-page-pair-differences/check.py\npython experiments/records/lp2-shifted-page-pair-differences/plot.py --check\n```\n\nPython 3 and NumPy are required. The runner repeats the manuscript grid and all 128 reference searches. The independent checker directly recounts every observed alignment, the earlier zero-offset differences, all planted-control alignments and each null-winning slice, then independently recomputes the global comparison. It does not independently exhaust all alignments within every null trial; those are regenerated by the runner.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-shifted-page-pair-differences/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;b5a52040e9b39485bd07b7eba47d9536302b47adaccd3ae6127cd4548f6050d7&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;unrestricted-keys&quot;,
+      &quot;title&quot;: &quot;Unrestricted additive keys and one-time-pad hypotheses&quot;,
+      &quot;aliases&quot;: [
+        &quot;one time pad&quot;,
+        &quot;OTP&quot;,
+        &quot;unrestricted key&quot;,
+        &quot;arbitrary key&quot;
+      ]
+    }
+  ]
 }</pre></article><article id="lp2-spacing-gap-audit"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp2-spacing-gap-audit&quot;,
   &quot;title&quot;: &quot;LP2-15 number-row spacing: a source-bound line-gap audit&quot;,
@@ -50747,6 +51071,9 @@
       &quot;caption&quot;: &quot;A constructed change to LP1-16: two +1 and two −1 adjustments preserve every line sum, half-turn symmetry and the center 809. Zero marks unchanged cells; this is not an original image.&quot;
     }
   ],
+  &quot;reader_question&quot;: &quot;Does one fixed number determine either LP1 magic square?&quot;,
+  &quot;reader_finding&quot;: &quot;Each five-by-five LP1 square has positive-integer alternatives that keep any one chosen cell and all line sums unchanged, while opposite cells remain equal. These conditions do not fix the rest of the square.&quot;,
+  &quot;reader_limit&quot;: &quot;Other requirements, such as prime-only entries, were not imposed. This does not reconstruct the original puzzle server’s acceptance rules.&quot;,
   &quot;article&quot;: &quot;# How much freedom remains in a magic square?\n\n## Question\nDoes a fixed line sum, half-turn symmetry and one fixed entry determine the rest of a five-by-five magic square?\n\nNo. Under precisely these conditions, five rational degrees of freedom remain. We also construct positive-integer alternatives to both LP1 examples, keeping any one chosen cell unchanged. This tests uniqueness of numerical grids, not a cipher or the authors’ intentions.\n\n## Why this matters\nIt is tempting to count twelve line-sum equations, subtract twelve from the number of cells, and conclude that almost everything is forced. That subtraction only works for independent equations. For example, the sum of all row totals already equals the sum of all column totals. Symmetry creates further dependencies.\n\nA **degree of freedom** is an independent parameter that can vary while all the equations remain satisfied. It is not a count of solutions and does not mean that every integer assigned to those parameters produces an allowed square.\n\n## Scope and plan\nThe [recorded plan](experiments/records/magic-square-freedom/plan.json) specifies orders 3, 5 and 7, with four symmetry conditions each. Every row, column and both main diagonals have the same fixed sum. We distinguish:\n\n- No additional symmetry.\n- Half-turn symmetry: the cell at row r, column c equals its opposite after a 180-degree rotation.\n- Transpose symmetry: swapping row and column leaves the entry unchanged.\n- Both symmetries together.\n\nThe actual LP1-05 converted square and LP1-16 printed square have half-turn symmetry. Neither is transpose-symmetric: compare their cells at row 1, column 2 and row 2, column 1. Imposing transpose symmetry would therefore change the model and exclude both observed grids.\n\nThe supplied discussion had already proposed uniqueness, retracted that claim, and suggested possible dimensions. Those claims were known before calculation. This is a deterministic audit, not a blind prediction or significance test. The plan was written before running but was not externally timestamped or preregistered.\n\n## Method\nLet A be an existing square and D a change to it. The square A+D retains the same line sums exactly when every row, column and diagonal of D sums to zero. The same symmetry equations apply to D. Keeping one cell unchanged adds the equation that its change is zero.\n\nThe script forms these linear equations and reduces them with exact rational arithmetic. Rank counts the independent equations; dimension equals the number of cells minus rank. The saved nullspace basis describes all rational changes satisfying the equations. A uniform rational grid with entry equal to the line sum divided by the order supplies a solution for every prescribed rational sum, so the reported affine dimensions are not dimensions of an empty set.\n\nFor each of the 25 cell positions in each actual five-by-five square, the script selects the first basis vector that preserves that cell, clears denominators, and divides out the common integer factor. It tries adding that primitive change, then subtracting it. It stops after those two possibilities; this is not an exhaustive positive-integer enumeration.\n\n## Results\nAll twelve comparison models completed. These dimensions assume a fixed common line sum:\n\n| Order | No symmetry | Half-turn | Transpose | Both |\n| --- | --- | --- | --- | --- |\n| 3 | 2 | 0 | 1 | 0 |\n| 5 | 14 | 6 | 8 | 4 |\n| 7 | 34 | 16 | 19 | 10 |\n\nFor order five, fixing any one cell reduces the half-turn dimension from six to five. For order seven it reduces sixteen to fifteen. This is not a statement about an audited historical seven-by-seven square; order seven here is a mathematical comparison. For order three, the half-turn model already has dimension zero: with a fixed sum, it forces the uniform rational square.\n\nEvery one of the **50 fixed-cell tests** produced a different positive-integer square. Each preserves its original line sum and half-turn symmetry, and keeps the chosen entry unchanged. The complete [results and witnesses](experiments/records/magic-square-freedom/results.json) include all cases, bases, positions and input hashes.\n\n### An example you can check by hand\nKeep the center 809 in LP1-16. Add 1 to row 2, column 1 and row 4, column 5; subtract 1 from row 2, column 5 and row 4, column 1. Leave every other cell alone.\n\n```text\n 434 1311 312  278  966\n 205  812 934  280 1070\n 626  620 809  620  626\n1070  280 934  812  205\n 966  278 312 1311  434\n```\n\nEach affected row and column gains one and loses one. Neither diagonal changes. Opposite entries still agree, all entries remain positive, and every line still sums to 3301. Thus the center value 809 cannot uniquely determine the original grid under these rules. These numbers are a constructed counterexample, not a transcription correction.\n\n## Reproduce\nPython 3.12 standard library; no network, packages or AI calls. From the repository root, run:\n\n```sh\npython experiments/records/magic-square-freedom/run.py --check\npython experiments/records/magic-square-freedom/check.py\n```\n\nThe first command recomputes every case and compares the complete report. The second independently constructs the equations and checks rank modulo two large primes. It directly verifies every rational null vector and its independence. A matching modular rank gives a lower bound; the independent null vectors give the matching upper bound, certifying the rational rank. It also checks every positive-integer counterexample by summing its actual rows, columns and diagonals and comparing opposite cells.\n\nUse `--write` instead of `--check` to regenerate results. Preserve the old output if changing the plan or input transcriptions.\n\n## Retest and changes\nOn 20 October 2026, Codex recomputed the saved result and ran the separate checker. All twelve ranks, fixed-cell dimensions and fifty witnesses passed. This is computational review by the same agent; independent human review is pending. No model, bounds or criterion changed after inspecting the results.\n\n## What remains open\nThis disproves uniqueness under the stated constraints. It does not count all positive-integer solutions, impose prime patterns or distinct entries, reconstruct a historical server validator, or show which values the authors deliberately selected. A rational basis is not automatically a basis for all integer solutions: clearing each vector’s denominators is enough to construct these witnesses, but is not an integer-lattice enumeration method.\n\nAn extra requirement can shrink the space. To test one, state it as a separate variant and show exactly which constraints changed. A theory that fixes many cells, restricts values to a list, or imposes a primality pattern is not ruled out by this result.\n\nSee [the magic-square guide](#/wiki/magic-squares) for the original images and rune-value conversion, and [search space and bounds](#/wiki/search-space) for why a claim must name the space it covers.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/magic-square-freedom/article.md&quot;,
   &quot;script_sha256&quot;: &quot;83d3474caaf0cc50019244bd8010088b04c93201c1e4bbd705a5126f78aa93ce&quot;,
@@ -77627,6 +77954,430 @@
         &quot;repeated sequences&quot;,
         &quot;bigrams&quot;,
         &quot;trigrams&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="url-marker-affine-census"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;url-marker-affine-census&quot;,
+  &quot;title&quot;: &quot;Literal web markers under every fixed affine rune map&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Which literal WWW, HTTP, HTTPS and ONION rune markers occur at any within-page position under the 812 invertible GP29 affine maps?&quot;,
+  &quot;reader_question&quot;: &quot;Do fixed affine rune maps produce a literal web marker?&quot;,
+  &quot;summary&quot;: &quot;One map produces HTTPS at one position on LP2-36; HTTP is its prefix. WWW and ONION have no matches. The short marker establishes neither a URL nor confirmed plaintext.&quot;,
+  &quot;reader_finding&quot;: &quot;One five-rune stretch on LP2-36 reads HTTPS. Its HTTP prefix is the same candidate, not a second hit. WWW and ONION have no matches under the tested maps. The short marker does not establish a web address or confirm the plaintext.&quot;,
+  &quot;reader_limit&quot;: &quot;Only four fixed literal rune spellings and static affine maps were tested. No punctuation or hostname grammar was inferred, and no chance/significance claim is made. This reuses an already tested keyspace for a new marker readout.&quot;,
+  &quot;finding&quot;: &quot;Across 44,660 nonempty page/map outputs, the census finds one HTTPS window at LP2-36 rune start 226 (zero-based), with a=24,b=28, cipher indices 4,14,14,3,20. HTTP matches its prefix under the same map/start. WWW 0 and ONION 0. All 3,248 planted map/token cases pass; independent complete decoded-stream substring searches reproduce every match and field. No original page stream contains an equal-symbol triple, making literal WWW impossible under any static bijective single-rune substitution in this representation.&quot;,
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;limitations&quot;: &quot;This supports a bounded literal-marker census, not a URL, plaintext or significance claim. Separators are removed, canonical one-letter spellings fixed, and no punctuation/host grammar inferred. Equality invariance extends only the zero-WWW result to static bijective substitutions; zero-ONION remains affine-grid scope. Other key layers, transpositions, spellings and alphabets are untested.&quot;,
+  &quot;next_steps&quot;: &quot;Any URL follow-up needs a predeclared punctuation/hostname grammar, continuation and independent validation criterion before interpreting this short marker.&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;affine substitution&quot;,
+    &quot;literal markers&quot;,
+    &quot;URL crib&quot;,
+    &quot;measurement&quot;,
+    &quot;equality invariant&quot;,
+    &quot;WWW&quot;,
+    &quot;HTTP&quot;,
+    &quot;HTTPS&quot;,
+    &quot;ONION&quot;
+  ],
+  &quot;related&quot;: [
+    &quot;wholepage-affine-gp29&quot;,
+    &quot;monoalphabetic-crib-capacity&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;representation&quot;: &quot;Original archived line.raw rune order including headings; remove every nonalphabet character, including all word/line separators. Search within each page only, with no wrap or cross-page join. One rune is one position, including digraph-labelled runes.&quot;,
+    &quot;parameters&quot;: &quot;812 maps; 56 original page files, 55 rune-bearing; 12,956 runes; fixed WWW/HTTP/HTTPS/ONION; every fitting zero-based rune start; 8-rune snippet flanks.&quot;,
+    &quot;procedure&quot;: &quot;Freeze 57 input hashes; run all 812 x 4 synthetic fixed-offset plants; decode every page under P=(aC+b)mod29 and scan all overlapping token windows; independently translate complete streams and compare every match field and source location; count original equal-rune triples.&quot;,
+    &quot;exclusions&quot;: &quot;No new keyspace, original punctuation interpretation, URL/hostname syntax, language score, chance estimate, p-value, changing substitution, alternate spelling, transposition or other layer.&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/url-marker-affine-census/run.py &amp;&amp; python experiments/records/url-marker-affine-census/check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; offline. SVG is supplied as a static checked artifact.&quot;,
+    &quot;script&quot;: &quot;experiments/records/url-marker-affine-census/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;5fe155e8c01b418d29ec64336c004c09882ccbf7607b71152a68c5a19d304ea5&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-00.json&quot;,
+        &quot;sha256&quot;: &quot;858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-01.json&quot;,
+        &quot;sha256&quot;: &quot;5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-02.json&quot;,
+        &quot;sha256&quot;: &quot;53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-03.json&quot;,
+        &quot;sha256&quot;: &quot;49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-38.json&quot;,
+        &quot;sha256&quot;: &quot;96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-40.json&quot;,
+        &quot;sha256&quot;: &quot;1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-41.json&quot;,
+        &quot;sha256&quot;: &quot;f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-42.json&quot;,
+        &quot;sha256&quot;: &quot;c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-43.json&quot;,
+        &quot;sha256&quot;: &quot;1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-44.json&quot;,
+        &quot;sha256&quot;: &quot;fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-45.json&quot;,
+        &quot;sha256&quot;: &quot;c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-46.json&quot;,
+        &quot;sha256&quot;: &quot;dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-47.json&quot;,
+        &quot;sha256&quot;: &quot;0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-48.json&quot;,
+        &quot;sha256&quot;: &quot;4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-50.json&quot;,
+        &quot;sha256&quot;: &quot;16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-52.json&quot;,
+        &quot;sha256&quot;: &quot;bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-53.json&quot;,
+        &quot;sha256&quot;: &quot;699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-54.json&quot;,
+        &quot;sha256&quot;: &quot;7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-55.json&quot;,
+        &quot;sha256&quot;: &quot;0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/plan.json&quot;,
+        &quot;sha256&quot;: &quot;335c2e6829eae6ae03a54acdeb28c37f5b7e959430b889f174328824915ee1f5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/run.py&quot;,
+        &quot;sha256&quot;: &quot;5fe155e8c01b418d29ec64336c004c09882ccbf7607b71152a68c5a19d304ea5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/check.py&quot;,
+        &quot;sha256&quot;: &quot;5718f315212646063b102cb978471e2dd6e5ad29d2f596fb5669841005236a6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/article.md&quot;,
+        &quot;sha256&quot;: &quot;771502f30b05039683438fc58c3146cebf22c603166d6948ad54d932db70bdcd&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/results.json&quot;,
+        &quot;sha256&quot;: &quot;08091b34201614274124ca320c67b021c331a94ecddb33486c10199f511451be&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/matches.json&quot;,
+        &quot;sha256&quot;: &quot;df1156c8506d295f5e5059df5154b27f13c79ea5168159fd34ab49f8ff7a72d5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/independent-check.json&quot;,
+        &quot;sha256&quot;: &quot;395463b80985a538be4e7c10d1c70390d92b8d089a7828f478587a3ee5969061&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/marker-census.svg&quot;,
+        &quot;sha256&quot;: &quot;259ccee3cdc57713da2f540503e934f022ed03f4a6da273bd2d2cc90084fcf8b&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;human_review&quot;: &quot;pending&quot;,
+    &quot;kind&quot;: &quot;Fixed-affine literal-pattern measurement with all-map synthetic controls and independent full-stream census&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Separate sliding rune-index scanner and complete-string substring checker; SVG rendered and visually inspected.&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Archived GP alphabet and manuscript source index&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/sources&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Earlier complete-page affine GP29 score grid&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/experiments/wholepage-affine-gp29&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned LP2-36 image source (overall manuscript53.jpg)&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/iBotPeaches/cicada_3301/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/liber_primus/53.jpg&quot;
+    }
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/url-marker-affine-census/marker-census.svg&quot;,
+      &quot;caption&quot;: &quot;One affine map sends five cipher rune indices to HTTPS; HTTP is its prefix at the same location. The displayed neighboring rune slots are unconfirmed output, and no punctuation/host grammar is inferred. Zero equal-symbol triples rules out literal WWW under any static bijective symbol map.&quot;
+    }
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;url-marker-affine-census&quot;,
+    &quot;title&quot;: &quot;Literal web-marker compatibility&quot;,
+    &quot;question&quot;: &quot;Which fixed literal markers fit fixed affine rune decodes at any within-page position?&quot;,
+    &quot;baseline&quot;: &quot;url-marker-affine-census&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Four fixed tokens, original GP29 page streams&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;article&quot;: &quot;# Do fixed affine rune maps produce literal web markers?\n\nOne map produces one literal **HTTPS** window: LP2-36, rune start 226 using zero-based positions, under `P=(24C+28) mod 29`. **HTTP** is the prefix of that same window. WWW and ONION have no matches. These are literal marker counts, not recovered URLs: punctuation and hostname grammar were not tested.\n\nThe frozen readout covers all 812 invertible GP29 affine maps at every fitting rune position in original LP2-00 through 55. Fifty-five pages contain 12,956 runes; LP2-50 has none. Every non-rune separator is removed, headings retain their original order, and searches never cross page boundaries. One ASCII letter uses its canonical one-letter GP rune. A digraph-labelled rune is one separate rune slot, not two searchable letters. No alternative spellings or marker variants were added after counting.\n\nThe sole cipher window has indices `4,14,14,3,20`, whose GP labels are `R X X O L`. The map sends it to `8,16,16,13,15`, or `H T T P S`. The saved snippet is `W H IA TH Y M B A [HTTPS] EO M F X U EO A`; spaces here delimit rune slots, and brackets mark the tested token. They do not recover original word spacing or punctuation. The HTTP and HTTPS rows share one page, key and start and therefore are not independent candidate locations. Both rows, exact source line/column positions and their bounded snippets are retained in `matches.json`.\n\nWWW has a stronger pattern constraint. Every static bijective substitution preserves symbol equality: three decoded W runes require three identical adjacent ciphertext runes. The original page streams contain **zero equal-symbol triples**, even after separators are removed. Literal WWW is therefore incompatible with any static bijective rune substitution in these page streams, including every affine map. This does not exclude web addresses without WWW or a cipher whose symbol map changes by position. ONION&#x27;s absence is established only for the declared affine maps.\n\nAll 3,248 planted map/token cases recover their fixed-offset markers: each of 812 maps enciphers synthetic contexts containing each of the four tokens, and the scanner recovers the marker at rune offset 8. A separate implementation translates every complete page into a one-codepoint-per-rune decoded stream and performs overlapping substring searches. Its 45,472 page/map streams, including 812 empty-page streams, reproduce every match tuple, index window, source location and snippet. It independently repeats all 3,248 synthetic controls and checks the equal-triple invariant.\n\nThis is one grouped marker-readout follow-up to the existing whole-page affine GP29 English-score record. It reuses the same 812-map keyspace for a different fixed output predicate. The earlier nine opening-crib capacity checks do not supply an all-position marker census. This record makes no p-value, language-score or URL claim; other key layers, transpositions, alphabets and spellings remain untested.\n\nRun `python experiments/records/url-marker-affine-census/run.py`, then `python experiments/records/url-marker-affine-census/check.py`. The plan pins `data/index.json` and all 56 original page files before target counting. Both scripts verify those hashes and use only the Python standard library.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/url-marker-affine-census/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;5fe155e8c01b418d29ec64336c004c09882ccbf7607b71152a68c5a19d304ea5&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;fixed-substitution&quot;,
+      &quot;title&quot;: &quot;Fixed alphabet substitutions&quot;,
+      &quot;aliases&quot;: [
+        &quot;Atbash&quot;,
+        &quot;Caesar&quot;,
+        &quot;affine substitution&quot;,
+        &quot;substitution&quot;,
+        &quot;monoalphabetic&quot;,
+        &quot;affine cipher&quot;,
+        &quot;fixed substitution&quot;,
+        &quot;Caesar shifts&quot;,
+        &quot;affine maps&quot;
       ]
     }
   ]

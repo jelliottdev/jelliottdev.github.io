@@ -606,5 +606,52 @@
       "path": "experiments/records/lp2-page-pair-english/pair-scores.svg",
       "caption": "The strongest zero-offset subtraction output and its English score against complete shuffled searches."
     }
-  ]
+  ],
+  "family": {
+    "id": "lp2-page-pair-alignment",
+    "title": "Page-pair arithmetic",
+    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "baseline": "lp2-page-pair-alignment"
+  },
+  "variant": {
+    "label": "Zero-offset English scoring",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/lp2-page-pair-alignment/plan.json",
+          "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
+        ],
+        "after": [
+          "experiments/records/lp2-page-pair-english/plan.json",
+          "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
+        ],
+        "reason": "Use this variant’s frozen English-score plan and shared idea source."
+      },
+      {
+        "field": "representation",
+        "before": "Full GP29 rune streams including headings from 55 rune-bearing LP2-00–55 pages; for each pair use the first min(page lengths) runes.",
+        "after": "Canonical GP29 rune indices, including headings, from all 55 rune-bearing LP2-00–55 text transcriptions; independent check re-parses structured page JSON.",
+        "reason": "Score canonical Latin rune labels rather than only symbol concentration."
+      },
+      {
+        "field": "procedure",
+        "before": "For every unordered page pair compute aligned sum and difference modulo29, measure output IoC, and compare the global maximum to 256 seeded shared page shuffles within page-length-delimited bands that preserve every compared-prefix histogram.",
+        "after": "Align every unordered page pair at rune zero to the shorter length. Compute A+B, A−B, and B−A modulo 29; score GP Latin labels with a fixed English quadgram model. Compare best eligible stream to 256 maxima of complete shared conditional-band page-shuffle searches.",
+        "reason": "Test English scores for sum and both subtraction directions at zero offset."
+      },
+      {
+        "field": "parameters",
+        "before": "1,485 distinct pairs × 2 arithmetic operations = 2,970 outputs; 256 global-max null trials; seed 330129.",
+        "after": "1,485 pairs × three operations = 4,455 streams, of which 4,136 have ≥100 Latin quadgrams. Each of 256 controls uses Random(33017127+t). Three synthetic planted English outputs check exact arithmetic recovery and the scorer.",
+        "reason": "Use the declared three-operation grid, score-length filter and English controls."
+      },
+      {
+        "field": "exclusions",
+        "before": "Known-opening cribs, other offsets, page reversals and reorders, repeating or interrupted page keys, later positions beyond the common prefix, alternative arithmetic and language scoring.",
+        "after": "Offsets, reverse streams, repeated page keys, other operations, changed page order or transcription, later decryption layers, non-English output and historical-negative claims.",
+        "reason": "English scoring is included here; shifted alignments remain outside this variant."
+      }
+    ]
+  }
 }

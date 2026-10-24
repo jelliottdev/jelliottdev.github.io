@@ -3,7 +3,7 @@
   "status": "published",
   "title": "Direct Hill keys at LP2 page starts",
   "question": "Can any invertible direct 2×2 or 3×3 Hill matrix over the GP29 indices recover a fixed 12-rune known-reading opening at an LP2 page start?",
-  "reader_question": "Could a two- or three-rune Hill key reveal a known opening?",
+  "reader_question": "Could a single Hill-cipher key turn a page opening into a known passage?",
   "summary": "A complete matrix-feasibility check finds no direct Hill key for any of 990 fixed page-opening cases.",
   "finding": "Neither dimension two nor three admits an invertible direct block matrix for any of the 495 page-opening pairs. All 55 page starts have full ciphertext rank, so each candidate matrix is uniquely determined by its first independent blocks and fails on later blocks.",
   "limitations": "Only consecutive blocks from page origin zero, nine fixed openings, canonical GP29 arithmetic and one linear matrix per page are covered. Other plaintexts, offsets, affine rules, changing keys and transposition remain open.",
@@ -578,5 +578,7 @@
       "path": "experiments/records/direct-hill-key-feasibility/block-rule.svg",
       "caption": "A direct Hill key maps every block with the same matrix and preserves linear relations."
     }
-  ]
+  ],
+  "reader_finding": "No key works for any of the 55 tested page starts and nine known twelve-rune openings, using blocks of two or three runes. The check covers every invertible key under that fixed rule.",
+  "reader_limit": "Blocks start at the first rune and use the usual 29-rune indices. Other openings, starting positions, added offsets and keys that change between blocks remain untested."
 }

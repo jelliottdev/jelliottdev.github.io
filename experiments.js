@@ -429,10 +429,12 @@ function bindFigureCounts(figure,controls,initialize){
     const retryHadFocus=document.activeElement===retry;
     loading=true;controls.forEach(control=>control.disabled=true);retry.disabled=true;
     readout.textContent='Loading the verified counts…';
+    const controller=new AbortController();let timer;
     try{
-      const response=await fetch(figure.dataset.results);
-      if(!response.ok)throw Error();
-      const data=await response.json();
+      const data=await Promise.race([
+        (async()=>{const response=await fetch(figure.dataset.results,{signal:controller.signal});if(!response.ok)throw Error();return response.json();})(),
+        new Promise((resolve,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Figure request timed out'));},10000);})
+      ]);
       if(!figure.isConnected)return;
       initialize(data);controls.forEach(control=>control.disabled=false);
       if(retryHadFocus&&(document.activeElement===retry||document.activeElement===document.body))controls[0].focus({preventScroll:true});
@@ -444,6 +446,7 @@ function bindFigureCounts(figure,controls,initialize){
         if(retryHadFocus&&document.activeElement===document.body)retry.focus({preventScroll:true});
       }
     }finally{
+      clearTimeout(timer);
       loading=false;if(figure.isConnected)retry.disabled=false;
     }
   };
@@ -492,12 +495,19 @@ async function bindBlockBoundaryFigure(){
   });
 }
 
+function experimentFindingText(text,pages){
+  const declared=new Set(Array.isArray(pages)?pages:[]);
+  return String(text).split(/(\bLP[12]-\d{2}\b)/gi).map(part=>
+    declared.has(part.toLowerCase())?`<a href="#/reader/${part.toLowerCase()}">${esc(part)}</a>`:esc(part)
+  ).join('');
+}
+
 function experimentArticle(r,catalog=experimentRecords){
   const needsImages=r.reproduction.inputs.some(f=>/^(?:images\/.*\.(?:jpe?g|png)|exports\/sources\/cicada-2014-seventh-onion\/\d+\.jpg)$/i.test(f.path));
   const sections=[['experiment-finding','Finding'],['experiment-reproduce','Files'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   const accountFiles=[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)];
-  const findingHTML=`<p>${esc(r.reader_finding||r.finding)}</p>`;
+  const findingHTML=`<p>${experimentFindingText(r.reader_finding||r.finding,r.scope.pages)}</p>`;
   const checked=esc(r.scope_summary||`${experimentTargetSummary(r)}. ${r.bounds_note||r.scope.parameters}`);
   return head(r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.reader_question||r.question)}</p>

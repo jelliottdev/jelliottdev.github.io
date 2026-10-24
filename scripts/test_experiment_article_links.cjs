@@ -62,4 +62,14 @@ assert(mixed.includes('&lt;source&gt; &amp; exact caption'),'Captions remain esc
 assert(!mixed.includes(`src="${l7.visuals[0].path}"`));assert(mixed.includes('Previously shown'));
 assert(!context.renderExperimentMarkdown(`![Unvetted](${extra})`,[],{},[extra]).includes('<a'),'Already-shown list cannot grant image/link permission');
 assert(context.renderExperimentMarkdown('```\n![Literal]('+extra+')\n```',[extra],{},[extra]).includes('![Literal]'),'Fenced examples remain literal');
+// Readers can inspect a cited manuscript page directly from the visible finding.
+const marker=records.find(record=>record.id==='url-marker-affine-census');assert(marker);
+const markerDetail=context.experimentArticle(marker,records);
+const markerFinding=markerDetail.match(/<div class="experiment-finding">([\s\S]*?)<\/div>/)[1];
+assert(markerFinding.includes('<a href="#/reader/lp2-36">LP2-36</a>'));
+assert.equal(markerFinding.replace(/<[^>]+>/g,''),esc(marker.reader_finding));
+const guarded=context.experimentFindingText('<img src=x> LP2-36 & LP1-99',['lp2-36']);
+assert(guarded.includes('&lt;img src=x&gt;')&&guarded.includes('&amp;'));
+assert(!guarded.includes('<img')&&!guarded.includes('href="#/reader/lp1-99"'));
+assert.equal(context.experimentFindingText('LP2-36',[]),'LP2-36','Undeclared page references remain plain text');
 console.log(`PASS: vetted local/basename/cross-record/ZIP aliases, unsafe/prototype/code/image guards, detail forwarding; ${aliasCount} generated aliases across ${recordCount} records currently checked.`);

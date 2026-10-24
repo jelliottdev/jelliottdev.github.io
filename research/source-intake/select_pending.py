@@ -5,6 +5,7 @@ This is an internal batching aid, not a count of unfinished cipher experiments.
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -60,6 +61,8 @@ def main():
     if args.output:
         args.output.write_text(text, encoding='utf-8', newline='\n')
     else:
+        # Preserve source claims when Windows pipes default to a legacy encoding.
+        sys.stdout.reconfigure(encoding='utf-8')
         print(text, end='')
 
 
