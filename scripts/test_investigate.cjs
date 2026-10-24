@@ -294,7 +294,7 @@ async function mockInterpretation(options){
  P.validateCandidate(text,candidate);
  return Response.json({candidate,sourceBinding:Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))).toString('hex')});
 }
-async function waitForReview(app){for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await new Promise(resolve=>setImmediate(resolve));assert.equal(app.getSnapshot().stage,'review','Validated mocked interpretation reaches review');}
+async function waitForReview(app){await require('./mock_interpretation_response.cjs').waitForReview(app);assert.equal(app.getSnapshot().stage,'review','Validated mocked interpretation reaches review');}
 (async()=>{
  const doc=fakeDocument('?q=Fibonacci%20keys&pages=lp2-15&pages=lp2-17');
  let resolveOptional;const optional=new Promise(resolve=>{resolveOptional=resolve;});

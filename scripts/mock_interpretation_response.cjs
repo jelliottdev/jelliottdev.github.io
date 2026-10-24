@@ -17,3 +17,10 @@ module.exports.acknowledge=(doc,app)=>{
  }
  throw Error('Fixture did not finish its explicit undecided answers');
 };
+
+// WebCrypto completes on another thread; event-loop turn counts are not a clock.
+module.exports.waitForReview=async app=>{
+ const deadline=Date.now()+5000;
+ while(app.getSnapshot().stage!=='review'&&Date.now()<deadline)await new Promise(resolve=>setTimeout(resolve,1));
+ require('node:assert/strict').equal(app.getSnapshot().stage,'review','Validated mocked interpretation reaches review');
+};

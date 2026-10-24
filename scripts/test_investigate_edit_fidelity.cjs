@@ -48,7 +48,7 @@ async function appFor(text){
  }});
  await app.ready;
  doc.getElementById('idea').value=text;doc.getElementById('intake').fire('submit');
- for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await new Promise(resolve=>setImmediate(resolve));
+ await require('./mock_interpretation_response.cjs').waitForReview(app);
  require('./mock_interpretation_response.cjs').acknowledge(doc,app);
  return {doc,app};
 }

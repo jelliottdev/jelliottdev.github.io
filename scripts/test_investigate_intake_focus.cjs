@@ -85,7 +85,7 @@ async function selectionAndStage(){
  assert.equal(doc.getElementById('edit-method'),method);assert.equal(method.value,'Unsaved exact method');assert.equal(doc.activeElement,method);assert.equal(method.selectionStart,3);assert.equal(method.selectionEnd,9,'An older save cannot replace an editing textarea/caret');
  doc.getElementById('cancel-edit').fire('click');assert.equal(doc.details.find(d=>d.summary.textContent==='Your idea').open,false,'Disclosure state does not leak across an editing-stage transition');
  doc.details.find(d=>d.summary.textContent==='Your idea').open=true;doc.getElementById('back').fire('click');
- doc.getElementById('idea').value='Find readable text using Vigenere with key XYZ on LP2-17';doc.getElementById('intake').fire('submit');for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await turn();doc.getElementById('confirm').fire('click');
+ doc.getElementById('idea').value='Find readable text using Vigenere with key XYZ on LP2-17';doc.getElementById('intake').fire('submit');await require('./mock_interpretation_response.cjs').waitForReview(app);doc.getElementById('confirm').fire('click');
  assert.deepEqual(app.getSnapshot().confirmed.scope.value.pages,['lp2-17']);assert.equal(doc.details.find(d=>d.summary.textContent==='Your idea').open,false,'A different confirmed card gets its own initial disclosure state');
  app.destroy();
 }

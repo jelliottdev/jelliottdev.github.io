@@ -54,7 +54,7 @@ async function fixture(session,backend,options={}){
  }});await app.ready;return {doc,app};
 }
 async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('intake').fire('submit');
- for(let i=0;i<100&&f.app.getSnapshot().stage!=='review';i++)await turn();
+ await require('./mock_interpretation_response.cjs').waitForReview(f.app);
  require('./mock_interpretation_response.cjs').acknowledge(f.doc,f.app);
  const d=f.app.getSnapshot().draft;d.aim=C.normalizeAim(known({outcomeId:'decipher',wording:'Find readable text',detail:''}));d.method=known({operations:JSON.parse(JSON.stringify(operations))});d.scope=known({pages:['lp2-15']});
  // Re-render through the existing edit/cancel path after replacing fixture fields.
