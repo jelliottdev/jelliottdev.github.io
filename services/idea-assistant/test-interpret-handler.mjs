@@ -1,7 +1,7 @@
 /* All provider calls are local mocks. No Worker routing/deployment or network. */
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {setImmediate as tick} from 'node:timers/promises';
+import {setImmediate as tick,setTimeout as pollDelay} from 'node:timers/promises';
 import {createInterpretHandler,sourceBinding,alignQuotePositions,fromWire,WIRE_SCHEMA,WIRE_PROMPT,MODEL,LIMITS,PROMPT_VERSION} from './interpret-handler.mjs';
 import {SCHEMA,toDraft} from './interpretation.mjs';
 const ORIGIN='https://jelliottdev.github.io';
@@ -15,7 +15,9 @@ function request(text='Use the supplied rule.',options={}){
 function environment(run,limit=async()=>({success:true})){return {SITE_ORIGIN:ORIGIN,AI:{run},IDEA_LIMIT:{limit}};}
 function clock(){let current=0,next=0;const timers=new Map();return {now:()=>current,schedule:(fn,ms)=>{timers.set(++next,{fn,at:current+ms});return next;},unschedule:id=>timers.delete(id),advance(ms){current+=ms;for(const [id,t]of timers)if(t.at<=current){timers.delete(id);t.fn();}},get timerCount(){return timers.size;}};}
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
-async function until(condition){for(let i=0;i<100;i++){if(condition())return;await tick();}throw Error('Mock did not reach expected state');}
+// WebCrypto completion crosses worker threads. A fixed number of event-loop
+// turns can expire in under a millisecond on Linux before the digest settles.
+async function until(condition){const deadline=performance.now()+5000;while(performance.now()<deadline){if(condition())return;await pollDelay(1);}throw Error('Mock did not reach expected state within 5 seconds');}
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
 try{
 await test('prompt examples preserve exact evidence and demonstrate both stated and unstated aims',async()=>{

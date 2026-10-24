@@ -453,7 +453,9 @@
      try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
     }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;
-     draft=C.clarify(draft,q.id,choice,text);editing=true;message='Your explanation is kept. Edit the method wording to make the interpretation explicit.';
+     const previous={stage,draft,confirmed,result,packet,message,error};
+     const revised=C.clarify(draft,q.id,choice,text);
+     editingBackup=previous;draft=revised;editing=true;message='Your explanation is kept. Edit the method wording to make the interpretation explicit.';
     }else{draft=C.clarify(draft,q.id,choice);message='';}
     error='';render();focus(editing?'#edit-method':'#review-title');
    });

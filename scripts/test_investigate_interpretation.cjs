@@ -61,12 +61,23 @@ async function ambiguity(){
  const f=await fixture();try{f.submit(text);f.requests[0].resolve(await response(text,proposed));await until(()=>f.app.getSnapshot().stage==='review','Ambiguous candidate not reviewed');
   assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'operation');assert.equal(f.doc.getElementById('confirm'),null);answer(f,'reverse_row_runes');
   assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'word-boundary','Paraphrased ambiguity must retain existing boundary decision');assert.equal(f.requests.length,1);
+  const beforeOther=C.serialize(f.app.getSnapshot().draft);
   const explanation='Keep <whole words> in order, then apply my supplied rule.';answer(f,'other',explanation);
   const revised=f.app.getSnapshot().draft,custom=revised.unresolved.find(item=>item.kind==='custom_interpretation');assert.equal(custom.text,explanation);assert.equal(custom.question,'word-boundary');
   const before=C.serialize(revised),visible=I.rowsHTML(revised);assert(visible.includes('Keep &lt;whole words&gt; in order'));assert(!visible.includes('custom_interpretation'));assert(!visible.includes('&quot;question&quot;'));assert.equal(C.serialize(revised),before,'Readable display never removes structured constraints from the draft/binding');
   const mixed={...revised,unresolved:[{kind:'source_note',text:'Source note <literal>',provenance:{kind:'supplied',refs:['original']}},{kind:'unknown_structured_rule',text:'Keep this text',setting:{offset:7}}]};
   const fallback=I.rowsHTML(mixed);assert(fallback.includes('Source note &lt;literal&gt;'));assert(!fallback.includes('source_note'));assert(fallback.includes('unknown_structured_rule'));assert(fallback.includes('&quot;offset&quot;:7'),'Unknown structured constraints retain every safe field');
   const extended=I.rowsHTML({...revised,unresolved:[{kind:'source_note',text:'Keep this text',offset:9}]});assert(extended.includes('&quot;offset&quot;:9'),'Additional fields on a known note kind cannot disappear');
+  f.doc.getElementById('cancel-edit').fire('click');
+  assert.equal(C.serialize(f.app.getSnapshot().draft),beforeOther,'Cancel restores the exact state before the custom answer and editor opened');
+  assert(!f.doc.host.html.includes('Your explanation is kept'),'Canceled editor guidance must also disappear');
+  assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'word-boundary');
+  answer(f,'within_words');
+  assert(!f.app.getSnapshot().draft.unresolved.some(item=>item.text===explanation),'A canceled custom answer must not contradict the replacement choice');
+  assert.equal(f.app.getSnapshot().draft.rules.boundaryMode.value,'within_words');
+  assert.equal(f.app.getSnapshot().draft.source.text,text);
+  assert.equal(f.requests.length,1,'Cancel and replacement answer never reinterpret, compare or save');
+
  }finally{f.destroy();}
 }
 async function failures(){
