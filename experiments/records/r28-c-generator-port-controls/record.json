@@ -1,0 +1,123 @@
+{
+  "id": "r28-c-generator-port-controls",
+  "status": "published",
+  "title": "Finite checks of the C generator ports",
+  "question": "Does the compiled generator region match independent finite stream expectations?",
+  "reader_question": "Does the C port generate the same keys as the reference models?",
+  "summary": "Nine compiled generator modes match 144,000 finite model symbols and 8,192 archived Round 27 vector symbols exactly.",
+  "finding": "72 grid streams and 64 saved vectors pass symbol-for-symbol C parity; a separate checker independently constructs all 152,192 expected symbols.",
+  "limitations": "Finite generator-port control only. No original PHP/glibc/Python 2 runtime, source scored decoder gates, native full engine, full seed space or LP2 manuscript search.",
+  "next_steps": "Recover the exact language panel and establish platform compatibility before rerunning scored production-engine controls.",
+  "outcome": "supported",
+  "tags": [
+    "generator control",
+    "C port",
+    "MT19937",
+    "PHP",
+    "glibc",
+    "finite parity"
+  ],
+  "related": [
+    "public-prng-seed-sweep",
+    "py27-prior-front-opening-cribs",
+    "typed-seed-random-opening-cribs",
+    "c2-extension-generator-controls"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/r28-c-generator-port-controls/source-manifest.json"
+    ],
+    "representation": "GP29 generator outputs; finite model streams and archived vectors.",
+    "procedure": "Compile unchanged source generator region; compare every symbol against source models and independently built expectations.",
+    "parameters": "9 modes x 8 seeds x 2000 symbols; 64 archived random29 vectors x 128 symbols.",
+    "exclusions": "Language-panel scores, plant/decoder recovery, native runtime parity, all LP2 searches and fullspace coverage."
+  },
+  "review": {
+    "kind": "Finite generator-port control",
+    "reviewer": "Separate standard-library MT and historical PHP / glibc recurrence checker",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 28 generator C source",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L4/grind28.c",
+      "note": "Generator region extracted unchanged; full source bundled under MIT."
+    }
+  ],
+  "family": {
+    "id": "r28-c-generator-port-controls",
+    "title": "C generator port controls",
+    "question": "Are finite output streams preserved across generator implementations?",
+    "baseline": "r28-c-generator-port-controls"
+  },
+  "variant": {
+    "label": "Nine modes and archived R27 vectors",
+    "changes": []
+  },
+  "reproduction": {
+    "command": "python experiments/records/r28-c-generator-port-controls/run.py && python experiments/records/r28-c-generator-port-controls/check.py && python experiments/records/r28-c-generator-port-controls/plot.py --check",
+    "environment": "Python 3 standard library and GCC; no network; temporary portable harness; one process at a time.",
+    "script": "experiments/records/r28-c-generator-port-controls/run.py",
+    "script_sha256": "e2217db501306c3f5eb4139c9fc90c276b66238fbad77953f3340e1aa8ad7a07",
+    "inputs": [
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/.gitattributes",
+        "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/article.md",
+        "sha256": "b76bc9f5995fae444f0198c997ea2e6a026e1408213b356f796c211e46fd5038"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/check.py",
+        "sha256": "d1a70981dc8bdbd6cb53a483e5e7f80fe2e7208654b417e9ca881fa9a6614358"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/plot.py",
+        "sha256": "6006c84e19f0cf9484c7c6982e0be98c1dfbf5147a753ad35ccf274b4cf44d82"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/run.py",
+        "sha256": "e2217db501306c3f5eb4139c9fc90c276b66238fbad77953f3340e1aa8ad7a07"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/source/gen28.py",
+        "sha256": "04a98ba0710c02957c2a6e76c83162fc6d8b0879a43686642eff4c3f377e592f"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/source/gen_py27.py",
+        "sha256": "01217361c1d873046bb8d85a2030d18c046f49365a172313e84f30f198a1190d"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/source/grind28.c",
+        "sha256": "9fe9243ea26b170c7ad268baa71eff8afc1529301a87bea17de25b741b729d1e"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/source/vectors.json",
+        "sha256": "d4ff48ea7882c55fb3603da424d11cdc4497f5edd9b17c97722611d34cddf779"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/source-manifest.json",
+        "sha256": "3e0bb2302eda384e76642da1ce3ba6ed471374b17803eb32facf52e59f6fbcca"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/port-checks.svg",
+        "sha256": "6b04c3c50e80187cce3e1097918d08bc526f2b09453c31e1db2d6f2692a88603"
+      },
+      {
+        "path": "experiments/records/r28-c-generator-port-controls/results.json",
+        "sha256": "6b267d577363f80b9b3a7b44d5e5ba8e67fbdb58347c91066cf943a71a285d26"
+      }
+    ]
+  },
+  "reader_finding": "The C implementations produced the same output as the reference models in every comparison: 152,192 symbols checked.",
+  "reader_limit": "This verifies these generator implementations on a fixed test set. It does not rerun the seed search or recover manuscript text."
+}

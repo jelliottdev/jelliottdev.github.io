@@ -24,4 +24,13 @@ assert(html.includes(esc(fixture.reader_finding)));assert(html.includes(esc(fixt
 const css=fs.readFileSync(path.join(root,'style.css'),'utf8');
 const headingRule=css.match(/\.experiment-result h3 a\{([^}]+)\}/)?.[1]||'';
 assert(headingRule.includes('display:block'));assert(headingRule.includes('min-height:44px'));assert(headingRule.includes('overflow-wrap:anywhere'));
+// The form's ID selector used to override the action group's 44px rule with 42px.
+// Compare the actual competing declarations rather than accepting a lower-priority match.
+const actionRules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].flatMap((match,index)=>
+ match[1].split(',').map(selector=>({selector:selector.trim(),body:match[2],index}))
+).filter(rule=>['#experiment-form button','.idea-actions button'].includes(rule.selector)&&/min-height:/.test(rule.body));
+actionRules.sort((a,b)=>Number(b.selector.includes('#'))-Number(a.selector.includes('#'))||b.index-a.index);
+assert.equal(actionRules[0].body.match(/min-height:([^;}]*)/)?.[1],'44px','The highest-priority checker action rule must retain the intended touch target');
+const indexLinkRule=css.match(/\.idea-index-link a\{([^}]+)\}/)?.[1]||'';
+assert(indexLinkRule.includes('display:inline-flex')&&indexLinkRule.includes('min-height:44px'),'The directory link matches the reciprocal research action target');
 console.log(`PASS: ${records.length} cards each expose one meaningful record link, visible outcome/finding/curated limit/scope, escaped text and a source-defined 44px wrapping title target. No rendered layout claim.`);

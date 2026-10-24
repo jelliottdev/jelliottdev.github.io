@@ -1,0 +1,14 @@
+import argparse
+from pathlib import Path
+HERE=Path(__file__).resolve().parent
+SVG='''<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320" role="img" aria-labelledby="title desc">
+<title id="title">Which runes do the fold comparisons check?</title><desc id="desc">For five folds over 240 runes, the comparison regions are overlapping tails after positions 48, 96, 144 and 192. The final fold is omitted and the first 48 reference positions are never compared.</desc>
+<rect width="600" height="320" fill="white"/><g font-family="Arial,sans-serif" fill="#163047">
+<text x="24" y="35" font-size="23">Five-fold helper: overlapping right tails</text>
+<text x="24" y="72" font-size="20">0</text><text x="122" y="72" font-size="20">48</text><text x="224" y="72" font-size="20">96</text><text x="321" y="72" font-size="20">144</text><text x="422" y="72" font-size="20">192</text><text x="529" y="72" font-size="20">240</text>
+<g fill="#3e7c6d"><rect x="131" y="92" width="416" height="24"/><rect x="235" y="132" width="312" height="24"/><rect x="339" y="172" width="208" height="24"/><rect x="443" y="212" width="104" height="24"/></g>
+<text x="24" y="275" font-size="20">Four tail tests; final fold omitted.</text><text x="24" y="304" font-size="20">First 48 reference indices never compared.</text></g></svg>'''
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args();dest=HERE/'fold-domains.svg'
+    if a.check:assert dest.read_text(encoding='utf-8')==SVG;print('PASS: plot current')
+    else:dest.write_text(SVG,encoding='utf-8',newline='\n')

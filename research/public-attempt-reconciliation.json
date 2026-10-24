@@ -11,19 +11,19 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 149,
+    "source_entries_reviewed": 172,
     "reproduced_subclaim": 9,
-    "partial": 90,
+    "partial": 110,
     "unsupported_source_verdict": 22,
-    "blocked_exact_replay": 17,
-    "source_proposal_only": 5,
+    "blocked_exact_replay": 19,
+    "source_proposal_only": 7,
     "failed_source_gate": 5,
-    "source_entries_with_published_record_link": 67,
+    "source_entries_with_published_record_link": 74,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
       "complete-executed-grid": 23,
-      "partial-execution": 17,
+      "partial-execution": 21,
       "replayed-with-invalid-gate": 6
     },
     "batch20_dispositions": {
@@ -43,6 +43,21 @@
       "already_reviewed_entries_revisited": 7,
       "new_public_records": 5,
       "note": "Source IDs are not distinct experiments. Generator controls and saved-log checks do not close their target campaigns."
+    },
+    "dated_and_generator_followup_cohort": {
+      "initial_reviews_added": 9,
+      "new_public_records": 2,
+      "note": "Source entries can contain unfinished subclaims; finite generator controls and input inventories do not close full target campaigns."
+    },
+    "residual_source_cohort": {
+      "initial_reviews_added": 7,
+      "new_public_records": 0,
+      "note": "Technical replay and documentary/maintenance review; no new cipher exclusion."
+    },
+    "restated_coverage_cohort": {
+      "initial_reviews_added": 7,
+      "new_public_records": 1,
+      "note": "Finite controls and coverage review; source campaigns remain open where inputs or calibrated gates are missing."
     }
   },
   "entries": [
@@ -3518,7 +3533,7 @@
     {
       "source_id": "R20-SMARS-SCAFFOLDED",
       "source_claim": "The pad is one of the 679 held Marsaglia CDROM physical-randomness units (~21 CPU-h). This is the round's HONEST CONTROL: real physical randomness, so a survival number here would mean what we think it means.",
-      "status": "blocked",
+      "status": "blocked-exact-replay",
       "record_links": [],
       "source_evidence": [
         "analysis/round20/S-MARS/PREREG.md",
@@ -3535,6 +3550,469 @@
         "77 checkpoint JSONs absent",
         "Physical ISO/BITS files absent",
         "Exact Welsh corpus/panel absent"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "G-09",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/dated-artifact-cohort-2026-10-23/plan.json",
+        "research/source-intake/dated-artifact-cohort-2026-10-23/receipt.json",
+        "research/source-intake/dated-artifact-cohort-2026-10-23/g09-prior-replay.json"
+      ],
+      "verified_subclaim": "Unchanged historical builder reproduces all archived fields except generated_utc: 59 anchors, 433 deduplicated seeds, tiers 54/107/260/12. Independent nine-form arithmetic reconstructs exactly the same seed set.",
+      "unresolved_parts": [
+        "No candidate was tried against an RNG or LP2 target.",
+        "Archived MESSAGES and 228-path signature table are a different snapshot from the independently checked 133-path G02 corpus. Source verified labels do not authenticate release dates.",
+        "Post times, file mtimes and new timeline sources remain outside this finite list."
+      ],
+      "readiness": "Completed finite builder replay; seed-prior construction only, not cipher exclusion.",
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "Seed candidate builder only; no generator/target cells."
+      },
+      "source_claim": "corpus/GAPS.md G-09: post times, commit times, file mtimes and PGP signature timestamps exist scattered across sources but no timeline dataset has ever been assembled, and the signature timestamps are recorded in prose only. L8 extension: those timestamps are also a PRIOR over RNG seeds. Round 8 enumerated every unix second of 2011-2015 UNIFORMLY for 10 generators, but seeds are not uniform — a signature time or key-creation time is exactly the kind of number a person types into srand().",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R24-C8-DATE-INDEXED-PAD",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-c8-timestamp-join",
+          "covered_subclaim": "Unchanged Step 0 plus independent packet/section extraction: all eight signature blocks map to LP1, none to LP2 textual inputs, seven distinct seconds. No per-target-page join available in these texts."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/dated-artifact-cohort-2026-10-23/plan.json",
+        "research/source-intake/dated-artifact-cohort-2026-10-23/receipt.json",
+        "experiments/records/dukotah-c8-timestamp-join/independent-check.json"
+      ],
+      "unresolved_parts": [
+        "No replay of 630 archived decoder rows or source positive control: beacon XML absent from pinned cache and HITFN depends on gated I2 stack.",
+        "No independently justified timestamp-to-target join; signer clock values are not authenticated release dates.",
+        "Runic file has 57 segments; LP2 Markdown uses 24 grouped headings and page labels through 57. These inventories do not prove absence across all historical artifacts."
+      ],
+      "readiness": "Step 0 replay complete. Main cryptanalytic campaign remains unavailable from this pin; no fresh negative claim.",
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "Input/timestamp extraction only; zero pad-decoder cells."
+      },
+      "source_claim": "A public dated random source (NIST Randomness Beacon v1 / dated block headers) is the OTP, JOINED to each page by that page's own PGP signature CREATION TIME -- a join key R17-PUBLIC-PAD never used (it swept beacon/blockchain as undated contiguous offsets only). Reduced-scope C8 survivor of Round-24 Gate-#1; needs a bounded external fetch, post-2013-09 pages only.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "H-01",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/dated-artifact-cohort-2026-10-23/availability.json",
+        "research/source-intake/dated-artifact-cohort-2026-10-23/source/liber-primus/analysis/OSINT-SWEEP-2026-07-27.md",
+        "research/source-intake/dated-artifact-cohort-2026-10-23/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/MANIFEST.md"
+      ],
+      "verified_subclaim": "Documentary review only. Later source manifest reports a single footer Port 5243 rather than a reproducible four-port sequence. Pinned harvest retains 17 files (READMEs, decoded message, three 256-byte blobs) and no .html/.htm files.",
+      "unresolved_parts": [
+        "Raw per-onion capture bytes and ordered source table are unavailable in this retained harvest.",
+        "Do not turn the source one-point observation into a channel exclusion, or infer anything about live hosts."
+      ],
+      "readiness": "Blocked for exact historical HTTP/header extraction; no network lookup or scan performed.",
+      "source_claim": "Per-onion HTTP/server-status anomalies: ports 5240/5241/5242/5243, mock uptime \"1 days 0 hours 33 minutes 14 seconds\" → 1033, leaked host `li676-224.members.linode.com` / 106.186.123.224, and `<head>`/`</head>` malformation varying per onion (\"theorized to bind the onions together\"). Listed as item 6 and as \"still genuinely open\"; never resolved as a channel. Raw HTML is held locally.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-09",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-h02-raw-whitespace-census",
+          "covered_subclaim": "Existing strict raw clear-signed-body preservation census only; excludes absent original three-Markdown history and other whitespace encodings."
+        },
+        {
+          "record_id": "dukotah-h03-onion-cookie-xor",
+          "covered_subclaim": "Existing 64 hex-decoded cookie XOR cases against four 256-byte objects only. These are not the missing T2/folly bytes."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/dated-artifact-cohort-2026-10-23/availability.json",
+        "research/source-intake/dated-artifact-cohort-2026-10-23/source/liber-primus/analysis/OSINT-SWEEP-2026-07-27.md"
+      ],
+      "verified_subclaim": "Bundled residue reviewed by subclaim. Existing whitespace and cookie/blob controls supply bounded evidence without closing the omnibus source entry. H01 header metadata is documentary only.",
+      "unresolved_parts": [
+        "Exact physical folly.bin and extracts/T2.bin absent at known source paths; high-entropy descriptions do not reconstruct their bytes.",
+        "Unconfirmed seven-images endpoint and missing Columbus share require preserved documentary evidence; no new confirmation or recovery.",
+        "Existing audio spectrum checks describe only their recordings and frequencies, and are not evidence on this entry."
+      ],
+      "readiness": "Partially mapped to established controls; unresolved physical bytes and historical claims remain open, not negatives.",
+      "source_claim": "OSINT residue — T2/T3 blobs, items 6–9",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-03",
+      "source_claim": "Generator families Round 8 names as untested: PHP `mt_rand` (distinct tempering), .NET subtractive, xorshift, RC4/ARC4, Java's full 48-bit space, MT `init_by_array` multi-word seeds, `/dev/urandom` (declared unattackable).",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "r28-c-generator-port-controls",
+          "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+        }
+      ],
+      "source_evidence": [
+        "research/DEAD_ENDS.md",
+        "liber-primus/analysis/round28/L4/gen28.py",
+        "research/source-intake/generator-tail-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Historical open-generator list is a scope reminder. Finite compiled ports now match nine models; this supplies actual C parity for PHP/glibc/Py27 streams, not seed-space coverage.",
+      "unresolved_parts": [
+        "Full PHP, .NET subtractive, xorshift, RC4, Java 48-bit and multiword init_by_array searches remain outside this replay. /dev/urandom has no bounded seed search defined here."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R27-CPORT-MT32-FULLSWEEP",
+      "source_claim": "The LP2 0-54 pad was derived by a Python-2.7 script as random.seed(w); int(random.random()*29)... for some 32-bit w (init_by_array([w]), reducer random29, offset 0), applied under a rejection-loop encipherment representable as keyskip2 'pair' (S1) or keyskip1 'exact' (S2). R25 covered 0.5015% of this space in pure Python and parked; R27 ports the stage-A screen to C (~70x) and finishes the space -- the only internally-runnable verdict-changer left after 26 rounds.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "r28-c-generator-port-controls",
+          "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round27/P0-spec/vectors.json",
+        "liber-primus/analysis/round27/P1-engine/run/STATUS.json",
+        "liber-primus/handoff/PARKED-SWEEPS.md",
+        "research/source-intake/generator-tail-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Compiled generator region matches all 64 archived ks128 vectors exactly. Saved STATUS arithmetic independently sums to 1,895,728,884 S2 seeds (44.1383776%); S1 completion is source-reported only.",
+      "unresolved_parts": [
+        "No full-space sweep or scored C V1/V2/drill rerun. Exact panel input missing; full native engine build also fails on fsync/readlink. S2 FLAG vs zero hit-counter inconsistency remains unresolved and is not an LP2 survivor verdict."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R28-L4-UNSWEPT-GENERATORS-QUEUE",
+      "source_claim": "LP2 0-54's pad comes from a 32-bit-seeded generator the census left open: PHP mt_rand (canonical MT_RAND_MT19937 AND the pre-7.1 MT_RAND_PHP broken twist, x mod/badscaling reductions -- CENSUS section C's highest-prior open generator, P-4 blocker now gone), glibc random()%29 gen=0 (the R19-G3-CORRECTION open row, upgraded from the rigid decoder to the validated beam), and the R27-S3 cells (grb5_mod/grb5_rej/shuffle29 x offsets {1,3,5,7,13}, labelled completeness rituals) -- under the exact/pair relations, full 2^32 per cell.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "r28-c-generator-port-controls",
+          "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round28/L4/queued_cells.json",
+        "liber-primus/analysis/round28/L4/run/ORPHANED-PREMATURE-RUN.txt",
+        "liber-primus/analysis/round28/L4/receipts/genval.json",
+        "research/source-intake/generator-tail-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "72 finite compiled generator/reducer streams match 2,000 Python-model symbols each, independently rechecked. Queue has 25 cells. Saved orphan status worker sum is 27,261,684; authoritative queue coverage remains zero per its explicit marker.",
+      "unresolved_parts": [
+        "No native PHP/glibc runtime replay, scored gate replay, queue execution or sanctioned target coverage. Saved gate booleans do not constitute local control-recovery measurements."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R26-D-REDTEAM",
+      "source_claim": "Adversarial audit of Round 26 A/B/C: refute every survivor, recompute coverage x power from raw rows, verify no silent re-run / no FP-inflation / no bare-closed claim.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round26/D/RESULTS.md",
+        "research/source-intake/generator-tail-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "The audit is a review of A/B/C, not another negative cipher experiment. It explicitly identifies 228 integer-seed rows at offset zero contrary to A prereg exclusion and warns A coverage was interim.",
+      "unresolved_parts": [
+        "No new source panel adjudication or source recovery-score recomputation; existing r26-derived-generators-opening-cribs and other records cover distinct narrower tests. Audit verdict not counted as an LP2 negative."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R28-R-REDTEAM",
+      "source_claim": "Adversarial audit (refute-by-default, doctrine R6) of Round 28, two passes: pass 1 (T1 ledger hygiene R12-A1/P-3, T2 S1-CLOSEOUT recomputation, T3 L3 i386-subsumption tested empirically, T4 PREREG-vs-code drift L1-L5, T5 S2 non-interference); pass 2 (R-redteam/RESULTS.md): recompute every lane headline from raw artifacts, verify the 25-cell queue + chainer cannot miss or fabricate a hit, verify S2 undisturbed.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round28/R/RESULTS.md",
+        "liber-primus/analysis/round28/R-redteam/RESULTS.md",
+        "liber-primus/handoff/PARKED-SWEEPS.md",
+        "research/source-intake/generator-tail-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "First pass records hygiene defects and about 43% S2 throughput degradation. Second pass reports 25 gated cells and an orphan queue launch. Later PARKED-SWEEPS explicitly supersedes its dated live-process prose.",
+      "unresolved_parts": [
+        "Finite C generator parity does not independently verify language scores, gate recovery, chainer safety or live process history. No audit is counted as a new cipher negative."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I-01",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/key-technical-replay.json"
+      ],
+      "verified_subclaim": "The unchanged compare_keys.py runs over retained public key exports with an explicit alias for its missing old canonical-key path. Fifteen-field comparisons, verdict inputs, INDECISIVE verdict and all four base-rate rows exactly match the archived result.",
+      "unresolved_parts": [
+        "Packet listing does not validate revocation signatures; source key-date prose is not newly authenticated.",
+        "Canonical key bytes use the separately G02-verified retained public key rather than the missing source path; exact old-file replay remains unavailable.",
+        "Preference/default agreement cannot establish exact toolchain, implementation version, common operator or identity. No matched Jan2012-frozen key population was obtained; four later/current release keys are not a discriminating era base rate.",
+        "Source factory-default labels and era-software source-code attribution are archival; the GnuPG release tree was not independently fetched or checked here."
+      ],
+      "readiness": "Finite offline packet-field extraction replay complete with declared path adaptation; no person identification or new network retrieval.",
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "Public-key field comparison only, with explicit canonical-key path alias."
+      },
+      "source_claim": "REFRAMED to something falsifiable. The register's question ('who is mruzuki') is not testable from public sources and is out of scope. The testable question: was the `mruzuki` / `cicadeur` key (02BD208AFB8AFF75, mruzuki@gmail.com, created 2012-01-12, self-revoked 2012-01-22) produced by the SAME OpenPGP toolchain as 3301's 7A35090F? Same-toolchain is a real, checkable technical claim; a name is not.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I-02",
+      "status": "source-proposal-only",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/source/liber-primus/analysis/attribution/CAMPAIGN-XIX-WITNESSES.md"
+      ],
+      "verified_subclaim": "Pinned witness-campaign document describes potential later private forum/contact leads; no technical source program, preserved later-forum corpus or testable pad claim is supplied for this entry.",
+      "unresolved_parts": [
+        "A private-pad possibility is not supported or excluded by the absence of a public record.",
+        "Source statements about witness knowledge, outreach and response history were not independently validated."
+      ],
+      "readiness": "Documentary proposal reviewed only; no contacts, private forum access, or identity investigation performed.",
+      "source_claim": "A separate 2013/2014 winner forum — closer to the LP than the timeline-eliminated 2012 forum, and the only insider space that could have received a privately-delivered pad. Campaign XIX flags it as an open thread; nobody looked. Adjacent: the un-corroborated 2013-winner claimant \"Nox Populi\" (reachable, DEF CON 26 speaker) was rated \"worth a low-priority contact\" and never contacted; the 2026-07-27 Wanner outreach shows no logged response.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I-03",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/archive-technical-replay.json"
+      ],
+      "verified_subclaim": "Independent Python reproduction of the source grep predicate matches all 16 fixed technical-pattern line-count totals over eight held monthly gzip archives; two personal-handle patterns are intentionally excluded. Held months are Aug2011 and Jun-Dec2013.",
+      "unresolved_parts": [
+        "Only one held month is pre-Jan2012; these files do not cover the 13-month window. Empty/unreachable external archive responses are not searched-and-clear negatives.",
+        "No new date-attested post, bitcointalk full-text index search or public archive retrieval was performed.",
+        "Saved cpunks_export records 20-byte/zero-message response objects; metadata does not establish historical absence."
+      ],
+      "readiness": "Finite held-byte technical count replay complete; broader pre-disclosure search remains unexecuted here.",
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "16 technical regex line-count predicates on eight held gzip files, excluding two handle terms."
+      },
+      "source_claim": "Pre-disclosure search of archived cypherpunks / metzdowd / bitcointalk posts 2011-2013 — Campaign VIII's own #1 open thread, 'unresolved only because the archives are thin, not because it was cleared'. Never executed as a search. A dated, archive-attested post referencing a Cicada-specific element BEFORE its public disclosure date would be the strongest external evidence in the whole case.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I-04",
+      "status": "source-proposal-only",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/source/liber-primus/analysis/FRESHNESS-2026-07-29.md"
+      ],
+      "verified_subclaim": "The pinned freshness note proposes reading a public court docket; it supplies a documentary pointer rather than an executable cryptanalytic method or an archived full-docket evidence corpus.",
+      "unresolved_parts": [
+        "No full docket or admissions were fetched or independently validated.",
+        "The source freshness note is historical and cannot establish current litigation state or puzzle authorship."
+      ],
+      "readiness": "Public-document proposal reviewed only; no legal conclusions or identity inference, no new network requests.",
+      "source_claim": "Pull the full Schoenberger docket (Michigan Court of Claims 25-000045-MM / 25-000186-MZ, consolidated 26-000013-mz) for admissions. Named as an \"optional low-cost operator step\"; only the Dec-4-2025 consolidation order was ever read.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-14",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "lp2-page-pair-alignment",
+          "covered_subclaim": "Existing 2970 zero-offset common-prefix pair sums/differences with global shuffled-max IoC control only; excludes shifted/all-offset S1."
+        },
+        {
+          "record_id": "lp2-page-pair-english",
+          "covered_subclaim": "Existing 4455 zero-offset common-prefix arithmetic streams with English scoring only; excludes shifted/all-offset S1."
+        }
+      ],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/document-scope-check.json"
+      ],
+      "verified_subclaim": "AUTO_EVOLUTION contains S1/S2/S3 roadmap proposals beneath Epoch5 as a next-epoch plan, not evidence of Epoch6 execution. Existing page-pair records cover explicit zero-offset subsets only.",
+      "unresolved_parts": [
+        "S1 all-offset superimposition remains outside the linked zero-offset records.",
+        "S2 fixed-position statistical probe lacks a frozen family/null specification and verified matching run.",
+        "S3 history-dependent phi(prime) extension is not the uninterrupted consecutive-integer totient-opening method; its history rule is unspecified."
+      ],
+      "readiness": "Roadmap subclaims mapped only; no invented failed experiment or claim of complete S1/S2/S3 execution.",
+      "source_claim": "AUTO_EVOLUTION epoch-6 SEEK roadmap (S1/S2/S3) never executed",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-17",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/document-scope-check.json"
+      ],
+      "verified_subclaim": "The exact pinned research/LEDGER.md still declares five logged tests, while the same file includes a Round8 heading and a five-track executed-results table after its Round1-7 sections. The running tally is not a reconciled whole-history count.",
+      "unresolved_parts": [
+        "Executed tracks, families, parameter cells and statistically independent trials are different units; adding five tracks to five tests would invent a global multiplicity count.",
+        "Round9 results require a per-test selection-family reconciliation before correcting a survivor threshold."
+      ],
+      "readiness": "Maintenance defect documented; no cipher outcome or replacement universal correction claimed.",
+      "source_claim": "Multiple-comparisons tally frozen at 5 across Rounds 8–9",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-18",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/residual-source-cohort-2026-10-23/plan.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/receipt.json",
+        "research/source-intake/residual-source-cohort-2026-10-23/document-scope-check.json"
+      ],
+      "verified_subclaim": "A declared four-document local navigation scan finds three Round9 mentions in PICKUP-HERE.md, including the Round9/10 section at line127; none under the same explicit pattern in root README, liber-primus/README or SOLVERS-DOSSIER. A blanket current invisibility claim is not established.",
+      "unresolved_parts": [
+        "The source entry names only README.md and does not identify its alleged original four-document set; this audit explicitly names its own four.",
+        "Navigation mentions do not verify underlying Round9 execution or outcomes."
+      ],
+      "readiness": "Navigation-only maintenance review; no public experiment record or shared navigation edit required.",
+      "source_claim": "Round 9 is invisible to all four navigation docs",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "RESTATE-B-21-ROUND8-BAR",
+      "source_claim": "B-21's recorded coverage claims more than its evidence supports, and the unstated conditions under which its negative holds can be measured and written down.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/restated-coverage-cohort-2026-10-23/arithmetic.json",
+        "liber-primus/benchmark/null.py",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Executed unchanged AST-selected threshold_for with exact frozen constants; independent formula agrees at ten trial counts. Floor crossover N=312848649.4793953; first integer above is312848650. At2.52e9 bar=-5.3487436375, above -5.5.",
+      "unresolved_parts": [
+        "This checks the conditional source tail model, not calibration validity at Round8 scale. Round8 best score -13.13 is on a different scale and cannot be compared directly. No2.52-billion-decode replay."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "RESTATE-R16-KDF",
+      "source_claim": "R16-KDF's recorded coverage claims more than its evidence supports, and the unstated conditions under which its negative holds can be measured and written down.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/restated-coverage-cohort-2026-10-23/existing-kdf-check.json",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/kdf-live-k1.txt",
+        "experiments/records/public-kdf-seed-stretch/record.json",
+        "experiments/records/l7-score-recovery-controls/record.json",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Existing public-kdf-seed-stretch finite archive checker passes; live source K1 correctly seeded beam vs wrong-key/rigid/shuffled controls passes (-4.170 vs-7.349 wrong, .989 character recovery). Original692064 StageA is already published and is not rerun or recounted as a new campaign.",
+      "unresolved_parts": [
+        "Restated register-power and stored-top50 extensions are not a new complete calibrated panel replay; exact Welsh/model inputs remain unavailable. Character recovery is source K1 metric and is not relabeled rune recovery. Other transition rules remain untested."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "RESTATE-R16-PRNG",
+      "source_claim": "R16-PRNG's recorded coverage claims more than its evidence supports, and the unstated conditions under which its negative holds can be measured and written down.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/restated-coverage-cohort-2026-10-23/existing-prng-check.json",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/prng-live-control.txt",
+        "experiments/records/public-prng-seed-sweep/record.json",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Existing archive checker passes; executed seven-generator source validation plus actual planted control (first validated generator) and correct/wrong-key source beam. Correct seed3301 recovery1.0 score-4.154959629744731; wrong seed12345 score-6.935, control PASS. Existing52556-decode record is preserved, not rerun as new coverage.",
+      "unresolved_parts": [
+        "Self-consistency validation does not establish native-runtime generator parity. Source language-register-power/top20 extensions and fullspace generator families remain outside this finite rerun."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "RESTATE-R17-PUBLIC-PAD",
+      "source_claim": "R17-PUBLIC-PAD's recorded coverage claims more than its evidence supports, and the unstated conditions under which its negative holds can be measured and written down.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/restated-coverage-cohort-2026-10-23/existing-l7-check.txt",
+        "liber-primus/analysis/round17/lib_padsweep.py",
+        "experiments/records/l7-score-recovery-controls/record.json",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Source lib_padsweep explicitly selects offsets using English rune trigrams before English beam escalation. Its control measures English prefilter survival only. Existing l7-score-recovery-controls independent checker passes its stored register/mechanism/null traces, supporting a narrower decoder control without reconstructing Round17 offsets.",
+      "unresolved_parts": [
+        "No14,522,916,046-offset campaign or original trained prefilter replay; no non-English prefilter survival measured. The source builder silently skips missing training files, so it was not run with an incomplete corpus. Constant-key runs beyond8 and paired rejection are separate decoder-control scopes."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R21-L1-SEAL",
+      "source_claim": "The hitfn20 real-mode (no-oracle) clause-3 held-out proxy is a single 1/4->3/4 cut that catches only 15/45 (33%) of correct-key EN_NOVOWEL bar-clearing hallucinations (SYNTHESIS 8.4 FOUND-ERROR). A strengthened proxy that attributes the key phase on each of k disjoint contiguous folds, re-decodes the held-out complement under the same key, and aggregates fold-level rune-index self-consistency by an agreement rule can SEAL the gate: >=0.90 catch on the planted-45 AND on a fresh held-out surrogate, while keeping genuine-decode false-reject <=0.10. No plaintext oracle is used.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "r21-fold-tail-scope-controls",
+          "covered_subclaim": "Six fresh known-key plants verify executable fold-helper comparison domains only; excludes unavailable language panel and original catch surface."
+        }
+      ],
+      "source_evidence": [
+        "experiments/records/r21-fold-tail-scope-controls/record.json",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/arithmetic.json",
+        "experiments/records/r21-l1-seal-blocked/INTERNAL-NOTE.md",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Fresh actual-source helper control on six new known-key plants verifies k-1 overlapping right tails, finalfold omitted and firstfold reference exclusion; all six full decodes recovery1.0. Existing saved15-cell arithmetic also independently recomputed: winner k5/min36/45,0/20; heldout54/66 and4/24 miss seal.",
+      "unresolved_parts": [
+        "Missing exact nine-register model and Welsh prevent audit_catch.py replay. The new helper test does not reproduce45 hallucinations, heldout surrogate, panel scores or source catch rate and is not a complete no-oracle gate test."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R22-R-REDTEAM",
+      "source_claim": "Standing red-team audit (doctrine R6) of Round-22 lanes A/B/C/D: refute, don't confirm. Target = the repository's own current Round-22 claims. Reports FOUND-ERROR or NO-ERROR-FOUND, never 'confirmed'.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/restated-coverage-cohort-2026-10-23/arithmetic.json",
+        "liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json",
+        "liber-primus/analysis/round22/R-redteam/RESULTS.md",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Recounted all72 raw geometry ledger rows: bbox_fill3,symmetry2,components1, other statistics0; zero per-row hit-list mismatches; zero saved flags. Independently recomputed P>=6 under Poisson2.88 and Binomial288,.01.",
+      "unresolved_parts": [
+        "Saved p-values were not regenerated from geometry/null campaigns. Distribution tails assume named model, not proven detector independence. R22A/C/D anti-repeat and control reports remain source evidence; audit is not a new cipher negative."
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R30-D1-LEDGER-AUDIT",
+      "source_claim": "The central LEDGER.json falsely claims a sweep at a scope it never executed (R29-L1 found one such false belief).",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/restated-coverage-cohort-2026-10-23/source-ledger-validation.txt",
+        "liber-primus/analysis/round30/D1-ledger-audit/findings.json",
+        "liber-primus/analysis/handoff/validate_ledger.py",
+        "research/source-intake/restated-coverage-cohort-2026-10-23/receipt.json"
+      ],
+      "audit_note": "Actually ran pinned validate_ledger.py on current pinned172-entry ledger: errors0, unsound negatives0. D1 findings describes an older162-entry audit snapshot; current warnings18 differ from its saved10, so saved counts are not presented as current.",
+      "unresolved_parts": [
+        "Validator schema/control flags do not establish campaign coverage or independently rerun any sweep. D1 B10/R29 discharging-tool claims are not equated to an OutGuess0.2 runtime replay; dedicated earlier b10-runtime gate handles that distinction. Audit sampled claims, not an exhaustive proof."
       ],
       "whole_entry_coverage_verified": false
     }

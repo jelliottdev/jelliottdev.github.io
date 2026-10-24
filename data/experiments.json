@@ -14738,6 +14738,152 @@
       ]
     },
     {
+      "id": "dukotah-c8-timestamp-join",
+      "title": "Do archived LP2 texts supply signature dates for a public pad?",
+      "status": "published",
+      "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+      "summary": "All eight signature blocks occur in LP1. Neither the LP2 Markdown portion nor the 57-segment runic transcription contains signature armor, so these texts supply no per-target-page timestamp join.",
+      "reader_question": "Do these archived texts give a signature date for each encrypted page?",
+      "reader_finding": "Eight signature blocks contain seven distinct clock values, and all eight occur in LP1. The two LP2 text inputs supply no per-page signature date.",
+      "reader_limit": "This checks the preserved texts, not every historical image or distribution. It performs no pad decoding; signature clock values are not independently authenticated release dates.",
+      "finding": "Unchanged source Step 0 reproduces eight blocks/seven seconds. Independent packet parsing agrees exactly and explicitly locates all eight within LP1. The LP2 Markdown portion has 24 grouped headings, no signature armor, and page labels through 57; the distinct runic file has 57 segments and no armor.",
+      "outcome": "supported",
+      "limitations": "This is an input-extraction and join-availability finding, not a cryptanalytic negative. No new GnuPG verification, beacon authentication, external fetch or 630-row decoder replay was performed. The two text inventories do not prove absence of per-page signatures from all historical artifacts.",
+      "next_steps": "Supply an independently justified timestamp-to-target join and exact archived pad inputs before a dated-pad replay.",
+      "tags": [
+        "source audit",
+        "PGP",
+        "timestamps",
+        "public pad",
+        "input gate"
+      ],
+      "related": [
+        "dukotah-g02-signature-corpus"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/dukotah-c8-timestamp-join/source-lp.md",
+          "experiments/records/dukotah-c8-timestamp-join/source-runes.txt",
+          "experiments/records/dukotah-c8-timestamp-join/source-step0.py"
+        ],
+        "representation": "Exact pinned Git bytes of C8 Step 0 and its two textual inputs, then Markdown indentation removal and explicit LP1/LP2 heading boundaries.",
+        "parameters": "8 signature blocks; 7 distinct creation seconds; 24 grouped LP2 headings; 57 percent-delimited rune segments.",
+        "procedure": "Run source Step 0 unchanged in a temporary input tree, compare complete saved JSON, independently parse packet lengths and creation subpackets and attribute blocks to explicit book-part headings.",
+        "exclusions": "Historical image-wide signature absence, authorship and release-date authentication, random-pad retrieval, I2 adjudication, source 630-test claims and LP2 decryption."
+      },
+      "reproduction": {
+        "command": "python experiments/records/dukotah-c8-timestamp-join/run.py",
+        "environment": "Python 3 standard library, offline.",
+        "script": "experiments/records/dukotah-c8-timestamp-join/run.py",
+        "script_sha256": "564ee1adffda59c6a13fbdbf6e7c6a25996a4ffd1a555c4c8c1608702d6a88a8",
+        "inputs": [
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/plan.json",
+            "sha256": "ad5aa10dfbff53fdcec4d7acff5b34c59fe068aad27b1a5adad51925fb4bc6fe"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/source-lp.md",
+            "sha256": "0f7545d470f2056b45b5de2c8c116ecdea66969fdca6be57ccbd8e591e40ee92"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/source-runes.txt",
+            "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/source-step0.py",
+            "sha256": "1fa14881a90d49ce78b5238225dffdcfb8e6e006ffdbe242e42decdee2d2cd05"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/LICENSE.source",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/run.py",
+            "sha256": "564ee1adffda59c6a13fbdbf6e7c6a25996a4ffd1a555c4c8c1608702d6a88a8"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/check.py",
+            "sha256": "c1d0bdb1338cd862361910d1ea3b66cb7a1f2fd0a40fb8a1334ae258692ece15"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/article.md",
+            "sha256": "8ea0b880b60b0e288bac7397cd4fecdee9dcff2e68d2cbcef4a6d9e0ad129c65"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/source-replay.json",
+            "sha256": "eeefe49d374b883b090e0dfdd42b13a809cb4a217e476a9c804068e28bebf6cb"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/independent-check.json",
+            "sha256": "1df700f57ee9062a4c22b83c991e195280a6a5459873cbad48adba624479f9ea"
+          },
+          {
+            "path": "experiments/records/dukotah-c8-timestamp-join/timestamp-join.svg",
+            "sha256": "2959741c1f4275f021205cf963043393aa293a1dfbbc717cd38aaf3b5921ef61"
+          }
+        ]
+      },
+      "review": {
+        "human_review": "pending",
+        "kind": "bounded source extraction and independent packet/section check",
+        "retested_on": "2026-10-23",
+        "reviewer": "Unchanged source extractor and independent standard-library parser"
+      },
+      "sources": [
+        {
+          "label": "Pinned C8 Step 0 extractor",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C8-date-indexed-pad/step0_timestamps.py"
+        }
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/dukotah-c8-timestamp-join/timestamp-join.svg",
+          "caption": "All eight signature blocks in the archived text occur in LP1. No per-target-page date is provided by these LP2 textual inputs; other historical artifacts are outside scope."
+        }
+      ],
+      "family": {
+        "id": "dukotah-c8-timestamp-join",
+        "title": "Archived signature timestamp joins",
+        "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+        "baseline": "dukotah-c8-timestamp-join"
+      },
+      "variant": {
+        "label": "Pinned text extraction",
+        "changes": []
+      },
+      "article": "# Do the archived texts supply a date for each target page?\n\nThe C8 proposal chooses public random data by the creation time in each page's PGP signature. A replay of its Step 0 extracts eight signature blocks with seven distinct seconds. An independent packet parser and section-boundary check places every block in LP1. The preserved LP2 portion contains no signature armor; its 24 headings group page labels through 57. The separate runic transcription contains 57 percent-delimited segments and no signature armor. These units are distinct.\n\nThis establishes that these two textual inputs do not supply the proposed per-target-page join. It does not establish that every historical image or distribution lacked signatures, or exclude a dated-pad cipher using another explicit join rule. The replay performs no signature verification. G-02 separately checks preserved signed-file bytes against a specified key; signature validity and section attribution are different checks. Signature creation times remain signer-supplied clock values, not independently authenticated release dates.\n\nThe pinned C8 source also reports a 630-test decoder probe and positive controls. Those results were not rerun here: the pinned cache contains timestamps.json but no beacon XML, and the decoder imports the separately gated I2 stack. They are not evidence for this record's outcome.\n\nRun `python experiments/records/dukotah-c8-timestamp-join/run.py` to replay the source extraction unchanged in a temporary local tree, compare it with the saved result, and run the independent parser. No network access is used.\n",
+      "article_path": "experiments/records/dukotah-c8-timestamp-join/article.md",
+      "script_sha256": "564ee1adffda59c6a13fbdbf6e7c6a25996a4ffd1a555c4c8c1608702d6a88a8",
+      "record_type": {
+        "id": "audit",
+        "label": "Source or input audit",
+        "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+      },
+      "method_topics": [
+        {
+          "id": "cryptographic-artifacts",
+          "title": "Public-key messages and cryptographic artifacts",
+          "aliases": [
+            "RSA",
+            "public key"
+          ]
+        },
+        {
+          "id": "unrestricted-keys",
+          "title": "Unrestricted additive keys and one-time-pad hypotheses",
+          "aliases": [
+            "one time pad",
+            "OTP",
+            "unrestricted key",
+            "arbitrary key"
+          ]
+        }
+      ]
+    },
+    {
       "id": "dukotah-ciphertext-feedback-coefficients",
       "status": "published",
       "title": "Do ciphertext-feedback coefficients decode these pages?",
@@ -65023,6 +65169,171 @@
       ]
     },
     {
+      "id": "r21-fold-tail-scope-controls",
+      "status": "published",
+      "title": "Which part of a decode does the fold check verify?",
+      "question": "Does the source fold proxy compare disjoint held-out complements or overlapping right-hand tails?",
+      "reader_question": "Can a consistency check leave part of a decoded page unverified?",
+      "summary": "Six known-key plants show the fold helper checks overlapping tails and omits its final fold. Changing the first 40 comparison indices leaves all measured agreements unchanged.",
+      "finding": "All six 240-rune source-beam plants recover exactly. Across k=2..6, only k-1 tails are compared; first-fold reference indices are never included. Source-helper reference changes confirm the measured domains; independent encryption and trace recount verify all 30 rows and 90 aggregates.",
+      "reader_finding": "The helper checks overlapping right tails; it never compares the first fold of reference indices and skips the final fold.",
+      "reader_limit": "Known-key diagnostic controls; no manuscript key, complete hit decision or original hallucination catch surface is tested.",
+      "limitations": "One fixed English plaintext window, three key seeds, suppression 0/.83 and exact/keyskip1 only. Reference-change diagnostics keep the ciphertext and key fixed; they are not wrong-key trials or a measured real-candidate false-pass rate. Missing exact source language panel prevents replaying the original R21 catch audit.",
+      "next_steps": "Recover the exact source language panel before interpreting the complete survivor-selection gate; test any revised fold scheme against separate genuine and hallucination populations.",
+      "outcome": "supported",
+      "tags": [
+        "decoder control",
+        "held-out check",
+        "fold scope",
+        "known key",
+        "reference comparison",
+        "R21-L1-SEAL"
+      ],
+      "related": [
+        "c2-extension-generator-controls",
+        "l7-score-recovery-controls",
+        "round19-decoder-repair-controls"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/r21-fold-tail-scope-controls/plan.json",
+          "experiments/records/r21-fold-tail-scope-controls/source-manifest.json"
+        ],
+        "representation": "One source-derived 240-rune English plaintext window; six newly enciphered GP29 known-key plants.",
+        "procedure": "Execute unchanged source class/helper definitions selected by AST, real source encoder and beam; trace prefix/tail calls, compare diagnostic reference edits, independently recount encryption and agreements.",
+        "parameters": "Seeds 3301,3302,3303; suppression 0/.83; k2..6; min/mean/frac_pass; beam400 exact/keyskip1; offset0; sign-1; 2000 key symbols.",
+        "exclusions": "Original hallucination selection, calibrated nine-register adjudication, full hit gate, wrong-key false-pass rates, manuscript search and other fold/proxy implementations."
+      },
+      "review": {
+        "kind": "Finite source-helper scope control",
+        "reviewer": "Independent encryption reconstruction and traced-domain/agreement recount",
+        "retested_on": "2026-10-23",
+        "human_review": "pending"
+      },
+      "sources": [
+        {
+          "label": "Pinned Round21 fold helper",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py",
+          "note": "Exact selected source helper definitions run with actual source beam; full source audit remains blocked."
+        }
+      ],
+      "family": {
+        "id": "r21-fold-tail-scope-controls",
+        "title": "Fold consistency check domains",
+        "question": "Which reference indices enter a held-out fold comparison?",
+        "baseline": "r21-fold-tail-scope-controls"
+      },
+      "variant": {
+        "label": "Six known-key plants and reference-change diagnostics",
+        "changes": []
+      },
+      "reproduction": {
+        "command": "python experiments/records/r21-fold-tail-scope-controls/run.py && python experiments/records/r21-fold-tail-scope-controls/check.py && python experiments/records/r21-fold-tail-scope-controls/plot.py --check",
+        "script": "experiments/records/r21-fold-tail-scope-controls/run.py",
+        "script_sha256": "6ed48211c393ed1a92f519133c81af400f9be24ff2f4d2ed7c4c7ddd58f95b08",
+        "environment": "Python3 standard library; bundled original MIT source, source English quadgram model, plan and plaintext; no network or language panel replacement.",
+        "inputs": [
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/.gitattributes",
+            "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/article.md",
+            "sha256": "3c32ad071dc3460d26ac2dda350bf964b18350fd9f06e83697484cb234f35f74"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/check.py",
+            "sha256": "4f701841bc77dddcaec716a291caa728b95242bfc4f04aae302db35471806076"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/plain.json",
+            "sha256": "cb778b1b5db49b4ed9de897fa509103293ea3e6fb8dc0103d2fcc31eab22218b"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/plan.json",
+            "sha256": "de749b9da49ced5d637e567688d47c24363756c8d8752ed379fc8944c7c4bb30"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/plot.py",
+            "sha256": "9aa48b1c077a72faa1a8f5af35c734cd773465239895ec90673c3dca237f9eb8"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/run.py",
+            "sha256": "6ed48211c393ed1a92f519133c81af400f9be24ff2f4d2ed7c4c7ddd58f95b08"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+            "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/round19/I1/driftbeam.py",
+            "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/round20/HITFN/hitfn20.py",
+            "sha256": "551d4b052e0a8310dd9203f8723cbca2fa1b3cf6f97f8b2791d8caf9e5be529b"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py",
+            "sha256": "cd69285982251b00c6e11234c492f9b60d9d2a31e57924bc51e9121f973e49d1"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/data/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/src/lp/gematria.py",
+            "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/src/lp/score.py",
+            "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/source-manifest.json",
+            "sha256": "fee36bf52e058ce892d7ba524290927442a2516ff3d8d730916051a612377a39"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/fold-domains.svg",
+            "sha256": "6cd1e0dee43910c3a51a6fc56acad7396ae37f70dd73b12275cf72987b241cfa"
+          },
+          {
+            "path": "experiments/records/r21-fold-tail-scope-controls/results.json",
+            "sha256": "8faa52c12cc85b86211fdbe6d709ac2d1403a8a81d227f8601950aee461dadfc"
+          }
+        ]
+      },
+      "article": "# Which part of a decode does the fold check verify?\n\n**Finding.** The source's fold helper compares **overlapping right-hand tails** of a decoded page. It omits the final fold and never compares the first fold's reference indices. On six new known-key plants, all 30 fold-count trials recover the true text exactly, but changing the first 40 reference indices leaves every measured tail agreement unchanged. Changing every reference index drops every measured tail agreement to zero.\n\n![The five-fold helper compares four overlapping right tails; the first 48 reference indices are never compared.](experiments/records/r21-fold-tail-scope-controls/fold-domains.svg)\n\nThe [Round 21 source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py) describes a disjoint-fold check of the held-out complement. Its executable helper first decodes the prefix ending at a fold boundary, then decodes the remaining tail from that prefix's ending key pointer. A final fold has no right-hand tail, so it returns `None`. Earlier prefixes contain all preceding folds, and the compared tails overlap.\n\n| Requested folds | Measured tails | Reference positions compared at least once |\n| --- | ---: | --- |\n| 2 | 1 | 120–239 |\n| 3 | 2 | 80–239 |\n| 4 | 3 | 60–239 |\n| 5 | 4 | 48–239 |\n| 6 | 5 | 40–239 |\n\nPositions above are zero-based. At five folds, for example, four comparisons cover tails starting at 48, 96, 144 and 192. The first 48 reference indices do not enter any agreement calculation. They still affect prefix decoding and the attributed key phase: this is a limit on the **reference comparison**, not a claim that the first ciphertext runes are ignored.\n\nWe supplied one fixed 240-rune English plaintext window, three deterministic key seeds and the source's no-suppression or 83% repeat-suppression encoder. The six newly generated ciphertexts use the source `exact` decoder at beam width 400. All six full-page decodes recover 100% of the planted rune indices; every measured tail agrees with its full-page decode at 100%. The three aggregation rules—minimum, mean and fraction above 90%—all return 1.0 for each fold-count trial.\n\nThe reference-change controls call the same unmodified source helper on the same ciphertext and key. They change the supplied comparison vector only. Changing its first 40 indices is outside every tested tail, so all tail agreements remain 1.0; changing all indices gives 0.0. These diagnostic controls expose the comparison's scope. They are not wrong-key trials, candidate hallucinations or estimates of a real candidate's correctness.\n\nThe runner executes selected source definitions unchanged using Python's syntax tree: the actual `HitDecode` class, baseline held-out helper, fold bounds and fold helpers. It uses the actual bundled beam decoder and English quadgram table. It does not import or replace the unavailable nine-register panel. The separate checker reconstructs each encryption, verifies the traced prefix/tail inputs and key offsets, and independently recounts every agreement and aggregate.\n\nThis does **not** replay the original 45 hallucinations, 15-cell catch surface or held-out surrogate, which still require the exact source language panel. The result establishes the executed helper's finite comparison domains; it does not demonstrate that a wrong manuscript reading passes the complete hit gate or that every no-oracle gate must fail.\n\nRun offline with Python 3:\n\n```bash\npython experiments/records/r21-fold-tail-scope-controls/run.py\npython experiments/records/r21-fold-tail-scope-controls/check.py\npython experiments/records/r21-fold-tail-scope-controls/plot.py --check\n```\n\nThe source, model table, fixed plaintext, plan, traces and MIT license are bundled. No manuscript candidate is searched.\n",
+      "article_path": "experiments/records/r21-fold-tail-scope-controls/article.md",
+      "script_sha256": "6ed48211c393ed1a92f519133c81af400f9be24ff2f4d2ed7c4c7ddd58f95b08",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        }
+      ]
+    },
+    {
       "id": "r26-derived-generators-opening-cribs",
       "status": "published",
       "title": "Older random generators against fixed LP2 openings",
@@ -65429,6 +65740,148 @@
             "guessed word",
             "known plaintext attack",
             "crib search"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r28-c-generator-port-controls",
+      "status": "published",
+      "title": "Finite checks of the C generator ports",
+      "question": "Does the compiled generator region match independent finite stream expectations?",
+      "reader_question": "Does the C port generate the same keys as the reference models?",
+      "summary": "Nine compiled generator modes match 144,000 finite model symbols and 8,192 archived Round 27 vector symbols exactly.",
+      "finding": "72 grid streams and 64 saved vectors pass symbol-for-symbol C parity; a separate checker independently constructs all 152,192 expected symbols.",
+      "limitations": "Finite generator-port control only. No original PHP/glibc/Python 2 runtime, source scored decoder gates, native full engine, full seed space or LP2 manuscript search.",
+      "next_steps": "Recover the exact language panel and establish platform compatibility before rerunning scored production-engine controls.",
+      "outcome": "supported",
+      "tags": [
+        "generator control",
+        "C port",
+        "MT19937",
+        "PHP",
+        "glibc",
+        "finite parity"
+      ],
+      "related": [
+        "public-prng-seed-sweep",
+        "py27-prior-front-opening-cribs",
+        "typed-seed-random-opening-cribs",
+        "c2-extension-generator-controls"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/r28-c-generator-port-controls/source-manifest.json"
+        ],
+        "representation": "GP29 generator outputs; finite model streams and archived vectors.",
+        "procedure": "Compile unchanged source generator region; compare every symbol against source models and independently built expectations.",
+        "parameters": "9 modes x 8 seeds x 2000 symbols; 64 archived random29 vectors x 128 symbols.",
+        "exclusions": "Language-panel scores, plant/decoder recovery, native runtime parity, all LP2 searches and fullspace coverage."
+      },
+      "review": {
+        "kind": "Finite generator-port control",
+        "reviewer": "Separate standard-library MT and historical PHP / glibc recurrence checker",
+        "retested_on": "2026-10-23",
+        "human_review": "pending"
+      },
+      "sources": [
+        {
+          "label": "Pinned Round 28 generator C source",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L4/grind28.c",
+          "note": "Generator region extracted unchanged; full source bundled under MIT."
+        }
+      ],
+      "family": {
+        "id": "r28-c-generator-port-controls",
+        "title": "C generator port controls",
+        "question": "Are finite output streams preserved across generator implementations?",
+        "baseline": "r28-c-generator-port-controls"
+      },
+      "variant": {
+        "label": "Nine modes and archived R27 vectors",
+        "changes": []
+      },
+      "reproduction": {
+        "command": "python experiments/records/r28-c-generator-port-controls/run.py && python experiments/records/r28-c-generator-port-controls/check.py && python experiments/records/r28-c-generator-port-controls/plot.py --check",
+        "environment": "Python 3 standard library and GCC; no network; temporary portable harness; one process at a time.",
+        "script": "experiments/records/r28-c-generator-port-controls/run.py",
+        "script_sha256": "e2217db501306c3f5eb4139c9fc90c276b66238fbad77953f3340e1aa8ad7a07",
+        "inputs": [
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/.gitattributes",
+            "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/article.md",
+            "sha256": "b76bc9f5995fae444f0198c997ea2e6a026e1408213b356f796c211e46fd5038"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/check.py",
+            "sha256": "d1a70981dc8bdbd6cb53a483e5e7f80fe2e7208654b417e9ca881fa9a6614358"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/plot.py",
+            "sha256": "6006c84e19f0cf9484c7c6982e0be98c1dfbf5147a753ad35ccf274b4cf44d82"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/run.py",
+            "sha256": "e2217db501306c3f5eb4139c9fc90c276b66238fbad77953f3340e1aa8ad7a07"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/source/gen28.py",
+            "sha256": "04a98ba0710c02957c2a6e76c83162fc6d8b0879a43686642eff4c3f377e592f"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/source/gen_py27.py",
+            "sha256": "01217361c1d873046bb8d85a2030d18c046f49365a172313e84f30f198a1190d"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/source/grind28.c",
+            "sha256": "9fe9243ea26b170c7ad268baa71eff8afc1529301a87bea17de25b741b729d1e"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/source/vectors.json",
+            "sha256": "d4ff48ea7882c55fb3603da424d11cdc4497f5edd9b17c97722611d34cddf779"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/source-manifest.json",
+            "sha256": "3e0bb2302eda384e76642da1ce3ba6ed471374b17803eb32facf52e59f6fbcca"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/port-checks.svg",
+            "sha256": "6b04c3c50e80187cce3e1097918d08bc526f2b09453c31e1db2d6f2692a88603"
+          },
+          {
+            "path": "experiments/records/r28-c-generator-port-controls/results.json",
+            "sha256": "6b267d577363f80b9b3a7b44d5e5ba8e67fbdb58347c91066cf943a71a285d26"
+          }
+        ]
+      },
+      "reader_finding": "The C implementations produced the same output as the reference models in every comparison: 152,192 symbols checked.",
+      "reader_limit": "This verifies these generator implementations on a fixed test set. It does not rerun the seed search or recover manuscript text.",
+      "article": "# Can the compiled generator ports reproduce their reference streams?\n\n**Finding.** The pinned Round 28 C generator code matches all **144,000 symbols** in a finite Python-model comparison, and all **8,192 symbols** in the earlier Round 27 archived reference vectors. A separate checker reproduces every symbol using independently constructed expectations. This validates the extracted generator code on this finite grid.\n\n![All finite C generator comparisons match exactly.](experiments/records/r28-c-generator-port-controls/port-checks.svg)\n\nWe compiled the unmodified generator and reducer region of [the pinned source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L4/grind28.c) in a small portable harness. The full sweep engine requires POSIX functions and an unavailable language-panel file; this harness only calls its generator functions.\n\nThe grid contains nine output modes and eight fixed seeds: 0, 1, 777, 3301, 123456789, 2147483647, 2147483648 and 4294967295. Each emits 2,000 symbols, crossing MT's 624-word state reload several times. The modes are Python 2.7 single-word MT with random29, five-bit modulo, five-bit rejection and shuffle29; canonical and historical PHP MT with scaling or modulo; and glibc's additive generator modulo 29. The archived comparison separately tests the first 128 random29 symbols for all 64 Round 27 reference seeds.\n\nBoth PHP twist modes produce different streams for every tested seed. This matters because checking the canonical twist does not establish that the historical PHP generator was implemented correctly. The independent checker uses the standard-library MT engine with an explicitly constructed state for canonical PHP, a separate historical-twist implementation, and an unbounded history recurrence for glibc rather than the source's ring buffer. The familiar MT19937 seed-5489 reference also passes.\n\nThis is a **generator-port control**, not a decoding control or a manuscript result. It does not rerun native PHP, native glibc or Python 2.7; the native-runtime assertions in the source remain source-reported evidence. It does not reproduce the language scores, plant-recovery gates, full seed spaces, checkpoint behavior or the source's LP2 negatives. In particular, no fresh coverage is assigned to the orphaned Round 28 run.\n\nRun offline from the repository root with Python 3 and GCC:\n\n```bash\npython experiments/records/r28-c-generator-port-controls/run.py\npython experiments/records/r28-c-generator-port-controls/check.py\npython experiments/records/r28-c-generator-port-controls/plot.py --check\n```\n\nAll source files and the MIT license are bundled. Generated executables live only in a temporary directory. The checker recompiles the C region and checks every emitted symbol and saved digest.\n",
+      "article_path": "experiments/records/r28-c-generator-port-controls/article.md",
+      "script_sha256": "e2217db501306c3f5eb4139c9fc90c276b66238fbad77953f3340e1aa8ad7a07",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "seeded",
+          "title": "Seeded generators and generated keystreams",
+          "aliases": [
+            "PRNG",
+            "seed",
+            "generated keystream"
           ]
         }
       ]

@@ -1,0 +1,55 @@
+========================================================================
+GENERATOR VALIDATION GATE
+========================================================================
+
+[php_mt_rand]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [10, 23, 27, 5, 21, 22, 17, 17, 4, 12]
+  note: PHP 5.x MT_RAND_PHP variant. Self-consistent reference (no PHP runtime available to cross-validate).
+
+[dotnet_sysrandom]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [1, 2, 22, 14, 23, 23, 4, 21, 7, 14]
+  note: Knuth subtractive (.NET 4.x). Self-consistent reference (no .NET/Mono runtime available). Implementa
+
+[isaac]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [20, 6, 9, 13, 12, 2, 23, 5, 26, 19]
+  note: Bob Jenkins ISAAC-32, simplified single-int seeding. Self-consistent reference. Simplified init (XOR
+
+[bbs_small]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [28, 13, 11, 15, 14, 28, 13, 11, 15, 14]
+  note: BBS M=253 (p=11,q=23). Analytically computed reference.
+
+[bbs_large]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [18, 9, 15, 19, 6, 20, 23, 7, 28, 4]
+  note: BBS M=3401669 (p=3299,q=1031), both Blum primes. Self-consistent.
+
+[lfsr32]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [0, 0, 0, 1, 23, 10, 25, 19, 10, 3]
+  note: 32-bit maximal-length LFSR taps=(32,22,2,1). Self-consistent.
+
+[geffe]  PASS
+  self_consistent=True  diverse=True  ref_match=True
+  first 10: [12, 2, 13, 14, 9, 15, 12, 16, 5, 19]
+  note: Geffe 3-LFSR (deg 11,13,17). Self-consistent.
+
+Validated:    ['php_mt_rand', 'dotnet_sysrandom', 'isaac', 'bbs_small', 'bbs_large', 'lfsr32', 'geffe']
+Disqualified: []
+
+========================================================================
+POSITIVE CONTROL
+========================================================================
+
+Generator: php_mt_rand  seed: 3301
+  ct doublet rate: 0.84%  total skips: 7
+  [BEAM correct]   score=-4.155  char-match=100.0%
+    THEPRIMESARESACREDANDTHETOTIENTFUNCTIONISSACREDALLTHINGSSHOULDBEENCRYPTEDCNOWTHI
+  [BEAM wrong]     score=-6.935
+
+  score>=-5.5: True  match>=90%: True  sep>1.0: True
+  Control gate: PASS
+FINITE_CONTROL_RESULT (True, 'php_mt_rand', -4.154959629744731, 1.0)

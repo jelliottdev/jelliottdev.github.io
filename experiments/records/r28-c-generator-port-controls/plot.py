@@ -1,0 +1,16 @@
+import argparse
+from pathlib import Path
+HERE=Path(__file__).resolve().parent
+SVG='''<svg xmlns="http://www.w3.org/2000/svg" width="600" height="280" viewBox="0 0 600 280" role="img" aria-labelledby="title desc">
+<title id="title">Finite C generator port checks</title><desc id="desc">Seventy-two streams of two thousand symbols match Python models; sixty-four archived vectors of 128 symbols match exactly. No manuscript search.</desc>
+<rect width="600" height="280" fill="white"/><g font-family="Arial,sans-serif" fill="#162b40">
+<text x="24" y="38" font-size="24">Compiled generator checks</text>
+<text x="24" y="83" font-size="22">72 model streams × 2,000 symbols</text>
+<rect x="24" y="100" width="552" height="30" fill="#397b6b"/>
+<text x="24" y="165" font-size="22">64 saved vectors × 128 symbols</text>
+<rect x="24" y="182" width="552" height="30" fill="#397b6b"/>
+<text x="24" y="253" font-size="20">All exact · finite control · no LP2 search</text></g></svg>'''
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args();dest=HERE/'port-checks.svg'
+    if a.check:assert dest.read_text(encoding='utf-8')==SVG;print('PASS: plot current')
+    else:dest.write_text(SVG,encoding='utf-8',newline='\n')

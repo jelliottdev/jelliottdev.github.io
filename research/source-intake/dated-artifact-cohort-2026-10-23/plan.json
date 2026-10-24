@@ -1,0 +1,105 @@
+{
+  "schema": "dated-artifact-cohort-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "G-09",
+    "R24-C8-DATE-INDEXED-PAD",
+    "H-01",
+    "B-09"
+  ],
+  "timing": "Retrospective archived-source extraction; frozen before executing programs, source findings already known.",
+  "scope": {
+    "G-09": "Replay seed-prior builder unchanged, compare archived candidate rows excluding generation time. No generator or decrypt test.",
+    "C8": "Replay Step 0 unchanged, independently parse packet timestamps and LP1/LP2 section boundaries. No beacon fetch, pad decode or 630-test replay.",
+    "H-01": "Local tracked-path availability and existing-source documentation review only.",
+    "B-09": "Subclaim mapping to existing controls and documented missing physical blobs, not omnibus closure."
+  },
+  "inputs": [
+    {
+      "path": "liber-primus/analysis/round24/C8-date-indexed-pad/step0_timestamps.py",
+      "sha256": "1fa14881a90d49ce78b5238225dffdcfb8e6e006ffdbe242e42decdee2d2cd05",
+      "bytes": 5092
+    },
+    {
+      "path": "liber-primus/analysis/round24/C8-date-indexed-pad/PREREG.md",
+      "sha256": "142339fdb3e044718babe15f49b000844ad490f51547cc095a440090bb46b5fc",
+      "bytes": 7575
+    },
+    {
+      "path": "liber-primus/analysis/round24/C8-date-indexed-pad/RESULTS.md",
+      "sha256": "865b60cdc443505034d26ec458b45db7b174a2f44005b4e5955c7df92f3e8356",
+      "bytes": 8377
+    },
+    {
+      "path": "liber-primus/analysis/round24/C8-date-indexed-pad/results.json",
+      "sha256": "1e4bcf32fb59f7871014660cb7a897b6e62f4eba254fe74a22c2d60e0fa3b7b6",
+      "bytes": 130276
+    },
+    {
+      "path": "liber-primus/analysis/round24/C8-date-indexed-pad/run_c8.py",
+      "sha256": "183ddee9fe8d1dadb4333a9fafa703eccc29e5ea91fa7808ccfadfe320c3da3c",
+      "bytes": 14916
+    },
+    {
+      "path": "liber-primus/analysis/round24/C8-date-indexed-pad/cache/timestamps.json",
+      "sha256": "f04200e8b4814674ad44917a1e9ab2700d946b60d5ae382a7160650285f0e206",
+      "bytes": 2106
+    },
+    {
+      "path": "liber-primus/data/scream314_lp.md",
+      "sha256": "0f7545d470f2056b45b5de2c8c116ecdea66969fdca6be57ccbd8e591e40ee92",
+      "bytes": 137957
+    },
+    {
+      "path": "liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+      "bytes": 43739
+    },
+    {
+      "path": "liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+      "sha256": "7494bd2876ea0fce47c2a79cbcba1fd2ebb7759d3a82b5a35fc1ef667c4578b4",
+      "bytes": 10191
+    },
+    {
+      "path": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+      "sha256": "44480694edc299ffcb682b41516bdf3cd55f7e1e1b3d969944191caae197f4a1",
+      "bytes": 49420
+    },
+    {
+      "path": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json",
+      "sha256": "42cddc5dcd3b8f5a306c873463fef80a7359b29c567ddb3d054f956f49f498ca",
+      "bytes": 400120
+    },
+    {
+      "path": "liber-primus/analysis/round18/L8-provenance/TIMESTAMP-SEED-CANDIDATES.json",
+      "sha256": "7673303a2b469223973f0aaba63e202ac10a83632020dcf9f71d797c5baa0443",
+      "bytes": 456247
+    },
+    {
+      "path": "liber-primus/analysis/round18/L8-provenance/PREREG.md",
+      "sha256": "44b5b119302e824b949d59c5e2f17321c278e67d1e7d6cc67ab9d1825c2de855",
+      "bytes": 9925
+    },
+    {
+      "path": "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md",
+      "sha256": "a40b833bdcf95c3d15c145f3d04ee46c1869b4a957e0b21b9ee7be5c8bad3ba8",
+      "bytes": 9933
+    },
+    {
+      "path": "liber-primus/analysis/armada_osint/onions_ibotpeaches/MANIFEST.md",
+      "sha256": "5d0c4a2972ee397886010daba3a35797dad90a162ce3bb915af13f37b626a582",
+      "bytes": 4108
+    }
+  ],
+  "prohibitions": [
+    "network fetch",
+    "onion access",
+    "live scanning",
+    "people OSINT"
+  ],
+  "known_limitations": [
+    "PGP creation times are signer supplied clock values, not independently authenticated release dates.",
+    "LP2 runic transcription has 57 segments while Markdown lists 58 LP2 pages; keep these units separate.",
+    "Existing G02 verifier receipts are reused; no new signature verification is claimed."
+  ]
+}

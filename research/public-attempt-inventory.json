@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "3edb5cbcf3c1f9464844430094ee38836517bee3eca4c9a72b35f458862b25b0",
-    "record_count": 306
+    "sha256": "e42a65e346142e95e665f981550aacfba58c78396ba7722c488d68db142ad20c",
+    "record_count": 309
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,14 +26,14 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 35,
-    "unreconciled": 23,
-    "source_entries_reviewed": 149,
-    "source_entries_pending_review": 23,
+    "candidate_overlap": 36,
+    "unreconciled": 0,
+    "source_entries_reviewed": 172,
+    "source_entries_pending_review": 0,
     "pending_review_with_candidate_match": 0,
-    "pending_review_without_candidate_match": 23,
+    "pending_review_without_candidate_match": 0,
     "execution_replay_states": {
-      "partial-execution": 17,
+      "partial-execution": 21,
       "complete-executed-grid": 23,
       "replayed-with-invalid-gate": 6
     },
@@ -1102,9 +1102,22 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "r28-c-generator-port-controls",
+            "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+          }
+        ],
+        "unresolved_parts": [
+          "Full PHP, .NET subtractive, xorshift, RC4, Java 48-bit and multiword init_by_array searches remain outside this replay. /dev/urandom has no bounded seed search defined here."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Historical open-generator list is a scope reminder. Finite compiled ports now match nine models; this supplies actual C parity for PHP/glibc/Py27 streams, not seed-space coverage."
+      }
     },
     {
       "source_id": "C-01",
@@ -1645,9 +1658,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "blocked-exact-replay",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Raw per-onion capture bytes and ordered source table are unavailable in this retained harvest.",
+          "Do not turn the source one-point observation into a channel exclusion, or infer anything about live hosts."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "H-02",
@@ -1745,9 +1767,24 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Packet listing does not validate revocation signatures; source key-date prose is not newly authenticated.",
+          "Canonical key bytes use the separately G02-verified retained public key rather than the missing source path; exact old-file replay remains unavailable.",
+          "Preference/default agreement cannot establish exact toolchain, implementation version, common operator or identity. No matched Jan2012-frozen key population was obtained; four later/current release keys are not a discriminating era base rate.",
+          "Source factory-default labels and era-software source-code attribution are archival; the GnuPG release tree was not independently fetched or checked here."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "Public-key field comparison only, with explicit canonical-key path alias."
+      }
     },
     {
       "source_id": "I-02",
@@ -1760,9 +1797,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "source-proposal-only",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "A private-pad possibility is not supported or excluded by the absence of a public record.",
+          "Source statements about witness knowledge, outreach and response history were not independently validated."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "I-03",
@@ -1777,9 +1823,23 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Only one held month is pre-Jan2012; these files do not cover the 13-month window. Empty/unreachable external archive responses are not searched-and-clear negatives.",
+          "No new date-attested post, bitcointalk full-text index search or public archive retrieval was performed.",
+          "Saved cpunks_export records 20-byte/zero-message response objects; metadata does not establish historical absence."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "16 technical regex line-count predicates on eight held gzip files, excluding two handle terms."
+      }
     },
     {
       "source_id": "I-04",
@@ -1792,9 +1852,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "source-proposal-only",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "No full docket or admissions were fetched or independently validated.",
+          "The source freshness note is historical and cannot establish current litigation state or puzzle authorship."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "J-01",
@@ -2047,9 +2116,28 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-h02-raw-whitespace-census",
+            "covered_subclaim": "Existing strict raw clear-signed-body preservation census only; excludes absent original three-Markdown history and other whitespace encodings."
+          },
+          {
+            "record_id": "dukotah-h03-onion-cookie-xor",
+            "covered_subclaim": "Existing 64 hex-decoded cookie XOR cases against four 256-byte objects only. These are not the missing T2/folly bytes."
+          }
+        ],
+        "unresolved_parts": [
+          "Exact physical folly.bin and extracts/T2.bin absent at known source paths; high-entropy descriptions do not reconstruct their bytes.",
+          "Unconfirmed seven-images endpoint and missing Columbus share require preserved documentary evidence; no new confirmation or recovery.",
+          "Existing audio spectrum checks describe only their recordings and frequencies, and are not evidence on this entry."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "B-06",
@@ -2110,9 +2198,28 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "lp2-page-pair-alignment",
+            "covered_subclaim": "Existing 2970 zero-offset common-prefix pair sums/differences with global shuffled-max IoC control only; excludes shifted/all-offset S1."
+          },
+          {
+            "record_id": "lp2-page-pair-english",
+            "covered_subclaim": "Existing 4455 zero-offset common-prefix arithmetic streams with English scoring only; excludes shifted/all-offset S1."
+          }
+        ],
+        "unresolved_parts": [
+          "S1 all-offset superimposition remains outside the linked zero-offset records.",
+          "S2 fixed-position statistical probe lacks a frozen family/null specification and verified matching run.",
+          "S3 history-dependent phi(prime) extension is not the uninterrupted consecutive-integer totient-opening method; its history rule is unspecified."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "B-17",
@@ -2125,9 +2232,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Executed tracks, families, parameter cells and statistically independent trials are different units; adding five tracks to five tests would invent a global multiplicity count.",
+          "Round9 results require a per-test selection-family reconciliation before correcting a survivor threshold."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "B-15",
@@ -2164,9 +2280,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The source entry names only README.md and does not identify its alleged original four-document set; this audit explicitly names its own four.",
+          "Navigation mentions do not verify underlying Round9 execution or outcomes."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "B-19",
@@ -2904,9 +3029,17 @@
       "source_evidence_urls": [],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "This checks the conditional source tail model, not calibration validity at Round8 scale. Round8 best score -13.13 is on a different scale and cannot be compared directly. No2.52-billion-decode replay."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Executed unchanged AST-selected threshold_for with exact frozen constants; independent formula agrees at ten trial counts. Floor crossover N=312848649.4793953; first integer above is312848650. At2.52e9 bar=-5.3487436375, above -5.5."
+      }
     },
     {
       "source_id": "RESTATE-B-04",
@@ -2944,9 +3077,17 @@
       "source_evidence_urls": [],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Restated register-power and stored-top50 extensions are not a new complete calibrated panel replay; exact Welsh/model inputs remain unavailable. Character recovery is source K1 metric and is not relabeled rune recovery. Other transition rules remain untested."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Existing public-kdf-seed-stretch finite archive checker passes; live source K1 correctly seeded beam vs wrong-key/rigid/shuffled controls passes (-4.170 vs-7.349 wrong, .989 character recovery). Original692064 StageA is already published and is not rerun or recounted as a new campaign."
+      }
     },
     {
       "source_id": "RESTATE-R16-PRNG",
@@ -2957,9 +3098,17 @@
       "source_evidence_urls": [],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Self-consistency validation does not establish native-runtime generator parity. Source language-register-power/top20 extensions and fullspace generator families remain outside this finite rerun."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Existing archive checker passes; executed seven-generator source validation plus actual planted control (first validated generator) and correct/wrong-key source beam. Correct seed3301 recovery1.0 score-4.154959629744731; wrong seed12345 score-6.935, control PASS. Existing52556-decode record is preserved, not rerun as new coverage."
+      }
     },
     {
       "source_id": "RESTATE-R17-PUBLIC-PAD",
@@ -2970,9 +3119,17 @@
       "source_evidence_urls": [],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "No14,522,916,046-offset campaign or original trained prefilter replay; no non-English prefilter survival measured. The source builder silently skips missing training files, so it was not run with an incomplete corpus. Constant-key runs beyond8 and paired rejection are separate decoder-control scopes."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Source lib_padsweep explicitly selects offsets using English rune trigrams before English beam escalation. Its control measures English prefilter survival only. Existing l7-score-recovery-controls independent checker passes its stored register/mechanism/null traces, supporting a narrower decoder control without reconstructing Round17 offsets."
+      }
     },
     {
       "source_id": "G-09",
@@ -2987,9 +3144,23 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "No candidate was tried against an RNG or LP2 target.",
+          "Archived MESSAGES and 228-path signature table are a different snapshot from the independently checked 133-path G02 corpus. Source verified labels do not authenticate release dates.",
+          "Post times, file mtimes and new timeline sources remain outside this finite list."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "Seed candidate builder only; no generator/target cells."
+      }
     },
     {
       "source_id": "R19-C2-PREFILTER-REGISTER",
@@ -4393,9 +4564,37 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "r21-fold-tail-scope-controls",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py"
+              ]
+            },
+            {
+              "kind": "explicit_source_entry_id"
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "r21-fold-tail-scope-controls",
+            "covered_subclaim": "Six fresh known-key plants verify executable fold-helper comparison domains only; excludes unavailable language panel and original catch surface."
+          }
+        ],
+        "unresolved_parts": [
+          "Missing exact nine-register model and Welsh prevent audit_catch.py replay. The new helper test does not reproduce45 hallucinations, heldout surrogate, panel scores or source catch rate and is not a complete no-oracle gate test."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Fresh actual-source helper control on six new known-key plants verifies k-1 overlapping right tails, finalfold omitted and firstfold reference exclusion; all six full decodes recovery1.0. Existing saved15-cell arithmetic also independently recomputed: winner k5/min36/45,0/20; heldout54/66 and4/24 miss seal."
+      }
     },
     {
       "source_id": "R21-L2-NSKIPS-CROSSOVER-LENGTH",
@@ -4756,9 +4955,17 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Saved p-values were not regenerated from geometry/null campaigns. Distribution tails assume named model, not proven detector independence. R22A/C/D anti-repeat and control reports remain source evidence; audit is not a new cipher negative."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Recounted all72 raw geometry ledger rows: bbox_fill3,symmetry2,components1, other statistics0; zero per-row hit-list mismatches; zero saved flags. Independently recomputed P>=6 under Poisson2.88 and Binomial288,.01."
+      }
     },
     {
       "source_id": "R23-A2-LINE-ACROSTIC",
@@ -5006,9 +5213,28 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-c8-timestamp-join",
+            "covered_subclaim": "Unchanged Step 0 plus independent packet/section extraction: all eight signature blocks map to LP1, none to LP2 textual inputs, seven distinct seconds. No per-target-page join available in these texts."
+          }
+        ],
+        "unresolved_parts": [
+          "No replay of 630 archived decoder rows or source positive control: beacon XML absent from pinned cache and HITFN depends on gated I2 stack.",
+          "No independently justified timestamp-to-target join; signer clock values are not authenticated release dates.",
+          "Runic file has 57 segments; LP2 Markdown uses 24 grouped headings and page labels through 57. These inventories do not prove absence across all historical artifacts."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "scope": "Input/timestamp extraction only; zero pad-decoder cells."
+      }
     },
     {
       "source_id": "R25-COMPUTE-TAIL-CHUNK1",
@@ -5317,7 +5543,7 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "blocked",
+      "reconciliation_state": "blocked-exact-replay",
       "candidate_records": [],
       "coverage_verified": false,
       "reviewed_subclaims": {
@@ -5455,9 +5681,17 @@
       "source_evidence_urls": [],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "No new source panel adjudication or source recovery-score recomputation; existing r26-derived-generators-opening-cribs and other records cover distinct narrower tests. Audit verdict not counted as an LP2 negative."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "The audit is a review of A/B/C, not another negative cipher experiment. It explicitly identifies 228 integer-seed rows at offset zero contrary to A prereg exclusion and warns A coverage was interim."
+      }
     },
     {
       "source_id": "R27-CPORT-MT32-FULLSWEEP",
@@ -5490,9 +5724,22 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "r28-c-generator-port-controls",
+            "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+          }
+        ],
+        "unresolved_parts": [
+          "No full-space sweep or scored C V1/V2/drill rerun. Exact panel input missing; full native engine build also fails on fsync/readlink. S2 FLAG vs zero hit-counter inconsistency remains unresolved and is not an LP2 survivor verdict."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Compiled generator region matches all 64 archived ks128 vectors exactly. Saved STATUS arithmetic independently sums to 1,895,728,884 S2 seeds (44.1383776%); S1 completion is source-reported only."
+      }
     },
     {
       "source_id": "R28-L1-CICADAOS-PADS-DENSE-PAIR",
@@ -5618,9 +5865,17 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Finite C generator parity does not independently verify language scores, gate recovery, chainer safety or live process history. No audit is counted as a new cipher negative."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "First pass records hygiene defects and about 43% S2 throughput degradation. Second pass reports 25 gated cells and an orphan queue launch. Later PARKED-SWEEPS explicitly supersedes its dated live-process prose."
+      }
     },
     {
       "source_id": "R28-L4-UNSWEPT-GENERATORS-QUEUE",
@@ -5644,9 +5899,22 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "r28-c-generator-port-controls",
+            "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+          }
+        ],
+        "unresolved_parts": [
+          "No native PHP/glibc runtime replay, scored gate replay, queue execution or sanctioned target coverage. Saved gate booleans do not constitute local control-recovery measurements."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "72 finite compiled generator/reducer streams match 2,000 Python-model symbols each, independently rechecked. Queue has 25 cells. Saved orphan status worker sum is 27,261,684; authoritative queue coverage remains zero per its explicit marker."
+      }
     },
     {
       "source_id": "R29-L1-ONION-STEGO",
@@ -5830,9 +6098,17 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "Validator schema/control flags do not establish campaign coverage or independently rerun any sweep. D1 B10/R29 discharging-tool claims are not equated to an OutGuess0.2 runtime replay; dedicated earlier b10-runtime gate handles that distinction. Audit sampled claims, not an exhaustive proof."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Actually ran pinned validate_ledger.py on current pinned172-entry ledger: errors0, unsound negatives0. D1 findings describes an older162-entry audit snapshot; current warnings18 differ from its saved10, so saved counts are not presented as current."
+      }
     },
     {
       "source_id": "R30-E1-RENDER-REOPEN",

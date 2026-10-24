@@ -1,0 +1,118 @@
+{
+  "id": "dukotah-c8-timestamp-join",
+  "title": "Do archived LP2 texts supply signature dates for a public pad?",
+  "status": "published",
+  "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+  "summary": "All eight signature blocks occur in LP1. Neither the LP2 Markdown portion nor the 57-segment runic transcription contains signature armor, so these texts supply no per-target-page timestamp join.",
+  "reader_question": "Do these archived texts give a signature date for each encrypted page?",
+  "reader_finding": "Eight signature blocks contain seven distinct clock values, and all eight occur in LP1. The two LP2 text inputs supply no per-page signature date.",
+  "reader_limit": "This checks the preserved texts, not every historical image or distribution. It performs no pad decoding; signature clock values are not independently authenticated release dates.",
+  "finding": "Unchanged source Step 0 reproduces eight blocks/seven seconds. Independent packet parsing agrees exactly and explicitly locates all eight within LP1. The LP2 Markdown portion has 24 grouped headings, no signature armor, and page labels through 57; the distinct runic file has 57 segments and no armor.",
+  "outcome": "supported",
+  "limitations": "This is an input-extraction and join-availability finding, not a cryptanalytic negative. No new GnuPG verification, beacon authentication, external fetch or 630-row decoder replay was performed. The two text inventories do not prove absence of per-page signatures from all historical artifacts.",
+  "next_steps": "Supply an independently justified timestamp-to-target join and exact archived pad inputs before a dated-pad replay.",
+  "tags": [
+    "source audit",
+    "PGP",
+    "timestamps",
+    "public pad",
+    "input gate"
+  ],
+  "related": [
+    "dukotah-g02-signature-corpus"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-c8-timestamp-join/source-lp.md",
+      "experiments/records/dukotah-c8-timestamp-join/source-runes.txt",
+      "experiments/records/dukotah-c8-timestamp-join/source-step0.py"
+    ],
+    "representation": "Exact pinned Git bytes of C8 Step 0 and its two textual inputs, then Markdown indentation removal and explicit LP1/LP2 heading boundaries.",
+    "parameters": "8 signature blocks; 7 distinct creation seconds; 24 grouped LP2 headings; 57 percent-delimited rune segments.",
+    "procedure": "Run source Step 0 unchanged in a temporary input tree, compare complete saved JSON, independently parse packet lengths and creation subpackets and attribute blocks to explicit book-part headings.",
+    "exclusions": "Historical image-wide signature absence, authorship and release-date authentication, random-pad retrieval, I2 adjudication, source 630-test claims and LP2 decryption."
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-c8-timestamp-join/run.py",
+    "environment": "Python 3 standard library, offline.",
+    "script": "experiments/records/dukotah-c8-timestamp-join/run.py",
+    "script_sha256": "564ee1adffda59c6a13fbdbf6e7c6a25996a4ffd1a555c4c8c1608702d6a88a8",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/plan.json",
+        "sha256": "ad5aa10dfbff53fdcec4d7acff5b34c59fe068aad27b1a5adad51925fb4bc6fe"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/source-lp.md",
+        "sha256": "0f7545d470f2056b45b5de2c8c116ecdea66969fdca6be57ccbd8e591e40ee92"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/source-runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/source-step0.py",
+        "sha256": "1fa14881a90d49ce78b5238225dffdcfb8e6e006ffdbe242e42decdee2d2cd05"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/run.py",
+        "sha256": "564ee1adffda59c6a13fbdbf6e7c6a25996a4ffd1a555c4c8c1608702d6a88a8"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/check.py",
+        "sha256": "c1d0bdb1338cd862361910d1ea3b66cb7a1f2fd0a40fb8a1334ae258692ece15"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/article.md",
+        "sha256": "8ea0b880b60b0e288bac7397cd4fecdee9dcff2e68d2cbcef4a6d9e0ad129c65"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/source-replay.json",
+        "sha256": "eeefe49d374b883b090e0dfdd42b13a809cb4a217e476a9c804068e28bebf6cb"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/independent-check.json",
+        "sha256": "1df700f57ee9062a4c22b83c991e195280a6a5459873cbad48adba624479f9ea"
+      },
+      {
+        "path": "experiments/records/dukotah-c8-timestamp-join/timestamp-join.svg",
+        "sha256": "2959741c1f4275f021205cf963043393aa293a1dfbbc717cd38aaf3b5921ef61"
+      }
+    ]
+  },
+  "review": {
+    "human_review": "pending",
+    "kind": "bounded source extraction and independent packet/section check",
+    "retested_on": "2026-10-23",
+    "reviewer": "Unchanged source extractor and independent standard-library parser"
+  },
+  "sources": [
+    {
+      "label": "Pinned C8 Step 0 extractor",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C8-date-indexed-pad/step0_timestamps.py"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-c8-timestamp-join/timestamp-join.svg",
+      "caption": "All eight signature blocks in the archived text occur in LP1. No per-target-page date is provided by these LP2 textual inputs; other historical artifacts are outside scope."
+    }
+  ],
+  "family": {
+    "id": "dukotah-c8-timestamp-join",
+    "title": "Archived signature timestamp joins",
+    "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+    "baseline": "dukotah-c8-timestamp-join"
+  },
+  "variant": {
+    "label": "Pinned text extraction",
+    "changes": []
+  }
+}

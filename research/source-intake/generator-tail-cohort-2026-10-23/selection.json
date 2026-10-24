@@ -1,0 +1,90 @@
+{
+  "source_entries": 172,
+  "awaiting_initial_review": 23,
+  "selected_initial_reviews": 5,
+  "selected_followups": 0,
+  "interpretation": "Reviewed does not mean completed or excluded. Entries can overlap and contain several subclaims.",
+  "entries": [
+    {
+      "source_id": "B-03",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "Generator families Round 8 names as untested: PHP `mt_rand` (distinct tempering), .NET subtractive, xorshift, RC4/ARC4, Java's full 48-bit space, MT `init_by_array` multi-word seeds, `/dev/urandom` (declared unattackable).",
+      "reproduction_command": null,
+      "evidence": [
+        "research/DEAD_ENDS.md"
+      ]
+    },
+    {
+      "source_id": "R27-CPORT-MT32-FULLSWEEP",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "The LP2 0-54 pad was derived by a Python-2.7 script as random.seed(w); int(random.random()*29)... for some 32-bit w (init_by_array([w]), reducer random29, offset 0), applied under a rejection-loop encipherment representable as keyskip2 'pair' (S1) or keyskip1 'exact' (S2). R25 covered 0.5015% of this space in pure Python and parked; R27 ports the stage-A screen to C (~70x) and finishes the space -- the only internally-runnable verdict-changer left after 26 rounds.",
+      "reproduction_command": "cd analysis/round27/P1-engine && python3 export_data.py && gcc -O3 -march=native -fopenmp -std=gnu17 -ffp-contract=off -o grind27 grind27.c -lm && ./grind27 --self-test && ./grind27 --drill; bash ../P2-harness/run_all.sh (acceptance); setsid launch per MONITORING.md; status: ./grind27 --status --run-dir run. Red-team: analysis/round27/R-redteam/{audit1.py,audit2.py,miniplan.json}.",
+      "evidence": [
+        "PREREG.md",
+        "SYNTHESIS.md",
+        "MONITORING.md",
+        "sweep_plan.json",
+        "P0-spec/SPEC.md",
+        "P0-spec/vectors.json",
+        "P1-engine/BUILD.md",
+        "P1-engine/grind27.c",
+        "P2-harness/ENGINE-CONTRACT.md",
+        "R-redteam/RESULTS.md",
+        "S1-CLOSEOUT.md",
+        "ORACLE-35563892.md",
+        "ORACLE-348625413.md",
+        "ORACLE-86514964.md",
+        "oracle_crosser.py",
+        "s1_batch_parity.py",
+        "S1-batch-parity.json",
+        "liber-primus/analysis/round27/P1-engine/run/STATUS.json",
+        "liber-primus/analysis/round27/P1-engine/run/top_S2.json",
+        "liber-primus/analysis/round27/P1-engine/run/HIT-CANDIDATE.json",
+        "liber-primus/handoff/PARKED-SWEEPS.md"
+      ]
+    },
+    {
+      "source_id": "R28-L4-UNSWEPT-GENERATORS-QUEUE",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "LP2 0-54's pad comes from a 32-bit-seeded generator the census left open: PHP mt_rand (canonical MT_RAND_MT19937 AND the pre-7.1 MT_RAND_PHP broken twist, x mod/badscaling reductions -- CENSUS section C's highest-prior open generator, P-4 blocker now gone), glibc random()%29 gen=0 (the R19-G3-CORRECTION open row, upgraded from the rigid decoder to the validated beam), and the R27-S3 cells (grb5_mod/grb5_rej/shuffle29 x offsets {1,3,5,7,13}, labelled completeness rituals) -- under the exact/pair relations, full 2^32 per cell.",
+      "reproduction_command": "analysis/round28/L4/BUILD.md (build + launch recipe), QUEUE.md (order, bars, ETAs, DO-NOT-FIRE hold), grind28.c, gen28.py, make_gates.py, receipts/, smoke/; chainer: analysis/round28/chain_after_s2.sh + chain.log + chainer.pid.",
+      "evidence": [
+        "PREREG.md",
+        "RESULTS.md",
+        "QUEUE.md",
+        "BUILD.md",
+        "queued_cells.json",
+        "receipts/gates_receipts.json",
+        "analysis/round28/sweep_plan_r28.json",
+        "analysis/round28/chain_after_s2.sh",
+        "liber-primus/analysis/round28/L4/run/STATUS.json",
+        "liber-primus/analysis/round28/L4/run/ORPHANED-PREMATURE-RUN.txt",
+        "liber-primus/analysis/round28/L3/progress28.json",
+        "liber-primus/handoff/PARKED-SWEEPS.md"
+      ]
+    },
+    {
+      "source_id": "R26-D-REDTEAM",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "Adversarial audit of Round 26 A/B/C: refute every survivor, recompute coverage x power from raw rows, verify no silent re-run / no FP-inflation / no bare-closed claim.",
+      "reproduction_command": "analysis/round26/D/RESULTS.md",
+      "evidence": []
+    },
+    {
+      "source_id": "R28-R-REDTEAM",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "Adversarial audit (refute-by-default, doctrine R6) of Round 28, two passes: pass 1 (T1 ledger hygiene R12-A1/P-3, T2 S1-CLOSEOUT recomputation, T3 L3 i386-subsumption tested empirically, T4 PREREG-vs-code drift L1-L5, T5 S2 non-interference); pass 2 (R-redteam/RESULTS.md): recompute every lane headline from raw artifacts, verify the 25-cell queue + chainer cannot miss or fabricate a hit, verify S2 undisturbed.",
+      "reproduction_command": "analysis/round28/R/RESULTS.md + T1-PATCH-PROPOSALS.md + t2_hist_check.py / t3_subsumption_test.py / t4_l1_check.py + work/; analysis/round28/R-redteam/RESULTS.md (second pass).",
+      "evidence": [
+        "RESULTS.md",
+        "T1-PATCH-PROPOSALS.md",
+        "analysis/round28/R-redteam/RESULTS.md"
+      ]
+    }
+  ]
+}

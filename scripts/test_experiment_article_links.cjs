@@ -45,4 +45,21 @@ for(const record of records){
 }
 const fixture={...records[0],article:'## Finding\n\n[Recorded result](results.json)',article_links:{'results.json':'experiments/records/sample/results.json'}};
 assert(context.experimentArticle(fixture,records).includes('href="experiments/records/sample/results.json"'),'Detail forwarding works before generated data rebuild');
+// Three real charts remain visible once in the main findings, with their detailed captions/source links retained.
+const l7=records.find(record=>record.id==='l7-score-recovery-controls');assert(l7&&l7.visuals.length===3);
+const l7Detail=context.experimentArticle(l7,records),l7Files=[l7.article_path,...l7.reproduction.inputs.map(f=>f.path),...l7.reproduction.outputs.map(f=>f.path)];
+const l7Static=render(l7.article,l7Files,l7.article_links||{});
+for(const visual of l7.visuals){
+ assert.equal(l7Detail.split(`src="${visual.path}"`).length-1,1,'Each declared main chart is embedded exactly once');
+ assert(l7Detail.includes(`href="${visual.path}" target="_blank" rel="noopener">Open full-size figure`),'Detailed source link is preserved');
+ assert(l7Static.includes(`src="${visual.path}"`),'Standalone/offline Markdown retains every embedded chart');
+}
+assert.equal((l7Detail.match(/class="small experiment-figure-reference"/g)||[]).length,3);
+const extra='experiments/records/example/extra.svg',caption='<source> & exact caption';
+const mixed=context.renderExperimentMarkdown(`![${caption}](${extra})\n\n![Previously shown](${l7.visuals[0].path})`,[extra,l7.visuals[0].path],{},[l7.visuals[0].path]);
+assert(mixed.includes(`src="${extra}"`),'An additional analysis-only figure is still embedded');
+assert(mixed.includes('&lt;source&gt; &amp; exact caption'),'Captions remain escaped');
+assert(!mixed.includes(`src="${l7.visuals[0].path}"`));assert(mixed.includes('Previously shown'));
+assert(!context.renderExperimentMarkdown(`![Unvetted](${extra})`,[],{},[extra]).includes('<a'),'Already-shown list cannot grant image/link permission');
+assert(context.renderExperimentMarkdown('```\n![Literal]('+extra+')\n```',[extra],{},[extra]).includes('![Literal]'),'Fenced examples remain literal');
 console.log(`PASS: vetted local/basename/cross-record/ZIP aliases, unsafe/prototype/code/image guards, detail forwarding; ${aliasCount} generated aliases across ${recordCount} records currently checked.`);

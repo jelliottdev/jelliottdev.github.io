@@ -1,0 +1,165 @@
+{
+  "id": "r21-fold-tail-scope-controls",
+  "status": "published",
+  "title": "Which part of a decode does the fold check verify?",
+  "question": "Does the source fold proxy compare disjoint held-out complements or overlapping right-hand tails?",
+  "reader_question": "Can a consistency check leave part of a decoded page unverified?",
+  "summary": "Six known-key plants show the fold helper checks overlapping tails and omits its final fold. Changing the first 40 comparison indices leaves all measured agreements unchanged.",
+  "finding": "All six 240-rune source-beam plants recover exactly. Across k=2..6, only k-1 tails are compared; first-fold reference indices are never included. Source-helper reference changes confirm the measured domains; independent encryption and trace recount verify all 30 rows and 90 aggregates.",
+  "reader_finding": "The helper checks overlapping right tails; it never compares the first fold of reference indices and skips the final fold.",
+  "reader_limit": "Known-key diagnostic controls; no manuscript key, complete hit decision or original hallucination catch surface is tested.",
+  "limitations": "One fixed English plaintext window, three key seeds, suppression 0/.83 and exact/keyskip1 only. Reference-change diagnostics keep the ciphertext and key fixed; they are not wrong-key trials or a measured real-candidate false-pass rate. Missing exact source language panel prevents replaying the original R21 catch audit.",
+  "next_steps": "Recover the exact source language panel before interpreting the complete survivor-selection gate; test any revised fold scheme against separate genuine and hallucination populations.",
+  "outcome": "supported",
+  "tags": [
+    "decoder control",
+    "held-out check",
+    "fold scope",
+    "known key",
+    "reference comparison",
+    "R21-L1-SEAL"
+  ],
+  "related": [
+    "c2-extension-generator-controls",
+    "l7-score-recovery-controls",
+    "round19-decoder-repair-controls"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/r21-fold-tail-scope-controls/plan.json",
+      "experiments/records/r21-fold-tail-scope-controls/source-manifest.json"
+    ],
+    "representation": "One source-derived 240-rune English plaintext window; six newly enciphered GP29 known-key plants.",
+    "procedure": "Execute unchanged source class/helper definitions selected by AST, real source encoder and beam; trace prefix/tail calls, compare diagnostic reference edits, independently recount encryption and agreements.",
+    "parameters": "Seeds 3301,3302,3303; suppression 0/.83; k2..6; min/mean/frac_pass; beam400 exact/keyskip1; offset0; sign-1; 2000 key symbols.",
+    "exclusions": "Original hallucination selection, calibrated nine-register adjudication, full hit gate, wrong-key false-pass rates, manuscript search and other fold/proxy implementations."
+  },
+  "review": {
+    "kind": "Finite source-helper scope control",
+    "reviewer": "Independent encryption reconstruction and traced-domain/agreement recount",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Pinned Round21 fold helper",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py",
+      "note": "Exact selected source helper definitions run with actual source beam; full source audit remains blocked."
+    }
+  ],
+  "family": {
+    "id": "r21-fold-tail-scope-controls",
+    "title": "Fold consistency check domains",
+    "question": "Which reference indices enter a held-out fold comparison?",
+    "baseline": "r21-fold-tail-scope-controls"
+  },
+  "variant": {
+    "label": "Six known-key plants and reference-change diagnostics",
+    "changes": []
+  },
+  "reproduction": {
+    "command": "python experiments/records/r21-fold-tail-scope-controls/run.py && python experiments/records/r21-fold-tail-scope-controls/check.py && python experiments/records/r21-fold-tail-scope-controls/plot.py --check",
+    "script": "experiments/records/r21-fold-tail-scope-controls/run.py",
+    "script_sha256": "6ed48211c393ed1a92f519133c81af400f9be24ff2f4d2ed7c4c7ddd58f95b08",
+    "environment": "Python3 standard library; bundled original MIT source, source English quadgram model, plan and plaintext; no network or language panel replacement.",
+    "inputs": [
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/.gitattributes",
+        "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/article.md",
+        "sha256": "3c32ad071dc3460d26ac2dda350bf964b18350fd9f06e83697484cb234f35f74"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/check.py",
+        "sha256": "4f701841bc77dddcaec716a291caa728b95242bfc4f04aae302db35471806076"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/plain.json",
+        "sha256": "cb778b1b5db49b4ed9de897fa509103293ea3e6fb8dc0103d2fcc31eab22218b"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/plan.json",
+        "sha256": "de749b9da49ced5d637e567688d47c24363756c8d8752ed379fc8944c7c4bb30"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/plot.py",
+        "sha256": "9aa48b1c077a72faa1a8f5af35c734cd773465239895ec90673c3dca237f9eb8"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/run.py",
+        "sha256": "6ed48211c393ed1a92f519133c81af400f9be24ff2f4d2ed7c4c7ddd58f95b08"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/round19/I1/driftbeam.py",
+        "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/round20/HITFN/hitfn20.py",
+        "sha256": "551d4b052e0a8310dd9203f8723cbca2fa1b3cf6f97f8b2791d8caf9e5be529b"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py",
+        "sha256": "cd69285982251b00c6e11234c492f9b60d9d2a31e57924bc51e9121f973e49d1"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/source-manifest.json",
+        "sha256": "fee36bf52e058ce892d7ba524290927442a2516ff3d8d730916051a612377a39"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/fold-domains.svg",
+        "sha256": "6cd1e0dee43910c3a51a6fc56acad7396ae37f70dd73b12275cf72987b241cfa"
+      },
+      {
+        "path": "experiments/records/r21-fold-tail-scope-controls/results.json",
+        "sha256": "8faa52c12cc85b86211fdbe6d709ac2d1403a8a81d227f8601950aee461dadfc"
+      }
+    ]
+  },
+  "article": "# Which part of a decode does the fold check verify?\n\n**Finding.** The source's fold helper compares **overlapping right-hand tails** of a decoded page. It omits the final fold and never compares the first fold's reference indices. On six new known-key plants, all 30 fold-count trials recover the true text exactly, but changing the first 40 reference indices leaves every measured tail agreement unchanged. Changing every reference index drops every measured tail agreement to zero.\n\n![The five-fold helper compares four overlapping right tails; the first 48 reference indices are never compared.](experiments/records/r21-fold-tail-scope-controls/fold-domains.svg)\n\nThe [Round 21 source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py) describes a disjoint-fold check of the held-out complement. Its executable helper first decodes the prefix ending at a fold boundary, then decodes the remaining tail from that prefix's ending key pointer. A final fold has no right-hand tail, so it returns `None`. Earlier prefixes contain all preceding folds, and the compared tails overlap.\n\n| Requested folds | Measured tails | Reference positions compared at least once |\n| --- | ---: | --- |\n| 2 | 1 | 120–239 |\n| 3 | 2 | 80–239 |\n| 4 | 3 | 60–239 |\n| 5 | 4 | 48–239 |\n| 6 | 5 | 40–239 |\n\nPositions above are zero-based. At five folds, for example, four comparisons cover tails starting at 48, 96, 144 and 192. The first 48 reference indices do not enter any agreement calculation. They still affect prefix decoding and the attributed key phase: this is a limit on the **reference comparison**, not a claim that the first ciphertext runes are ignored.\n\nWe supplied one fixed 240-rune English plaintext window, three deterministic key seeds and the source's no-suppression or 83% repeat-suppression encoder. The six newly generated ciphertexts use the source `exact` decoder at beam width 400. All six full-page decodes recover 100% of the planted rune indices; every measured tail agrees with its full-page decode at 100%. The three aggregation rules—minimum, mean and fraction above 90%—all return 1.0 for each fold-count trial.\n\nThe reference-change controls call the same unmodified source helper on the same ciphertext and key. They change the supplied comparison vector only. Changing its first 40 indices is outside every tested tail, so all tail agreements remain 1.0; changing all indices gives 0.0. These diagnostic controls expose the comparison's scope. They are not wrong-key trials, candidate hallucinations or estimates of a real candidate's correctness.\n\nThe runner executes selected source definitions unchanged using Python's syntax tree: the actual `HitDecode` class, baseline held-out helper, fold bounds and fold helpers. It uses the actual bundled beam decoder and English quadgram table. It does not import or replace the unavailable nine-register panel. The separate checker reconstructs each encryption, verifies the traced prefix/tail inputs and key offsets, and independently recounts every agreement and aggregate.\n\nThis does **not** replay the original 45 hallucinations, 15-cell catch surface or held-out surrogate, which still require the exact source language panel. The result establishes the executed helper's finite comparison domains; it does not demonstrate that a wrong manuscript reading passes the complete hit gate or that every no-oracle gate must fail.\n\nRun offline with Python 3:\n\n```bash\npython experiments/records/r21-fold-tail-scope-controls/run.py\npython experiments/records/r21-fold-tail-scope-controls/check.py\npython experiments/records/r21-fold-tail-scope-controls/plot.py --check\n```\n\nThe source, model table, fixed plaintext, plan, traces and MIT license are bundled. No manuscript candidate is searched.\n",
+  "article_path": "experiments/records/r21-fold-tail-scope-controls/article.md",
+  "script_sha256": "6ed48211c393ed1a92f519133c81af400f9be24ff2f4d2ed7c4c7ddd58f95b08",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "automatic-search",
+      "title": "Automatic search and language scoring",
+      "aliases": [
+        "hill climbing",
+        "simulated annealing",
+        "genetic algorithm",
+        "brute force",
+        "automatic search",
+        "beam search"
+      ]
+    }
+  ]
+}

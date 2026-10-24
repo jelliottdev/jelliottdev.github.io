@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 306,
+    "records": 309,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -3512,6 +3512,64 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-book-matrix-hill.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-book-matrix-hill/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-book-matrix-hill.zip"
+    },
+    {
+      "id": "dukotah-c8-timestamp-join",
+      "title": "Do archived LP2 texts supply signature dates for a public pad?",
+      "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+      "summary": "All eight signature blocks occur in LP1. Neither the LP2 Markdown portion nor the 57-segment runic transcription contains signature armor, so these texts supply no per-target-page timestamp join.",
+      "tags": [
+        "source audit",
+        "PGP",
+        "timestamps",
+        "public pad",
+        "input gate"
+      ],
+      "finding": "Eight signature blocks contain seven distinct clock values, and all eight occur in LP1. The two LP2 text inputs supply no per-page signature date.",
+      "record_type": {
+        "id": "audit",
+        "label": "Source or input audit",
+        "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+      },
+      "method_topics": [
+        {
+          "id": "cryptographic-artifacts",
+          "title": "Public-key messages and cryptographic artifacts",
+          "aliases": [
+            "RSA",
+            "public key"
+          ]
+        },
+        {
+          "id": "unrestricted-keys",
+          "title": "Unrestricted additive keys and one-time-pad hypotheses",
+          "aliases": [
+            "one time pad",
+            "OTP",
+            "unrestricted key",
+            "arbitrary key"
+          ]
+        }
+      ],
+      "family": {
+        "id": "dukotah-c8-timestamp-join",
+        "title": "Archived signature timestamp joins",
+        "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+        "baseline": "dukotah-c8-timestamp-join"
+      },
+      "variant_label": "Pinned text extraction",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/dukotah-c8-timestamp-join/source-lp.md",
+        "experiments/records/dukotah-c8-timestamp-join/source-runes.txt",
+        "experiments/records/dukotah-c8-timestamp-join/source-step0.py"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-c8-timestamp-join",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-c8-timestamp-join.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-c8-timestamp-join/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-c8-timestamp-join.zip"
     },
     {
       "id": "dukotah-ciphertext-feedback-coefficients",
@@ -17817,6 +17875,58 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/r18-skip-channel-power.zip"
     },
     {
+      "id": "r21-fold-tail-scope-controls",
+      "title": "Which part of a decode does the fold check verify?",
+      "question": "Does the source fold proxy compare disjoint held-out complements or overlapping right-hand tails?",
+      "summary": "Six known-key plants show the fold helper checks overlapping tails and omits its final fold. Changing the first 40 comparison indices leaves all measured agreements unchanged.",
+      "tags": [
+        "decoder control",
+        "held-out check",
+        "fold scope",
+        "known key",
+        "reference comparison",
+        "R21-L1-SEAL"
+      ],
+      "finding": "The helper checks overlapping right tails; it never compares the first fold of reference indices and skips the final fold.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        }
+      ],
+      "family": {
+        "id": "r21-fold-tail-scope-controls",
+        "title": "Fold consistency check domains",
+        "question": "Which reference indices enter a held-out fold comparison?",
+        "baseline": "r21-fold-tail-scope-controls"
+      },
+      "variant_label": "Six known-key plants and reference-change diagnostics",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/r21-fold-tail-scope-controls/plan.json",
+        "experiments/records/r21-fold-tail-scope-controls/source-manifest.json"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/r21-fold-tail-scope-controls",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/r21-fold-tail-scope-controls.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/r21-fold-tail-scope-controls/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/r21-fold-tail-scope-controls.zip"
+    },
+    {
       "id": "r26-derived-generators-opening-cribs",
       "title": "Older random generators against fixed LP2 openings",
       "question": "Can any source-defined R26-A Perl, TeX or Python 2.7 keystream produce a predeclared 12-rune known-reading opening at the start of an LP2 page under either source key-skip rule?",
@@ -17881,6 +17991,54 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/r26-derived-generators-opening-cribs.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/r26-derived-generators-opening-cribs/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/r26-derived-generators-opening-cribs.zip"
+    },
+    {
+      "id": "r28-c-generator-port-controls",
+      "title": "Finite checks of the C generator ports",
+      "question": "Does the compiled generator region match independent finite stream expectations?",
+      "summary": "Nine compiled generator modes match 144,000 finite model symbols and 8,192 archived Round 27 vector symbols exactly.",
+      "tags": [
+        "generator control",
+        "C port",
+        "MT19937",
+        "PHP",
+        "glibc",
+        "finite parity"
+      ],
+      "finding": "The C implementations produced the same output as the reference models in every comparison: 152,192 symbols checked.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "seeded",
+          "title": "Seeded generators and generated keystreams",
+          "aliases": [
+            "PRNG",
+            "seed",
+            "generated keystream"
+          ]
+        }
+      ],
+      "family": {
+        "id": "r28-c-generator-port-controls",
+        "title": "C generator port controls",
+        "question": "Are finite output streams preserved across generator implementations?",
+        "baseline": "r28-c-generator-port-controls"
+      },
+      "variant_label": "Nine modes and archived R27 vectors",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/r28-c-generator-port-controls/source-manifest.json"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/r28-c-generator-port-controls",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/r28-c-generator-port-controls.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/r28-c-generator-port-controls/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/r28-c-generator-port-controls.zip"
     },
     {
       "id": "rail-fence-visible-words",

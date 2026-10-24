@@ -522,7 +522,7 @@ function experimentArticle(r,catalog=experimentRecords){
     </details>
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
       <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Method</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Not tested</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
-      <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles,r.article_links||{})}</div>
+      <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles,r.article_links||{},(r.visuals||[]).map(visual=>visual.path))}</div>
       <div id="experiment-method-guides">${experimentMethodGuidesContent(r)}</div>
       <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
     </details>
@@ -530,7 +530,7 @@ function experimentArticle(r,catalog=experimentRecords){
 }
 
 // Authored experiment Markdown: escaped text, links, headings, lists, simple tables and code; no embedded HTML.
-function renderExperimentMarkdown(markdown,files=[],articleLinks={}){
+function renderExperimentMarkdown(markdown,files=[],articleLinks={},shownVisuals=[]){
   const safeLink=href=>/^https:\/\/[^\s<>"']+$/.test(href)||
     /^#\/(?:wiki\/[a-z0-9-]+|page\/lp[12]-\d{2}|reader\/lp[12]-\d{2}|experiments\/[a-z0-9-]+)(?:\?[a-zA-Z0-9_%=&.-]+)?$/.test(href)||
     (files.includes(href)&&/^[a-zA-Z0-9_./-]+$/.test(href)&&!href.startsWith('/')&&!href.split('/').includes('..'));
@@ -547,6 +547,7 @@ function renderExperimentMarkdown(markdown,files=[],articleLinks={}){
     return safeLink(href)?href:null;
   };
 
+  const shownFigures=new Set(Array.isArray(shownVisuals)?shownVisuals:[]);
   let inCode=false,code=[],paragraph=[],html=[],listType='',codeNumber=0;
   const codeBlock=lines=>{const number=++codeNumber;return `<div class="copyable-block unwrapped"><div class="block-tools"><span role="status"></span><button type="button" data-wrap-block aria-pressed="false" aria-label="Wrap lines in experiment text block ${number}">Wrap lines</button><button type="button" data-copy-block aria-label="Copy experiment text block ${number}">Copy</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment text block ${number}">${esc(lines.join('\n'))}</pre></div>`;};
   const inline=text=>String(text).split(/(`[^`]+`|\[[^\]\n]+\]\([^)]+\))/g).map(part=>{
@@ -566,6 +567,9 @@ function renderExperimentMarkdown(markdown,files=[],articleLinks={}){
     if(!line.trim()){flush();closeList();continue;}
     const figure=line.match(/^!\[([^\]]+)\]\(([^)]+)\)$/);
     if(figure&&files.includes(figure[2])&&safeLink(figure[2])&&/\.(?:svg|png|jpg|webp)$/.test(figure[2])){
+      if(shownFigures.has(figure[2])){
+        flush();closeList();html.push(`<p class="small experiment-figure-reference">${esc(figure[1])} <a href="${esc(figure[2])}" target="_blank" rel="noopener">Open full-size figure ↗</a></p>`);continue;
+      }
       flush();closeList();html.push(`<figure class="experiment-figure"><a class="experiment-figure-image" href="${esc(figure[2])}" target="_blank" rel="noopener"><img src="${esc(figure[2])}" alt="${esc(figure[1])}" loading="lazy"></a><figcaption>${esc(figure[1])} <a href="${esc(figure[2])}" target="_blank" rel="noopener">Open full-size figure ↗</a></figcaption></figure>`);continue;
     }
     if(line.includes('|')&&i+1<lines.length&&/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i+1])){

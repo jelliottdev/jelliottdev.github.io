@@ -1,0 +1,137 @@
+{
+  "schema": "restated-coverage-cohort-v1",
+  "source_commit": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "selection": "selection.json",
+  "selected_initial_ids": [
+    "RESTATE-B-21-ROUND8-BAR",
+    "RESTATE-R16-KDF",
+    "RESTATE-R16-PRNG",
+    "RESTATE-R17-PUBLIC-PAD",
+    "R21-L1-SEAL",
+    "R22-R-REDTEAM",
+    "R30-D1-LEDGER-AUDIT"
+  ],
+  "source_file_pins": [
+    {
+      "path": "liber-primus/LEDGER.json",
+      "sha256": "7718bf90fb4cc6cc0fb98464d65ab898dd0e776da33d9b056bcd908d3b60558d"
+    },
+    {
+      "path": "liber-primus/benchmark/null.py",
+      "sha256": "191f3e7ec0cf9a902b10d98e92f9539267e58f132f0ec605c383edfa1ea362e4"
+    },
+    {
+      "path": "liber-primus/analysis/round17/lib_padsweep.py",
+      "sha256": "6015edcd7b5eba8534d9cccef5802ce5dd3a9708578fd34f89344158e79c450a"
+    },
+    {
+      "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/audit_catch.py",
+      "sha256": "f373d4239d5d5804aee3b06042c39efaabcf46615fbd0a83cc98c19712e4932f"
+    },
+    {
+      "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/hitfn21_folds.py",
+      "sha256": "cd69285982251b00c6e11234c492f9b60d9d2a31e57924bc51e9121f973e49d1"
+    },
+    {
+      "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/catch_surface.json",
+      "sha256": "501063fdbe83d3b91a38e780ed9e1a07011145c66fb14a2aaf474bde918f6d15"
+    },
+    {
+      "path": "liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json",
+      "sha256": "fd1d7b12bf0b98df8723515a5fc27f89a9e05593c6b698a0bf0b806bdbd4c39b"
+    },
+    {
+      "path": "liber-primus/analysis/round22/R-redteam/RESULTS.md",
+      "sha256": "34d191f42974a3487aafe77990e7e010d011f63e7687d20d106b08b17c448ff2"
+    },
+    {
+      "path": "liber-primus/analysis/round30/D1-ledger-audit/findings.json",
+      "sha256": "f174043bb0d6dbf8a2e584f522de73cba20feca3938ba3f7e7302fce98be6c72"
+    },
+    {
+      "path": "liber-primus/analysis/handoff/validate_ledger.py",
+      "sha256": "a0bc92495b7a804f2f2f7d0592699253603ff3c92f5d9e40f25456dddc593e33"
+    }
+  ],
+  "entries": [
+    {
+      "source_id": "RESTATE-B-21-ROUND8-BAR",
+      "status": "partially-reproduced",
+      "finding": "Executed unchanged AST-selected threshold_for with exact frozen constants; independent formula agrees at ten trial counts. Floor crossover N=312848649.4793953; first integer above is312848650. At2.52e9 bar=-5.3487436375, above -5.5.",
+      "evidence": [
+        "arithmetic.json",
+        "liber-primus/benchmark/null.py"
+      ],
+      "unresolved": "This checks the conditional source tail model, not calibration validity at Round8 scale. Round8 best score -13.13 is on a different scale and cannot be compared directly. No2.52-billion-decode replay."
+    },
+    {
+      "source_id": "RESTATE-R16-KDF",
+      "status": "partially-reproduced",
+      "finding": "Existing public-kdf-seed-stretch finite archive checker passes; live source K1 correctly seeded beam vs wrong-key/rigid/shuffled controls passes (-4.170 vs-7.349 wrong, .989 character recovery). Original692064 StageA is already published and is not rerun or recounted as a new campaign.",
+      "evidence": [
+        "existing-kdf-check.json",
+        "kdf-live-k1.txt",
+        "experiments/records/public-kdf-seed-stretch/record.json",
+        "experiments/records/l7-score-recovery-controls/record.json"
+      ],
+      "unresolved": "Restated register-power and stored-top50 extensions are not a new complete calibrated panel replay; exact Welsh/model inputs remain unavailable. Character recovery is source K1 metric and is not relabeled rune recovery. Other transition rules remain untested."
+    },
+    {
+      "source_id": "RESTATE-R16-PRNG",
+      "status": "partially-reproduced",
+      "finding": "Existing archive checker passes; executed seven-generator source validation plus actual planted control (first validated generator) and correct/wrong-key source beam. Correct seed3301 recovery1.0 score-4.154959629744731; wrong seed12345 score-6.935, control PASS. Existing52556-decode record is preserved, not rerun as new coverage.",
+      "evidence": [
+        "existing-prng-check.json",
+        "prng-live-control.txt",
+        "experiments/records/public-prng-seed-sweep/record.json"
+      ],
+      "unresolved": "Self-consistency validation does not establish native-runtime generator parity. Source language-register-power/top20 extensions and fullspace generator families remain outside this finite rerun."
+    },
+    {
+      "source_id": "RESTATE-R17-PUBLIC-PAD",
+      "status": "source-audited",
+      "finding": "Source lib_padsweep explicitly selects offsets using English rune trigrams before English beam escalation. Its control measures English prefilter survival only. Existing l7-score-recovery-controls independent checker passes its stored register/mechanism/null traces, supporting a narrower decoder control without reconstructing Round17 offsets.",
+      "evidence": [
+        "existing-l7-check.txt",
+        "liber-primus/analysis/round17/lib_padsweep.py",
+        "experiments/records/l7-score-recovery-controls/record.json"
+      ],
+      "unresolved": "No14,522,916,046-offset campaign or original trained prefilter replay; no non-English prefilter survival measured. The source builder silently skips missing training files, so it was not run with an incomplete corpus. Constant-key runs beyond8 and paired rejection are separate decoder-control scopes."
+    },
+    {
+      "source_id": "R21-L1-SEAL",
+      "status": "partially-reproduced",
+      "finding": "Fresh actual-source helper control on six new known-key plants verifies k-1 overlapping right tails, finalfold omitted and firstfold reference exclusion; all six full decodes recovery1.0. Existing saved15-cell arithmetic also independently recomputed: winner k5/min36/45,0/20; heldout54/66 and4/24 miss seal.",
+      "evidence": [
+        "experiments/records/r21-fold-tail-scope-controls/record.json",
+        "arithmetic.json",
+        "experiments/records/r21-l1-seal-blocked/INTERNAL-NOTE.md"
+      ],
+      "unresolved": "Missing exact nine-register model and Welsh prevent audit_catch.py replay. The new helper test does not reproduce45 hallucinations, heldout surrogate, panel scores or source catch rate and is not a complete no-oracle gate test."
+    },
+    {
+      "source_id": "R22-R-REDTEAM",
+      "status": "partially-reproduced",
+      "finding": "Recounted all72 raw geometry ledger rows: bbox_fill3,symmetry2,components1, other statistics0; zero per-row hit-list mismatches; zero saved flags. Independently recomputed P>=6 under Poisson2.88 and Binomial288,.01.",
+      "evidence": [
+        "arithmetic.json",
+        "liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json",
+        "liber-primus/analysis/round22/R-redteam/RESULTS.md"
+      ],
+      "unresolved": "Saved p-values were not regenerated from geometry/null campaigns. Distribution tails assume named model, not proven detector independence. R22A/C/D anti-repeat and control reports remain source evidence; audit is not a new cipher negative."
+    },
+    {
+      "source_id": "R30-D1-LEDGER-AUDIT",
+      "status": "partially-reproduced",
+      "finding": "Actually ran pinned validate_ledger.py on current pinned172-entry ledger: errors0, unsound negatives0. D1 findings describes an older162-entry audit snapshot; current warnings18 differ from its saved10, so saved counts are not presented as current.",
+      "evidence": [
+        "source-ledger-validation.txt",
+        "liber-primus/analysis/round30/D1-ledger-audit/findings.json",
+        "liber-primus/analysis/handoff/validate_ledger.py"
+      ],
+      "unresolved": "Validator schema/control flags do not establish campaign coverage or independently rerun any sweep. D1 B10/R29 discharging-tool claims are not equated to an OutGuess0.2 runtime replay; dedicated earlier b10-runtime gate handles that distinction. Audit sampled claims, not an exhaustive proof."
+    }
+  ],
+  "new_draft_record": "r21-fold-tail-scope-controls",
+  "interpretation": "Fresh finite executable checks, stored-row recounts and source audits separated. Existing published campaign/control records are linked, not duplicated; no audit disposition is an LP2 negative."
+}

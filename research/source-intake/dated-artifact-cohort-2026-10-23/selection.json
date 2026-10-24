@@ -1,0 +1,56 @@
+{
+  "source_entries": 172,
+  "awaiting_initial_review": 23,
+  "selected_initial_reviews": 4,
+  "selected_followups": 0,
+  "interpretation": "Reviewed does not mean completed or excluded. Entries can overlap and contain several subclaims.",
+  "entries": [
+    {
+      "source_id": "G-09",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "corpus/GAPS.md G-09: post times, commit times, file mtimes and PGP signature timestamps exist scattered across sources but no timeline dataset has ever been assembled, and the signature timestamps are recorded in prose only. L8 extension: those timestamps are also a PRIOR over RNG seeds. Round 8 enumerated every unix second of 2011-2015 UNIFORMLY for 10 generators, but seeds are not uniform — a signature time or key-creation time is exactly the kind of number a person types into srand().",
+      "reproduction_command": "python3 liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+      "evidence": [
+        "liber-primus/analysis/round18/L8-provenance/TIMESTAMP-SEED-CANDIDATES.json",
+        "liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+        "liber-primus/analysis/round18/L8-provenance/MESSAGES.json"
+      ]
+    },
+    {
+      "source_id": "R24-C8-DATE-INDEXED-PAD",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "A public dated random source (NIST Randomness Beacon v1 / dated block headers) is the OTP, JOINED to each page by that page's own PGP signature CREATION TIME -- a join key R17-PUBLIC-PAD never used (it swept beacon/blockchain as undated contiguous offsets only). Reduced-scope C8 survivor of Round-24 Gate-#1; needs a bounded external fetch, post-2013-09 pages only.",
+      "reproduction_command": null,
+      "evidence": [
+        "analysis/round24/C8-date-indexed-pad/PREREG.md",
+        "analysis/round24/C8-date-indexed-pad/step0_timestamps.py",
+        "analysis/round24/C8-date-indexed-pad/run_c8.py",
+        "analysis/round24/C8-date-indexed-pad/cache/timestamps.json",
+        "analysis/round24/C8-date-indexed-pad/results.json",
+        "analysis/round24/C8-date-indexed-pad/RESULTS.md"
+      ]
+    },
+    {
+      "source_id": "H-01",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "Per-onion HTTP/server-status anomalies: ports 5240/5241/5242/5243, mock uptime \"1 days 0 hours 33 minutes 14 seconds\" → 1033, leaked host `li676-224.members.linode.com` / 106.186.123.224, and `<head>`/`</head>` malformation varying per onion (\"theorized to bind the onions together\"). Listed as item 6 and as \"still genuinely open\"; never resolved as a channel. Raw HTML is held locally.",
+      "reproduction_command": null,
+      "evidence": [
+        "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md"
+      ]
+    },
+    {
+      "source_id": "B-09",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "OSINT residue — T2/T3 blobs, items 6–9",
+      "reproduction_command": null,
+      "evidence": [
+        "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md"
+      ]
+    }
+  ]
+}
