@@ -14,7 +14,7 @@
      E.validateTask(task);
      const snapshot=JSON.parse(JSON.stringify(task)),total=snapshot.pages.length;let completed=0;
      if(typeof WorkerClass!=='function')throw Error('This browser cannot start the local runner. You can use the reproduction download instead.');
-     worker=new WorkerClass('local-run-worker.js?v=20261024-interrupted-key');
+     worker=new WorkerClass('local-run-worker.js?v=20261024-word-sums');
      worker.onmessage=event=>{
       if(settled||event.data?.id!==id)return;
       const data=event.data;

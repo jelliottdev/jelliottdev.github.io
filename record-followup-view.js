@@ -12,7 +12,7 @@
    if(!object(item)||!slug(item.id)||seen.has(item.id)||!text(item.title,300)||!text(item.scope_change,1200)||!text(item.question,1200)||!text(item.limitation,1200))return false;
    const pins=item.inputs,control=item.control,task=control?.task;
    if(!object(item.card)||item.card.version!==1||!object(pins)||!['raw','reviewed'].includes(pins.version)||!hash(pins.alphabet_sha256)||!Array.isArray(pins.pages)||!pins.pages.length||pins.pages.length>75||pins.pages.some(p=>!object(p)||!/^lp[12]-\d{2}$/.test(p.id)||!hash(p.text_sha256))||new Set(pins.pages.map(p=>p.id)).size!==pins.pages.length)return false;
-   if(!object(control)||!text(control.label,300)||!hash(control.expected_result_sha256)||!object(task)||task.schema!=='liberpedia-local-task-v1'||task.engine!=='rune-program-v1'||!hash(task.taskId)||!Array.isArray(task.steps)||!Array.isArray(task.alphabet)||task.alphabet.length!==29||!['exact-prefix','word-affine-count'].includes(task.criterion?.kind)||task.criterion.kind==='exact-prefix'&&(!Array.isArray(task.criterion.values)||!task.criterion.values.length))return false;
+   if(!object(control)||!text(control.label,300)||!hash(control.expected_result_sha256)||!object(task)||task.schema!=='liberpedia-local-task-v1'||task.engine!=='rune-program-v1'||!hash(task.taskId)||!Array.isArray(task.steps)||!Array.isArray(task.alphabet)||task.alphabet.length!==29||!['exact-prefix','word-affine-count','word-prime-sums'].includes(task.criterion?.kind)||task.criterion.kind==='exact-prefix'&&(!Array.isArray(task.criterion.values)||!task.criterion.values.length))return false;
    seen.add(item.id);return true;
   });
  }

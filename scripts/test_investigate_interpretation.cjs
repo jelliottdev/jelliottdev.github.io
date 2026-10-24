@@ -70,14 +70,17 @@ async function tinyAmbiguity(){
  for(const text of ['Do not reverse prime values in rows','Reverse prime values in rows with key ABC','Reverse prime values in rows then apply Atbash','Reverse prime values in rows only if marked']){const f=await fixture();try{f.submit(text);assert.equal(f.app.getSnapshot().stage,'input');assert(f.app.getSnapshot().interpreting);assert.equal(f.requests.length,1);assert.deepEqual(JSON.parse(f.requests[0].options.body),{text});}finally{f.destroy();}}
 }
 async function failures(){
- for(const kind of ['outage','missing-binding','wrong-binding','invalid-candidate','timeout']){
+ for(const kind of ['outage','busy','rate-limit','invalid-response','missing-binding','wrong-binding','invalid-candidate','timeout']){
   const f=await fixture();try{const field=edit(f,raw);field.selectionStart=3;field.selectionEnd=7;f.doc.activeElement=field;f.submit();const request=f.requests[0];
-   if(kind==='outage')request.resolve(Response.json({error:'Unavailable'},{status:503}));
+   if(kind==='busy')request.resolve(Response.json({reason:'busy'},{status:503}));
+   else if(kind==='rate-limit')request.resolve(Response.json({reason:'untrusted message <script>'},{status:429}));
+   else if(kind==='invalid-response')request.resolve(Response.json({reason:'invalid-interpretation'},{status:503}));
+   else if(kind==='outage')request.resolve(Response.json({error:'Unavailable'},{status:503}));
    else if(kind==='invalid-candidate'){const c=candidate();c.steps[0].parameters.key.value='INVENTED';request.resolve(await response(raw,c));}
    else if(kind==='timeout'){f.timers[0]();request.resolve(await response());}
    else request.resolve(Response.json({candidate:candidate(),...(kind==='wrong-binding'?{sourceBinding:'0'.repeat(64)}:{})}));
    await until(()=>!f.app.getSnapshot().interpreting,'Failure did not settle');assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.app.getSnapshot().draft,null);assert.equal(f.doc.getElementById('idea'),field);assert.equal(field.value,raw);assert.equal(field.selectionStart,3);assert.equal(field.selectionEnd,7);assert.equal(f.doc.activeElement,field);
-   assert(f.doc.getElementById('interpretation-error').textContent.includes('could not be checked'));assert(!f.doc.getElementById('interpret-submit').disabled);assert.equal(f.doc.getElementById('interpret-submit').textContent,'Check idea');assert.equal(f.requests.length,1);assert(!f.doc.host.html.includes('Original idea'));assert(!f.doc.getElementById('use-original'));
+   const failureText=f.doc.getElementById('interpretation-error').textContent;assert(failureText.length>0);assert(!failureText.includes('<script>'));assert(failureText.includes(kind==='timeout'?'timed out':kind==='rate-limit'?'in a minute':['outage','busy'].includes(kind)?'temporarily unavailable':'interpreted reliably'));assert(!f.doc.getElementById('interpret-submit').disabled);assert.equal(f.doc.getElementById('interpret-submit').textContent,'Check idea');assert.equal(f.requests.length,1);assert(!f.doc.host.html.includes('Original idea'));assert(!f.doc.getElementById('use-original'));
    f.submit();assert.equal(f.requests.length,2,'Regular Check idea retries exact source');assert.deepEqual(JSON.parse(f.requests[1].options.body),{text:raw});f.requests[1].resolve(await response());await until(()=>f.app.getSnapshot().stage==='review','Regular retry did not advance');
   }finally{f.destroy();}
  }

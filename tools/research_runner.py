@@ -125,6 +125,10 @@ def validate(task):
         fields(criterion, ('kind', 'values'), 'Prefix criterion')
         require(isinstance(criterion['values'], list) and 1 <= len(criterion['values']) <= 256
                 and all(integer(v, 0, 28) for v in criterion['values']), 'Invalid prefix values')
+    elif criterion.get('kind') == 'word-prime-sums':
+        fields(criterion, ('kind', 'table', 'boundaries'), 'Word-prime-sums criterion')
+        require(criterion['table'] in ('canonical', 'reversed'), 'Invalid prime table')
+        require(criterion['boundaries'] in ('non-rune', 'hyphen-period'), 'Invalid word boundary rule')
     elif criterion.get('kind') == 'word-affine-count':
         fields(criterion, ('kind', 'lag', 'a', 'b', 'boundaries'), 'Word-pair criterion')
         require(integer(criterion['lag'], 1, 12) and integer(criterion['a'], 0, 28)
@@ -272,6 +276,8 @@ def run(task):
     word_pages = []
     word_opportunities = word_matches = 0
     word_expected = Fraction(0)
+    sum_pages = []
+    sum_words = sum_total = 0
     for page in task['pages']:
         text = page['text']
         for step in task['steps']:
@@ -292,6 +298,15 @@ def run(task):
             word_opportunities += opportunities
             word_matches += matched
             word_expected += expected
+        if task['criterion']['kind'] == 'word-prime-sums':
+            words = []
+            for characters in measurement_words(text, indices, task['criterion']['boundaries']):
+                amount = sum(task['alphabet'][28 - indices[ch] if task['criterion']['table'] == 'reversed'
+                                              else indices[ch]]['prime'] for ch in characters)
+                words.append({'runes': ''.join(characters), 'sum': amount})
+                sum_words += 1
+                sum_total += amount
+            sum_pages.append({'page': page['id'], 'words': words})
     result = {'schema': RESULT_SCHEMA, 'taskId': task['taskId'], 'engine': ENGINE,
             'metrics': {'pages': len(task['pages']), 'runes': total, 'adjacentPairs': pairs,
                         'equalAdjacentPairs': equal,
@@ -300,6 +315,8 @@ def run(task):
     if task['criterion']['kind'] == 'word-affine-count':
         result['wordPairs'] = {'opportunities': word_opportunities, 'matches': word_matches,
                                'expected': rational_json(word_expected), 'pages': word_pages}
+    if task['criterion']['kind'] == 'word-prime-sums':
+        result['wordSums'] = {'words': sum_words, 'total': sum_total, 'pages': sum_pages}
     return result
 
 

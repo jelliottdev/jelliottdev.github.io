@@ -98,6 +98,18 @@ def compile_card(card):
         require(card['rules'][name]['status'] != 'specified', 'unhandled rule ' + name)
     operations = method['operations']
     require(isinstance(operations, list) and 1 <= len(operations) <= 8, 'need 1..8 ordered operations')
+    if any(isinstance(op, dict) and op.get('id') == 'word_prime_sums' for op in operations):
+        require(len(operations) == 1, 'word-prime sums cannot include transforms')
+        op = operations[0]
+        fields(op, ('id', 'label', 'table', 'boundaries'), 'word-prime operation')
+        require(op['label'] == 'Word prime sums' and op['table'] in ('canonical', 'reversed')
+                and op['boundaries'] in ('non-rune', 'hyphen-period'), 'word-prime parameters')
+        expected = {'kind': 'word-prime-sums', 'table': op['table'], 'boundaries': op['boundaries']}
+        fields(criterion, expected, 'word-prime evaluation')
+        require(criterion == expected, 'word-prime evaluation conflicts with method')
+        for name in ('boundaryMode', 'reset', 'initialState'):
+            require(values[name] is None, 'irrelevant word-prime rule ' + name)
+        return {'pages': scope['pages'], 'steps': [], 'criterion': criterion, 'inputVersion': values['inputVersion']}
     if any(isinstance(op, dict) and op.get('id') == 'word_affine_count' for op in operations):
         require(len(operations) == 1, 'word-pair measurement cannot include transforms')
         op = operations[0]
@@ -235,7 +247,15 @@ def validate_followups(value, root, known_pages=None):
         else:
             require(task['criterion'] == plan['criterion'], 'control differs from proposed target criterion')
         result = runner.run(task)
-        if plan['criterion']['kind'] == 'word-affine-count':
+        if plan['criterion']['kind'] == 'word-prime-sums':
+            sums = result['wordSums']
+            groups = [word for page in sums['pages'] for word in page['words']]
+            require(type(sums['words']) is int and sums['words'] == len(groups) > 0
+                    and type(sums['total']) is int and 0 < sums['total'] <= 9007199254740991
+                    and all(word['runes'] and type(word['sum']) is int and word['sum'] > 0 for word in groups)
+                    and sum(word['sum'] for word in groups) == sums['total'],
+                    'synthetic prime-sum control lacks complete positive group sums')
+        elif plan['criterion']['kind'] == 'word-affine-count':
             measured = result['wordPairs']
             expected = measured['expected']
             require(measured['matches'] == measured['opportunities'] > 0
@@ -495,6 +515,59 @@ def construct_word_pair_followup(root, *, identifier, title, question, scope_cha
               'scope_change': scope_change, 'limitation': limitation, 'card': card,
               'inputs': {'version': input_version, 'alphabet_sha256': digest(ordered_alphabet), 'pages': pins},
               'control': {'label': 'Count every planted synthetic pair using the declared word boundaries and distinguish its shuffled-order mean',
+                          'task': task, 'expected_result_sha256': digest(result)}}
+    validate_followups([recipe], root)
+    return recipe
+
+
+def construct_word_prime_followup(root, *, identifier, title, question, scope_change,
+                                  limitation, pages, table, boundaries, input_version='raw'):
+    """Prepare direct word sums with a small hand-calculated numeric control."""
+    root = Path(root)
+    ordered_alphabet = alphabet(root)
+    require(isinstance(pages, (list, tuple)) and all(isinstance(p, str) for p in pages)
+            and len(set(pages)) == len(pages), 'pages must be an explicit unique list')
+    pages = sorted(pages)
+    criterion = {'kind': 'word-prime-sums', 'table': table, 'boundaries': boundaries}
+    operation = {'id': 'word_prime_sums', 'label': 'Word prime sums',
+                 'table': table, 'boundaries': boundaries}
+    specified = lambda value: {'status': 'specified', 'value': value}
+    rules = {name: {'status': 'not_applicable'} for name in RULES}
+    rules.update({name: specified(value) for name, value in {
+        'inputVersion': input_version, 'representation': 'GP29', 'unmapped': 'preserve',
+        'wordBoundaries': 'preserve', 'evaluation': criterion}.items()})
+    card = {'version': 1, 'outcome': specified({'outcomeId': 'measure',
+            'detail': 'List each word and its exact sum under the specified prime table; no language or statistical threshold is inferred.'}),
+            'method': specified({'operations': [operation]}), 'scope': specified({'pages': pages}),
+            'rules': rules, 'unresolved': []}
+    compile_card(card)
+    require([(ordered_alphabet[n]['latin'], ordered_alphabet[n]['prime']) for n in (0, 1, 27, 28)]
+            == [('F', 2), ('U', 3), ('IA', 107), ('EA', 109)], 'hand-control alphabet anchors changed')
+    f, u, ea = (ordered_alphabet[n]['rune'] for n in (0, 1, 28))
+    cipher = f + ' /\r\n' + u + '-' + ea + '. ' + f + u + ea
+    task = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE,
+            'title': 'Synthetic hand-calculated word-prime control: ' + identifier,
+            'pages': [{'id': 'lp1-01', 'text': cipher}], 'alphabet': ordered_alphabet,
+            'steps': [], 'criterion': criterion}
+    task['taskId'] = runner.task_identity(task)
+    result = runner.run(task)
+    vf, vu, vea = (2, 3, 109) if table == 'canonical' else (109, 107, 2)
+    expected = ([{'runes': f + u, 'sum': vf + vu}, {'runes': ea, 'sum': vea}]
+                if boundaries == 'hyphen-period' else
+                [{'runes': f, 'sum': vf}, {'runes': u, 'sum': vu}, {'runes': ea, 'sum': vea}])
+    expected.append({'runes': f + u + ea, 'sum': vf + vu + vea})
+    require(result['wordSums'] == {'words': len(expected), 'total': 2 * (vf + vu + vea),
+            'pages': [{'page': 'lp1-01', 'words': expected}]}, 'hand-calculated synthetic word sums differ')
+    pins = []
+    for page_id in pages:
+        source = json.loads((root / 'data/pages' / (page_id + '.json')).read_text(encoding='utf-8'))
+        text = source.get('raw' if input_version == 'raw' else 'reviewed_text')
+        require(isinstance(text, str), 'requested exact source text unavailable: ' + page_id)
+        pins.append({'id': page_id, 'text_sha256': text_hash(text)})
+    recipe = {'id': identifier, 'title': title, 'question': question, 'scope_change': scope_change,
+              'limitation': limitation, 'card': card,
+              'inputs': {'version': input_version, 'alphabet_sha256': digest(ordered_alphabet), 'pages': pins},
+              'control': {'label': 'Verify hand-calculated synthetic F, U and EA sums across exact word boundaries',
                           'task': task, 'expected_result_sha256': digest(result)}}
     validate_followups([recipe], root)
     return recipe

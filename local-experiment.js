@@ -81,6 +81,9 @@
    object(task.criterion,['kind','values']);
    if(!Array.isArray(task.criterion.values)||!task.criterion.values.length||task.criterion.values.length>256)throw Error('Give a prefix of one to 256 rune indices.');
    task.criterion.values.forEach(v=>integer(v,0,28));
+  }else if(task.criterion?.kind==='word-prime-sums'){
+   object(task.criterion,['kind','table','boundaries']);
+   if(!['canonical','reversed'].includes(task.criterion.table)||!['non-rune','hyphen-period'].includes(task.criterion.boundaries))throw Error('Choose the prime table and word boundary rule.');
   }else if(task.criterion?.kind==='word-affine-count'){
    object(task.criterion,['kind','lag','a','b','boundaries']);
    integer(task.criterion.lag,1,12);integer(task.criterion.a,0,28);integer(task.criterion.b,0,28);
@@ -181,7 +184,7 @@
  function run(task,{onProgress}={}){
   validateTask(task);
   const index=new Map(task.alphabet.map((r,i)=>[r.rune,i])),frequencies=Array(29).fill(0);
-  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[],wordPages=[];let wordExpected=[0n,1n],wordOpportunities=0,wordMatches=0;
+  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[],wordPages=[];let wordExpected=[0n,1n],wordOpportunities=0,wordMatches=0;const sumPages=[];let sumWords=0,sumTotal=0;
   for(const page of task.pages){
    const text=transform(page.text,task.steps,task.alphabet),values=Array.from(text).filter(ch=>index.has(ch)).map(ch=>index.get(ch));
    values.forEach(v=>frequencies[v]++);runes+=values.length;adjacentPairs+=Math.max(0,values.length-1);
@@ -193,11 +196,19 @@
     wordPages.push({page:page.id,opportunities:measured.opportunities,matches:measured.matches,expected:rationalJSON(measured.expected)});
     wordExpected=plusFraction(wordExpected,measured.expected);wordOpportunities+=measured.opportunities;wordMatches+=measured.matches;
    }
+   if(task.criterion.kind==='word-prime-sums'){
+    const words=measurementWords(text,index,task.criterion.boundaries).map(chars=>{
+     const sum=chars.reduce((total,ch)=>total+task.alphabet[task.criterion.table==='reversed'?28-index.get(ch):index.get(ch)].prime,0);
+     sumWords++;sumTotal+=sum;return {runes:chars.join(''),sum};
+    });
+    sumPages.push({page:page.id,words});
+   }
    if(onProgress)onProgress({phase:'running',completed:transformed.length,total:task.pages.length});
   }
   const result={schema:RESULT,taskId:task.taskId,engine:ENGINE,runnerVersion:'1',
    metrics:{pages:task.pages.length,runes,adjacentPairs,equalAdjacentPairs,ioc:runes>1?frequencies.reduce((s,n)=>s+n*(n-1),0)/(runes*(runes-1)):0},matches,transformed};
   if(task.criterion.kind==='word-affine-count')result.wordPairs={opportunities:wordOpportunities,matches:wordMatches,expected:rationalJSON(wordExpected),pages:wordPages};
+  if(task.criterion.kind==='word-prime-sums')result.wordSums={words:sumWords,total:sumTotal,pages:sumPages};
   return result;
  }
  function sameResult(actual,expected){
@@ -217,6 +228,9 @@
  function summary(task,result){
   validateTask(task);
   if(!result||verifiedResults.get(result)!==stable(task)||!sameResult(result,run(task)))throw Error('Results must be verified before display.');
+  if(task.criterion.kind==='word-prime-sums')return {
+   finding:result.wordSums.words.toLocaleString('en-US')+' words measured with the '+task.criterion.table+' prime table.',
+   comparison:[],limit:'These sums use only the declared prime table and word boundaries. They are not a decoding or a statistical test.'};
   if(task.criterion.kind==='word-affine-count'){
    const p=result.wordPairs,e=p.expected,n=BigInt(e.numerator),d=BigInt(e.denominator),approx=Number(n/d)+Number((n%d)*1000000000000n/d)/1000000000000;
    // Exact rational values remain authoritative; the chart is a display approximation.

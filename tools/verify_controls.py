@@ -60,6 +60,10 @@ def validate_origin(value):
 def positive_control(task, result):
     if task['criterion']['kind'] == 'exact-prefix':
         return bool(result['matches']) and all(m['matched'] for m in result['matches'])
+    if task['criterion']['kind'] == 'word-prime-sums':
+        sums = result['wordSums']
+        return (type(sums['words']) is int and 0 < sums['words'] <= 9007199254740991
+                and type(sums['total']) is int and 0 < sums['total'] <= 9007199254740991)
     if task['criterion']['kind'] == 'word-affine-count':
         pairs = result['wordPairs']
         return (pairs['opportunities'] > 0 and pairs['matches'] == pairs['opportunities']
@@ -73,7 +77,7 @@ def verified_controls(task, document, folder):
     runner.require(type(document['version']) is int and document['version'] == 1
                    and isinstance(document['origins'], list) and 1 <= len(document['origins']) <= 10,
                    'Unsupported or empty origins document')
-    runner.require(task['criterion']['kind'] in ('measurement', 'exact-prefix', 'word-affine-count'), 'Controls require supported evaluation')
+    runner.require(task['criterion']['kind'] in ('measurement', 'exact-prefix', 'word-affine-count', 'word-prime-sums'), 'Controls require supported evaluation')
     checked = set()
     for value in document['origins']:
         control = validate_origin(value)

@@ -175,3 +175,19 @@ measurement control cannot certify itself through an empty success condition.
 Existing exact-prefix and word-pair tests still require identical control and
 target criteria. The controls run before any manuscript computation. Findings
 for a descriptive target remain measurements, with no readability verdict.
+
+### Word prime-value ledgers
+
+`word-prime-sums` measures word values without claiming a decoding rule. It uses
+canonical GP prime assignments or reverses the actual ordered 29-value table
+(F=109, U=107, through EA=2). This is not decimal-digit reversal, an emirp rule,
+or subtraction from a fixed constant. Word grouping must explicitly choose
+non-rune boundaries or the earlier hyphen/period convention; pages stay separate.
+The output retains each measured rune group and its exact total. The shared
+view exposes bounded page/word browsing and a calculation from the actual data.
+
+A synthetic ledger control uses the identical table and grouping rule and a
+complete expected result digest. Direct sums do not reproduce a prime-excess
+permutation test, candidate-key collision study or a readable-text test. Changing
+the table in such a study also changes its controls and target values; the
+original findings cannot be inherited from this ledger.

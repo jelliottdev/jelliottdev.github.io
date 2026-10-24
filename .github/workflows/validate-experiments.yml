@@ -45,6 +45,9 @@ jobs:
       - run: node scripts/test_interrupted_keyed_shift.cjs
       - run: node --experimental-sqlite services/idea-assistant/test-interrupted-key-plan.mjs
       - run: node --experimental-sqlite services/idea-assistant/test-record-measurement-control.mjs
+      - run: node scripts/test_word_prime_sums.cjs
+      - run: node scripts/test_word_prime_sum_view.cjs
+      - run: node --experimental-sqlite services/idea-assistant/test-word-prime-sum-plans.mjs
       - run: node scripts/test_word_affine_count.cjs
       - run: node --experimental-sqlite services/idea-assistant/test-word-pair-plans.mjs
       - run: node --experimental-sqlite services/idea-assistant/test-finite-plans.mjs
@@ -190,6 +193,8 @@ jobs:
       - run: python scripts/test_verify_controls.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_browser_followups_interrupted.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_word_prime_followups.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_word_pair_followups.py
         if: steps.scope.outputs.science == 'true'

@@ -51,10 +51,38 @@
   const rows=[{label:'Observed matches',value:pairs.matches,text:actual},{label:'Random-order average',value:expected,text:average}];
   return '<figure class="local-run-chart run-word-pair-chart"><figcaption>Matching pairs inside words</figcaption><p class="run-word-pair-total">'+actual+(pairs.matches===1?' match in ':' matches in ')+total+' available pairs</p><div role="img" aria-label="'+esc('Observed matches: '+actual+'. Random-order average: approximately '+average+'. Both compare the same '+total+' available pairs.')+'">'+rows.map((row,i)=>'<div class="run-word-pair-row"><span>'+row.label+'</span><strong>'+esc(row.text)+'</strong><div class="run-bar-track"><span class="run-bar run-bar-'+i+'" style="width:'+(row.value/max*100).toFixed(4)+'%"></span></div></div>').join('')+'</div><p class="run-chart-note">Average across all possible orderings of the same runes within each word. Rounded here to two decimal places.</p><p class="run-chart-note">'+esc(boundary)+'</p><details class="run-pair-arithmetic"><summary>Exact average</summary><p>'+esc(pairs.expected.numerator)+' ÷ '+esc(pairs.expected.denominator)+' matches.</p></details></figure>';
  }
+ const SUM_PAGE_SIZE=8,SUM_PREVIEW=12;
+ function wordSumCalculation(task,page,index){
+  const word=page.words[index];if(!word)return '<p class="run-sum-empty">No rune words were measured on this page.</p>';
+  const runes=Array.from(word.runes),shown=runes.slice(0,SUM_PREVIEW),indices=new Map(task.alphabet.map((v,i)=>[v.rune,i])),long=runes.length>SUM_PREVIEW;
+  return '<section class="run-sum-calculation"><h3>Word '+(index+1)+' · '+esc(page.page.toUpperCase())+'</h3><p class="run-sum-calculation-note">'+(long?'Showing the first '+SUM_PREVIEW+' of '+runes.length+' runes. The full sum includes all '+runes.length+'.':'Add the assigned prime value of each rune.')+'</p><ol class="run-sum-terms" aria-label="Assigned prime value for each displayed rune">'+shown.map(rune=>{const i=indices.get(rune),prime=task.alphabet[task.criterion.table==='reversed'?28-i:i].prime;return '<li><span class="run-sum-rune">'+esc(rune)+'</span><span class="run-sum-prime">'+prime+'</span></li>';}).join('')+'</ol><p class="run-sum-total">'+(long?'Full word sum':'Word sum')+': <strong>'+word.sum.toLocaleString('en-US')+'</strong></p></section>';
+ }
+ function wordSumRows(page,batch,selected){
+  const start=batch*SUM_PAGE_SIZE,rows=page.words.slice(start,start+SUM_PAGE_SIZE);
+  if(!rows.length)return '';
+  return '<table class="run-sum-table"><thead><tr><th scope="col">Word</th><th scope="col">Sum</th></tr></thead><tbody>'+rows.map((word,offset)=>{const i=start+offset,runes=Array.from(word.runes),long=runes.length>SUM_PREVIEW,preview=runes.slice(0,SUM_PREVIEW).join('');return '<tr><td><button type="button" data-run-sum-word="'+i+'" aria-pressed="'+(i===selected)+'" aria-label="Inspect word '+(i+1)+' on '+esc(page.page.toUpperCase())+', '+runes.length+' runes"><span class="run-sum-word-number">'+(i+1)+'</span><span class="run-sum-word">'+esc(preview)+(long?'…':'')+'</span>'+(long?'<span class="run-sum-word-length">'+runes.length+' runes</span>':'')+'</button></td><td>'+word.sum.toLocaleString('en-US')+'</td></tr>';}).join('')+'</tbody></table>';
+ }
+ function wordSumsView(task,result){
+  const page=result.wordSums.pages[0],boundary=task.criterion.boundaries==='non-rune'?'Every non-rune character separates words.':'Only ASCII hyphens (-) and periods (.) separate groups. Other non-rune characters, including spaces and line breaks, are joined.';
+  return '<section class="run-word-sums" data-run-word-sums aria-label="Measured word sums"><p class="run-sum-table-choice"><strong>'+(task.criterion.table==='reversed'?'Reversed':'Canonical')+' prime assignments</strong></p><p class="run-sum-boundary">'+esc(boundary)+'</p><div class="run-sum-controls">'+(result.wordSums.pages.length>1?'<label>Page<select data-run-sum-page aria-label="Measured page">'+result.wordSums.pages.map(p=>'<option value="'+esc(p.page)+'">'+esc(p.page.toUpperCase())+'</option>').join('')+'</select></label>':'<p>'+esc(page.page.toUpperCase())+'</p>')+'</div><div data-run-sum-calculation>'+wordSumCalculation(task,page,0)+'</div><h3>Word totals</h3><p class="run-sum-instruction">Select a word to see its calculation.</p><div data-run-sum-list>'+wordSumRows(page,0,0)+'</div><div class="run-sum-pagination"><button type="button" data-run-sum-prev disabled>Previous</button><p data-run-sum-range role="status">'+(page.words.length?'Words 1–'+Math.min(SUM_PAGE_SIZE,page.words.length)+' of '+page.words.length:'0 words')+' · '+esc(page.page.toUpperCase())+'</p><button type="button" data-run-sum-next'+(page.words.length<=SUM_PAGE_SIZE?' disabled':'')+'>Next</button></div></section>';
+ }
+ function bindWordSums(host,task,result){
+  const panel=host.querySelector?.('[data-run-word-sums]');if(!panel)return ()=>{};
+  const select=panel.querySelector('[data-run-sum-page]'),calculation=panel.querySelector('[data-run-sum-calculation]'),list=panel.querySelector('[data-run-sum-list]'),range=panel.querySelector('[data-run-sum-range]'),prev=panel.querySelector('[data-run-sum-prev]'),next=panel.querySelector('[data-run-sum-next]');
+  if(!calculation||!list||!range||!prev||!next)return ()=>{};
+  let page=result.wordSums.pages[0],batch=0,selected=0;const listeners=[];
+  const update=()=>{const start=batch*SUM_PAGE_SIZE;calculation.innerHTML=wordSumCalculation(task,page,selected);list.innerHTML=wordSumRows(page,batch,selected);range.textContent=(page.words.length?'Words '+(start+1)+'–'+Math.min(start+SUM_PAGE_SIZE,page.words.length)+' of '+page.words.length:'0 words')+' · '+page.page.toUpperCase();prev.disabled=batch===0;next.disabled=(batch+1)*SUM_PAGE_SIZE>=page.words.length;};
+  const listen=(node,event,fn)=>{node.addEventListener(event,fn);listeners.push(()=>node.removeEventListener?.(event,fn));};
+  if(select)listen(select,'change',()=>{const chosen=result.wordSums.pages.find(p=>p.page===select.value);if(!chosen){select.value=page.page;return;}page=chosen;batch=selected=0;update();});
+  listen(prev,'click',()=>{if(batch>0){batch--;selected=batch*SUM_PAGE_SIZE;update();}});
+  listen(next,'click',()=>{if((batch+1)*SUM_PAGE_SIZE<page.words.length){batch++;selected=batch*SUM_PAGE_SIZE;update();}});
+  listen(list,'click',event=>{const button=event.target?.closest?.('[data-run-sum-word]');if(!button||!list.contains(button)||!/^\d+$/.test(button.dataset.runSumWord||''))return;const i=Number(button.dataset.runSumWord);if(i<batch*SUM_PAGE_SIZE||i>=Math.min((batch+1)*SUM_PAGE_SIZE,page.words.length))return;selected=i;calculation.innerHTML=wordSumCalculation(task,page,selected);list.querySelectorAll('[data-run-sum-word]').forEach(node=>node.setAttribute('aria-pressed',String(Number(node.dataset.runSumWord)===selected)));});
+  update();return ()=>listeners.forEach(remove=>remove());
+ }
  function inspector(task,result){
-  const first=task.pages[0],after=result.transformed.find(page=>page.page===first.id),single=task.criterion.kind==='word-affine-count'&&!task.steps.length;
+  const first=task.pages[0],after=result.transformed.find(page=>page.page===first.id),single=['word-affine-count','word-prime-sums'].includes(task.criterion.kind)&&!task.steps.length;
   return '<details class="run-text-inspector"><summary>Inspect the text</summary><div class="run-text-controls">'+
-   (task.pages.length>1?'<label class="run-text-page">Page<select data-run-text-page>'+task.pages.map(page=>'<option value="'+esc(page.id)+'">'+esc(page.id.toUpperCase())+'</option>').join('')+'</select></label>':'<p class="run-text-single">'+esc(first.id.toUpperCase())+'</p>')+
+   (task.pages.length>1?'<label class="run-text-page">Page<select data-run-text-page aria-label="Text page">'+task.pages.map(page=>'<option value="'+esc(page.id)+'">'+esc(page.id.toUpperCase())+'</option>').join('')+'</select></label>':'<p class="run-text-single">'+esc(first.id.toUpperCase())+'</p>')+
    '<div class="run-text-modes" role="group" aria-label="Text representation"><button type="button" data-run-text-mode="runes" aria-pressed="true">Runes</button><button type="button" data-run-text-mode="latin" aria-pressed="false">Transliteration</button></div></div>'+
    '<p class="run-text-note">Transliteration shows rune labels, not a translation. A middle dot (·) separates adjacent labels; original spaces, punctuation and line breaks remain.</p>'+
    (task.criterion.kind==='exact-prefix'?'<div data-run-prefix>'+prefixAlignment(task,result,first.id)+'</div>':'')+
@@ -63,10 +91,11 @@
  function bind(host,task,result){
   bindings.get(host)?.();
   E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result}));
-  const panel=host.querySelector?.('.run-text-inspector');if(!panel)return ()=>{};
+  const sumsCleanup=task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):()=>{};
+  const panel=host.querySelector?.('.run-text-inspector');if(!panel){bindings.set(host,sumsCleanup);return sumsCleanup;}
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
   const original=panel.querySelector('[data-run-original]'),after=panel.querySelector('[data-run-after]');
-  if(!original||!after&&!(task.criterion.kind==='word-affine-count'&&!task.steps.length))return ()=>{};
+  if(!original||!after&&!(['word-affine-count','word-prime-sums'].includes(task.criterion.kind)&&!task.steps.length)){bindings.set(host,sumsCleanup);return sumsCleanup;}
   let pageId=snapshot.task.pages[0].id,mode='runes';const listeners=[];
   const update=()=>{
    const page=snapshot.task.pages.find(p=>p.id===pageId),output=snapshot.result.transformed.find(p=>p.page===pageId);
@@ -79,12 +108,12 @@
   const listen=(node,event,fn)=>{node.addEventListener(event,fn);listeners.push(()=>node.removeEventListener?.(event,fn));};
   if(select)listen(select,'change',()=>{if(snapshot.task.pages.some(p=>p.id===select.value)){pageId=select.value;update();}});
   buttons.forEach(button=>listen(button,'click',()=>{const chosen=button.getAttribute('data-run-text-mode');if(['runes','latin'].includes(chosen)){mode=chosen;update();}}));
-  update();const cleanup=()=>listeners.forEach(remove=>remove());bindings.set(host,cleanup);return cleanup;
+  update();const cleanup=()=>{listeners.forEach(remove=>remove());sumsCleanup();};bindings.set(host,cleanup);return cleanup;
  }
  function render(task,result){
   const data=E.summary(task,result),max=Math.max(1,...(data.comparison||[]).map(r=>r.value));
   return '<section class="local-run-result" aria-labelledby="local-run-finding"><p class="run-state">Computation verified</p><h2 id="local-run-finding">What this run found</h2><p>'+esc(data.finding)+'</p>'+
-   (task.criterion.kind==='word-affine-count'?wordPairChart(task,result):task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
+   (task.criterion.kind==='word-prime-sums'?wordSumsView(task,result):task.criterion.kind==='word-affine-count'?wordPairChart(task,result):task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
    data.comparison.map((row,i)=>'<div class="run-bar-row"><span>'+esc(row.label)+'</span><div class="run-bar-track"><span class="run-bar run-bar-'+i+'" style="width:'+(row.value/max*100).toFixed(4)+'%"></span></div><strong>'+row.value+'</strong></div>').join('')+
    '</div><p class="run-chart-note">Counts follow the rune sequence on each page, ignoring spaces and punctuation.</p></figure>')+
    (task.criterion.kind==='word-affine-count'?wordPairExample(task,result):'')+'<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';

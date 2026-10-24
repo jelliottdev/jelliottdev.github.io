@@ -4,10 +4,10 @@ const E=require('../local-experiment.js'),{createExecutor}=require('../local-run
 const root=path.resolve(__dirname,'..'),engine=fs.readFileSync(path.join(root,'local-experiment.js'),'utf8'),workerSource=fs.readFileSync(path.join(root,'local-run-worker.js'),'utf8');
 const workers=[];
 class WorkerFixture{
- constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-interrupted-key');this.stopped=false;workers.push(this);
+ constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-word-sums');this.stopped=false;workers.push(this);
   const self={postMessage:data=>{if(!this.stopped)this.onmessage?.({data:structuredClone(data)});}};
   const context=vm.createContext({self,crypto:webcrypto,TextEncoder,structuredClone});
-  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-interrupted-key');vm.runInContext(engine,context);};
+  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-word-sums');vm.runInContext(engine,context);};
   vm.runInContext(workerSource,context);this.receive=self.onmessage;
  }
  postMessage(data){this.message=structuredClone(data);queueMicrotask(()=>{if(!this.stopped)Promise.resolve(this.receive({data:this.message})).catch(()=>this.onerror?.({preventDefault(){}}));});}
@@ -43,6 +43,11 @@ let groups=0;async function test(name,fn){await fn();console.log('PASS '+name);g
   }
   const invalid=await task();invalid.steps=[{op:'interrupted-keyed-shift',key:[1],direction:'subtract',reset:'page',interrupts:[0,0]}];invalid.taskId=await E.identity(invalid,webcrypto);
   const before=workers.length;await assert.rejects(createExecutor({WorkerClass:WorkerFixture}).start(invalid).promise);assert.equal(workers.length,before);
+ });
+ await test('actual worker measures word prime values using the declared table and boundaries',async()=>{
+  const input=await E.prepare({...await task(),steps:[],criterion:{kind:'word-prime-sums',table:'reversed',boundaries:'non-rune'}},webcrypto);
+  const output=await createExecutor({WorkerClass:WorkerFixture}).start(input).promise;
+  assert.deepEqual(await E.verify(input,output,webcrypto),E.run(input));assert.equal(output.wordSums.words,4);assert.equal(output.wordSums.total,291);assert.deepEqual(output.wordSums.pages[0].words[0],{runes:'ABC',sum:87});assert(workers.at(-1).stopped);
  });
  await test('stop terminates the worker and rejects without accepting late output',async()=>{
   const executor=createExecutor({WorkerClass:WorkerFixture}),run=executor.start(await task());

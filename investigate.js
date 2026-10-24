@@ -633,7 +633,7 @@
    if(notice)notice.textContent=interpretError;
   }
   async function interpret(){
-   stopInterpretation();const token=interpretVersion,text=raw;
+   stopInterpretation();const token=interpretVersion,text=raw;let returnedInterpretation=false;
    if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))){acceptDraft(initialDraft(text));return;}
    stage='input';interpreting=true;interpretError='';error='';message='';updateInterpretationInput();
    try{
@@ -649,11 +649,15 @@
     const timer=schedule(()=>requestController.abort(),30000);
     try{
      const response=await fetcher(interpretationEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text}),signal:requestController.signal});
-     if(!response.ok)throw Error('Interpretation is unavailable. You can continue with your original wording.');
+     if(!response.ok){
+      let reason;try{reason=(await response.json())?.reason;}catch{}
+      const failure=Error('Interpretation request failed');failure.interpretationReason=response.status===429?'rate-limit':reason==='invalid-interpretation'?'invalid':reason==='timeout'?'timeout':'unavailable';throw failure;
+     }
+     returnedInterpretation=true;
      const data=await response.json();
      const digest=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
      const expected=[...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('');
-     if(requestController.signal.aborted)throw Error('Interpretation timed out. Your original wording is kept.');
+     if(requestController.signal.aborted)throw Object.assign(Error('Interpretation timed out'),{interpretationReason:'timeout'});
      if(token!==interpretVersion||stage!=='input'||!interpreting||text!==raw)return;
      if(data.sourceBinding!==expected)throw Error('The interpretation did not match your wording. You can continue with the original.');
      const proposed=P.toDraft(text,data.candidate);
@@ -661,7 +665,8 @@
     }finally{unschedule(timer);}
    }catch(e){
     if(token===interpretVersion&&stage==='input'){
-     interpreting=false;interpretError=e.name==='AbortError'?'Checking timed out. Please check the idea again.':'The idea could not be checked. Please try checking it again.';updateInterpretationInput();
+     interpreting=false;const reason=e.name==='AbortError'?'timeout':e.interpretationReason||(returnedInterpretation?'invalid':'unavailable');
+     interpretError=({timeout:'The check timed out. Your text is kept. Try again.', 'rate-limit':'Too many checks. Try again in a minute.', invalid:'The wording couldn’t be interpreted reliably. Try rephrasing it.', unavailable:'The checker is temporarily unavailable. Your text is kept.'})[reason];updateInterpretationInput();
     }
    }finally{if(token===interpretVersion){interpreting=false;interpretController=null;}}
   }

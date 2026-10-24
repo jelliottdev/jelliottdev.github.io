@@ -139,6 +139,55 @@ class GuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'hash differs'):
             self.verified(target, doc)
 
+    def test_word_sum_controls_require_exact_table_boundary_and_complete_hash(self):
+        criterion = {'kind': 'word-prime-sums', 'table': 'reversed', 'boundaries': 'non-rune'}
+        fixture = task([0, 1, 2], criterion)
+        target = task([4, 5, 6], criterion, page='lp2-15')
+        self.assertEqual(self.verified(target, document(fixture))[0], 1)
+        for patch_value in ({'table': 'canonical'}, {'boundaries': 'hyphen-period'}):
+            changed = task([0, 1, 2], {**criterion, **patch_value})
+            with self.subTest(patch=patch_value), self.assertRaisesRegex(ValueError, 'different criterion'):
+                self.verified(target, document(changed))
+        for changed in (self.fixture, task([0, 1], {'kind': 'measurement'})):
+            with self.assertRaisesRegex(ValueError, 'different criterion'):
+                self.verified(target, document(changed))
+        empty = task([], criterion)
+        with self.assertRaisesRegex(ValueError, 'recovery property'):
+            self.verified(target, document(empty))
+        for mutate in (lambda r: r['wordSums'].update(total=r['wordSums']['total'] + 1),
+                       lambda r: r['wordSums'].update(words=0),
+                       lambda r: r['wordSums']['pages'][0]['words'][0].update(sum=1)):
+            doc = document(fixture)
+            forged = runner.run(fixture)
+            mutate(forged)
+            doc['origins'][0]['control']['expected_result_sha256'] = hashlib.sha256(guard.stable(forged).encode('utf-8')).hexdigest()
+            with self.assertRaisesRegex(ValueError, 'hash differs'):
+                self.verified(target, doc)
+
+    def test_word_sum_failure_never_calls_target_or_creates_output(self):
+        criterion = {'kind': 'word-prime-sums', 'table': 'canonical', 'boundaries': 'non-rune'}
+        target = task([4, 5, 6], criterion, page='lp2-15')
+        fixture = task([0, 1], criterion)
+        doc = document(fixture)
+        doc['origins'][0]['control']['expected_result_sha256'] = '0' * 64
+        self.write_control(doc)
+        target_path, origins_path, result_path = [self.folder / n for n in ('task.json', 'origins.json', 'results.json')]
+        target_path.write_text(json.dumps(target), encoding='utf-8')
+        origins_path.write_text(json.dumps(doc), encoding='utf-8')
+        arguments = ['verify_controls.py', '--task', str(target_path), '--origins', str(origins_path), '--out', str(result_path)]
+        original, calls = runner.run, []
+        def observe(value):
+            calls.append(value['taskId'])
+            return original(value)
+        with patch.object(sys, 'argv', arguments), patch.object(runner, 'run', observe), self.assertRaises(SystemExit):
+            guard.main()
+        self.assertEqual(calls, [fixture['taskId']])
+        self.assertFalse(result_path.exists())
+        for patch_value in ({'words': True}, {'words': 0}, {'total': False}, {'total': 0}, {'total': 9007199254740992}):
+            forged = runner.run(fixture)
+            forged['wordSums'].update(patch_value)
+            self.assertFalse(guard.positive_control(fixture, forged))
+
     def test_main_runs_target_only_after_all_controls_and_never_overwrites(self):
         doc = document(self.fixture)
         self.write_control(doc)

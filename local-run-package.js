@@ -4,7 +4,7 @@
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const encoder=new TextEncoder(),MAX_RUNNER=100000,MAX_TASK=2000000;
  const Control=typeof module==='object'&&module.exports?require('./local-control.js'):root.LocalControl;
- const GUARD_SHA256='ef7503f81d950ceead2e3eb946b69f3f969824c6b7d68fcc9c03440e731b6ef3';
+ const GUARD_SHA256='71fea900922eab1963af3e4230e47512929d673267180e4740aeee165bd48b2f';
  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(k=>Object.hasOwn(value,k));
  const hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
  async function digest(bytes){const hash=await root.crypto.subtle.digest('SHA-256',bytes);return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('');}
@@ -63,7 +63,7 @@
   const address=returnAddress(returnURL,snapshot.taskId),runner=textBytes(runnerText,'Runner source',MAX_RUNNER);
   const taskBytes=textBytes(E.stable(snapshot)+'\n','Task',MAX_TASK);
   if(savedOrigins.length){
-   if(!['measurement','exact-prefix','word-affine-count'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
+   if(!['measurement','exact-prefix','word-affine-count','word-prime-sums'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
    const guard=textBytes(guardText,'Control guard source',MAX_RUNNER);
    if(await digest(guard)!==GUARD_SHA256)throw Error('The fixed control guard source changed.');
    const controls=new Map();
@@ -81,7 +81,7 @@
     'Python 3.9 or later is required. Only the Python standard library is used; nothing is installed.\n\n'+
     'From that folder, run:\n  python verify_controls.py --task task.json --origins origins.json --out results.json\n\n'+
     'The fixed guard independently checks each synthetic control identity, exact program and full result hash.\n'+
-    (snapshot.criterion.kind==='word-affine-count'?'Every control must recover all planted relations with a lower random-order expectation before the target runs.':'Every control must match its declared prefix before the target runs.')+' A failed control stops the command without writing target results.\n'+
+    (snapshot.criterion.kind==='word-affine-count'?'Every control must recover all planted relations with a lower random-order expectation before the target runs.':snapshot.criterion.kind==='word-prime-sums'?'Every control must reproduce its complete declared word-sum ledger before the target runs.':snapshot.criterion.kind==='measurement'?'Every control must match every rune of its declared known answer before the target runs.':'Every control must match its declared prefix before the target runs.')+' A failed control stops the command without writing target results.\n'+
     'The command refuses to overwrite results.json. Keep all packaged inputs and Python files unchanged.\n'+
     'This local calculation makes no network calls and uploads nothing automatically. The origins describe saved published provenance, not a live source check.\n'+
     'To return manually and select your results file, open:\n  '+address+'\n\n'+
