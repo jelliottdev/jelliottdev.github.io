@@ -130,3 +130,69 @@ for(const [query,expected] of [['trigrams on LP2-31','lp2-trigram-repeats'],
 assert.equal((await (await realHandler(request('has anyone tried LP2-31'),realEnv)).json()).reason,'no-matching-records');
 assert.equal(realCalls,9);
 console.log('PASS: current published experiments retain complete scope through the hosted handler; page-only queries still skip inference. Model binding mocked.');
+
+// Confirmed interpretation is model context, never a bag of retrieval keywords.
+// An unrelated phrase repeated in the context must not displace the explicitly
+// requested Fibonacci method. The original (non-confirmation) API still works.
+const confirmedRequest=(query,confirmedQuery,pages=[])=>new Request('https://fixture.workers.dev/ask',{
+ method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},
+ body:JSON.stringify({query,pages,...(confirmedQuery===undefined?{}:{confirmedQuery})})
+});
+let contextCalls=0,contextMessages=[];
+const contextHandler=createHandler(async()=>realDocs);
+const contextEnv={...env,AI:{run:async(model,options)=>{
+ contextCalls++;contextMessages.push(JSON.parse(options.messages[1].content));
+ return {choices:[{message:{content:'Mock fixed-scope comparison [1].'}}]};
+}}};
+const compact='Fibonacci on LP2-31';
+const complete='Confirmed interpretation; not an executed experiment.\n'+
+ 'Rules: preserve the exact phase and page selection.\n'+
+ 'Original wording retained separately: '+('OutGuess reverse words '.repeat(50)).trimEnd();
+const expectedSelection=Search.select(realDocs,compact,[]).map(d=>d.id);
+let contextResponse=await contextHandler(confirmedRequest(compact,complete),contextEnv);
+assert.equal(contextResponse.status,200);
+assert.deepEqual((await contextResponse.json()).sources.map(d=>d.id),expectedSelection);
+assert.equal(contextMessages[0].idea,complete,'The complete confirmed wording reaches inference unchanged');
+assert.equal(contextMessages[0].records[0].id,'lp2-fibonacci-openings');
+for(const evidence of contextMessages[0].records){
+ assert.equal(evidence.text,realDocs.find(d=>d.id===evidence.id).text);
+}
+contextResponse=await contextHandler(confirmedRequest(compact,complete),contextEnv);
+assert.equal((await contextResponse.json()).cached,true);
+assert.equal(contextCalls,1,'An identical confirmation reuses the same answer');
+const amended=complete+'\nChanged rule: restart the key at each word.';
+contextResponse=await contextHandler(confirmedRequest(compact,amended),contextEnv);
+assert.equal(contextResponse.status,200);await contextResponse.json();
+assert.equal(contextCalls,2,'Changed confirmed rules must invalidate an otherwise identical cache key');
+assert.equal(contextMessages[1].idea,amended);
+assert.deepEqual(contextMessages[1].records.map(d=>d.id),expectedSelection);
+contextResponse=await contextHandler(confirmedRequest(compact,undefined),contextEnv);
+assert.equal(contextResponse.status,200);await contextResponse.json();
+assert.equal(contextCalls,3,'The legacy request does not inherit a different confirmed context');
+assert.equal(contextMessages[2].idea,compact);
+// Context alone, including method names and pages, cannot trigger inference.
+const beforePageOnly=contextCalls;
+const pageOnly=await contextHandler(confirmedRequest('has anyone tried LP2-31',complete),contextEnv);
+assert.equal((await pageOnly.json()).reason,'no-matching-records');
+assert.equal(contextCalls,beforePageOnly);
+
+// Both independent limits apply before retrieval/inference. Exercise UTF-8,
+// because 6,000 permitted characters need more than the former 6,500-byte body.
+const boundaryContext='漢'.repeat(6000);
+contextResponse=await contextHandler(confirmedRequest(compact,boundaryContext),contextEnv);
+assert.equal(contextResponse.status,200);await contextResponse.json();
+assert.equal(contextMessages.at(-1).idea,boundaryContext);
+const beforeInvalid=contextCalls;
+for(const bad of ['x'.repeat(6001),'', '   ',null,42,{method:'reverse'}]){
+ assert.equal((await contextHandler(confirmedRequest(compact,bad),contextEnv)).status,400,
+  'An invalid confirmed context must be rejected before inference');
+}
+assert.equal((await contextHandler(confirmedRequest('x'.repeat(1501),complete),contextEnv)).status,400,
+ 'The optional context does not increase the retrieval-query limit');
+const oversizedBody=new Request('https://fixture.workers.dev/ask',{
+ method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},
+ body:JSON.stringify({query:compact,confirmedQuery:'valid',padding:'x'.repeat(32001)})
+});
+assert.equal((await contextHandler(oversizedBody,contextEnv)).status,400,'The raw request body remains bounded');
+assert.equal(contextCalls,beforeInvalid);
+console.log('PASS: confirmed context reaches inference without affecting ranking; independent limits, UTF-8 body and confirmation-bound caches. All inference mocked.');

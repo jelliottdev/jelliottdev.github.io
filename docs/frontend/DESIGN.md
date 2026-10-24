@@ -12,3 +12,11 @@ Liberpedia is a reference work and research archive. The first decision on each 
 - Check the rendered page at 320, 390, 768, and at least one wide desktop width. Verify focus, disclosure states, no sideways scrolling, image loading, and direct links to hidden sections.
 
 - Wiki articles end with their authored content. Use relevant links in context; do not append the same tools, related-links, process or provenance panels to every article. Keep full methods and reproduction files on the linked research records.
+
+## October 2026 implementation handoff
+
+The supplied implementation handoff sets the direction for dedicated manuscript and idea workspaces. Keep their quiet white and cool-gray surfaces, compact named controls, and clear hierarchy. The manuscript gets the available screen area; source text and contextual readings remain distinct. Preserve public links into these workspaces.
+
+Idea checking follows input, clarification when necessary, confirmation, and comparison with actual research. Keep original wording separate from the confirmed interpretation. Missing parameters remain unknown, never automatic wildcards. Show findings and meaningful differences before supporting detail. A saved or printed comparison must use the same confirmed idea and evidence snapshot. Do not import prototype example findings as research or advertise attachment interpretation that is not implemented.
+
+The research index remains separate. Optional research maps help discover related approaches; their editorial groupings do not establish that procedures are equivalent or covered. Use current record content even when a map began from an older archive snapshot.

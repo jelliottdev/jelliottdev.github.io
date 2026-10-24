@@ -1,0 +1,31 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const map=require('../research-map.js');
+const data=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/research-map.json'),'utf8'));
+for(const view of ['solving','analytics']){
+  const top=map.select(data,{view});
+  assert.equal(top.node.id,top.view.root);
+  assert.equal(map.select(data,{view,branch:'record:missing'}).node.id,top.view.root);
+  const branch=top.children[0],chosen=map.select(data,{view,branch:branch.id});
+  assert.deepEqual(chosen.records.map(r=>r.id),branch.members);
+  assert.deepEqual(chosen.trail.map(n=>n.id),[top.view.root,branch.id]);
+  const related=map.lineage(chosen.nodes,branch.id);
+  assert(related.has(top.view.root));
+  assert(related.has(branch.children[0]));
+  assert(!related.has(top.children[1].id));
+  assert(!map.lineage(chosen.nodes,'missing').size);
+  const html=map.render(data,{view,branch:branch.id});
+  for(const record of chosen.records)assert(html.includes(record.href));
+  assert(html.includes('Draft classifications'));
+  assert(!map.render(data,{view}).includes('class="rm-record"'));
+}
+const hostile=structuredClone(data),first=hostile.views.solving.nodes.find(n=>n.kind==='family');
+first.label='<img src=x onerror="alert(1)">';
+const html=map.render(hostile,{});
+assert(!html.includes('<img src=x'));
+assert(html.includes('&lt;img'));
+const encoded=map.href({view:'analytics',branch:'method:page scopes & text'});
+assert.equal(new URLSearchParams(encoded.split('?')[1]).get('branch'),'method:page scopes & text');
+assert.equal(map.state({view:'bogus',page:-4}).view,'solving');
+console.log('research map navigation, lineage, links and escaping: PASS');

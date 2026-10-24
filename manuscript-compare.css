@@ -1,0 +1,10 @@
+#comparison-divider{flex:0 0 7px;position:relative;background:#fff;cursor:col-resize;touch-action:none;border-left:1px solid #e0e3e7;border-right:1px solid #e0e3e7;z-index:2}
+#comparison-divider:after{content:'';position:absolute;left:2px;top:calc(50% - 20px);height:40px;width:1px;background:#a9b4c1;border-radius:1px}
+#comparison-divider:hover,#comparison-divider:focus-visible,.resizing-comparison #comparison-divider{background:#e5edf5}
+#comparison-divider:focus-visible{outline-offset:-2px}
+.resizing-comparison{cursor:col-resize;user-select:none}
+#reader[data-view=compare] .image-pane{flex:var(--image-share,50) 1 0}
+#reader[data-view=compare] .text-pane{flex:calc(100 - var(--image-share,50)) 1 0;border-left:0}
+#reader:not([data-view=compare]) #comparison-divider{display:none}
+@media(min-width:761px) and (max-width:1100px){.reader-bar{gap:12px}.view-switch{position:static;transform:none;margin-left:auto}.reader-tools{margin-left:0;gap:1px}}
+@media(max-width:760px){#comparison-divider{display:none!important}}

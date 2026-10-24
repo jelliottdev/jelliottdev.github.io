@@ -1,0 +1,102 @@
+{
+  "aim":"Research & analytics",
+  "selection_rule":"Measurements, theoretical constraints, source audits and validation studies in the pinned Liberpedia corpus, excluding the 138 selected direct LP2 solving-attempt records and four direct historical/other-object decoding records. Includes related LP1 and Cicada material where it is being analyzed, rather than presented as a direct LP2 decoding attempt.",
+  "excluded_nonanalytic_decoding":["dukotah-h03-onion-cookie-xor","h03-ps-layout-replay","public-lp2-as-pad","emerson-book-cipher-control"],
+  "status":"Draft research-purpose and operation taxonomy, reviewed against source questions. Membership is a shared subject or analytical operation, not equivalent experiments or independently verified findings.",
+  "families":[
+    {"id":"rune-patterns","label":"Rune patterns","groups":[
+      {"label":"Doublet placement","records":"block-boundary-doublets doublet-placement doublet-section-residues doublet-sentence-residues"},
+      {"label":"Doublet context","records":"doublet-context doublet-event-lags doublet-event-shuffle"},
+      {"label":"Repeated-rune lags","records":"doublet-lag-profile f-delete-lag13 lp2-trigram-repeats repeated-long-ngrams short-window-lag13"},
+      {"label":"Boundary effects","records":"doublet-boundaries word-reset-repetition"},
+      {"label":"Marker positions","records":"im-near-f-markers n-rune-gaps"},
+      {"label":"Rune deletion effects","records":"single-rune-null-doublets"},
+      {"label":"Word-internal affine relations","records":"word-internal-affine-all-lags word-internal-affine-lags"},
+      {"label":"Section profiles","records":"sectionwise-rune-profile"},
+      {"label":"Entropy & equality structure","records":"dukotah-mdl-order-profile lp2-53-red-equality-invariants"},
+      {"label":"Doublet feature tests","records":"wulfic-doublet-leak-h-o"}
+    ]},
+    {"id":"cipher-models","label":"Cipher-model constraints","groups":[
+      {"label":"Nonzero-key feedback models","records":"ea-difference-independence ea-frequency-control linear-ciphertext-feedback uniform-additive-doublets source-independent-key-floor-audit"},
+      {"label":"Collision-filter models","records":"doublet-collision-edits lp2-filter-fingerprint-models r18-filter-locus-replay rejection-channel-information"},
+      {"label":"Cipher fingerprints","records":"leo-cipher-model-fingerprints wulfic-early-keyspace-diagnostics"},
+      {"label":"Substitution frequency models","records":"wulfic-keyword-quagmire-models wulfic-letter-encoding-bounds wulfic-position-alphabet-flatness-bound wulfic-quagmire-random-alphabets"},
+      {"label":"Repeated-unit constraints","records":"wulfic-local-codebook-invariants wulfic-stage-ab-reset-alphabets wulfic-stage-af-unit-shifts"},
+      {"label":"Literal-prime maps","records":"literal-prime-affine literal-prime-affine-pages literal-prime-quadratic"},
+      {"label":"Direct polynomial constraints","records":"direct-polynomial-streams"},
+      {"label":"Crib capacity","records":"monoalphabetic-crib-capacity periodic-affine-crib-capacity"},
+      {"label":"Position divisors","records":"position-divisor-labels"},
+      {"label":"Missing-rune models","records":"haplography-diagonal-bound a03-haplography-source-gate"}
+    ]},
+    {"id":"period-alignment","label":"Periodicity & alignment","groups":[
+      {"label":"Period searches","records":"four-phase-ioc leo-transform-periodic-profile lp2-00-02-lag35-selection lp2-31-periodic-ioc lp2-31-row-shuffle-ioc relikd-interrupt-pattern-database wulfic-periodic-alphabet-lags wulfic-session17-period-detectors"},
+      {"label":"Key-reuse alignment","records":"leo-shared-key-differences wulfic-lag-reuse-models wulfic-two-time-pad-premise"},
+      {"label":"Crib difference alignment","records":"crib-difference-stream-search"},
+      {"label":"Join sensitivity","records":"lp2-page-join-lag-six-sensitivity"}
+    ]},
+    {"id":"language","label":"Language & corpus","groups":[
+      {"label":"Language identification","records":"parallel-languages parallel-language-blocks target-sized-languages known-reading-languages"},
+      {"label":"Corpus prefix census","records":"corpus-prefix-census"},
+      {"label":"Corpus word sums","records":"word-sum-corpus-control"},
+      {"label":"Literary-reference audit","records":"night-thoughts-729-line-audit"}
+    ]},
+    {"id":"numerical","label":"Numerical structure","groups":[
+      {"label":"LP1 word-length grids","records":"lp1-section-balance lp1-section-order lp1-width-selection lp1-word-length-balance"},
+      {"label":"Word-sum selectivity","records":"lp1-seven-word-825-census mixed-square-word-sums obscura-sum-collision-control selected-phrase-word-sums wing-tree-eleven-rune-windows lp2-23-red-sum-claim"},
+      {"label":"Number-panel arithmetic","records":"lp2-15-mobius-panel lp2-15-prime-gap-cycle lp2-15-totient-gap-audit"},
+      {"label":"Rune-row prime sums","records":"lp2-row-prime-sums lp2-row-emirp-sums"},
+      {"label":"Square-size fits","records":"cc-section-representation-census lp2-seven-page-square-fits lp2-54-55-word-square"},
+      {"label":"Magic-square freedom","records":"magic-square-freedom"},
+      {"label":"Pointers & coordinates","records":"fehu-coordinate-triad study-here-bidirectional-pointer dju-bei-cross-page"},
+      {"label":"Digit-grid contacts","records":"cc-roman-matrix-replay"},
+      {"label":"Prime-distance arithmetic","records":"prime-distance-reverse-add prime-distance-word-derivation"}
+    ]},
+    {"id":"image-layout","label":"Images & layout","groups":[
+      {"label":"Row & spacing measurements","records":"large-gap-mark-alignment large-gap-pixel-replay lp2-spacing-gap-audit page-margin-row-alignment"},
+      {"label":"Image/file-size comparisons","records":"large-gap-file-size-replay jpeg-byte-mode-replay jpeg-modal-reencode-control"},
+      {"label":"Artwork alignment","records":"dead-tree-alignment dead-tree-cross-carrier compass-shared-radii"},
+      {"label":"Ornament counts","records":"dukotah-ornament-component-recount"},
+      {"label":"Grid/message geometry","records":"lp2-32-message-grid"},
+      {"label":"Initials & page layout","records":"red-initial-presence-order line-initial-layout-control"},
+      {"label":"Geometric drawings","records":"lp2-turtle-spatial-replay"},
+      {"label":"Image-channel measurements","records":"dukotah-line-geometry-channel-replay"}
+    ]},
+    {"id":"transcription","label":"Transcription checks","groups":[
+      {"label":"Rune-reading sensitivity","records":"oae-uniform-remapping rune-reading-sensitivity-t3 transcription-correction-sensitivity"},
+      {"label":"Separators & joins","records":"cross-source-word-boundaries page-join-sensitivity"},
+      {"label":"Grid-glyph readings","records":"dukotah-grid-cell-adjudication grid-round-glyphs grid-stem-uncertainty grid-radix-reconciliation"},
+      {"label":"Image-row recovery","records":"image-row-coverage dukotah-image-template-rebuild"},
+      {"label":"Fresh-template validation","records":"dukotah-ornament-fresh-reader-gate dukotah-t2-fresh-controls dukotah-t2-fresh-template-loo"}
+    ]},
+    {"id":"payload-analysis","label":"Grid & payload analysis","groups":[
+      {"label":"Prime-path census","records":"grid-alternative-layouts grid-prime-path-null grid-prime-paths grid-prime-paths-page-boundaries"},
+      {"label":"Byte-channel structure","records":"grid-high-digit-cells wulfic-grid-periodic-byte-invariant wulfic-grid-rsa-modulus-screen"},
+      {"label":"Payload/event correlations","records":"dukotah-payload-varint-matrix payload-doublet-gaps"}
+    ]},
+    {"id":"decoder-validation","label":"Decoder validation","groups":[
+      {"label":"Skip-rule recovery","records":"decoder-skip-controls r18-keyskip-drift-power r18-skip-channel-power public-nskips-crossover round19-decoder-baseline-control round19-decoder-repair-controls round19-full-book-decoder-power"},
+      {"label":"Generator validation","records":"c2-extension-generator-controls r28-c-generator-port-controls"},
+      {"label":"Known-page equation checks","records":"mobius-zero-mask-known-page"}
+    ]},
+    {"id":"search-calibration","label":"Search & scoring checks","groups":[
+      {"label":"Language-score calibration","records":"english-scorer-controls l7-score-recovery-controls rune-matched-scorer-calibration round19-decoder-null-bars relikd-trigram-shift-control"},
+      {"label":"Complete-search maxima","records":"search-maximum-controls"},
+      {"label":"Held-out scope","records":"r21-fold-tail-scope-controls"},
+      {"label":"Crib prediction controls","records":"seed-crib-controls"},
+      {"label":"Gate reachability","records":"d4v1-missing-prime-anchor-gate dukotah-nonenglish-control-gate round20-sieve-register-gate semantic-seed-screen-gate-audit solved-text-selection-source-gate"},
+      {"label":"Offset prefilter agreement","records":"dukotah-offset-model-integrity"},
+      {"label":"Entropy-budget claims","records":"r18-entropy-budget-replay"}
+    ]},
+    {"id":"claim-audits","label":"Claim & tool audits","groups":[
+      {"label":"Worked decoding arithmetic","records":"alberti-branch-arithmetic cross-section-index-inversion page40-for-every-arithmetic public-p20-static-boundary"},
+      {"label":"Keystream-sweep reproducibility","records":"py27-reducer-sweep-source-audit"},
+      {"label":"Tool build effects","records":"outguess-guard-sweep"}
+    ]},
+    {"id":"related-artifacts","label":"Artifact provenance","groups":[
+      {"label":"Signature provenance","records":"dukotah-c8-timestamp-join dukotah-g02-signature-corpus round19-rsa-key-provenance"},
+      {"label":"Message whitespace","records":"dukotah-h02-raw-whitespace-census"},
+      {"label":"Cross-artifact patterns","records":"later-message-f-omission lp1-payload-outer-ring"},
+      {"label":"Audio spectrum","records":"instar-narrowband-lines"}
+    ]}
+  ]
+}
