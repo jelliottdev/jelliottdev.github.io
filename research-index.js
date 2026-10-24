@@ -125,7 +125,7 @@
       (value.page<result.pages?pageLink(value.page+1,'Next','rel="next"'):'')+'</nav>';
   }
   function results(result){
-    if(!result.total)return '<div class="empty research-empty"><h2>No matching research</h2><p>No record matches this combination of search terms and filters. Try fewer terms or clear the filters.</p><button type="button" data-research-reset>Clear filters</button></div>';
+    if(!result.total)return '<div class="empty research-empty"><h2>No matching research</h2><p>No record matches this combination of search terms and filters. Try fewer terms or clear the filters.</p></div>';
     return `<ol class="research-records" start="${result.start+1}">${result.records.map(record=>{
       const date=checked(record),recent=result.state.sort==='recent'&&date;
       const query=pageQuery(result.state.q||'').text,details=matchingDetails(record,query);

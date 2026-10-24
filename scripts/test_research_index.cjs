@@ -59,7 +59,8 @@ assert.equal(Index.select(many,state('page=999')).state.page,3);
 assert(Index.results(second).includes('aria-current="page"'));
 assert(!Index.results(second).includes('<details'),'Findings do not sit inside nested disclosures');
 const emptyHTML=Index.results(Index.select(records,state('q=absent-word')));
-assert(emptyHTML.includes('data-research-reset'));
+assert(emptyHTML.includes('No matching research'));
+assert(!emptyHTML.includes('data-research-reset'),'Empty copy must not duplicate the persistent Clear filters action');
 const unsafe=Index.results(Index.select([fixture('safe','<img src=x>',{finding:'<script>unsafe</script>'})],state('')));
 assert(!unsafe.includes('<script>'));assert(!unsafe.includes('<img'));
 const grouped=Index.results(Index.select(records,state('q=Case+2')));
@@ -142,6 +143,8 @@ const lifecycleGuard=setTimeout(()=>{console.error('Research lifecycle test did 
   element('#research-query').value='no-such-test';element('#research-query').input();
   assert.equal(element('#research-count').textContent,'0 matching records');
   assert.equal(element('#research-reset').hidden,false,'Active filters remain clearable when no records match');
+  assert.equal((html.match(/data-research-reset/g)||[]).length,1,'The index owns one persistent reset action');
+  assert(!element('#research-results').innerHTML.includes('data-research-reset'),'Zero-result updates do not add a second reset button');
   assert(lastURL.includes('family=prime-reversal'),'Editing visible filters keeps the active related-test group');
   article.click({target:{closest:()=>({})}});
   assert.equal(element('#research-query').value,'');assert.equal(element('#research-sort').value,'title');
