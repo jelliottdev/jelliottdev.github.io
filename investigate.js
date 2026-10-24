@@ -7,6 +7,7 @@
  const H=typeof module!=='undefined'?require('./claim-share.js'):root.ClaimShare;
  const R=typeof module!=='undefined'?require('./claim-research.js'):root.ClaimResearch;
  const P=typeof module!=='undefined'?require('./claim-interpretation.js'):root.ClaimInterpretation;
+ const D=typeof module!=='undefined'?require('./recorded-comparison.js'):root.RecordedComparison;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -183,7 +184,7 @@
   }
   return ranges;
  }
- function validateAnswer(data,knownDocuments){
+ function validateAnswer(data,knownDocuments,confirmed){
   if(!data||typeof data.answer!=='string'||!data.answer.trim()||data.answer.length>12000||!Array.isArray(data.sources)||!data.sources.length||data.sources.length>4)throw Error('A sourced comparison is unavailable. You can inspect the related records below.');
   const seen=new Set();
   for(const source of data.sources){
@@ -194,7 +195,13 @@
   }
   const citations=M.citationNumbers(data.answer,data.sources.length);
   if(!citations.length||citations.some(n=>n<1||n>data.sources.length))throw Error('The comparison could not be checked against its sources.');
-  return {answer:data.answer,sources:data.sources.map(s=>knownDocuments.find(d=>d.id===s.id&&d.href===s.href)),cached:Boolean(data.cached)};
+  const sources=data.sources.map(s=>knownDocuments.find(d=>d.id===s.id&&d.href===s.href));
+  if(data.kind!==undefined&&data.kind!=='recorded-overlap')throw Error('The comparison returned an unrecognized answer type.');
+  if(data.kind==='recorded-overlap'){
+   const checked=confirmed&&D.compare({snapshot:R.prepare(confirmed).snapshot,documents:sources});
+   if(!checked||checked.answer!==data.answer||JSON.stringify(checked.sources.map(s=>s.id))!==JSON.stringify(sources.map(s=>s.id)))throw Error('The recorded comparison does not match the confirmed idea and sources.');
+  }
+  return {answer:data.answer,sources,cached:Boolean(data.cached),...(data.kind?{kind:data.kind}:{})};
  }
  function operationDetails(operation){
   if(!operation)return '';
@@ -251,9 +258,9 @@
    (preview&&limit?'<p class="source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
  }
  function packetHTML(packet){
-  const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[],noMatch=r.evidence.search?.reason==='no-matching-records';
+  const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[],noMatch=r.evidence.search?.reason==='no-matching-records',recorded=r.evidence.comparisonKind==='recorded-overlap'&&D.compare({snapshot:R.prepare(s).snapshot,documents:docs})?.answer===r.answer;
   return '<h1>Liberpedia · Research note</h1><p>'+esc(r.at)+'</p>'+rowsHTML(s)+
-   observedFindingsHTML(docs)+'<h2>'+(noMatch?'Search result':'How this relates to your idea')+'</h2>'+(noMatch?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
+   observedFindingsHTML(docs)+'<h2>'+(noMatch?'Search result':'How this relates to your idea')+'</h2>'+(noMatch||recorded?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
    (docs.length?'<h2>Sources &amp; details</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,{packet:true})).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
@@ -526,7 +533,7 @@
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
-   if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls;
+   if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls;
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
    const related=q.query?S.select(documents,q.query,scope.pages||[],scope.discovery).filter(d=>d.kind==='experiment'):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true})).join(''):'');
@@ -715,10 +722,10 @@
      const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:[],documents:[],search:{query:compact.query,reason:data.reason}},answer});
      packet=C.packetSnapshot(snapshot,research);result=Object.freeze({answer,sources:[],noMatch:true});printHost.innerHTML=packetHTML(packet);return;
     }
-    const checked=validateAnswer(data,documents);
+    const checked=validateAnswer(data,documents,snapshot);
     const evidenceRecords=records.filter(r=>checked.sources.some(s=>s.kind==='experiment'&&s.id===r.id));
     if(!evidenceRecords.length)throw Error('No research record supports this comparison.');
-    const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:evidenceRecords,documents:checked.sources},answer:checked.answer});
+    const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:evidenceRecords,documents:checked.sources,...(checked.kind?{comparisonKind:checked.kind}:{})},answer:checked.answer});
     packet=C.packetSnapshot(snapshot,research);result=Object.freeze(checked);printHost.innerHTML=packetHTML(packet);
    }catch(e){if(token===generation)error=e.name==='AbortError'?'The comparison timed out. Your confirmed idea is kept; try again.':e.message;}
    finally{unschedule(timer);if(token===generation){busy=false;controller=null;render();}}

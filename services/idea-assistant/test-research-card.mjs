@@ -50,10 +50,16 @@ for(const boundary of [null,'within_words','word_blocks','fixed_spaces']){
   method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'},
    ...(boundary==='fixed_spaces'?[{id:'described_method',label:'Apply Vigenere with key ABC',key:'ABC'}]:[])]}),
   scope:known({pages:['lp2-15','lp2-17']}),rules:boundary?{wordBoundaries:known('preserve'),boundaryMode:known(boundary)}:{}}),{id:'operand-'+boundary,at:'2026-10-24T12:00:00Z'});
- const prepared=R.prepare(snapshot),result=await (await handle(post(prepared.request),env)).json();
+ const prepared=R.prepare(snapshot),before=calls,result=await (await handle(post(prepared.request),env)).json();
  assert.equal(result.claimBinding,await R.binding(prepared.request));
- assert.deepEqual(result.sources.map(s=>s.id),Search.select(docs,prepared.query,prepared.pages,prepared.discovery).map(s=>s.id));
- assert.equal(seen.at(-1).idea,prepared.confirmedQuery,'Model sees the exact confirmed combination, not discovery hints as execution evidence');
+ if(boundary===null){
+  assert.equal(result.kind,'recorded-overlap');assert.equal(calls,before,'Reviewed operation overlap requires no model call');
+  assert.deepEqual(result.sources.map(s=>s.id).sort(),['lp2-row-column-english','lp2-row-column-routes']);
+ }else{
+  assert.notEqual(result.kind,'recorded-overlap');
+  assert.deepEqual(result.sources.map(s=>s.id),Search.select(docs,prepared.query,prepared.pages,prepared.discovery).map(s=>s.id));
+  assert.equal(seen.at(-1).idea,prepared.confirmedQuery,'Model sees the exact confirmed combination, not discovery hints as execution evidence');
+ }
  assert(result.sources.some(s=>s.id===(boundary==='within_words'?'lp2-word-reversal':boundary==='word_blocks'?'lp2-word-order-reversal':'lp2-row-column-routes')));
  for(const source of result.sources)assert.equal(source.text,docs.find(d=>d.id===source.id).text);
  const spoofed=await handle(post({...prepared.request,discovery:{steps:[{query:'OutGuess'}]}}),env);

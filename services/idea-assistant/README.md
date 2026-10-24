@@ -150,3 +150,32 @@ not a fully accepted scientific comparison. Prompt guidance, citations and exact
 source binding do not validate every inference. Further work must preserve the
 difference between matching known openings, scoring outputs and demonstrating
 readable text; a generic outcome label cannot substitute for that distinction.
+
+## Direct comparisons from reviewed execution records
+
+`recorded-comparison.js` handles exact supported operations before model selection.
+It currently supports one confirmed row-rune reversal on explicit whole pages,
+with no extra steps, parameters, unresolved constraints or specified rules.
+Its authority comes from validated `recorded_comparison` execution metadata,
+never discovery tags or a record title. Each retained source must cover every
+requested page. Other requests continue through the ordinary comparison path.
+
+The row-route record contains 55 executed pages; its English-scoring companion
+contains 53 eligible pages. LP2-50 has no row-route input; LP2-49 and LP2-55 do
+not meet the scorer's 100-quadgram minimum. The evidence checker verifies saved
+permutations, output indices, source positions, score eligibility and hashes
+without rerunning the searches. These records establish the executed operation,
+not equivalence with unspecified settings or success at the visitor's objective.
+
+Direct replies use no AI binding or answer cache. They retain normal request
+validation, rate limits, source loading and confirmed-card binding. The browser
+recomputes the reply from the same normalized transport card and exact cited
+evidence before accepting its type. Screen and printed packets show the authored
+findings first, with no AI-attribution label on a validated direct comparison.
+The broader source-guidance prompt remains version 15; this is not an improvement
+claim about untested model responses.
+
+Checks: `node scripts/test_recorded_comparison.cjs`,
+`node services/idea-assistant/test-recorded-comparison.mjs`,
+`node scripts/test_investigate_recorded.cjs`, and
+`python scripts/check_recorded_row_routes.py --self-test`.

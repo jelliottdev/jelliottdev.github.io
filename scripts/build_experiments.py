@@ -11,7 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 # Preserve exact evidence and lexical text; detail/download dependencies stay separate.
 CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
                   'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
-                  'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials', 'discovery')
+                  'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials', 'discovery',
+                  'recorded_comparison')
 
 
 def checker_payload(records, registry_bytes):
@@ -55,6 +56,45 @@ def validate_discovery(discovery):
             and all(value in ('known-opening', 'english-readability') for value in evaluation)
             and len(set(evaluation)) == len(evaluation),
             'discovery.evaluation: expected unique controlled evaluations')
+
+
+def validate_recorded_comparison(value, scope, pages):
+    """Match recorded-comparison.js reviewed metadata; no coverage inference."""
+    require(isinstance(value, dict) and set(value) == {
+        'version', 'operation', 'executed_pages', 'evaluation', 'input_description', 'reuse'},
+        'recorded_comparison: unexpected fields')
+    require(type(value['version']) in (int, float) and value['version'] == 1,
+            'recorded_comparison.version: expected 1')
+    operation = value['operation']
+    require(isinstance(operation, dict) and set(operation) == {'action', 'operand', 'within'}
+            and operation == {'action': 'reverse', 'operand': 'rune-order', 'within': 'row'},
+            'recorded_comparison.operation: unsupported signature')
+
+    def canonical(values):
+        return (isinstance(values, list) and 1 <= len(values) <= 75
+                and all(isinstance(page, str) and re.fullmatch(r'lp[12]-[0-9]{2}', page)
+                        and int(page[4:]) <= (16 if page.startswith('lp1') else 57)
+                        and page in pages for page in values)
+                and values == sorted(set(values)))
+
+    executed = value['executed_pages']
+    declared = scope.get('pages') if isinstance(scope, dict) else None
+    require(canonical(executed) and canonical(declared)
+            and set(executed) <= set(declared),
+            'recorded_comparison.executed_pages: expected canonical nonempty subset of scope')
+    evaluation = value['evaluation']
+    require(isinstance(evaluation, dict) and set(evaluation) == {'kind', 'description', 'limitation'}
+            and evaluation['kind'] in ('known-opening', 'english-score'),
+            'recorded_comparison.evaluation: unsupported fields or kind')
+    # ECMAScript trim whitespace and UTF-16 length, including astral characters.
+    whitespace = '\u0009\u000a\u000b\u000c\u000d\u0020\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff'
+    for name, prose in (('input_description', value['input_description']), ('reuse', value['reuse']),
+                        ('evaluation.description', evaluation['description']),
+                        ('evaluation.limitation', evaluation['limitation'])):
+        require(isinstance(prose, str) and prose == prose.strip(whitespace)
+                and 0 < len(prose.encode('utf-16-le', errors='surrogatepass')) // 2 <= 500
+                and not re.search(r'[\x00-\x1f\x7f\[\]`*\\]', prose),
+                'recorded_comparison.' + name + ': expected bounded plain prose')
 
 
 def local(root, path):
@@ -148,6 +188,8 @@ def validate_record(root, path, pages):
     scope = d.get('scope', {})
     require(isinstance(scope.get('pages'), list)
             and all(x in pages for x in scope['pages']), 'Scope needs valid page IDs')
+    if 'recorded_comparison' in d:
+        validate_recorded_comparison(d['recorded_comparison'], scope, pages)
     if 'pages_note' in d:
         text(d['pages_note'], f'{identifier}.pages_note')
     if 'bounds_note' in d:

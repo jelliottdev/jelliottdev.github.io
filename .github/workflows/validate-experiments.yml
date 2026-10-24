@@ -24,6 +24,7 @@ jobs:
       - run: node scripts/test_ci_validation_scope.cjs
       - run: node services/idea-assistant/test-worker.mjs
       - run: node services/idea-assistant/test-research-card.mjs
+      - run: node services/idea-assistant/test-recorded-comparison.mjs
       - run: node services/idea-assistant/test-interpretation.mjs
       - run: node services/idea-assistant/test-interpretation-cases.mjs
       - run: node services/idea-assistant/test-interpret-handler.mjs
@@ -49,6 +50,8 @@ jobs:
       - run: node scripts/test_investigate_intake_recovery.cjs
       - run: node scripts/test_investigate_recovery.cjs
       - run: node scripts/test_investigate_card_request.cjs
+      - run: node scripts/test_recorded_comparison.cjs
+      - run: node scripts/test_investigate_recorded.cjs
       - run: node scripts/test_investigate_interpretation.cjs
       - run: node scripts/test_proposal_ui.cjs
       - run: node scripts/test_research_map.cjs
@@ -89,6 +92,8 @@ jobs:
           cache: 'pip'
           cache-dependency-path: scripts/requirements-line-gap-measurements.txt
       - run: python -m pip install -r scripts/requirements-line-gap-measurements.txt
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/check_recorded_row_routes.py --self-test
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/check_download_catalog.py
         if: steps.scope.outputs.science == 'true'

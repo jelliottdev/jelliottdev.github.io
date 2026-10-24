@@ -39,3 +39,9 @@ Use the supplied Liberpedia-home-current composition as the home reference. The 
 The file picker currently keeps originals in this browser for preview only. Show that boundary in file review; transfer only the confirmed text into the checker. Do not imply that attached files, linked repositories or scripts have been interpreted or executed.
 
 The confirmed standardized idea is the intake. Do not add a second “Suggest a test” form. Preserve original wording beside its standardized interpretation internally; checking overlap and designing a bounded test are maintainer work. Exact duplicate storage does not establish semantic novelty. Sharing remains an optional card action. No automatic experiment result or public untested page is implied by saving.
+
+Show authored findings before comparison prose. A direct comparison backed by
+reviewed execution metadata should use those recorded conditions and limits
+without a model rewrite or an AI label. It still describes only the matched
+operation, not unprovided settings or success at the visitor's whole objective.
+Keep the same evidence and attribution in the printed research note.

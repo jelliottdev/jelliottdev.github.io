@@ -32,6 +32,10 @@ const qa=`window.__investigateMockCore=async function(url,options){
  if(mode==='delay')await new Promise((resolve,reject)=>{let t=setTimeout(resolve,10000);options.signal.addEventListener('abort',()=>{clearTimeout(t);reject(new DOMException('Canceled','AbortError'));});});
  const registry=await (await fetch('data/experiments.json')).json();
  const raw=JSON.parse(options.body),request=raw.version===1?ClaimResearch.validate(raw):raw,docs=AssistantSearch.experimentDocs(registry.records);
+ if(mode==='recorded'){
+  const recorded=request.snapshot&&RecordedComparison.compare({snapshot:request.snapshot,documents:docs});
+  return Response.json(recorded||{error:'The local fixture does not match the reviewed operation.'},{status:recorded?200:400});
+ }
  const selected=AssistantSearch.select(docs,request.query,request.pages,request.discovery).filter(d=>d.kind==='experiment');
  if(!selected.length)return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  const record=registry.records.find(r=>r.id===selected[0].id);
@@ -71,4 +75,4 @@ http.createServer((req,res)=>{
   const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'};
   res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');res.end(bytes);
  }catch{res.writeHead(404).end();}
-}).listen(4397,'127.0.0.1',()=>console.log('Mock-only investigate QA: http://127.0.0.1:4397/investigate.html'));
+}).listen(Number(process.env.PORT||4397),'127.0.0.1',()=>console.log('Mock-only investigate QA: http://127.0.0.1:'+(process.env.PORT||4397)+'/investigate.html'));
