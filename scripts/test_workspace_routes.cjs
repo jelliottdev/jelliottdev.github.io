@@ -34,5 +34,5 @@ const checkerScripts=[...checkerHTML.matchAll(/<script\b([^>]*)>/g)].map(([,attr
  assert(fs.existsSync(require.resolve('../'+filename)),'Entry dependency exists: '+filename);
  return filename;
 });
-assert.deepEqual(checkerScripts,['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','investigate.js'],'The formatter and all dependencies must load before the checker');
+assert.deepEqual(checkerScripts,['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','recorded-comparison.js','investigate.js'],'The formatter and all dependencies must load before the checker');
 console.log('PASS: checker entry script attributes, dependency paths and load order.');
