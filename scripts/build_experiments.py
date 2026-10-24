@@ -5,7 +5,7 @@ import html
 import json
 import re
 from pathlib import Path
-from experiment_content import compile_content, article_bytes
+from experiment_content import compile_content, article_bytes, draft_record_ids
 from experiment_taxonomy import apply_classifications
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -425,7 +425,7 @@ def build(root=ROOT):
     # Editorial record types travel with complete evidence, including offline exports.
     type_path = root / 'data/method-families.json'
     if type_path.exists():
-        types = apply_classifications(json.loads(type_path.read_text(encoding='utf-8')), records)
+        types = apply_classifications(json.loads(type_path.read_text(encoding='utf-8')), records, retired_ids=draft_record_ids(root))
         assignments = types['record_kind_by_id']
         require(set(assignments) == ids, 'Record types must cover exactly the published records')
         for record in records:

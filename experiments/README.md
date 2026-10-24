@@ -59,6 +59,10 @@ Write the result once. The page, graph preview, search index, checker evidence a
    python scripts/build_research.py
    ```
 
+For quick wording and layout iteration, use `python scripts/build_research.py --preview`. It refreshes the record views and map without rebuilding downloads or the catalog. Run the full command once before publishing; a preview is not a release build.
+
+For new-format records, changing status to `draft` removes the active index assignment and map leaf on the next build. Republishing restores them from the same record. Evidence files and the pinned historical map are retained. References from other published records still need explicit review; the build does not silently remove them.
+
 This command builds records, articles, checker data, downloads, the research map and its home preview in dependency order, then checks catalog hashes and map freshness. It does not run experiments, alter findings, commit or push. Batch related records into one build and release.
 
 Existing records and archived bundles remain supported in their original format. They are not automatically rewritten or summarized. For a deliberate migration, embed the exact account bytes in `analysis` and verify every frozen dependency; never refresh an evidence hash just to make a conversion pass. The source schema is stricter for new records, while public export fields remain compatible with existing tools.

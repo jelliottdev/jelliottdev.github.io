@@ -6,12 +6,13 @@ _ID = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z")
 _MAP_ID = re.compile(r"[a-z][a-z0-9]*(?:[-:/][a-z0-9]+)*\Z")
 
 
-def apply_classifications(types, records):
+def apply_classifications(types, records, retired_ids=()):
     """Return effective taxonomy; branch existence belongs to the map validator.
 
     Existing selected membership order is retained. Missing memberships append in
     records order, so the same input gives the same output and repeated application
-    is idempotent. Records without classification make no changes.
+    is idempotent. Records without classification make no changes. Only explicitly
+    retired IDs are removed; omitted records never imply retirement.
     """
     if not isinstance(types, dict):
         raise ValueError("Taxonomy must be an object")
@@ -28,11 +29,20 @@ def apply_classifications(types, records):
         by_family[family["id"]] = family
     if not isinstance(records, (list, tuple)):
         raise ValueError("Records must be a sequence")
+    if not isinstance(retired_ids, (list, tuple)):
+        raise ValueError("Retired IDs must be a sequence")
+    retired = set()
+    for identifier in retired_ids:
+        if not isinstance(identifier, str) or not _ID.fullmatch(identifier) or identifier in retired:
+            raise ValueError("Retired IDs must be distinct safe record IDs")
+        retired.add(identifier)
     overlays = []
     seen = set()
     for record in records:
         if not isinstance(record, dict):
             raise ValueError("Record must be an object")
+        if isinstance(record.get("id"), str) and record["id"] in retired:
+            raise ValueError("A record cannot be both active and retired")
         if "classification" not in record:
             continue
         identifier = record.get("id")
@@ -52,6 +62,10 @@ def apply_classifications(types, records):
             raise ValueError(f"{identifier}: invalid map_parent ID")
         overlays.append((identifier, kind, set(methods)))
     effective = deepcopy(types)
+    for identifier in retired:
+        effective["record_kind_by_id"].pop(identifier, None)
+    for family in effective["families"]:
+        family["related"] = [member for member in family["related"] if member not in retired]
     for identifier, kind, methods in overlays:
         effective["record_kind_by_id"][identifier] = kind
         for family in effective["families"]:

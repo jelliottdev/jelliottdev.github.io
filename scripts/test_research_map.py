@@ -56,7 +56,9 @@ class ResearchMapTests(unittest.TestCase):
         source = builder.load(builder.SOURCE / 'provenance.json')['snapshot_record_sha256']
         assigned = {n['record_id'] for v in self.data['views'].values() for n in v['nodes'] if n['record_id']}
         self.assertEqual(self.data['awaiting_classification'], sorted(set(self.registry) - set(source) - assigned))
-        self.assertFalse(self.data['provenance']['missing_snapshot_ids'])
+        self.assertEqual(self.data['provenance']['missing_snapshot_ids'],
+                         sorted(set(source) - set(self.registry)))
+        self.assertLessEqual(set(self.data['provenance']['missing_snapshot_ids']), builder.retired_ids(ROOT))
         for rid, record in self.registry.items():
             mapped = self.data['records'][rid]
             self.assertEqual(mapped['current_sha256'], builder.sha(builder.canonical(record)))
@@ -186,6 +188,114 @@ class ResearchMapTests(unittest.TestCase):
         self.assertEqual(updated['outside_selected_views'], self.data['outside_selected_views'])
         self.assertEqual(updated['records']['new-explicit-placement']['classification'], 'authored')
         self.assertIn('new-explicit-placement', updated['provenance']['new_ids'])
+
+    def test_build_withdrawal_and_republication_restore_pinned_and_authored_placement(self):
+        registry = builder.load(ROOT / 'data/experiments.json')
+        rid = 'cumulative-autokey-literal'
+        record = copy.deepcopy(next(r for r in registry['records'] if r['id'] == rid))
+        source_pins = {name: (builder.SOURCE / name).read_bytes()
+                       for name in ('provenance.json', 'solving-hierarchy.json', 'analytics-hierarchy.json')}
+        with tempfile.TemporaryDirectory(prefix='research-map-withdrawal-') as temporary:
+            root = Path(temporary)
+            (root / 'data').mkdir()
+            folder = root / 'experiments/records' / rid
+            folder.mkdir(parents=True)
+            canonical = {'schema': builder.SCHEMA, 'id': rid, 'status': 'draft',
+                         'classification': {'kind': 'method', 'methods': ['feedback'],
+                                            'map_parent': 'method:language'}}
+            path = folder / 'record.json'
+            path.write_text(json.dumps(canonical), encoding='utf-8')
+            registry['records'] = [r for r in registry['records'] if r['id'] != rid]
+            registry_path = root / 'data/experiments.json'
+            registry_path.write_text(json.dumps(registry), encoding='utf-8')
+            canonical_before = path.read_bytes()
+            with patch.object(builder, 'ROOT', root):
+                withdrawn = builder.build()
+            self.assertNotIn(rid, withdrawn['records'])
+            self.assertEqual(withdrawn['provenance']['missing_snapshot_ids'], [rid])
+            for view in withdrawn['views'].values():
+                self.assertFalse(any(n['record_id'] == rid for n in view['nodes']))
+                self.assertTrue(all(rid not in n['members'] and 'record:' + rid not in n['children'] for n in view['nodes']))
+                nodes = {n['id']: n for n in view['nodes']}
+                self.assertEqual(view['record_count'], len(nodes[view['root']]['members']))
+                self.assertTrue(all(n['left'] <= n['x'] <= n['right'] for n in view['nodes']))
+            self.assertEqual(path.read_bytes(), canonical_before, 'Map build never edits canonical source')
+            self.assertEqual(withdrawn['views']['analytics'], self.data['views']['analytics'])
+            # Republishing without an override restores the original pinned leaf.
+            canonical['status'] = 'published'
+            path.write_text(json.dumps(canonical), encoding='utf-8')
+            registry['records'].append(record)
+            registry_path.write_text(json.dumps(registry), encoding='utf-8')
+            with patch.object(builder, 'ROOT', root):
+                restored = builder.build()
+            self.assertEqual(restored['views'], self.data['views'])
+            self.assertEqual(restored['provenance']['missing_snapshot_ids'], [])
+            # An explicit republished classification can instead move the leaf.
+            record['classification'] = canonical['classification']
+            registry_path.write_text(json.dumps(registry), encoding='utf-8')
+            with patch.object(builder, 'ROOT', root):
+                moved = builder.build()
+            leaf = next(n for n in moved['views']['analytics']['nodes'] if n['record_id'] == rid)
+            self.assertEqual(leaf['parent'], 'method:language')
+            self.assertNotIn(rid, moved['views']['solving']['nodes'][0]['members'])
+        for name, raw in source_pins.items():
+            self.assertEqual((builder.SOURCE / name).read_bytes(), raw)
+
+    def test_missing_legacy_or_unapproved_source_record_still_rejects(self):
+        rid = 'cumulative-autokey-literal'
+        registry = builder.load(ROOT / 'data/experiments.json')
+        registry['records'] = [r for r in registry['records'] if r['id'] != rid]
+        with tempfile.TemporaryDirectory(prefix='research-map-unapproved-') as temporary:
+            root = Path(temporary)
+            (root / 'data').mkdir()
+            (root / 'data/experiments.json').write_text(json.dumps(registry), encoding='utf-8')
+            folder = root / 'experiments/records' / rid
+            folder.mkdir(parents=True)
+            for raw in ({'id': rid, 'status': 'draft'},
+                        {'id': rid, 'schema': builder.SCHEMA, 'status': 'published'}):
+                (folder / 'record.json').write_text(json.dumps(raw), encoding='utf-8')
+                with self.subTest(raw=raw), patch.object(builder, 'ROOT', root), self.assertRaisesRegex(AssertionError, 'without an explicit v2 withdrawal'):
+                    builder.build()
+            (folder / 'record.json').write_text(json.dumps({'id': rid, 'schema': builder.SCHEMA, 'status': 'draft'}), encoding='utf-8')
+            original = copy.deepcopy(self.registry[rid])
+            registry['records'].append(original)
+            (root / 'data/experiments.json').write_text(json.dumps(registry), encoding='utf-8')
+            with patch.object(builder, 'ROOT', root), self.assertRaisesRegex(AssertionError, 'Draft record remains'):
+                builder.build()
+
+    def test_retirement_requires_safe_matching_canonical_id(self):
+        with tempfile.TemporaryDirectory(prefix='research-map-retired-id-') as temporary:
+            root = Path(temporary)
+            folder = root / 'experiments/records/safe-folder'
+            folder.mkdir(parents=True)
+            for rid in ('../escape', 'another-folder', None):
+                (folder / 'record.json').write_text(json.dumps({'id': rid, 'schema': builder.SCHEMA, 'status': 'draft'}), encoding='utf-8')
+                with self.subTest(rid=rid), self.assertRaises((AssertionError, ValueError)):
+                    builder.retired_ids(root)
+
+    def test_withdrawn_post_snapshot_record_disappears_without_changing_source_provenance(self):
+        registry = builder.load(ROOT / 'data/experiments.json')
+        record = copy.deepcopy(registry['records'][0])
+        rid = 'new-withdrawal-fixture'
+        record.update(id=rid, classification={'kind': 'method', 'methods': ['feedback'], 'map_parent': 'method:feedback'})
+        with tempfile.TemporaryDirectory(prefix='research-map-new-withdrawal-') as temporary:
+            root = Path(temporary)
+            (root / 'data').mkdir()
+            path = root / 'data/experiments.json'
+            path.write_text(json.dumps({**registry, 'records': registry['records'] + [record]}), encoding='utf-8')
+            with patch.object(builder, 'ROOT', root):
+                published = builder.build()
+            self.assertIn(rid, published['records'])
+            folder = root / 'experiments/records' / rid
+            folder.mkdir(parents=True)
+            (folder / 'record.json').write_text(json.dumps({'id': rid, 'schema': builder.SCHEMA, 'status': 'draft'}), encoding='utf-8')
+            path.write_text(json.dumps(registry), encoding='utf-8')
+            with patch.object(builder, 'ROOT', root):
+                withdrawn = builder.build()
+            self.assertNotIn(rid, withdrawn['records'])
+            self.assertEqual(withdrawn['views'], self.data['views'])
+            self.assertEqual(withdrawn['provenance']['missing_snapshot_ids'], self.data['provenance']['missing_snapshot_ids'])
+            self.assertEqual(withdrawn['provenance']['source_files'], self.data['provenance']['source_files'])
 
 
 if __name__ == '__main__':

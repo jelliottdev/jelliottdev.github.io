@@ -72,6 +72,36 @@ class ClassificationTests(unittest.TestCase):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 apply_classifications(self.types, [self.record(parent=value)])
 
+    def test_explicit_retirement_removes_all_references_only_and_is_pure(self):
+        original = copy.deepcopy(self.types)
+        result = apply_classifications(self.types, [], retired_ids=["old"])
+        self.assertNotIn("old", result["record_kind_by_id"])
+        self.assertEqual([family["related"] for family in result["families"]],
+                         [["before", "after"], ["legacy"], ["legacy"]])
+        self.assertEqual(self.types, original)
+        self.assertEqual(apply_classifications(result, [], retired_ids=["old"]), result)
+        self.assertEqual(apply_classifications(self.types, []), self.types)
+        self.assertEqual(apply_classifications(self.types, [], retired_ids=["absent"]), self.types)
+
+    def test_retired_classification_can_be_restored_explicitly(self):
+        retired = apply_classifications(self.types, [], retired_ids=["old"])
+        restored = apply_classifications(retired, [self.record()])
+        self.assertEqual(restored["record_kind_by_id"]["old"], "measurement")
+        self.assertEqual(restored["families"][0]["related"], ["before", "after", "old"])
+        self.assertEqual(restored["families"][1]["related"], ["legacy"])
+        self.assertEqual(restored["families"][2]["related"], ["legacy", "old"])
+        self.assertNotIn("old", retired["record_kind_by_id"])
+
+    def test_retirement_validation_and_all_active_overlaps(self):
+        original = copy.deepcopy(self.types)
+        for ids in [["old", "old"], ["../old"], [None], "old", ["a/b"], ["OLD"]]:
+            with self.subTest(ids=ids), self.assertRaises(ValueError):
+                apply_classifications(self.types, [], retired_ids=ids)
+        for record in [self.record(), {"id": "old"}]:
+            with self.assertRaisesRegex(ValueError, "both active and retired"):
+                apply_classifications(self.types, [record], retired_ids=["old"])
+        self.assertEqual(self.types, original)
+
     def test_current_taxonomy_self_overlay_is_exact_noop(self):
         types = json.loads((Path(__file__).resolve().parents[1] / "data/method-families.json").read_text(encoding="utf-8"))
         records = [{"id": identifier, "classification": {

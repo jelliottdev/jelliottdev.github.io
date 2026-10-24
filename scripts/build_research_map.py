@@ -8,6 +8,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from experiment_content import SCHEMA, draft_record_ids
+
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'research/research-map-source'
 
@@ -24,7 +26,12 @@ def load(path):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
-def place_classified(views, current):
+def retired_ids(root):
+    """Only canonical v2 drafts explicitly authorize withdrawal from the map."""
+    return set(draft_record_ids(root))
+
+
+def place_classified(views, current, retired=()):
     """Apply explicit record parents to a copy; preserve unchanged source trees."""
     views = copy.deepcopy(views)
     locations, leaves = {}, {}
@@ -37,6 +44,15 @@ def place_classified(views, current):
                 assert node['record_id'] not in leaves, 'Duplicate map record'
                 leaves[node['record_id']] = node
     changed_views = set()
+    for rid in sorted(set(retired)):
+        assert rid not in current, 'Draft record remains in published registry: ' + rid
+        leaf = leaves.pop(rid, None)
+        if leaf is None:
+            continue
+        name, _ = locations.pop(leaf['id'])
+        locations[leaf['parent']][1]['children'].remove(leaf['id'])
+        views[name]['nodes'].remove(leaf)
+        changed_views.add(name)
     for rid, record in sorted(current.items()):
         classification = record.get('classification')
         if classification is None:
@@ -128,6 +144,10 @@ def build():
     current = {r['id']: r for r in published}
     assert len(current) == len(published), 'duplicate published record ID'
     snapshot = provenance['snapshot_record_sha256']
+    retired = retired_ids(ROOT)
+    assert not set(current).intersection(retired), 'Draft record remains in published registry'
+    missing = set(snapshot) - set(current)
+    assert missing <= retired, 'Snapshot records missing without an explicit v2 withdrawal: ' + ', '.join(sorted(missing - retired))
     views, assigned = {}, set()
     for view, filename in [('solving', 'solving-hierarchy.json'), ('analytics', 'analytics-hierarchy.json')]:
         source = load(SOURCE / filename)
@@ -137,10 +157,11 @@ def build():
                     ('id', 'parent', 'label', 'color', 'kind', 'children', 'record_id', 'members', 'depth', 'x', 'left', 'right')}
             if node['record_id']:
                 rid = node['record_id']
-                assert rid in current and rid in snapshot, rid
+                assert (rid in current or rid in retired) and rid in snapshot, rid
                 assert rid not in assigned, rid
                 assigned.add(rid)
-                node['label'] = current[rid]['title']
+                if rid in current:
+                    node['label'] = current[rid]['title']
                 node['draft_operation'] = original['operation_tag']
             nodes.append(node)
         ids = {n['id'] for n in nodes}
@@ -149,7 +170,7 @@ def build():
         views[view] = {'root': nodes[0]['id'], 'title': source['report']['root_aim'],
                        'selection_rule': source['selection_rule'], 'nodes': nodes,
                        'record_count': len(nodes[0]['members']), 'classification_status': 'draft'}
-    views, assigned = place_classified(views, current)
+    views, assigned = place_classified(views, current, retired)
     records = {}
     for rid, record in sorted(current.items()):
         fields = provenance['snapshot_fields_sha256'].get(rid, {})

@@ -5,12 +5,18 @@ import re
 
 from build_experiments import ROOT, article_link_aliases, require, validate_family, validate_record, validate_record_placement
 from experiment_taxonomy import apply_classifications
+from experiment_content import draft_record_ids
 
 
 def preflight(identifiers, root=ROOT):
     pages = {page['id'] for page in json.loads((root / 'data/index.json').read_bytes())['pages']}
     published = json.loads((root / 'data/experiments.json').read_bytes())['records']
     by_id = {record['id']: record for record in published}
+    # Selected drafts are validated as proposed publications. Other explicit
+    # withdrawals must not survive as stale published dependencies.
+    retired = set(draft_record_ids(root)) - set(identifiers)
+    for identifier in retired:
+        by_id.pop(identifier, None)
     selected = []
     require(len(identifiers) == len(set(identifiers)), 'Duplicate requested record ID')
     for identifier in identifiers:
@@ -21,7 +27,7 @@ def preflight(identifiers, root=ROOT):
         by_id[identifier] = record
     taxonomy = root / 'data/method-families.json'
     if taxonomy.exists():
-        apply_classifications(json.loads(taxonomy.read_text(encoding='utf-8')), list(by_id.values()))
+        apply_classifications(json.loads(taxonomy.read_text(encoding='utf-8')), list(by_id.values()), retired_ids=sorted(retired))
     validate_record_placement(root, selected)
     for record in selected:
         require(all(identifier in by_id and identifier != record['id']

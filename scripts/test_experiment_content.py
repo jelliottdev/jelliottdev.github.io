@@ -112,6 +112,26 @@ class ContentTests(unittest.TestCase):
             build(self.root)
         self.assertEqual(before, self.files())
 
+    def test_status_alone_withdraws_and_republishes_a_v2_record(self):
+        raw = self.source(); self.write(raw)
+        taxonomy = {'record_kinds': {'measurement': {'label': 'Measurement', 'description': 'A comparison'}},
+                    'record_kind_by_id': {}, 'families': [{'id': 'feedback', 'title': 'Feedback', 'aliases': [], 'related': []}]}
+        kind_path = self.root / 'data/method-families.json'
+        kind_path.write_text(json.dumps(taxonomy))
+        published = build(self.root)[0]
+        account = (self.root / published['article_path']).read_bytes()
+        raw['status'] = 'draft'; self.write(raw)
+        self.assertEqual(build(self.root), [])
+        retired = json.loads(kind_path.read_bytes())
+        self.assertEqual(retired['record_kind_by_id'], {})
+        self.assertEqual(retired['families'][0]['related'], [])
+        self.assertFalse((self.root / 'reference/experiments/test-record.json').exists())
+        self.assertEqual((self.root / published['article_path']).read_bytes(), account)
+        # Preflight evaluates the selected draft as a proposed publication.
+        self.assertEqual(preflight(['test-record'], self.root)[0]['status'], 'draft')
+        raw['status'] = 'published'; self.write(raw)
+        self.assertEqual(build(self.root)[0], published)
+
     def test_legacy_projection_is_unchanged(self):
         self.assertEqual(compile_content(self.record), self.record)
         self.assertIsNot(compile_content(self.record), self.record)

@@ -4,6 +4,8 @@ V2 record.json is the only authored content file. article.md and public aliases
 are derived views; this module never writes files or executes experiments.
 """
 import copy
+import json
+import re
 
 SCHEMA = 'liberpedia-experiment-v2'
 DERIVED = {'summary', 'finding', 'limitations', 'next_steps', 'reader_finding',
@@ -49,3 +51,19 @@ def compile_content(raw):
                   reader_finding=result['finding'], limitations=result['limits'],
                   reader_limit=result['limits'], next_steps=result['next_steps'], article=account)
     return record
+
+
+def draft_record_ids(root):
+    """Only an explicit canonical v2 draft authorizes automatic withdrawal."""
+    identifiers = []
+    for path in sorted((root / 'experiments/records').glob('*/record.json')):
+        if not path.resolve().is_relative_to(root.resolve()):
+            raise ValueError('Experiment source escapes repository')
+        raw = json.loads(path.read_text(encoding='utf-8'))
+        if raw.get('schema') == SCHEMA and raw.get('status') == 'draft':
+            identifier = raw.get('id')
+            if (not isinstance(identifier, str) or not re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)
+                    or path.parent.name != identifier):
+                raise ValueError('Invalid or mismatched v2 draft ID')
+            identifiers.append(identifier)
+    return identifiers
