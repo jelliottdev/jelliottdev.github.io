@@ -23,6 +23,27 @@
   const matched=result.matches.filter(row=>row.matched).length,total=task.pages.length,notMatched=total-matched;
   return '<figure class="local-run-chart run-prefix-chart"><figcaption>Exact starting-sequence check</figcaption><div class="run-prefix-total" role="img" aria-label="'+matched+' of '+total+' pages matched all '+task.criterion.values.length+' prefix positions; '+notMatched+' did not match."><span class="run-prefix-match" style="width:'+(100*matched/total).toFixed(4)+'%"></span><span class="run-prefix-other" style="width:'+(100*notMatched/total).toFixed(4)+'%"></span></div><dl class="run-prefix-counts"><div><dt>Matched every position</dt><dd>'+matched+' of '+total+' pages</dd></div><div><dt>Did not match</dt><dd>'+notMatched+' of '+total+' pages</dd></div></dl><p class="run-chart-note">The fixed prefix has '+task.criterion.values.length+' rune positions.</p></figure>';
  }
+ function wordPairExample(task,result){
+  if(!result.wordPairs.matches)return '';
+  const rule=task.criterion,indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i]));
+  const firstMatch=group=>{for(let i=0;i+rule.lag<group.length;i++)if(group[i+rule.lag].index===(rule.a*group[i].index+rule.b)%29)return group.slice(i,i+rule.lag+1);return null;};
+  for(const page of result.transformed){
+   let group=[],position=0,offset=0;
+   const draw=span=>{
+    const first=span[0],last=span.at(-1),joined=last.offset-first.offset>rule.lag;
+    return '<figure class="run-word-example"><figcaption>One matching pair</figcaption><p class="run-word-example-location">'+esc(page.page.toUpperCase())+' · page rune positions '+first.position+' and '+last.position+'</p><div class="run-word-example-strip" style="--pair-columns:'+span.length+'" role="img" aria-label="'+esc('A matching pair '+rule.lag+' rune positions apart. '+span.map((r,i)=>'Position '+(i+1)+': '+r.char+(i===0||i===span.length-1?', highlighted endpoint':'')).join('. '))+'">'+span.map((r,i)=>'<span class="run-word-example-cell'+(i===0||i===span.length-1?' is-endpoint':'')+'" aria-hidden="true"><span class="run-word-example-rune">'+esc(r.char)+'</span><span class="run-word-example-position">'+(i+1)+'</span></span>').join('')+'</div><p class="run-word-example-rule">Strip positions 1 and '+span.length+' are '+rule.lag+' '+(rule.lag===1?'position':'positions')+' apart. '+(rule.a===1&&rule.b===0?'Both highlighted runes are '+esc(first.char)+'.':'In the 0–28 numbering, '+esc(first.char)+' = '+first.index+' and '+esc(last.char)+' = '+last.index+'. The checked rule gives ('+rule.a+' × '+first.index+' + '+rule.b+') mod 29 = '+last.index+'.')+'</p><p class="run-word-example-note">'+(rule.boundaries==='non-rune'?'This span stays inside one uninterrupted run of runes.':joined?'This joined span ignores non-rune separators between the endpoints.':'This span belongs to a sequence bounded only by ASCII hyphens or periods.')+' Positions count runes only. This is a counted relation, not a translation.</p></figure>';
+   };
+   for(const ch of page.text){
+    if(indices.has(ch))group.push({char:ch,index:indices.get(ch),position:++position,offset});
+    else if(rule.boundaries==='non-rune'||ch==='-'||ch==='.'){
+     const span=firstMatch(group);if(span)return draw(span);group=[];
+    }
+    offset++;
+   }
+   const span=firstMatch(group);if(span)return draw(span);
+  }
+  return '';
+ }
  function wordPairChart(task,result){
   const pairs=result.wordPairs,n=BigInt(pairs.expected.numerator),d=BigInt(pairs.expected.denominator),scaled=(n*100n+d/2n)/d;
   const expected=Number(n*1000000n/d)/1000000,average=n>0n&&scaled===0n?'<0.01':(Number(scaled)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),actual=pairs.matches.toLocaleString('en-US'),total=pairs.opportunities.toLocaleString('en-US'),max=Math.max(1,pairs.matches,expected);
@@ -66,7 +87,7 @@
    (task.criterion.kind==='word-affine-count'?wordPairChart(task,result):task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
    data.comparison.map((row,i)=>'<div class="run-bar-row"><span>'+esc(row.label)+'</span><div class="run-bar-track"><span class="run-bar run-bar-'+i+'" style="width:'+(row.value/max*100).toFixed(4)+'%"></span></div><strong>'+row.value+'</strong></div>').join('')+
    '</div><p class="run-chart-note">Counts follow the rune sequence on each page, ignoring spaces and punctuation.</p></figure>')+
-   '<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
+   (task.criterion.kind==='word-affine-count'?wordPairExample(task,result):'')+'<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
  }
  const api={render,bind,pageLabel};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

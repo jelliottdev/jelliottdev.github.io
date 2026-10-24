@@ -93042,6 +93042,551 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   },
+  &quot;browser_followups&quot;: [
+    {
+      &quot;id&quot;: &quot;lag-five-equality-non-rune-boundaries&quot;,
+      &quot;title&quot;: &quot;Check the five-position repeat without joining layout marks&quot;,
+      &quot;question&quot;: &quot;Does the already selected five-position repeat remain elevated against its word-shuffle mean when every non-rune ends a word?&quot;,
+      &quot;scope_change&quot;: &quot;Keep the published winning relation: the same rune five positions later. Change only word boundaries on LP2-00 to LP2-55: slashes, line breaks and every other non-rune now end a word instead of allowing continuation until a hyphen or period. Pages remain separate.&quot;,
+      &quot;limitation&quot;: &quot;This is a descriptive robustness check of a relation selected by the earlier search, not an independent discovery or a new significance test. It counts one fixed relation and its exact within-word shuffled-order mean. It does not repeat the 12-distance, 841-formula search, run shuffled trials, adjust for selection, test realistic ciphertext models or identify a cipher.&quot;,
+      &quot;card&quot;: {
+        &quot;version&quot;: 1,
+        &quot;outcome&quot;: {
+          &quot;status&quot;: &quot;specified&quot;,
+          &quot;value&quot;: {
+            &quot;outcomeId&quot;: &quot;measure&quot;,
+            &quot;detail&quot;: &quot;Count one fixed affine relation at one fixed lag under the declared word boundaries; this does not identify a cipher.&quot;
+          }
+        },
+        &quot;method&quot;: {
+          &quot;status&quot;: &quot;specified&quot;,
+          &quot;value&quot;: {
+            &quot;operations&quot;: [
+              {
+                &quot;id&quot;: &quot;word_affine_count&quot;,
+                &quot;label&quot;: &quot;Within-word affine pair count&quot;,
+                &quot;lag&quot;: 5,
+                &quot;a&quot;: 1,
+                &quot;b&quot;: 0,
+                &quot;boundaries&quot;: &quot;non-rune&quot;
+              }
+            ]
+          }
+        },
+        &quot;scope&quot;: {
+          &quot;status&quot;: &quot;specified&quot;,
+          &quot;value&quot;: {
+            &quot;pages&quot;: [
+              &quot;lp2-00&quot;,
+              &quot;lp2-01&quot;,
+              &quot;lp2-02&quot;,
+              &quot;lp2-03&quot;,
+              &quot;lp2-04&quot;,
+              &quot;lp2-05&quot;,
+              &quot;lp2-06&quot;,
+              &quot;lp2-07&quot;,
+              &quot;lp2-08&quot;,
+              &quot;lp2-09&quot;,
+              &quot;lp2-10&quot;,
+              &quot;lp2-11&quot;,
+              &quot;lp2-12&quot;,
+              &quot;lp2-13&quot;,
+              &quot;lp2-14&quot;,
+              &quot;lp2-15&quot;,
+              &quot;lp2-16&quot;,
+              &quot;lp2-17&quot;,
+              &quot;lp2-18&quot;,
+              &quot;lp2-19&quot;,
+              &quot;lp2-20&quot;,
+              &quot;lp2-21&quot;,
+              &quot;lp2-22&quot;,
+              &quot;lp2-23&quot;,
+              &quot;lp2-24&quot;,
+              &quot;lp2-25&quot;,
+              &quot;lp2-26&quot;,
+              &quot;lp2-27&quot;,
+              &quot;lp2-28&quot;,
+              &quot;lp2-29&quot;,
+              &quot;lp2-30&quot;,
+              &quot;lp2-31&quot;,
+              &quot;lp2-32&quot;,
+              &quot;lp2-33&quot;,
+              &quot;lp2-34&quot;,
+              &quot;lp2-35&quot;,
+              &quot;lp2-36&quot;,
+              &quot;lp2-37&quot;,
+              &quot;lp2-38&quot;,
+              &quot;lp2-39&quot;,
+              &quot;lp2-40&quot;,
+              &quot;lp2-41&quot;,
+              &quot;lp2-42&quot;,
+              &quot;lp2-43&quot;,
+              &quot;lp2-44&quot;,
+              &quot;lp2-45&quot;,
+              &quot;lp2-46&quot;,
+              &quot;lp2-47&quot;,
+              &quot;lp2-48&quot;,
+              &quot;lp2-49&quot;,
+              &quot;lp2-50&quot;,
+              &quot;lp2-51&quot;,
+              &quot;lp2-52&quot;,
+              &quot;lp2-53&quot;,
+              &quot;lp2-54&quot;,
+              &quot;lp2-55&quot;
+            ]
+          }
+        },
+        &quot;rules&quot;: {
+          &quot;representation&quot;: {
+            &quot;status&quot;: &quot;specified&quot;,
+            &quot;value&quot;: &quot;GP29&quot;
+          },
+          &quot;wordBoundaries&quot;: {
+            &quot;status&quot;: &quot;specified&quot;,
+            &quot;value&quot;: &quot;preserve&quot;
+          },
+          &quot;boundaryMode&quot;: {
+            &quot;status&quot;: &quot;not_applicable&quot;
+          },
+          &quot;unmapped&quot;: {
+            &quot;status&quot;: &quot;specified&quot;,
+            &quot;value&quot;: &quot;preserve&quot;
+          },
+          &quot;inputVersion&quot;: {
+            &quot;status&quot;: &quot;specified&quot;,
+            &quot;value&quot;: &quot;raw&quot;
+          },
+          &quot;evaluation&quot;: {
+            &quot;status&quot;: &quot;specified&quot;,
+            &quot;value&quot;: {
+              &quot;kind&quot;: &quot;word-affine-count&quot;,
+              &quot;lag&quot;: 5,
+              &quot;a&quot;: 1,
+              &quot;b&quot;: 0,
+              &quot;boundaries&quot;: &quot;non-rune&quot;
+            }
+          },
+          &quot;reset&quot;: {
+            &quot;status&quot;: &quot;not_applicable&quot;
+          },
+          &quot;initialState&quot;: {
+            &quot;status&quot;: &quot;not_applicable&quot;
+          },
+          &quot;searchBounds&quot;: {
+            &quot;status&quot;: &quot;not_applicable&quot;
+          },
+          &quot;searchProtocol&quot;: {
+            &quot;status&quot;: &quot;not_applicable&quot;
+          },
+          &quot;exceptionalCases&quot;: {
+            &quot;status&quot;: &quot;not_applicable&quot;
+          }
+        },
+        &quot;unresolved&quot;: []
+      },
+      &quot;inputs&quot;: {
+        &quot;version&quot;: &quot;raw&quot;,
+        &quot;alphabet_sha256&quot;: &quot;06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f&quot;,
+        &quot;pages&quot;: [
+          {
+            &quot;id&quot;: &quot;lp2-00&quot;,
+            &quot;text_sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-01&quot;,
+            &quot;text_sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-02&quot;,
+            &quot;text_sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-03&quot;,
+            &quot;text_sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-04&quot;,
+            &quot;text_sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-05&quot;,
+            &quot;text_sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-06&quot;,
+            &quot;text_sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-07&quot;,
+            &quot;text_sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-08&quot;,
+            &quot;text_sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-09&quot;,
+            &quot;text_sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-10&quot;,
+            &quot;text_sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-11&quot;,
+            &quot;text_sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-12&quot;,
+            &quot;text_sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-13&quot;,
+            &quot;text_sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-14&quot;,
+            &quot;text_sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-15&quot;,
+            &quot;text_sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-16&quot;,
+            &quot;text_sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-17&quot;,
+            &quot;text_sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-18&quot;,
+            &quot;text_sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-19&quot;,
+            &quot;text_sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-20&quot;,
+            &quot;text_sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-21&quot;,
+            &quot;text_sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-22&quot;,
+            &quot;text_sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-23&quot;,
+            &quot;text_sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-24&quot;,
+            &quot;text_sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-25&quot;,
+            &quot;text_sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-26&quot;,
+            &quot;text_sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-27&quot;,
+            &quot;text_sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-28&quot;,
+            &quot;text_sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-29&quot;,
+            &quot;text_sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-30&quot;,
+            &quot;text_sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-31&quot;,
+            &quot;text_sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-32&quot;,
+            &quot;text_sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-33&quot;,
+            &quot;text_sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-34&quot;,
+            &quot;text_sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-35&quot;,
+            &quot;text_sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-36&quot;,
+            &quot;text_sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-37&quot;,
+            &quot;text_sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-38&quot;,
+            &quot;text_sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-39&quot;,
+            &quot;text_sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-40&quot;,
+            &quot;text_sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-41&quot;,
+            &quot;text_sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-42&quot;,
+            &quot;text_sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-43&quot;,
+            &quot;text_sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-44&quot;,
+            &quot;text_sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-45&quot;,
+            &quot;text_sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-46&quot;,
+            &quot;text_sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-47&quot;,
+            &quot;text_sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-48&quot;,
+            &quot;text_sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-49&quot;,
+            &quot;text_sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-50&quot;,
+            &quot;text_sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-51&quot;,
+            &quot;text_sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-52&quot;,
+            &quot;text_sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-53&quot;,
+            &quot;text_sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-54&quot;,
+            &quot;text_sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+          },
+          {
+            &quot;id&quot;: &quot;lp2-55&quot;,
+            &quot;text_sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+          }
+        ]
+      },
+      &quot;control&quot;: {
+        &quot;label&quot;: &quot;Count every planted synthetic pair using the declared word boundaries and distinguish its shuffled-order mean&quot;,
+        &quot;task&quot;: {
+          &quot;schema&quot;: &quot;liberpedia-local-task-v1&quot;,
+          &quot;engine&quot;: &quot;rune-program-v1&quot;,
+          &quot;title&quot;: &quot;Synthetic planted word-pair control: lag-five-equality-non-rune-boundaries&quot;,
+          &quot;pages&quot;: [
+            {
+              &quot;id&quot;: &quot;lp1-01&quot;,
+              &quot;text&quot;: &quot;ᚠᚢᚦᚩᚱᚠᚢᚦᚩᚱᚠᚢᚦᚩᚱ /\r\nᚠᚢᚦᚩᚱᚠᚢᚦᚩᚱᚠᚢᚦᚩᚱ&quot;
+            }
+          ],
+          &quot;alphabet&quot;: [
+            {
+              &quot;rune&quot;: &quot;ᚠ&quot;,
+              &quot;latin&quot;: &quot;F&quot;,
+              &quot;prime&quot;: 2
+            },
+            {
+              &quot;rune&quot;: &quot;ᚢ&quot;,
+              &quot;latin&quot;: &quot;U&quot;,
+              &quot;prime&quot;: 3
+            },
+            {
+              &quot;rune&quot;: &quot;ᚦ&quot;,
+              &quot;latin&quot;: &quot;TH&quot;,
+              &quot;prime&quot;: 5
+            },
+            {
+              &quot;rune&quot;: &quot;ᚩ&quot;,
+              &quot;latin&quot;: &quot;O&quot;,
+              &quot;prime&quot;: 7
+            },
+            {
+              &quot;rune&quot;: &quot;ᚱ&quot;,
+              &quot;latin&quot;: &quot;R&quot;,
+              &quot;prime&quot;: 11
+            },
+            {
+              &quot;rune&quot;: &quot;ᚳ&quot;,
+              &quot;latin&quot;: &quot;C&quot;,
+              &quot;prime&quot;: 13
+            },
+            {
+              &quot;rune&quot;: &quot;ᚷ&quot;,
+              &quot;latin&quot;: &quot;G&quot;,
+              &quot;prime&quot;: 17
+            },
+            {
+              &quot;rune&quot;: &quot;ᚹ&quot;,
+              &quot;latin&quot;: &quot;W&quot;,
+              &quot;prime&quot;: 19
+            },
+            {
+              &quot;rune&quot;: &quot;ᚻ&quot;,
+              &quot;latin&quot;: &quot;H&quot;,
+              &quot;prime&quot;: 23
+            },
+            {
+              &quot;rune&quot;: &quot;ᚾ&quot;,
+              &quot;latin&quot;: &quot;N&quot;,
+              &quot;prime&quot;: 29
+            },
+            {
+              &quot;rune&quot;: &quot;ᛁ&quot;,
+              &quot;latin&quot;: &quot;I&quot;,
+              &quot;prime&quot;: 31
+            },
+            {
+              &quot;rune&quot;: &quot;ᛄ&quot;,
+              &quot;latin&quot;: &quot;J&quot;,
+              &quot;prime&quot;: 37
+            },
+            {
+              &quot;rune&quot;: &quot;ᛇ&quot;,
+              &quot;latin&quot;: &quot;EO&quot;,
+              &quot;prime&quot;: 41
+            },
+            {
+              &quot;rune&quot;: &quot;ᛈ&quot;,
+              &quot;latin&quot;: &quot;P&quot;,
+              &quot;prime&quot;: 43
+            },
+            {
+              &quot;rune&quot;: &quot;ᛉ&quot;,
+              &quot;latin&quot;: &quot;X&quot;,
+              &quot;prime&quot;: 47
+            },
+            {
+              &quot;rune&quot;: &quot;ᛋ&quot;,
+              &quot;latin&quot;: &quot;S&quot;,
+              &quot;prime&quot;: 53
+            },
+            {
+              &quot;rune&quot;: &quot;ᛏ&quot;,
+              &quot;latin&quot;: &quot;T&quot;,
+              &quot;prime&quot;: 59
+            },
+            {
+              &quot;rune&quot;: &quot;ᛒ&quot;,
+              &quot;latin&quot;: &quot;B&quot;,
+              &quot;prime&quot;: 61
+            },
+            {
+              &quot;rune&quot;: &quot;ᛖ&quot;,
+              &quot;latin&quot;: &quot;E&quot;,
+              &quot;prime&quot;: 67
+            },
+            {
+              &quot;rune&quot;: &quot;ᛗ&quot;,
+              &quot;latin&quot;: &quot;M&quot;,
+              &quot;prime&quot;: 71
+            },
+            {
+              &quot;rune&quot;: &quot;ᛚ&quot;,
+              &quot;latin&quot;: &quot;L&quot;,
+              &quot;prime&quot;: 73
+            },
+            {
+              &quot;rune&quot;: &quot;ᛝ&quot;,
+              &quot;latin&quot;: &quot;NG&quot;,
+              &quot;prime&quot;: 79
+            },
+            {
+              &quot;rune&quot;: &quot;ᛟ&quot;,
+              &quot;latin&quot;: &quot;OE&quot;,
+              &quot;prime&quot;: 83
+            },
+            {
+              &quot;rune&quot;: &quot;ᛞ&quot;,
+              &quot;latin&quot;: &quot;D&quot;,
+              &quot;prime&quot;: 89
+            },
+            {
+              &quot;rune&quot;: &quot;ᚪ&quot;,
+              &quot;latin&quot;: &quot;A&quot;,
+              &quot;prime&quot;: 97
+            },
+            {
+              &quot;rune&quot;: &quot;ᚫ&quot;,
+              &quot;latin&quot;: &quot;AE&quot;,
+              &quot;prime&quot;: 101
+            },
+            {
+              &quot;rune&quot;: &quot;ᚣ&quot;,
+              &quot;latin&quot;: &quot;Y&quot;,
+              &quot;prime&quot;: 103
+            },
+            {
+              &quot;rune&quot;: &quot;ᛡ&quot;,
+              &quot;latin&quot;: &quot;IA&quot;,
+              &quot;prime&quot;: 107
+            },
+            {
+              &quot;rune&quot;: &quot;ᛠ&quot;,
+              &quot;latin&quot;: &quot;EA&quot;,
+              &quot;prime&quot;: 109
+            }
+          ],
+          &quot;steps&quot;: [],
+          &quot;criterion&quot;: {
+            &quot;kind&quot;: &quot;word-affine-count&quot;,
+            &quot;lag&quot;: 5,
+            &quot;a&quot;: 1,
+            &quot;b&quot;: 0,
+            &quot;boundaries&quot;: &quot;non-rune&quot;
+          },
+          &quot;taskId&quot;: &quot;85822a67abc4bcd14d54118933d7aee888f5c59111991008ebb83ee79155c984&quot;
+        },
+        &quot;expected_result_sha256&quot;: &quot;591e90f805408ce272506b8e5d76958e53f45f270736304b721bc4dc4e78a710&quot;
+      }
+    }
+  ],
   &quot;article&quot;: &quot;# Affine relations across twelve rune distances\n\n## Finding\n\nAcross **12 distances and 841 formulas per distance**, the strongest excess is a **same-rune repeat five positions later**: 102 matches versus 60.6 expected after shuffling runes within each visible word. Only **4 of 999** shuffled-word searches found a result at least this strong (**p = 0.005**, including the one-count Monte Carlo correction). The earlier six-rune rule ranked below this repeat; 23 shuffled searches reached its score somewhere in the full search.\n\n![Histogram of the strongest score in each shuffled-word search, with markers for the actual maximum and the proposed six-rune rule.](experiments/records/word-internal-affine-all-lags/selection-null.svg)\n\nThe test finds word-internal structure that this shuffle does not explain. **It does not identify the encryption algorithm.** A shuffle breaks ordinary sequence patterns too, so an elevated count alone cannot distinguish a cipher rule from other structure in the manuscript.\n\n## Why scan the full range?\n\nThe [earlier lag-six measurement](#/experiments/word-internal-affine-lags) compared the proposed rule c′ = 24 − 2c (mod 29) against all 841 affine maps **at distance six**. That comparison did not account for choosing the distance after exploration. Here every shuffle must compete over the same 12 distances and 841 maps as the actual transcription. The proposed rule has 77 matches against a shuffle mean of 44.8; its standardized score is 4.763. The complete-search reference reaches at least that score in **23 of 999** trials (corrected tail 0.024). This is a comparison to a wider search, not a fresh independent test of the original idea.\n\nThe largest observed score, 5.272, comes from the identity relation at distance five: the rune repeats. It is 102 matches against an exact within-word shuffle expectation of 60.6. Four controls have a maximum score at least this high after repeating the **entire** search. That 4/999 count belongs to the strongest relation, not specifically to the original six-rune formula.\n\n## How the comparison works\n\nUse the archived rune order on LP2-00–55. A hyphen or full stop ends a word; a slash or line break does not. Each page remains separate. For each distance from 1 through 12, count rune pairs that stay within a visible word. Try all maps c′ = ac + b (mod 29), with a and b each 0–28. These are pattern measurements, including noninvertible maps, rather than candidate decryption keys.\n\nFor each map and distance, calculate its expected count under independent random order inside each word, keeping that word&#x27;s exact rune counts. Divide the excess count by the square root of expected count plus one. Select the largest of the **10,092** scores. The denominator is a ranking scale, not a claim that scores follow a normal distribution; the full selection is calibrated by 999 seeded shuffles that repeat the same scan. The [frozen plan](experiments/records/word-internal-affine-all-lags/plan.json) records this score, search range, word rule, seed, stopping rule, and threshold before the run.\n\n## What remains open\n\nThe word rule follows the archived transcription, which has disputed separators. Other segmentations, page subsets, relations, and prior exploratory choices were not included in the selection control. The shuffled words preserve local rune counts and word lengths but are not simulated ciphertext. The high same-rune count at distance five should be tested on held-out material or against a more realistic generative control before treating it as a mechanism. Neither result supplies a key, plaintext, or explanation for missing adjacent doublets.\n\n## Reproduce\n\nFrom the repository root with Python 3.12 and the standard library:\n\n```text\npython experiments/records/word-internal-affine-all-lags/run.py --check\npython experiments/records/word-internal-affine-all-lags/check.py\n```\n\nThe first command reruns all 999 complete searches and compares the full [saved result](experiments/records/word-internal-affine-all-lags/results.json) and chart byte for byte. The second independently checks the word and pair counts, the earlier 77-match rule, the exact shuffle expectation on a small exhaustive example, and the saved tail arithmetic. Input hashes and exact bounds are in the plan and download bundle. The run reached its planned 999 trials; the score, range, and stopping rule were not changed after seeing the result.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/word-internal-affine-all-lags/article.md&quot;,
   &quot;script_sha256&quot;: &quot;a0bc4d3aff8a4d0679b0a5b06af4281acd691f3423b52cbb7c4253edc5ac7a00&quot;,

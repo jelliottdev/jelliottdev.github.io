@@ -49,6 +49,19 @@
 .run-pair-arithmetic summary{cursor:pointer;min-height:44px;align-content:center}
 .local-run-chart .run-pair-arithmetic p{margin:.5rem 0 0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 
+/* One real counted span makes the pair rule concrete without a long table. */
+.run-word-example{margin:1.5rem 0;padding:1rem 0;border-block:1px solid #dfe5eb;min-width:0}
+.run-word-example figcaption{font-weight:600;margin-bottom:.4rem}
+.local-run-result .run-word-example-location{font-size:.875rem;color:#586878;margin:0 0 1rem}
+.run-word-example-strip{display:grid;grid-template-columns:repeat(var(--pair-columns),minmax(0,1fr));gap:clamp(1px,.5vw,4px);width:min(100%,calc(var(--pair-columns) * 2.75rem));max-width:34rem;margin:0 0 1rem;min-width:0}
+.run-word-example-cell{display:grid;gap:.35rem;justify-items:center;min-width:0;padding:.45rem 0;border:1px solid transparent;border-bottom-color:#dfe5eb;border-radius:3px}
+.run-word-example-cell.is-endpoint{background:#e9f0f5;border-color:#326b91;border-width:2px;color:#214f71}
+.run-word-example-rune{font:1.35rem/1.5 "Local Runic",Arial,sans-serif}
+.run-word-example-position{font:.875rem/1.4 Arial,sans-serif;color:#586878;font-variant-numeric:tabular-nums}
+.local-run-result .run-word-example-rule{font-family:Arial,"Local Runic",sans-serif;font-size:1rem;margin-bottom:.65rem}
+.local-run-result .run-word-example-note{font-size:.875rem;line-height:1.6;color:#586878;margin:0}
+@media(max-width:440px){.run-word-example-rune{font-size:clamp(1rem,calc((100vw - 72px) / var(--pair-columns) * .75),1.8rem)}.run-word-example-cell{padding:.4rem 0}.run-word-example-strip{gap:1px}}
+
 .run-text-columns.run-text-columns-single{grid-template-columns:minmax(0,1fr)}
 
 .run-word-pair-chart .run-bar-0{background:#2f6482}
