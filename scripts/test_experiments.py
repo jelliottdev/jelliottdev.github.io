@@ -75,6 +75,22 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(json.loads((self.root / 'data/checker-records.json').read_text())['records'], [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
 
+    def test_materials_preserves_reviewed_reuse_limits_and_rejects_unbound_notes(self):
+        materials = {'summary': 'Scores and hashes only.', 'reuse': 'Inspect retained scores.',
+                     'limits': 'Decoded text requires reconstruction.',
+                     'evidence': ['experiments/records/test-record/output.txt']}
+        record = copy.deepcopy(self.record)
+        record['materials'] = materials
+        self.assertEqual(self.run_build(record)[0]['materials'], materials)
+        checker = json.loads((self.root / 'data/checker-records.json').read_text())
+        self.assertEqual(checker['records'][0]['materials'], materials)
+        for changed in [None, {**materials, 'reuse': ''}, {**materials, 'verified': True},
+                        {**materials, 'summary': 'x' * 1201},
+                        {**materials, 'evidence': ['missing.json']},
+                        {**materials, 'evidence': materials['evidence'] * 2}]:
+            with self.subTest(changed=changed), self.assertRaises(ValueError):
+                self.run_build({**record, 'materials': changed})
+
     def test_article_link_permissions_are_derived_not_imported(self):
         record = copy.deepcopy(self.record)
         record['article_links'] = {'invented.json': 'research/unreviewed.json'}

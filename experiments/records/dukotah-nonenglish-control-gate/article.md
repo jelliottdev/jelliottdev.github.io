@@ -20,3 +20,7 @@ python experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check
 ```
 
 The first checker compares all four saved language-model rows with both decision rules. The second verifies the pinned sibling source bytes and recomputes the frozen and executed decisions for Latin, Greek and vowel-dropped English. Source plans, code and saved receipts are bundled under the source repository’s MIT license. A new search would need a predeclared control that can reveal a detection-rate advantage, followed by one unchanged decision rule and a matched null for the full search.
+
+## Saved results
+
+The [saved language-model controls](experiments/records/dukotah-nonenglish-control-gate/source-out_control.json), [language-model audit](experiments/records/dukotah-nonenglish-control-gate/results.json) and [matched-rune audit](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/results.json) support rechecking the frozen and executed gate decisions without repeating the original simulations. They preserve aggregate control summaries and audit receipts, not all original trial outputs. Neither reported 20,480-case manuscript search was locally rerun, so these materials do not validate its zero survivors under the frozen control rule.

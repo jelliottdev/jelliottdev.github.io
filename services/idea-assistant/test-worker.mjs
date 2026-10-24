@@ -25,6 +25,21 @@ const supplied=JSON.parse(captured[1].content).records;
 assert.deepEqual(JSON.parse(supplied[0].text).record_type,typed.record_type);
 assert.equal((await typedResponse.json()).sources[0].recordType,'method',
   'The Worker passes editorial type to the browser alongside complete evidence');
+// Reviewed file-content notes are exact evidence, not a runtime execution claim.
+const materials={summary:'Saved scores and hashes only.',reuse:'Inspect existing scores.',limits:'Decoded text requires reconstruction.',evidence:['experiments/records/fixture/results.json']};
+let materialDocs=Search.experimentDocs([{...typed,materials}]),materialCalls=0,materialPrompt;
+const materialHandler=createHandler(async()=>materialDocs);
+const materialEnv={...env,AI:{run:async(model,options)=>{materialCalls++;materialPrompt=options.messages;return {choices:[{message:{content:'Scores are retained; decoded text needs reconstruction [1].'}}]};}}};
+const materialResult=await (await materialHandler(request(),materialEnv)).json();
+assert.deepEqual(JSON.parse(JSON.parse(materialPrompt[1].content).records[0].text).materials,materials);
+assert.equal(materialResult.sources[0].text,materialDocs[0].text);
+assert(materialPrompt[0].content.includes('reuse availability is unknown'));
+assert(materialPrompt[0].content.includes('not file contents you have inspected'));
+await materialHandler(request(),materialEnv);assert.equal(materialCalls,1);
+materialDocs=Search.experimentDocs([{...typed,materials:{...materials,limits:'Only selected scores are retained.'}}]);
+await materialHandler(request(),materialEnv);assert.equal(materialCalls,2,'Changed reuse limits invalidate answer caches');
+const plainRank=Search.search(Search.experimentDocs([typed]),'reverse').map(({score})=>score);
+assert.deepEqual(Search.search(Search.experimentDocs([{...typed,materials}]),'reverse').map(({score})=>score),plainRank,'Reuse notes do not distort technique ranking');
 assert.equal((await (await createHandler(async()=>[])(request(),env)).json()).reason,'no-matching-records');
 assert.equal((await (await handle(request('Vigenere on page 31'),env)).json()).reason,'no-matching-records');assert.equal(calls,0);
 for(const query of ['has anyone tried LP2–15','has anyone tested page #15','has anyone tested pages #15–#16']){

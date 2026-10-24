@@ -11,16 +11,23 @@
       .map(m=>`lp${m[1]}-${m[2].padStart(2,'0')}`))];
   }
   function experimentDocs(records) {
-    return records.filter(r=>r.status==='published').map(r=>({
-      id:r.id, title:r.title, kind:'experiment', recordType:r.record_type?.id||'method', href:`#/experiments/${r.id}`,
-      text:JSON.stringify({record_type:r.record_type,question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations}),
-      // Retrieval can use prose, but evidence always preserves the complete scope.
-      keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
-      phrases:r.tags||[],
-      // Authored metadata ranks a named method; it is not evidence of a test.
-      retrieval:{question:r.question||'',summary:r.summary||'',tags:r.tags||[],topics:r.method_topics||[]}
-    }));
+    return records.filter(r=>r.status==='published').map(r=>{
+      const evidence={record_type:r.record_type,question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations};
+      const core=JSON.stringify(evidence);
+      if(r.materials)evidence.materials=r.materials;
+      return {
+        id:r.id, title:r.title, kind:'experiment', recordType:r.record_type?.id||'method', href:`#/experiments/${r.id}`,
+        text:JSON.stringify(evidence),
+        // Reuse notes support the answer, not the ranking of a named technique.
+        ...(r.materials?{searchText:core}:{}),
+        // Retrieval can use prose, but evidence always preserves the complete scope.
+        keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
+        phrases:r.tags||[],
+        retrieval:{question:r.question||'',summary:r.summary||'',tags:r.tags||[],topics:r.method_topics||[]}
+      };
+    });
   }
+
   function techniqueQuery(query) {
     return query.replace(pageReference,' ').replace(/\bpages?\s*#?\s*\d+(?:\s*[-‐‑–—−]\s*#?\s*\d+)?/gi,' ');
   }
@@ -29,7 +36,7 @@
     const corpus=documents.map(document=>{
       let index=wordIndex.get(document);
       if(!index){
-        const words=tokens(document.title+' '+document.title+' '+document.text+' '+(document.keywords||''));
+        const words=tokens(document.title+' '+document.title+' '+(document.searchText??document.text)+' '+(document.keywords||''));
         const counts=new Map();
         for(const word of words)counts.set(word,(counts.get(word)||0)+1);
         index={length:words.length,counts};wordIndex.set(document,index);
@@ -175,6 +182,7 @@
     // swamp the explicitly named operation, but full evidence remains unchanged.
     const ranked=search(candidates.map(document=>({
       ...document,text:document.retrieval.question+' '+document.retrieval.summary,
+      searchText:document.retrieval.question+' '+document.retrieval.summary,
       keywords:document.retrieval.tags.join(' ')
     })),query);
     for(const hit of ranked){

@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Preserve exact evidence and lexical text; detail/download dependencies stay separate.
 CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
                   'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
-                  'article', 'method_topics', 'reader_finding', 'reader_limit')
+                  'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials')
 
 
 def checker_payload(records, registry_bytes):
@@ -175,6 +175,19 @@ def validate_record(root, path, pages):
     require(command_files <= bundled_files,
             'Reproduction command uses undeclared bundle files: ' +
             ', '.join(sorted(command_files - bundled_files)))
+    if 'materials' in d:
+        materials = d['materials']
+        require(isinstance(materials, dict) and set(materials) == {'summary', 'reuse', 'limits', 'evidence'},
+                'Materials needs summary, reuse, limits and evidence')
+        for key in ('summary', 'reuse', 'limits'):
+            text(materials.get(key), 'materials.' + key)
+        evidence = materials.get('evidence')
+        require(isinstance(evidence, list) and 1 <= len(evidence) <= 3
+                and all(isinstance(name, str) and name in bundled_files for name in evidence)
+                and len(set(evidence)) == len(evidence),
+                'Materials evidence must name 1–3 distinct declared reproduction files')
+        require(len(json.dumps(materials, ensure_ascii=False, separators=(',', ':'))) <= 1200,
+                'Materials exceeds the 1200-character evidence budget; shorten the complete note')
     validate_plan_provenance(root, identifier, reproduction)
     validate_batch(root, d)
     require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),

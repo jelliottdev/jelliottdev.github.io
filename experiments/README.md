@@ -52,6 +52,12 @@ Hosted AI is deployed through Cloudflare Workers AI, using its built-in binding 
 
 The verified service URL is set in `data/assistant.json`. Empty registries and unmatched techniques do not call inference. Answers use complete experiment scopes; excerpts from explicitly named manuscript pages can supply supporting context. Only pressing Check idea can start inference. Repeated answers are cached against the question and exact evidence; changed source contents invalidate the server cache. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
 
+## Describe reusable results
+
+An optional `materials` note tells the checker what the saved files actually contain. Use `summary` for retained material, `reuse` for questions it can answer without a new transformation run, `limits` for missing content or remaining work, and `evidence` for one to three declared reproduction file paths. Inspect the files and their producer before writing this note. Scores, output hashes, selected candidates and complete decoded streams support different actions; filenames alone do not establish their contents. Keep the same explanation in the experiment account.
+
+The complete note, including paths, must fit 1,200 JSON characters. The builder rejects oversized notes and undeclared references rather than truncating them. It verifies referenced file hashes, not the truth of the interpretation or runtime reproducibility. The note travels unchanged in full and compact checker evidence; absence means reuse availability is unknown. It does not create a new experiment or change its outcome.
+
 ## Check the implementation
 
 Run `python scripts/test_experiments.py` for publishing validation. For browser regression tests, install Playwright, serve the repository on port 8765, and run `node scripts/test_interface.cjs`. It uses the Edge browser channel; `PLAYWRIGHT_MODULE` can point to an existing Playwright installation and `WIKI_BASE_URL` can select a different preview server. Synthetic experiment records are intercepted in the test browser only. Hosted responses are mocked in UI tests; this does not test model answer quality.

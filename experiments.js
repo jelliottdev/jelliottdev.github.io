@@ -48,6 +48,14 @@ async function ensureExperimentRecords() {
   }
   return experimentRecords;
 }
+function validMaterials(value){
+ return value&&typeof value==='object'&&!Array.isArray(value)&&
+  Object.keys(value).sort().join(',')==='evidence,limits,reuse,summary'&&
+  ['summary','reuse','limits'].every(key=>typeof value[key]==='string'&&value[key].trim())&&
+  Array.isArray(value.evidence)&&value.evidence.length>=1&&value.evidence.length<=3&&
+  value.evidence.every(path=>typeof path==='string'&&/^[a-zA-Z0-9_./-]+$/.test(path)&&!path.startsWith('/')&&!path.split('/').some(part=>!part||part==='.'||part==='..'))&&
+  new Set(value.evidence).size===value.evidence.length&&[...JSON.stringify(value)].length<=1200;
+}
 function validCheckerPayload(data){
  const strings=values=>Array.isArray(values)&&values.every(value=>typeof value==='string');
  const text=value=>typeof value==='string'&&value.trim().length>0;
@@ -66,7 +74,8 @@ function validCheckerPayload(data){
     ['supported','not-supported','inconclusive'].includes(record.outcome)&&
     (!record.family||['id','title','question','baseline'].every(key=>text(record.family[key])))&&
     (!record.variant||text(record.variant.label))&&
-    ['reader_finding','reader_limit'].every(key=>!Object.hasOwn(record,key)||text(record[key]));
+    ['reader_finding','reader_limit'].every(key=>!Object.hasOwn(record,key)||text(record[key]))&&
+    (!Object.hasOwn(record,'materials')||validMaterials(record.materials));
   });
 }
 async function ensureCheckerRecords(){

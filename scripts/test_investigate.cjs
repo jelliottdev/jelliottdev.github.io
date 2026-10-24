@@ -98,6 +98,7 @@ test('source inspection shows actual method and bounds, compact page holes, and 
  const preview=I.sourceHTML(doc,[record],{preview:true});assert(preview.includes(record.reader_finding));assert(!preview.includes('source-facts'));
  const packet=I.sourceHTML(doc,[record],{packet:true});assert(packet.includes(record.reader_finding));assert(packet.includes(encoded(record.reproduction.command)));
  assert.equal(JSON.stringify(record),before);
+ if(record.materials){assert(html.includes(encoded(record.materials.reuse)));assert(html.includes(encoded(record.materials.limits)));}
  const unknown={...record,scope:{},reader_limit:'',limitations:'No independent transcription check. Human review pending.'};
  const unknownHTML=I.sourceHTML(doc,[unknown]);assert(unknownHTML.includes('Not specified in this record'));assert(unknownHTML.includes('No independent transcription check.'));assert(!unknownHTML.includes('Human review pending'));
  assert(unknown.limitations.endsWith('Human review pending.'));

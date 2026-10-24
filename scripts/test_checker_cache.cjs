@@ -1,7 +1,7 @@
 /* Cold checker, warm details, malformed artifacts and retry must stay separate. */
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.join(__dirname,'..'),full=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json')));
-const fields=['id','status','title','question','summary','tags','record_type','family','variant','scope','outcome','finding','limitations','article','method_topics','reader_finding','reader_limit'];
+const fields=['id','status','title','question','summary','tags','record_type','family','variant','scope','outcome','finding','limitations','article','method_topics','reader_finding','reader_limit','materials'];
 const compact={schema:'liberpedia-checker-records-v1',registry_sha256:'a'.repeat(64),records:full.records.slice(0,2).map(record=>Object.fromEntries(fields.filter(k=>Object.hasOwn(record,k)).map(k=>[k,record[k]])))};
 const source=fs.readFileSync(path.join(root,'experiments.js'),'utf8');
 const make=()=>{const context={};vm.createContext(context);vm.runInContext(source,context);return context};
@@ -36,6 +36,11 @@ const response=data=>({ok:true,json:async()=>data});
   const test=make();let calls=0;test.fetch=async()=>{calls++;return response(calls===1?payload:compact)};
   await assert.rejects(test.ensureCheckerRecords(),/invalid format/);assert(vm.runInContext('checkerRecords===undefined&&experimentRecords===undefined',test));
   const recovered=await test.ensureCheckerRecords();assert.equal(recovered.length,2);assert.equal(calls,2,'Malformed loads release the promise for retry');
+ }
+ const validNote={summary:'Saved scores.',reuse:'Compare recorded scores.',limits:'No decoded text.',evidence:['experiments/records/test/results.json']};
+ assert(context.validMaterials(validNote));
+ for(const materials of [null,{}, {...validNote,summary:''},{...validNote,limits:'x'.repeat(1201)}, {...validNote,evidence:['../private']},{...validNote,evidence:validNote.evidence.concat(validNote.evidence)},{...validNote,runVerified:true}]){
+  assert(!context.validCheckerPayload({...compact,records:[{...compact.records[0],materials}]}),'Malformed notes must not become model evidence');
  }
  const missing=make();let calls=0;missing.fetch=async()=>{calls++;return calls===1?{ok:false}:response(compact)};
  await assert.rejects(missing.ensureCheckerRecords(),/could not be loaded/);await missing.ensureCheckerRecords();assert.equal(calls,2);

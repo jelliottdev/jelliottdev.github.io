@@ -35,3 +35,7 @@ A separately implemented checker rescores all 92,510 short outputs, reconstructs
 ## Scope and sources
 
 The figure uses an actual alias of the best returned full setting: seed (4,19), offset 3 starts 13,7,20,..., exactly like canonical seed (13,7), offset 0. The funnel shows actual computed settings, not independent evidence counts. The source files are pinned to Dukotah/cicada 3301 commit f08b20b632d91209ddbaa747e8e2f23df0c78ba1, with its MIT license bundled. This is a bounded source computation and control study: no plaintext is certified, no global probability is calibrated, and no general numeric-key or OTP conclusion follows. Other keys, clocks, languages, joined-page rules and intermediate ranking criteria remain outside scope.
+
+## Saved results
+
+The [case rows](experiments/records/fibonacci-stream-skip-grid/cases.json) and [binary rune indices](experiments/records/fibonacci-stream-skip-grid/short-paths.bin) retain all 92,510 selected 50-rune screen outputs and the 900 full-page source winners. These can be rescored without repeating beam search. The [terminal audit](experiments/records/fibonacci-stream-skip-grid/terminal-audit.json) also retains one best normalized witness for each of those 900 settings, rather than every terminal beam path. Rejected screens have no saved full-page outputs; these score gates do not confirm plaintext.

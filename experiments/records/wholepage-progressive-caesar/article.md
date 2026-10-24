@@ -19,3 +19,7 @@ For each of 199 null trials, we shuffled positions independently within every pa
 The [plan](experiments/records/wholepage-progressive-caesar/plan.json) pins all page transcriptions, solved readings, alphabet and score model by SHA-256. The [case ledger](experiments/records/wholepage-progressive-caesar/cases.jsonl) contains every schedule, score and decoded-index hash; [results](experiments/records/wholepage-progressive-caesar/results.json) retain all 199 global null maxima. Run `python experiments/records/wholepage-progressive-caesar/run.py --check`, then `python experiments/records/wholepage-progressive-caesar/check.py` for an independent reconstruction. Both full searches use NumPy and Numba; fixed outputs are also checked by a separate ordinary Latin-string scorer.
 
 The position clock here increments once per rune and resets at each page. It does not test word or line resets, nonlinear clocks, extra key layers, mixed alphabets, transposition, non-English text, or the branching disk proposal's unspecified transitions.
+
+## Saved results
+
+The [case ledger](experiments/records/wholepage-progressive-caesar/cases.jsonl) and [results](experiments/records/wholepage-progressive-caesar/results.json) let you inspect the recorded scores, rankings, threshold counts and null comparisons without repeating the search. The ledger retains decoded-output hashes, not decoded text. A different text-based metric requires reconstructing outputs from the bundled inputs and fixed formula; it cannot be applied to the score table alone.

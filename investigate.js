@@ -230,6 +230,7 @@
   const scope=record.scope||{},limit=readerLimit(record),finding=record.reader_finding||record.finding;
   const pages=Array.isArray(scope.pages)&&scope.pages.length?compactPages(scope.pages).map(p=>p.text).join(', '):'Not specified in this record';
   const facts=[['Page scope',pages],['Method',scope.procedure],['Input',scope.representation],['Bounds',scope.parameters],['Not tested',scope.exclusions]];
+  if(record.materials)facts.push(['Saved results',[record.materials.summary,record.materials.reuse,record.materials.limits].join(' ')]);
   if(packet)facts.push(['Run',record.reproduction?.command],['Inputs',(record.reproduction?.inputs||[]).map(f=>f.path).join(', ')]);
   return heading+((packet||preview)&&finding?'<p>'+esc(finding)+'</p>':'')+
    (preview?'':'<dl class="source-facts">'+facts.filter(([,value])=>value).map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>')+
