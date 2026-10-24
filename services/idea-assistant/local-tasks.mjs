@@ -18,9 +18,9 @@ async function storedTask(row){
  if(task.taskId!==row.id||await digest(L.stable(task))!==row.task_hash)throw Error('Stored task mismatch');
  return task;
 }
-function projection(row,task,run){
- return {id:row.id,proposalId:row.proposal_id,card:validateCard(row.card_json),title:task.title,plan:task,
-  inputVersion:row.input_version,parentTaskId:row.parent_task_id,createdAt:row.created_at,
+function projection(row,task,run,context){
+ return {id:row.id,proposalId:context.proposal_id,card:validateCard(context.card_json),title:task.title,plan:task,
+  inputVersion:context.input_version,parentTaskId:context.parent_task_id,createdAt:context.created_at,
   state:run?'results-verified':'not-run',...(run?{latestRun:run}:{}),verification:NOTICE};
 }
 export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date()}={}){
@@ -43,16 +43,22 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
   if(request.method!==method){headers.Allow=method+', OPTIONS';return reply({error:'Method is not allowed.'},405);}
   if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Local experiments are unavailable.'},503);
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
-  const view=async (row,linkedProposalId=null)=>{
+  const publicContext=row=>query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
+   FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
+   JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=?
+   ORDER BY CASE WHEN links.proposal_id=? THEN 0 ELSE 1 END,links.created_at,links.proposal_id LIMIT 1`,row.id,row.proposal_id).first();
+  const view=async (row,linkedProposalId=null,selectedContext=null)=>{
+   const context=selectedContext||(linkedProposalId?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
+    FROM local_task_ideas links JOIN proposals p ON p.id=links.proposal_id
+    WHERE links.task_id=? AND links.proposal_id=?`,row.id,linkedProposalId).first():await publicContext(row));
+   if(!context)throw Error('Missing visible task association');
    const task=await storedTask(row),latest=await query('SELECT * FROM local_task_results WHERE task_id=? ORDER BY created_at DESC,id DESC LIMIT 1',row.id).first();let run=null;
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
    const publicRows=await query(`SELECT json_group_array(proposal_id) AS ids FROM (
     SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
    const publicIds=JSON.parse(publicRows?.ids||'[]');
-   const linked=linkedProposalId?await query('SELECT input_version,parent_task_id FROM local_task_ideas WHERE task_id=? AND proposal_id=?',row.id,linkedProposalId).first():null;
-   if(linkedProposalId&&!linked)throw Error('Missing task association');
-   return {...projection(row,task,run),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linked?{linkedProposalId,linkedInputVersion:linked.input_version,linkedParentTaskId:linked.parent_task_id}:{})};
+   return {...projection(row,task,run,context),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
   };
   try{
    let body;
@@ -119,8 +125,9 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     return reply(await view(existing,body.proposalId));
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
+   const context=await publicContext(row);if(!context)return reply({error:'Experiment not found.'},404);
    const task=await storedTask(row);
-   if(method==='GET')return reply(await view(row));
+   if(method==='GET')return reply(await view(row,null,context));
    let result;try{exact(body,['result']);result=await L.verify(task,body.result);}catch{return reply({error:'The results do not match this exact experiment.'},422);}
    const resultJson=L.stable(result),runId=await digest(resultJson);
    let saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();

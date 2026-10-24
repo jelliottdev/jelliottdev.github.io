@@ -11,13 +11,14 @@ const origin='https://jelliottdev.github.io',proposalId='p_'+'a'.repeat(64),at='
 const alphabet=Array.from({length:29},(_,i)=>({rune:String.fromCharCode(65+i),latin:'R'+i,prime:i+2}));
 const source={id:'lp2-15',raw:'ABC A\nBA',reviewed_text:'ABC B\nBA'};
 const card=H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE ORIGINAL'},method:C.field('specified',{operations:[{id:'described_method',label:'Reverse rows'}]},{kind:'supplied',refs:['source:text']})}),{id:'test',at}));
-function adapter(){
+function adapter({publicOriginal=true}={}){
  const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,'a'.repeat(64),C.serialize(card),'unused',at);
+ if(publicOriginal)sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(proposalId,at,at.slice(0,10));
  const db={sqlite,reads:0,fail:false,prepare(sql){return {bind(...args){return {sql,args,first:async()=>{db.reads++;return sqlite.prepare(sql).get(...args)||null;}};}};},async batch(statements){sqlite.exec('BEGIN IMMEDIATE');try{if(db.fail)throw Error('Injected storage failure');const result=statements.map(s=>({success:true,meta:{changes:Number(sqlite.prepare(s.sql).run(...s.args).changes)}}));sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};return db;
 }
-function fixture(){
- const db=adapter(),urls=[],rates=[];let date=at,fetchFailure=false;
+function fixture(options){
+ const db=adapter(options),urls=[],rates=[];let date=at,fetchFailure=false;
  const env={SITE_ORIGIN:origin,PROPOSALS:db,PROPOSAL_LIMIT:{limit:async value=>{rates.push(value);return {success:true};}}};
  const handle=createLocalTaskHandler({now:()=>new Date(date),fetcher:async(url,options)=>{urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);if(fetchFailure)throw Error('Offline');return Response.json(source);}});
  return {db,env,handle,urls,rates,setDate:value=>date=value,setFetchFailure:value=>fetchFailure=value};
@@ -118,20 +119,45 @@ await test('migration backfills original task provenance without changing it',as
  sqlite.close();
 });
 function addIdea(f,id,value=card,isPublic=false){f.db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,id.slice(2),C.serialize(value),'unused',at);if(isPublic)f.db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(id,at,at.slice(0,10));}
-await test('different real goal cards reuse the same computation and saved result without provenance overwrite',async()=>{
- const f=fixture(),field=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
+await test('different real goal cards reuse the same computation and saved result without exposing private original context',async()=>{
+ const f=fixture({publicOriginal:false}),field=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
  const cards=['decipher','measure'].map(outcomeId=>H.cardData(C.confirm(C.createDraft({source:{text:'DO NOT PROJECT ORIGINAL'},aim:field({outcomeId,wording:C.OUTCOMES[outcomeId],detail:''}),method:field({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:field({pages:['lp2-15']})}),{id:outcomeId,at})));
  f.db.sqlite.prepare('UPDATE proposals SET card_json=? WHERE id=?').run(C.serialize(cards[0]),proposalId);
  const plans=await Promise.all(cards.map(value=>{const plan=planCard(value);assert(!plan.reason);return task('Local test: rune reversal','raw',{steps:plan.steps,criterion:plan.criterion})}));
  assert.notDeepEqual(cards[0],cards[1]);assert.equal(plans[0].taskId,plans[1].taskId);
  const t=plans[0];assert.equal((await call(f,'/tasks','POST',body(t))).status,200);const original=f.db.sqlite.prepare('SELECT * FROM local_tasks WHERE id=?').get(t.taskId);
- const run=await(await call(f,'/tasks/'+t.taskId+'/results','POST',{result:L.run(t)})).json();
+ assert.equal((await call(f,'/tasks/'+t.taskId)).status,404);assert.equal((await call(f,'/tasks/'+t.taskId+'/results','POST',{result:L.run(t)})).status,404);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
  const second='p_'+'b'.repeat(64);addIdea(f,second,cards[1],true);
- const response=await call(f,'/tasks','POST',{...body(t),proposalId:second}),shared=await response.json();assert.equal(response.status,200);assert.equal(shared.linkedProposalId,second);assert.equal(shared.linkedInputVersion,'raw');assert.equal(shared.linkedParentTaskId,null);assert.equal(shared.proposalId,proposalId);assert.deepEqual(shared.card,cards[0]);assert.equal(shared.state,'results-verified');assert.deepEqual(shared.latestRun,run.latestRun);assert.deepEqual(shared.relatedIdeaIds,[second]);assert(!JSON.stringify(shared).includes('DO NOT PROJECT ORIGINAL'));
+ assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:second})).status,200);
+ const run=await(await call(f,'/tasks/'+t.taskId+'/results','POST',{result:L.run(t)})).json();
+ const response=await call(f,'/tasks','POST',{...body(t),proposalId:second}),shared=await response.json();assert.equal(response.status,200);assert.equal(shared.linkedProposalId,second);assert.equal(shared.linkedInputVersion,'raw');assert.equal(shared.linkedParentTaskId,null);assert.equal(shared.proposalId,second);assert.deepEqual(shared.card,cards[1]);assert.equal(shared.state,'results-verified');assert.deepEqual(shared.latestRun,run.latestRun);assert.deepEqual(shared.relatedIdeaIds,[second]);assert(!JSON.stringify(shared).includes('DO NOT PROJECT ORIGINAL'));assert(!JSON.stringify(shared).includes(proposalId));
  assert.equal(f.urls.length,1,'Identical raw task reuses already verified exact source bytes');assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,1);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas').get().n,2);
  assert.deepEqual(f.db.sqlite.prepare('SELECT * FROM local_tasks WHERE id=?').get(t.taskId),original);
  const link=f.db.sqlite.prepare('SELECT * FROM local_task_ideas WHERE proposal_id=?').get(second);f.setDate('2026-10-25T00:00:00Z');const retry=await call(f,'/tasks','POST',{...body(t),proposalId:second});assert.equal(retry.status,200);assert.deepEqual(f.db.sqlite.prepare('SELECT * FROM local_task_ideas WHERE proposal_id=?').get(second),link);
- const get=await(await call(f,'/tasks/'+t.taskId)).json();assert.deepEqual(get.relatedIdeaIds,[second]);assert(!Object.hasOwn(get,'linkedProposalId'));
+ const get=await(await call(f,'/tasks/'+t.taskId)).json();assert.deepEqual(get.relatedIdeaIds,[second]);assert(!Object.hasOwn(get,'linkedProposalId'));assert.equal(get.proposalId,second);assert.deepEqual(get.card,cards[1]);assert(!JSON.stringify(get).includes(proposalId));
+});
+await test('public task projection uses public association version/parent/date and never private original parent',async()=>{
+ const f=fixture({publicOriginal:false}),parent=await task('Private parent computation');assert.equal((await call(f,'/tasks','POST',body(parent))).status,200);
+ const t=await task('Shared computation');assert.equal((await call(f,'/tasks','POST',{...body(t),parentTaskId:parent.taskId})).status,200);
+ const before=f.db.sqlite.prepare('SELECT * FROM local_tasks WHERE id=?').get(t.taskId),second='p_'+'b'.repeat(64);
+ const publicCard=H.cardData(C.confirm(C.createDraft({source:{text:'Public normalized fixture'},aim:C.field('specified','Measure repeat counts',{kind:'supplied',refs:['fixture']}),method:C.field('specified',{operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]},{kind:'supplied',refs:['fixture']})}),{id:'public',at}));
+ addIdea(f,second,publicCard,true);f.setDate('2026-10-25T01:00:00.000Z');
+ const previous=source.reviewed_text;try{source.reviewed_text=source.raw;const response=await call(f,'/tasks','POST',{...body(t),proposalId:second,inputVersion:'reviewed'});assert.equal(response.status,200);const created=await response.json();assert.equal(created.proposalId,second);assert.equal(created.inputVersion,'reviewed');assert.equal(created.parentTaskId,null);}finally{source.reviewed_text=previous;}
+ const response=await call(f,'/tasks/'+t.taskId);assert.equal(response.status,200);const visible=await response.json();
+ assert.equal(visible.proposalId,second);assert.deepEqual(visible.card,publicCard);assert.equal(visible.inputVersion,'reviewed');assert.equal(visible.parentTaskId,null);assert.equal(visible.createdAt,'2026-10-25T01:00:00.000Z');assert.deepEqual(visible.plan,t);
+ assert(!JSON.stringify(visible).includes(proposalId));assert(!JSON.stringify(visible).includes(parent.taskId));assert.equal((await call(f,'/tasks/'+parent.taskId)).status,404);
+ assert.deepEqual(f.db.sqlite.prepare('SELECT * FROM local_tasks WHERE id=?').get(t.taskId),before,'Public context cannot rewrite immutable original provenance');
+ const result=await call(f,'/tasks/'+t.taskId+'/results','POST',{result:L.run(t)});assert.equal(result.status,200);assert(!JSON.stringify(await result.json()).includes(proposalId));
+});
+await test('public context prefers canonical only when public, otherwise earliest public association',async()=>{
+ const f=fixture({publicOriginal:false}),t=await task();await call(f,'/tasks','POST',body(t));
+ const first='p_'+'b'.repeat(64),second='p_'+'c'.repeat(64);addIdea(f,first,card,true);addIdea(f,second,card,true);
+ f.setDate('2026-10-25T01:00:00.000Z');await call(f,'/tasks','POST',{...body(t),proposalId:first});
+ f.setDate('2026-10-26T01:00:00.000Z');await call(f,'/tasks','POST',{...body(t),proposalId:second});
+ assert.equal((await(await call(f,'/tasks/'+t.taskId)).json()).proposalId,first);
+ f.db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(proposalId,at,at.slice(0,10));
+ assert.equal((await(await call(f,'/tasks/'+t.taskId)).json()).proposalId,proposalId);
+ const privateThird='p_'+'d'.repeat(64);addIdea(f,privateThird);const echo=await(await call(f,'/tasks','POST',{...body(t),proposalId:privateThird})).json();assert.equal(echo.proposalId,privateThird);assert.equal(echo.linkedProposalId,privateThird);assert(!echo.relatedIdeaIds.includes(privateThird),'A requested private association can be echoed without publishing it');
 });
 await test('shared links still validate proposals, parents and changed source versions before writing',async()=>{
  const f=fixture(),t=await task();await call(f,'/tasks','POST',body(t));
@@ -139,7 +165,7 @@ await test('shared links still validate proposals, parents and changed source ve
  assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:second,parentTaskId:'f'.repeat(64)})).status,404);
  const before=f.urls.length;assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:second,inputVersion:'reviewed'})).status,422);assert.equal(f.urls.length,before+1);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas').get().n,1);
  const old=source.reviewed_text;try{source.reviewed_text=source.raw;assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:second,inputVersion:'reviewed'})).status,200);}finally{source.reviewed_text=old;}
- assert.equal(f.urls.length,before+2,'Different input version gets an independent official-source check');const versionLink=await(await call(f,'/tasks','POST',{...body(t),proposalId:second,inputVersion:'reviewed'})).json();assert.equal(versionLink.linkedInputVersion,'reviewed');assert.equal(versionLink.inputVersion,'raw');assert.equal(f.db.sqlite.prepare('SELECT input_version FROM local_tasks').get().input_version,'raw');
+ assert.equal(f.urls.length,before+2,'Different input version gets an independent official-source check');const versionLink=await(await call(f,'/tasks','POST',{...body(t),proposalId:second,inputVersion:'reviewed'})).json();assert.equal(versionLink.linkedInputVersion,'reviewed');assert.equal(versionLink.inputVersion,'reviewed');assert.equal(f.db.sqlite.prepare('SELECT input_version FROM local_tasks').get().input_version,'raw');
  assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:second})).status,409,'An existing idea association cannot silently change its input version');
  const parent=await task('Existing parent');await call(f,'/tasks','POST',body(parent));const third='p_'+'c'.repeat(64);addIdea(f,third);
  assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:third,parentTaskId:parent.taskId})).status,200);assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:third,parentTaskId:null})).status,409);
@@ -147,7 +173,7 @@ await test('shared links still validate proposals, parents and changed source ve
  f.db.fail=false;f.db.sqlite.prepare('UPDATE local_tasks SET task_hash=? WHERE id=?').run('0'.repeat(64),t.taskId);assert.equal((await call(f,'/tasks','POST',{...body(t),proposalId:fourth})).status,503,'Stored full-task integrity remains required even for reuse');
 });
 await test('atomic association cap, duplicate retries, rollback and bounded public-only related IDs',async()=>{
- const f=fixture(),t=await task();await call(f,'/tasks','POST',body(t));f.setDate('2026-10-25T00:00:00Z');
+ const f=fixture({publicOriginal:false}),t=await task();await call(f,'/tasks','POST',body(t));f.setDate('2026-10-25T00:00:00Z');
  const ids=Array.from({length:60},(_,i)=>'p_'+(i+1).toString(16).padStart(64,'0'));ids.forEach(id=>addIdea(f,id,card,true));
  const responses=await Promise.all(ids.map(id=>call(f,'/tasks','POST',{...body(t),proposalId:id})));assert.equal(responses.filter(r=>r.status===200).length,50);assert.equal(responses.filter(r=>r.status===429).length,10);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas WHERE created_day=?').get('2026-10-25').n,50);
  const linked=f.db.sqlite.prepare('SELECT proposal_id FROM local_task_ideas WHERE created_day=? LIMIT 1').get('2026-10-25').proposal_id;

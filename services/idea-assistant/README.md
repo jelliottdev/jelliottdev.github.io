@@ -3,7 +3,7 @@
 ## Browser experiment loop
 
 The new `/tasks` routes link a confirmed idea to an immutable declarative plan,
-then accept a results file only after replaying the bounded computation. The
+then accept submitted results only after replaying the bounded computation. The
 handler verifies bundled page text against the site's selected raw or reviewed
 text. Task and result storage are separate from proposal review status; neither
 the original idea wording nor private notes appear in task projections.
@@ -16,6 +16,10 @@ or calling a model. Offline real-SQLite and browser fixtures verify persistence.
 
 The checker publishes only a newly confirmed active card through `/ideas`, then
 links to `run.html#idea=…`. The original submission text remains in private intake.
+There are no private/public idea types or visibility settings: every confirmed
+research entry is shared. Unfinished intake is not a second kind of idea. A task
+view uses a saved entry's card and association metadata, rather than exposing an
+unpublished intake card when a computation is reused.
 The run workspace reviews a proposed plan, creates a task, runs it on the visitor's
 CPU in a cancellable Web Worker and submits replay-checked results. Downloads and
 file uploads are optional reproduction paths. The result and dynamic chart lead;

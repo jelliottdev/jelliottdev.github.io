@@ -407,7 +407,7 @@
      '')+(editing?editorHTML():questionsHTML())+
      (stage==='review'&&!pending?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="research.html#mode=list">Browse research</a> for approaches.</p>':'')+
-     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(ideaEndpoint?'Your confirmed card becomes public. Keep private details out of the card.':intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(ideaEndpoint?'Your confirmed card becomes a shared research entry.':intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
@@ -670,7 +670,7 @@
    if(status)status.textContent=message||(!loaded&&!loadError?'Loading research records…':'');
    if(notice)notice.textContent=error||loadError;
    if(confirm)confirm.disabled=!loaded;
-   const collection=doc.getElementById('collection-notice');if(collection){collection.hidden=!intakeEndpoint;collection.textContent=ideaEndpoint?'Your confirmed card becomes public. Keep private details out of the card.':intakeEndpoint?'Confirmed ideas are saved for research review.':'';}
+   const collection=doc.getElementById('collection-notice');if(collection){collection.hidden=!intakeEndpoint;collection.textContent=ideaEndpoint?'Your confirmed card becomes a shared research entry.':intakeEndpoint?'Confirmed ideas are saved for research review.':'';}
    const privacy=doc.querySelector('.privacy');if(privacy)privacy.textContent=endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'';
    const retry=doc.getElementById('reload');
    if(loaded)retry?.remove();
