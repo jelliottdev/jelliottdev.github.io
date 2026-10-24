@@ -18,6 +18,12 @@ const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve
 async function until(condition){for(let i=0;i<100;i++){if(condition())return;await tick();}throw Error('Mock did not reach expected state');}
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
 try{
+await test('prompt examples preserve exact evidence and demonstrate both stated and unstated aims',async()=>{
+ const examples=[...WIRE_PROMPT.matchAll(/Example input: (.+)\nExample output: (.+)/g)];assert.equal(examples.length,3);
+ const aims=[];
+ for(const [,input,output]of examples){const {text}=JSON.parse(input),wire=JSON.parse(output);const sources=[wire.outcome?.source,wire.scope?.source,...wire.steps.map(s=>s.source),...wire.rules.map(r=>r.source)].filter(Boolean);for(const s of sources)assert.equal(text.slice(s.start,s.start+s.quote.length),s.quote);const draft=toDraft(text,fromWire(wire,text)).draft;aims.push(draft.aim.status);}
+ assert(aims.includes('specified'));assert(aims.includes('unspecified'));
+});
 await test('route, exact origin, methods, preflight and configuration fail before model calls',async()=>{
  let calls=0,limits=0;const handler=createInterpretHandler(),env=environment(()=>{calls++;},async()=>{limits++;return {success:true};});
  assert.equal((await handler(request('x',{path:'/ask'}),env)).status,404);
@@ -52,8 +58,8 @@ await test('source-only schema requires every field and cannot generate keys/pag
  const visit=node=>{if(!node||typeof node!=='object')return;if(node.type==='object'){assert.equal(node.additionalProperties,false);assert.deepEqual([...node.required].sort(),Object.keys(node.properties).sort());}for(const child of Object.values(node)){if(Array.isArray(child))child.forEach(visit);else if(child&&typeof child==='object')visit(child);}};visit(WIRE_SCHEMA);
  const text='Use a custom rule.',wire=toWire(proposal(text)),before=JSON.stringify(wire),canonical=fromWire(wire,text);
  assert(!Object.hasOwn(wire.steps[0],'key'));assert(!Object.hasOwn(wire.steps[0],'parameters'));assert.deepEqual(wire.rules,[]);assert.deepEqual(canonical,proposal(text));assert.deepEqual(canonical.steps[0].parameters,{});assert.equal(canonical.outcome,null);assert.equal(canonical.scope,null);assert.equal(JSON.stringify(wire),before);
- const examples=[...WIRE_PROMPT.matchAll(/Example input: (.+)\nExample output: (.+)/g)];assert.equal(examples.length,2);
- for(const [,input,output]of examples){const raw=JSON.parse(input).text,example=JSON.parse(output);assert.equal(example.outcome,null);assert.equal(example.steps.length,1);assert(!Object.hasOwn(example.steps[0],'key'));assert(!Object.hasOwn(example.scope||{},'pages'));const candidate=fromWire(example,raw);if(raw.includes('boundaries')){assert.equal(example.rules.length,1);assert.equal(candidate.rules.wordBoundaries.value,'preserve');assert.equal(toDraft(raw,candidate).questions[0].id,'word-boundary');}else{assert.deepEqual(example.rules,[]);assert.equal(candidate.steps[0].parameters.key.value,'ABC');}}
+ const examples=[...WIRE_PROMPT.matchAll(/Example input: (.+)\nExample output: (.+)/g)];assert.equal(examples.length,3);
+ for(const [,input,output]of examples){const raw=JSON.parse(input).text,example=JSON.parse(output);assert.equal(example.steps.length,1);assert(!Object.hasOwn(example.steps[0],'key'));assert(!Object.hasOwn(example.scope||{},'pages'));const candidate=fromWire(example,raw);if(raw.includes('boundaries')){assert.equal(example.rules.length,1);assert.equal(candidate.rules.wordBoundaries.value,'preserve');assert.equal(toDraft(raw,candidate).questions[0].id,'word-boundary');}else if(raw.includes('Vigenere')){assert.deepEqual(example.rules,[]);assert.equal(candidate.steps[0].parameters.key.value,'ABC');}else{assert.equal(candidate.outcome.id,'reproduce');assert.equal(toDraft(raw,candidate).draft.aim.status,'specified');}}
 });
 await test('rules derive explicit states from evidence and reject old fields/duplicates/inventions',async()=>{
  const text='Search bounds unrestricted; reset rule not applicable.',wire=toWire(proposal(text));wire.rules=[{name:'searchBounds',source:{start:0,quote:'Search bounds unrestricted'}},{name:'reset',source:{start:text.indexOf('reset'),quote:'reset rule not applicable'}}];
@@ -81,7 +87,13 @@ await test('exclusion/disjunction scope stays exact passage prose without an inv
   const text='Use the supplied route on '+passage+'.',wire=toWire(proposal(text));wire.scope={source:{start:text.indexOf('LP2'),quote:passage},passage};
   const candidate=fromWire(wire,text);assert.equal(candidate.scope.pages,null,'Unsafe derived conjunctive pages for '+passage);assert(!candidate.scope.pages?.includes('lp2-50'));assert.equal(candidate.scope.passage,passage);assert.equal(toDraft(text,candidate).draft.scope.value.description,passage);
   const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);const actual=(await response.json()).candidate;assert.equal(actual.scope.pages,null);assert.equal(actual.scope.passage,passage);
+  wire.scope.passage=null;const evidenceOnly=fromWire(wire,text);assert.deepEqual(evidenceOnly.scope,actual.scope);assert.equal(toDraft(text,evidenceOnly).draft.scope.value.description,passage);
+  wire.scope.passage='LP2-50';assert.throws(()=>fromWire(wire,text));
  }
+});
+await test('broad named scope remains literal instead of invented membership or missing scope',async()=>{
+ const text='Try autokey on all unsolved LP2 pages.',wire=toWire(proposal(text));wire.scope={source:{start:text.indexOf('all'),quote:'all unsolved LP2 pages'},passage:null};
+ const candidate=fromWire(wire,text);assert.equal(candidate.scope.pages,null);assert.equal(candidate.scope.passage,'all unsolved LP2 pages');const draft=toDraft(text,candidate).draft;assert.equal(draft.scope.status,'specified');assert.equal(draft.aim.status,'unspecified');assert.equal(draft.rules.reset.status,'unspecified');
 });
 await test('multiple literal keys stay in source with no arbitrary selected key',async()=>{
  const text='Use key "ABC" for the first pass and key "DEF" for the second pass.',wire=toWire(proposal(text));const candidate=fromWire(wire,text);assert.deepEqual(candidate.steps[0].parameters,{});assert.equal(candidate.steps[0].source.quote,text);
@@ -120,7 +132,7 @@ await test('captured synthetic model output aligns unique exact quotes without c
  const original=JSON.stringify(captured),aligned=alignQuotePositions(text,original);
  assert.equal(aligned.steps[0].source.start,4);assert.equal(aligned.scope.source.start,4);assert.equal(aligned.rules.wordBoundaries.source.start,text.indexOf('preserving'));
  const expected=JSON.parse(original);expected.steps[0].source.start=4;expected.scope.source.start=4;expected.rules.wordBoundaries.source.start=text.indexOf('preserving');assert.deepEqual(aligned,expected);assert.equal(JSON.stringify(captured),original);
- let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v6-source-rules');
+ let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v8-literal-scope');
 });
 await test('alignment uses UTF-16 positions and only whitelisted evidence fields',async()=>{
  const text='😀 Use key "ABC" on LP2-15; measure a pattern; reset each word.',candidate=proposal(text);

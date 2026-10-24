@@ -1,7 +1,8 @@
 /* Proposed candidates are mocked untrusted JSON. No model/network calls. */
 import assert from 'node:assert/strict';
 import C from '../../claim-specification.js';
-import {SCHEMA,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations} from './interpretation.mjs';
+import UI from '../../investigate.js';
+import {SCHEMA,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations,outcomeEvidence} from './interpretation.mjs';
 const copy=x=>JSON.parse(JSON.stringify(x));
 const at=(raw,quote,start=raw.indexOf(quote))=>({start,quote});
 const step=(raw,quote=raw,id='described_method',familyId=null)=>({id,familyId,source:at(raw,quote),parameters:{}});
@@ -10,6 +11,40 @@ let groups=0;function test(name,fn){fn();groups++;console.log('PASS '+name);}
 test('exported bounded schema and prompt do not call or confirm anything',()=>{
  assert.equal(JSON_SCHEMA.additionalProperties,false);assert(PROMPT.includes('must review and confirm'));assert(PROMPT.includes('negation'));assert.throws(()=>validateInput(''));assert.throws(()=>validateInput('x'.repeat(1501)));assert.equal(validateInput(' x '),' x ');
  const raw='Use the supplied rule.',result=toDraft(raw,candidate(raw));assert.equal(result.draft.source.text,raw);assert.equal(result.draft.status,'draft');assert.equal(result.draft.confirmation,null);assert.equal(result.draft.execution,'not_run');assert.equal(result.requiresConfirmation,true);assert.equal(result.meaningVerified,false);
+});
+
+test('unsupported inferred known aim becomes unknown without discarding useful method/scope or asking them again',()=>{
+ const raw='Try running the ciphertext through an autokey on all unsolved LP2 pages.',method='running the ciphertext through an autokey',scope='all unsolved LP2 pages';
+ const p=candidate(raw,[step(raw,method,'described_method','feedback')]);p.outcome={id:'decipher',source:at(raw,method)};p.scope={pages:null,passage:scope,source:at(raw,scope)};
+ const before=JSON.stringify(p),result=toDraft(raw,p);assert.equal(outcomeEvidence(raw,p.outcome).reason,'no_explicit_outcome_wording');assert.equal(result.candidate.outcome,null);assert.equal(result.draft.aim.status,'unspecified');
+ assert.equal(result.draft.source.text,raw);assert.equal(result.draft.method.value.operations[0].sourceText,method);assert.equal(result.draft.scope.value.description,scope);assert.deepEqual(UI.intakeQuestions(result.draft).map(q=>q.id),['aim']);
+ assert.equal(result.draft.rules.reset.status,'unspecified');assert.equal(result.draft.rules.representation.status,'unspecified');assert.equal(result.requiresConfirmation,true);assert.equal(result.meaningVerified,false);assert.equal(JSON.stringify(p),before);
+});
+
+test('known outcome evidence is ID-specific and explicit; literal keys and method nouns never supply a goal',()=>{
+ for(const [id,goal]of [['decipher','Recover only the first twelve runes.'],['measure','Measure repeated rune pairs inside words.'],['measure','Compare pair frequencies against shuffled controls.'],['reproduce','Reproduce the previous result.'],['explain','Explain why this feature repeats.'],['verify_source','Check the transcription against the original image.']]){
+  const raw=goal+' Use the supplied method.',p=candidate(raw,[step(raw,'Use the supplied method.')]);p.outcome={id,source:at(raw,goal)};const result=toDraft(raw,p);assert.equal(result.candidate.outcome.id,id);assert.equal(result.draft.aim.outcome.detail,goal);assert.equal(outcomeEvidence(raw,p.outcome).supported,true);
+ }
+ for(const [id,raw]of [['decipher','Use plaintext autokey.'],['decipher','Feed known plaintext through an autokey.'],['measure','Run a statistical key search.'],['reproduce','Use the previous test as a key.'],['decipher','decrypt(ciphertext)']]){
+  const p=candidate(raw);p.outcome={id,source:at(raw,raw)};assert.equal(validateCandidate(raw,p).outcome,null,raw);assert.equal(toDraft(raw,p).draft.source.text,raw);
+ }
+ const raw='Use cipher with key "decipher".',p=candidate(raw);p.outcome={id:'decipher',source:at(raw,'decipher')};assert.equal(validateCandidate(raw,p).outcome,null);
+ const same='Measure repeated rune pairs.',q=candidate(same);q.outcome={id:'decipher',source:at(same,same)};assert.equal(validateCandidate(same,q).outcome,null,'No automatic category reclassification');q.outcome=null;assert.equal(validateCandidate(same,q).outcome,null,'No fallback inference when model supplies no goal');
+ const custom='I want a catalogue of unresolved historical choices.',r=candidate(custom,[]);r.outcome={id:'unclassified',source:at(custom,custom)};assert.equal(validateCandidate(custom,r).outcome.id,'unclassified');
+});
+
+test('later complete page exclusion is scope evidence, never a way to hide conditional or negated goals',()=>{
+ const raw='Count adjacent equal runes across LP2-00 through LP2-55 apart from LP2-50.',goal='Count adjacent equal runes',selection='LP2-00 through LP2-55 apart from LP2-50';
+ const p=candidate(raw);p.outcome={id:'measure',source:at(raw,goal)};p.scope={pages:null,passage:selection,source:at(raw,selection)};
+ const result=toDraft(raw,p);assert.equal(result.candidate.outcome.id,'measure');assert.equal(result.draft.aim.outcome.detail,goal);assert.equal(result.draft.scope.value.description,selection);assert.equal(result.draft.source.text,raw);assert.deepEqual(UI.intakeQuestions(result.draft),[]);
+ assert.equal(outcomeEvidence(raw,p.outcome,{scope:p.scope}).supported,true);
+ const missing=copy(p);missing.scope=null;assert.throws(()=>validateCandidate(raw,missing),/conditional outcome/,'No validated complete scope, no exception');
+ for(const prefix of ['Do not ','Only if the key is present, ']){
+  const text=prefix+raw,q=candidate(text);q.outcome={id:'measure',source:at(text,goal)};q.scope={pages:null,passage:selection,source:at(text,selection)};assert.throws(()=>validateCandidate(text,q),/condition|negation/);
+ }
+ const negation='Count adjacent equal runes across LP2-00 not LP2-50.',q=candidate(negation);q.outcome={id:'measure',source:at(negation,goal)};q.scope={pages:null,passage:'LP2-00 not LP2-50',source:at(negation,'LP2-00 not LP2-50')};assert.throws(()=>validateCandidate(negation,q),/conditional outcome/);
+ const inside=copy(p);inside.outcome.source=at(raw,raw);assert.equal(validateCandidate(raw,inside).outcome,null,'An exclusion inside the goal is not erased by scope');
+ assert.deepEqual(Object.keys(result).sort(),['candidate','draft','questions','uninterpreted','requiresConfirmation','meaningVerified'].sort(),'No internal gate reasons enter the review result');
 });
 test('row paraphrases activate the same consequential existing boundary question',()=>{
  for(const raw of ['Reverse each row on LP2-15, preserving word boundaries.','Try reversing rune order within each row on LP2-15, preserving word boundaries.','Reverse rune order within rows on LP2-15, preserving word boundaries.','Reverse the runes in every row on LP2-15, preserving word boundaries.']){
@@ -45,7 +80,7 @@ test('complete sentence boundaries and explicit limited reading criteria preserv
  const raw='Use Vigenere with key ABC. Reset the key at each word unless the word continues across a line.',first='Use Vigenere with key ABC.',tail='Reset the key at each word unless the word continues across a line.';
  const p=candidate(raw,[step(raw,first),step(raw,tail)]);p.steps[0].parameters.key={value:'ABC',source:at(raw,'ABC')};p.rules.reset={status:'specified',value:tail,source:at(raw,tail)};assert.equal(toDraft(raw,p).draft.rules.reset.value,tail);
  const goal='Recover only the first twelve runes.',q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};assert.equal(toDraft(goal,q).draft.aim.outcome.id,'decipher');assert.equal(toDraft(goal,q).draft.aim.outcome.detail,goal);
- for(const goal of ['Recover text only if the key is supplied.','Do not recover only the opening.']){const q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};assert.throws(()=>validateCandidate(goal,q),/conditional outcome/);}
+ for(const goal of ['Recover text only if the key is supplied.','Do not recover only the opening.']){const q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};const result=toDraft(goal,q);assert.equal(result.candidate.outcome,null);assert.equal(result.draft.aim.status,'unspecified');assert(result.draft.rules.exceptionalCases.value.includes(goal));}
  const negative='Reverse each row only if the key is supplied.',r=candidate(negative,[step(negative,'Reverse each row','reverse_row_runes')]);assert.throws(()=>validateCandidate(negative,r),/conditional/);
 });
 
@@ -55,7 +90,7 @@ test('literal keys cannot manufacture outcome, page scope, rule values or unrest
   if(field==='outcome')p.outcome={id:'decipher',source:at(raw,literal)};
   if(field==='scope')p.scope={pages:['lp2-15'],passage:null,source:at(raw,literal)};
   if(field==='rules')p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,literal)};
-  assert.throws(()=>validateCandidate(raw,p),/literal key/);
+  if(field==='outcome')assert.equal(validateCandidate(raw,p).outcome,null);else assert.throws(()=>validateCandidate(raw,p),/literal key/);
  }
  const raw='Use cipher with key "LP2-15" on LP2-43.',p=candidate(raw);p.scope={pages:['lp2-15','lp2-43'],passage:null,source:at(raw,raw)};assert.throws(()=>validateCandidate(raw,p),/partial page/);p.scope.pages=['lp2-43'];assert.deepEqual(validateCandidate(raw,p).scope.pages,['lp2-43']);assert.deepEqual(pagesFromSource(raw),['lp2-43']);
  for(const [literal,key,status,value]of [['preserve word boundaries','wordBoundaries','specified','preserve'],['unrestricted','searchBounds','unrestricted'],['reset at each word','reset','specified','reset at each word']]){

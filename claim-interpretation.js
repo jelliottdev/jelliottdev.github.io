@@ -60,7 +60,7 @@ function literalOutsideKey(raw,s,value){
 }
 function conditionWord(text){return maskedKeys(text).match(conditional)?.[0];}
 function hasCondition(text){return conditionWord(text)!==undefined;}
-function clause(raw,s){
+function clauseSpan(raw,s){
  // Conservative context check prevents positive substring extraction from a
  // negated/conditional sentence. Commas do not isolate away a condition.
  const context=maskedKeys(raw);
@@ -68,8 +68,9 @@ function clause(raw,s){
  const terminal=context.slice(s.start,s.start+s.quote.length).match(/[.;\n]\s*$/);
  let end=terminal?s.start+terminal.index+1:raw.length;
  if(!terminal)for(const char of ['.',';','\n']){const found=context.indexOf(char,s.start+s.quote.length);if(found!==-1)end=Math.min(end,found);}
- return raw.slice(start,end);
+ return {start,end,quote:raw.slice(start,end)};
 }
+function clause(raw,s){return clauseSpan(raw,s).quote;}
 function semanticQuote(s){
  let q=s.trim().replace(/[.!?]$/,'').replace(/^(?:please\s+)?(?:try\s+)?/i,'').replace(/^reversing\b/i,'reverse');
  // Remove only explicit, bounded trailing positive clauses; retain everything
@@ -112,18 +113,58 @@ function ruleValue(key,value,s){
  }else if(!s.quote.includes(value))error('invented rule value');
  return value;
 }
+function outcomeEvidence(raw,outcome,{scope=null}={}){
+ validateInput(raw);
+ if(outcome===null)return {supported:false,reason:'unstated'};
+ object(outcome,['id','source']);if(!OUTCOMES.includes(outcome.id))error('outcome ID');
+ const s=source(raw,outcome.source),span=clauseSpan(raw,s),context=span.quote;
+ if(keyEvidence(raw,s))return {supported:false,reason:'literal_key'};
+ let selection=null;
+ if(scope!==null){object(scope,['pages','passage','source']);const evidence=source(raw,scope.source);
+  if(scope.pages===null&&scope.passage===evidence.quote.trim()&&evidence.start>=s.start+s.quote.length&&/^\s*LP[12]-\d{1,2}\b/i.test(evidence.quote))selection=evidence;
+ }
+ const conditions=[...maskedKeys(context).matchAll(new RegExp(conditional.source,'gi'))].filter(m=>{
+  const start=span.start+m.index,end=start+m[0].length;
+  // A later complete page exclusion is a separate scope restriction. It cannot
+  // account for leading negation, a conditional goal, or a marker in the goal.
+  return !(selection&&/^(?:except|excluding|exclude|without|apart\s+from|other\s+than|minus)$/i.test(m[0])&&
+   start>=s.start+s.quote.length&&start>=selection.start&&end<=selection.start+selection.quote.length&&
+   /\bLP[12]-\d{1,2}\b/i.test(selection.quote.slice(end-selection.start)));
+ });
+ const condition=conditions[0]?.[0];
+ // Omitted conditions are an evidence-fidelity error, not merely an uncertain
+ // category. A complete negative/conditional known aim can safely stay unknown.
+ if(condition&&!s.quote.includes(condition))error('negated/conditional outcome must remain complete unclassified wording');
+ if(outcome.id==='unclassified')return {supported:true,reason:'unclassified_proposal'};
+ const limitedReading=outcome.id==='decipher'&&/\bonly\b/i.test(s.quote)&&conditions.every(m=>/^only$/i.test(m[0]));
+ if(condition&&!limitedReading)return {supported:false,reason:'negated_or_conditional'};
+ const text=maskedKeys(s.quote).trim().replace(/[.!?]$/,'').trim();
+ const prefix=/^(?:please\s+)?(?:try\s+)?(?:(?:I|we)\s+(?:want|would like|hope|aim|intend)\s+to\s+|(?:(?:my|our|the)\s+)?(?:goal|aim|objective)\s*(?:is\s+|:\s*)(?:to\s+)?)?/i;
+ const phrases=[text.replace(prefix,'')];
+ // An explicit purpose may follow a method. This preserves a stated goal but
+ // never assumes one merely from a named cipher, family, parameter or key.
+ for(const match of text.matchAll(/\b(?:in order to|to)\s+([^;\n]+)/gi))phrases.push(match[1].replace(prefix,''));
+ const quantitative=/\b(?:statistic\w*|frequenc\w*|counts?|pairs?|doublets?|rates?|distributions?|correlations?|proportions?|means?|control\w*|patterns?|differences?)\b/i;
+ const cues={
+  decipher:q=>/^(?:decipher(?:ing)?|decrypt(?:ing)?|decod(?:e|ing)|solv(?:e|ing))\b/i.test(q)||
+   /^(?:find|recover|produce|obtain|generate|read)\b[\s\S]*\b(?:plaintext|readable|text|reading|passage|runes?|words?|sentences?)\b/i.test(q)||
+   /^(?:can|could|will|would|does)\b[\s\S]*\b(?:decipher|decrypt|decode|solve|produce plaintext|yield readable text)\b/i.test(q),
+  measure:q=>/^(?:measur(?:e|ing)|count(?:ing)?|quantif(?:y|ying))\b/i.test(q)||
+   /^(?:compare|calculate|estimate|test)\b/i.test(q)&&quantitative.test(q)||
+   /^(?:how often|how many|statistics? of|frequency of|count of)\b/i.test(q),
+  reproduce:q=>/^(?:reproduce|replicate|rerun)\b/i.test(q)||/^repeat\b[\s\S]*\b(?:prior|previous|published|existing|known)\b[\s\S]*\b(?:result|test|experiment|run)\b/i.test(q),
+  explain:q=>/^(?:explain|account for|understand why|why)\b/i.test(q),
+  verify_source:q=>/^(?:verify|check|audit)\b[\s\S]*\b(?:source|material|transcription|authenticity|provenance|signature|archive|original|edition|image|copying)\b/i.test(q)
+ };
+ const supported=phrases.some(q=>!/^\w+\s*\(/.test(q)&&cues[outcome.id](q));
+ return {supported,reason:supported?'explicit_outcome_wording':'no_explicit_outcome_wording'};
+}
 function validateCandidate(raw,input){
  validateInput(raw);
  if(typeof input==='string'){if(new TextEncoder().encode(input).length>24000)error('candidate size');try{input=JSON.parse(input);}catch{error('invalid JSON');}}
  boundedData(input);if(new TextEncoder().encode(JSON.stringify(input)).length>24000)error('candidate size');
  object(input,['schema','outcome','steps','scope','rules']);if(input.schema!==SCHEMA)error('schema version');
  const out={schema:SCHEMA,outcome:null,steps:[],scope:null,rules:{}};
- if(input.outcome!==null){object(input.outcome,['id','source']);if(!OUTCOMES.includes(input.outcome.id))error('outcome ID');const s=source(raw,input.outcome.source),context=clause(raw,s),condition=conditionWord(context);if(keyEvidence(raw,s))error('literal key is not outcome evidence');
-  // "Only" can explicitly limit the desired reading, rather than condition or
-  // negate it. Keep that entire criterion; do not relax method/scope guards.
-  const conditions=[...maskedKeys(context).matchAll(new RegExp(conditional.source,'gi'))];
-  const limitedReading=input.outcome.id==='decipher'&&/\bonly\b/i.test(s.quote)&&conditions.every(m=>/^only$/i.test(m[0]));
-  if(condition&&!limitedReading&&(input.outcome.id!=='unclassified'||!s.quote.includes(condition)))error('negated/conditional outcome must remain complete unclassified wording');out.outcome={id:input.outcome.id,source:s};}
  if(!Array.isArray(input.steps)||input.steps.length>12)error('step limit');
  let end=0;
  for(const step of input.steps){
@@ -163,6 +204,7 @@ function validateCandidate(raw,input){
   if(rule.status==='specified'&&!normalized&&literalOutsideKey(raw,s,rule.value)===-1)error('literal key is not rule value evidence');
   out.rules[key]={status:rule.status,...(rule.status==='specified'?{value:ruleValue(key,rule.value,normalized?proof:s)}:{}),source:s};
  }
+ if(input.outcome!==null&&outcomeEvidence(raw,input.outcome,{scope:out.scope}).supported)out.outcome={id:input.outcome.id,source:source(raw,input.outcome.source)};
  return out;
 }
 function references(s){return {kind:'proposed',refs:[JSON.stringify({source:'original wording',start:s.start,end:s.start+s.quote.length,quote:s.quote})]};}
@@ -210,6 +252,6 @@ function toDraft(raw,input){
  return {candidate,draft,questions:C.questions(draft),uninterpreted:remainder,requiresConfirmation:true,meaningVerified:false};
 }
 
-const api={SCHEMA,MAX_TEXT,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations};
+const api={SCHEMA,MAX_TEXT,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations,outcomeEvidence};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimInterpretation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

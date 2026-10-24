@@ -2,9 +2,10 @@
 
 ## Optional interpretation endpoint
 
-The `/interpret` route is deployed but remains disabled in the public frontend:
-`data/assistant.json` deliberately omits `interpretationEndpoint`. The existing
-local clarification and confirmation flow remains the default.
+The `/interpret` route is enabled through `interpretationEndpoint` in
+`data/assistant.json`. It runs only on explicit idea submission. Visitors review
+the proposed card before comparison; local clarification remains available if
+interpretation fails.
 
 The endpoint proposes a source-bound draft using a strict model wire schema,
 then validates the converted candidate with the same browser/Worker code. It
@@ -16,17 +17,18 @@ Null aims and an empty rules array preserve missing information. Explicit rule
 states require wording about the named rule. Invalid output returns a recoverable
 error. Literal key contents cannot serve as outcome, page or rule evidence.
 
-24 October 2026: the source-only implementation passed a live two-step
-reversal/Vigenere request with its exact key and scope. A separate measurement
-request retained its page-list gap and 2,000-shuffle instruction but omitted the
-explicit measurement aim, producing an unnecessary clarification. Interpretation
-therefore remains disabled. The 22 handler groups, 17 shared-validator groups,
-21 synthetic candidate cases, five browser parity groups and UI journey tests
-pass offline; these do not establish live extraction accuracy. Reuse captured
-synthetic failures before spending more inference on another probe.
-These latest live checks used a local diagnostic Worker with the remote AI
-binding. The source-only revision has not been deployed; production still uses
-Worker version `e0b51f51-fbe4-4a02-8427-b5a4b166c8f8` behind the disabled setting.
+24 October 2026: deployed source-only extraction and the shared outcome-evidence
+gate as Worker version `7564f79f-305b-45a0-9f53-8f9c8e99a527`. A production synthetic
+measurement request preserved its explicit aim, ordered instructions, page-list
+gap and 2,000-shuffle control. Four captured responses also replay correctly:
+measurement, ordered methods with a literal key, an excluded page, and a method
+without an aim. The last now asks for an aim instead of assuming deciphering.
+
+Verification includes 24 mocked handler groups, 20 shared-validator groups,
+26 synthetic candidate cases, six browser parity groups and UI journey tests.
+These do not establish complete extraction accuracy. Unsupported aim wording
+stays undecided; original wording remains visible for review. Saving and queue
+intake remain unconfigured (`proposalEndpoint: null`).
 
 One uncached interpretation makes one generation, with no automatic repair or
 retry. A 20-second response deadline, three active provider slots per isolate,

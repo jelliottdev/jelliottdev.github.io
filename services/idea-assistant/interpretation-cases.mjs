@@ -3,7 +3,7 @@
  * Invariants deliberately do not prescribe generated display prose.
  */
 import {SCHEMA} from './interpretation.mjs';
-export const CORPUS_VERSION='synthetic-proposed-interpretation-cases-v1';
+export const CORPUS_VERSION='synthetic-proposed-interpretation-cases-v2';
 function evidence(text,quote,start=text.indexOf(quote)){
  if(start<0||text.slice(start,start+quote.length)!==quote)throw Error('Invalid synthetic case evidence');return {start,quote};
 }
@@ -55,6 +55,16 @@ export const INTERPRETATION_CASES=[
   steps:[{quote:'Use the supplied method.'}],rules:{searchBounds:{status:'unrestricted',quote:'Search bounds unrestricted'},reset:{status:'not_applicable',quote:'key reset not applicable'}},expect:{unknownRules:['inputVersion','evaluation','initialState'],ruleStates:{searchBounds:'unrestricted',reset:'not_applicable'}}}),
  make('repeated-source-occurrences','Reverse each row. Reverse each row.',{
   steps:[{id:'reverse_row_runes',quote:'Reverse each row.',start:0},{id:'reverse_row_runes',quote:'Reverse each row.',start:18}],expect:{keys:[null,null]}}),
+ make('measurement-goal-overlaps-method',"Measure how often c'=24-2c mod29 holds at lag 6 inside words on LP2-00–55.",{
+  outcome:{id:'measure',quote:"Measure how often c'=24-2c mod29 holds at lag 6 inside words"},steps:[{quote:"c'=24-2c mod29 holds at lag 6 inside words"}],scope:{pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')),quote:'LP2-00–55'},expect:{outcomeId:'measure',outcomeDetail:"Measure how often c'=24-2c mod29 holds at lag 6 inside words",outcomeMethodOverlap:true,noRepeatedIntake:true,unknownRules:['representation','evaluation','inputVersion','reset','initialState'],retainedTexts:["c'=24-2c mod29 holds at lag 6 inside words"]}}),
+ make('purpose-reproduce-prior-count','Reproduce a prior result: count the lag-six formula matches on LP2-00–55.',{
+  outcome:{id:'reproduce',quote:'Reproduce a prior result'},steps:[{quote:'count the lag-six formula matches'}],scope:{pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')),quote:'LP2-00–55'},expect:{outcomeId:'reproduce',outcomeDetail:'Reproduce a prior result',noRepeatedIntake:true}}),
+ make('purpose-decipher-with-same-count','Find plaintext: count the lag-six formula matches on LP2-00–55.',{
+  outcome:{id:'decipher',quote:'Find plaintext'},steps:[{quote:'count the lag-six formula matches'}],scope:{pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')),quote:'LP2-00–55'},expect:{outcomeId:'decipher',outcomeDetail:'Find plaintext',noRepeatedIntake:true}}),
+ make('verify-source-transcription-passage','Verify the transcription of LP2-43, lines 2–3 by comparing the archived rune string with the page image.',{
+  outcome:{id:'verify_source',quote:'Verify the transcription'},steps:[{quote:'comparing the archived rune string with the page image'}],scope:{pages:['lp2-43'],passage:'lines 2–3',quote:'LP2-43, lines 2–3'},expect:{outcomeId:'verify_source',outcomeDetail:'Verify the transcription',pages:['lp2-43'],passage:'lines 2–3',noRepeatedIntake:true,unknownRules:['representation','inputVersion','evaluation','reset','initialState']}}),
+ make('explain-artwork-feature','Explain the dot cluster on LP2-07 by comparing its five centres as a geometric shape.',{
+  outcome:{id:'explain',quote:'Explain the dot cluster'},steps:[{quote:'comparing its five centres as a geometric shape'}],scope:{pages:['lp2-07'],quote:'LP2-07'},expect:{outcomeId:'explain',outcomeDetail:'Explain the dot cluster',pages:['lp2-07'],noRepeatedIntake:true,unknownRules:['representation','inputVersion','evaluation','reset','initialState']}}),
  make('uninterpreted-compound-tail','Reverse each row then apply my custom shedding operation.',{
   steps:[{id:'reverse_row_runes',quote:'Reverse each row'}],expect:{retainedTexts:['apply my custom shedding operation'],uninterpretedIncludes:['apply my custom shedding operation'],keys:[null]}})
 ];

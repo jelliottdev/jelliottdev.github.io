@@ -1,6 +1,7 @@
 /* Canonical target fixtures, not generated model prose or live evaluations. */
 import assert from 'node:assert/strict';
 import C from '../../claim-specification.js';
+import Investigate from '../../investigate.js';
 import {toDraft} from './interpretation.mjs';
 import {CORPUS_VERSION,INTERPRETATION_CASES} from './interpretation-cases.mjs';
 
@@ -23,6 +24,8 @@ for(const item of INTERPRETATION_CASES){
   }
   if(e.outcomeId)assert.equal(C.normalizeOutcome(d.aim).id,e.outcomeId);
   if(e.outcomeDetail)assert.equal(C.normalizeOutcome(d.aim).detail,e.outcomeDetail);
+  if(e.noRepeatedIntake){const questions=Investigate.intakeQuestions(d);assert(!questions.some(q=>q.id==='aim'),'Explicit goal asked again');assert(!questions.some(q=>q.id==='scope'),'Explicit scope asked again');}
+  if(e.outcomeMethodOverlap){const a=item.candidate.outcome.source,b=item.candidate.steps[0].source;assert(Math.max(a.start,b.start)<Math.min(a.start+a.quote.length,b.start+b.quote.length),'Expected goal/method source overlap');}
   if(Object.hasOwn(e,'pages'))assert.deepEqual(d.scope.value?.pages??null,e.pages);
   if(e.passage)assert.equal(d.scope.value.description,e.passage);
   for(const page of e.excludedPages||[])assert(!d.scope.value?.pages?.includes(page),'scope hole lost');
@@ -44,6 +47,11 @@ if(outputs.has('row-boundary-plain')&&outputs.has('row-boundary-conversational')
 if(outputs.has('aim-decipher-whole')&&outputs.has('aim-decipher-opening')){
  const a=outputs.get('aim-decipher-whole').draft.aim,b=outputs.get('aim-decipher-opening').draft.aim;
  assert.equal(C.normalizeOutcome(a).id,C.normalizeOutcome(b).id);assert.notEqual(C.normalizeOutcome(a).detail,C.normalizeOutcome(b).detail);
+}
+if(outputs.has('purpose-reproduce-prior-count')&&outputs.has('purpose-decipher-with-same-count')){
+ const a=outputs.get('purpose-reproduce-prior-count').draft,b=outputs.get('purpose-decipher-with-same-count').draft;
+ assert.equal(C.normalizeOutcome(a.aim).id,'reproduce');assert.equal(C.normalizeOutcome(b.aim).id,'decipher');assert.notEqual(C.normalizeOutcome(a.aim).detail,C.normalizeOutcome(b.aim).detail);
+ const active=d=>d.method.value.operations.map(({id,label,key})=>({id,label,...(key?{key}:{})}));assert.deepEqual(active(a),active(b));assert.deepEqual(a.scope.value,b.scope.value);
 }
 assert.deepEqual(failures,[],'Legitimate source fixtures rejected or changed; report these validator gaps upstream, do not weaken the expected meaning.');
 console.log('PASS '+INTERPRETATION_CASES.length+' '+CORPUS_VERSION+' cases; zero model/network calls, no claim of live generation accuracy');

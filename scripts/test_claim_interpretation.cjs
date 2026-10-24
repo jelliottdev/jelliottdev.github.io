@@ -15,7 +15,7 @@ let count=0;const test=(name,fn)=>{fn();count++;console.log('PASS '+name);};
 (async()=>{
  const E=await import('../services/idea-assistant/interpretation.mjs');
  test('browser UMD, CommonJS and existing ESM wrapper preserve the exact exports',()=>{
-  assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft','pagesFromSource','keyDeclarations'].sort());
+  assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft','pagesFromSource','keyDeclarations','outcomeEvidence'].sort());
   for(const key of Object.keys(I))assert.equal(E[key],I[key]);
   assert.equal(B.SCHEMA,I.SCHEMA);assert.equal(B.MAX_TEXT,I.MAX_TEXT);assert.equal(B.PROMPT,I.PROMPT);assert.deepEqual(plain(B.JSON_SCHEMA),I.JSON_SCHEMA);
   assert.equal(context.document,undefined);assert.equal(context.fetch,undefined);assert.equal(context.localStorage,undefined);
@@ -47,6 +47,12 @@ let count=0;const test=(name,fn)=>{fn();count++;console.log('PASS '+name);};
   const p=candidate(raw,[step(raw,'Reverse every row','reverse_row_runes'),step(raw,tail)]);p.steps[1].parameters.key={value:'IF',source:source(raw,'IF')};
   assert.deepEqual(plain(B.toDraft(raw,local(p))),I.toDraft(raw,p));
   for(const text of ['LP2-15 or LP2-17','LP1-15 to LP2-03']){assert.throws(()=>I.pagesFromSource(text));assert.throws(()=>B.pagesFromSource(text));}
+ });
+ test('browser and server gate unsupported known aims identically without changing source or useful steps',()=>{
+  const raw='Try running the ciphertext through an autokey.',quote='running the ciphertext through an autokey',p=candidate(raw,[step(raw,quote)]);p.outcome={id:'decipher',source:source(raw,quote)};
+  assert.deepEqual(plain(B.outcomeEvidence(raw,local(p.outcome))),I.outcomeEvidence(raw,p.outcome));assert.deepEqual(plain(B.toDraft(raw,local(p))),I.toDraft(raw,p));assert.equal(B.toDraft(raw,local(p)).draft.aim.status,'unspecified');
+  const text='Count pairs on LP2-00 through LP2-55 apart from LP2-50.',selection='LP2-00 through LP2-55 apart from LP2-50',q=candidate(text);q.outcome={id:'measure',source:source(text,'Count pairs')};q.scope={pages:null,passage:selection,source:source(text,selection)};
+  assert.deepEqual(plain(B.toDraft(text,local(q))),I.toDraft(text,q));assert.equal(B.toDraft(text,local(q)).candidate.outcome.id,'measure');
  });
  console.log('PASS '+count+' interpretation UMD parity groups; no DOM, network, model, execution or confirmation calls.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

@@ -218,7 +218,7 @@
   if(r.label==='Aim'&&spec.aim.status!=='specified')content='<span class="tag unknown">Outcome undecided</span>';
   if(r.label==='Method'){const families=C.classifyMethod(spec.method).familyIds;if(tags.length===1&&families.some(id=>C.METHOD_FAMILIES[id]===tags[0].text))content='';content=families.map(id=>'<span class="tag">'+esc(C.METHOD_FAMILIES[id])+'</span>').join('')+content;}
   return '<div class="tag-row"><dt>'+esc(label)+'</dt><dd>'+content+'</dd></div>';
- }).join('')+(spec.unresolved.length?'<div class="tag-row"><dt>Other details</dt><dd class="unresolved-details">'+spec.unresolved.map(item=>{const value={...item};delete value.provenance;return '<p>'+esc(Object.keys(value).length===1&&typeof value.text==='string'?value.text:JSON.stringify(value))+'</p>';}).join('')+'</dd></div>':'')+'</dl>';}
+ }).join('')+(spec.unresolved.length?'<div class="tag-row"><dt>Other details</dt><dd class="unresolved-details">'+spec.unresolved.map(item=>{const value={...item};delete value.provenance;const noteKeys=value.kind==='custom_interpretation'?['kind','question','text']:value.kind==='source_note'?['kind','text']:null;const readable=typeof value.text==='string'&&(Object.keys(value).length===1||noteKeys&&Object.keys(value).every(key=>noteKeys.includes(key))); return '<p>'+esc(readable?value.text:JSON.stringify(value))+'</p>';}).join('')+'</dd></div>':'')+'</dl>';}
  function methodText(spec){return C.reviewRows(spec).find(r=>r.label==='Method').tags.map(t=>t.text).join('; then ');}
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
  function sourceHTML(doc,records,full=false){

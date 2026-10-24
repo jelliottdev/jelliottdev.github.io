@@ -317,13 +317,13 @@ and ensure generic aim wording does not derail strong technique retrieval.
 
 ### Proposed interpretation before review
 
-Release status (24 October): disabled in the public configuration. Source-only
-extraction now preserves a live compound reversal/Vigenere request, including its
-key and operation order. A measurement request preserves its page range, missing
-page and shuffle count, but omits the explicitly stated measurement aim. Keep the
-existing local clarification flow until interpretation is reliable across these
-cases. Passing validation does not establish complete extraction or semantic
-correctness; offline contract tests do not establish generation reliability.
+Release status (24 October): enabled after deploying Worker version
+`7564f79f-305b-45a0-9f53-8f9c8e99a527` and verifying a production synthetic request.
+Its measurement aim, ordered instructions, page-list gap and shuffle count were
+preserved. Captured-response replays cover literal keys, excluded pages and a
+method-only idea whose aim must remain unknown. Validation checks structure and
+source evidence, not complete extraction or semantic correctness. Visitors still
+review and confirm the proposed card.
 
 `claim-interpretation.js` is the shared browser/Worker validator and draft adapter;
 `services/idea-assistant/interpretation.mjs` preserves its ESM interface. The
@@ -352,9 +352,16 @@ rules, unsupported classifications and invented fields fail validation.
 
 Literal key contents cannot create outcome, scope or rule evidence. For example,
 a key named “IF” is not a condition and a key named “LP2-15” does not select that
-page. The offline corpus covers 21 idea shapes alongside validator, browser
+page. The offline corpus covers 26 idea shapes alongside validator, browser
 parity, handler and frontend journey checks. It tests proposed candidates rather
 than claiming live model accuracy.
+
+Known outcome categories need explicit supporting aim wording. A cipher name alone
+does not establish a deciphering aim. Unsupported guesses become unknown without
+changing the method, scope or original text. A complete later page exclusion can
+qualify scope separately from an explicit aim; negated or conditional aims cannot
+be turned positive by extracting a substring. Broad named material remains a
+literal selection rather than an invented list of pages.
 
 The response carries the SHA-256 of the exact original text; the browser checks it
 and independently validates the candidate. Cancel, fallback, new input and leaving
