@@ -1,0 +1,311 @@
+{
+  "id": "keyword-skip-family",
+  "status": "published",
+  "record_type": "experiment",
+  "title": "Keyword search with skipped key positions",
+  "question": "Does the complete source keyword-with-skips grid produce a candidate above its English-score gates?",
+  "reader_question": "Can these repeating keyword keys decode pages when key positions may be skipped?",
+  "summary": "None of 619,080 short screens passed the first source gate, so no full-page target decode ran. Controls passed scores more often than they recovered the correct text.",
+  "finding": "Complete source fast full grid: 623 labels, 617 encoded arrays, 2,814 phase labels, 55 nonempty segments, both signs and Atbash states. All 619,080 screen scores and 137,060 strict best-phase selections are saved. Best -6.020535494918678: LP2-10, EVEN, sign+1, no Atbash, phase3; zero strict >-6 screens, zero full promotions and zero source hits. Native source validation gate recovers its paragraph exactly. Own-key controls:617/617 pass both score gates,575/617 complete; endpoints46/48 complete; full623-label planted searches3/4 complete despite4/4 passing scores.",
+  "reader_finding": "None of the short checks passed the first English-score gate. No full-page manuscript decode was run. In the controls, 617 scores passed but only 575 known readings were recovered completely.",
+  "reader_limit": "This checks the listed keywords and the source selection rule. Passing scores can be wrong, and rejected starting positions received no full-page test; it does not exclude this cipher family.",
+  "limitations": "Only the fixed 623 keyword labels/source fast branch, forward page-local inputs and English quadgrams. No new complete-search null calibration. Known-key tests reuse two passages:37 nonexact outcomes retain truth but rank a wrong output above it;7 select a wrong phase. Four wrong cumulative winners have worse normalized scores than retained truth. No full target promotion means no target terminal-normalized hypotheses were examined; do not infer all beams fail the final gate. No general keyword, skip-mechanism, language or periodic-cipher exclusion.",
+  "next_steps": "A different scoring or phase-selection rule would require a separately frozen experiment and recovery controls; this run preserves the historical algorithm.",
+  "outcome": "inconclusive",
+  "tags": [
+    "keyword keys",
+    "repeating keys",
+    "Vigenere",
+    "conditional skips",
+    "English scoring",
+    "reported attempt"
+  ],
+  "pages_note": "55 nonempty source segments: LP2-00 through 49 and 51 through 55; LP2-50 contributes no runes to this source transcription.",
+  "bounds_note": "623 keyword labels; every starting phase, both signs and alphabet directions; 619,080 short screens, no full-page promotions.",
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/keyword-skip-family/reproduction/target-protocol-frozen.json",
+      "experiments/records/keyword-skip-family/reproduction/keywords-frozen.json"
+    ],
+    "representation": "Pinned GP29 indices from the source percent-separated transcription; 55 nonempty segments / 12,956 runes. Page-local forward order; optional ciphertext Atbash c->28-c. Exact raw transcription remains external.",
+    "procedure": "Unchanged source attack_page_keyword_fast: all canonical phases at each keyword/sign/Atbash; stable cumulative-score beam, then normalized returned-path phase selection. Strict first best phase only; promote if screen > -6, full confirm > -5.5. Accelerated representation has native ordered-terminal parity. Separate normalized-terminal diagnostic only for promoted fulls; none occurred.",
+    "parameters": "623 labels/617 encoded arrays/2,814 labelled phases x55 segments x2 signs x2 Atbash=619,080 screens/137,060 phase selections. Screens min(90,L), beam 300;full L, beam 500; max 3 conditional skips. Source tiling L*4+64 and finite zero-padding preserved. All duplicate labels/phases retained. Source encoder controls use supp 0.83 and frozen seeds;665 own-key/endpoint cases plus4 complete 623-label searches.",
+    "exclusions": "Other vocabularies, noncanonical offsets, generic prefilter/smoke branch, alternate score/ranking, full decoding of rejected phases, other languages, joined pages and search-wide significance. Score passage is not exact recovery; controls fail some phase/ranking recovery checks. No broad cipher-family verdict."
+  },
+  "review": {
+    "kind": "Full finite historical source-algorithm audit with pre-target controls and native parity",
+    "retested_on": "2026-10-24",
+    "reviewer": "Independent source/control review before target;665 encoder paths and44 failed exact cases checked. All score dimensions/selections audited;123 unchanged native screens cover every page maximum, ties, global top 40 and fixed cells. No full promotions existed.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/keyword-skip-family/check.py && python experiments/records/keyword-skip-family/replay.py --transcription keyword-manuscript.txt",
+    "environment": "Python 3.12, NumPy 2.5.4, Numba 0.67.0 installed separately. Prepare exact external manuscript from explicit local Git via prepare_input.py; full replay uses temporary files and compares deterministic controls, every target score/selection and independent native witness checks. No automatic installation/network.",
+    "script": "experiments/records/keyword-skip-family/replay.py",
+    "script_sha256": "fb6523bacbc2715426048a7cb7e3a6ae63bb5b36ec061763086ac03adc29c3c4",
+    "inputs": [
+      {
+        "path": "experiments/records/keyword-skip-family/article.md",
+        "sha256": "01367c645aa121132c36ffd58c31dcd5873ee9b165a2463c19f3e367ccada755"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/check.py",
+        "sha256": "43dad3f0f5332683c1a6578e74de365b8c843c08d15ef4b666f33984cd09d30c"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/audit_controls.py",
+        "sha256": "bdec98e175a6b22a647fdcdb4c73f272e30d2a441c3e8d7dc9a09490e96fca5c"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/audit_target.py",
+        "sha256": "f0a98cc9ec045c6a5e8267c460feb4681148a31da721d465253ba7f0d09148ff"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/check_parity.py",
+        "sha256": "2d1a7072036f33f89f698fe71f349f98f81cd319b7643cacc0d7202a94379521"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/parity-plan-frozen.json",
+        "sha256": "fd9ab3812002cea29369cf0263fdaf233a2410e3c898d0d5256d490a63163d34"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/SOURCE-REVIEW.md",
+        "sha256": "de197931c2f07adf37854e5ec88f3f9da7a5927120adc037282d808c8fa75128"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/target-audit-plan.json",
+        "sha256": "8335280ea6807f7dd3d46a20f822d2b0ee07b3de4f46cb52a362200491b9ece1"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/plot.py",
+        "sha256": "a5e6ad451d4374ee7af8373262dc2d28f615511abe46136eb73663fc0d3d7280"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/PORTABILITY.md",
+        "sha256": "d32eb3a0f0369556aa1afd746265627731f926d284c3ac02102635f6830347b2"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/prepare_input.py",
+        "sha256": "163765bd7894817efc7fb2ac78f88f428a31f882c2c7bdf8010162a71e174310"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/replay.py",
+        "sha256": "fb6523bacbc2715426048a7cb7e3a6ae63bb5b36ec061763086ac03adc29c3c4"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/controls-plan-frozen.json",
+        "sha256": "10373a1397e9adb101527b32f49d96ac8a1885f799647f6e64829b75f41e0665"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/controls.py",
+        "sha256": "4ae39142fb6ec743b267cdf75012fc7473d1c536acb07caee6a0fc2e6361dc8b"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/engine.py",
+        "sha256": "b10aea468b7e4dfc9aa8261032623e600fc45ca5d3afbd4bcad0ca02e6668010"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/inputs-frozen.json",
+        "sha256": "3206de8f65b6e9b3913c874d532d948ecd096fda370d7e02b1ae309c501f7c53"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/keywords-frozen.json",
+        "sha256": "19fb564c5e60ec0b081d0867a74fb63d29eed15f8ffc879a0edb17672927ab2c"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/PRETARGET-AMENDMENT.md",
+        "sha256": "2d15e2f380dfd497c86badb4febf1206483d3564373f5921c8f9aee86a4ee162"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/run_target.py",
+        "sha256": "acd2c76fe4a3492bfca61e73b842d915b0aa481b091bdec959c48e983017daf9"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/analysis/campaign18_skip/armada2/keywords_skip.py",
+        "sha256": "4affe3d1bc62df92b847324e5137093fb409d359c9e5f36a542e4d6dd6e46364"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/analysis/campaign18_skip/sweep.py",
+        "sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/target-protocol-frozen.json",
+        "sha256": "00129a62ccd5c35a7d0ce153f87a01e89bdf61c93153bfd6dd7ea606230b3d61"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/requirements.txt",
+        "sha256": "85ca4c5b217056a3b1e9a77b497ffdde09518222b94c0139dc838ea10601ea99"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/keyword-skip-family/control-recovery.svg",
+        "sha256": "c70ec4bfc0ddafaea858c9a60ea1abb5b1b5bb6b47c1c549b35cd80220a25dda"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/control-summary.json",
+        "sha256": "501d9e494956844ee6ded9fb57c727817c2d30075a5002f56e161ec0eb1ba1b5"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/controls-audit-receipt.json",
+        "sha256": "5485e34b4f2f3179e89486de12d53d358ec093229aaea530b95aecfd547513e3"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/parity-receipt.json",
+        "sha256": "6cf6e9e34bf524ec482d24defbf03b10602aced102240fcede567e95884ac915"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/source-mapping-receipt.json",
+        "sha256": "a5be387f3b4a1ff82bc8a601e81ebe43889ce7fd4759102da59111a0a92999d8"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/independent/target-audit-receipt.json",
+        "sha256": "187e8fa82d7a110bdcc9fca225b206651684368f0af672b3f42d73b96ee7537e"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/controls-audit-receipt.json",
+        "sha256": "5485e34b4f2f3179e89486de12d53d358ec093229aaea530b95aecfd547513e3"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/controls-results.json",
+        "sha256": "fa8ac2efc10a81742c3c09ae147051edb05b89311aa3ccb4a91fcd5749eabc1d"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/full-survivors.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/parity-receipt.json",
+        "sha256": "6cf6e9e34bf524ec482d24defbf03b10602aced102240fcede567e95884ac915"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/phase-selections.npy",
+        "sha256": "be0427a7bec38937324a39d442c0ca1fe28ac52603be3b36fe75d3e703b45611"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/results.json",
+        "sha256": "bcd3bbd3b81e6c76fd19cb5a46f2f16cd52807744401cce74feded869855c7e9"
+      },
+      {
+        "path": "experiments/records/keyword-skip-family/reproduction/screen-scores.npy",
+        "sha256": "3a8f6abe42a8b71cf8006ba35de210ce76cba8f989157a393b152ad05a0a8799"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/keyword-skip-family/control-recovery.svg",
+      "caption": "All 617 known-key controls passed a score, but575 complete readings were recovered. The complete keyword searches recover3/4. No target screen passed the first gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source keyword full sweep",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada2/keywords_skip.py"
+    },
+    {
+      "label": "Pinned conditional-skip beam",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/sweep.py"
+    }
+  ],
+  "related": [
+    "numeric-stream-skip-grid",
+    "artifact-stream-skip-grid",
+    "lp2-known-vigenere-keys"
+  ],
+  "materials": {
+    "summary": "All 619,080 screen scores,137,060 phase selections, controls, frozen protocol/source and independent native audits.",
+    "reuse": "Check saved results without the manuscript, or replay all controls and targets with exact external transcription.",
+    "limits": "Source algorithm audit only;42 of 617 own-key outputs are wrong despite passing scores. No target full-page decoding or global-null probability. Raw transcription excluded.",
+    "evidence": [
+      "experiments/records/keyword-skip-family/control-summary.json",
+      "experiments/records/keyword-skip-family/reproduction/screen-scores.npy",
+      "experiments/records/keyword-skip-family/reproduction/controls-results.json"
+    ]
+  }
+}

@@ -77,6 +77,8 @@ These distinctions require known truth, so a planted control records exact rune 
 
 The numeric-key and artifact-key controls produced cases where the intended reading survived but a different output won. Those incorrect outputs still passed the score test. The records preserve exact-recovery counts separately from score acceptance.
 
+The keyword-with-skips search makes this distinction concrete: all 617 known-key checks passed the English-score threshold, but 42 returned the wrong text. In 36, the correct text was still among the retained candidates; in six, the search chose the wrong starting position in the key. These failures involved choosing an output or a starting position, rather than simply discarding the correct text to save beam space.
+
 
 Use the controls before interpreting a failure
 
@@ -95,6 +97,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/numeric-stream-skip-grid
 - artifact-key
   https://jelliottdev.github.io/#/experiments/artifact-stream-skip-grid
+- keyword-with-skips search
+  https://jelliottdev.github.io/#/experiments/keyword-skip-family
 - scorer controls
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
 - search-maximum controls
