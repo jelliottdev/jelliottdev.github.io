@@ -1,5 +1,5 @@
 'use strict';
-const assert=require('node:assert/strict'),fs=require('node:fs'),{webcrypto}=require('node:crypto');
+const assert=require('node:assert/strict'),fs=require('node:fs'),{webcrypto,createHash}=require('node:crypto');
 const UI=require('../run.js'),E=require('../local-experiment.js'),C=require('../claim-specification.js'),H=require('../claim-share.js');
 const alphabet=Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2}));
 const at='2026-10-24T12:00:00.000Z',proposalId='p_'+'1'.repeat(64),endpoint='https://mock.example/tasks',ideaEndpoint='https://mock.example/ideas',prepareEndpoint='https://mock.example/prepare-task';
@@ -17,13 +17,54 @@ async function fixture({task,hash,config={},get,post,prepare,ideaCard}={}){
  const doc=documentFixture(hash||'#task='+task.taskId),requests=[],executions=[],packages=[],downloads=[];
  const settings={endpoint:'https://mock.example/ask',localTaskEndpoint:endpoint,researchIdeaEndpoint:ideaEndpoint,taskPreparationEndpoint:prepareEndpoint,...config};
  const app=UI.createApp(doc,{crypto:webcrypto,executor:{start(plan,options){const d=deferred();executions.push({plan,options,...d,cancel(){this.cancelled=true;}});const e=executions.at(-1);return{promise:d.promise,cancel:()=>e.cancel()};}},package:{async build(...args){packages.push(args);return Uint8Array.of(80,75,3,4)}},download:(...args)=>downloads.push(args),fetcher:async(url,options={})=>{
-  requests.push({url,options});if(url==='data/assistant.json')return Response.json(settings);if(url==='tools/research_runner.py')return new Response('fixed runner');
+  requests.push({url,options});if(url==='data/assistant.json')return Response.json(settings);if(url==='tools/research_runner.py')return new Response('fixed runner');if(url==='tools/verify_controls.py')return new Response('fixed control guard');
   if(options.method==='POST'){if(url===prepareEndpoint)return Response.json(await prepare?.(JSON.parse(options.body))||{state:'needs-adapter',proposalId,reason:'No supported adapter.'});return post?post(url,options):Response.json({taskId:task.taskId,state:'results-verified',latestRun:await receipt(JSON.parse(options.body).result)});}
   if(url===ideaEndpoint+'/'+proposalId)return Response.json({id:proposalId,card:ideaCard||card(),createdAt:at,tasks:[],tasksTruncated:true});
   return get?get(url,options):Response.json(projection(task));
  }});await app.ready;return{doc,app,task,requests,executions,packages,downloads,click:id=>doc.getElementById(id).onclick(),upload:async(result,extra={})=>{const input=doc.getElementById('result-file');input.files=[{name:'results.json',size:10,text:async()=>JSON.stringify(result),...extra}];return input.onchange();}};
 }
+async function authoredControlTests(){
+ const hash=value=>createHash('sha256').update(E.stable(value)).digest('hex');
+ const steps=[{op:'keyed-shift',key:[1,2],mode:'repeat',direction:'subtract',reset:'word'}],criterion={kind:'exact-prefix',values:[0,1]};
+ const task=await E.prepare({title:'Synthetic target with authored control',alphabet,steps,criterion,pages:[{id:'lp2-15',text:'ᚢᚩᚱ-ᚢᚩ'}]},webcrypto);
+ async function setup({badHash=false,badPrefix=false}={}){
+  const controlTask=await E.prepare({title:'Synthetic positive control',alphabet,steps,criterion,pages:[{id:'lp1-01',text:badPrefix?'ᚦᚩ-ᚢᚩ':'ᚢᚩ-ᚢᚩ'}]},webcrypto);
+  const origins=[{origin:{recordId:'synthetic-record',followupId:'fixed-control',recordSha256:'a'.repeat(64),protocolSha256:'b'.repeat(64)},control:{label:'Synthetic positive control',task:controlTask,expected_result_sha256:badHash?'0'.repeat(64):hash(E.run(controlTask))},question:'Does the fixed beginning match?',scopeChange:'One exact synthetic variant.',limitation:'A prefix match is not a complete reading.'}];
+  const f=await fixture({task,get:async()=>Response.json({...projection(task),origins})});return{...f,origins,controlTask};
+ }
+ const f=await setup();try{
+  assert(f.app.getState().task,'Valid public authored-origin projection loads');assert.deepEqual(f.app.getState().task.origins,f.origins);
+  assert.equal(f.executions.length,0,'Loading a controlled task must not execute its control or target');assert.equal(f.requests.filter(r=>r.options.method==='POST').length,0);
+  assert.equal(f.requests.filter(r=>r.url==='tools/verify_controls.py').length,0,'Load does not fetch optional reproduction code');
+  const pending=f.click('run-browser');assert.equal(f.executions.length,1);assert.deepEqual(f.executions[0].plan,f.controlTask,'The first worker receives only the synthetic control');
+  assert(!f.app.getState().selected);f.executions[0].resolve(E.run(f.controlTask));await until(()=>f.executions.length===2);
+  assert.deepEqual(f.executions[1].plan,task,'Only a passed full-hash/prefix control permits the target');assert.equal(f.doc.getElementById('control-status').textContent,'Positive control passed.');
+  f.executions[1].resolve(E.run(task));await pending;assert(f.app.getState().selected);assert.equal(f.requests.filter(r=>r.options.method==='POST').length,0,'Browser completion never saves automatically');
+  await f.click('download-experiment');assert.equal(f.requests.filter(r=>r.url==='tools/verify_controls.py').length,1);assert.equal(f.packages.length,1);assert.equal(f.packages[0].length,5);
+  assert.deepEqual(f.packages[0][0],task);assert.equal(f.packages[0][1],'fixed runner');assert.deepEqual(f.packages[0][3],f.origins);assert.equal(f.packages[0][4],'fixed control guard');assert.equal(f.downloads.length,1);
+ }finally{f.app.destroy();}
+ for(const failure of [{badHash:true},{badPrefix:true}]){
+  const bad=await setup(failure);try{
+   await bad.upload(E.run(task));const selected=bad.app.getState().selected,markup=bad.doc.getElementById('verified-result').innerHTML;
+   const pending=bad.click('run-browser');assert.deepEqual(bad.executions[0].plan,bad.controlTask);bad.executions[0].resolve(E.run(bad.controlTask));await pending;
+   assert.equal(bad.executions.length,1,'Failed control must not start a target worker');assert.equal(bad.app.getState().selected,selected);assert.equal(bad.doc.getElementById('verified-result').innerHTML,markup);
+   assert(bad.doc.getElementById('run-error').textContent.includes('control failed'));assert(!bad.app.getState().running);assert.equal(bad.requests.filter(r=>r.options.method==='POST').length,0);
+  }finally{bad.app.destroy();}
+ }
+ for(const stale of ['cancel','navigation','destroy']){
+  const old=await setup();try{
+   await old.upload(E.run(task));const selected=old.app.getState().selected;
+   const pending=old.click('run-browser');assert.equal(old.executions.length,1);assert.deepEqual(old.executions[0].plan,old.controlTask);
+   if(stale==='cancel')old.click('cancel-run');else if(stale==='navigation')old.doc.defaultView.location.hash='#idea='+proposalId;else old.app.destroy();
+   old.executions[0].resolve(E.run(old.controlTask));await pending;
+   assert.equal(old.executions.length,1,'A cancelled/stale control completion cannot start a target');assert.equal(old.app.getState().selected,selected,'A late control result cannot replace the previously selected target result');
+   assert.equal(old.requests.filter(r=>r.options.method==='POST').length,0);if(stale!=='navigation')assert(old.executions[0].cancelled);
+  }finally{old.app.destroy();}
+ }
+ console.log('PASS authored-origin UI: no auto-execution; control before target; complete-hash/prefix failures, cancel/navigation/destroy preserve selected result and stop target; optional guard fetch and five-argument package.');
+}
 (async()=>{
+ await authoredControlTests();
  for(const mode of ['repeat','plaintext-autokey','ciphertext-autokey']){
   const text=UI.stepText({op:'keyed-shift',key:[1,2,3],mode,direction:'subtract',reset:'word'});
   assert(text.includes('[1, 2, 3]')&&text.includes('subtract')&&text.includes('word'));
@@ -40,7 +81,7 @@ async function fixture({task,hash,config={},get,post,prepare,ideaCard}={}){
   const retained=f.app.getState().selected,html=f.doc.getElementById('verified-result').innerHTML;f.doc.getElementById('experiment-details').open=true;
   const rerun=f.click('run-browser');f.click('cancel-run');assert.equal(f.app.getState().selected,retained);assert.equal(f.doc.getElementById('verified-result').innerHTML,html);assert(f.doc.getElementById('experiment-details').open,'Cancelling a rerun does not collapse the user-opened plan');f.executions[1].resolve(E.run(f.task));await rerun;assert.equal(f.app.getState().selected,retained);
   await f.click('submit-results');assert(f.app.getState().saved);assert.equal(f.doc.getElementById('save-status').textContent,'Saved to this research entry.');assert(f.doc.getElementById('submit-results').disabled);
-  f.doc.defaultView.location.href='https://example.org/run.html?v=cache-key#task='+f.task.taskId;await f.click('download-experiment');assert.equal(f.packages.length,1);assert.deepEqual(f.packages[0][0],f.task);assert.equal(f.packages[0][1],'fixed runner');assert.equal(new URL(f.packages[0][2]).hash,'#task='+f.task.taskId);assert.equal(new URL(f.packages[0][2]).search,'','Reproduction return URL is canonical despite entry cache version');assert.equal(f.downloads.length,1);
+  f.doc.defaultView.location.href='https://example.org/run.html?v=cache-key#task='+f.task.taskId;await f.click('download-experiment');assert.equal(f.packages.length,1);assert.deepEqual(f.packages[0][0],f.task);assert.equal(f.packages[0][1],'fixed runner');assert.equal(new URL(f.packages[0][2]).hash,'#task='+f.task.taskId);assert.equal(new URL(f.packages[0][2]).search,'','Reproduction return URL is canonical despite entry cache version');assert.equal(f.downloads.length,1);assert.equal(f.requests.filter(r=>r.url==='tools/verify_controls.py').length,0,'Legacy downloads never fetch the control guard');assert.equal(f.packages[0].length,5);assert.deepEqual(f.packages[0][3],[]);assert.equal(f.packages[0][4],undefined);
  }finally{f.app.destroy();}
  const canceled=await fixture();try{const pending=canceled.click('run-browser');canceled.click('cancel-run');assert(canceled.executions[0].cancelled);canceled.executions[0].resolve(E.run(canceled.task));await pending;assert.equal(canceled.app.getState().selected,null);assert.equal(canceled.requests.filter(r=>r.options.method==='POST').length,0);}finally{canceled.app.destroy();}
  let posts=0;const retry=await fixture({post:async(url,options)=>{if(++posts===1)return Response.json({error:'Unavailable'},{status:503});return Response.json({taskId:retry.task.taskId,state:'results-verified',latestRun:await receipt(JSON.parse(options.body).result)});}});try{

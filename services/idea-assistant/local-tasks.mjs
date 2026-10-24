@@ -1,6 +1,7 @@
 /* Bounded declarative computation persistence. No user code or scientific verdicts. */
 import L from '../../local-experiment.js';
 import {validateCard} from './idea-relations.mjs';
+import {loadRecordPlan,validOrigin as validRecordedOrigin} from './record-plans.mjs';
 const MAX_BODY=2*1024*1024, HEX=/^[a-f0-9]{64}$/, PROPOSAL=/^p_[a-f0-9]{64}$/;
 const NOTICE='Verified computation only; this does not establish a correct reading or scientific conclusion.';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -47,7 +48,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
    JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=?
    ORDER BY CASE WHEN links.proposal_id=? THEN 0 ELSE 1 END,links.created_at,links.proposal_id LIMIT 1`,row.id,row.proposal_id).first();
-  const view=async (row,linkedProposalId=null,selectedContext=null)=>{
+  const view=async (row,linkedProposalId=null,selectedContext=null,preferredOriginId=null)=>{
    const context=selectedContext||(linkedProposalId?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
     FROM local_task_ideas links JOIN proposals p ON p.id=links.proposal_id
     WHERE links.task_id=? AND links.proposal_id=?`,row.id,linkedProposalId).first():await publicContext(row));
@@ -58,7 +59,13 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
    const publicIds=JSON.parse(publicRows?.ids||'[]');
-   return {...projection(row,task,run,context),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
+   const originRows=await query(`SELECT json_group_array(json_object('origin',json(origin_json),'snapshot',json(snapshot_json))) AS entries FROM (
+    SELECT o.origin_json,o.snapshot_json FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id
+    WHERE o.task_id=? GROUP BY o.origin_id,o.origin_json,o.snapshot_json
+    ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,MIN(o.created_at),o.origin_id LIMIT 11)`,row.id,preferredOriginId).first();
+   const savedOrigins=JSON.parse(originRows?.entries||'[]'),origins=[];
+   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot;origins.push({origin:saved.origin,control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation});}
+   return {...projection(row,task,run,context),origins,...(savedOrigins.length>10?{originsTruncated:true}:{}),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
   };
   try{
    let body;
@@ -71,7 +78,8 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(create){
     let task,taskJson,taskHash,createHash;
     try{
-     exact(body,['proposalId','task','inputVersion','parentTaskId']);
+     exact(body,['proposalId','task','inputVersion','parentTaskId',...(Object.hasOwn(body,'origin')?['origin']:[])]);
+     if(Object.hasOwn(body,'origin')&&!validRecordedOrigin(body.origin))throw Error();
      if(!PROPOSAL.test(body.proposalId)||!['raw','reviewed'].includes(body.inputVersion)||(body.parentTaskId!==null&&!HEX.test(body.parentTaskId)))throw Error();
      task=await L.checkIdentity(body.task);taskJson=L.stable(task);taskHash=await digest(taskJson);createHash=await digest(L.stable(body));
     }catch{return reply({error:'The experiment plan is invalid or changed.'},400);}
@@ -80,6 +88,18 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     if(!proposal)return reply({error:'Confirmed idea not found.'},404);
     const cardJson=L.stable(validateCard(proposal.card_json));
     if(body.parentTaskId&&!await find(body.parentTaskId))return reply({error:'Parent task not found.'},404);
+    let reviewed=null,originId=null;
+    if(body.origin){
+     try{reviewed=await loadRecordPlan(body.origin,{fetcher});if(L.stable(reviewed.origin)!==L.stable(body.origin)||L.stable(reviewed.card)!==cardJson||L.stable(reviewed.task)!==taskJson||reviewed.inputVersion!==body.inputVersion||body.parentTaskId!==null)throw Error();originId=await digest(L.stable(reviewed.origin));}
+     catch{return reply({error:'The reviewed origin, input pins, card or task could not be verified.'},422);}
+    }
+    const saveOrigin=async()=>{
+     if(!reviewed)return;
+     await db.batch([query(`INSERT INTO local_task_origins(task_id,proposal_id,origin_id,origin_json,snapshot_json,created_at,created_day)
+      SELECT ?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_origins WHERE created_day=?)<50 ON CONFLICT(task_id,proposal_id,origin_id) DO NOTHING`,task.taskId,body.proposalId,originId,L.stable(reviewed.origin),L.stable(reviewed.snapshot),at,day,day)]);
+     const saved=await query('SELECT origin_json,snapshot_json FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_id=?',task.taskId,body.proposalId,originId).first();
+     if(!saved||saved.origin_json!==L.stable(reviewed.origin)||saved.snapshot_json!==L.stable(reviewed.snapshot))throw Error('The reviewed origin could not be saved.');
+    };
     if(existing){
      const saved=await storedTask(existing);
      if(existing.task_hash!==taskHash||L.stable(saved)!==taskJson)return reply({error:'This computation identity has different task content.'},409);
@@ -87,10 +107,10 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     const association=()=>query('SELECT * FROM local_task_ideas WHERE task_id=? AND proposal_id=?',task.taskId,body.proposalId).first();
     const compatible=link=>link.input_version===body.inputVersion&&link.parent_task_id===body.parentTaskId;
     const linked=await association();
-    if(linked){if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);return reply(await view(existing,body.proposalId));}
+    if(linked){if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));}
     // Identical bytes under the same already-verified input version can be reused.
     // A different version must independently match that version's official source.
-    if(!existing||existing.input_version!==body.inputVersion){
+    if(!reviewed&&(!existing||existing.input_version!==body.inputVersion)){
     const sourceController=new AbortController(),sourceTimer=setTimeout(()=>sourceController.abort(),20000);
     try{
      let fetched=0,next=0;
@@ -122,7 +142,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     existing=await find(task.taskId);const accepted=await association();
     if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.'},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
-    return reply(await view(existing,body.proposalId));
+    await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
    const context=await publicContext(row);if(!context)return reply({error:'Experiment not found.'},404);

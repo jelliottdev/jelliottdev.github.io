@@ -10,6 +10,7 @@ import {createPrepareTaskHandler} from './prepare-task.mjs';
 import {createCommunityIdeaHandler} from './community-ideas.mjs';
 import {createCommunityFeedHandler} from './community-feed.mjs';
 import {createTaskExtensionHandler} from './task-extensions.mjs';
+import {createRecordPlanHandler} from './record-plans.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
@@ -172,6 +173,7 @@ const ask=createHandler();
 const interpret=createInterpretHandler();
 const localTasks=createLocalTaskHandler();
 const prepareTask=createPrepareTaskHandler();
+const recordPlans=createRecordPlanHandler();
 const communityIdeas=createCommunityIdeaHandler();
 const communityFeed=createCommunityFeedHandler();
 const taskExtensions=createTaskExtensionHandler();
@@ -180,6 +182,7 @@ export default {fetch(request,env,ctx){
   if(path==='/community-research')return communityFeed(request,env);
   if(/^\/tasks\/[a-f0-9]{64}\/extensions$/.test(path))return taskExtensions(request,env);
   if(path==='/prepare-task')return prepareTask(request,env);
+  if(path==='/record-plans')return recordPlans(request,env);
   if(path==='/ideas'||path.startsWith('/ideas/'))return communityIdeas(request,env);
   if(path==='/tasks'||path.startsWith('/tasks/'))return localTasks(request,env);
   if(new URL(request.url).pathname==='/interpret')return interpret(request,env);

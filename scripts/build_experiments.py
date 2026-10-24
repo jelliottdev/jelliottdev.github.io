@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 from experiment_content import compile_content, article_bytes, draft_record_ids
 from experiment_taxonomy import apply_classifications
+from browser_followups import validate_followups
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -221,6 +222,8 @@ def validate_record(root, path, pages):
             and all(x in pages for x in scope['pages']), 'Scope needs valid page IDs')
     if 'recorded_comparison' in d:
         validate_recorded_comparison(d['recorded_comparison'], scope, pages)
+    if 'browser_followups' in d:
+        validate_followups(d['browser_followups'], root, pages)
     if 'pages_note' in d:
         text(d['pages_note'], f'{identifier}.pages_note')
     if 'bounds_note' in d:

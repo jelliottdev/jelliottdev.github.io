@@ -102,10 +102,24 @@
  }
  function zoom(factor,point){const r=map.getBoundingClientRect(),p=point||{x:r.width/2,y:r.height/2},k=Math.min(8,Math.max(.08,camera.k*factor)),ratio=k/camera.k;camera={x:p.x-(p.x-camera.x)*ratio,y:p.y-(p.y-camera.y)*ratio,k};applyCamera()}
  function recordNode(id){return [...nodes.values()].find(n=>n.record_id===id)}
+ function previewScopeHTML(record){
+  const text=value=>typeof value==='string'?value.trim():'',normal=value=>value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim(),parameters=text(record.scope?.parameters),excluded=text(record.scope?.exclusions),next=text(record.next_steps),limit=text(record.reader_limit||record.limitations);
+  const already=[record.reader_finding||record.finding,parameters,excluded,next].map(value=>normal(text(value))).filter(Boolean),distinctLimit=limit&&!already.some(value=>value.includes(normal(limit)));
+  return '<section class="record-scope"><h3>Tested bounds</h3><p>'+esc(pageRanges(record.pages))+'</p>'+(parameters?'<p>'+esc(parameters)+'</p>':'')+'</section>'+
+   (excluded||next?'<section class="record-open-questions"><h3>Further checks</h3>'+(excluded?'<p><strong>Not tested:</strong> '+esc(excluded)+'</p>':'')+(next?'<p><strong>Next check:</strong> '+esc(next)+'</p>':'')+'</section>':'')+
+   (distinctLimit?'<p class="record-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'');
+ }
+ function previewFollowupsHTML(record){
+  const slug=value=>typeof value==='string'&&value.length<=100&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+  if(!slug(record.id)||!Array.isArray(record.browser_followups)||record.browser_followups.length>8)return '';
+  const seen=new Set(),items=record.browser_followups.filter(item=>{if(!item||!slug(item.id)||seen.has(item.id)||typeof item.title!=='string'||!item.title.trim()||Array.from(item.title).length>300||typeof item.scope_change!=='string'||!item.scope_change.trim()||Array.from(item.scope_change).length>1200)return false;seen.add(item.id);return true;});
+  if(!items.length)return '';
+  return '<section class="record-followups"><h3>Prepared follow-up'+(items.length>1?'s':'')+'</h3>'+items.map(item=>'<p><strong>'+esc(item.title)+'</strong><br>'+esc(item.scope_change)+'</p><a href="run.html#record='+record.id+'&amp;followup='+item.id+'">Run a follow-up'+(items.length>1?': '+esc(item.title):'')+'</a>').join('')+'</section>';
+ }
  function showInspector(){
   const record=data.records[state.record];panel.hidden=!record;updatePreviewMode();if(!record)return;
   const labels={supported:'Supported within this test','not-supported':'Not supported by this test',inconclusive:'Inconclusive'};
-  panel.innerHTML=`<div class="inspector-top"><button type="button" class="preview-back" aria-label="Back to map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>Back to map</button></div><div class="inspector-scroll"><h2 id="preview-title" tabindex="-1">${esc(record.title)}</h2><p class="preview-status">${esc(labels[record.outcome]||record.outcome)}</p><h3 class="preview-heading">Result</h3><p class="record-finding">${esc(record.reader_finding||record.finding)}</p><div class="record-scope"><h3>Tested material</h3><p>${esc(pageRanges(record.pages))}</p></div><h3>What this leaves open</h3><p class="record-limit">${esc(record.reader_limit||record.limitations)}</p></div><a class="record-open" href="${esc(record.href)}">Read full record ${arrow}</a>`;
+  panel.innerHTML=`<div class="inspector-top"><button type="button" class="preview-back" aria-label="Back to map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>Back to map</button></div><div class="inspector-scroll"><h2 id="preview-title" tabindex="-1">${esc(record.title)}</h2><p class="preview-status">${esc(labels[record.outcome]||record.outcome)}</p><h3 class="preview-heading">Result</h3><p class="record-finding">${esc(record.reader_finding||record.finding)}</p>${previewFollowupsHTML(record)}${previewScopeHTML(record)}</div><a class="record-open" href="${esc(record.href)}">Read full record ${arrow}</a>`;
   panel.querySelector('.preview-back').onclick=()=>navigate({record:''},true);panel.onkeydown=event=>{if(event.key==='Escape'){event.preventDefault();navigate({record:''},true)}};
  }
  function pageRanges(pages){
