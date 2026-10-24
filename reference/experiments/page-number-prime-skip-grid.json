@@ -1,0 +1,607 @@
+{
+  "id": "page-number-prime-skip-grid",
+  "status": "published",
+  "title": "Keys based on page order",
+  "question": "Do the exact source page-number ramp keys pass their fixed English-score gates when conditional key skips are permitted?",
+  "reader_question": "Can keys derived from page order decode the text?",
+  "summary": "Seven complete-page outputs selected from 660 short trials all fail the source final score gate. A separate audit of every retained final candidate also finds no gate crossing.",
+  "reader_finding": "These three page-assigned key rules produced no output that cleared their fixed English-score test. Only seven of the 660 short trials reached complete-page checking.",
+  "reader_limit": "Only these three rules and this skip procedure were tested. Most settings received a 50-rune check; passing the score test would still need plaintext verification.",
+  "bounds_note": "660 source short settings; 7 complete-page checks; 112 signed-array plants representing eight step/known-reading situations.",
+  "pages_note": "55 nonempty pages LP2-00 through49 and51 through55; source index50 maps to LP2-51.",
+  "tags": [
+    "page-number keys",
+    "numeric keys",
+    "conditional skips",
+    "linear ramps",
+    "source replay"
+  ],
+  "family": {
+    "id": "numeric-stream-skip-grid",
+    "title": "Numeric keys with conditional skips",
+    "question": "Can these numeric keys decode pages when key positions may be skipped?",
+    "baseline": "numeric-stream-skip-grid"
+  },
+  "variant": {
+    "label": "Page-assigned ramps",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/numeric-stream-skip-grid/frozen-plan.json",
+          "experiments/records/numeric-stream-skip-grid/streams.json",
+          "experiments/records/numeric-stream-skip-grid/pages.json"
+        ],
+        "after": [
+          "experiments/records/page-number-prime-skip-grid/plan.json",
+          "experiments/records/page-number-prime-skip-grid/key-manifest.json",
+          "experiments/records/page-number-prime-skip-grid/control-results.json"
+        ],
+        "reason": "Replay the source page-assigned PartC branch with its exact indexed keys and width300 confirmations, preserving the known rigid-ramp overlap and adding explicit linear-skip validation."
+      },
+      {
+        "field": "procedure",
+        "before": "Unchanged source numeric sweep_keystream; source beam records all 50-rune screens and confirms only strict screen survivors on complete pages. Independent scalar reconstruction of every full survivor and maximum screen; independent rescore of all outputs.",
+        "after": "Execute unchanged source numeric2 sweep_page_seeded with return-preserving observations of its beam/helper results. Screen all assigned page rules and fully decode only strict survivors. Independently reconstruct all short/full outputs with the exact nonzero-linear-step skip criterion; separately freeze and audit every retained terminal candidate.",
+        "reason": "Replay the source page-assigned PartC branch with its exact indexed keys and width300 confirmations, preserving the known rigid-ramp overlap and adding explicit linear-skip validation."
+      },
+      {
+        "field": "parameters",
+        "before": "33 labelled numeric streams at exact length1176 × 55 pages × signs −1/+1 × Atbash off/on × offsets0–4 =36,300 screens. Screen50/beam60/strict>−6.5; survivor full beam200/strict>−5.5; max3 conditional key skips.",
+        "after": "Three source page-assigned modes x55pages x2signs x2Atbash states =660screens; exact1124-value keys, offset0. Screen50/beam60/strict>-6.5; survivor full beam300/strict>-5.5.165assignments,56base arrays,112signed-array plants representing8step/reading situations.",
+        "reason": "Replay the source page-assigned PartC branch with its exact indexed keys and width300 confirmations, preserving the known rigid-ramp overlap and adding explicit linear-skip validation."
+      },
+      {
+        "field": "exclusions",
+        "before": "841 Fibonacci seed pairs; other numeric catalogs, offsets, clocks, languages and joined pages; no full decoding of rejected screens, full-search null calibration, general key-family exclusion or proof of plaintext.",
+        "after": "Source numeric2 PartsA/B, unassigned page keys, other phases/clocks/languages and joined pages; no full decoding of rejected screens or intermediate normalized ranking.330Atbash-off rigid paths already overlap progressive Caesar; reflected rigid coverage is not established by that record. No page-number significance, global-null probability, general key-family exclusion or plaintext proof.",
+        "reason": "Replay the source page-assigned PartC branch with its exact indexed keys and width300 confirmations, preserving the known rigid-ramp overlap and adding explicit linear-skip validation."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/page-number-prime-skip-grid/plan.json",
+      "experiments/records/page-number-prime-skip-grid/key-manifest.json",
+      "experiments/records/page-number-prime-skip-grid/control-results.json"
+    ],
+    "representation": "55 exact source GP29 page arrays, LP2-00–49 and LP2-51–55; canonical GP Latin labels scored with the pinned source English quadgrams.",
+    "procedure": "Execute unchanged source numeric2 sweep_page_seeded with return-preserving observations of its beam/helper results. Screen all assigned page rules and fully decode only strict survivors. Independently reconstruct all short/full outputs with the exact nonzero-linear-step skip criterion; separately freeze and audit every retained terminal candidate.",
+    "parameters": "Three source page-assigned modes x55pages x2signs x2Atbash states =660screens; exact1124-value keys, offset0. Screen50/beam60/strict>-6.5; survivor full beam300/strict>-5.5.165assignments,56base arrays,112signed-array plants representing8step/reading situations.",
+    "exclusions": "Source numeric2 PartsA/B, unassigned page keys, other phases/clocks/languages and joined pages; no full decoding of rejected screens or intermediate normalized ranking.330Atbash-off rigid paths already overlap progressive Caesar; reflected rigid coverage is not established by that record. No page-number significance, global-null probability, general key-family exclusion or plaintext proof."
+  },
+  "outcome": "not-supported",
+  "finding": "All660short settings completed;7received complete-page source decoding and none cleared strict>-5.5. Best returned full score -6.994514123971474. Separately frozen post-target audit independently reconstructs all1220retained hypotheses; all7settings improve under normalization but none crosses the gate, best -6.944792840501962. All112plants contain skips and pass gates;98recover exactly, with14labels repeating one scorer-preference situation.",
+  "limitations": "112array controls repeat only eight step/reading structures. All14nonexact controls retain the true reading second in the final beam. Source cumulative ranking differs from normalized acceptance.330Atbash-off rigid settings overlap prior progressive Caesar; that record does not demonstrate the330reflected rigid forms. Only strict short survivors were fully decoded; no plaintext, full-search probability, page-number significance or general key-family negative.",
+  "next_steps": "A different proposal needs a fixed assignment, clock and skip law with relevant complete-reading controls and a prospective complete-search calibration.",
+  "reproduction": {
+    "command": "python experiments/records/page-number-prime-skip-grid/replay.py; python experiments/records/page-number-prime-skip-grid/audit_terminal.py; python experiments/records/page-number-prime-skip-grid/check.py; python experiments/records/page-number-prime-skip-grid/plot.py",
+    "environment": "Python3 with NumPy, entirely offline from repository or extracted bundle root. Bundled pinned MIT source/model/inputs; portable replay repeats112plants and660targets in a temporary copy and compares scientific outputs except timings. Original plans and outputs remain unchanged.",
+    "script": "experiments/records/page-number-prime-skip-grid/run.py",
+    "script_sha256": "1b82b1a77d35bf5e43c852469db58c599c5f22e4ecde0bcc7f3071edb86acc03",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/.gitattributes",
+        "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/check_controls.py",
+        "sha256": "b1eaa2f65bbe41d4364dbebdbcafcb337ce1645788766b0a4a213b5c5f596ba6"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/control-check.json",
+        "sha256": "757659724194f81e53f72f275b1f403cc193b0a1a8b1edce8f8a24596c46b4d1"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/control-plan.json",
+        "sha256": "f688872e51719856b887d065a00273d675cf057c06b0d9bbee485048696055cb"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/control-results.json",
+        "sha256": "d7030aaa0edabdf67dd0a295a9daa77fd0e49e4da0d87f9af0aa749415f41c5a"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/controls.py",
+        "sha256": "00a51a734a3c74d4f48242c1d77612cbf3cab1958fb6a422068b1250c593aefb"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/engine.py",
+        "sha256": "7907771f580040ece067abfb37981852e449e64910ced53829f4e5a900cb345d"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/independent.py",
+        "sha256": "d72dc6e2031b69bd5eb9f79dcef8fe431ca56a8614d2aec033e1d6026c145679"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/key-manifest.json",
+        "sha256": "ea2c6500bd791f33cf7d3ea076d13cdf3422a5c4495e2d8b7d37ef04425408ea"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/known-readings.json",
+        "sha256": "de66e85c0cc475b5cd40c80367a38e751fe8273904057347b32f89368e081a86"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/manifest.py",
+        "sha256": "72d0678879335de08cd75d7239579cb8e9c088b0be1527dbd6591c37fed44494"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/run.py",
+        "sha256": "1b82b1a77d35bf5e43c852469db58c599c5f22e4ecde0bcc7f3071edb86acc03"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/analysis/campaign18_skip/armada2/numeric2_skip.py",
+        "sha256": "966b24b9397f2153231095f9974771ba9fcb4704d85340a4993489498a0789db"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/analysis/campaign18_skip/sweep.py",
+        "sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/data/keys/solved_plaintext.txt",
+        "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/autokey.py",
+        "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/solve.py",
+        "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/plan.json",
+        "sha256": "3d68d9f5c4899c18a12ad9bd80d3020a49f2050b9a3d6443dd0b1678074fbacf"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/terminal-plan.json",
+        "sha256": "46d594f23d95947d83230143ead180bbd725c986c044bfe298cb930f62f8eef5"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/audit_terminal.py",
+        "sha256": "833d23429cb44ca82cd5c3c95b9699cb1ef8022da82c9249209de9e4175af160"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/check.py",
+        "sha256": "334e16a769fdec747eb650a5dde4e0c2ba9ef737f7be08cb2fa6630a6c1068ba"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/plot.py",
+        "sha256": "19852fb860fa8ebf57fa18ff2a60c5b827f99d4b515d42e023f08e6a31c945cd"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/replay.py",
+        "sha256": "3bba4b4c59a55745175354306c9798de8469d735c1019e0544081d4f804435ea"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/article.md",
+        "sha256": "ef1ed02085a3dadc99b762a8fb9defdad5400abc09c76bc00674d2b4488b9bc9"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/scope.json",
+        "sha256": "6b64a30efdab5c9cb29b7cbfa532e534c163175b78e22f8c29f2ae4ced49efb4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/results.json",
+        "sha256": "f51d4d089db80460ad4580f0ecbbaff39e48a520bfdbc20577549e4f5ca45847"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/cases.json",
+        "sha256": "5bc682e4d29f6ef8979d6fb554daaf0dac1803dbc6b266da00de0173204825f9"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/terminal-audit.json",
+        "sha256": "9fcf1efb4318f2fb3fee5793c0ae73fa3f2520a49e0f25d637f7ce6b294ad6f8"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/independent-check.json",
+        "sha256": "1dcef5786ac44015b6b50423fd293078689e72f72d781e4bfc0ddc0d2735a800"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/replay-check.json",
+        "sha256": "e475b7641df8a5f6e187d0ff65f4afb7705d991e5c35df77031637bdb2d4afb9"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/figure-receipt.json",
+        "sha256": "d6fc2ad18cfa78881cb66ac0bce5bfa438c11d9dbb4805763c762987bcc77327"
+      },
+      {
+        "path": "experiments/records/page-number-prime-skip-grid/page-ramp-search.svg",
+        "sha256": "930cb59df631e40994fc1c74d99d213fa2ce68a64a3d67611e35329c0ddff085"
+      }
+    ]
+  },
+  "review": {
+    "kind": "exact source PartC replay and independent linear-skip reconstruction",
+    "retested_on": "2026-10-23",
+    "reviewer": "All660short paths,7complete paths,1220ordered terminal hypotheses,112control paths and exact source/site/key joins independently checked",
+    "human_review": "pending"
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/page-number-prime-skip-grid/page-ramp-search.svg",
+      "caption": "The 660-to7-to0 source selection funnel and an actual admissible skip boundary in the LP2-39 candidate path. Candidate plaintext is not certified."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source PartC",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada2/numeric2_skip.py"
+    },
+    {
+      "label": "Pinned conditional-skip beam",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/sweep.py"
+    },
+    {
+      "label": "Pinned enciphering controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/skipdecode.py"
+    },
+    {
+      "label": "Pinned MIT license",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/LICENSE"
+    }
+  ],
+  "related": [
+    "numeric-stream-skip-grid",
+    "artifact-stream-skip-grid",
+    "wholepage-progressive-caesar",
+    "decoder-skip-controls"
+  ],
+  "article": "These page-number keys did not produce a reading that passed the fixed English-score test. Seven complete-page outputs were selected from 660 short trials; all failed the source's final score gate. A separate audit of every retained final candidate also found no gate crossing. This is a bounded conditional-skip extension of known linear ramps, not evidence that page numbers have no possible use.\n\n## What was tried\n\nThe pinned source assigns each nonempty page index i three repeating arithmetic streams. Key position j starts at zero, and all values are reduced modulo 29.\n\n| Source rule | Value at key position j |\n| --- | --- |\n| prime | prime[i mod 29] + j, using the 29 primes through 109 |\n| [totient](#/wiki/totient) | phi(i+2) + j |\n| 3301xor | 24j + i; the source label does not perform XOR |\n\nThe source index runs 0 through 54 over nonempty pages. Its index 50 therefore means LP2-51, not the blank LP2-50. Each key is used only on its assigned page, with both signs and ciphertext [Atbash](#/wiki/atbash), offset zero. That gives 660 settings. The 165 page-assigned labels contain 56 base arrays, or 112 distinct signed arrays. Repeated arrays assigned to different pages still require their respective page tests.\n\nThe source first decodes 50 runes with beam width 60. Only normalized scores strictly above -6.5 receive a complete-page decode with width 300; the final gate is strictly above -5.5. F behaves like every other rune. Headings remain, and state resets on each page. The source PartC function executes unchanged under return-preserving observers; its returned hit list and best short score agree with the recorded cases. Parts A/B are excluded.\n\n## What a conditional skip adds\n\nWithout skips, the 330 Atbash-off settings are already inside the [whole-page progressive Caesar test](#/experiments/wholepage-progressive-caesar), P=C+k*i+b. That record does not establish coverage of the 330 Atbash-on rigid forms P=28-C+k*i+b. This replay keeps that orientation distinction explicit while treating the work as an extension of known ramp rules, not a new broad key family or a test of page-number significance.\n\nHere every signed key step D is nonzero: 1, 24, 28 or 5. The source permits up to three rejected keys in general, but two consecutive rejections would require equal consecutive ramp values, which is impossible. A single rejected key is admissible exactly when the previous transformed ciphertext index minus the current index equals D modulo 29. The independent decoder uses this simpler rule rather than the source's generic rejection loop. It reproduces every short output, complete-page output and ordered final beam.\n\nThe figure shows an actual selected path on LP2-39. At zero-based rune position 105, transformed ciphertext indices 19 then 20 give (19-20) mod 29=28, matching the signed key step. The key pointer advances from 104 to 106. This is an admissible candidate path, not a certified plaintext or an inferred real skip.\n\n## Controls and limits\n\nA control plan was frozen before manuscript calls. All 112 distinct signed arrays received one fixed known reading, alternating the existing 184-rune Warning and 85-rune LP2-56 readings. The source encoder used suppression 0.83 and seed 3301, with no resampling. Every plant contains a genuine skip; none is omitted. All 112 pass both source gates, while 98 recover the complete reading exactly. Changing the ramp intercept only translates the planted ciphertext, so these are eight distinct step/reading situations rather than 112 independent power samples.\n\nThe 14 nonexact labels all repeat one situation: step 5 with Warning. The true reading remains second in the final beam in every case; the source selects a higher cumulative-score alternative. These are scorer preferences, not invalid plants, ties or pruning away the true reading. Gate passage therefore does not guarantee exact recovery.\n\nThe target plan binds the source, model, key rules, control receipts, site index and all 55 page texts before the new target calls. Source and site rune arrays agree exactly. Keys have 1,124 slots; the generic buffer requirement is at most 1,116, and the linear skip rule bounds the actual last consumed index at 552. An imported bigram prefilter is unused; direct beam calls use the bundled English quadgram table. The short/full source beam still ranks cumulative scores and gates normalized scores.\n\nAfter the source outputs, a separately frozen POST-TARGET audit checks all 1,220 retained final hypotheses from the seven full decodes. Every setting has a better normalized alternative than the returned cumulative winner, but none crosses -5.5. Best returned complete score is -6.994514123971474; best normalized retained score is -6.944792840501962, both on the LP2-39 totient setting with subtraction and Atbash. This audit does not rerank intermediate beams or fully decode rejected screens.\n\nIndependent checks reconstruct all 660 short paths, all seven full paths and every ordered retained final hypothesis, verify the key formulas and page-index mapping, and separately reconstruct all 112 controls. A portable isolated replay repeats controls and the exact source target without a source-cache dependency. Scientific outputs agree byte-for-byte except timing fields. Original plans and outputs remain unchanged. The source is Dukotah/cicada3301 commit f08b20b632d91209ddbaa747e8e2f23df0c78ba1, with its MIT license bundled.\n\nNo plaintext is certified. These eight known-reading situations do not calibrate a maximum over the entire manuscript search, and no global probability, general numeric-key exclusion or OTP explanation follows. Other assigned rules, phases, clocks, languages and joined-page mechanisms remain outside scope.\n",
+  "article_path": "experiments/records/page-number-prime-skip-grid/article.md",
+  "script_sha256": "1b82b1a77d35bf5e43c852469db58c599c5f22e4ecde0bcc7f3071edb86acc03",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "method_topics": [
+    {
+      "id": "number-streams",
+      "title": "Arithmetic keystreams",
+      "aliases": [
+        "prime shifts",
+        "Fibonacci",
+        "totient sequence",
+        "arithmetic keystream",
+        "numerical sequence"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
+      ]
+    }
+  ]
+}

@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 47,
+    "published_followup_records": 49,
     "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
@@ -647,10 +647,11 @@
         "experiments/records/lp2-prime-openings/record.json",
         "experiments/records/lp2-prime-minus-one-openings/record.json"
       ],
-      "coverage_note": "Consecutive prime and prime-minus-one opening grids cover fixed start/offset choices; nonunit stride, reverse direction and section restarts are a new bounded extension. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "coverage_note": "Consecutive prime and prime-minus-one opening grids cover fixed start/offset choices; nonunit stride, reverse direction and section restarts are a new bounded extension. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits. A separate followup tests the source-defined page-assigned prime/totient ramps with conditional skips; assignment uses nonempty-segment indices, not always the printed page number.",
       "queue_id": null,
       "subsequent_record_ids": [
-        "numeric-stream-skip-grid"
+        "numeric-stream-skip-grid",
+        "page-number-prime-skip-grid"
       ]
     },
     {
@@ -665,10 +666,11 @@
         "experiments/records/lp2-totient-openings/record.json",
         "experiments/records/lp2-15-totient-gap-audit/record.json"
       ],
-      "coverage_note": "Consecutive phi(n) openings and panel arithmetic are tested; phi(prime), iterated and running-sum inputs need separate exact streams. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "coverage_note": "Consecutive phi(n) openings and panel arithmetic are tested; phi(prime), iterated and running-sum inputs need separate exact streams. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits. A separate followup tests the source-defined page-assigned prime/totient ramps with conditional skips; assignment uses nonempty-segment indices, not always the printed page number.",
       "queue_id": null,
       "subsequent_record_ids": [
-        "numeric-stream-skip-grid"
+        "numeric-stream-skip-grid",
+        "page-number-prime-skip-grid"
       ]
     },
     {
@@ -1657,8 +1659,11 @@
         "experiments/records/grid-payload-prf-opening-cribs/record.json",
         "research/public-attempt-inventory.json#B-05"
       ],
-      "coverage_note": "Payload-as-key and PRF-seed branches are already queued and partly replayed; fixed openings/English-score bounds do not close all direct-pad or repeated-key uses.",
-      "queue_id": null
+      "coverage_note": "Payload-as-key and PRF-seed branches are already queued and partly replayed; fixed openings/English-score bounds do not close all direct-pad or repeated-key uses. A source-defined conditional-skip followup tests two payload readings and their reversals at the exact page-dependent phases; the short-screen selection and beam width differ from the older zero-offset test.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "payload-phase-skip-grid"
+      ]
     },
     {
       "source_id": "12.6",

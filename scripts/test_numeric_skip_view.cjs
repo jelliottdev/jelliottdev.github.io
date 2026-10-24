@@ -5,15 +5,30 @@ const ids=['numeric-stream-skip-grid','artifact-stream-skip-grid','fibonacci-str
 for(const id of ids){
  const base='experiments/records/'+id+'/',artifact=id===ids[1],fib=id===ids[2],planName=id===ids[0]?'frozen-plan.json':'plan.json';
  const record=read(base+'record.json'),plan=read(base+planName),results=read(base+'results.json'),receipt=artifact?read(base+'figure-receipt.json'):undefined;
- fixtures[id]={record,plan,results,receipt,payloads:{[base+planName]:plan,[base+'results.json']:results,...(artifact?{[base+'figure-receipt.json']:receipt}:{})}};
- const data=api.validate(id,plan,results,receipt),html=api.content(data);
+ const controlPath=fib?'preflight-independent-check.json':artifact?'control/summary.json':'controls/summary.json',control=read(base+controlPath);
+ fixtures[id]={record,plan,results,receipt,control,payloads:{[base+planName]:plan,[base+'results.json']:results,[base+controlPath]:control,...(artifact?{[base+'figure-receipt.json']:receipt}:{})}};
+ const data=api.validate(id,plan,results,receipt,control),html=api.content(data);
  assert.equal(data.screens,fib?92510:artifact?23100:36300);assert.equal(data.full,fib?900:artifact?194:322);assert.equal(data.passes,0);
  for(const count of [data.screens,data.full,data.passes])assert(html.includes('<strong>'+count.toLocaleString('en-US')+'</strong>'));
  assert.equal((html.match(/numeric-skip-stages/g)||[]).length,1);assert(html.includes('First 50-rune checks'));assert(html.includes('Complete-page checks'));assert(html.includes('Passed the fixed English-score test'));
  assert(html.includes(data.best.score.toFixed(3).replace('-','−')));assert(html.includes('−5.5'));assert(html.includes('score alone cannot confirm plaintext'));
+ const expectedControl=fib?{total:841,exact:805}:artifact?{total:420,exact:402}:{total:660,exact:634};
+ assert.equal(data.controls.total,expectedControl.total);assert.equal(data.controls.exact,expectedControl.exact);assert.equal(data.controls.score,expectedControl.total);
+ const actualControl=fib?control:control.branches[artifact?'numeric2A':'numeric'];
+ assert.equal(data.controls.exact,actualControl.exact_complete_recovery);
+ assert.equal(data.controls.score,fib?actualControl.score_gate_passes:actualControl.full_gate_pass);
+ assert(html.includes('Correct reading recovered'));assert(html.includes('Passed the English-score test'));
+ assert(html.includes(`<strong>${expectedControl.exact} / ${expectedControl.total}</strong>`));
+ assert(html.includes(`<strong>${expectedControl.total} / ${expectedControl.total}</strong>`));
+ assert(html.includes((expectedControl.total-expectedControl.exact)+' incorrect outputs still passed'));
+ assert(html.includes('not independent success probabilities'));
+ assert(JSON.stringify(control).length<25000,'Only compact receipts are used, never full control traces');
  assert(api.canRender(record,record.visuals[0]));assert(api.render(id).includes('download>Download the original SVG'));
  const missing=structuredClone(record);missing.reproduction.outputs=missing.reproduction.outputs.filter(f=>!f.path.endsWith('results.json'));assert(!api.canRender(missing,record.visuals[0]));
+ const unlistedControl=structuredClone(record);for(const group of ['inputs','outputs'])unlistedControl.reproduction[group]=unlistedControl.reproduction[group].filter(f=>f.path!==base+controlPath);assert(!api.canRender(unlistedControl,record.visuals[0]),'A compact receipt must be explicitly declared');
  if(artifact){
+  assert(html.includes('Puzzle numbers and sequences: search results'),'The heading covers mathematical sequences as well as puzzle-derived values');
+  assert(!html.includes('Artifact keys:'),'The old heading understated this stream catalog');
   const byRune=new Map(read('data/index.json').alphabet.map(a=>[a.rune,a.index]));
   const ciphertext=[...read('data/pages/lp2-49.json').raw].filter(r=>byRune.has(r)).map(r=>byRune.get(r));
   assert.equal(ciphertext[receipt.rune_position_zero_based-1],receipt.previous_transformed_cipher_index);
@@ -22,7 +37,7 @@ for(const id of ids){
   assert.equal((receipt.candidate_plain_index-receipt.rejected_key_value+29)%29,ciphertext[28]);
   assert.equal((receipt.candidate_plain_index-receipt.accepted_key_value+29)%29,ciphertext[29]);
   assert(html.includes('28 − 2 = 26 (mod 29)'));assert(html.includes('28 − 3 = 25 (mod 29)'));assert(html.includes('same candidate rune again'));assert(html.includes('not confirmed plaintext'));
-  const wrong=structuredClone(receipt);wrong.rejected_key_value=1;assert.throws(()=>api.validate(id,plan,results,wrong));
+  const wrong=structuredClone(receipt);wrong.rejected_key_value=1;assert.throws(()=>api.validate(id,plan,results,wrong,control));
  }else if(fib){
   assert.equal(results.source_labeled_screens,10*data.screens);assert(html.includes('925,100'));assert(html.includes('not extra tests'));
   assert(!html.includes('numeric-skip-step'),'Fibonacci summary does not invent an alias/skip demonstration');
@@ -31,7 +46,27 @@ for(const id of ids){
   assert.equal(results.stream_logs.reduce((n,row)=>n+row.full_survivors,0),data.full);
   assert(!html.includes('numeric-skip-step'),'Numeric results do not invent a skip trace');
  }
- const bad=structuredClone(results);if(fib)bad.canonical_full_confirmations++;else if(artifact)bad.source_gate_passes=1;else bad.full_survivors++;assert.throws(()=>api.validate(id,plan,bad,receipt));
+ const bad=structuredClone(results);if(fib)bad.canonical_full_confirmations++;else if(artifact)bad.source_gate_passes=1;else bad.full_survivors++;assert.throws(()=>api.validate(id,plan,bad,receipt,control));
+ assert.throws(()=>api.validate(id,plan,results,receipt,{}),'Missing compact control metrics fail safely');
+ const badControl=structuredClone(control);if(fib)badControl.score_gate_passes--;else badControl.branches[artifact?'numeric2A':'numeric'].exact_complete_recovery++;assert.throws(()=>api.validate(id,plan,results,receipt,badControl));
+}
+for(const [id,planName,svg,controlName,counts] of [
+ ['payload-phase-skip-grid','frozen-plan.json','payload-phases.svg','frozen-plan.json',[30112,234,1616,1540]],
+ ['page-number-prime-skip-grid','plan.json','page-ramp-search.svg','control-check.json',[660,7,112,98]]
+]){
+ const base='experiments/records/'+id+'/',record=read(base+'record.json'),plan=read(base+planName),results=read(base+'results.json'),control=read(base+controlName),receipt=id.startsWith('page-')?read(base+'figure-receipt.json'):undefined;
+ fixtures[id]={record,plan,results,control,receipt,payloads:{[base+planName]:plan,[base+'results.json']:results,[base+controlName]:control,...(receipt?{[base+'figure-receipt.json']:receipt}:{})}};
+ ids.push(id);const data=api.validate(id,plan,results,receipt,control),html=api.content(data);
+ assert.deepEqual([data.screens,data.full,data.controls.total,data.controls.exact],counts);assert.equal(data.controls.score,counts[2]);assert.equal(data.passes,0);
+ assert(api.canRender(record,record.visuals.find(v=>v.path===base+svg)));assert(html.includes('Correct reading recovered'));assert(html.includes('not independent success probabilities'));
+ const invalid=structuredClone(control);if(receipt)invalid.exact_recoveries++;else invalid.control_decision.exact_full++;assert.throws(()=>api.validate(id,plan,results,receipt,invalid));
+ if(receipt){
+  const byRune=new Map(read('data/index.json').alphabet.map(a=>[a.rune,a.index]));
+  const c=[...read('data/pages/lp2-39.json').raw].filter(r=>byRune.has(r)).map(r=>28-byRune.get(r));
+  assert.equal(c[104],19);assert.equal(c[105],20);assert.equal((c[104]-c[105]+29)%29,28);
+  assert(html.includes('(19 \u2212 20) mod 29 = 28'));assert(html.includes('104 to 106'));assert(html.includes('not confirmed plaintext'));
+  const bad=structuredClone(receipt);bad.signed_slope=1;assert.throws(()=>api.validate(id,plan,results,bad,control));
+ }
 }
 assert.throws(()=>api.render('fibonacci-streams'),'No unapproved record/payload is supported');
 const integrated={esc:String,NumericSkipView:api};vm.createContext(integrated);vm.runInContext(fs.readFileSync(path.join(root,'experiments.js'),'utf8'),integrated);
@@ -55,11 +90,16 @@ const flush=()=>new Promise(resolve=>setImmediate(resolve));
 (async()=>{
  const sharedRun=runtime(),first=harness(ids[0],sharedRun),second=harness(ids[1],sharedRun);
  const a=first.api.bind(first.figure,first.options),b=second.api.bind(second.figure,second.options);
- assert.equal(first.requests.length,2);assert.equal(second.requests.length,3,'Different studies cannot share the wrong cache');
+ assert.equal(first.requests.length,3);assert.equal(second.requests.length,4,'Different studies cannot share the wrong cache');
  const twin=harness(ids[0],sharedRun),same=twin.api.bind(twin.figure,twin.options);assert.equal(twin.requests.length,0);
  first.respond();second.respond();await Promise.all([a,b,same]);assert(first.view.innerHTML.includes('36,300'));assert(second.view.innerHTML.includes('23,100'));assert.equal(sharedRun.timers.size,0);
  const warm=harness(ids[1],sharedRun);await warm.api.bind(warm.figure,warm.options);assert.equal(warm.requests.length,0);
  for(const id of ids){
+  const brokenReceipt=harness(id),receiptLoad=brokenReceipt.api.bind(brokenReceipt.figure,brokenReceipt.options);
+  const receiptRequests=brokenReceipt.requests.length;
+  for(const request of brokenReceipt.requests)request.resolve({ok:true,json:async()=>/summary\.json$|preflight-independent-check\.json$|control-check\.json$|payload-phase-skip-grid\/frozen-plan\.json$/.test(request.url)?{}:fixtures[id].payloads[request.url]});
+  await receiptLoad;assert(!brokenReceipt.retry.hidden);assert.equal(brokenReceipt.view.innerHTML,'','An invalid compact receipt cannot display misleading control counts');
+  const receiptRetry=brokenReceipt.retry.listeners.click();brokenReceipt.respond(receiptRequests);await receiptRetry;assert(brokenReceipt.retry.hidden);assert(brokenReceipt.view.innerHTML.includes('Correct reading recovered'));
   const fail=harness(id),start=fail.api.bind(fail.figure,fail.options);fail.respond(0,true);await start;
   assert(!fail.retry.hidden);assert.equal(fail.view.innerHTML,'');assert(fail.status.textContent.includes('download'));
   fail.doc.activeElement=fail.retry;const n=fail.requests.length,retry=fail.retry.listeners.click();await fail.retry.listeners.click();assert.equal(fail.requests.length,n*2);
@@ -75,5 +115,5 @@ const flush=()=>new Promise(resolve=>setImmediate(resolve));
    if(bodyOnly)resolveBodies.forEach(resolve=>resolve({}));else timeout.respond(0,true);await flush();assert.equal(timeout.view.innerHTML,saved);assert.equal(timeout.doc.activeElement,elsewhere);
   }
  }
- console.log('PASS: all three actual stage counts/scores, Fibonacci alias qualification, artifact ciphertext equations/slot semantics, fixed declarations/fallback,16px fluid markup, independent shared caches, JSON/response timeouts, retry/focus/stale guards. Source/DOM only.');
+ console.log('PASS: all five actual stage/control counts/scores, compact-receipt declaration/validation/retry, Fibonacci alias qualification, artifact ciphertext equations/slot semantics,16px fluid markup, independent shared caches, JSON/response timeouts, focus/stale guards. Source/DOM only.');
 })().catch(error=>{console.error(error);process.exitCode=1});

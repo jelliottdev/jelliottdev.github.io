@@ -1,0 +1,369 @@
+{
+  "id": "payload-phase-skip-grid",
+  "status": "published",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "title": "Moving the number-grid key's starting position",
+  "question": "Do the exact source numeric2 Part B payload phases produce complete-page outputs above its fixed English gate under conditional skips?",
+  "reader_question": "Does moving the number-grid key help decode a page?",
+  "summary": "30,112 short checks select 234 complete-page decodes; none clears the source English-score bar. The new grid extends the earlier zero-start payload test with bounded nonzero phases.",
+  "finding": "Unchanged source Part B: 30,112 short screens, 234 full confirmations, no source-selected output >−5.5. Best −6.360651245809504 on LP2-49, reversed majority payload, sign −1, Atbash, offset 23. All 30,346 scores independently checked and 234 full paths reconstructed. Separate post-target audit: 34,827 terminal candidates, no >−5.5 crossings. Controls: 1,616 eligible, all score gates pass, 1,540 exact readings, 76 higher-cumulative alternatives; all true readings retained at ranks 2–5.",
+  "reader_finding": "None of the 234 complete-page results passed the source’s English-score test. The strongest result was on LP2-49; most settings stopped after the first 50 runes.",
+  "reader_limit": "Only four grid-derived keys and the source’s page-specific starting positions were tested. A good score can select an incorrect reading, and rejected short screens were not decoded as complete pages.",
+  "limitations": "The known-message controls are decoder cells, not full-search calibration. All 1,616 pass both gates but 76 return a different reading; 20 of those alternatives have worse normalized scores than the retained truth. No full-grid null significance, arbitrary phases, broad language or encryption-family exclusion.",
+  "next_steps": "Freeze an exact alternate grid interpretation or key clock before testing it, retain known-reading power checks, and require an independently confirmed reading before treating a score as decryption.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "payload key",
+    "conditional skips",
+    "source replay",
+    "key phase",
+    "English scorer"
+  ],
+  "related": [
+    "dukotah-payload-key-skip",
+    "numeric-stream-skip-grid",
+    "artifact-stream-skip-grid"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/payload-phase-skip-grid/frozen-plan.json",
+      "experiments/records/payload-phase-skip-grid/control-plan.json",
+      "experiments/records/payload-phase-skip-grid/streams.json",
+      "experiments/records/payload-phase-skip-grid/pages.json"
+    ],
+    "representation": "55 exact source GP29 page arrays, LP2-00–49 and LP2-51–55; canonical GP Latin labels scored with the pinned source English quadgrams.",
+    "procedure": "Run unchanged source numeric2 Part B with four payload interpretations and its page-specific phase bounds. Record every short output and confirm only source short-gate survivors. Independently rescore every output and reconstruct all complete survivors, best short output and best normalized terminal witnesses. Preserve source selection separately from a labelled post-target audit.",
+    "parameters": "Four source 256-byte streams tiled seven times to 1,792 values. For page length L, offsets range(max(1,268−L)); 1,882 page/offset pairs × four streams × two signs × two Atbash states = 30,112 screens. Screen 50/beam 60/strict >−6.5, survivor full beam 300/strict >−5.5, max three conditional key skips. 880 offset-zero labels overlap earlier payload work; 29,232 nonzero labels.",
+    "exclusions": "Source numeric2 Parts A/C, phases outside the executable page-length bounds, other payload constructions, clocks, languages, joined pages, full decoding of rejected short screens, general key-family exclusion or global null significance. Earlier offset-zero replay used another width, no short gate and another finite allocation."
+  },
+  "review": {
+    "kind": "Frozen bounded phase extension using unchanged source",
+    "reviewer": "Portable source replay, 1,616 pretarget controls, independent scalar scores/paths/plant reconstruction and post-target normalized-terminal audit",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "family": {
+    "id": "numeric-stream-skip-grid",
+    "title": "Numeric keys with conditional skips",
+    "question": "Can these numeric keys decode pages when key positions may be skipped?",
+    "baseline": "numeric-stream-skip-grid"
+  },
+  "variant": {
+    "label": "Payload phases within source page-length bounds",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/numeric-stream-skip-grid/frozen-plan.json",
+          "experiments/records/numeric-stream-skip-grid/streams.json",
+          "experiments/records/numeric-stream-skip-grid/pages.json"
+        ],
+        "after": [
+          "experiments/records/payload-phase-skip-grid/frozen-plan.json",
+          "experiments/records/payload-phase-skip-grid/control-plan.json",
+          "experiments/records/payload-phase-skip-grid/streams.json",
+          "experiments/records/payload-phase-skip-grid/pages.json"
+        ],
+        "reason": "Extend the payload-key starting positions with exact source Part B gates and allocation; preserve the bounded overlap with the earlier zero-offset payload replay."
+      },
+      {
+        "field": "procedure",
+        "before": "Unchanged source numeric sweep_keystream; source beam records all 50-rune screens and confirms only strict screen survivors on complete pages. Independent scalar reconstruction of every full survivor and maximum screen; independent rescore of all outputs.",
+        "after": "Run unchanged source numeric2 Part B with four payload interpretations and its page-specific phase bounds. Record every short output and confirm only source short-gate survivors. Independently rescore every output and reconstruct all complete survivors, best short output and best normalized terminal witnesses. Preserve source selection separately from a labelled post-target audit.",
+        "reason": "Extend the payload-key starting positions with exact source Part B gates and allocation; preserve the bounded overlap with the earlier zero-offset payload replay."
+      },
+      {
+        "field": "parameters",
+        "before": "33 labelled numeric streams at exact length1176 × 55 pages × signs −1/+1 × Atbash off/on × offsets0–4 =36,300 screens. Screen50/beam60/strict>−6.5; survivor full beam200/strict>−5.5; max3 conditional key skips.",
+        "after": "Four source 256-byte streams tiled seven times to 1,792 values. For page length L, offsets range(max(1,268−L)); 1,882 page/offset pairs × four streams × two signs × two Atbash states = 30,112 screens. Screen 50/beam 60/strict >−6.5, survivor full beam 300/strict >−5.5, max three conditional key skips. 880 offset-zero labels overlap earlier payload work; 29,232 nonzero labels.",
+        "reason": "Extend the payload-key starting positions with exact source Part B gates and allocation; preserve the bounded overlap with the earlier zero-offset payload replay."
+      },
+      {
+        "field": "exclusions",
+        "before": "841 Fibonacci seed pairs; other numeric catalogs, offsets, clocks, languages and joined pages; no full decoding of rejected screens, full-search null calibration, general key-family exclusion or proof of plaintext.",
+        "after": "Source numeric2 Parts A/C, phases outside the executable page-length bounds, other payload constructions, clocks, languages, joined pages, full decoding of rejected short screens, general key-family exclusion or global null significance. Earlier offset-zero replay used another width, no short gate and another finite allocation.",
+        "reason": "Extend the payload-key starting positions with exact source Part B gates and allocation; preserve the bounded overlap with the earlier zero-offset payload replay."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned numeric2 source, Part B only",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada2/numeric2_skip.py",
+      "note": "Exact source and grid byte interpretations bundled under MIT; other source branches excluded."
+    },
+    {
+      "label": "Earlier offset-zero payload replay",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-payload-key-skip",
+      "note": "880 overlapping labels; original width 320, no short gate and different finite key allocation."
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/payload-phase-skip-grid/payload-phases.svg",
+      "caption": "30,112 short checks select 234 complete-page decodes; none clears the source English-score bar."
+    }
+  ],
+  "reproduction": {
+    "command": "python experiments/records/payload-phase-skip-grid/controls.py --check && python experiments/records/payload-phase-skip-grid/run.py --check && python experiments/records/payload-phase-skip-grid/audit_terminal.py && python experiments/records/payload-phase-skip-grid/check.py && python experiments/records/payload-phase-skip-grid/plot.py --check",
+    "script": "experiments/records/payload-phase-skip-grid/run.py",
+    "script_sha256": "7bff10dd90ceb04040c47e494de9c0c4354ebce0007bd1b896094900ab606b8c",
+    "environment": "Python 3 and NumPy; original source, keys, model, manuscript and known readings bundled offline. Single process. Controls replay compares every deterministic field, ignoring only timings; target --check never overwrites expected bytes. Original target 18.90 seconds and controls 64.66 seconds. No external source cache required.",
+    "inputs": [
+      {
+        "path": "experiments/records/payload-phase-skip-grid/.gitattributes",
+        "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/article.md",
+        "sha256": "12e70c492904f22f04841f44b5e95a277601c898829e57fe9cf0df9fc6f395c9"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/audit_terminal.py",
+        "sha256": "3734d2a4c2055631de1e7b7bc63eba14066a7b5f53f6fe544785a6d363415ffd"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/check.py",
+        "sha256": "f54f47e5618ba4f42ef95ba6be309a7489f994b35442a0948d8ea20ba87b4a22"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/control-plan.json",
+        "sha256": "ffc99d163337ec6b416c3ce9a6acb28daa097df00b8cb31aad7a135863654a7f"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/control-results.json",
+        "sha256": "69158f9f9dd85c3b1c12c340ca7c859682d73d942783befa2efbe881469a3a67"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/controls.py",
+        "sha256": "066c5b681c66f5e4f4b76e504591ef2967163f615c27734e537b0cb4218e4195"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/engine.py",
+        "sha256": "1e7dfdfe92aec9b93769e98d68eff0e9a91b2a841c9ee8fc1c6dfc626c3b2b84"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/frozen-plan.json",
+        "sha256": "484899ec22c12674cd0af0586e5b39175f256f0db4d4208c77b0788100fe2cdb"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/known-readings.json",
+        "sha256": "de66e85c0cc475b5cd40c80367a38e751fe8273904057347b32f89368e081a86"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/labels.json",
+        "sha256": "97f6c985dbf9de8287dd41ed81fdf9ac141568cc4199d083efc3f6ea957ad638"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/pages.json",
+        "sha256": "66ea49e3c4c7095d6e9c61ffd7bbb81b07f8aec9ba11e721223fbc3ff4267c3d"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/plot.py",
+        "sha256": "5f138a200d621212a888ccc94d7dd0b70c9c30ffa3208025e638266c9c2ca15e"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/run.py",
+        "sha256": "7bff10dd90ceb04040c47e494de9c0c4354ebce0007bd1b896094900ab606b8c"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/scope.json",
+        "sha256": "43b9fdf04f6984bf6bc7d0bdf746cf03af0d2c3bc8aa1856d08a05eaed7d6f7a"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/campaign18_skip/armada/numeric_skip.py",
+        "sha256": "082e6f24a6ddc29fa9ea88c68e71d4a45d3de3d816e8ab2230d864cf64bee2de"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/campaign18_skip/armada2/numeric2_skip.py",
+        "sha256": "966b24b9397f2153231095f9974771ba9fcb4704d85340a4993489498a0789db"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/campaign18_skip/sweep.py",
+        "sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/pp49_51/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/pp49_51/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/data/keys/solved_plaintext.txt",
+        "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/autokey.py",
+        "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/solve.py",
+        "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/streams.json",
+        "sha256": "777282c56b0c306b5bc8cf3e1353a39662cd9cdfdd5821c255d865a27555ffb4"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/terminal-plan.json",
+        "sha256": "b2723a0b03711a86df3ff2e3f3b97f256349e63e50a0d5360bd215c63dcec7c9"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/payload-phase-skip-grid/independent-check.json",
+        "sha256": "8764cb2094c7876507f237327ed25b5a9fd16f3953e76ded4cafaabded2cf739"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/outputs.jsonl",
+        "sha256": "cf629f570d9975c004a0b7d993b64fd7212ae52743c208f8b7ce14492240be27"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/payload-phases.svg",
+        "sha256": "199a138aef1bd5022ab97b99f472c834f13399a5c07edb911f589c8714b21827"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/results.json",
+        "sha256": "647a4791fd7f83dcc739d542e77efd684b32b91abad007c0b6da9b48ee4f7e96"
+      },
+      {
+        "path": "experiments/records/payload-phase-skip-grid/terminal-audit.json",
+        "sha256": "b8f2d99bcf84a7cc928baba8045cc6f17bb7a86626263e6dc244856d48ca7f02"
+      }
+    ]
+  },
+  "article": "**None of the 234 complete-page results passed the source's English-score test.** This search moved the starting position of four keys derived from the manuscript's number grid, allowing key values to be skipped under a fixed repeated-rune rule. It checked the first 50 runes at **30,112 settings**; only 234 passed the short screen and received a whole-page decode. Their strongest score was **−6.361 on [LP2-49](#/page/lp2-49)**, below the source's −5.5 bar. This bounded search supplies no supported reading.\n\n![30,112 short screens select 234 complete-page checks. None clears the English-score bar; the strongest complete output on LP2-49 scores −6.361.](experiments/records/payload-phase-skip-grid/payload-phases.svg)\n\n## What moving the key means\n\nThe source preserves two different 256-byte interpretations of the LP2-49–51 number grid. Each is used forward and backward, giving four keys. A byte becomes its remainder modulo 29. The decoder normally consumes the next key value for each rune. It may skip up to three values before accepting the next—but only if **every skipped value would have repeated the preceding ciphertext rune**. The beam retains paths using an English four-letter score. This is a candidate rule, not evidence that the manuscript actually used such skips.\n\nAn [earlier payload-key experiment](#/experiments/dukotah-payload-key-skip) started all four keys at position zero. This source branch also tries later starting positions. Its “all-offset” label is broader than its code: for a page of L runes it uses starts `0…max(1,268−L)−1`. Long pages often receive only start zero. The 66-rune LP2-49 page receives starts 0–201. The 55 pages contribute 1,882 page/start pairs, multiplied by four keys, both arithmetic signs and Atbash off/on to give 30,112 short screens.\n\nThere are **880 zero-start labels overlapping the earlier experiment** and **29,232 labels with nonzero starts**. The algorithms are not identical even at zero: the earlier record used full beam 320 without a short gate and a different finite key allocation. This source branch repeats each 256-value key seven times, giving exactly 1,792 values; no tested path reaches zero padding. Its short beam is 60, with strict score greater than −6.5; selected pages use full beam 300, with strict score greater than −5.5. Parts A and C of the source program are excluded.\n\nThe strongest returned complete output uses the reversed first payload, subtraction, Atbash and start 23 on LP2-49. Starts count from zero: start 23 begins at the 24th stored key value. The strongest short output, −5.833, uses that same reversed payload on [LP2-54](#/page/lp2-54), addition, no Atbash and start 16; its short success does not become a full-page confirmation. These are settings of one payload-key idea, not thousands of independent solving ideas.\n\n## Known-message checks\n\nBefore the manuscript run, we froze and executed **1,616 decoder controls**: four keys, both signs and every phase 0–201, with a predetermined choice between two complete audited readings. We used the first seed in the frozen range that kept every planted step within three key skips; all attempts and all outcomes are retained. Every plant was eligible, **1,555 contained genuine skips**, and 61 contained none. Atbash inversion is algebraically the same decoder problem; 16 endpoint cases also reproduce the full output exactly. Duplicating every Atbash twin would not provide independent power evidence.\n\nAll 1,616 controls passed the short and full score gates, but **1,540 recovered every rune correctly**. In the other 76, the true reading was valid and still present in the final beam at ranks 2–5. The returned alternative had a strictly higher cumulative score in every case; there were no ties or pruned true readings. In 20 cases it had a worse normalized score than the true reading. A fixed wrong key passed both gates in **0 of 1,616** controls. These checks demonstrate useful recognition under the rule, with a clear exact-recovery limitation. They are not calibration of the complete manuscript search or proof that every known message would survive its page-length selection bounds.\n\n## Independent checks and a separate score audit\n\nThe source run took **18.90 seconds**. Its page arrays match the existing pinned transcription. A separate scalar implementation reconstructs every selected complete-page output and the best short output, re-scores every saved output, and independently reconstructs all 1,616 planted ciphertexts and skip lists. It checks the original page-specific phase bounds rather than replacing them with all 256 phases. All 2,048 complete signed cycles across four payload variants and 256 possible phases are distinct; no phase/sign quotient was used to omit target settings.\n\nAfter the original run, a separately frozen diagnostic inspected every retained terminal candidate. Across **34,827 candidates**, none passed −5.5; the best normalized candidate is also −6.361. Normalized ranking chooses a different candidate in 170 of the 234 full searches. The source's original cumulative-score selections remain unchanged. The independent checker also reconstructs and verifies each best-normalized terminal witness. This audit does not recover paths pruned earlier or decode rejected short screens as full pages.\n\nThe [frozen target plan](experiments/records/payload-phase-skip-grid/frozen-plan.json), [control plan](experiments/records/payload-phase-skip-grid/control-plan.json), [results](experiments/records/payload-phase-skip-grid/results.json) and complete output ledger retain the exact inputs and decisions. Original source, model, payload bytes and MIT license are bundled.\n\nThis result concerns four payload constructions, the executable phase bounds, source skip rule and fixed English scorer. No global null calibration was run. It does not exclude other grid interpretations, phases, key clocks, languages or encryption families, and does not establish an OTP explanation.\n\n## Reproduce offline\n\nWith Python 3 and NumPy, from the checkout or extracted bundle:\n\n```text\npython experiments/records/payload-phase-skip-grid/controls.py --check\npython experiments/records/payload-phase-skip-grid/run.py --check\npython experiments/records/payload-phase-skip-grid/audit_terminal.py\npython experiments/records/payload-phase-skip-grid/check.py\npython experiments/records/payload-phase-skip-grid/plot.py --check\n```\n\nThe control replay compares all numerical and recovery fields while ignoring only timing fields. The target replay compares every output byte and deterministic report field without overwriting expected results. No external source cache is needed.\n",
+  "article_path": "experiments/records/payload-phase-skip-grid/article.md",
+  "script_sha256": "7bff10dd90ceb04040c47e494de9c0c4354ebce0007bd1b896094900ab606b8c",
+  "method_topics": [
+    {
+      "id": "number-streams",
+      "title": "Arithmetic keystreams",
+      "aliases": [
+        "prime shifts",
+        "Fibonacci",
+        "totient sequence",
+        "arithmetic keystream",
+        "numerical sequence"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
+      ]
+    }
+  ]
+}

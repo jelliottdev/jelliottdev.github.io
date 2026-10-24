@@ -1,0 +1,30 @@
+{
+  "record": "payload-phase-skip-grid",
+  "fresh_zip_members": 45,
+  "manifest": "PASS",
+  "source_cache": false,
+  "commands": [
+    {
+      "command": "python experiments/records/payload-phase-skip-grid/controls.py --check",
+      "output": "Controls payload_majority -1 done 9.07 s\nControls payload_majority 1 done 17.46 s\nControls payload_majority_rev -1 done 24.88 s\nControls payload_majority_rev 1 done 33.26 s\nControls payload_decpref -1 done 41.64 s\nControls payload_decpref 1 done 50.12 s\nControls payload_decpref_rev -1 done 58.23 s\nControls payload_decpref_rev 1 done 66.5 s\nPASS all1616 control cells; expected files unchanged\n{\n  \"control_plan_sha256\": \"ffc99d163337ec6b416c3ce9a6acb28daa097df00b8cb31aad7a135863654a7f\",\n  \"cells\": 1616,\n  \"eligible\": 1616,\n  \"no_eligible\": 0,\n  \"exact_full\": 1540,\n  \"exact_screen\": 1501,\n  \"screen_pass\": 1616,\n  \"full_pass\": 1616,\n  \"both_gates\": 1616,\n  \"zero_skip\": 61,\n  \"wrong_both_gates\": 0,\n  \"atbash_parity\": 16,\n  \"elapsed_seconds\": 66.49627459992189\n}"
+    },
+    {
+      "command": "python experiments/records/payload-phase-skip-grid/run.py --check",
+      "output": "PASS complete PartB source replay; expected files unchanged\n{\n  \"plan_sha256\": \"484899ec22c12674cd0af0586e5b39175f256f0db4d4208c77b0788100fe2cdb\",\n  \"screens\": 30112,\n  \"full_survivors\": 234,\n  \"source_gate_passes\": 0,\n  \"elapsed_seconds\": 18.12085379997734\n}"
+    },
+    {
+      "command": "python experiments/records/payload-phase-skip-grid/audit_terminal.py",
+      "output": "Audit 34827 candidates; abovegate 0 best -6.360651245809504 elapsed 7.11"
+    },
+    {
+      "command": "python experiments/records/payload-phase-skip-grid/check.py",
+      "output": "PASS independent 1616 plants; 30346 scores; 234 full paths; failures Counter({'strictly_higher_alternative': 76}) truth retained 76"
+    },
+    {
+      "command": "python experiments/records/payload-phase-skip-grid/plot.py --check",
+      "output": "PASS deterministic SVG"
+    }
+  ],
+  "elapsed_seconds": 106.66983010002878,
+  "shared_builds": false
+}

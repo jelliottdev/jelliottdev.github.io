@@ -24,3 +24,14 @@ onChange({matches:true});assert.deepEqual(sections.map(s=>s.open),[true,false]);
 onChange({matches:false});assert(sections.every(s=>s.open),'Returning to desktop retains the expanded article behavior');
 sections=[];onChange({matches:true});
 console.log('PASS: mobile breakpoint retains active and deep-linked passages, respects closed sections, handles missing targets, and preserves desktop expansion. DOM stubs do not verify rendering.');
+
+// Automatic provenance/tool/navigation panels must not reappear below authored prose.
+const authored='<p>Measured finding with an <a href="#/experiments/example">inline source</a>.</p>';
+context.db={articles:[{id:'example',title:'Example',summary:'Summary',category:'Analysis and reproduction',html:authored,pages:['lp2-04']},{id:'backlink',linked_articles:['example']}],guideCategories:[]};
+context.DOMParser=class{parseFromString(){return {body:{children:[],innerHTML:authored},querySelectorAll(){return []}}}};
+context.head=()=>'<header>Example</header>';context.esc=String;
+context.footer=()=>'<footer>Source snapshot: repeated footer</footer>';
+const rendered=vm.runInContext("wikiPage('example')",context);
+assert(rendered.includes(authored),'Authored findings and contextual source links remain');
+assert(!/article-tools|article-related|Source snapshot|Page tools|Related pages and guides/.test(rendered),'No automatic article-end boilerplate');
+console.log('PASS: wiki articles preserve authored sources without automatic related/tool/provenance panels.');

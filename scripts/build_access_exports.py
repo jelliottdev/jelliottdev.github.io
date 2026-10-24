@@ -207,6 +207,11 @@ register('exports/grid-binary-audit.json','Grid binary audit')
 register('exports/jpeg-byte-audit.json','JPEG byte audit')
 register('exports/jpeg-byte-audit-lp1.json','First-release JPEG byte audit')
 register('exports/gap-file-sizes.json','Gap file-size audit')
+
+for path in ['exports/line-gap-measurements.json','exports/line-gap-measurements.csv','scripts/build_line_gap_measurements.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/line-gaps').glob('*.svg'))]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Line-gap measurements')
+ files[-1].update(guide='line-gaps',aliases=['vertical line spacing','pixel gaps','space between lines','annotated line gaps'])
+
 register('exports/branch-margin-alignment.json','Image window comparison')
 register('exports/figures/branch-alignment-overlay.png','Analysis figure')
 register('exports/branch-margin-reuse.json','Image window comparison')
@@ -793,7 +798,7 @@ for experiment in read('data/experiments.json')['records']:
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Historical later-message image','Original JPEG','Page-only JPEG','Historical page copy','Archived seventh-onion JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.update({'Known-reading vocabulary map', 'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Idea checker retrieval evidence', 'Structured experiment record'})
+ if name=='reference-data':roles.update({'Line-gap measurements', 'Known-reading vocabulary map', 'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Idea checker retrieval evidence', 'Structured experiment record'})
  if name=='reference-data':roles.update({'Mathematical illustration','Idea coverage notes','Britannica book-code evidence','Word reset bound','Position divisor bound','Polynomial stream bound','Historical printed spelling evidence','Parable audio evidence','Repeated marker audit','Transcription layer inventory','Wing and Tree window audit','Later-message arithmetic','Historical later-message provenance','Geometric mapping audit','Historical second-chance provenance','Grid prime-path audit','Emirp chain audit','Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical puzzle reconstruction','Historical transcription source','Historical generated candidate output','Historical transcription comparison','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles]
  if name=='reference-data':

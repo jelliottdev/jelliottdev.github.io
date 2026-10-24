@@ -78,11 +78,10 @@ function wikiPage(id='') {
   button.textContent='Copy';button.setAttribute('aria-label',`Copy text block ${i+1}`);
   tools.append(status,wrap,button);pre.replaceWith(wrapper);wrapper.append(tools,pre);
  });
- const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
  const breadcrumb=wikiBreadcrumb(a);
  return head(a.title,esc(a.summary),breadcrumb.label,breadcrumb.href)+`<div class="article-grid"><article class="wiki-article${topSections.length?' wiki-sectioned':''}">
  <details class="mobile-article-contents"><summary>On this page</summary>${contentsHTML}</details>
- ${doc.body.innerHTML}${a.pages?.length||backlinks.length?`<details class="article-related"><summary>Related pages and guides</summary>${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}</details>`:''}<details class="article-tools"><summary>Page tools</summary><p><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p></details>${footer()}</article>
+ ${doc.body.innerHTML}</article>
  <aside class="contents"><strong>On this page</strong>${contentsHTML}</aside></div>`;
 }
 window.matchMedia('(max-width:760px)').addEventListener('change',event=>{
