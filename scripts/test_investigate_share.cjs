@@ -32,7 +32,7 @@ async function until(predicate){const end=Date.now()+5000;while(Date.now()<end){
   if(url==='data/experiments.json')return Response.json(registry);
   if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.invalid/ask'});
   return Response.json({documents:[]});
- },sharer:(snapshot,url)=>{shares++;assert.equal(snapshot,app.getSnapshot().confirmed);assert.equal(url,'https://jelliottdev.github.io/investigate.html');return shareResponse||new Promise(r=>releaseShare=r);}});
+ },sharer:(snapshot,url)=>{shares++;assert.equal(snapshot,app.getSnapshot().confirmed);assert.equal(url,'https://jelliottdev.github.io/investigate.html?v=complete-current-20261024');const shared=H.link(snapshot,url);assert.equal(new URL(shared).search,'?v=complete-current-20261024');assert.equal(new URL(shared).hash,H.encode(snapshot));assert.deepEqual(H.decode(new URL(shared).hash).draft.scope.value,snapshot.scope.value);return shareResponse||new Promise(r=>releaseShare=r);}});
  await app.ready;assert.equal(posts,0);assert.equal(app.getSnapshot().stage,'review');
  assert.equal(app.getSnapshot().confirmed,null);assert(!doc.getElementById('share-idea'));
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15']);

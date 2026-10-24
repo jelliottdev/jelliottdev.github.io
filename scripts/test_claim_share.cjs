@@ -43,6 +43,11 @@ function canvasDocument(){const texts=[],rectangles=[];return {texts,rectangles,
  });
  await test('link removes old query/source hints and uses a bounded same-page fragment only',()=>{
   const url=S.link(make(),'https://example.test/investigate.html?q=PRIVATE#old');assert(url.startsWith('https://example.test/investigate.html#idea='));assert(!url.includes('PRIVATE'));assert(url.length<=16000);
+  const versioned=S.link(make(),'https://example.test/investigate.html?v=complete-current-20261024&q=PRIVATE&pages=LP2-15#old');
+  assert.equal(new URL(versioned).search,'?v=complete-current-20261024');
+  assert(!versioned.includes('PRIVATE'));assert(!versioned.includes('pages='));
+  assert.equal(new URL(versioned).hash,S.encode(make()));assert.deepEqual(S.decode(new URL(versioned).hash).draft.method.value.operations,S.cardData(make()).method.value.operations);
+  assert.equal(new URL(S.link(make(),'https://example.test/investigate.html?v=PRIVATE')).search,'');
   assert.throws(()=>S.link(make(),'javascript:alert(1)'));
  });
  await test('canvas has measured complete wrapping and refuses clipping or failed PNG output',async()=>{

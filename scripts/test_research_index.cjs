@@ -128,7 +128,7 @@ const app=fs.readFileSync(path.join(root,'app.js'),'utf8'),shell=fs.readFileSync
 assert(app.includes("type==='research'"));assert(app.includes('ResearchIndex.legacyHref'));
 assert(app.includes('ResearchIndex.position(main)'));assert(app.includes('ResearchIndex.remember(main,window.scrollY)'));
 assert(shell.includes('site-navigation.js'),'The shared drawer owns research navigation');
-assert.equal(require('../site-navigation.js').primary.filter(([,href])=>href==='research.html?v=workspace-20261024b').length,1);
+assert.equal(require('../site-navigation.js').primary.filter(([,href])=>new URL(href,'https://example.org/').pathname==='/research.html').length,1);
 console.log('PASS: focused checker has no archive/page picker; natural-language pages and old page links remain usable; directory route/navigation/scroll hooks are installed. No live model requests.');
 
 const lifecycleGuard=setTimeout(()=>{console.error('Research lifecycle test did not finish');process.exitCode=1},5000);

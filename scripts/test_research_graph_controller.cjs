@@ -35,9 +35,10 @@ function fixture({width=1000,height=700,focus='root',real=false,panelFraction=.4
  const panel={hidden:true,getBoundingClientRect:()=>panel.hidden?rect(0,0,0,0):rect(12,height*(1-panelFraction)-12,width-24,height*panelFraction),getClientRects:()=>panel.hidden?[]:[panel.getBoundingClientRect()]};
  const controls={getBoundingClientRect:()=>rect(width-60,!panel.hidden&&width<=760?height*(1-panelFraction)-145:height-150,40,120)};
  const help={getBoundingClientRect:()=>!panel.hidden&&width<=760?rect(0,0,0,0):rect(22,height-54,105,36),getClientRects:()=>!panel.hidden&&width<=760?[]:[help.getBoundingClientRect()]};
- const map={getBoundingClientRect:()=>rect(0,0,width,height),querySelector:selector=>selector==='.map-help'?help:controls,querySelectorAll:()=>[controls,help]};
+ const list={inert:false},map={inert:false,getBoundingClientRect:()=>rect(0,0,width,height),querySelector:selector=>selector==='.map-help'?help:controls,querySelectorAll:()=>[controls,help]};
  const c={ResearchGraphGeometry:G,CSS:{escape:s=>s},getComputedStyle:el=>({display:el.hidden||!el.getBoundingClientRect().width?'none':'block'}),camera:{x:width/2,y:height/2,k:1},world,map,panel,innerWidth:width,state:{mode:'graph',record:'',colour:'methods'},nodes,focus:nodes.get(focus),data:{records},matching:new Set(Object.keys(records)),layout:new Map(),labelNodes:[],worldBounds:{},worldHeight:600,aliases:{},resultColours:{},$:id=>id==='about-button'?help:null,esc:s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'),navigate:change=>events.push(change)};
- vm.createContext(c);vm.runInContext(source.match(/^ const count=.*$/m)[0],c);for(const name of ['passes','lines','branchBelow','position','paintGraph','applyCamera','availableMapHeight','recordNode','revealSelection','fit','activate'])vm.runInContext(production(name),c);
+ c.$=id=>id==='research-list'?list:id==='about-button'?help:null;c.list=list;
+ vm.createContext(c);vm.runInContext(source.match(/^ const count=.*$/m)[0],c);for(const name of ['passes','lines','branchBelow','position','paintGraph','applyCamera','availableMapHeight','recordNode','revealSelection','updatePreviewMode','fit','activate'])vm.runInContext(production(name),c);
  c.position();c.paintGraph();return{c,groups,events,width,height};
 }
 function visibleBoxes(f){return[...f.groups].filter(([,el])=>el.group.style.display!=='none').map(([id,el])=>{const m=el.group.attrs.transform.match(/^translate\(([-\d.e]+) ([-\d.e]+)\)/),b=el.group.getBBox();return{id,x:f.c.camera.x+Number(m[1])*f.c.camera.k,y:f.c.camera.y+Number(m[2])*f.c.camera.k,width:b.width,height:b.height+4}})}
@@ -64,18 +65,17 @@ for(const width of [320,390,768,1440]){
  const boxes=visibleBoxes(f);assert(boxes.length>1);for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)assert(!G.intersects(boxes[i],boxes[j],8));
  for(const box of boxes){assert(box.x>=8&&box.y>=8);assert(box.x+box.width<=width-8+1e-8);assert(box.y+box.height<=592+1e-8);assert(!G.intersects(box,{x:width-66,y:444,width:52,height:132},8),'Label must not cover the fixed zoom controls')}
 }
-const panelFit=fixture({width:390,height:600,real:true,focus:'aim:unplaced'});panelFit.c.panel.hidden=false;panelFit.c.fit();const pb=panelFit.c.worldBounds,pc=panelFit.c.camera;assert((pb.y+pb.height)*pc.k+pc.y<=320.001,'Mobile fit reserves the visible inspector height');
-// Crowded real Combined ciphers branch: the actual mobile inspector rectangle is
-// an obstacle at every zoom, not merely an estimated height used by Fit.
+const panelFit=fixture({width:390,height:600,real:true,focus:'aim:unplaced'});panelFit.c.panel.hidden=false;panelFit.c.updatePreviewMode();panelFit.c.fit();const pb=panelFit.c.worldBounds,pc=panelFit.c.camera;assert.equal(panelFit.c.availableMapHeight(),600,'The mobile reader replaces the map, rather than shrinking its saved viewport');assert((pb.y+pb.height)*pc.k+pc.y<=590.001);assert(panelFit.c.map.inert&&panelFit.c.list.inert);
+// Crowded Combined ciphers stays readable when the graph is exposed. Opening a
+// mobile record replaces that workspace and must not pan a hidden graph behind it.
 for(const width of [320,390])for(const panelFraction of [.4,.55,.7,.8]){
- const f=fixture({width,height:650,real:true,focus:'method:combined',panelFraction});f.c.panel.hidden=false;f.c.fit();
- for(const scale of [f.c.camera.k,.8,1.8]){f.c.camera.k=scale;f.c.applyCamera();const inspector=f.c.panel.getBoundingClientRect(),boxes=visibleHitBoxes(f);assert(boxes.length>0,JSON.stringify({width,panelFraction,scale}));
-  for(const box of boxes)assert(!G.intersects(box,inspector),'A displayed label or its click rectangle must never sit underneath the mobile preview');
+ const f=fixture({width,height:650,real:true,focus:'method:combined',panelFraction});f.c.fit();
+ for(const scale of [f.c.camera.k,.8,1.8]){f.c.camera.k=scale;f.c.applyCamera();const boxes=visibleHitBoxes(f);assert(boxes.length>0,JSON.stringify({width,panelFraction,scale}));
   for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)assert(!G.intersects(boxes[i],boxes[j]),'Padded title hit rectangles must not overlap');
   for(const box of boxes){const target=f.groups.get(box.id).group.hit.closest('[data-node]');assert.equal(target.getAttribute('data-node'),box.id)}
  }
- const selected=f.c.labelNodes.find(n=>n.record);assert(selected);f.c.state.record=selected.n.record_id;f.c.camera={x:-900,y:1200,k:1.8};f.c.revealSelection();
- const x=f.c.camera.x+selected.p.x*f.c.camera.k,y=f.c.camera.y+selected.p.y*f.c.camera.k;
- assert.equal(f.c.camera.k,1.8,'Selecting a record must pan without discarding the current zoom');assert(x>=32&&x<=width-32);assert(y>=32&&y<=f.c.availableMapHeight()-32,'Selected marker must pan above the actual preview, not a fixed55% guess');
+ const selected=f.c.labelNodes.find(n=>n.record);assert(selected);f.c.state.record=selected.n.record_id;f.c.panel.hidden=false;f.c.updatePreviewMode();f.c.camera={x:-900,y:1200,k:1.8};const savedCamera={...f.c.camera};f.c.revealSelection();
+ assert.deepEqual(f.c.camera,savedCamera,'Mobile record selection cannot move the hidden map');assert(f.c.map.inert&&f.c.list.inert,'Underlying map and List keyboard targets are unavailable');
+ f.c.panel.hidden=true;f.c.updatePreviewMode();assert(!f.c.map.inert&&!f.c.list.inert,'Back makes the retained workspace interactive again');
 }
 console.log('PASS production graph VM: screen-constant marks/hits and non-scaling strokes; collision-free measured-stub labels; deep reveal/activation; actual dense-branch fit bounds at320/390/768/1440. CSS/font/browser QA remains separate.');

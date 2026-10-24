@@ -105,7 +105,7 @@
   const draft=C.createDraft({source:{text:summary,origin:'shared_link'},aim:field(p.outcome),method:field(p.method),scope:field(p.scope),rules:Object.fromEntries(Object.entries(p.rules).map(([k,f])=>[k,field(f)])),unresolved:p.unresolved});
   return {draft,acknowledged:{aim:true,scope:true},version:VERSION};
  }
- function link(spec,baseURL){const url=new URL(baseURL);if(!['http:','https:'].includes(url.protocol))throw Error('Sharing needs an HTTP(S) page URL');url.search='';url.hash=encode(spec);const result=url.href;if(result.length>MAX_URL)throw Error('Shared URL exceeds 16,000 characters');return result;}
+ function link(spec,baseURL){const url=new URL(baseURL);if(!['http:','https:'].includes(url.protocol))throw Error('Sharing needs an HTTP(S) page URL');const entryVersion=url.searchParams.get('v');url.search='';if(entryVersion==='complete-current-20261024')url.searchParams.set('v',entryVersion);url.hash=encode(spec);const result=url.href;if(result.length>MAX_URL)throw Error('Shared URL exceeds 16,000 characters');return result;}
  function wrap(ctx,text,maxWidth){
   const lines=[];
   for(const paragraph of text.split('\n')){

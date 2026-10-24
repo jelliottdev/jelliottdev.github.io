@@ -476,7 +476,7 @@
    if(!confirmed||shareBusy)return;
    const snapshot=confirmed;shareBusy=true;shareNotice='';shareFallback=null;updateShare();
    try{
-    const base='https://jelliottdev.github.io/investigate.html';
+    const base='https://jelliottdev.github.io/investigate.html?v=complete-current-20261024';
     const response=await sharer(snapshot,base,{document:doc,preparedPNG:preparedFor===snapshot?preparedCard:null});
     if(confirmed!==snapshot)return;
     if(response.status==='shared')shareNotice='';

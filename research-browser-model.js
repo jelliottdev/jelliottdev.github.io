@@ -5,7 +5,7 @@
     const data=structuredClone(source),current=new Map(registry.records.filter(r=>r.status==='published').map(r=>[r.id,r]));
     for(const [id,record] of current){
       const prior=data.records[id]||{};
-      data.records[id]={...prior,...record,pages:record.scope.pages,href:'library.html?v=workspace-20261024b#/experiment/'+encodeURIComponent(id)};
+      data.records[id]={...prior,...record,pages:record.scope.pages,href:'library.html?v=record-panel-20261024#/experiment/'+encodeURIComponent(id)};
     }
     for(const id of Object.keys(data.records))if(!current.has(id))delete data.records[id];
     const original=new Map(Object.values(data.views).flatMap(view=>view.nodes).map(n=>[n.id,n]));
