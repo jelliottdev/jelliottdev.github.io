@@ -11,6 +11,7 @@ const qa=`window.__investigateMockCore=async function(url,options){
   const text=JSON.parse(options.body).text,source=quote=>({start:text.indexOf(quote),quote});
   const known=text==='Try reversing rune order within each row on LP2-15, preserving word boundaries.';
   const candidate={schema:ClaimInterpretation.SCHEMA,outcome:null,steps:[{id:known?'reverse_row_runes':'described_method',familyId:known?'transposition':null,source:source(text),parameters:{}}],scope:known?{pages:['lp2-15'],passage:null,source:source('LP2-15')}:null,rules:known?{wordBoundaries:{status:'specified',value:'preserve',source:source('preserving word boundaries')}}:{}};
+  if(proposalMode==='interpret-reset'&&text==='Use Vigenere with key ABC. Reset the key at each word.')candidate.rules.reset={status:'specified',value:'Reset the key at each word.',source:source('Reset the key at each word.')};
   const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
   return Response.json({candidate,sourceBinding:[...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('')});
  }
@@ -50,7 +51,7 @@ http.createServer((req,res)=>{
   let bytes=fs.readFileSync(file);
   if(url.pathname==='/investigate.html')bytes=Buffer.from(bytes.toString().replace(/<script src="investigate\.js(?:\?[^"]*)?">/,tag=>'<script src="/__qa.js"></script>'+tag));
   if(url.pathname==='/investigate.js')bytes=Buffer.from(bytes.toString().replace('createApp(root.document);',"createApp(root.document,{fetcher:root.__investigateMock||(()=>Promise.reject(Error('QA mock unavailable; network disabled')))});"));
-  const types={'.html':'text/html','.js':'text/javascript','.json':'application/json','.css':'text/css'};
-  res.setHeader('Content-Type',(types[path.extname(file)]||'application/octet-stream')+'; charset=utf-8');res.end(bytes);
+  const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'};
+  res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');res.end(bytes);
  }catch{res.writeHead(404).end();}
 }).listen(4397,'127.0.0.1',()=>console.log('Mock-only investigate QA: http://127.0.0.1:4397/investigate.html'));

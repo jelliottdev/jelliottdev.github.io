@@ -174,6 +174,13 @@
   function specified(f,value){return f.status==='specified'&&(arguments.length===1||f.value===value);}
   function questions(spec){
     const result=[];
+    for(const constraint of spec.unresolved.filter(c=>c?.kind==='changed_method_rule'&&RULES.includes(c.field))){
+      result.push({id:'rule-review:'+constraint.field,prompt:'Does this condition still apply?',
+        context:ruleText(constraint.field,spec.rules[constraint.field]),choices:[
+          {id:'keep',label:'Keep this condition'},
+          {id:'replace',label:'Replace it',requiresText:true,fieldLabel:'Write the condition for the edited method'},
+          {id:'remove',label:'Remove this condition'}]});
+    }
     if(spec.unresolved.some(c=>c&&c.kind==='operation_ambiguity'))result.push({id:'operation',prompt:'What should be reversed?',choices:[
       {id:'reverse_row_runes',label:OPERATIONS.reverse_row_runes,example:'13,19,37 → 37,19,13'},
       {id:'reverse_value_digits',label:OPERATIONS.reverse_value_digits,example:'13,19,37 → 31,91,73'},
@@ -199,6 +206,12 @@
     if(own(patch,'rules'))for(const [key,value] of Object.entries(patch.rules)){
       if(!RULES.includes(key))throw Error('Unknown rule; append an unresolved constraint');
       next.rules[key]=checkedField(value);
+      if(next.rules[key].status!=='unspecified'){
+        const linked=(draft.rules[key].provenance.refs||[]).filter(ref=>/^method:operation:\d+$/.test(ref));
+        next.rules[key].provenance.refs=[...new Set([...next.rules[key].provenance.refs,...linked])];
+      }
+      // An explicit rule edit also resolves its dependency on an older step.
+      next.unresolved=next.unresolved.filter(c=>!(c?.kind==='changed_method_rule'&&c.field===key));
     }
     if(own(patch,'appendUnresolved')){
       if(!Array.isArray(patch.appendUnresolved))throw Error('Invalid constraints');
@@ -213,6 +226,16 @@
       next.rules.boundaryMode=field();
     }
     return next;
+  }
+  function sourceRanges(provenance,text){
+    return (provenance?.refs||[]).flatMap(ref=>{
+      try{
+        const span=JSON.parse(ref);
+        return span?.source==='original wording'&&Number.isInteger(span.start)&&Number.isInteger(span.end)&&
+          span.start>=0&&span.end>span.start&&span.end<=text.length&&typeof span.quote==='string'&&
+          text.slice(span.start,span.end)===span.quote?[span]:[];
+      }catch{return [];}
+    });
   }
   function applyMethodEdit(draft,edit){
     if(!edit||!['add','remove','move','wording','replace','category'].includes(edit.type))throw Error('Unknown method edit');
@@ -264,6 +287,27 @@
     // Empty method retains its history outside active semantics.
     const method=list.length?field('specified',value,{kind:'user_clarification',refs:['method:edit']}):field();
     const next=revise(draft,{method});next.unresolved=unresolved;
+    // Keep the dependency through user clarification and sibling reordering.
+    // These links are draft provenance, not new cipher parameters.
+    for(const rule of Object.values(next.rules))rule.provenance.refs=rule.provenance.refs.flatMap(ref=>{
+      const match=ref.match(/^method:operation:(\d+)$/);
+      if(!match)return [ref];
+      const destination=map[Number(match[1])];
+      return Number.isInteger(destination)?['method:operation:'+destination]:[];
+    });
+    if(old&&(changedIndex!==null||edit.type==='remove')){
+      const spans=sourceRanges(old.provenance,draft.source.text);
+      for(const key of RULES){
+        if(next.rules[key].status==='unspecified')continue;
+        const dependent=draft.rules[key].provenance.refs.includes('method:operation:'+edit.index)||sourceRanges(draft.rules[key].provenance,draft.source.text)
+          .some(rule=>spans.some(step=>rule.start<step.end&&step.start<rule.end));
+        if(dependent){
+          const destination=map[edit.index];
+          if(Number.isInteger(destination))next.rules[key].provenance.refs=[...new Set([...next.rules[key].provenance.refs,'method:operation:'+destination])];
+          if(!next.unresolved.some(c=>c?.kind==='changed_method_rule'&&c.field===key))next.unresolved.push({kind:'changed_method_rule',field:key});
+        }
+      }
+    }
     next.methodEdits=[...(draft.methodEdits||[]),receipt];
     return next;
   }
@@ -272,7 +316,12 @@
     if(!question||!question.choices.some(c=>c.id===choice))throw Error('Unavailable clarification');
     const provenance={kind:'user_clarification',refs:[id]};
     let next;
-    if(choice==='other'){
+    if(id.startsWith('rule-review:')){
+      const key=id.slice('rule-review:'.length);
+      if(choice==='replace'&&(typeof text!=='string'||!text.trim()))throw Error('Write the replacement condition.');
+      const current=draft.rules[key];
+      next=revise(draft,{rules:{[key]:choice==='remove'?field():choice==='replace'?field('specified',text.trim(),provenance):field(current.status,current.value,provenance)}});
+    }else if(choice==='other'){
       if(typeof text!=='string'||!text.trim())throw Error('Other needs an explanation');
       next=revise(draft,{appendUnresolved:[{kind:'custom_interpretation',question:id,text,provenance}]});
       // Preserve the ambiguity until a supported interpretation is explicitly
@@ -291,7 +340,7 @@
     }else{
       next=revise(draft,{rules:{boundaryMode:field('specified',choice,provenance)}});
     }
-    next.clarifications.push({question:id,choice,...(choice==='other'?{text}:{}),revision:next.revision});
+    next.clarifications.push({question:id,choice,...(['other','replace'].includes(choice)?{text}:{}),revision:next.revision});
     return next;
   }
   function completeness(spec){

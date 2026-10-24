@@ -474,7 +474,7 @@
   function questionsHTML(){
    if(stage!=='review')return '';
    const q=intakeQuestions(draft)[0];if(!q)return '';
-   return '<form id="clarification" class="question"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
+   return '<form id="clarification" class="question"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
@@ -534,7 +534,7 @@
      const previous={stage,draft,confirmed,result,packet,message,error};
      const revised=C.clarify(draft,q.id,choice,text);
      editingBackup=previous;draft=revised;editing=true;message='Your explanation is kept. Edit the method wording to make the interpretation explicit.';
-    }else{draft=C.clarify(draft,q.id,choice);message='';}
+    }else{draft=C.clarify(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}
     error='';render();focus(editing?'#edit-method':'#review-title');
    });
    doc.getElementById('confirm')?.addEventListener('click',()=>{

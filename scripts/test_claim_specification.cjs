@@ -137,6 +137,43 @@ test('changed wording retires exact semantics with full history; category is sep
  const replaced=C.applyMethodEdit(d,{type:'replace',index:0,operation:{id:'caesar_shift',shift:3}});assert.equal(replaced.method.value.operations[0].key,undefined);
  assert.throws(()=>C.applyMethodEdit(d,{type:'move',index:0,toIndex:2}));assert.throws(()=>C.applyMethodEdit(d,{type:'category',index:0,familyId:'visitor-family'}));
 });
+test('editing a source-linked step requires review of its extracted rules without guessing replacements',()=>{
+ const P=require('../claim-interpretation.js'),R=require('../claim-research.js');
+ const raw='Use Vigenere with key ABC. Reset the key at each word. Use only black runes.';
+ const step='Use Vigenere with key ABC. Reset the key at each word.',rule='Reset the key at each word.';
+ const source=quote=>({start:raw.indexOf(quote),quote});
+ const d=P.toDraft(raw,{schema:P.SCHEMA,outcome:null,
+  steps:[{id:'described_method',familyId:'polyalphabetic',source:source(step),parameters:{}}],scope:null,
+  rules:{reset:{status:'specified',value:rule,source:source(rule)},representation:{status:'specified',value:'Use only black runes.',source:source('Use only black runes.')}}}).draft;
+ const changed=C.applyMethodEdit(d,{type:'wording',index:0,text:'Use Vigenere with key ABC. Reset the key at each page.'});
+ assert.equal(changed.rules.reset.value,rule,'Old condition stays visible until explicitly resolved');
+ assert.deepEqual(changed.rules.representation,d.rules.representation,'Independent source condition stays exact');
+ assert.deepEqual(C.questions(changed).map(q=>q.id),['rule-review:reset']);
+ assert.equal(C.completeness(changed).researchReady,false);assert.throws(()=>confirmed(changed));
+ const replaced=C.clarify(changed,'rule-review:reset','replace','Reset the key at each page.');
+ assert.equal(replaced.rules.reset.value,'Reset the key at each page.');assert.equal(C.questions(replaced).length,0);
+ assert.equal(replaced.source.text,raw);assert.deepEqual(replaced.rules.representation,d.rules.representation);
+ assert(!R.prepare(confirmed(replaced)).request.card.rules.reset.value.includes('word'));
+ assert.throws(()=>C.clarify(changed,'rule-review:reset','replace','  '));
+ const kept=C.clarify(changed,'rule-review:reset','keep');assert.equal(kept.rules.reset.value,rule);assert.equal(C.questions(kept).length,0);
+ for(const resolved of [kept,replaced]){
+  const editedAgain=C.applyMethodEdit(resolved,{type:'wording',index:0,text:'Use Vigenere with key ABC. Reset the key at each line.'});
+  assert.deepEqual(C.questions(editedAgain).map(q=>q.id),['rule-review:reset'],'Resolving a review retains its dependency for later edits');
+  assert.equal(C.questions(C.applyMethodEdit(resolved,{type:'remove',index:0}))[0].id,'rule-review:reset');
+  const withSibling=C.applyMethodEdit(resolved,{type:'add',index:0,operation:{id:'atbash'}});
+  assert.equal(C.questions(C.applyMethodEdit(withSibling,{type:'wording',index:0,text:'Apply Caesar shift 3'})).length,0,'A new sibling does not inherit the old dependency');
+  const moved=C.applyMethodEdit(withSibling,{type:'move',index:1,toIndex:0});
+  assert.equal(C.questions(C.applyMethodEdit(moved,{type:'wording',index:0,text:'Reset the key at each line.'}))[0].id,'rule-review:reset');
+ }
+ const removed=C.clarify(changed,'rule-review:reset','remove');assert.equal(removed.rules.reset.status,'unspecified');assert.equal(C.questions(removed).length,0);
+ const manual=C.revise(changed,{rules:{reset:known('Restart each page')}});assert.equal(C.questions(manual).length,0);
+ const again=C.applyMethodEdit(changed,{type:'wording',index:0,text:'Use a different key stream.'});assert.deepEqual(C.questions(again).map(q=>q.id),['rule-review:reset'],'Further edits cannot drop the pending decision');
+ for(const edit of [{type:'remove',index:0},{type:'replace',index:0,operation:{id:'atbash'}}])assert.equal(C.questions(C.applyMethodEdit(d,edit))[0].id,'rule-review:reset');
+ for(const edit of [{type:'wording',index:0,text:step},{type:'category',index:0,familyId:'polyalphabetic'},{type:'add',index:1,operation:{id:'atbash'}},{type:'move',index:0,toIndex:0}])assert.equal(C.questions(C.applyMethodEdit(d,edit)).length,0,'No rule review for unchanged meaning, category, new independent step or reorder');
+ const invalid=C.createDraft({...d,rules:{...d.rules,reset:C.field('specified',rule,{kind:'proposed',refs:[JSON.stringify({source:'original wording',start:0,end:step.length,quote:'not the source'})]})}});
+ assert.equal(C.questions(C.applyMethodEdit(invalid,{type:'wording',index:0,text:'Different method'})).length,0,'Unverified offsets cannot establish a dependency');
+});
+
 test('exact scope normalizes harmless order/duplicates but keeps holes and explicit empty sets',()=>{
  assert.deepEqual(draft().scope.value.pages,['lp2-15','lp2-17']);
  assert.deepEqual(C.pages(['lp2-57','lp1-16']),['lp1-16','lp2-57']);

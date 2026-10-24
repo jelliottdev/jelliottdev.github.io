@@ -35,7 +35,7 @@ function fakeDocument(){
    }
    return cache.get(id);
   },
-  querySelector(selector){if(selector.startsWith('#'))return this.getElementById(selector.slice(1));return null;}
+  querySelector(selector){if(selector==='input[name=choice]:checked')return this.selectedChoice?{value:this.selectedChoice}:null;if(selector.startsWith('#'))return this.getElementById(selector.slice(1));return null;}
  };
 }
 async function appFor(text){
@@ -102,6 +102,29 @@ function save(doc){doc.getElementById('editor').fire('submit');assert(!doc.getEl
  assert(query.query.includes('"status":"not_applicable"'));assert(query.query.includes('"status":"unrestricted"'));
  assert.deepEqual(query.pages,['lp2-17','lp2-19']);
  second.app.destroy();
+
+ // A source-linked condition must not survive a contradictory method edit
+ // without a visible decision; use the production interpretation adapter.
+ const P=require('../claim-interpretation.js'),raw='Use Vigenere with key ABC. Reset the key at each word.';
+ const third=await appFor(raw),source=quote=>({start:raw.indexOf(quote),quote});
+ const interpreted=P.toDraft(raw,{schema:P.SCHEMA,outcome:null,scope:null,
+  steps:[{id:'described_method',familyId:'polyalphabetic',source:source(raw),parameters:{}}],
+  rules:{reset:{status:'specified',value:'Reset the key at each word.',source:source('Reset the key at each word.')}}}).draft;
+ Object.assign(third.app.getSnapshot().draft,interpreted);
+ openEditor(third.doc);
+ third.doc.getElementById('edit-method').value='Use Vigenere with key ABC. Reset the key at each page.';
+ third.doc.getElementById('edit-aim').value='decipher';third.doc.getElementById('edit-scope').value='LP2-15';save(third.doc);
+ assert(third.doc.host.html.includes('Does this condition still apply'));
+ assert(third.doc.host.html.includes('Reset the key at each word.'));
+ assert.equal(third.doc.getElementById('confirm'),null,'Cannot confirm the contradictory card');
+ third.doc.selectedChoice='replace';third.doc.getElementById('clarification').fire('change');
+ assert.equal(third.doc.getElementById('other-detail').hidden,false);
+ third.doc.getElementById('other-detail').value='Reset the key at each page.';
+ third.doc.getElementById('clarification').fire('submit');
+ assert.equal(third.app.getSnapshot().draft.rules.reset.value,'Reset the key at each page.');
+ assert(third.doc.getElementById('confirm'),'The corrected card can now be confirmed');
+ assert.equal(third.app.getSnapshot().draft.source.text,raw);
+ third.app.destroy();
 
  // Empty editor projections do not conflate unspecified, not-applicable,
  // unrestricted or an explicit empty page selection.
