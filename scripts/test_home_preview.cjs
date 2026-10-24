@@ -62,7 +62,7 @@ function exactTextHandoff(){
    const f=fixture({attachments}),field=f.get(attachments?'review-idea':'idea');field.value=text;
    f.get(attachments?'review-form':'check-idea').listeners.submit({preventDefault(){}});
    assert.equal(f.navigations.length,1);const link=new URL(f.navigations[0],'https://example.org/');
-   assert.equal(link.pathname,'/investigate.html');assert.equal(link.search,'?v=20261024-input','Only a fixed checker-version marker belongs in the HTTP request target');
+   assert.equal(link.pathname,'/investigate.html');assert.equal(link.search,'?v=complete-current-20261024','Only a fixed checker-version marker belongs in the HTTP request target');
    assert.equal(Input.read(link).text,text,'The real home handler must preserve all text through the shared checker decoder');
    assert.equal(f.navigations[0],Input.href(text));
   }

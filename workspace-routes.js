@@ -2,7 +2,8 @@
 (function(root){
   'use strict';
   function destination(hash){
-    const [path,query='']=String(hash||'').replace(/^#/, '').split('?');
+    const value=String(hash||'').replace(/^#/, ''),split=value.indexOf('?');
+    const path=split<0?value:value.slice(0,split),query=split<0?'':value.slice(split+1);
     const parts=path.split('/').filter(Boolean);
     const params=new URLSearchParams(query);
     if(params.get('full')==='1')return null;
@@ -29,7 +30,11 @@
       if(params.has('page')){params.set('p',params.get('page'));params.delete('page');}
       return 'research.html#'+params;
     }
-    if(parts[0]==='experiments' && parts.length===1)return 'investigate.html'+(query?'?'+query:'');
+    if(parts[0]==='experiments' && parts.length===1){
+      const entry=new URLSearchParams({v:'complete-current-20261024'});
+      for(const [key,value] of params)if(key!=='v')entry.append(key,value);
+      return 'investigate.html?'+entry;
+    }
     return null;
   }
   function redirect(){const target=destination(location.hash);if(target){location.replace(target);return true;}return false;}

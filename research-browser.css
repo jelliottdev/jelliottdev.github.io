@@ -15,3 +15,21 @@ body[data-sidebar-page="map"]{height:100dvh;display:flex;flex-direction:column;o
 
 /* A one-pixel breadcrumb overflow must not add a vertical scrollbar. */
 #map-trail{overflow-x:auto;overflow-y:hidden}
+/* List follows exactly one level of the map, using the same node colours. */
+.research-branch-list{list-style:none;padding:0;margin:0;max-width:1000px}
+.research-branch-row{border-bottom:1px solid var(--line);padding:5px 0}
+.research-branch-button{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 8px;text-align:left}
+.research-branch-button:disabled{cursor:default;color:#75808d}.research-branch-row.muted .research-branch-mark{opacity:.3}
+.research-branch-mark{width:12px;height:12px;flex:0 0 12px;border-radius:50%;background:var(--branch-colour)}
+.research-branch-copy{display:block;min-width:0;flex:1;overflow-wrap:anywhere}.research-branch-copy strong{display:block;font:500 17px/1.5 system-ui,sans-serif;color:inherit}.research-branch-copy>span{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.research-branch-button>svg{flex:0 0 18px;width:18px;height:18px;color:var(--branch-colour)}
+.research-branch-row.selected .research-branch-button{background:#edf2f7}
+.research-branch-open{display:inline-flex;align-items:center;min-height:44px;margin-left:32px;font-size:13px}
+@media(max-width:760px){.research-branch-button{padding:11px 4px;gap:10px}.research-branch-copy strong{font-size:16px}.research-branch-copy>span{font-size:13px}.research-branch-open{margin-left:26px}}
+
+/* Labels stay in screen pixels; their white halo never grows with zoom. */
+#world .node-label text{paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}#world .node .mark,#world .node .selection,#world .edge{vector-effect:non-scaling-stroke}
+
+#world .label-hit{fill:transparent;stroke:none;pointer-events:all}
+
+#world .node-label{cursor:pointer}#world .node-label text{font-family:system-ui,sans-serif;fill:#33475a}#world .node-label .count{fill:#718096}

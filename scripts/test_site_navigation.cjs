@@ -34,3 +34,6 @@ assert(home.includes('data-sidebar-page="home"'));assert(home.includes('class="s
 assert(home.includes('these files are not uploaded or analyzed'),'Production attachment boundary remains explicit');assert(home.includes('id="file-preview" class="file-preview" tabindex="0"'));
 assert(css.includes('max-width:calc(100vw - 44px)'));assert(css.includes('overscroll-behavior:contain'));assert(css.includes('.site-sidebar-search input{font-size:16px}'));
 console.log('PASS shared navigation: five primary/six reference links, one research entry, native modal/close/Escape/backdrop/CtrlK, focus/blank-input/search routes/current route, home intake preserved; source/DOM only.');
+
+assert.equal(api.primary.find(([, ,id])=>id==='idea')[1],'investigate.html?v=complete-current-20261024','Every shared drawer opens the fresh checker entry');
+assert(home.includes('href="investigate.html?v=complete-current-20261024"'),'Home checker heading bypasses older cached HTML');

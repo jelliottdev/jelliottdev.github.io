@@ -10,7 +10,7 @@
  function href(text){
   const error=issue(text);if(error)throw Error(error);
   // A new entry URL also avoids an older cached checker that cannot read input fragments.
-  return 'investigate.html?v=20261024-input#input='+encodeURIComponent(text);
+  return 'investigate.html?v=complete-current-20261024#input='+encodeURIComponent(text);
  }
  function read(location={}){
   const fragment=location.hash||'';

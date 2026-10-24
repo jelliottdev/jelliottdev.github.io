@@ -2,7 +2,14 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
 const routes=require('../workspace-routes.js');
 assert.equal(routes.destination('#/reader/lp2-15?view=text&line=4-8'),'reader.html#lp2-15?view=text&line=4-8');
-assert.equal(routes.destination('#/experiments?q=autokey%20LP2-15'),'investigate.html?q=autokey%20LP2-15');
+assert.equal(routes.destination('#/experiments?q=autokey%20LP2-15'),'investigate.html?v=complete-current-20261024&q=autokey+LP2-15');
+assert.equal(routes.destination('#/experiments'),'investigate.html?v=complete-current-20261024');
+const oldQuery='Reverse the prime values in rows?\nKeep the key Ω + / # exact.';
+const fresh=new URL(routes.destination('#/experiments?q='+encodeURIComponent(oldQuery)+'&pages=LP2-15&v=old'),'https://jelliottdev.github.io/');
+assert.equal(fresh.pathname,'/investigate.html');assert.equal(fresh.searchParams.get('v'),'complete-current-20261024');
+assert.equal(fresh.searchParams.get('q'),oldQuery);assert.equal(fresh.searchParams.get('pages'),'LP2-15');
+assert.equal(fresh.searchParams.getAll('v').length,1,'Old entry versions cannot retain the stale HTML URL');
+assert.equal(new URL(routes.destination('#/experiments?q=Which?rule&pages=LP2-15'),'https://example.org/').searchParams.get('q'),'Which?rule','Only the first question mark splits the route/query');
 for(const route of ['#/reader/../../bad','#/experiments/word-internal-affine-lags?full=1','#/wiki/line-gaps?full=1'])assert.equal(routes.destination(route),null);
 assert.equal(routes.destination('#/research?q=prime&page=3'),'research.html#q=prime&p=3&mode=list');
 assert.equal(routes.destination('#/research-map?view=analytics&branch=method%3Alanguage'),'research.html#view=analytics&branch=method%3Alanguage');
@@ -31,6 +38,8 @@ vm.createContext(context);vm.runInContext(slice,context);
 
 // Validate actual entry markup, not only the JS modules used by the VM tests.
 const checkerHTML=fs.readFileSync(require.resolve('../investigate.html'),'utf8');
+assert(checkerHTML.includes('data-sidebar-page="idea"')&&checkerHTML.includes('site-navigation.js'),'The checker uses the same shared menu');
+assert(checkerHTML.indexOf('</header>')<checkerHTML.indexOf('id="investigate"'),'The shared masthead is outside the changing checker/error workspace');
 const checkerScripts=[...checkerHTML.matchAll(/<script\b([^>]*)>/g)].map(([,attributes])=>{
  const src=attributes.match(/\bsrc="([^"<>\r\n]+)"/);
  assert(src,'Each checker script needs a closed, quoted source attribute: '+attributes);
@@ -43,3 +52,10 @@ assert.deepEqual(checkerScripts.filter(name=>name!=='site-navigation.js'),['clai
 console.log('PASS: checker entry script attributes, dependency paths and load order.');
 
 assert.equal(routes.destination('#/research?page=lp2-15'),'research.html#page=lp2-15&mode=list');
+let redirected;
+const entryContext={URLSearchParams,location:{hash:'#/experiments?q='+encodeURIComponent(oldQuery)+'&pages=LP2-15',replace(value){redirected=value;}}};
+vm.runInNewContext(fs.readFileSync(require.resolve('../workspace-routes.js'),'utf8'),entryContext);
+const actualEntry=new URL(redirected,'https://jelliottdev.github.io/');
+assert.equal(actualEntry.searchParams.get('v'),'complete-current-20261024');
+assert.equal(actualEntry.searchParams.get('q'),oldQuery);assert.equal(actualEntry.searchParams.get('pages'),'LP2-15');
+console.log('PASS: installed legacy redirect opens the fresh checker URL with exact idea/scope and persistent shared masthead.');

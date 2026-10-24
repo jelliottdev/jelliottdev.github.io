@@ -6,7 +6,7 @@
  const chevron='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
  const aliases={'method:feedback':'Autokey & feedback','method:repeating-key':'Repeating keys','method:running-key':'Running keys','method:generated-key':'Keystreams','method:substitution':'Substitution','method:routes':'Routes & extraction','method:numeric':'Numbers','method:payload':'Grid & bytes','method:steganography':'Images','method:hash-target':'Hash targets','method:combined':'Combined ciphers','method:blocks':'Block ciphers','method:rune-patterns':'Rune patterns','method:cipher-models':'Cipher models','method:period-alignment':'Period & alignment','method:language':'Language','method:numerical':'Numbers','method:image-layout':'Image & layout','method:transcription':'Transcription','method:payload-analysis':'Grid analysis','method:decoder-validation':'Decoders','method:search-calibration':'Search & scoring','method:claim-audits':'Claim audits','method:related-artifacts':'Provenance'};
  const outcomes={supported:'Supported within scope','not-supported':'Not supported within scope',inconclusive:'Inconclusive'},resultColours={supported:'#138575','not-supported':'#7b899b',inconclusive:'#75649a'};
- let data,state,nodes,focus,layout=new Map(),camera={x:0,y:0,k:1},previous='',previousRecord='',resizeTimer,dialogReturn=null,worldHeight=600,previewExpanded=false,indexResult,matching=new Set(),lastGraphKey='',preferredMode='graph';
+ let data,state,nodes,focus,layout=new Map(),camera={x:0,y:0,k:1},previous='',previousRecord='',resizeTimer,dialogReturn=null,worldHeight=600,worldBounds={x:0,y:0,width:600,height:600},labelNodes=[],previewExpanded=false,indexResult,matching=new Set(),lastGraphKey='',preferredMode='graph';
  const listPositions=new Map();let listKey='';try{preferredMode=localStorage.getItem('liberpedia-research-mode')==='list'?'list':'graph'}catch{}
  const activePointers=new Map();let gesture=null,moved=false;
  const url=next=>'#'+new URLSearchParams(Object.entries(next).filter(([,v])=>v));
@@ -17,32 +17,74 @@
  function lines(label,max=14,limit=3){const words=label.split(/\s+/).flatMap(word=>word.length>max?word.match(new RegExp('.{1,'+max+'}','g')):[word]),out=[];let line='';for(const word of words){if(line&&line.length+word.length+1>max){out.push(line);line=word}else line+=(line?' ':'')+word}if(line)out.push(line);if(out.length>limit){out.length=limit;out[limit-1]=out[limit-1].slice(0,max-1)+'…'}return out}
  function branchBelow(id){let n=nodes.get(id);while(n&&n.parent!==focus.id&&n.id!==focus.id)n=nodes.get(n.parent);return n?.id===focus.id?null:n}
  function position(){
-  layout=new Map();layout.set(focus.id,{x:300,y:300,a:0,r:0,activate:focus.id});const children=focus.children.map(id=>nodes.get(id)),step=2*Math.PI/Math.max(children.length,1);
+  layout=new Map();labelNodes=[];layout.set(focus.id,{x:0,y:0,a:0,r:0,depth:0,activate:focus.id});
+  const children=focus.children.map(id=>nodes.get(id)).filter(n=>count(n)),step=2*Math.PI/Math.max(children.length,1),radius=Math.max(155,children.length*25);
   children.forEach((child,index)=>{
    const angle=-Math.PI/2+step*index,leaves=[];
    function collect(n){if(!n.children.length)leaves.push(n);else n.children.forEach(id=>collect(nodes.get(id)))}collect(child);
-   const leafAngles=new Map(leaves.map((leaf,i)=>[leaf.id,angle+((i+.5)/leaves.length-.5)*Math.min(step*.72,.57)]));
-   function visit(n,depth){const childAngles=n.children.map(id=>visit(nodes.get(id),depth+1)),a=childAngles.length?childAngles.reduce((s,v)=>s+v,0)/childAngles.length:leafAngles.get(n.id)||angle;
-    const r=n.id===child.id?105:n.kind==='record'?194:n.kind==='scope'?180:Math.min(180,125+depth*15);
-    layout.set(n.id,{x:300+Math.cos(a)*r,y:300+Math.sin(a)*r,a,r,activate:child.id});return a}
-   visit(child,1);const p=layout.get(child.id);p.a=angle;p.x=300+Math.cos(angle)*105;p.y=300+Math.sin(angle)*105;p.label={x:300+Math.cos(angle)*236,y:300+Math.sin(angle)*236};if(focus.id==='all-research'){const descendants=[...layout.values()].filter(v=>v.activate===child.id),ys=descendants.map(v=>v.y),length=lines(child.label,15,3).length;p.label.y=Math.sin(angle)<0?Math.min(...ys)-45-(length-1)*17:Math.max(...ys)+35+(length-1)*10;}
+   const leafAngles=new Map(leaves.map((leaf,i)=>[leaf.id,angle+((i+.5)/leaves.length-.5)*Math.min(step*.8,.85)]));
+   function visit(n,depth){const angles=n.children.map(id=>visit(nodes.get(id),depth+1)),a=angles.length?angles.reduce((sum,v)=>sum+v,0)/angles.length:leafAngles.get(n.id)??angle;
+    const r=radius+(depth-1)*105;layout.set(n.id,{x:Math.cos(a)*r,y:Math.sin(a)*r,a,r,depth,activate:child.id});return a}
+   visit(child,1);const point=layout.get(child.id);point.a=angle;point.x=Math.cos(angle)*radius;point.y=Math.sin(angle)*radius;
   });
-  worldHeight=innerWidth<=760&&!state.record?780:600;
-  if(worldHeight!==600)for(const p of layout.values()){p.y*=1.3;if(p.label)p.label.y*=1.3}
+  const points=[...layout.values()],xs=points.map(p=>p.x),ys=points.map(p=>p.y);
+  const padding=children.length>10?120:95;
+  worldBounds={x:Math.min(...xs)-padding,y:Math.min(...ys)-padding,width:Math.max(...xs)-Math.min(...xs)+padding*2,height:Math.max(...ys)-Math.min(...ys)+padding*2};
+  worldHeight=worldBounds.height;
  }
  function paintGraph(){
-  let edges='',marks='';for(const [id,p] of layout){const n=nodes.get(id),parent=layout.get(n.parent);if(parent){const mid={x:(parent.x+p.x)/2,y:(parent.y+p.y)/2};edges+=`<path class="edge${count(n)?'':' muted'}" data-parent="${esc(n.parent)}" data-child="${esc(id)}" d="M${parent.x} ${parent.y} Q${mid.x} ${mid.y} ${p.x} ${p.y}" stroke="${state.colour==='methods'?(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color):'#aab6c3'}"/>`}
-   const isFocus=id===focus.id,isChild=n.parent===focus.id,matched=count(n),record=n.kind==='record',r=isFocus?0:record?(isChild?5:3):6,colour=record&&state.colour==='results'?resultColours[data.records[n.record_id].outcome]:(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color);
-   const rawLabel=isFocus?n.label:aliases[n.id]||n.label.replace(/^LP[12][^:]{0,30}:\s*/,''),label=lines(rawLabel,isFocus?23:15,isFocus?3:3),textPoint=isFocus?{x:300,y:layout.get(focus.id).y-15-label.length*7}:p.label;
-   const texts=(isFocus||isChild)?`<text text-anchor="middle" x="${textPoint.x}" y="${textPoint.y-(label.length-1)*10}">${label.map((s,i)=>`<tspan x="${textPoint.x}" dy="${i?'1.15em':'0'}">${esc(s)}</tspan>`).join('')}</text>${!record?`<text class="count" text-anchor="middle" x="${textPoint.x}" y="${textPoint.y+(label.length-1)*14+27}">${matched}${isFocus?' records':''}</text>`:''}`:'';
-   const showLabel=isFocus||isChild,tab=isChild&&matched?' tabindex="0" role="button"':'';
-   marks+=`<g class="node ${record?'record':''} ${isFocus?'aim':''} ${matched?'':'muted'} ${n.record_id===state.record?'selected':''}" data-node="${esc(id)}"${tab} aria-label="${esc(n.label+(record?'':', '+matched+' records'))}" transform="translate(0 0)"><title>${esc(n.label)}</title>${isChild?`<circle class="hit" cx="${p.x}" cy="${p.y}" r="38"/>`:''}${n.record_id===state.record?`<circle class="selection" cx="${p.x}" cy="${p.y}" r="9"/>`:''}${!isFocus?`<circle class="mark" cx="${p.x}" cy="${p.y}" r="${r}" fill="${colour}"/>`:''}${showLabel?`<g class="node-label">${texts}</g>`:''}</g>`;
-  }world.innerHTML=edges+marks;
-  world.querySelectorAll('.node-label').forEach(group=>group.querySelectorAll('text').forEach(t=>{t.style.paintOrder='stroke';t.style.stroke='white';t.style.strokeWidth='6px';t.style.strokeLinejoin='round'}));
+  let edges='',marks='';labelNodes=[];
+  for(const [id,p] of layout){const n=nodes.get(id),parent=layout.get(n.parent),isFocus=id===focus.id,isChild=n.parent===focus.id,record=n.kind==='record',matched=count(n);
+   if(parent)edges+=`<path class="edge${matched?'':' muted'}" data-parent="${esc(n.parent)}" data-child="${esc(id)}" d="M${parent.x} ${parent.y} L${p.x} ${p.y}" stroke="${state.colour==='methods'?(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color):'#aab6c3'}" vector-effect="non-scaling-stroke"/>`;
+   const colour=record&&state.colour==='results'?resultColours[data.records[n.record_id].outcome]:(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color);
+   const label=lines(isFocus?n.label:aliases[n.id]||n.label.replace(/^LP[12][^:]{0,30}:\s*/,''),isFocus?24:22,isFocus?2:3);
+   labelNodes.push({id,p,n,isFocus,isChild,record,matched,label});
+   marks+=`<g class="node ${record?'record':''} ${isFocus?'aim':''} ${matched?'':'muted'} ${n.record_id===state.record?'selected':''}" data-node="${esc(id)}" aria-label="${esc(n.label+(record?'':', '+matched+' records'))}"><title>${esc(n.label)}</title><circle class="hit" cx="${p.x}" cy="${p.y}" r="0"/>${n.record_id===state.record?`<circle class="selection" cx="${p.x}" cy="${p.y}" r="0" vector-effect="non-scaling-stroke"/>`:''}${!isFocus?`<circle class="mark" cx="${p.x}" cy="${p.y}" r="0" fill="${colour}" vector-effect="non-scaling-stroke"/>`:''}<g class="node-label"><rect class="label-hit" width="0" height="0"/><text>${label.map((line,i)=>`<tspan x="0" dy="${i?'1.2em':'0'}">${esc(line)}</tspan>`).join('')}</text>${!record?`<text class="count">${matched} records</text>`:''}</g></g>`;
+  }
+  world.innerHTML=edges+marks+'<g class="labels-layer"></g>';
+  labelNodes.forEach(item=>{item.element=world.querySelector(`[data-node="${CSS.escape(item.id)}"]`);item.group=item.element.querySelector('.node-label');item.group.setAttribute('data-node',item.id);item.group.setAttribute('aria-hidden','true');world.querySelector('.labels-layer').appendChild(item.group);});
  }
- function applyCamera(){world.setAttribute('transform',`translate(${camera.x} ${camera.y}) scale(${camera.k})`);world.querySelectorAll('.hit').forEach(c=>c.setAttribute('r',String(Math.max(24,22/camera.k))));world.querySelectorAll('.node text').forEach(t=>{const count=t.classList.contains('count'),aim=t.closest('.aim');t.style.fontSize=(count?Math.min(12,Math.max(10,17*camera.k)):aim?Math.min(20,Math.max(14,25*camera.k)):Math.min(18,Math.max(12,23*camera.k)))/camera.k+'px'})}
- function fit(){if(!state||state.mode==='list')return;const r=map.getBoundingClientRect(),hasPanel=!panel.hidden&&innerWidth<=760,h=hasPanel?r.height*.55:r.height,k=Math.min((r.width-12)/600,(h-12)/worldHeight,1.3);camera={x:(r.width-600*k)/2,y:(h-worldHeight*k)*(innerWidth<=760?.3:.5),k};applyCamera()}
- function zoom(factor,point){const r=map.getBoundingClientRect(),p=point||{x:r.width/2,y:r.height/2},k=Math.min(4,Math.max(.28,camera.k*factor)),ratio=k/camera.k;camera={x:p.x-(p.x-camera.x)*ratio,y:p.y-(p.y-camera.y)*ratio,k};applyCamera()}
+ function applyCamera(){
+  const G=ResearchGraphGeometry,k=camera.k,r=map.getBoundingClientRect();
+  world.setAttribute('transform',`translate(${camera.x} ${camera.y}) scale(${k})`);
+  const occupied=[],candidates=[],markerBoxes=[];
+  const controls=map.querySelector('.map-controls').getBoundingClientRect();
+  occupied.push({x:controls.x-r.x-6,y:controls.y-r.y-6,width:controls.width+12,height:controls.height+12});
+  const ordered=[...labelNodes].sort((a,b)=>a.p.depth-b.p.depth||a.id.localeCompare(b.id));
+  for(const item of ordered){
+   const {element,group,p,isFocus,isChild,n,record,matched}=item,x=camera.x+p.x*k,y=camera.y+p.y*k;
+   const markerSize=isChild?6:record?2.5:4,box={x:x-markerSize,y:y-markerSize,width:markerSize*2,height:markerSize*2};
+   const visible=isFocus||isChild||!markerBoxes.some(other=>G.intersects(box,other,1));
+   element.querySelector('.mark')?.setAttribute('r',String(G.worldPixels(visible?markerSize:0,k)));
+   element.querySelector('.selection')?.setAttribute('r',String(G.worldPixels(10,k)));
+   element.querySelector('.hit').setAttribute('r',String(G.worldPixels(visible&&isChild?18:0,k)));
+   element.dataset.revealed=String(visible);element.dataset.labelVisible='false';element.removeAttribute('tabindex');element.removeAttribute('role');
+   if(visible&&!isFocus){markerBoxes.push(box);if(isChild&&matched&&x>=0&&x<=r.width&&y>=0&&y<=r.height){element.setAttribute('tabindex','0');element.setAttribute('role','button')}}
+   group.hidden=true;group.style.display='none';
+   if(!visible||(!matched&&!isFocus)||(!isFocus&&!isChild&&k<.8))continue;
+   const font=isFocus?17:isChild?14:13,lineHeight=font*1.2;
+   const text=group.querySelector('text'),countText=group.querySelector('.count');text.style.fontSize=font+'px';text.setAttribute('x','0');text.setAttribute('y',String(font));
+   text.querySelectorAll('tspan').forEach(span=>span.setAttribute('x','0'));
+   if(countText){countText.style.fontSize='12px';countText.setAttribute('x','0');countText.setAttribute('y',String(item.label.length*lineHeight+17));}
+   const labelHit=group.querySelector('.label-hit');labelHit.setAttribute('width','0');labelHit.setAttribute('height','0');
+   group.style.display='';const measured=group.getBBox(),width=measured.width,height=measured.height+4;group.style.display='none';
+   const centre=layout.get(focus.id),cx=camera.x+centre.x*k,cy=camera.y+centre.y*k;
+   const outer=isChild&&focus.id==='all-research'?{x:Math.max(8,Math.min(r.width-width-8,cx+Math.cos(p.a)*(p.r*k+90)-width/2)),y:Math.max(8,Math.min(r.height-height-8,cy+Math.sin(p.a)*(p.r*k+90)-height/2))}:null;
+   const placements=isFocus?[{x:x-width/2,y:y-height/2}]:[...(outer?[outer]:[]),
+    {x:x+12,y:y-height/2},{x:x-width-12,y:y-height/2},{x:x-width/2,y:y-height-13},{x:x-width/2,y:y+13}];
+   candidates.push({id:item.id,priority:isFocus?-2:n.record_id===state.record?-1:isChild?0:p.depth,width,height,placements});
+   item.labelOffset={x:measured.x,y:measured.y};labelHit.setAttribute('x',String(measured.x-3));labelHit.setAttribute('y',String(measured.y-2));labelHit.setAttribute('width',String(width+6));labelHit.setAttribute('height',String(height+4));
+  }
+  if(r.width<20||r.height<20)return;
+  const placed=G.placeOptionalLabels(candidates,{viewport:{x:8,y:8,width:r.width-16,height:r.height-16},occupied,gap:8}).placed;
+  for(const placement of placed){const item=labelNodes.find(n=>n.id===placement.id),group=item.group;
+   group.style.display='';group.hidden=false;
+   group.setAttribute('transform',`translate(${(placement.x-camera.x)/k} ${(placement.y-camera.y)/k}) scale(${1/k}) translate(${-item.labelOffset.x} ${-item.labelOffset.y})`);
+   item.element.dataset.labelVisible='true';if(!item.isFocus){item.element.setAttribute('tabindex','0');item.element.setAttribute('role','button');item.element.querySelector('.hit').setAttribute('r',String(G.worldPixels(18,k)));}
+  }
+ }
+ function fit(){if(!state||state.mode==='list')return;const r=map.getBoundingClientRect(),hasPanel=!panel.hidden&&innerWidth<=760,h=hasPanel?r.height*.55:r.height,b=worldBounds,k=Math.min((r.width-20)/b.width,(h-20)/b.height,1.3);camera={x:(r.width-b.width*k)/2-b.x*k,y:(h-b.height*k)/2-b.y*k,k};applyCamera()}
+ function zoom(factor,point){const r=map.getBoundingClientRect(),p=point||{x:r.width/2,y:r.height/2},k=Math.min(8,Math.max(.08,camera.k*factor)),ratio=k/camera.k;camera={x:p.x-(p.x-camera.x)*ratio,y:p.y-(p.y-camera.y)*ratio,k};applyCamera()}
  function recordNode(id){return [...nodes.values()].find(n=>n.record_id===id)}
  function showInspector(){
   const r=data.records[state.record];panel.hidden=!r;if(!r)return;if(previousRecord!==state.record)previewExpanded=false;panel.dataset.expanded=String(previewExpanded);
@@ -60,14 +102,18 @@
  }
  function clearFilters(){navigate({q:'',type:'',method:'',family:'',result:'',page:'',record:''})}
  function renderList(){
-  const ids=new Set(focus.members),matches=indexResult.allRecords.filter(r=>ids.has(r.id)&&passes(r.id)),pages=Math.max(1,Math.ceil(matches.length/20));state.p=Math.min(state.p,pages);
-  const selected=matches.findIndex(r=>r.id===state.record);if(selected>=0&&Math.floor(selected/20)!==state.p-1){state.p=Math.floor(selected/20)+1;history.replaceState(null,'',url(state))}const start=(state.p-1)*20,shown=matches.slice(start,start+20),container=$('research-list');
-  listKey=JSON.stringify([state.view,focus.id,state.q,state.type,state.method,state.family,state.result,state.page,state.sort,state.p]);
-  container.innerHTML=`<div class="research-list-head"><span role="status">${matches.length?`${start+1}–${Math.min(start+20,matches.length)} of ${matches.length}`:'0'} records</span><button id="research-sort" aria-label="Sort research">${sorts[state.sort]}${chevron}</button></div>${shown.map(r=>`<article class="research-list-record${r.id===state.record?' selected':''}"><div class="research-list-title"><h2><a href="${esc(r.href)}">${esc(r.title)}</a></h2><button data-preview-record="${esc(r.id)}" aria-label="Preview ${esc(r.title)}" aria-pressed="${r.id===state.record}" title="Preview experiment"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg></button></div><div class="research-list-meta">${esc(r.record_type?.label||'Research record')} · ${esc(scopeLabel(r))} · ${esc(outcomes[r.outcome]||r.outcome)}${state.sort==='recent'&&r.review?.retested_on?' · Checked '+esc(r.review.retested_on):''}</div><p>${esc(r.reader_finding||r.finding)}</p></article>`).join('')}${!shown.length?`<div class="research-empty"><h2>No matching research</h2><p>No published record matches these filters in this area.</p><button data-clear-all>Clear filters</button>${focus.id!==data.views[state.view].root?'<button data-search-all>Look across all research</button>':''}</div>`:''}${pages>1?`<nav class="research-pagination" aria-label="Research pages"><button data-list-page="${state.p-1}"${state.p===1?' disabled':''}>Previous</button><span>${state.p} of ${pages}</span><button data-list-page="${state.p+1}"${state.p===pages?' disabled':''}>Next</button></nav>`:''}`;
-  container.querySelectorAll('[data-preview-record]').forEach(b=>b.onclick=()=>navigate({record:b.dataset.previewRecord}));
-  container.querySelectorAll('[data-list-page]').forEach(b=>b.onclick=()=>navigate({p:+b.dataset.listPage,record:''}));
+  const children=focus.children.map(id=>nodes.get(id)).filter(Boolean),hasBranches=children.some(n=>n.kind!=='record'),rank=new Map(indexResult.allRecords.map((r,i)=>[r.id,i]));
+  if(!hasBranches)children.sort((a,b)=>(rank.get(a.record_id)??Infinity)-(rank.get(b.record_id)??Infinity));
+  const container=$('research-list'),total=count(focus),noun=hasBranches?(children.every(n=>n.kind!=='record')?'branches':'items'):'records';
+  listKey=JSON.stringify([state.view,focus.id,state.q,state.type,state.method,state.family,state.result,state.page,state.sort]);
+  container.innerHTML=`<div class="research-list-head"><span role="status">${children.length} ${noun} · ${total} matching ${total===1?'record':'records'}</span>${!hasBranches&&children.length?`<button id="research-sort" aria-label="Sort research">${sorts[state.sort]}${chevron}</button>`:''}</div><ul class="research-branch-list">${children.map(n=>{
+   const record=n.kind==='record',r=record?data.records[n.record_id]:null,matched=count(n),colour=record&&state.colour==='results'?resultColours[r?.outcome]:n.color;
+   const safeColour=/^#[0-9a-f]{3,8}$/i.test(colour||'')?colour:'#64748b';
+   return `<li class="research-branch-row${matched?'':' muted'}${r?.id===state.record?' selected':''}" style="--branch-colour:${safeColour}"><button type="button" class="research-branch-button" data-list-node="${esc(n.id)}"${matched?'':' disabled'}${record?` aria-pressed="${r?.id===state.record}"`:''}><span class="research-branch-mark" aria-hidden="true"></span><span class="research-branch-copy"><strong>${esc(record?r?.title||n.label:aliases[n.id]||n.label)}</strong><span>${record?`${esc(r?.record_type?.label||'Research record')} · ${esc(scopeLabel(r))} · ${esc(outcomes[r.outcome]||r.outcome)}`:`${matched} matching ${matched===1?'record':'records'}`}</span></span>${record?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg>':chevron}</button>${r?`<a class="research-branch-open" href="${esc(r.href)}">Open full record</a>`:''}</li>`;
+  }).join('')}</ul>${!total?`<div class="research-empty"><h2>No matching research</h2><p>No published record matches these filters in this area.</p><button data-clear-all>Clear filters</button>${focus.id!==data.views[state.view].root?'<button data-search-all>Look across all research</button>':''}</div>`:''}`;
+  container.querySelectorAll('[data-list-node]').forEach(button=>button.onclick=()=>{const n=nodes.get(button.dataset.listNode);if(!n||n.parent!==focus.id||!count(n))return;n.kind==='record'?navigate({record:n.record_id}):navigate({branch:n.id,record:''})});
   container.querySelector('[data-clear-all]')?.addEventListener('click',clearFilters);container.querySelector('[data-search-all]')?.addEventListener('click',()=>navigate({view:'all',branch:'',record:''}));
-  $('research-sort').onclick=()=>{openDialog('Sort research',Object.entries(sorts).map(([id,label])=>`<button class="filter-option" data-sort="${id}" aria-pressed="${state.sort===id}">${label}</button>`).join(''),$('research-sort'));dialog.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{closeDialog();navigate({sort:b.dataset.sort,record:''})})};
+  const sortButton=container.querySelector('#research-sort');if(sortButton)sortButton.onclick=()=>{openDialog('Sort research',Object.entries(sorts).map(([id,label])=>`<button class="filter-option" data-sort="${id}" aria-pressed="${state.sort===id}">${label}</button>`).join(''),sortButton);dialog.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{closeDialog();navigate({sort:b.dataset.sort,record:''})})};
   container.scrollTop=listPositions.get(listKey)||0;
  }
  function filterMenu(){
@@ -88,11 +134,11 @@
   document.querySelectorAll('[data-view]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.view===state.view)));
   $('page-button').textContent=state.page?state.page.toUpperCase():'All pages';const keyPanel=$('result-key');keyPanel.hidden=state.colour!=='results'||!!state.result;keyPanel.innerHTML=state.result?`<span><i class="${esc(state.result)}"></i>${esc(outcomes[state.result])}</span><button aria-label="Clear result filter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>`:Object.entries(outcomes).map(([id,label])=>`<span><i class="${id}"></i>${esc(label.replace(' within scope',''))}</span>`).join('');keyPanel.querySelector('button')?.addEventListener('click',()=>navigate({result:''}));$('display-button').dataset.active=String(state.mode==='graph'&&state.colour==='results');
   document.body.dataset.researchMode=state.mode;map.hidden=state.mode==='list';$('research-list').hidden=state.mode!=='list';document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode)));filteredChips();showInspector();position();paintGraph();renderList();
-  const key=JSON.stringify([state.view,focus.id,state.page,state.result,state.q,state.type,state.method,state.family]);const graphKey=key+'|'+state.record;if(state.mode==='graph'){if(lastGraphKey!==graphKey)requestAnimationFrame(fit);else applyCamera();lastGraphKey=graphKey}if((previous!==key||previousRecord!==state.record)&&previous&&!document.querySelector('dialog[open]')){if(state.record)panel.querySelector('h2').focus({preventScroll:true});else if(state.mode==='graph')map.focus({preventScroll:true})}previous=key;previousRecord=state.record;
+  const key=JSON.stringify([state.view,focus.id,state.page,state.result,state.q,state.type,state.method,state.family]);const graphKey=key+'|'+state.record;if(state.mode==='graph'){if(lastGraphKey!==graphKey)requestAnimationFrame(fit);else applyCamera();lastGraphKey=graphKey}if((previous!==key||previousRecord!==state.record)&&previous&&!document.querySelector('dialog[open]')){if(state.record)panel.querySelector('h2').focus({preventScroll:true});else if(state.mode==='graph')map.focus({preventScroll:true});else{$('research-list').setAttribute('tabindex','-1');$('research-list').focus({preventScroll:true})}}previous=key;previousRecord=state.record;
   $('map-status').textContent=focus.label+': '+count(focus)+' matching records.';
   document.title=focus.label+' · Research map · Liberpedia';
  }
- function activate(id){let n=branchBelow(id);if(!n||!count(n))return;if(n.kind==='record'){navigate({record:n.record_id});return}while(n.children.length===1&&nodes.get(n.children[0]).kind==='scope')n=nodes.get(n.children[0]);const only=n.children.length===1?nodes.get(n.children[0]):null;navigate({branch:n.id,record:only?.kind==='record'?only.record_id:''})}
+ function activate(id){const element=world.querySelector(`[data-node="${CSS.escape(id)}"]`),n=element?.dataset.revealed==='true'?nodes.get(id):branchBelow(id);if(!n||n.id===focus.id||!count(n))return;if(n.kind==='record'){navigate({record:n.record_id});return}navigate({branch:n.id,record:''})}
  svg.addEventListener('click',event=>{if(event.detail!==0)return;const node=event.target.closest('[data-node]');if(node)activate(node.dataset.node)});
  svg.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target.matches('[data-node]')){event.preventDefault();activate(event.target.dataset.node)}});
  map.addEventListener('keydown',event=>{if(event.target!==map)return;const delta={ArrowLeft:[35,0],ArrowRight:[-35,0],ArrowUp:[0,35],ArrowDown:[0,-35]}[event.key];if(delta){event.preventDefault();camera.x+=delta[0];camera.y+=delta[1];applyCamera()}else if(event.key==='Home'){event.preventDefault();fit()}});
@@ -120,7 +166,7 @@
    dialog.querySelectorAll('[data-find-node]').forEach(b=>b.onclick=()=>{const id=b.dataset.findNode.slice(7);closeDialog();navigate({record:id,q:passes(id)?state.q:''})});
   };
  };
- $('about-button').onclick=()=>{openDialog('About this map',`<p>The top-level routes are editorial navigation. Below them, the method subtrees retain the existing draft classifications: method, operation, scope, experiment. The outer clusters show individual records. Tap a branch to explore it; tap an experiment to read its finding and limits.</p><p>Drag to move, pinch or use the zoom controls to look closer. Fit restores the current branch. Keyboard: Tab to a branch, Enter to open; arrow keys move the focused map.</p><p>These are related approaches, not proof that every configuration has been tested. The current registry has ${Object.keys(data.records).length} records; ${data.awaiting_classification.length} await classification, and ${data.outside_selected_views.length} belong to other Cicada material.</p><p><a href="research.html#mode=list">Browse all records</a> · <a href="data/research-map.json">Map data</a></p>`,$('about-button'))};
+ $('about-button').onclick=()=>{openDialog('About this map',`<p>The top-level routes are editorial navigation. Below them, the method subtrees retain the existing draft classifications: method, operation, scope, experiment. The outer clusters show individual records. Tap a branch to explore it; tap an experiment to read its finding and limits.</p><p>Drag to move, pinch or use the zoom controls to look closer. Fit restores the current branch. Keyboard: Tab to a branch, Enter to open; arrow keys move the focused map.</p><p>These are related approaches, not proof that every configuration has been tested. The current registry has ${Object.keys(data.records).length} records; ${data.awaiting_classification.length} await classification, and ${data.outside_selected_views.length} belong to other Cicada material.</p><p><a href="research.html#mode=list">Explore in List view</a> · <a href="data/research-map.json">Map data</a></p>`,$('about-button'))};
  let mobileLayout=innerWidth<=760,lastMapSize='';const ro=new ResizeObserver(entries=>{const r=entries[0].contentRect;if(!r.width||!r.height)return;const size=r.width+'|'+r.height;if(size===lastMapSize)return;lastMapSize=size;clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(data&&mobileLayout!==(innerWidth<=760)){mobileLayout=innerWidth<=760;render()}else fit()},80)});ro.observe(map);
  $('research-filter-button').onclick=filterMenu;document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>navigate({mode:b.dataset.mode}));$('research-list').addEventListener('scroll',()=>{if(listKey&&state?.mode==='list'&&!$('research-list').hidden)listPositions.set(listKey,$('research-list').scrollTop)},{passive:true});
  window.addEventListener('hashchange',()=>{if(data)render()});

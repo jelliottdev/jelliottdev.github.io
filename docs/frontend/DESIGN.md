@@ -63,3 +63,9 @@ The complete-current package supersedes older global navigation and separate res
 Guide pages use a readable article column and section navigation, with mobile contents in a dialog. Experiment records lead with their finding and visual; Scope, Reproduce, Analysis and Sources remain direct tabs. Current records and original files are authoritative; prototype snapshots and illustrative claims must never replace them. Preserve specialist interactives and old section links. Source-family comparisons compare exact recorded fields, not inferred semantic equivalence.
 
 Keep interpretation loading and errors beside the editable idea input. Preserve wording and cursor position; only move to clarification/review after a usable draft exists. Editing cancels a pending interpretation. A service failure must not become a separate error page or automatically submit an unverified claim. Straightforward, fully recognized phrases can ask local clarification without a model call.
+
+### Research traversal and zoom
+
+Graph and List are two views of the same branch. List shows only immediate children, with matching branch colors and counts; opening a branch advances exactly one level. It does not flatten the whole archive into a result list. Filters narrow matching counts within the same hierarchy.
+
+Graph zoom changes the space available for detail. Keep markers, strokes and touch areas stable in screen pixels; reveal labels when they fit without collisions. Dense branches need wider geometry. Render label touch targets above marker targets so tapping a title selects that title's record. Pinch and button zoom share the same limits. Preserve the current branch, filters and record when changing views.
