@@ -26,4 +26,13 @@ assert(colored.container.html.includes('--branch-colour:'+colored.context.result
 const filtered=render('all-research',{matches:[record.id]});for(const button of filtered.container.buttons){const node=filtered.nodes.get(button.dataset.listNode);assert.equal(button.disabled,!node.members.includes(record.id));}
 assert(filtered.container.html.includes('1 matching record</span>'));const empty=render('all-research',{matches:[]});assert(empty.container.html.includes('No matching research'));assert(empty.container.buttons.every(b=>b.disabled));
 const css=fs.readFileSync(require.resolve('../research-browser.css'),'utf8');assert(css.includes('.research-branch-copy{display:block;min-width:0;flex:1;overflow-wrap:anywhere}'));assert(css.includes('min-height:64px'));
+// Run the actual wheel/button and pinch paths: touching a fitted dense view must not snap its scale.
+const pointerState=source.match(/^ function pointerState\(.*$/m)[0],pointerMove=source.split('\n').find(line=>line.startsWith(" svg.addEventListener('pointermove'")),zoom=source.match(/^ function zoom\(.*$/m)[0];
+for(const scale of [.08,.1,.28,1,4,5,8])for(const factor of [.25,1,2]){
+ let move;const context={camera:{x:0,y:0,k:scale},gesture:{center:{x:50,y:0},distance:100,camera:{x:0,y:0,k:scale}},moved:false,
+  activePointers:new Map([[1,{x:0,y:0}],[2,{x:100,y:0}]]),map:{getBoundingClientRect:()=>({left:0,top:0,width:320,height:650})},applyCamera(){},svg:{addEventListener(type,handler){move=handler}}};
+ vm.createContext(context);vm.runInContext(pointerState+'\n'+pointerMove+'\n'+zoom,context);move({pointerId:2,clientX:100*factor,clientY:0});const pinched=context.camera.k;
+ context.camera={x:0,y:0,k:scale};context.zoom(factor);assert.equal(pinched,context.camera.k,'Pinch and button/wheel zoom share exact limits at '+scale+' × '+factor);
+ if(factor===1)assert.equal(pinched,scale,'Starting a two-finger gesture preserves the current scale');
+}
 console.log('PASS map List: every branch exposes exactly one level, exact scope drill/record preview, shared filtering/counts/colors/links, no pagination/descendant wall, state unchanged, wrapping/touch targets.');

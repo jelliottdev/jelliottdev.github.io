@@ -18,7 +18,7 @@
  function branchBelow(id){let n=nodes.get(id);while(n&&n.parent!==focus.id&&n.id!==focus.id)n=nodes.get(n.parent);return n?.id===focus.id?null:n}
  function position(){
   layout=new Map();labelNodes=[];layout.set(focus.id,{x:0,y:0,a:0,r:0,depth:0,activate:focus.id});
-  const children=focus.children.map(id=>nodes.get(id)).filter(n=>count(n)),step=2*Math.PI/Math.max(children.length,1),radius=Math.max(155,children.length*25);
+  const children=focus.children.map(id=>nodes.get(id)),step=2*Math.PI/Math.max(children.length,1),radius=Math.max(155,children.length*25);
   children.forEach((child,index)=>{
    const angle=-Math.PI/2+step*index,leaves=[];
    function collect(n){if(!n.children.length)leaves.push(n);else n.children.forEach(id=>collect(nodes.get(id)))}collect(child);
@@ -145,7 +145,7 @@
  svg.addEventListener('wheel',event=>{event.preventDefault();const r=map.getBoundingClientRect();zoom(Math.exp(-event.deltaY*.002),{x:event.clientX-r.left,y:event.clientY-r.top})},{passive:false});
  function pointerState(){const ps=[...activePointers.values()],center={x:ps.reduce((s,p)=>s+p.x,0)/ps.length,y:ps.reduce((s,p)=>s+p.y,0)/ps.length},distance=ps.length>1?Math.hypot(ps[0].x-ps[1].x,ps[0].y-ps[1].y):0;return {center,distance}}
  svg.addEventListener('pointerdown',event=>{if(event.button!==0)return;activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});svg.setPointerCapture(event.pointerId);gesture={...pointerState(),camera:{...camera},node:event.target.closest('[data-node]')?.dataset.node};moved=activePointers.size>1});
- svg.addEventListener('pointermove',event=>{if(!activePointers.has(event.pointerId))return;activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});const next=pointerState(),dx=next.center.x-gesture.center.x,dy=next.center.y-gesture.center.y;if(Math.hypot(dx,dy)>5||activePointers.size>1)moved=true;const k=gesture.distance&&next.distance?Math.max(.28,Math.min(4,gesture.camera.k*next.distance/gesture.distance)):gesture.camera.k,ratio=k/gesture.camera.k,r=map.getBoundingClientRect(),origin={x:gesture.center.x-r.left,y:gesture.center.y-r.top};camera={x:origin.x-(origin.x-gesture.camera.x)*ratio+dx,y:origin.y-(origin.y-gesture.camera.y)*ratio+dy,k};applyCamera()});
+ svg.addEventListener('pointermove',event=>{if(!activePointers.has(event.pointerId))return;activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});const next=pointerState(),dx=next.center.x-gesture.center.x,dy=next.center.y-gesture.center.y;if(Math.hypot(dx,dy)>5||activePointers.size>1)moved=true;const k=gesture.distance&&next.distance?Math.max(.08,Math.min(8,gesture.camera.k*next.distance/gesture.distance)):gesture.camera.k,ratio=k/gesture.camera.k,r=map.getBoundingClientRect(),origin={x:gesture.center.x-r.left,y:gesture.center.y-r.top};camera={x:origin.x-(origin.x-gesture.camera.x)*ratio+dx,y:origin.y-(origin.y-gesture.camera.y)*ratio+dy,k};applyCamera()});
  const up=event=>{const selected=gesture?.node;activePointers.delete(event.pointerId);if(activePointers.size)gesture={...pointerState(),camera:{...camera}};else if(event.type==='pointerup'&&!moved&&selected)activate(selected)};svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
  $('zoom-in').onclick=()=>zoom(1.35);$('zoom-out').onclick=()=>zoom(1/1.35);$('fit').onclick=fit;
  document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>navigate({view:button.dataset.view,branch:'',record:''}));

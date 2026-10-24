@@ -9,7 +9,8 @@ const known=value=>C.field('specified',value,{kind:'supplied',refs:['original wo
 const pages=['lp2-00','lp2-02','lp2-15','lp2-17'];
 const original='Apply Vigenere with key FIRFUMFERENFE, then Atbash. Preserve word boundaries and reset on each page.';
 const turn=()=>new Promise(resolve=>setImmediate(resolve));
-async function until(predicate,message){for(let n=0;n<80;n++){if(predicate())return;await turn();}assert.fail(message);}
+// WebCrypto resolves off-thread; a bounded elapsed wait must yield real time.
+async function until(predicate,message){const deadline=Date.now()+5000;while(Date.now()<deadline){if(predicate())return;await new Promise(resolve=>setTimeout(resolve,1));}assert.fail(message);}
 class Element{
  constructor(id){this.id=id;this.listeners={};this.disabled=false;this.textContent='';this.value='';this.hidden=false;this.html='';}
  addEventListener(type,fn){this.listeners[type]=fn;}
