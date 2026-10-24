@@ -97,17 +97,50 @@ test('source inspection shows actual method and bounds, compact page holes, and 
  assert(html.includes('LP2-00–49, LP2-51–55'));assert(!html.includes('LP2-00–55'));
  for(const field of ['procedure','representation','parameters','exclusions'])assert(html.includes(encoded(record.scope[field])));
  assert(!html.includes(record.reader_finding)); // Findings already precede these source details.
- assert(html.includes(record.reader_limit));assert(!html.includes('<details'));assert(!html.includes('sha256'));
+ assert(!html.includes(record.reader_limit));assert(!html.includes('<details'));assert(!html.includes('sha256'));
  const preview=I.sourceHTML(doc,[record],{preview:true});assert(preview.includes(record.reader_finding));assert(!preview.includes('source-facts'));
- const packet=I.sourceHTML(doc,[record],{packet:true});assert(packet.includes(record.reader_finding));assert(packet.includes(encoded(record.reproduction.command)));
+ const packet=I.sourceHTML(doc,[record],{packet:true});assert(!packet.includes(record.reader_finding));assert(packet.includes(encoded(record.reproduction.command)));
  assert.equal(JSON.stringify(record),before);
  if(record.materials){assert(html.includes(encoded(record.materials.reuse)));assert(html.includes(encoded(record.materials.limits)));}
  const unknown={...record,scope:{},reader_limit:'',limitations:'No independent transcription check. Human review pending.'};
- const unknownHTML=I.sourceHTML(doc,[unknown]);assert(unknownHTML.includes('Not specified in this record'));assert(unknownHTML.includes('No independent transcription check.'));assert(!unknownHTML.includes('Human review pending'));
+ const unknownHTML=I.sourceHTML(doc,[unknown]);assert(unknownHTML.includes('Not specified in this record'));const observed=I.observedFindingsHTML([{...doc,text:JSON.stringify({finding:unknown.finding,limitations:unknown.limitations})}],[record]);assert(observed.includes('No independent transcription check.'));assert(!observed.includes('Human review pending'));
  assert(unknown.limitations.endsWith('Human review pending.'));
  const payload={...unknown,scope:{procedure:'<img src=x onerror=alert(1)>',parameters:'a < 7 & b > 3'}};
  const safe=I.sourceHTML(doc,[payload]);assert(!safe.includes('<img'));assert(safe.includes('a &lt; 7 &amp; b &gt; 3'));
  assert(I.sourceHTML({id:'context',title:'Page context',href:'#/pages/lp2-15'},[]).includes('not evidence that the idea was tested'));
+});
+
+test('authored findings and adjacent limits precede AI interpretation without repeating in source details or print',()=>{
+ const escapedText=value=>value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+ const ids=['lp2-row-column-routes','lp2-row-column-english'],records=ids.map(id=>registry.records.find(r=>r.id===id)),sources=ids.map(id=>docs.find(d=>d.id===id));
+ const context={id:'context',kind:'page',title:'LP2-15',href:'#/page/lp2-15',text:'Context only.'};
+ const observed=I.observedFindingsHTML([...sources,context],records);
+ assert(observed.startsWith('<h2>What the records found</h2>'));assert.equal((observed.match(/<section /g)||[]).length,2);assert(!observed.includes('<details'));
+ records.forEach((record,index)=>{assert(observed.includes(escapedText(record.reader_finding||record.finding)));assert(observed.includes(escapedText(record.reader_limit||record.limitations)));assert(observed.includes('['+(index+1)+'] '+sources[index].title));});
+ assert(!observed.includes('Context only'));assert.equal(I.observedFindingsHTML([context],records),'');
+ const c=C.confirm(I.initialDraft('Reverse rows on LP2-15'),{id:'findings-first',at});
+ const r=C.bindResearch(c,{id:'findings-first-result',at,evidence:{snapshotId:'x',records,documents:sources},answer:'These evaluations differ [1, 2].'});
+ const printed=I.packetHTML(C.packetSnapshot(c,r));
+ assert(printed.indexOf('What the records found')<printed.indexOf('How this relates to your idea'));
+ assert(printed.indexOf('How this relates to your idea')<printed.indexOf('Sources &amp; details'));
+ for(const record of records)assert.equal(printed.split(record.reader_finding||record.finding).length-1,1);
+ const escaped=I.observedFindingsHTML([{...sources[0],text:JSON.stringify({reader_finding:'<img src=x>',reader_limit:'a < b & c'})}],records);
+ assert(!escaped.includes('<img'));assert(escaped.includes('&lt;img src=x&gt;'));assert(escaped.includes('a &lt; b &amp; c'));
+});
+
+test('observed findings use exact validated source text rather than newer local reader fields',()=>{
+ const source=docs.find(doc=>doc.kind==='experiment'),saved={reader_finding:'Saved concise finding.',reader_limit:'Saved concise limit.',finding:'Saved technical finding.',limitations:'Saved technical limit.'};
+ const snapshot={...source,text:JSON.stringify(saved)},newer={id:source.id,reader_finding:'NEW local finding',reader_limit:'NEW local limit',finding:'NEW fallback',limitations:'NEW fallback limit'};
+ const html=I.observedFindingsHTML([snapshot],[newer]);
+ assert(html.includes(saved.reader_finding));assert(html.includes(saved.reader_limit));assert(!html.includes('NEW'));assert(!html.includes(saved.finding));
+ for(const readerFields of [{},{reader_finding:'',reader_limit:'   '},{reader_finding:{text:'not prose'},reader_limit:['not prose']}]){
+  const fallback=I.observedFindingsHTML([{...source,text:JSON.stringify({finding:saved.finding,limitations:saved.limitations,...readerFields})}],[newer]);
+  assert(fallback.includes(saved.finding));assert(fallback.includes(saved.limitations));assert(!fallback.includes('NEW'));
+ }
+ for(const text of ['{broken','null','[]','"prose"','{}',JSON.stringify({finding:{text:'invalid'},limitations:'limit'})])assert.equal(I.observedFindingsHTML([{...source,text}],[newer]),'','Malformed snapshot must not fall back to live metadata');
+ const c=C.confirm(I.initialDraft('A supplied method'),{id:'saved-findings',at});
+ const r=C.bindResearch(c,{id:'saved-research',at,evidence:{snapshotId:'older',records:[{...registry.records.find(record=>record.id===source.id),...newer}],documents:[snapshot]},answer:'Scoped comparison [1].'});
+ const printed=I.packetHTML(C.packetSnapshot(c,r));assert(printed.includes(saved.reader_finding));assert(printed.includes(saved.reader_limit));assert(!printed.includes('NEW local'));
 });
 
 test('compact retrieval avoids unknown-field scaffolding on actual published records',()=>{
@@ -297,6 +330,8 @@ function answerInDOM(doc,choice,text=''){
  requests[3].resolve(Response.json({answer:null,sources:[],reason:'no-matching-records'}));await new Promise(resolve=>setTimeout(resolve,5));
  const empty=application.getSnapshot();assert.equal(empty.result.noMatch,true);assert.deepEqual(empty.result.sources,[]);
  assert.equal(C.binding(empty.packet.confirmed),C.binding(noMatchConfirmed));assert(!journey.host.html.includes('AI comparison'));
+ assert(journey.host.html.includes('<h2>Search result</h2>'));assert(!journey.host.html.includes('AI interpretation'));
+ const noMatchPrint=I.packetHTML(empty.packet);assert(noMatchPrint.includes('<h2>Search result</h2>'));assert(!noMatchPrint.includes('AI interpretation'));assert(!noMatchPrint.includes('How this relates'));
  assert(journey.getElementById('print'));assert(!journey.getElementById('retry'));
  journey.getElementById('edit').fire('click');assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');journey.getElementById('cancel-edit').fire('click');assert.equal(application.getSnapshot().result.noMatch,true);
  journey.getElementById('edit').fire('click');assert(journey.host.html.includes('LP2-43, lines 2–3'));

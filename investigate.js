@@ -223,6 +223,19 @@
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
  // Editorial status belongs to the record workflow; preserve substantive uncertainty.
  function readerLimit(record){return String(record.reader_limit||record.limitations||'').replace(/\s*Human review pending\.?\s*$/i,'').trim();}
+ function observedFindingsHTML(docs){
+  const findings=docs.flatMap((doc,index)=>{
+   if(doc.kind!=='experiment'||typeof doc.text!=='string')return [];
+   try{
+    const evidence=JSON.parse(doc.text);if(!evidence||typeof evidence!=='object'||Array.isArray(evidence))return [];
+    const text=(primary,fallback)=>typeof primary==='string'&&primary.trim()?primary:typeof fallback==='string'?fallback:'';
+    const record={finding:text(evidence.reader_finding,evidence.finding),limitations:text(evidence.reader_limit,evidence.limitations)};
+    return record.finding.trim()?[{doc,index,record}]:[];
+   }catch{return [];}
+  });
+  if(!findings.length)return '';
+  return '<h2>What the records found</h2>'+findings.map(({doc,index,record})=>'<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">['+(index+1)+'] '+esc(doc.title)+'</a></h3><p>'+esc(record.reader_finding||record.finding)+'</p>'+(readerLimit(record)?'<p class="source-limit"><strong>Limit:</strong> '+esc(readerLimit(record))+'</p>':'')+'</section>').join('');
+ }
  function sourceHTML(doc,records,{packet=false,preview=false}={}){
   const record=records.find(r=>r.id===doc.id);
   const heading='<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(doc.title)+'</a></h3>';
@@ -232,15 +245,15 @@
   const facts=[['Page scope',pages],['Method',scope.procedure],['Input',scope.representation],['Bounds',scope.parameters],['Not tested',scope.exclusions]];
   if(record.materials)facts.push(['Saved results',[record.materials.summary,record.materials.reuse,record.materials.limits].join(' ')]);
   if(packet)facts.push(['Run',record.reproduction?.command],['Inputs',(record.reproduction?.inputs||[]).map(f=>f.path).join(', ')]);
-  return heading+((packet||preview)&&finding?'<p>'+esc(finding)+'</p>':'')+
+  return heading+(preview&&finding?'<p>'+esc(finding)+'</p>':'')+
    (preview?'':'<dl class="source-facts">'+facts.filter(([,value])=>value).map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>')+
-   (limit?'<p class="source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
+   (preview&&limit?'<p class="source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
  }
  function packetHTML(packet){
-  const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[];
+  const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[],noMatch=r.evidence.search?.reason==='no-matching-records';
   return '<h1>Liberpedia · Research note</h1><p>'+esc(r.at)+'</p>'+rowsHTML(s)+
-   '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
-   (docs.length?'<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,{packet:true})).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
+   observedFindingsHTML(docs)+'<h2>'+(noMatch?'Search result':'How this relates to your idea')+'</h2>'+(noMatch?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
+   (docs.length?'<h2>Sources &amp; details</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,{packet:true})).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
  function disclosureNodes(host){
@@ -478,7 +491,7 @@
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
-   if(result)return '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls+(result.noMatch?'':'<p class="small answer-note">AI comparison based on the linked records.</p>');
+   if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls;
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
    const related=q.query?S.select(documents,q.query,scope.pages||[],scope.discovery).filter(d=>d.kind==='experiment'):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true})).join(''):'');
@@ -677,7 +690,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

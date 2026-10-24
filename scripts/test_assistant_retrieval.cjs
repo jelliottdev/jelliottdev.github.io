@@ -81,7 +81,8 @@ for(const query of [long,short,auditQuery,'OutGuess on LP2-31']){
   const source=records.find(record=>record.id===doc.id);
   assert.equal(doc.text,JSON.stringify({record_type:source.record_type,question:source.question,
    family:source.family,variant:source.variant,scope:source.scope,outcome:source.outcome,
-   finding:source.finding,limitations:source.limitations,...(source.materials?{materials:source.materials}:{})}),
+   finding:source.finding,limitations:source.limitations,...(source.materials?{materials:source.materials}:{}),
+   ...(source.reader_finding?{reader_finding:source.reader_finding}:{}),...(source.reader_limit?{reader_limit:source.reader_limit}:{})}),
   'Selected evidence must preserve the entire recorded scope and limits');
  }
 }

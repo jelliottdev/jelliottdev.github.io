@@ -15,11 +15,13 @@
       const evidence={record_type:r.record_type,question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations};
       const core=JSON.stringify(evidence);
       if(r.materials)evidence.materials=r.materials;
+      if(r.reader_finding)evidence.reader_finding=r.reader_finding;
+      if(r.reader_limit)evidence.reader_limit=r.reader_limit;
       return {
         id:r.id, title:r.title, kind:'experiment', recordType:r.record_type?.id||'method', href:`#/experiments/${r.id}`,
         text:JSON.stringify(evidence),
-        // Reuse notes support the answer, not the ranking of a named technique.
-        ...(r.materials?{searchText:core}:{}),
+        // Authored display text and reuse notes support the answer, not technique ranking.
+        ...(r.materials||r.reader_finding||r.reader_limit?{searchText:core}:{}),
         // Retrieval can use prose, but evidence always preserves the complete scope.
         keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
         phrases:r.tags||[],
