@@ -65,10 +65,10 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
   if(request.method!=='POST')return reply({error:'Method is not allowed.'},405);
   const rate=env.TASK_LIMIT||env.PROPOSAL_LIMIT;if(!rate?.limit)return reply({error:'Reviewed plans are unavailable.'},503);
   try{if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);}catch{return reply({error:'Reviewed plans are unavailable.'},503);}
-  let body;try{body=(await readJSON(request,1024)).value;if(!exact(body,['recordId','followupId'])||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
+  let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting');if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[])])||optedIn&&body.includeExisting!==true||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
   let loaded;try{loaded=await loadRecordPlan(body,{fetcher,timeoutMs});}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
   const {snapshot,...plan}=loaded;
-  if(env.PROPOSALS?.prepare){
+  if(body.includeExisting===true&&env.PROPOSALS?.prepare){
    try{
     // The task and recipe must be identical; an unrelated parent-record edit
     // may change recordSha256 without invalidating an immutable saved origin.

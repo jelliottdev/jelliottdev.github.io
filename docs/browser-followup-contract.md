@@ -23,7 +23,9 @@ default measurement is permitted for an authored follow-up. Initial support is
 exact-prefix evaluation only. A valid declaration does not make an unsupported
 method executable.
 
-`POST /record-plans` accepts `{recordId,followupId}`. The service fetches only the
+`POST /record-plans` accepts `{recordId,followupId}`. Current clients add
+`includeExisting:true` to opt into saved-task lookup; legacy two-field requests
+retain their original response shape and perform no database lookup. The service fetches only the
 fixed canonical record URL and official alphabet/page sources. It checks the
 published record, recipe, input hashes and control before returning a plan.
 The response is `{state:'plan-ready', origin, card, task, inputVersion, control,

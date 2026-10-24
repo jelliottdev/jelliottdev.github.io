@@ -31,7 +31,7 @@ await test('strict route/origin/method/body and rate guard run before all source
  assert.equal((await handle(request(args,{origin:'https://evil.example'}),env)).status,403);
  assert.equal((await handle(request(args),{...env,TASK_LIMIT:null})).status,503);
  assert.equal((await handle(request(args),{...env,TASK_LIMIT:{limit:async()=>({success:false})}})).status,429);
- for(const body of [{...args,extra:true},{recordId:'../secret',followupId:args.followupId},{...args,followupId:'x'.repeat(101)}])assert.equal((await handle(request(body),env)).status,400);
+ for(const body of [{...args,extra:true},{recordId:'../secret',followupId:args.followupId},{...args,followupId:'x'.repeat(101)},... [false,null,0,1,'true',{}].map(includeExisting=>({...args,includeExisting})),{...args,includeExisting:true,extra:true}])assert.equal((await handle(request(body),env)).status,400);
  assert.equal((await handle(request({padding:'x'.repeat(1024)}),env)).status,400);
  assert.equal((await handle(new Request('https://worker.example/record-plans',{headers:{origin}}),env)).status,405);
  assert.equal((await handle(new Request('https://worker.example/record-plans?x=1',{headers:{origin}}),env)).status,404);
@@ -87,7 +87,7 @@ await test('existing public task lookup is read-only, origin-bound, private-safe
  const taskEnv={...env,PROPOSALS:db},tasks=createLocalTaskHandler({fetcher:f.fetcher,now:()=>new Date(at)}),lookup=createRecordPlanHandler({fetcher:f.fetcher});
  const post=async(body)=>tasks(new Request('https://worker.example/tasks',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(body)}),taskEnv);
  const body={proposalId:privateId,task:plan.task,inputVersion:'raw',parentTaskId:null,origin:plan.origin};assert.equal((await post(body)).status,200);
- const check=async()=>{const response=await lookup(request(args),taskEnv);assert.equal(response.status,200);return response.json();};
+ const check=async()=>{const response=await lookup(request({...args,includeExisting:true}),taskEnv);assert.equal(response.status,200);return response.json();};
  assert(!('existingTask'in await check()),'A private-only origin is never disclosed');
  db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(pid,at,at.slice(0,10));
  assert.equal((await post({...body,proposalId:pid,origin:undefined})).status,200);assert(!('existingTask'in await check()),'Public task without this public origin is insufficient');
@@ -96,11 +96,13 @@ await test('existing public task lookup is read-only, origin-bound, private-safe
  let value=await check();assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'not-run'});assert(!JSON.stringify(value).includes(privateId));assert.equal(sql.length,1);
  const result=L.run(plan.task);db.sqlite.prepare('INSERT INTO local_task_results VALUES(?,?,?,?,?)').run(await sha(L.stable(result)),plan.task.taskId,L.stable(result),at,at.slice(0,10));
  value=await check();assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'results-verified'});assert(!('latestRun'in value));assert(!('result'in value.existingTask));
+ const queries=sql.length,legacy=await lookup(request(args),taskEnv),legacyBody=await legacy.json();assert.equal(legacy.status,200);assert.equal(Object.keys(legacyBody).length,9);assert(!('existingTask'in legacyBody));assert.equal(sql.length,queries,'Legacy request never queries public or private task metadata');
+ const legacyNoDB=await lookup(request(args),{...env,PROPOSALS:{prepare(){throw Error('Legacy clients must never touch storage');}}});assert.equal(legacyNoDB.status,200);assert.equal(Object.keys(await legacyNoDB.json()).length,9);
  const snapshots=db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all();f.record.summary='An unrelated parent record clarification';value=await check();assert.notEqual(value.origin.recordSha256,plan.origin.recordSha256);assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'results-verified'});assert.deepEqual(db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all(),snapshots,'Old origin snapshot is not rebound');
  f.recipe.limitation+=' A revised protocol.';assert(!('existingTask'in await check()),'Changed protocol cannot reuse even identical computation');f.recipe.limitation=plan.limitation;
  const oldHash=await sha(L.stable(plan.task));db.sqlite.prepare('UPDATE local_tasks SET task_hash=?').run('0'.repeat(64));assert(!('existingTask'in await check()),'Task identity/hash must match exactly');db.sqlite.prepare('UPDATE local_tasks SET task_hash=?').run(oldHash);
- f.recipe.inputs.pages[0].text_sha256='0'.repeat(64);const before=sql.length;assert.equal((await lookup(request(args),taskEnv)).status,422);assert.equal(sql.length,before,'Changed input pins fail before lookup');
- const broken=await fixture(),failed=await createRecordPlanHandler({fetcher:broken.fetcher})(request(args),{...env,PROPOSALS:{prepare(){throw Error('Storage offline');}}});assert.equal(failed.status,503);
+ f.recipe.inputs.pages[0].text_sha256='0'.repeat(64);const before=sql.length;assert.equal((await lookup(request({...args,includeExisting:true}),taskEnv)).status,422);assert.equal(sql.length,before,'Changed input pins fail before lookup');
+ const broken=await fixture(),failed=await createRecordPlanHandler({fetcher:broken.fetcher})(request({...args,includeExisting:true}),{...env,PROPOSALS:{prepare(){throw Error('Storage offline');}}});assert.equal(failed.status,503);
  db.sqlite.close();
 });
 await test('origins bind exact card/task, persist immutable snapshots and project public associations only',async()=>{
