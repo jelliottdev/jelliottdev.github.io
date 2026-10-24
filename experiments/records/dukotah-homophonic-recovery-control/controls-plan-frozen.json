@@ -1,0 +1,76 @@
+{
+  "schema": "d03-private-controls-plan-v1",
+  "frozen_at_utc": "2026-10-24T10:59:42.545654+00:00",
+  "authorization": "Root authorized controls-only calibration with explicitly selected main-tree inputs; no historical replay or manuscript target scoring.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_receipt_sha256": "4b9b579d5cd288de07714042ff8718e9f9616f545d6d039e035ef50e1f0850a5",
+  "runner_sha256": "a7536470667d6b8332dc3aafcafee103c44fa4ce79b750f6ec7ad32edf712e15",
+  "inventory_sha256": "a58a495188a920e49c8d63e3570ce33094dfc68d154d23d0b641e8233aca1755",
+  "length": 12956,
+  "cases": [
+    {
+      "k": 12,
+      "suppress": 0.0,
+      "seed": 11
+    },
+    {
+      "k": 12,
+      "suppress": 0.9,
+      "seed": 23
+    },
+    {
+      "k": 18,
+      "suppress": 0.9,
+      "seed": 37
+    }
+  ],
+  "engine": "Only ten whitelisted function definitions AST-extracted unchanged from frozen recovered P6. No module-level target code executes. N=29. English model uses explicitly selected main-tree solved_plaintext.txt, words_expanded.txt and thematic.txt; exact source cleaning and tiling.",
+  "source_fit": {
+    "iterations": 4000,
+    "restarts": 4,
+    "seed": "99+plant_seed",
+    "selection": "Best final restart state, as source; record max evaluated score separately without changing random calls."
+  },
+  "source_controls": {
+    "wrong_shuffle_restarts": 2,
+    "wrong_shuffle_seed": "1234+plant_seed",
+    "train_cut": "length*7//10",
+    "train_iterations": 4000,
+    "train_restarts": 4,
+    "train_seed": "777+plant_seed",
+    "heldout_shuffles": 500,
+    "heldout_gate": "strict z>3, as source synthetic control",
+    "partc_iterations": 4000,
+    "partc_restarts": 4,
+    "partc_shuffle_count": 24,
+    "partc_null_restarts": 1,
+    "partc_seed": "plant_seed; shuffled-fit seed=5000+trial+k+plant_seed",
+    "partc_gates": "strict z>3 and observed score>control max; report each separately",
+    "global_rng": "fresh np.random.default_rng(3301+plant_seed) per case; not historical RNG state after original Part A"
+  },
+  "additional_matched_budget_controls": {
+    "count_per_plant": 8,
+    "shuffle_rng": "np.random.default_rng(6600+plant_seed)",
+    "iterations": 4000,
+    "restarts": 4,
+    "fit_seed": "200000+100*plant_seed+trial",
+    "interpretation": "Whole-fit, equal-budget negative controls; eight comparisons are not a calibrated 99.9% envelope or a general false-positive probability."
+  },
+  "benchmark": {
+    "case_seed": 11,
+    "iterations": 128,
+    "restarts": 1,
+    "fit_seed": 110,
+    "repeats": 2
+  },
+  "projected_full_length_iterations": 840000,
+  "benchmark_gate_seconds": 600,
+  "outputs": "benchmark.json; case-11.json,case-23.json,case-37.json; controls-results.json. Existing outputs are never overwritten.",
+  "recovery_metrics": "Raw class-label position agreement, exact full label stream, 29-symbol map agreement and source non-bijective row-max confusion accuracy reported distinctly. Every failure retained.",
+  "limits": [
+    "Training and plants reuse source English substrate; this is an optimistic source-design calibration, not independent corpus power.",
+    "Source source Part-C null has one restart against four for the observed fit; matched-budget controls are separately labelled.",
+    "No Latin/structured-data model, natural partitions, k5..26 target grid, manuscript target or 1000-search envelope is run.",
+    "Recovered code lacks its recovered data/src trees; selected main-tree bytes are not proven original recovered-run inputs."
+  ]
+}

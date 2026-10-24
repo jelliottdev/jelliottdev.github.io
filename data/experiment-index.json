@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 323,
+    "records": 325,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -6912,6 +6912,122 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-h03-onion-cookie-xor.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-h03-onion-cookie-xor/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-h03-onion-cookie-xor.zip"
+    },
+    {
+      "id": "dukotah-held-corpus-skeleton-replay",
+      "title": "Matching manuscript word lengths to archived texts",
+      "question": "Do these available texts contain the manuscript’s sequence of word lengths?",
+      "summary": "No complete pattern matched in 84 eligible texts from 94 available files. The unchanged source scan compared a 2,928-word pattern and two fixed prefixes; it did not replay the historical 224-text corpus.",
+      "tags": [
+        "word lengths",
+        "word skeleton",
+        "corpus matching",
+        "contiguous passages",
+        "F rune",
+        "interrupters",
+        "positive controls",
+        "available corpus",
+        "LP2"
+      ],
+      "finding": "None of the tested alignments matched the complete pattern. The best exact-length alignment agreed at 593 of 2,928 word positions.",
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
+        ],
+        "representation": "Exact pinned Dukotah source manuscript parser and available corpus normalization. First 55 percent-separated segments, 2,928 words; split on dash/period, ignore slash line wraps. The 94 available text files contain 9,808,699 normalized words; 84 files contain 9,799,472 words and meet the unchanged 2,928-word minimum.",
+        "procedure": "Run unchanged Round 10 L4 source T0 first, then frozen T1: exact length, symmetric slack-one and directional F-count interval. Preserve default blocked FFT, shuffled patterns, raw floating maxima and tie behavior. Independently control all three matchers and recount every saved global winning alignment.",
+        "parameters": "T1: three full real patterns plus four full permutations with three matchers; first 400 and 120 word interval prefixes with two permutations each; 21 patterns total. Unique alignments per full/400/120 pattern: 9,553,604 / 9,765,956 / 9,789,476. T0: two eligible plant texts, four planted matcher cases and two shuffled matcher cases. No extra corpus globs.",
+        "exclusions": "Not the historical 224-text / 22,643,594-word replay. Ten available texts shorter than 2,928 are omitted even for shorter patterns. No all-subwindow scan, changed normalization, reordered/noncontiguous plaintext, degradation-floor bound, calibrated global probability, language exclusion or plaintext recovery."
+      },
+      "limitations": "The source admitted 84 of 94 available files and omitted ten texts shorter than 2,928 words, even for the prefix patterns. Only the first 400 and 120 words were tested as shorter windows. Four full-pattern shuffles and two per prefix do not establish a calibrated global probability or statistical equivalence. The source T0 supplied two plant texts and one shuffled control; the preregistered null z gate and degradation floor are not established. This is not the historical 224-text replay or a plaintext/language exclusion.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "language",
+          "title": "Language and corpus identification",
+          "aliases": [
+            "Welsh",
+            "language identification",
+            "corpus",
+            "different language",
+            "another language",
+            "non English",
+            "other languages"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-24",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-held-corpus-skeleton-replay",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-held-corpus-skeleton-replay.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-held-corpus-skeleton-replay/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-held-corpus-skeleton-replay.zip"
+    },
+    {
+      "id": "dukotah-homophonic-recovery-control",
+      "title": "Homophonic search: synthetic recovery controls",
+      "question": "Does the recovered P6 homophonic partition search recover and detect these three known synthetic inputs?",
+      "summary": "Three synthetic controls missed complete recovery and both source detection gates. No manuscript target was scored.",
+      "tags": [
+        "homophonic substitution",
+        "positive controls",
+        "partition search",
+        "synthetic controls"
+      ],
+      "finding": "The search did not completely recover any of three known synthetic inputs, and all three missed both detection gates.",
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/dukotah-homophonic-recovery-control/controls-plan-frozen.json",
+          "experiments/records/dukotah-homophonic-recovery-control/source-receipt.json"
+        ],
+        "representation": "Three source-design synthetic 29-symbol homophonic streams derived from explicitly selected main-tree puzzle/key text; no manuscript target.",
+        "procedure": "AST-extract unchanged recovered P6 functions; generate three planted class streams; run frozen annealing fits and source gates, plus equal-budget shuffled comparisons; independently reconstruct and rescore retained witnesses.",
+        "parameters": "Length 12,956 each; seeds 11/23/37; classes 12/12/18; suppression 0/0.9/0.9. Fits 4,000 iterations × 4 restarts. Source Part-C 24 null fits × 1 restart; held-out 500 shuffles per case; added 8 equal-budget null fits × 4 restarts per case. Trigram models for k=12, bigrams for k=18.",
+        "exclusions": "No manuscript target, historical replay, multilingual D-03 grid, whole-family exclusion, independent English validation, or general false-positive-rate estimate."
+      },
+      "limitations": "Three fixed plants test this recovered implementation only. Main-tree text inputs were explicitly selected because recovered inputs are absent; mixed puzzle/key material is not independent English prose. The source row-max statistic is not exact recovery, and source Part-C budgets differ. Eight matched shuffled fits per plant do not estimate a general false-positive rate. The 72 source Part-C null-fit witnesses and three single-shuffle maps were not retained; their moments remain producer summaries. No original D-03 family closure or LP2 target exclusion follows.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "homophonic",
+          "title": "Homophonic and many-to-one substitutions",
+          "aliases": [
+            "homophonic",
+            "many to one",
+            "substitution",
+            "homophonic substitution"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/dukotah-homophonic-recovery-control/controls-plan-frozen.json",
+        "experiments/records/dukotah-homophonic-recovery-control/source-receipt.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-24",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-homophonic-recovery-control",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-homophonic-recovery-control.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-homophonic-recovery-control/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-homophonic-recovery-control.zip"
     },
     {
       "id": "dukotah-image-template-rebuild",

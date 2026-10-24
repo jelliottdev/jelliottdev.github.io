@@ -1,0 +1,147 @@
+{
+  "source_id": "C-01",
+  "proposed_status": "partial",
+  "completed_scope": "Unchanged Round 10 L4 T0 and T1 on 94 exact held loader entries; 84 eligible under the source full 2928-word gate.",
+  "input_scope": {
+    "held_entries": 94,
+    "held_words": 9808699,
+    "eligible_entries": 84,
+    "eligible_words": 9799472,
+    "omitted_short_entries": 10,
+    "manuscript": "Source first 55 percent-separated segments; 2928 words; split on dash and period, ignore slash line wraps",
+    "prefixes": [
+      400,
+      120
+    ],
+    "alignments": {
+      "2928": {
+        "unique": 9553604,
+        "source_evaluations_including_block_overlap": 9553604
+      },
+      "400": {
+        "unique": 9765956,
+        "source_evaluations_including_block_overlap": 9874660
+      },
+      "120": {
+        "unique": 9789476,
+        "source_evaluations_including_block_overlap": 9910220
+      }
+    }
+  },
+  "controls": {
+    "independent_integer_offset_counts": 103995,
+    "t0_planted_texts": 2,
+    "t0_exact_location_recoveries": 4,
+    "t0_exact_counts": [
+      2506,
+      2506
+    ],
+    "t0_interval_counts": [
+      2928,
+      2928
+    ],
+    "t0_shuffled_maxima": {
+      "exact": 688,
+      "interval": 772
+    }
+  },
+  "target_findings": [
+    {
+      "pattern": "real:exact",
+      "window": 2928,
+      "count": 593,
+      "text": "keys/tyndale_new_testament.txt",
+      "offset": 145429,
+      "unique_eligible_alignments": 9553604,
+      "fraction": 0.20252732240437157,
+      "shuffled_maxima": [
+        586,
+        590,
+        583,
+        588
+      ],
+      "perfect_match": false
+    },
+    {
+      "pattern": "real:slack1",
+      "window": 2928,
+      "count": 1445,
+      "text": "keys/tyndale_new_testament.txt",
+      "offset": 144747,
+      "unique_eligible_alignments": 9553604,
+      "fraction": 0.49351092896174864,
+      "shuffled_maxima": [
+        1450,
+        1445,
+        1448,
+        1448
+      ],
+      "perfect_match": false
+    },
+    {
+      "pattern": "real:interval",
+      "window": 2928,
+      "count": 664,
+      "text": "keys/tyndale_new_testament.txt",
+      "offset": 145429,
+      "unique_eligible_alignments": 9553604,
+      "fraction": 0.226775956284153,
+      "shuffled_maxima": [
+        656,
+        662,
+        650,
+        659
+      ],
+      "perfect_match": false
+    },
+    {
+      "pattern": "realW400:interval",
+      "window": 400,
+      "count": 109,
+      "text": "data/kjv.txt",
+      "offset": 192907,
+      "unique_eligible_alignments": 9765956,
+      "fraction": 0.2725,
+      "shuffled_maxima": [
+        109,
+        109
+      ],
+      "perfect_match": false
+    },
+    {
+      "pattern": "realW120:interval",
+      "window": 120,
+      "count": 47,
+      "text": "keys/homer_iliad.txt",
+      "offset": 26860,
+      "unique_eligible_alignments": 9789476,
+      "fraction": 0.39166666666666666,
+      "shuffled_maxima": [
+        48,
+        50
+      ],
+      "perfect_match": false
+    }
+  ],
+  "plain_finding": "No complete skeleton match was found in the tested held-text alignments. Best full-pattern counts were 593 exact, 1445 slack-one, 664 directional-interval out of 2928; these are matching-length positions, not recovered plaintext.",
+  "limits": [
+    "Historical 224-text / 22,643,594-word corpus not replayed; earlier names/sizes overlap does not establish historical byte identity.",
+    "Source skips all 10 texts shorter than 2928 even for 120/400 prefixes. A corrected short-text version is a separate future follow-up.",
+    "Only first 120/400-word prefixes, not every manuscript window. Corpus is sequential normalized words; no reordered/noncontiguous or alternate-transliteration coverage.",
+    "Four full-pattern and two prefix shuffles are descriptive controls, not calibrated global probabilities or proof of statistical equivalence.",
+    "Source T0 supplies only one shuffled control; plant recovery is demonstrated, but historical preregistered z gate is not established. No T0b/c degradation-floor replay.",
+    "No plaintext recovery, language exclusion, general corpus elimination, or historical full-attempt closure is claimed."
+  ],
+  "integration": "Private proposed reconciliation only. Do not create a new source idea count; no public registry/catalog edits were made.",
+  "evidence": [
+    "inputs-frozen.json",
+    "controls-plan-frozen.json",
+    "independent-controls.json",
+    "positive_control_T0.json",
+    "independent-t0-audit.json",
+    "target-plan-frozen.json",
+    "scan_results.json",
+    "independent-target-audit.json",
+    "publication-assessment.json"
+  ]
+}

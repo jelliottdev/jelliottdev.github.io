@@ -1,0 +1,14 @@
+{
+  "implemented": false,
+  "executed_normalization_unchanged": true,
+  "arrays_equal_pinned_normalization": 94,
+  "encoding": "little-endian signed16-bit integer per normalized word",
+  "all94_raw_bytes": 19617398,
+  "eligible84_raw_bytes": 19598944,
+  "all94_individually_deflated_bytes": 4727489,
+  "eligible84_individually_deflated_bytes": 4722342,
+  "contents_saved": false,
+  "recommendation": "A future bundle can store all94 arrays plus exact keys/order, lengths and per-array hashes, source raw hashes and manuscript inputs. The10short arrays add little and preserve unchanged source corpus totals and selection metadata. The original scanner consumes these exact int16 arrays; only the corpus loader would need an explicitly declared adapter.",
+  "equivalence": "Every array hash was recomputed from the unchanged source normalization and agrees with the pre-target manifest. A loader adapter must validate the entire name/order/hash set, then return identical arrays and metadata; independent full array equality and same-source small fixture output parity should precede any new bundle claim.",
+  "limits": "This assessment only computes sizes in memory. No derived arrays or corpus bytes are saved, distributed, or used for a new scan. Word-length arrays omit word spellings, but no legal conclusion about redistribution is asserted. An array bundle reuses recorded normalization; it does not independently rerun normalization or authenticate historical224-text bytes."
+}

@@ -269,3 +269,16 @@ for(const query of ['image-only row detection','whole line omission']){
  assert.equal(Search.supporting(liveDocs,query)[0].document.id,'image-row-coverage',query);
 }
 console.log('PASS: known-crib seed controls and image-row coverage have distinct experiment destinations.');
+
+for(const query of ['homophonic synthetic recovery controls','D-03 homophonic search']){
+ const hits=Search.classify(liveDocs,query);
+ assert.equal(hits.supporting[0]?.document.id,'dukotah-homophonic-recovery-control');
+ assert(!hits.tests.some(hit=>hit.document.id==='dukotah-homophonic-recovery-control'),
+  'Synthetic recovery checks cannot become manuscript solving coverage');
+}
+for(const query of ['matching word lengths to books','C-01 skeleton scan']){
+ const hit=Search.experiments(liveDocs,query)[0];
+ assert.equal(hit?.document.id,'dukotah-held-corpus-skeleton-replay');
+ assert(hit.document.text.includes('224-text'), 'The missing historical corpus must remain in retrieved evidence');
+}
+console.log('PASS: homophonic controls and bounded corpus replays retain their distinct evidence roles.');

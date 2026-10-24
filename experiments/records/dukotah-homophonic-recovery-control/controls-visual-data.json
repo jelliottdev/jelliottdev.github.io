@@ -1,0 +1,80 @@
+{
+  "schema": "d03-private-control-visual-v1",
+  "purpose": "Known synthetic controls only; no manuscript target was scored.",
+  "reader_finding": "On three known synthetic inputs, the recovered partition search failed both detection checks. Its 57–62% class-alignment measure did not mean complete recovery.",
+  "reader_limit": "Explicitly selected main-tree key and puzzle texts only; not independent English validation or a historical replay. No manuscript target was scored.",
+  "panels": [
+    {
+      "title": "Known plants did not pass the detection gate",
+      "metric": "Source Part-C z and held-out z; higher than 3 is required",
+      "threshold": 3
+    },
+    {
+      "title": "Recovery depends on what is counted",
+      "metric": "Raw class-label agreement, one-to-one aligned agreement and source many-to-one row-max agreement; exact full recovery was zero of three."
+    }
+  ],
+  "rows": [
+    {
+      "seed": 11,
+      "classes": 12,
+      "suppress": 0.0,
+      "raw_position_accuracy_pct": 8.335906143871567,
+      "source_rowmax_accuracy_pct": 56.938870021611606,
+      "bijective_aligned_accuracy_pct": 39.502933004013585,
+      "exact_recovery": false,
+      "source_partc_z": 1.3694822158192035,
+      "heldout_z": 0.3138405613502968,
+      "source_z_gate": 3,
+      "matched_null_ge_fit": 7,
+      "matched_null_count": 8,
+      "returned_score": -3.0011866773955465,
+      "best_evaluated_score": -2.878357020553479,
+      "oracle_score": -2.998469185542464
+    },
+    {
+      "seed": 23,
+      "classes": 12,
+      "suppress": 0.9,
+      "raw_position_accuracy_pct": 31.799938252547083,
+      "source_rowmax_accuracy_pct": 59.76381599259031,
+      "bijective_aligned_accuracy_pct": 36.708860759493675,
+      "exact_recovery": false,
+      "source_partc_z": 1.885843627758166,
+      "heldout_z": 1.9429610157599135,
+      "source_z_gate": 3,
+      "matched_null_ge_fit": 2,
+      "matched_null_count": 8,
+      "returned_score": -2.8676365104106725,
+      "best_evaluated_score": -2.7936735676073754,
+      "oracle_score": -2.998469185542464
+    },
+    {
+      "seed": 37,
+      "classes": 18,
+      "suppress": 0.9,
+      "raw_position_accuracy_pct": 4.438098178450138,
+      "source_rowmax_accuracy_pct": 61.87094782340229,
+      "bijective_aligned_accuracy_pct": 56.34455078728002,
+      "exact_recovery": false,
+      "source_partc_z": 1.1926535495523594,
+      "heldout_z": 0.21380139581082108,
+      "source_z_gate": 3,
+      "matched_null_ge_fit": 1,
+      "matched_null_count": 8,
+      "returned_score": -2.4386752898708752,
+      "best_evaluated_score": -2.428363995330269,
+      "oracle_score": -2.373996205718811
+    }
+  ],
+  "hashes": {
+    "frozen_plan_sha256": "d88b6fb36e4c537f5001771d61697fb9784b77c1e3d9f1eba0aead3b6b43835e",
+    "results_sha256": "74a7ced3132379fe3e6cea65088563e05c770891538dc44b4fda2b0647d24433",
+    "independent_check_sha256": "ce351c0f72818600cfa650114cc7908a0230f5e615e292cf75e05d9fc2e4ae77"
+  },
+  "limits": [
+    "Three cases are not independent evidence about the whole proposed family.",
+    "Eight equal-budget shuffled fits per plant do not estimate a 99.9% envelope.",
+    "Source gate failures on known plants prevent using a future negative as a general exclusion."
+  ]
+}

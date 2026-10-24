@@ -1,0 +1,28 @@
+{
+  "scope": "Local Git extraction and all94 normalized-array equivalence; synthetic scanner only, no manuscript target rerun",
+  "stage_receipt_sha256": "a8c300df946403971cde50b50665f4e471bce3859c5c0d861238b0c58dd0d553",
+  "fixture_seed": 330120261025,
+  "fixture_corpus_length": 5000,
+  "windows": [
+    120,
+    400,
+    2928
+  ],
+  "planted_offset": 2048,
+  "matchers": [
+    "exact",
+    "slack1",
+    "interval"
+  ],
+  "block": 4096,
+  "fft_size": 8192,
+  "checks": [
+    "bit-identical normalized arrays and manuscript arrays vs original source",
+    "bit-identical full fixture FFT arrays and blocked maxima",
+    "reject extra eligible corpus entry",
+    "reject raw byte mutation",
+    "mock optional download bounds/hash/redirect only; no network"
+  ],
+  "expected_external_setup_files": 95,
+  "temporary_corpus_retained": false
+}

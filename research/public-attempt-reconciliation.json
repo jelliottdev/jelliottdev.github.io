@@ -1,6 +1,6 @@
 {
   "schema": "liberpedia-public-attempt-reconciliation-v1",
-  "compiled": "2026-10-23",
+  "compiled": "2026-10-24",
   "source": {
     "repository": "Dukotah/cicada3301",
     "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
@@ -13,17 +13,17 @@
   "counts": {
     "source_entries_reviewed": 172,
     "reproduced_subclaim": 9,
-    "partial": 110,
+    "partial": 111,
     "unsupported_source_verdict": 22,
     "blocked_exact_replay": 19,
-    "source_proposal_only": 7,
+    "source_proposal_only": 6,
     "failed_source_gate": 5,
-    "source_entries_with_published_record_link": 74,
+    "source_entries_with_published_record_link": 76,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
       "complete-executed-grid": 24,
-      "partial-execution": 21,
+      "partial-execution": 22,
       "replayed-with-invalid-gate": 6
     },
     "batch20_dispositions": {
@@ -1436,18 +1436,34 @@
     {
       "source_id": "D-03",
       "source_claim": "A surjective 29-to-k homophonic partition search with planted controls and held-out validation remains unexecuted.",
-      "status": "source-proposal-only",
-      "record_links": [],
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-homophonic-recovery-control",
+          "covered_subclaim": "Fresh controls using unchanged recovered campaign15 P6 functions and explicitly selected main-tree text bytes: three 12,956-symbol plants (k=12/12/18), 4,000 iterations x4 restarts, complete recovery 0/3; source Part-C and held-out z gates fail all three. All 24 additional equal-budget null-fit witnesses and 1,500 held-out shuffle scores were independently checked, and an isolated replay matched deterministic outputs. No manuscript target was scored."
+        }
+      ],
       "unresolved_parts": [
-        "Campaign14 P4 computes off-diagonal bigram independence chi-square against 200 filtered-uniform simulations; it does not anneal or fit surjective homophonic partitions.",
-        "No synthetic family recovery/power test or held-out homophonic score appears in the cited P4 routine. A non-extreme aggregate statistic does not substitute for an exclusion calibrated against every proposed family member.",
-        "The proposed partition search over k=5 through 26, synthetic controls, 1,000-shuffle comparison and held-out pages remains pending; nearby fixed substitutions and crib-table tests cover different rules."
+        "Recovered campaign15 P6 implements a related partition search, despite the earlier D-03 statement that the proposed search was never coded. Its source-reported manuscript results were not locally replayed or adopted as a family closure.",
+        "The recovered subtree has no training data/src tree. These controls explicitly select pinned main-tree puzzle/key text; they are not verified historical-run inputs or independent clean-English validation.",
+        "The original broader D-03 multilingual/structured-data search, k=5..26 target grid, natural partitions, 1,000-shuffle whole-search calibration and genuinely held-out selection remain unexecuted locally.",
+        "Recovered P6 uses trigrams at k=12 and bigrams at k=18, returns final-restart rather than best-visited states, uses unequal source null budgets and consults all target pages when selecting its later held-out model. Failed synthetic controls cannot exclude the homophonic cipher family."
       ],
       "source_evidence": [
         "liber-primus/analysis/campaign14/REDTEAM-PROPOSALS.md",
-        "liber-primus/analysis/campaign14/probes.py"
+        "liber-primus/analysis/campaign14/probes.py",
+        "corpus/H-branch-recovery/recovered/claude_cicada-3301-scope-cigxzi/liber-primus/analysis/campaign15/P6-homophonic.py"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-homophonic-recovery-control"
+        ],
+        "scope": "Three synthetic plants and explicit matched shuffled controls; selected main-tree inputs, not a historical P6 manuscript replay.",
+        "wider_method_excluded": false
+      },
+      "audit_note": "The earlier never-coded claim is superseded by recovered P6 source. These local synthetic controls assess that implementation with explicitly reconstructed training inputs; no manuscript target was tested."
     },
     {
       "source_id": "D-04",
@@ -3417,7 +3433,12 @@
       "source_id": "C-01",
       "source_claim": "SKELETON corpus extension. Round 8's word-length plaintext-identification is negative for 51 texts / 8.2M words, and says so explicitly: \"it eliminates a specific 8.2 M-word corpus, not 'any known text'… extending it to a full Gutenberg mirror is the obvious follow-up and `wordlen_search.py` is written for it\". Never extended.",
       "status": "partial",
-      "record_links": [],
+      "record_links": [
+        {
+          "record_id": "dukotah-held-corpus-skeleton-replay",
+          "covered_subclaim": "Fresh unchanged L4 scan of the exact 94 available inputs, 84 eligible under the 2,928-word gate: three full-length rules plus fixed 400/120 prefixes, 21 real/shuffled patterns. No full pattern matched. Independent matcher controls and all 21 saved winning alignments checked; portable inputs external."
+        }
+      ],
       "source_evidence": [
         "PICKUP-HERE.md",
         "research/ROUND-8-RESULTS.md",
@@ -3426,23 +3447,26 @@
         "liber-primus/analysis/round10/L4-skeleton/positive_control_T0.json",
         "research/source-intake/hint-scope-cohort-2026-10-23/proposed-reconciliation.json",
         "research/source-intake/hint-scope-cohort-2026-10-23/evidence-pins.json",
-        "research/source-intake/runnable-method-followups-2026-10-24/c01-overlap-audit.json"
+        "research/source-intake/runnable-method-followups-2026-10-24/c01-overlap-audit.json",
+        "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
       ],
-      "verified_subclaim": "The never-extended premise is superseded in the same pinned source: Round-10 L4 scanned 224 texts/22,643,594 words, with exact/slack1/interval bests inside shuffled bands. Fresh exact-source scanner controls recover 9/9 interval plants at W=120/400/2928 and match all 69,330 per-offset counts to independent direct calculations.",
+      "verified_subclaim": "The earlier never-extended premise is superseded by archived Round-10 L4 results. The new local replay used 84 eligible texts from 94 available files, not the archived 224-text corpus. Best full-pattern counts were 593/2,928 exact, 1,445/2,928 within one rune and 664/2,928 with F-count tolerance; these are compatible positions, not decoded words.",
       "unresolved_parts": [
-        "The 224-text corpus scan and archived detection-floor experiment were not freshly replayed.",
-        "Fresh synthetic controls validate these scanner cases, not the missing corpus bytes or the archived negative scores.",
-        "An entire Gutenberg mirror, unheld corpora, different recensions and word insertions/deletions remain outside this result.",
-        "Original 51-text scan and later 224-text extension must not be counted as new local tests."
+        "The historical 224-text/22,643,594-word scan was not freshly replayed; available filenames do not establish identical historical bytes.",
+        "Ten available texts shorter than 2,928 words remain excluded even for the 400/120-word prefix tests. No other manuscript subwindows were searched.",
+        "Four full-pattern shuffles and two per prefix do not calibrate a global probability. Two eligible planted texts locate correctly, but the source null-score gate and degradation floor remain unestablished.",
+        "Other corpora, editions, changed word boundaries, insertions/deletions, reordered and noncontiguous plaintext remain outside this replay."
       ],
       "whole_entry_coverage_verified": false,
       "execution_replay": {
         "state": "partial-execution",
-        "record_ids": [],
-        "scope": "Fresh synthetic controls of exact L4 blocked FFT scanner; no target corpus replay.",
+        "record_ids": [
+          "dukotah-held-corpus-skeleton-replay"
+        ],
+        "scope": "Exact currently available corpus replay and source T0 controls; not the full historical 224-text input set or all planned controls.",
         "wider_method_excluded": false
       },
-      "readiness": "The94 available text names/counts overlap the archived224-text inventory; no new corpus coverage established and no duplicate target campaign launched."
+      "readiness": "Current-input replay is published. Historical missing bytes and broader robustness checks remain unresolved."
     },
     {
       "source_id": "R20-P1-SIEVE-INFEASIBLE",

@@ -1,0 +1,319 @@
+{
+  "id": "dukotah-held-corpus-skeleton-replay",
+  "status": "published",
+  "title": "Matching manuscript word lengths to archived texts",
+  "question": "Do these available texts contain the manuscript’s sequence of word lengths?",
+  "reader_question": "Do any of these texts match the manuscript’s word lengths?",
+  "summary": "No complete pattern matched in 84 eligible texts from 94 available files. The unchanged source scan compared a 2,928-word pattern and two fixed prefixes; it did not replay the historical 224-text corpus.",
+  "finding": "The best full-pattern counts were 593/2,928 exact, 1,445/2,928 within one rune and 664/2,928 with directional F-count tolerance. The first 400 and 120 word prefixes reached 109/400 and 47/120. These are compatible length positions at an alignment, not decoded words or consecutive matching passages. No complete real pattern matched.",
+  "reader_finding": "None of the tested alignments matched the complete pattern. The best exact-length alignment agreed at 593 of 2,928 word positions.",
+  "limitations": "The source admitted 84 of 94 available files and omitted ten texts shorter than 2,928 words, even for the prefix patterns. Only the first 400 and 120 words were tested as shorter windows. Four full-pattern shuffles and two per prefix do not establish a calibrated global probability or statistical equivalence. The source T0 supplied two plant texts and one shuffled control; the preregistered null z gate and degradation floor are not established. This is not the historical 224-text replay or a plaintext/language exclusion.",
+  "reader_limit": "Only 84 of 94 available texts passed the unchanged length gate. This is not the historical 224-text corpus, and length matches are not decoded words.",
+  "next_steps": "A separate frozen follow-up would be needed to include short texts in the prefix scans or measure robustness to changed editions and word boundaries.",
+  "outcome": "inconclusive",
+  "tags": [
+    "word lengths",
+    "word skeleton",
+    "corpus matching",
+    "contiguous passages",
+    "F rune",
+    "interrupters",
+    "positive controls",
+    "available corpus",
+    "LP2"
+  ],
+  "pages_note": "Source parser’s first 55 percent-separated manuscript segments; 2,928 words",
+  "bounds_note": "84 eligible texts from 94 available files; full 2,928-word pattern plus first 400/120 prefixes; corpus inputs external",
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
+    ],
+    "representation": "Exact pinned Dukotah source manuscript parser and available corpus normalization. First 55 percent-separated segments, 2,928 words; split on dash/period, ignore slash line wraps. The 94 available text files contain 9,808,699 normalized words; 84 files contain 9,799,472 words and meet the unchanged 2,928-word minimum.",
+    "procedure": "Run unchanged Round 10 L4 source T0 first, then frozen T1: exact length, symmetric slack-one and directional F-count interval. Preserve default blocked FFT, shuffled patterns, raw floating maxima and tie behavior. Independently control all three matchers and recount every saved global winning alignment.",
+    "parameters": "T1: three full real patterns plus four full permutations with three matchers; first 400 and 120 word interval prefixes with two permutations each; 21 patterns total. Unique alignments per full/400/120 pattern: 9,553,604 / 9,765,956 / 9,789,476. T0: two eligible plant texts, four planted matcher cases and two shuffled matcher cases. No extra corpus globs.",
+    "exclusions": "Not the historical 224-text / 22,643,594-word replay. Ten available texts shorter than 2,928 are omitted even for shorter patterns. No all-subwindow scan, changed normalization, reordered/noncontiguous plaintext, degradation-floor bound, calibrated global probability, language exclusion or plaintext recovery."
+  },
+  "review": {
+    "kind": "bounded held-input source replay with independent instrument and saved-witness checks",
+    "retested_on": "2026-10-24",
+    "reviewer": "Independent checks of 103,995 synthetic offset values and integer recounts of 21 target winners; source T0/T1 run unchanged; portable loader/fixture parity checked separately",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable.py run --inputs c01-inputs --stage t0 --output c01-t0-output && python experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable.py run --inputs c01-inputs --stage target --output c01-target-output && python experiments/records/dukotah-held-corpus-skeleton-replay/compare_replay.py --t0 c01-t0-output/positive_control_T0.json --target c01-target-output/scan_results.json",
+    "environment": "Full replay: Python 3.12, NumPy 2.5.4 and the exact external 94-text corpus plus manuscript, prepared as c01-inputs. Output directories must be fresh. PORTABILITY.md gives commands from the extracted bundle root for local Git setup, verification, T0, T1 and comparison with immutable expected outputs. Corpus texts and derived arrays are not bundled. check.py --check is a separate standard-library saved-evidence audit, not the main replay.",
+    "script": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable.py",
+    "script_sha256": "95de92577b6783cd3b4d734a87530eb0d0eee2a7664d9fca5321ae15f0768903",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/PORTABILITY.md",
+        "sha256": "215592a8f8f5a87a299fb883aecee09bd87ec01e5e6f300674e4a59d34549c6d"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/article.md",
+        "sha256": "49cec7925c1b3b925fab1727ede3cff9049f7b8c8d40408ba454813221de1bf1"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/check.py",
+        "sha256": "542b607b68a619458e63bdf95b5723e5e926ce5aca43aaa131e3717cc11e7303"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/compare_replay.py",
+        "sha256": "3b95a0e49f85581f7d34c5ed4bc703f9b5f62e01a7d6b93ac686ea2c315a930a"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/input-shape-check.json",
+        "sha256": "8fb497f16774655c9888b5ed618f848941423ae62665f93f424ab36491ad7bde"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/plot.py",
+        "sha256": "3b81bf4783b2276fb59ed22b594b80fa4bc8c7e6cbeb7ad3fa921bdcc1001967"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/portable-files.json",
+        "sha256": "3717b5066629a9d36b196e9cd4f8ef6cfc0b89ab8f09d71b09d17909e183f0e2"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/portable-final-receipt.json",
+        "sha256": "6dcff37ed1335994f1af98f1b82627200734b248fbd4fd23a3a3aed85a78595c"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/PORTABLE.md",
+        "sha256": "ba588754c0862390a8f347d8f8d061d4d929653d859a9659997e8aa2761b6757"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/README.md",
+        "sha256": "0860272b899017887958c37e12346d6592a2004b6f413a20cd1b2f4bb776ae25"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/assess_arrays.py",
+        "sha256": "2d3115d61bbeb9dc54791bb402218bed6ad0237db514908373163e515849b4ec"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/check_public_provenance.py",
+        "sha256": "3a26cdbaab62d8a35e07842477956fbda95aa7d717609bde72301be1345f1f4b"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/check_receipt.py",
+        "sha256": "2e6e006958051f73049c086b2e41c6128c7b984059df78f9ae42c8bab3eb631a"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/check_t0.py",
+        "sha256": "bb902e61f38f793c417c8e92f08799ff536460dc9f005c8211fe2c7c1dcd7b6b"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/controls-plan-frozen.json",
+        "sha256": "332db9dbe35ac332517415118c5c3e277fcc23abe2e5ef24a6e781c3541fa27f"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/corpus-public-provenance.json",
+        "sha256": "7676083aaeacfbb1b97ae933fd58dbeb0125bb76c962de5bc439b0bf9649852f"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/derived-array-assessment.json",
+        "sha256": "29d6498e85aab81667b49022f21c28ae3558d29152527826241ab3b2e18437b0"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json",
+        "sha256": "e7b3922b158d037b134a21246d0426bcd15d36dbc1d2feeb76c330876ce71100"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable-offline-parity-plan.json",
+        "sha256": "664fba897a7df97779af8317fa63b4a066c00fde87ff53c70d7954b4ac9e5001"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable-parity-plan.json",
+        "sha256": "5102593e6b8fc8065851050eb0496c5646582faa69c4cc9586057df8beecee1a"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable.py",
+        "sha256": "95de92577b6783cd3b4d734a87530eb0d0eee2a7664d9fca5321ae15f0768903"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/proposed-reconciliation.json",
+        "sha256": "b5226d9f28645f4d3b7afb17d192d4353a06681976606de601d0389a00b54086"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/publication-assessment.json",
+        "sha256": "7b7288e5d6dfc9dcb7d29e3c3119a874a766e54b3bc4ab0bd3efc83906c4d622"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/receipt.json",
+        "sha256": "2105bb041b69cbd4596420673da204404c28af5f77c1a20d4f221d2c774e4284"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/replay-controls-frozen.py",
+        "sha256": "af6af7f1c2140caecabf66d02dceee1ee0869dc5ac7717e6e48402db59661435"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/replay.py",
+        "sha256": "f03a84256cba12da75fb8ca9478451b7f10fd57f51299f79ad8cc9e63a6dcc93"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/requirements.txt",
+        "sha256": "738071c1d9633f276433ad6738de256d2bf0d22f66dc4bd3179012bebb63bdd1"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+        "sha256": "0021eee0b7cd2f247547af6ba776851b54f62988afa3f46345f12276d165bebd"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+        "sha256": "9270ad69cb53f632d3774147c0c515df6f2471c6c623102aec45c06493783fab"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/analysis/round10/L4-skeleton/positive_control.py",
+        "sha256": "8fe85799ffd03566fabf551192f6afac1576e0ae8990b41d8b7d97fc01a17516"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/analysis/round10/L4-skeleton/run_scan.py",
+        "sha256": "ae4d39c4b66df0d1b2c38566f7b2731e4be68fc7829ffbc28d3da24c27097e5a"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/analysis/round10/L4-skeleton/scanner.py",
+        "sha256": "683ace872739c278ff80cfdfcb3f875ae2b648ae5b95e1caa757c588ab3f8029"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/analysis/round10/L4-skeleton/skel.py",
+        "sha256": "649f7fe62c243a20c2fd09ea56c68d5b07d340d75fd8f8d37250bb992156f567"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/summarize.py",
+        "sha256": "6bd4e1da234fb6b554e3e1f30aaa16ca5f4584ff32edfd7972c03c20b070730c"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/t0-stdout.txt",
+        "sha256": "f7ea873aace65a9ebff158f3f3973d6c437647892a8503f5e6e3c9114a0916b7"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/target-plan-frozen.json",
+        "sha256": "7eec9117910d1906742ad03db77c31724eff9a3cf2b94e9da60ae02827385d64"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/target-stdout.txt",
+        "sha256": "e25a47a1b07036350326de7ce372178fea2e6bd45fdab0d665bbef0ed66b08c9"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/test_portable.py",
+        "sha256": "1a9ef97a261244a1c875a6dee40df66aba36ee07338418be68a1f4ee7f86efe8"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/test_compare_replay.py",
+        "sha256": "4cbde5b5b549ee6ec9a4d63b2a734d1ab04da962873996a59a29607bdfdc8ace"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/length-matches.svg",
+        "sha256": "db670df4056313ef87426b45a7dd481161cf8e4e2173cc272e7bae98e66b5c8b"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-controls.json",
+        "sha256": "ffdc40b451831f455bb1c0984307c65e243631a62e8975d4c4ac4850f3651de2"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-t0-audit.json",
+        "sha256": "c75a2ac6f55555a59c24f7433b626f59e27775e1ce4fcf15b0c4c5ad6d33d331"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-target-audit.json",
+        "sha256": "17f17498b273d12a0b9481d36557526c4b2e6c8e69b6c0631d3c9826157390e0"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/portable-offline-tests.json",
+        "sha256": "0a1f5021e0f9ec9a13f1af319661fff5a84793fe5519b7fe01d2e2c139d6387d"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/positive_control_T0.json",
+        "sha256": "a6cfe68854c02ba15617c86ed6ec8d5a51a88d2c1f1e43ebbdb5c296564441ef"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/scan_results.json",
+        "sha256": "81f00d9a00e2f7c9438028cea5aca5857207a7dbbe0bd9a5e8ab4873f1e21f71"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/t0-runtime.json",
+        "sha256": "65c15f2ccb7e6f71ce5b493c886164e2e2d5ba2709de84daedee9690b7150e14"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/target-runtime.json",
+        "sha256": "3184eea2ab25e502349aa94c21f787bfd699471ef09b11debd7578c0bef2d0c5"
+      },
+      {
+        "path": "experiments/records/dukotah-held-corpus-skeleton-replay/results.json",
+        "sha256": "367edaaf5e9e967dcdf44950b7d67f42f279ac0b4881a5784a3be2ba3cda4e69"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-held-corpus-skeleton-replay/length-matches.svg",
+      "caption": "Best full-pattern compatible word-length positions out of 2,928 across 84 eligible texts. Gray marks length-rule matches, not decoded words or a statistical rejection."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source T1pattern selection",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/run_scan.py"
+    },
+    {
+      "label": "Pinned parser, normalization and match rules",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/skel.py"
+    },
+    {
+      "label": "Pinned blocked scanner and minimum-text gate",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/scanner.py"
+    },
+    {
+      "label": "Pinned planted-text control",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/positive_control.py"
+    }
+  ],
+  "related": [
+    "corpus-prefix-census",
+    "layout-count-streams",
+    "transcription-correction-sensitivity"
+  ],
+  "materials": {
+    "summary": "Saved full/prefix maxima, per-text summaries, planted controls and independent witness/audit receipts.",
+    "reuse": "Inspect reported scores and winning text offsets without repeating the full corpus scan; check the frozen bytes and summary arithmetic offline.",
+    "limits": "Corpus texts and derived arrays remain external. Saved counts are not plaintext. Full input normalization or a new corpus scan requires all exact raw inputs; only 84 of 94 available texts were eligible, and the historical 224-text corpus was not replayed.",
+    "evidence": [
+      "experiments/records/dukotah-held-corpus-skeleton-replay/results.json",
+      "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/scan_results.json",
+      "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-target-audit.json"
+    ]
+  },
+  "article": "No tested alignment matched the complete manuscript word-length pattern. With the exact-length rule, the best alignment agreed at **593 of 2,928 word positions**. Those positions meet the length rule; this does not recover the manuscript’s words or mean that 593 consecutive word lengths matched.\n\nThe scan used **84 eligible texts from 94 available files**. It is a replay of these exact archived inputs, **not the historical 224-text corpus** reported by the source. It does not establish a plaintext or exclude a language.\n\n![Best full-pattern word-length counts, each out of 2,928 positions.](experiments/records/dukotah-held-corpus-skeleton-replay/length-matches.svg)\n\n## What was compared\n\nThe [pinned source program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/run_scan.py) compares a sequence of manuscript word lengths with every eligible contiguous alignment in each text. The source parser takes its first 55 percent-separated manuscript segments, yielding 2,928 words. It splits words on dashes and periods and treats slash marks as line wraps. Corpus text passes through the source’s fixed Latin-to-rune-length normalization. This retains the archived input convention; it is not a fresh scan of every current page transcription.\n\nThree full-pattern rules were tested: exact length; symmetric tolerance of one rune; and a directional interval from the observed length minus that word’s F-rune count up to the observed length. The latter models F runes that might be nulls. The source also tests the **first 400 and first 120 words** with the interval rule; it does not test every manuscript subwindow.\n\n| Pattern | Best compatible positions | Shuffled-pattern maxima |\n|---|---:|---|\n| Full, exact | 593 / 2,928 | 586, 590, 583, 588 |\n| Full, within one rune | 1,445 / 2,928 | 1,450, 1,445, 1,448, 1,448 |\n| Full, F-count interval | 664 / 2,928 | 656, 662, 650, 659 |\n| First 400, interval | 109 / 400 | 109, 109 |\n| First 120, interval | 47 / 120 | 48, 50 |\n\nEach number is a maximum after searching the same eligible texts and offsets. Four full-pattern shuffles and two shuffles per prefix are too few for a calibrated global probability or a claim that the real pattern is statistically equivalent to shuffled patterns. No such inference is made here.\n\n## Exact coverage and controls\n\nThe unchanged scanner omits every text shorter than **2,928 words**, even when testing the shorter prefixes. Thus ten available files were omitted. The eligible files contain 9,799,472 normalized words and supply 9,553,604 unique full-pattern alignments, 9,765,956 first-400 alignments and 9,789,476 first-120 alignments. Shorter patterns are evaluated more than once near block joins; those repeated evaluations are not extra independent alignments.\n\nBefore the target scan, independent direct counts checked all three matchers at **103,995 synthetic offset values**, including block joins and tail plants. The source’s planted-text control then recovered two available passages at their exact text and offset: KJV and Emerson, each scoring 2,506/2,928 under exact matching and 2,928/2,928 under the interval rule. Only two eligible plant texts were available under its unchanged selection rule. Its single shuffled control does not establish the preregistered null-score gate, and the source’s separate corruption/degradation tests were not replayed. There is no measured bound on tolerance to other editions, insertions, deletions or changed word boundaries.\n\nAll 21 saved target winners were independently recounted with integer comparisons. The full corpus maxima were not independently searched a second time; the saved per-text summaries have membership, bounds and near-integer checks. This replay does not cover reordered or noncontiguous plaintext, other encodings, unavailable corpus texts, or changed input conventions.\n\n## Saved results and reproduction\n\nThe [saved scan](experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/scan_results.json) retains every pattern’s global winner and per-text maximum. The [independent witness audit](experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-target-audit.json) records integer winner counts and omissions. These let readers inspect the reported maxima without repeating the corpus search.\n\nThe reproduction bundle includes exact MIT-licensed source code, frozen plans, input hashes and receipts, but **no corpus texts or derived length arrays**. [Portable reproduction instructions](experiments/records/dukotah-held-corpus-skeleton-replay/PORTABILITY.md) give the exact bundle-root setup, T0 control, manuscript scan and expected-output comparison commands. Every raw and normalized input must match before a full replay can run. Adapter checks confirmed all 94 normalized arrays against the original loader and bit-identical synthetic scanner outputs; they did not rerun the manuscript search.\n\nFor a quick audit without the corpus scans, this separate command validates saved bytes and arithmetic only:\n\n```text\npython experiments/records/dukotah-held-corpus-skeleton-replay/check.py --check\n```\n",
+  "article_path": "experiments/records/dukotah-held-corpus-skeleton-replay/article.md",
+  "script_sha256": "95de92577b6783cd3b4d734a87530eb0d0eee2a7664d9fca5321ae15f0768903",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "language",
+      "title": "Language and corpus identification",
+      "aliases": [
+        "Welsh",
+        "language identification",
+        "corpus",
+        "different language",
+        "another language",
+        "non English",
+        "other languages"
+      ]
+    }
+  ]
+}

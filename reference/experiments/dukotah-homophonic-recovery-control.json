@@ -1,0 +1,220 @@
+{
+  "id": "dukotah-homophonic-recovery-control",
+  "status": "published",
+  "title": "Homophonic search: synthetic recovery controls",
+  "question": "Does the recovered P6 homophonic partition search recover and detect these three known synthetic inputs?",
+  "reader_question": "Can this search recover the known hidden classes?",
+  "summary": "Three synthetic controls missed complete recovery and both source detection gates. No manuscript target was scored.",
+  "finding": "Complete class-stream recovery was 0/3. Source many-to-one row-max alignment was 56.9–61.9%, versus 36.7–56.3% one-to-one alignment. Source Part-C z was 1.19–1.89 and held-out z was 0.21–1.94; all failed the strict z > 3 gates. Equal-budget shuffled fits matched or exceeded the planted fit in 7/8, 2/8 and 1/8 cases.",
+  "reader_finding": "The search did not completely recover any of three known synthetic inputs, and all three missed both detection gates.",
+  "reader_limit": "Controls only: no manuscript target was scored. The selected key and puzzle texts are not independent English validation or a verified historical replay.",
+  "limitations": "Three fixed plants test this recovered implementation only. Main-tree text inputs were explicitly selected because recovered inputs are absent; mixed puzzle/key material is not independent English prose. The source row-max statistic is not exact recovery, and source Part-C budgets differ. Eight matched shuffled fits per plant do not estimate a general false-positive rate. The 72 source Part-C null-fit witnesses and three single-shuffle maps were not retained; their moments remain producer summaries. No original D-03 family closure or LP2 target exclusion follows.",
+  "next_steps": "Review the recovered implementation and freeze a control-validated search with matched selection budgets and genuinely held-out inputs before manuscript testing.",
+  "outcome": "not-supported",
+  "tags": [
+    "homophonic substitution",
+    "positive controls",
+    "partition search",
+    "synthetic controls"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-homophonic-recovery-control/controls-plan-frozen.json",
+      "experiments/records/dukotah-homophonic-recovery-control/source-receipt.json"
+    ],
+    "representation": "Three source-design synthetic 29-symbol homophonic streams derived from explicitly selected main-tree puzzle/key text; no manuscript target.",
+    "procedure": "AST-extract unchanged recovered P6 functions; generate three planted class streams; run frozen annealing fits and source gates, plus equal-budget shuffled comparisons; independently reconstruct and rescore retained witnesses.",
+    "parameters": "Length 12,956 each; seeds 11/23/37; classes 12/12/18; suppression 0/0.9/0.9. Fits 4,000 iterations × 4 restarts. Source Part-C 24 null fits × 1 restart; held-out 500 shuffles per case; added 8 equal-budget null fits × 4 restarts per case. Trigram models for k=12, bigrams for k=18.",
+    "exclusions": "No manuscript target, historical replay, multilingual D-03 grid, whole-family exclusion, independent English validation, or general false-positive-rate estimate."
+  },
+  "review": {
+    "kind": "reproduced synthetic recovery controls",
+    "retested_on": "2026-10-24",
+    "reviewer": "Fresh portable replay plus independent reconstruction and retained-witness scoring; human review pending",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-homophonic-recovery-control/replay_controls.py --inputs d03-inputs --workdir d03-replay && python experiments/records/dukotah-homophonic-recovery-control/plot_controls.py --check",
+    "environment": "Python 3.12.10, NumPy 2.5.4. Prepare external d03-inputs with the bundled prepare_external_inputs.py using the exact four pinned paths/hashes in external-input-contract.json. No texts or packages are installed automatically. Choose a new replay directory; see article and PORTABILITY.md.",
+    "script": "experiments/records/dukotah-homophonic-recovery-control/replay_controls.py",
+    "script_sha256": "32729197679852a7f3121b63eaee7f535e1b97a74727e926ab52fb36704835d4",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/article.md",
+        "sha256": "1e9c2bdf869051e912d0cb0d35db994c064b2a419b263adc8487f4a3c1c3a96c"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/check_controls.py",
+        "sha256": "04c3fad7fcf82ef26c6239f70ac0cc4bd94edf6a0f63edfb714aa1c3c3f4afd7"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/controls-plan-frozen.json",
+        "sha256": "d88b6fb36e4c537f5001771d61697fb9784b77c1e3d9f1eba0aead3b6b43835e"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/external-input-contract.json",
+        "sha256": "1bf4d9027613df014e6ca885d8c586b09189d766457347f5a08ae3ee2239c616"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/inventory-d03-frozen.json",
+        "sha256": "a58a495188a920e49c8d63e3570ce33094dfc68d154d23d0b641e8233aca1755"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/PORTABILITY.md",
+        "sha256": "724855051789dcbb732daee72a5a51c4d69c768e979024d16a95b9691c148c6f"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/prepare_external_inputs.py",
+        "sha256": "2a3828b31d9c3cb95af697878bc47a711014dce2a52e8597a99cfa1ea2f54947"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/replay_controls.py",
+        "sha256": "32729197679852a7f3121b63eaee7f535e1b97a74727e926ab52fb36704835d4"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/run_controls.py",
+        "sha256": "a7536470667d6b8332dc3aafcafee103c44fa4ce79b750f6ec7ad32edf712e15"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source/corpus/H-branch-recovery/recovered/claude_cicada-3301-scope-cigxzi/liber-primus/analysis/campaign15/P6-homophonic.py",
+        "sha256": "7fc20f026a252a6e3955853acc3ca4e733ff7abb74d9726050d12ba9f01bd517"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source/corpus/H-branch-recovery/recovered/claude_cicada-3301-scope-cigxzi/liber-primus/analysis/campaign15/P6-homophonic_RESULT.md",
+        "sha256": "dfd8dbd903a9fb8e24d21967cbf1a290744ed185f2aaac33dc015f4623fe2f8f"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source/liber-primus/analysis/campaign14/probes.py",
+        "sha256": "0964e7afe4ab447409b1d72add7356310e96aafb9ff043a7ce38957ded70e307"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source/liber-primus/analysis/campaign14/REDTEAM-PROPOSALS.md",
+        "sha256": "af3df155ca73a472ed762729db8b11a74fa5f390fca1c005d4c5c8e45df58ed4"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/source-receipt.json",
+        "sha256": "4b9b579d5cd288de07714042ff8718e9f9616f545d6d039e035ef50e1f0850a5"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/test_replay_adapter.py",
+        "sha256": "440204454d2f0f2bbb39bfa03bb477a32fda2ffc0521d2a4e20c311f1acb82f9"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/plot_controls.py",
+        "sha256": "bd5b01c68c4c6b780b35d668bb39534b03e01139c643668df2a5c2fb06e7f872"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/assignment-check.json",
+        "sha256": "24b374c6203b5a670bec93eac96cc8904de960f199a9048694d5f2f616ddb5e1"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/benchmark.json",
+        "sha256": "3d0f453cbeaeed1d3bc9887d8d6b19250e624628cd7012f5a24f7984490b9fe3"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/case-11.json",
+        "sha256": "7a29256dbdf4e29ac0afc2a52e5b7709c88ab6e96f29128a615fe0d785dc2231"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/case-23.json",
+        "sha256": "1a7fec6e33da695ae917ef0d0e0cca7dc92d9d8f15d0fcecf39e9efc90849acf"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/case-37.json",
+        "sha256": "4a13fc9021e8b34ce4d0a57047e3f40938d8aece7b3da00351d3bb0feca7ec62"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/control-gates.svg",
+        "sha256": "0e26ef7f1b2df373670936e28f887f0921be95221b65b400ec10df7797df34c3"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/controls-results.json",
+        "sha256": "74a7ced3132379fe3e6cea65088563e05c770891538dc44b4fda2b0647d24433"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/controls-visual-data.json",
+        "sha256": "e7eb69afbfbf3696a1011149272839d52c06a86377bd827a3faad29f8ae784b0"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/environment.json",
+        "sha256": "15496227de431750bf3f822cf27e8ce7f03d54b4e61d3309e13db5d6cb023bef"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/independent-check.json",
+        "sha256": "ce351c0f72818600cfa650114cc7908a0230f5e615e292cf75e05d9fc2e4ae77"
+      },
+      {
+        "path": "experiments/records/dukotah-homophonic-recovery-control/training-selection-audit.json",
+        "sha256": "64bcca0cd0543cb4f26628d17887ec3f0545fdd52b2bc54991bb8086cab3dc25"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-homophonic-recovery-control/control-gates.svg",
+      "caption": "All three synthetic controls missed both source z > 3 detection gates; complete recovery was zero of three. These are repeated evaluations of the same plants."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Dukotah campaign-14 D-03 proposal",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign14/REDTEAM-PROPOSALS.md"
+    },
+    {
+      "label": "Recovered campaign-15 P6 implementation",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_cicada-3301-scope-cigxzi/liber-primus/analysis/campaign15/P6-homophonic.py"
+    }
+  ],
+  "related": [
+    "dukotah-nonenglish-control-gate"
+  ],
+  "materials": {
+    "summary": "Complete three-plant control outputs, frozen plan, source code and retained shuffled-fit witnesses.",
+    "reuse": "Reconstruct and rescore these controls, or replay with externally prepared exact texts.",
+    "limits": "No manuscript targets. Source unequal-budget null moments lack individual fit witnesses; texts are external and not independent prose.",
+    "evidence": [
+      "experiments/records/dukotah-homophonic-recovery-control/controls-results.json",
+      "experiments/records/dukotah-homophonic-recovery-control/independent-check.json",
+      "experiments/records/dukotah-homophonic-recovery-control/external-input-contract.json"
+    ]
+  },
+  "article": "# Homophonic search: synthetic recovery controls\n\nThe search did not completely recover any of three known synthetic class streams. All three also missed both source detection gates. This is a failed control check, not evidence that Liber Primus excludes homophonic substitution: no manuscript target was scored.\n\n![Both detection measures remain below their source gate](experiments/records/dukotah-homophonic-recovery-control/control-gates.svg)\n\nThe idea is to group the 29 rune values into fewer underlying classes, allowing several runes to stand for the same class. We ran unchanged functions from Dukotah’s recovered campaign-15 P6 program on three planted inputs, each 12,956 symbols long: two with 12 classes and one with 18. Two plants suppress repeated letters using the source rule; the other does not. The frozen search uses 4,000 iterations and four restarts per fit. This tests one recovered implementation, not every search proposed in campaign-14 D-03.\n\nThe program’s class-alignment measure reached 57–62%, but it lets multiple true classes match one output class. A one-to-one alignment reached only 37–56%; none was complete recovery. The search-score detection z values were 1.19–1.89 and held-out values 0.21–1.94, all below the required value greater than 3. These two evaluations reuse the same three plants and are not independent trials.\n\nEach plant also received eight shuffled fits with the same four-restart budget. Seven, two and one of these respectively scored at least as highly as the planted fit. Eight comparisons cannot establish the original proposal’s 1,000-shuffle envelope or a general false-positive rate. The source detection calculation itself uses unequal restart budgets; we preserve that rule and report the equal-budget comparison separately.\n\nThere are additional reasons to keep the conclusion narrow. The source returns the best final restart rather than the best state visited. It uses trigrams at 12 classes and bigrams at 18, whereas D-03 proposed a broader multilingual quadgram search. The selected main-tree training files mix puzzle material, notes and key lists; they are not independent clean English prose. The recovered subtree lacks its training inputs, so this is an explicitly chosen input reconstruction, not a verified historical replay. Original D-03’s remaining target search, languages, structured-data possibilities and held-out design remain unresolved.\n\n## Inspect and reproduce\n\nThe [frozen plan](controls-plan-frozen.json), [complete results](controls-results.json), [independent checks](independent-check.json) and [input contract](external-input-contract.json) retain the exact choices. The checker separately reconstructs plants and models and rescores returned maps, 1,500 held-out shuffle scores and all 24 equal-budget shuffled-fit witnesses. The 72 source unequal-budget null-fit witnesses and three single-shuffle maps were not retained; their aggregate moments remain producer summaries.\n\nPython 3.12.10 with NumPy 2.5.4 reproduced the deterministic outputs in a fresh directory in about 40 seconds. From the extracted bundle root, with the pinned source repository available locally, run:\n\n```text\npython experiments/records/dukotah-homophonic-recovery-control/replay_controls.py --from-git /path/to/cicada3301 --workdir /private/new-replay\n```\n\nAlternatively prepare exact external files first and use `--inputs /private/prepared-inputs`. [Preparation instructions](PORTABILITY.md) describe the four fixed paths and hashes and an explicit optional download mode. Training texts are not bundled. The replay compares every deterministic output exactly, ignores only durations and the resulting raw-report hash, and never overwrites expectations.\n\nThe recovered code and documentation are by Dukotah at revision `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`; the exact [source license](source/LICENSE) grants MIT terms for original work and explicitly excludes puzzle artifacts and third-party/community transcriptions. The original [D-03 proposal](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign14/REDTEAM-PROPOSALS.md) and recovered P6 source are included with attribution. The separate [language-control audit](#/experiments/dukotah-nonenglish-control-gate) addresses different searches and is not this rerun.\n",
+  "article_path": "experiments/records/dukotah-homophonic-recovery-control/article.md",
+  "script_sha256": "32729197679852a7f3121b63eaee7f535e1b97a74727e926ab52fb36704835d4",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "homophonic",
+      "title": "Homophonic and many-to-one substitutions",
+      "aliases": [
+        "homophonic",
+        "many to one",
+        "substitution",
+        "homophonic substitution"
+      ]
+    }
+  ],
+  "article_links": {
+    "controls-plan-frozen.json": "experiments/records/dukotah-homophonic-recovery-control/controls-plan-frozen.json",
+    "controls-results.json": "experiments/records/dukotah-homophonic-recovery-control/controls-results.json",
+    "independent-check.json": "experiments/records/dukotah-homophonic-recovery-control/independent-check.json",
+    "external-input-contract.json": "experiments/records/dukotah-homophonic-recovery-control/external-input-contract.json",
+    "PORTABILITY.md": "experiments/records/dukotah-homophonic-recovery-control/PORTABILITY.md",
+    "source/LICENSE": "experiments/records/dukotah-homophonic-recovery-control/source/LICENSE"
+  }
+}

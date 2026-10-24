@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "43e1ba377feb34f432183fdee097f8abad0bb98acc7ca66fdd4af912590ac91c",
+    "current_experiments_sha256": "dfbdfc2269760845e2b399d324a601805426be824d541468b4cfa3dc6e3a7a02",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -33,12 +33,14 @@
       }
     },
     "snapshot_records": 314,
-    "current_records": 323,
+    "current_records": 325,
     "missing_snapshot_ids": [],
     "new_ids": [
       "artifact-stream-skip-grid",
       "d04-remaining-page-feedback",
       "dot-constellation-candidate-fit",
+      "dukotah-held-corpus-skeleton-replay",
+      "dukotah-homophonic-recovery-control",
       "fibonacci-stream-skip-grid",
       "lp2-43-egalitarianism-compatibility",
       "numeric-stream-skip-grid",
@@ -13022,6 +13024,55 @@
       "snapshot_sha256": "9cb1eb207cd4f269fe5035d7e62e4f811c487def05d045b245abfe47668630b2",
       "changed_fields": [],
       "classification": "outside-selected-views"
+    },
+    "dukotah-held-corpus-skeleton-replay": {
+      "id": "dukotah-held-corpus-skeleton-replay",
+      "title": "Matching manuscript word lengths to archived texts",
+      "question": "Do any of these texts match the manuscript’s word lengths?",
+      "finding": "None of the tested alignments matched the complete pattern. The best exact-length alignment agreed at 593 of 2,928 word positions.",
+      "limitations": "Only 84 of 94 available texts passed the unchanged length gate. This is not the historical 224-text corpus, and length matches are not decoded words.",
+      "pages": [],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
+        ],
+        "representation": "Exact pinned Dukotah source manuscript parser and available corpus normalization. First 55 percent-separated segments, 2,928 words; split on dash/period, ignore slash line wraps. The 94 available text files contain 9,808,699 normalized words; 84 files contain 9,799,472 words and meet the unchanged 2,928-word minimum.",
+        "procedure": "Run unchanged Round 10 L4 source T0 first, then frozen T1: exact length, symmetric slack-one and directional F-count interval. Preserve default blocked FFT, shuffled patterns, raw floating maxima and tie behavior. Independently control all three matchers and recount every saved global winning alignment.",
+        "parameters": "T1: three full real patterns plus four full permutations with three matchers; first 400 and 120 word interval prefixes with two permutations each; 21 patterns total. Unique alignments per full/400/120 pattern: 9,553,604 / 9,765,956 / 9,789,476. T0: two eligible plant texts, four planted matcher cases and two shuffled matcher cases. No extra corpus globs.",
+        "exclusions": "Not the historical 224-text / 22,643,594-word replay. Ten available texts shorter than 2,928 are omitted even for shorter patterns. No all-subwindow scan, changed normalization, reordered/noncontiguous plaintext, degradation-floor bound, calibrated global probability, language exclusion or plaintext recovery."
+      },
+      "outcome": "inconclusive",
+      "href": "#/experiments/dukotah-held-corpus-skeleton-replay",
+      "current_sha256": "b555db058271010192da2ca1861d84d50cff2bb9de4fca3f85096e706116d40a",
+      "snapshot_sha256": null,
+      "changed_fields": [],
+      "classification": "awaiting-classification"
+    },
+    "dukotah-homophonic-recovery-control": {
+      "id": "dukotah-homophonic-recovery-control",
+      "title": "Homophonic search: synthetic recovery controls",
+      "question": "Can this search recover the known hidden classes?",
+      "finding": "The search did not completely recover any of three known synthetic inputs, and all three missed both detection gates.",
+      "limitations": "Controls only: no manuscript target was scored. The selected key and puzzle texts are not independent English validation or a verified historical replay.",
+      "pages": [],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/dukotah-homophonic-recovery-control/controls-plan-frozen.json",
+          "experiments/records/dukotah-homophonic-recovery-control/source-receipt.json"
+        ],
+        "representation": "Three source-design synthetic 29-symbol homophonic streams derived from explicitly selected main-tree puzzle/key text; no manuscript target.",
+        "procedure": "AST-extract unchanged recovered P6 functions; generate three planted class streams; run frozen annealing fits and source gates, plus equal-budget shuffled comparisons; independently reconstruct and rescore retained witnesses.",
+        "parameters": "Length 12,956 each; seeds 11/23/37; classes 12/12/18; suppression 0/0.9/0.9. Fits 4,000 iterations × 4 restarts. Source Part-C 24 null fits × 1 restart; held-out 500 shuffles per case; added 8 equal-budget null fits × 4 restarts per case. Trigram models for k=12, bigrams for k=18.",
+        "exclusions": "No manuscript target, historical replay, multilingual D-03 grid, whole-family exclusion, independent English validation, or general false-positive-rate estimate."
+      },
+      "outcome": "not-supported",
+      "href": "#/experiments/dukotah-homophonic-recovery-control",
+      "current_sha256": "8429666655ea68acb2be0fad6c4773e0fcccc9513b2586aed0a11f102e544031",
+      "snapshot_sha256": null,
+      "changed_fields": [],
+      "classification": "awaiting-classification"
     },
     "dukotah-image-template-rebuild": {
       "id": "dukotah-image-template-rebuild",
@@ -34591,6 +34642,8 @@
     "artifact-stream-skip-grid",
     "d04-remaining-page-feedback",
     "dot-constellation-candidate-fit",
+    "dukotah-held-corpus-skeleton-replay",
+    "dukotah-homophonic-recovery-control",
     "fibonacci-stream-skip-grid",
     "lp2-43-egalitarianism-compatibility",
     "numeric-stream-skip-grid",
