@@ -73,6 +73,14 @@
    object(task.criterion,['kind','values']);
    if(!Array.isArray(task.criterion.values)||!task.criterion.values.length||task.criterion.values.length>256)throw Error('Give a prefix of one to 256 rune indices.');
    task.criterion.values.forEach(v=>integer(v,0,28));
+  }else if(task.criterion?.kind==='word-affine-count'){
+   object(task.criterion,['kind','lag','a','b','boundaries']);
+   integer(task.criterion.lag,1,12);integer(task.criterion.a,0,28);integer(task.criterion.b,0,28);
+   if(!['non-rune','hyphen-period'].includes(task.criterion.boundaries))throw Error('Choose the word boundary rule.');
+   // Transforms preserve rune/separator positions; bound the complete count before running.
+   let opportunities=0;
+   for(const page of task.pages)for(const word of measurementWords(page.text,runes,task.criterion.boundaries))opportunities+=Math.max(0,word.length-task.criterion.lag);
+   if(opportunities>2000000)throw Error('The word-pair measurement exceeds its work limit.');
   }else throw Error('Choose a supported result criterion.');
   if(new TextEncoder().encode(stable(task)).length>2000000)throw Error('The task exceeds the local runner file limit.');
   return task;
@@ -124,20 +132,56 @@
   }
   return chars.join('');
  }
+ function measurementWords(text,runes,boundaries){
+  const words=[];let word=[];
+  for(const ch of text){
+   if(runes.has(ch))word.push(ch);
+   else if(boundaries==='non-rune'||ch==='-'||ch==='.'){
+    if(word.length)words.push(word);word=[];
+   }
+  }
+  if(word.length)words.push(word);
+  return words;
+ }
+ function gcd(a,b){while(b){const r=a%b;a=b;b=r;}return a;}
+ function fraction(n,d=1n){const g=gcd(n,d);return [n/g,d/g];}
+ function plusFraction(a,b){const g=gcd(a[1],b[1]);return fraction(a[0]*(b[1]/g)+b[0]*(a[1]/g),a[1]*(b[1]/g));}
+ function rationalJSON(f){return {numerator:String(f[0]),denominator:String(f[1])};}
+ function countWordPairs(text,index,criterion){
+  let opportunities=0,matches=0,expected=[0n,1n];
+  for(const chars of measurementWords(text,index,criterion.boundaries)){
+   const word=chars.map(ch=>index.get(ch)),n=word.length,k=Math.max(0,n-criterion.lag);
+   if(!k)continue;
+   opportunities+=k;
+   for(let i=0;i<k;i++)if(word[i+criterion.lag]===(criterion.a*word[i]+criterion.b)%29)matches++;
+   const counts=Array(29).fill(0);for(const v of word)counts[v]++;
+   let ordered=0;
+   for(let i=0;i<29;i++){const j=(criterion.a*i+criterion.b)%29;ordered+=counts[i]*(counts[j]-(i===j?1:0));}
+   expected=plusFraction(expected,fraction(BigInt(k)*BigInt(ordered),BigInt(n)*BigInt(n-1)));
+  }
+  return {opportunities,matches,expected};
+ }
  function run(task,{onProgress}={}){
   validateTask(task);
   const index=new Map(task.alphabet.map((r,i)=>[r.rune,i])),frequencies=Array(29).fill(0);
-  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[];
+  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[],wordPages=[];let wordExpected=[0n,1n],wordOpportunities=0,wordMatches=0;
   for(const page of task.pages){
    const text=transform(page.text,task.steps,task.alphabet),values=Array.from(text).filter(ch=>index.has(ch)).map(ch=>index.get(ch));
    values.forEach(v=>frequencies[v]++);runes+=values.length;adjacentPairs+=Math.max(0,values.length-1);
    for(let i=1;i<values.length;i++)if(values[i]===values[i-1])equalAdjacentPairs++;
    transformed.push({page:page.id,text});
    if(task.criterion.kind==='exact-prefix')matches.push({page:page.id,matched:task.criterion.values.every((v,i)=>values[i]===v)});
+   if(task.criterion.kind==='word-affine-count'){
+    const measured=countWordPairs(text,index,task.criterion);
+    wordPages.push({page:page.id,opportunities:measured.opportunities,matches:measured.matches,expected:rationalJSON(measured.expected)});
+    wordExpected=plusFraction(wordExpected,measured.expected);wordOpportunities+=measured.opportunities;wordMatches+=measured.matches;
+   }
    if(onProgress)onProgress({phase:'running',completed:transformed.length,total:task.pages.length});
   }
-  return {schema:RESULT,taskId:task.taskId,engine:ENGINE,runnerVersion:'1',
+  const result={schema:RESULT,taskId:task.taskId,engine:ENGINE,runnerVersion:'1',
    metrics:{pages:task.pages.length,runes,adjacentPairs,equalAdjacentPairs,ioc:runes>1?frequencies.reduce((s,n)=>s+n*(n-1),0)/(runes*(runes-1)):0},matches,transformed};
+  if(task.criterion.kind==='word-affine-count')result.wordPairs={opportunities:wordOpportunities,matches:wordMatches,expected:rationalJSON(wordExpected),pages:wordPages};
+  return result;
  }
  function sameResult(actual,expected){
   if(typeof actual!==typeof expected||actual===null||expected===null)return actual===expected;
@@ -156,6 +200,13 @@
  function summary(task,result){
   validateTask(task);
   if(!result||verifiedResults.get(result)!==stable(task)||!sameResult(result,run(task)))throw Error('Results must be verified before display.');
+  if(task.criterion.kind==='word-affine-count'){
+   const p=result.wordPairs,e=p.expected,n=BigInt(e.numerator),d=BigInt(e.denominator),approx=Number(n/d)+Number((n%d)*1000000000000n/d)/1000000000000;
+   // Exact rational values remain authoritative; the chart is a display approximation.
+   return {finding:p.matches+' matches among '+p.opportunities.toLocaleString('en-US')+' rune pairs '+task.criterion.lag+' positions apart inside words; '+(Number.isFinite(approx)?approx.toFixed(2):e.numerator+'/'+e.denominator)+' expected when each word’s runes are shuffled.',
+    comparison:[{label:'Observed matches',value:p.matches,total:p.opportunities},{label:'Word-shuffle expectation',value:Number.isFinite(approx)?approx:0,total:p.opportunities}],
+    limit:'This comparison does not tell us how unlikely the count is. It does not account for choosing the rule, spacing or word boundaries after seeing the data, and it does not identify a cipher.'};
+  }
   const baseline=run({...task,steps:[],criterion:{kind:'measurement'}}).metrics;
   const matched=result.matches.filter(v=>v.matched).length;
   return {finding:task.criterion.kind==='measurement'

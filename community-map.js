@@ -4,7 +4,7 @@
  const C=typeof module==='object'&&module.exports?require('./claim-specification.js'):root.ClaimSpecification;
  const H=typeof module==='object'&&module.exports?require('./claim-share.js'):root.ClaimShare;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/;
- const parents={'fixed-substitution':'method:substitution',polyalphabetic:'method:repeating-key',feedback:'method:feedback',transposition:'method:routes','prime-indices':'method:numeric','number-streams':'method:generated-key','book-codes':'method:running-key'};
+ const parents={'fixed-substitution':'method:substitution',polyalphabetic:'method:repeating-key',feedback:'method:feedback',transposition:'method:routes','prime-indices':'method:numeric','number-streams':'method:generated-key','book-codes':'method:running-key',repetition:'method:rune-patterns'};
  const routes={decipher:'solve-lp2',measure:'aim:understand',explain:'aim:understand',reproduce:'aim:validate',verify_source:'aim:sources'};
  function exact(o,keys){if(!o||typeof o!=='object'||Array.isArray(o)||Object.keys(o).some(k=>!keys.includes(k)))throw Error('Unexpected community fields.');}
  function decodeCard(card){

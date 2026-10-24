@@ -28,7 +28,7 @@
     'fixed-substitution':'Fixed alphabet substitutions',polyalphabetic:'Repeating-key and polyalphabetic ciphers',
     feedback:'Autokey and ciphertext feedback',transposition:'Transposition and permutations',
     'prime-indices':'Prime indexing and value transforms','number-streams':'Arithmetic keystreams',
-    'book-codes':'Book ciphers and coordinate lookups'
+    'book-codes':'Book ciphers and coordinate lookups',repetition:'Repeats, doublets and word structure'
   });
   const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
   function copy(value) {
@@ -101,7 +101,7 @@
       repeating_key:'polyalphabetic',autokey:'feedback',ciphertext_autokey:'feedback',plaintext_autokey:'feedback',
       transposition:'transposition',reverse_row_runes:'transposition',reverse_word_order:'transposition',reverse_runes:'transposition',
       prime_value_mapping:'prime-indices',prime_mapping:'prime-indices',prime_index:'prime-indices',reverse_prime_digits:'prime-indices',
-      finite_key:'number-streams',prime_keystream:'number-streams',numeric_keystream:'number-streams',book_cipher:'book-codes',book_code:'book-codes'};
+      word_affine_count:'repetition',finite_key:'number-streams',prime_keystream:'number-streams',numeric_keystream:'number-streams',book_cipher:'book-codes',book_code:'book-codes'};
     const rows=f.value.operations.map((operation,index)=>{
       const text=typeof operation.label==='string'?operation.label:typeof operation.sourceText==='string'?operation.sourceText:'';
       const evidence=[operation.label,operation.sourceText].filter(t=>typeof t==='string'&&

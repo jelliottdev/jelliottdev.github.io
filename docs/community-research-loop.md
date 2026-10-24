@@ -57,6 +57,9 @@ steps. `taskId` is SHA-256 of canonical sorted compact UTF-8 JSON, excluding
 - An explicit affine map on rune indices modulo29.
 - Cumulative difference `P[k] = C[k] − sum(P[0..k−1]) mod29`, with a declared
   page, line or word reset and zero initial state.
+- Finite streams of explicit GP indices, with no wrapping or inferred continuation.
+  Each complete reset segment must fit the key before execution. Standardized
+  card size limits remain distinct from engine limits.
 - Keyed shifts with an explicit seed of 1–256 GP indices (0–28), add/subtract
   decoding direction, and page, line or word reset. The key can repeat, extend
   from decoded runes (plaintext autokey), or extend from input runes (ciphertext
@@ -75,9 +78,8 @@ alternate alphabets, skipped
 runes, language models and other operations need explicit versioned adapters.
 Never silently approximate an unsupported instruction. Preserve it in planning.
 
-The criterion is either a measurement (no success/failure verdict) or an exact
-rune-index prefix fixed before the run. Matching a prefix is not decryption.
-The output includes transformed text, pooled IoC, rune counts and repeat counts.
+The criterion is a measurement (no success/failure verdict), a fixed within-word affine-pair count with exact conditional expectation, or an exact rune-index prefix fixed before the run. Matching a prefix is not decryption.
+The output includes transformed text, pooled IoC, rune counts and repeat counts. The word-pair criterion adds per-page and aggregate pair counts with exact rational expected values; it does not assign a significance level or reproduce a full affine-map search.
 Repeat counts use consecutive runes after removing separators, separately on
 each page; they do not claim to be within-word doublet counts.
 

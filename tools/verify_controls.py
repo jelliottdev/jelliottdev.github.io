@@ -57,13 +57,23 @@ def validate_origin(value):
     return control
 
 
+def positive_control(task, result):
+    if task['criterion']['kind'] == 'exact-prefix':
+        return bool(result['matches']) and all(m['matched'] for m in result['matches'])
+    if task['criterion']['kind'] == 'word-affine-count':
+        pairs = result['wordPairs']
+        return (pairs['opportunities'] > 0 and pairs['matches'] == pairs['opportunities']
+                and int(pairs['expected']['numerator']) < pairs['opportunities'] * int(pairs['expected']['denominator']))
+    return False
+
+
 def verified_controls(task, document, folder):
     runner.validate(task)
     runner.fields(document, ('version', 'origins'), 'Origins document')
     runner.require(type(document['version']) is int and document['version'] == 1
                    and isinstance(document['origins'], list) and 1 <= len(document['origins']) <= 10,
                    'Unsupported or empty origins document')
-    runner.require(task['criterion']['kind'] == 'exact-prefix', 'Controls require exact-prefix evaluation')
+    runner.require(task['criterion']['kind'] in ('exact-prefix', 'word-affine-count'), 'Controls require supported evaluation')
     checked = set()
     for value in document['origins']:
         control = validate_origin(value)
@@ -77,8 +87,8 @@ def verified_controls(task, document, folder):
         identity = (fixture['taskId'], control['expected_result_sha256'])
         if identity not in checked:
             result = runner.run(fixture)
-            runner.require(result['matches'] and all(m['matched'] for m in result['matches']),
-                           'Synthetic control failed the exact-prefix criterion; target not run')
+            runner.require(positive_control(fixture, result),
+                           'Synthetic control failed its recovery property; target not run')
             digest = hashlib.sha256(stable(result).encode('utf-8')).hexdigest()
             runner.require(digest == control['expected_result_sha256'],
                            'Synthetic control result hash differs; target not run')

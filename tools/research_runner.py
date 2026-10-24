@@ -5,6 +5,7 @@ Only rune characters move/change; separators retain their exact positions.
 """
 import argparse
 from collections import Counter
+from fractions import Fraction
 import hashlib
 import json
 from pathlib import Path
@@ -115,6 +116,14 @@ def validate(task):
         fields(criterion, ('kind', 'values'), 'Prefix criterion')
         require(isinstance(criterion['values'], list) and 1 <= len(criterion['values']) <= 256
                 and all(integer(v, 0, 28) for v in criterion['values']), 'Invalid prefix values')
+    elif criterion.get('kind') == 'word-affine-count':
+        fields(criterion, ('kind', 'lag', 'a', 'b', 'boundaries'), 'Word-pair criterion')
+        require(integer(criterion['lag'], 1, 12) and integer(criterion['a'], 0, 28)
+                and integer(criterion['b'], 0, 28), 'Invalid word-pair parameters')
+        require(criterion['boundaries'] in ('non-rune', 'hyphen-period'), 'Invalid word boundary rule')
+        opportunities = sum(max(0, len(word) - criterion['lag']) for page in pages
+                            for word in measurement_words(page['text'], runes, criterion['boundaries']))
+        require(opportunities <= 2_000_000, 'Word-pair measurement exceeds its work limit')
     else:
         fields(criterion, ('kind',), 'Measurement criterion')
         require(criterion['kind'] == 'measurement', 'Unsupported criterion')
@@ -195,12 +204,51 @@ def transform(text, step, runes, indices):
     return ''.join(chars)
 
 
+def measurement_words(text, indices, boundaries):
+    word = []
+    for character in text:
+        if character in indices:
+            word.append(character)
+        elif boundaries == 'non-rune' or character in '-.':
+            if word:
+                yield word
+            word = []
+    if word:
+        yield word
+
+
+def rational_json(value):
+    return {'numerator': str(value.numerator), 'denominator': str(value.denominator)}
+
+
+def count_word_pairs(text, indices, criterion):
+    opportunities = matches = 0
+    expected = Fraction(0)
+    lag, a, b = criterion['lag'], criterion['a'], criterion['b']
+    for characters in measurement_words(text, indices, criterion['boundaries']):
+        word = [indices[ch] for ch in characters]
+        n = len(word)
+        k = max(0, n - lag)
+        if not k:
+            continue
+        opportunities += k
+        matches += sum(word[i + lag] == (a * word[i] + b) % 29 for i in range(k))
+        counts = Counter(word)
+        ordered = sum(counts[i] * (counts[(a * i + b) % 29] - (i == (a * i + b) % 29))
+                      for i in range(29))
+        expected += Fraction(k * ordered, n * (n - 1))
+    return opportunities, matches, expected
+
+
 def run(task):
     validate(task)
     runes = [entry['rune'] for entry in task['alphabet']]
     indices = {rune: i for i, rune in enumerate(runes)}
     transformed, matches, counts = [], [], Counter()
     pairs = equal = total = 0
+    word_pages = []
+    word_opportunities = word_matches = 0
+    word_expected = Fraction(0)
     for page in task['pages']:
         text = page['text']
         for step in task['steps']:
@@ -214,11 +262,22 @@ def run(task):
         if task['criterion']['kind'] == 'exact-prefix':
             prefix = task['criterion']['values']
             matches.append({'page': page['id'], 'matched': values[:len(prefix)] == prefix})
-    return {'schema': RESULT_SCHEMA, 'taskId': task['taskId'], 'engine': ENGINE,
+        if task['criterion']['kind'] == 'word-affine-count':
+            opportunities, matched, expected = count_word_pairs(text, indices, task['criterion'])
+            word_pages.append({'page': page['id'], 'opportunities': opportunities,
+                               'matches': matched, 'expected': rational_json(expected)})
+            word_opportunities += opportunities
+            word_matches += matched
+            word_expected += expected
+    result = {'schema': RESULT_SCHEMA, 'taskId': task['taskId'], 'engine': ENGINE,
             'metrics': {'pages': len(task['pages']), 'runes': total, 'adjacentPairs': pairs,
                         'equalAdjacentPairs': equal,
                         'ioc': sum(n * (n - 1) for n in counts.values()) / (total * (total - 1)) if total > 1 else 0.0},
             'matches': matches, 'transformed': transformed, 'runnerVersion': '1'}
+    if task['criterion']['kind'] == 'word-affine-count':
+        result['wordPairs'] = {'opportunities': word_opportunities, 'matches': word_matches,
+                               'expected': rational_json(word_expected), 'pages': word_pages}
+    return result
 
 
 def unique_object(pairs):

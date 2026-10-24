@@ -15,12 +15,11 @@ Each array item has exactly:
   control uses the exact same ordered steps, alphabet and criterion as the
   proposed target task. Its bounded fixture is labeled synthetic, never an
   archived manuscript transcription. The expected digest covers the complete
-  stable result. Its exact-prefix criterion must match.
+  stable result. For a prefix criterion every stated position must match. For a fixed-pair measurement every planted pair must match, there must be at least one opportunity, and the exact random-order expectation must be smaller than that planted count.
 
 The card explicitly specifies input version, GP29 representation and evaluation.
 Steps come only from the existing deterministic `planCard`; no AI mapping or
-default measurement is permitted for an authored follow-up. Initial support is
-exact-prefix evaluation only. A valid declaration does not make an unsupported
+default measurement is permitted for an authored follow-up. Supported evaluations are exact-prefix recovery and a fixed within-word affine-pair count with an exact conditional expectation. A valid declaration does not make an unsupported
 method executable.
 
 `POST /record-plans` accepts `{recordId,followupId}`. Current clients add
@@ -115,8 +114,33 @@ provenance and existing-prefix exclusions must be checked before a new recipe
 is declared. The plan view shows stream length and behavior first; complete
 values are available in one optional disclosure and reproduction files.
 
-Statistical records need separate controlled measurement adapters: declared
-statistics, shuffle constraints, full-search correction and bounded work.
-An exact-prefix comparison cannot substitute for those experiments. The current
+The fixed word-pair adapter uses criterion
+`{kind:'word-affine-count',lag,a,b,boundaries}` with lag 1–12, coefficients
+0–28 and `non-rune` or `hyphen-period` boundaries. The latter splits only at
+literal ASCII hyphens and periods, ignoring other layout marks. It never joins
+across pages. Canonical cards use one `word_affine_count` operation and an
+identical explicit evaluation. It does not accept transformation compounds.
+
+The null comparison is the exact average obtained by uniformly permuting each
+word's existing rune multiset. For a word length n and lag l, it is
+`(n-l) * sum_i m_i*(m_j-[i=j]) / (n*(n-1))`, where j=(a*i+b) modulo29.
+Counts and expected values are returned per page and in aggregate. Fractions
+are reduced exact numerator/denominator strings; rounding is display-only.
+This is not a permutation-tail probability, a full-search adjustment, or a
+cipher model. Other statistical records still need their own adapters for
+shuffle constraints, search correction, generators or held-out predictions.
+An exact-prefix comparison cannot substitute for those experiments.
+
+`local-control.js` supplies the same criterion-specific positive-control
+property to plan preparation, browser execution and package construction.
+Every use still checks the complete replayed control hash. The independent
+Python package guard checks the corresponding property before any target run.
+ The current
 authoring constructor also restricts criteria to documented Warning prefixes;
 other reading criteria need explicit source pins and independent controls.
+
+The word-pair authoring constructor is `construct_word_pair_followup`. Its
+synthetic control contains layout separators and complete planted words, and
+must change its measured opportunities if the alternate boundary rule is used.
+This checks the boundary distinction as well as arithmetic. Existing fixed
+relation counts do not make an expanded test significant or identify a generator.

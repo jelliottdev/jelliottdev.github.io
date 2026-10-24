@@ -94,12 +94,26 @@ def compile_card(card):
         require(values[name] == expected, 'explicit ' + name + ' required')
     require(values['inputVersion'] in ('raw', 'reviewed'), 'explicit inputVersion required')
     criterion = values['evaluation']
-    fields(criterion, ('kind', 'values'), 'evaluation')
-    require(criterion['kind'] == 'exact-prefix', 'exact-prefix evaluation required')
     for name in ('searchBounds', 'searchProtocol', 'exceptionalCases'):
         require(card['rules'][name]['status'] != 'specified', 'unhandled rule ' + name)
     operations = method['operations']
     require(isinstance(operations, list) and 1 <= len(operations) <= 8, 'need 1..8 ordered operations')
+    if any(isinstance(op, dict) and op.get('id') == 'word_affine_count' for op in operations):
+        require(len(operations) == 1, 'word-pair measurement cannot include transforms')
+        op = operations[0]
+        fields(op, ('id', 'label', 'lag', 'a', 'b', 'boundaries'), 'word-pair operation')
+        require(op['label'] == 'Within-word affine pair count', 'word-pair operation wording')
+        require(type(op['lag']) is int and 1 <= op['lag'] <= 12
+                and all(type(op[name]) is int and 0 <= op[name] <= 28 for name in ('a', 'b'))
+                and op['boundaries'] in ('non-rune', 'hyphen-period'), 'word-pair parameters')
+        expected = {'kind': 'word-affine-count', **{name: op[name] for name in ('lag', 'a', 'b', 'boundaries')}}
+        fields(criterion, expected, 'word-pair evaluation')
+        require(criterion == expected, 'word-pair evaluation conflicts with method')
+        for name in ('boundaryMode', 'reset', 'initialState'):
+            require(values[name] is None, 'irrelevant word-pair rule ' + name)
+        return {'pages': scope['pages'], 'steps': [], 'criterion': criterion, 'inputVersion': values['inputVersion']}
+    fields(criterion, ('kind', 'values'), 'evaluation')
+    require(criterion['kind'] == 'exact-prefix', 'exact-prefix evaluation required')
     steps = []
     labels = {'repeating_key': ('Repeating key', 'Repeating-key', 'Vigenere', 'Vigenère'),
               'vigenere': ('Vigenere', 'Vigenère'),
@@ -198,7 +212,14 @@ def validate_followups(value, root, known_pages=None):
         require(task['alphabet'] == ordered_alphabet and task['steps'] == plan['steps']
                 and task['criterion'] == plan['criterion'], 'control differs from proposed target protocol')
         result = runner.run(task)
-        require(result['matches'] and all(m['matched'] for m in result['matches']), 'synthetic control failed exact-prefix criterion')
+        if plan['criterion']['kind'] == 'word-affine-count':
+            measured = result['wordPairs']
+            expected = measured['expected']
+            require(measured['matches'] == measured['opportunities'] > 0
+                    and int(expected['numerator']) < measured['opportunities'] * int(expected['denominator']),
+                    'synthetic word-pair control lacks a detectable complete planted relation')
+        else:
+            require(result['matches'] and all(m['matched'] for m in result['matches']), 'synthetic control failed exact-prefix criterion')
         require(control['expected_result_sha256'] == digest(result), 'complete control result digest mismatch')
     return value
 
@@ -367,6 +388,82 @@ def construct_followup(root, *, identifier, title, question, scope_change, limit
                                scope_change=scope_change, limitation=limitation,
                                operations=operations, pages=pages,
                                input_version=input_version, prefix=prefix)
+
+
+def construct_word_pair_followup(root, *, identifier, title, question, scope_change,
+                                 limitation, pages, lag, a, b, boundaries,
+                                 input_version='raw'):
+    """Author one fixed count and a planted synthetic control; never count targets.
+
+    This is deliberately separate from transform construction. No reset, cipher,
+    significance threshold, lag search or shuffled-trial protocol is inferred.
+    """
+    root = Path(root)
+    ordered_alphabet = alphabet(root)
+    require(isinstance(pages, (list, tuple)) and all(isinstance(p, str) for p in pages)
+            and len(set(pages)) == len(pages), 'pages must be an explicit unique list')
+    pages = sorted(pages)
+    operation = {'id': 'word_affine_count', 'label': 'Within-word affine pair count',
+                 'lag': lag, 'a': a, 'b': b, 'boundaries': boundaries}
+    criterion = {'kind': 'word-affine-count', 'lag': lag, 'a': a, 'b': b, 'boundaries': boundaries}
+    specified = lambda value: {'status': 'specified', 'value': value}
+    rules = {name: {'status': 'not_applicable'} for name in RULES}
+    rules.update({name: specified(value) for name, value in {
+        'inputVersion': input_version, 'representation': 'GP29', 'unmapped': 'preserve',
+        'wordBoundaries': 'preserve', 'evaluation': criterion}.items()})
+    card = {'version': 1, 'outcome': specified({'outcomeId': 'measure',
+            'detail': 'Count one fixed affine relation at one fixed lag under the declared word boundaries; this does not identify a cipher.'}),
+            'method': specified({'operations': [operation]}), 'scope': specified({'pages': pages}),
+            'rules': rules, 'unresolved': []}
+    compile_card(card)  # Validate parameters before building synthetic input.
+    runes = [entry['rune'] for entry in ordered_alphabet]
+    task = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE,
+            'title': 'Synthetic planted word-pair control: ' + identifier,
+            'pages': [], 'alphabet': ordered_alphabet, 'steps': [], 'criterion': criterion}
+    result = None
+    # 29 explicitly bounded seed rotations. Every lag-separated successor is
+    # planted by the declared equation, without inspecting manuscript values.
+    # Two copies exercise the exact layout-boundary policy as well.
+    for seed in range(29):
+        values = [(seed + n) % 29 for n in range(lag)]
+        for position in range(10):
+            values.append((a * values[position] + b) % 29)
+        word = ''.join(runes[n] for n in values)
+        # Exercise layout continuation as well as the planted equation. The
+        # two supported segmentation rules must not accept an indistinguishable
+        # fixture merely because it contains only uninterrupted rune text.
+        if boundaries == 'non-rune':
+            control_text = word + ' /\r\n' + word
+        else:
+            split = len(word) // 2
+            control_text = word[:split] + ' /\r\n' + word[split:] + '. ' + word
+        task['pages'] = [{'id': 'lp1-01', 'text': control_text}]
+        task['taskId'] = runner.task_identity(task)
+        candidate = runner.run(task)
+        measured = candidate['wordPairs']
+        expected = measured['expected']
+        if measured['matches'] == measured['opportunities'] > 0 and int(expected['numerator']) < measured['opportunities'] * int(expected['denominator']):
+            alternate = copy.deepcopy(task)
+            alternate['criterion']['boundaries'] = 'hyphen-period' if boundaries == 'non-rune' else 'non-rune'
+            alternate['taskId'] = runner.task_identity(alternate)
+            alternate_result = runner.run(alternate)
+            if alternate_result['wordPairs'] != measured:
+                result = candidate
+                break
+    require(result is not None, 'no detectable planted word-pair control among the 29 declared seeds')
+    pins = []
+    for page_id in pages:
+        source = json.loads((root / 'data/pages' / (page_id + '.json')).read_text(encoding='utf-8'))
+        text = source.get('raw' if input_version == 'raw' else 'reviewed_text')
+        require(isinstance(text, str), 'requested exact source text unavailable: ' + page_id)
+        pins.append({'id': page_id, 'text_sha256': text_hash(text)})
+    recipe = {'id': identifier, 'title': title, 'question': question,
+              'scope_change': scope_change, 'limitation': limitation, 'card': card,
+              'inputs': {'version': input_version, 'alphabet_sha256': digest(ordered_alphabet), 'pages': pins},
+              'control': {'label': 'Count every planted synthetic pair using the declared word boundaries and distinguish its shuffled-order mean',
+                          'task': task, 'expected_result_sha256': digest(result)}}
+    validate_followups([recipe], root)
+    return recipe
 
 
 def construct_second_koan_word_reset(root):

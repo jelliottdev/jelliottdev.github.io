@@ -19,7 +19,7 @@
    const key=E.stable(item.origin);if(seen.has(key))throw Error('A published origin is repeated.');seen.add(key);
    const control=item.control;if(!exact(control,['label','task','expected_result_sha256'])||!text(control.label,300)||!HEX.test(control.expected_result_sha256))throw Error('The synthetic control metadata is invalid.');
    await E.checkIdentity(control.task,cryptoAPI);
-   if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>runes.has(ch)).length>4096||plan.criterion.kind!=='exact-prefix'||!['alphabet','steps','criterion'].every(k=>same(control.task[k],plan[k])))throw Error('The synthetic control does not match this bounded experiment.');
+   if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>runes.has(ch)).length>4096||!['exact-prefix','word-affine-count'].includes(plan.criterion.kind)||!['alphabet','steps','criterion'].every(k=>same(control.task[k],plan[k])))throw Error('The synthetic control does not match this bounded experiment.');
   }
   return clone(origins);
  }
@@ -32,9 +32,15 @@
  function cardProgram(card){
   const snapshot=cardSnapshot(card),draft=snapshot,rules=draft.rules,known=k=>rules[k].status==='specified';
   if(draft.unresolved.length||draft.method.status!=='specified'||draft.scope.status!=='specified'||!exact(draft.scope.value,['pages'])||!Array.isArray(draft.scope.value.pages)||!draft.scope.value.pages.length||Object.values(rules).some(v=>v.status==='unrestricted'))throw Error('The published idea is not a fixed complete-page experiment.');
-  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||rules.evaluation.value?.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values']))throw Error('The published input and prefix criterion must be explicit.');
+  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!['exact-prefix','word-affine-count'].includes(rules.evaluation.value?.kind))throw Error('The published input and evaluation must be explicit.');
   for(const k of ['searchBounds','searchProtocol','exceptionalCases'])if(known(k))throw Error('The published conditions need an execution adapter.');
   if(known('unmapped')&&rules.unmapped.value!=='preserve'||known('wordBoundaries')&&rules.wordBoundaries.value!=='preserve')throw Error('The published separator rule needs an adapter.');
+  if(draft.method.value.operations.some(op=>op.id==='word_affine_count')){
+   const operations=draft.method.value.operations,op=operations[0],evaluation=rules.evaluation.value;
+   if(operations.length!==1||op.id!=='word_affine_count'||Object.keys(op).some(k=>!['id','label','declaredFamilyId','lag','a','b','boundaries'].includes(k))||op.label!==undefined&&op.label!=='Within-word affine pair count'||!exact(evaluation,['kind','lag','a','b','boundaries'])||!same(evaluation,{kind:'word-affine-count',lag:op.lag,a:op.a,b:op.b,boundaries:op.boundaries})||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The published measurement and evaluation must agree.');
+   return {snapshot,steps:[],pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:evaluation};
+  }
+  if(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values']))throw Error('The published transformation needs an exact-prefix criterion.');
   const modes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};let reversed=false,cumulative=false,resetUsed=false;
   const steps=draft.method.value.operations.map(op=>{
    const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];

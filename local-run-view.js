@@ -23,14 +23,21 @@
   const matched=result.matches.filter(row=>row.matched).length,total=task.pages.length,notMatched=total-matched;
   return '<figure class="local-run-chart run-prefix-chart"><figcaption>Exact starting-sequence check</figcaption><div class="run-prefix-total" role="img" aria-label="'+matched+' of '+total+' pages matched all '+task.criterion.values.length+' prefix positions; '+notMatched+' did not match."><span class="run-prefix-match" style="width:'+(100*matched/total).toFixed(4)+'%"></span><span class="run-prefix-other" style="width:'+(100*notMatched/total).toFixed(4)+'%"></span></div><dl class="run-prefix-counts"><div><dt>Matched every position</dt><dd>'+matched+' of '+total+' pages</dd></div><div><dt>Did not match</dt><dd>'+notMatched+' of '+total+' pages</dd></div></dl><p class="run-chart-note">The fixed prefix has '+task.criterion.values.length+' rune positions.</p></figure>';
  }
+ function wordPairChart(task,result){
+  const pairs=result.wordPairs,n=BigInt(pairs.expected.numerator),d=BigInt(pairs.expected.denominator),scaled=(n*100n+d/2n)/d;
+  const expected=Number(n*1000000n/d)/1000000,average=n>0n&&scaled===0n?'<0.01':(Number(scaled)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),actual=pairs.matches.toLocaleString('en-US'),total=pairs.opportunities.toLocaleString('en-US'),max=Math.max(1,pairs.matches,expected);
+  const boundary=task.criterion.boundaries==='non-rune'?'Every non-rune character ends a word.':'Only ASCII hyphens (-) and periods (.) end a word; other non-rune characters, including line breaks, are joined.';
+  const rows=[{label:'Observed matches',value:pairs.matches,text:actual},{label:'Random-order average',value:expected,text:average}];
+  return '<figure class="local-run-chart run-word-pair-chart"><figcaption>Matching pairs inside words</figcaption><p class="run-word-pair-total">'+actual+(pairs.matches===1?' match in ':' matches in ')+total+' available pairs</p><div role="img" aria-label="'+esc('Observed matches: '+actual+'. Random-order average: approximately '+average+'. Both compare the same '+total+' available pairs.')+'">'+rows.map((row,i)=>'<div class="run-word-pair-row"><span>'+row.label+'</span><strong>'+esc(row.text)+'</strong><div class="run-bar-track"><span class="run-bar run-bar-'+i+'" style="width:'+(row.value/max*100).toFixed(4)+'%"></span></div></div>').join('')+'</div><p class="run-chart-note">Average across all possible orderings of the same runes within each word. Rounded here to two decimal places.</p><p class="run-chart-note">'+esc(boundary)+'</p><details class="run-pair-arithmetic"><summary>Exact average</summary><p>'+esc(pairs.expected.numerator)+' ÷ '+esc(pairs.expected.denominator)+' matches.</p></details></figure>';
+ }
  function inspector(task,result){
-  const first=task.pages[0],after=result.transformed.find(page=>page.page===first.id);
+  const first=task.pages[0],after=result.transformed.find(page=>page.page===first.id),single=task.criterion.kind==='word-affine-count'&&!task.steps.length;
   return '<details class="run-text-inspector"><summary>Inspect the text</summary><div class="run-text-controls">'+
    (task.pages.length>1?'<label class="run-text-page">Page<select data-run-text-page>'+task.pages.map(page=>'<option value="'+esc(page.id)+'">'+esc(page.id.toUpperCase())+'</option>').join('')+'</select></label>':'<p class="run-text-single">'+esc(first.id.toUpperCase())+'</p>')+
    '<div class="run-text-modes" role="group" aria-label="Text representation"><button type="button" data-run-text-mode="runes" aria-pressed="true">Runes</button><button type="button" data-run-text-mode="latin" aria-pressed="false">Transliteration</button></div></div>'+
    '<p class="run-text-note">Transliteration shows rune labels, not a translation. A middle dot (·) separates adjacent labels; original spaces, punctuation and line breaks remain.</p>'+
    (task.criterion.kind==='exact-prefix'?'<div data-run-prefix>'+prefixAlignment(task,result,first.id)+'</div>':'')+
-   '<div class="run-text-columns"><section><h3>Original</h3><pre class="run-text-value" data-run-original>'+esc(first.text)+'</pre></section><section><h3>After the method</h3><pre class="run-text-value" data-run-after>'+esc(after.text)+'</pre></section></div></details>';
+   '<div class="run-text-columns'+(single?' run-text-columns-single':'')+'"><section><h3>'+(single?'Text measured':'Original')+'</h3><pre class="run-text-value" data-run-original>'+esc(first.text)+'</pre></section>'+(single?'':'<section><h3>After the method</h3><pre class="run-text-value" data-run-after>'+esc(after.text)+'</pre></section>')+'</div></details>';
  }
  function bind(host,task,result){
   bindings.get(host)?.();
@@ -38,12 +45,12 @@
   const panel=host.querySelector?.('.run-text-inspector');if(!panel)return ()=>{};
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
   const original=panel.querySelector('[data-run-original]'),after=panel.querySelector('[data-run-after]');
-  if(!original||!after)return ()=>{};
+  if(!original||!after&&!(task.criterion.kind==='word-affine-count'&&!task.steps.length))return ()=>{};
   let pageId=snapshot.task.pages[0].id,mode='runes';const listeners=[];
   const update=()=>{
    const page=snapshot.task.pages.find(p=>p.id===pageId),output=snapshot.result.transformed.find(p=>p.page===pageId);
    original.textContent=mode==='latin'?transliteration(page.text,snapshot.task.alphabet):page.text;
-   after.textContent=mode==='latin'?transliteration(output.text,snapshot.task.alphabet):output.text;
+   if(after)after.textContent=mode==='latin'?transliteration(output.text,snapshot.task.alphabet):output.text;
    const prefix=panel.querySelector('[data-run-prefix]');if(prefix)prefix.innerHTML=prefixAlignment(snapshot.task,snapshot.result,pageId,mode);
    panel.dataset.textMode=mode;
    buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.getAttribute('data-run-text-mode')===mode)));
@@ -54,9 +61,9 @@
   update();const cleanup=()=>listeners.forEach(remove=>remove());bindings.set(host,cleanup);return cleanup;
  }
  function render(task,result){
-  const data=E.summary(task,result),max=Math.max(1,...data.comparison.map(r=>r.value));
+  const data=E.summary(task,result),max=Math.max(1,...(data.comparison||[]).map(r=>r.value));
   return '<section class="local-run-result" aria-labelledby="local-run-finding"><p class="run-state">Computation verified</p><h2 id="local-run-finding">What this run found</h2><p>'+esc(data.finding)+'</p>'+
-   (task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
+   (task.criterion.kind==='word-affine-count'?wordPairChart(task,result):task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
    data.comparison.map((row,i)=>'<div class="run-bar-row"><span>'+esc(row.label)+'</span><div class="run-bar-track"><span class="run-bar run-bar-'+i+'" style="width:'+(row.value/max*100).toFixed(4)+'%"></span></div><strong>'+row.value+'</strong></div>').join('')+
    '</div><p class="run-chart-note">Counts follow the rune sequence on each page, ignoring spaces and punctuation.</p></figure>')+
    '<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';

@@ -1,5 +1,6 @@
 /* Authored bounded follow-ups. No inference, persistence or target execution. */
 import L from '../../local-experiment.js';
+import Control from '../../local-control.js';
 import {validateCard} from './idea-relations.mjs';
 import {planCard} from './prepare-task.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
@@ -26,7 +27,7 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
   if(!exact(recipe,['id','title','question','scope_change','limitation','card','inputs','control']))throw Error('The follow-up declaration is malformed.');
   for(const name of ['title','question','scope_change','limitation'])if(typeof recipe[name]!=='string'||!recipe[name].trim()||Array.from(recipe[name]).length>(name==='title'?300:1200))throw Error('The follow-up text is malformed.');
   const card=validateCard(recipe.card);if(L.stable(card)!==L.stable(recipe.card))throw Error('The declared card is not canonical.');
-  const rules=card.rules;if(!['inputVersion','representation','evaluation'].every(k=>rules[k].status==='specified')||rules.representation.value!=='GP29'||rules.evaluation.value?.kind!=='exact-prefix')throw Error('The follow-up needs explicit input, alphabet and exact-prefix evaluation.');
+  const rules=card.rules;if(!['inputVersion','representation','evaluation'].every(k=>rules[k].status==='specified')||rules.representation.value!=='GP29'||!['exact-prefix','word-affine-count'].includes(rules.evaluation.value?.kind))throw Error('The follow-up needs explicit input, alphabet and supported evaluation.');
   const plan=planCard(card);if(plan.reason)throw Error(plan.reason);
   const pins=recipe.inputs;if(!exact(pins,['version','alphabet_sha256','pages'])||pins.version!==plan.inputVersion||!HEX.test(pins.alphabet_sha256)||!Array.isArray(pins.pages)||pins.pages.length!==plan.pages.length)throw Error('The input pins are malformed.');
   for(let i=0;i<pins.pages.length;i++)if(!exact(pins.pages[i],['id','text_sha256'])||pins.pages[i].id!==plan.pages[i]||!HEX.test(pins.pages[i].text_sha256))throw Error('The page pins do not match the declared scope.');
@@ -36,8 +37,9 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
   if(await recordPlanDigest(L.stable(alphabet))!==pins.alphabet_sha256)throw Error('The official alphabet changed.');
   const control=recipe.control;if(!exact(control,['label','task','expected_result_sha256'])||typeof control.label!=='string'||!control.label.trim()||control.label.length>300||!HEX.test(control.expected_result_sha256))throw Error('The synthetic control is malformed.');
   await L.checkIdentity(control.task);
+  const controlRunes=new Set(control.task.alphabet.map(v=>v.rune));if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>controlRunes.has(ch)).length>4096)throw Error('The synthetic control exceeds its bound.');
   for(const field of ['steps','alphabet','criterion'])if(L.stable(control.task[field])!==L.stable(field==='steps'?plan.steps:field==='alphabet'?alphabet:plan.criterion))throw Error('The control uses a different program, alphabet or criterion.');
-  const result=L.run(control.task);if(!result.matches.length||result.matches.some(v=>v.matched!==true)||await recordPlanDigest(L.stable(result))!==control.expected_result_sha256)throw Error('The declared synthetic control failed.');
+  const result=L.run(control.task);if(!Control.passed(control.task,result)||await recordPlanDigest(L.stable(result))!==control.expected_result_sha256)throw Error('The declared synthetic control failed.');
   const pages=Array(plan.pages.length);let next=0,total=0;
   const accept=async(i,page)=>{const id=plan.pages[i],text=pins.version==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string'||await recordPlanDigest(text)!==pins.pages[i].text_sha256)throw Error('The pinned manuscript input changed.');total+=new TextEncoder().encode(text).length;if(total>2000000)throw Error('The selected inputs exceed their bound.');pages[i]={id,text};};
   if(pages.length>40){

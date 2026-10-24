@@ -4,10 +4,10 @@ const E=require('../local-experiment.js'),{createExecutor}=require('../local-run
 const root=path.resolve(__dirname,'..'),engine=fs.readFileSync(path.join(root,'local-experiment.js'),'utf8'),workerSource=fs.readFileSync(path.join(root,'local-run-worker.js'),'utf8');
 const workers=[];
 class WorkerFixture{
- constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-finite-run');this.stopped=false;workers.push(this);
+ constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-word-pairs');this.stopped=false;workers.push(this);
   const self={postMessage:data=>{if(!this.stopped)this.onmessage?.({data:structuredClone(data)});}};
   const context=vm.createContext({self,crypto:webcrypto,TextEncoder,structuredClone});
-  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-finite-run');vm.runInContext(engine,context);};
+  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-word-pairs');vm.runInContext(engine,context);};
   vm.runInContext(workerSource,context);this.receive=self.onmessage;
  }
  postMessage(data){this.message=structuredClone(data);queueMicrotask(()=>{if(!this.stopped)Promise.resolve(this.receive({data:this.message})).catch(()=>this.onerror?.({preventDefault(){}}));});}

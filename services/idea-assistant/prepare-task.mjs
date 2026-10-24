@@ -29,9 +29,20 @@ export function planCard(input){
   const value=rules.evaluation.value;
   if(value==='measurement')criterion={kind:'measurement'};
   else if(value&&typeof value==='object'&&value.kind==='exact-prefix'&&Object.keys(value).length===2&&Object.hasOwn(value,'values'))criterion={kind:value.kind,values:value.values};
+  else if(value&&value.kind==='word-affine-count'&&Object.keys(value).length===5&&['kind','lag','a','b','boundaries'].every(k=>Object.hasOwn(value,k))&&Number.isInteger(value.lag)&&value.lag>=1&&value.lag<=12&&[value.a,value.b].every(n=>Number.isInteger(n)&&n>=0&&n<=28)&&['non-rune','hyphen-period'].includes(value.boundaries))criterion={...value};
   else return fail('The requested evaluation needs an adapter.');
  }else notes.push('Proposed evaluation: measure rune frequencies and adjacent repeats; no readability decision.');
  for(const key of ['searchBounds','searchProtocol','exceptionalCases'])if(specified(key))return fail('The specified '+key+' condition needs an adapter.');
+ if(operations.some(op=>op.id==='word_affine_count')){
+  const op=operations[0],allowed=['id','label','declaredFamilyId','lag','a','b','boundaries'];
+  if(operations.length!==1||op.id!=='word_affine_count'||Object.keys(op).some(k=>!allowed.includes(k))||op.label!==undefined&&op.label!=='Within-word affine pair count')return fail('The within-word count needs one explicit measurement operation.');
+  const expected={kind:'word-affine-count',lag:op.lag,a:op.a,b:op.b,boundaries:op.boundaries};
+  if(criterion.kind!=='word-affine-count'||L.stable(criterion)!==L.stable(expected))return fail('The measurement parameters and explicit evaluation must agree.');
+  if(['boundaryMode','reset','initialState'].some(specified)||rules.wordBoundaries.status==='not_applicable')return fail('The measurement boundary conflicts with another supplied rule.');
+  notes.push('Count only pairs within each page and declared word boundary. Compare with the exact average under uniformly shuffled rune order inside each word; this is not a tail probability or a correction for choosing a formula.');
+  return {pages:card.scope.value.pages,steps:[],inputVersion,criterion,notes};
+ }
+ if(criterion.kind==='word-affine-count')return fail('The evaluation needs the matching within-word measurement operation.');
  const steps=[];let reverse=false,cumulative=false,keyed=false;
  const keyedModes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};
  for(const operation of operations){
@@ -122,7 +133,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
     const worker=async()=>{try{while(next<plan.pages.length){if(controller.signal.aborted)throw Error();const index=next++,id=plan.pages[index];const response=bundle?null:await fetcher('https://jelliottdev.github.io/data/pages/'+id+'.json',{redirect:'manual',signal:controller.signal});if(response&&!response.ok)throw Error();const page=bundle?bundle.pages.get(id):await jsonBody(response,512*1024),text=plan.inputVersion==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string')throw Error();totalBytes+=new TextEncoder().encode(text).length;if(totalBytes>2000000)throw Error();pages[index]={id,text};}}catch(error){controller.abort();throw error;}};
     await Promise.all(Array.from({length:Math.min(4,pages.length)},()=>worker()));
    }catch(error){console.warn('prepare-task: official manuscript source unavailable',error?.name||'Error',error?.message||'');return reply({error:'The selected manuscript text could not be loaded.'},422);}finally{clearTimeout(timer);}
-   const title=plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':s.op==='finite-shift'?'Finite key stream '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+' indices · '+s.reset+' resets':s.op==='keyed-shift'?(s.mode==='repeat'?'Repeating-key':s.mode==='plaintext-autokey'?'Plaintext autokey':'Ciphertext autokey')+' '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune '+(s.mode==='repeat'?'key':'seed')+' · '+s.reset+' resets':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
+   const title=plan.criterion.kind==='word-affine-count'?'Within-word rune pairs · lag '+plan.criterion.lag+' · '+plan.criterion.boundaries:plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':s.op==='finite-shift'?'Finite key stream '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+' indices · '+s.reset+' resets':s.op==='keyed-shift'?(s.mode==='repeat'?'Repeating-key':s.mode==='plaintext-autokey'?'Plaintext autokey':'Ciphertext autokey')+' '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune '+(s.mode==='repeat'?'key':'seed')+' · '+s.reset+' resets':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
    let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch(error){return reply({state:'needs-adapter',reason:String(error?.message||'').startsWith('The finite key stream is shorter')?'The supplied finite stream is too short for a complete page segment. Supply enough values or specify a different reset.':'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
    return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
   }catch{return reply({error:'Plan preparation is temporarily unavailable.'},503);}

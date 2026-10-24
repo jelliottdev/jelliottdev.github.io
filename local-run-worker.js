@@ -1,5 +1,5 @@
 /* Fixed site-owned worker. Task data can select reviewed operations, never code. */
-importScripts('local-experiment.js?v=20261024-finite-run');
+importScripts('local-experiment.js?v=20261024-word-pairs');
 self.onmessage=async function(event){
  const message=event.data;
  if(!message||message.type!=='run'||!Number.isSafeInteger(message.id))return;

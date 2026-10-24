@@ -43,9 +43,10 @@ with tempfile.TemporaryDirectory(prefix='extracted-rune-run-') as directory:
  const tampered=structuredClone(task);tampered.pages[0].text+='ᚠ';await assert.rejects(P.build(tampered,runner,address),/changed/);
  await assert.rejects(P.build({...task,unknown:undefined},runner,address),'Unknown fields cannot disappear during JSON snapshotting');
  for(const invalid of ['',null,'x'.repeat(100001),'🧪'.repeat(25001),'\ud800'])await assert.rejects(P.build(task,invalid,address));
- const context={LocalExperiment:E,TextEncoder,URL,crypto:webcrypto};vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'local-run-package.js'),'utf8'),context);
+ const context={LocalControl:require('../local-control.js'),LocalExperiment:E,TextEncoder,URL,crypto:webcrypto};vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'local-run-package.js'),'utf8'),context);
  assert.deepEqual(Buffer.from(await context.LocalRunPackage.build(task,runner,address)),Buffer.from(bytes),'Browser UMD and CommonJS produce identical archives');
  await controlsPackage(context);
+ await wordPairPackage(context);
  console.log('PASS local run package: deterministic STORE/CRC/date/UTF8; exact source/task; safe return addresses; Python extraction/run and shared verification; browser parity.');
 }
 async function controlsPackage(context){
@@ -116,3 +117,20 @@ print('PASS extracted Python guard: complete controls before target; prefix/hash
  console.log('PASS authored-origin package: full JS/Python synthetic controls, immutable snapshots, fixed guard, exact protocol/digest, browser parity and bounded origins.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
+
+async function wordPairPackage(context){
+ const recipe=JSON.parse(fs.readFileSync(path.join(root,'experiments/records/word-internal-affine-lags/record.json'),'utf8')).browser_followups[0],control=recipe.control;
+ const task=await E.prepare({...control.task,title:'Synthetic word-pair package target',pages:[{id:'lp2-15',text:control.task.pages[0].text+'-'+control.task.pages[0].text}]});
+ const entry={origin:{recordId:'synthetic-pairs',followupId:'fixed-boundary',recordSha256:'a'.repeat(64),protocolSha256:'b'.repeat(64)},control,question:'Synthetic fixed-pair count',scopeChange:'Synthetic words only',limitation:'No manuscript result or significance claim'};
+ const guard=fs.readFileSync(path.join(root,'tools/verify_controls.py'),'utf8'),address='https://jelliottdev.github.io/run.html#task='+task.taskId,zip=await P.build(task,runner,address,[entry],guard);
+ assert.deepEqual(Buffer.from(await context.LocalRunPackage.build(task,runner,address,[entry],guard)),Buffer.from(zip));
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'word-pair-guard-'));fs.writeFileSync(path.join(dir,'run.zip'),zip);
+ const code=String.raw`import pathlib,subprocess,sys,tempfile,zipfile
+with tempfile.TemporaryDirectory() as d:
+ zipfile.ZipFile(pathlib.Path(sys.argv[1])/'run.zip').extractall(d)
+ subprocess.run([sys.executable,'verify_controls.py','--task','task.json','--origins','origins.json','--out','result.json'],cwd=d,check=True,stdout=subprocess.DEVNULL)
+ sys.stdout.buffer.write((pathlib.Path(d)/'result.json').read_bytes())`;
+ const result=JSON.parse(execFileSync(process.env.PYTHON||'python',['-c',code,dir],{encoding:'utf8'}));await E.verify(task,result);assert.deepEqual(result.wordPairs,E.run(task).wordPairs);
+ const failed=structuredClone(entry);failed.control.task.pages[0].text=task.alphabet[0].rune;failed.control.task.taskId=await E.identity(failed.control.task);failed.control.expected_result_sha256=createHash('sha256').update(E.stable(E.run(failed.control.task))).digest('hex');await assert.rejects(P.build(task,runner,address,[failed],guard),/control failed/);
+ console.log('PASS word-pair package: independent Python guard/control and exact fractions reproduce JS; failed or empty control cannot prepare a package');
+}
