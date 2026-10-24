@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "fb56f008a58fae625883e7e0032154d5d48851a9adf438f5192ad6b571293ced",
+    "current_experiments_sha256": "ef446a01cd73f2ce1d1781b3924eccd30e30b491d00fa372f93b2106ee4db2df",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -33,7 +33,7 @@
       }
     },
     "snapshot_records": 314,
-    "current_records": 332,
+    "current_records": 333,
     "missing_snapshot_ids": [],
     "new_ids": [
       "artifact-stream-skip-grid",
@@ -49,6 +49,7 @@
       "lp2-pad-payload-target",
       "numeric-stream-skip-grid",
       "page-number-prime-skip-grid",
+      "payload-ciphertext-skip-replay",
       "payload-phase-skip-grid",
       "short-text-prefix-extension",
       "turtle-shape-refinement-replay",
@@ -24700,6 +24701,40 @@
       "changed_fields": [],
       "classification": "draft"
     },
+    "payload-ciphertext-skip-replay": {
+      "id": "payload-ciphertext-skip-replay",
+      "title": "Number-grid bytes as an encrypted message",
+      "question": "Could the number-grid bytes be an encrypted message under these keys?",
+      "finding": "Neither archived grid reading passed the score test under any of the twelve keys. Scores also accepted seven wrong known-message outputs, so this does not rule out a message in the payload.",
+      "limitations": "Only this byte-to-rune reading, these twelve finite keys and the source decoder were checked. The two inputs are alternative readings of one grid, and the controls reuse two known passages.",
+      "pages": [
+        "lp2-49",
+        "lp2-50",
+        "lp2-51"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "artifacts": [
+          "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+          "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+          "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json"
+        ],
+        "representation": "Two pinned 256-byte grid readings, each byte reduced modulo 29 to GP indices. Optional ciphertext Atbash maps c to 28-c. These are alternate readings of one grid, not independent messages.",
+        "procedure": "Source payload_ciphertext.py section 1 only. Construct all twelve finite keys, then execute unchanged skipdecode.beam_decode at offset zero for every input/sign/Atbash case. Preserve stable cumulative winner and its normalized score; separately record every retained terminal normalized score and first maximum. Report all exceptions rather than trusting printed denominator.",
+        "parameters": "12 distinct source arrays, exactly 356 symbols each; 2 inputs x 2 signs x 2 Atbash =96 full 256-rune calls. Beam 300, max_skip 3, strict score > -5.5. Source appends 4L+8 zeros when 4L>=key length. Known-message controls: 144 fixed-seed cases plus next-key wrong controls; 24 forced pointer-435 boundaries and 96 allocation checks.",
+        "exclusions": "Other keys, offsets, key clocks, infinite cycling beyond the source prefix, alternate scoring/ranking, other languages, raw-byte reversible interpretations, source sections 2–4 and later probes. No global-null significance or general payload-message rejection. All seven known-reading ranking failures preserved."
+      },
+      "outcome": "inconclusive",
+      "href": "#/experiments/payload-ciphertext-skip-replay",
+      "current_sha256": "0abd4a97e747ad9989b1164f6f5e6a09e8bd2ca8f6efd11b61aa8d3401eca12f",
+      "snapshot_sha256": null,
+      "changed_fields": [],
+      "classification": "awaiting-classification"
+    },
     "payload-doublet-gaps": {
       "id": "payload-doublet-gaps",
       "title": "Do LP2 grid bytes track doublet gaps?",
@@ -35524,6 +35559,7 @@
     "lp2-pad-payload-target",
     "numeric-stream-skip-grid",
     "page-number-prime-skip-grid",
+    "payload-ciphertext-skip-replay",
     "payload-phase-skip-grid",
     "short-text-prefix-extension",
     "turtle-shape-refinement-replay",

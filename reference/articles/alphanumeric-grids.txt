@@ -198,13 +198,19 @@ Run python scripts/audit_grid_binary.py --check from the repository or extracted
 
 The report includes each original token, page coordinate, decimal value and eight-bit spelling, plus the source-export hash and resulting byte-stream hash. Save fresh files with python scripts/audit_grid_binary.py --output my-grid.json --svg my-grid.svg; the script refuses to replace existing files. It does not invoke a QR or Data Matrix decoder.
 
-What a barcode experiment would need
+Has this been tested as a barcode?
 
-The supplied exploration reports attempts at QR-like and Data Matrix-like layouts, but the full plotting script and referenced result images were not included. Its later comments also identify changed bases, inconsistent bit widths and whitespace mistakes. Those reports do not define one fully reproducible negative test, and they do not rule out every barcode proposal.
+Yes. No QR Code or Data Matrix message decoded in 64 fixed scans. The barcode experiment tested the complete 32-row image and each of the three pages separately. Each image was rotated, reflected and tested with black and white reversed: 16 variants per image.
 
-A clean experiment would freeze the transcription and conversion first, then list the candidate widths, padding rules, page combinations, rotations, reflections and bit polarities. Specify the decoder and version, settings, and what counts as a valid payload. Preserve outputs and errors for every candidate, and use known valid symbols to confirm the decoder works. A visual resemblance alone is not a decoded result.
+The same decoder correctly read both generated test barcodes. This supports the result for those four images and settings. It does not cover different row widths, disputed glyphs, cropped regions or other barcode types.
 
-Keep related variants in one experiment family, with the changed variables and total candidates visible. The rendering above supplies one fixed input representation for that work; it does not claim that a barcode search has been completed. See search space and bounds and documenting a reproducible attempt.
+The earlier reported exploration did not preserve its final images and full settings. This experiment tests one reproducible version of that idea; it does not recreate every historical attempt. The record includes the four images, results and reproduction files.
+
+Could the grid itself be an encrypted message?
+
+That is a different question from using its numbers as a key for the manuscript. In the payload-as-ciphertext test, each of two preserved 256-byte readings becomes a 256-rune sequence by taking every byte modulo 29. Twelve fixed key streams are then tried, with both signs and an optional alphabet reversal.
+
+None of the 96 settings passed the source program's English-score threshold. But the program preferred a wrong answer in seven of 144 known-message checks, even though it retained the correct reading. The result describes these keys and this search; it does not rule out an encrypted message in the grid.
 
 Do the entries beginning with 4 form a special group?
 
@@ -309,8 +315,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_grid_binary.py
 - JSON report
   https://jelliottdev.github.io/exports/grid-binary-audit.json
-- documenting a reproducible attempt
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- barcode experiment; record includes the four images, results and reproduction files
+  https://jelliottdev.github.io/#/experiments/grid-barcode-fixed-render
+- payload-as-ciphertext test
+  https://jelliottdev.github.io/#/experiments/payload-ciphertext-skip-replay
 - published alternative-grid proposal
   https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/README.md
 - directional prime-search reconstruction

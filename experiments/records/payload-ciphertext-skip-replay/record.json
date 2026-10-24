@@ -1,0 +1,231 @@
+{
+  "id": "payload-ciphertext-skip-replay",
+  "status": "published",
+  "record_type": "experiment",
+  "title": "Number-grid bytes as an encrypted message",
+  "question": "Do the two source number-grid payload readings decode above the fixed English-score gate under the twelve finite source keys and conditional skips?",
+  "reader_question": "Could the number-grid bytes be an encrypted message under these keys?",
+  "summary": "None of 96 complete payload decodes passed the English-score threshold. The known-message controls recovered 137 of 144 readings despite all 144 passing scores; seven wrong outputs outranked retained correct readings.",
+  "reader_finding": "Neither archived grid reading passed the score test under any of the twelve keys. Scores also accepted seven wrong known-message outputs, so this does not rule out a message in the payload.",
+  "reader_limit": "Only this byte-to-rune reading, these twelve finite keys and the source decoder were checked. The two inputs are alternative readings of one grid, and the controls reuse two known passages.",
+  "reader_sections": [
+    "What was treated as the message",
+    "What the controls establish"
+  ],
+  "finding": "All 96 attempted 256-rune decodes completed without errors. Zero source scores and zero normalized terminal maxima exceed strict -5.5. Source best -6.85528881839596: majority-byte input, anend_hash, sign -1, Atbash. Separate normalized best -6.717071296221741: decimal-preferred input, same key/sign/Atbash. All 27,062 ordered terminals were independently reconstructed; 93 cases improve normalized score. Controls: 137/144 exact, 144/144 score passes, 144 feasible and retained truths, zero wrong-key passes. Seven strict ranking losses, no ties; one wrong cumulative winner is worse after normalization.",
+  "limitations": "Historical source section 1 only, not message/language/cipher-family exclusion or a complete-search probability. Keys are 356-symbol prefixes with source zero tails; no target retained path reaches position 356, while structural controls exercise the tail. Byte modulo 29 loses information. Other byte transforms, decompression, block and later source probes remain unexecuted. Three control fixtures reuse two known passages; seven accepted wrong outputs limit score interpretation.",
+  "next_steps": "Any different key catalog, reversible byte encoding or modified ranking requires a separately frozen experiment; keep this finite historical result and all control failures intact.",
+  "outcome": "inconclusive",
+  "tags": [
+    "number grid",
+    "payload as ciphertext",
+    "payload as message",
+    "conditional skips",
+    "English scoring",
+    "reported attempt"
+  ],
+  "pages_note": "The two exact archived 256-byte readings of the LP2-49–51 number-grid payload; no manuscript rune pages are decoded in this direction.",
+  "bounds_note": "Two grid readings, twelve finite keys, both signs and alphabet directions: 96 complete 256-rune decodes; no short screen.",
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json"
+    ],
+    "representation": "Two pinned 256-byte grid readings, each byte reduced modulo 29 to GP indices. Optional ciphertext Atbash maps c to 28-c. These are alternate readings of one grid, not independent messages.",
+    "procedure": "Source payload_ciphertext.py section 1 only. Construct all twelve finite keys, then execute unchanged skipdecode.beam_decode at offset zero for every input/sign/Atbash case. Preserve stable cumulative winner and its normalized score; separately record every retained terminal normalized score and first maximum. Report all exceptions rather than trusting printed denominator.",
+    "parameters": "12 distinct source arrays, exactly 356 symbols each; 2 inputs x 2 signs x 2 Atbash =96 full 256-rune calls. Beam 300, max_skip 3, strict score > -5.5. Source appends 4L+8 zeros when 4L>=key length. Known-message controls: 144 fixed-seed cases plus next-key wrong controls; 24 forced pointer-435 boundaries and 96 allocation checks.",
+    "exclusions": "Other keys, offsets, key clocks, infinite cycling beyond the source prefix, alternate scoring/ranking, other languages, raw-byte reversible interpretations, source sections 2–4 and later probes. No global-null significance or general payload-message rejection. All seven known-reading ranking failures preserved."
+  },
+  "review": {
+    "kind": "Complete finite source replay with pre-target controls and independent exhaustive beam reconstruction",
+    "retested_on": "2026-10-24",
+    "reviewer": "Independent key-constructor proof; all 144 source/RNG/truth-feasibility controls and wrong keys, 24 boundaries and 96 allocations checked. Every one of 96 target beams and all 27,062 ordered terminals independently reconstructed with exact scores, paths, pointers, transformations and maxima; no sampling.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/payload-ciphertext-skip-replay/check.py && python experiments/records/payload-ciphertext-skip-replay/replay.py",
+    "environment": "Python 3.12 standard library only. Both exact target byte files, source/model, known-reading fixtures and audit code are bundled. Full replay uses temporary outputs and compares all deterministic controls/targets before independent complete reconstruction. No installation, external transcript or network.",
+    "script": "experiments/records/payload-ciphertext-skip-replay/replay.py",
+    "script_sha256": "89568c9e10f96ceb9de3f3453876578de50a69a8a070756cfa59101f5a32ca17",
+    "inputs": [
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/article.md",
+        "sha256": "8355739f7ac2b4141f3158f6118b2abb3210e1b9681afb4b9c65a4b916f75164"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/check.py",
+        "sha256": "06980af00449a54916ea84f7bdd97d19501e35933064ed59cfe0b4d8a738ac96"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/audit_controls.py",
+        "sha256": "d0d79600a979f727794e29b6915a704e841e0fe2203c9fcb64fb091b4b095fc0"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/audit_target.py",
+        "sha256": "6bb215fc85c0a6bc75f8a8240389200c697574c316b9b2e861284ed93693c808"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/target-audit-plan-frozen.json",
+        "sha256": "08cdae249054ed556a6e3073b5974b8bb078f48a8c208c4042407f6aac7b9a9e"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/PORTABILITY.md",
+        "sha256": "d86be368e5b2a91a644106e7c0984e4940e422eeba28c21aa21977c29dc1a86b"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/replay.py",
+        "sha256": "89568c9e10f96ceb9de3f3453876578de50a69a8a070756cfa59101f5a32ca17"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/analyze_failures.py",
+        "sha256": "697ce1406368b699091887908782d3ae654c15c186969bc1ce10f0caec143040"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/control-fixtures-frozen.json",
+        "sha256": "5c9d3d180a80b13fc607dfe7f78d21cf492258230f28c49d47b508cbea892f97"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-execution-frozen.json",
+        "sha256": "6e4a1a4435b8c962680796eb40b140d679653c20d4459004a5fad0d22f5920eb"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-plan-frozen.json",
+        "sha256": "7cf1ab1de2a6a297cacba1f362d0a960dc583f4e9d5e959c1c145699dcd6e5f9"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls.py",
+        "sha256": "ccffd3c5a812b9601d9c6cfe5569f43bcd8bb215a9982fcba5189df4cd720407"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/inputs-frozen.json",
+        "sha256": "bf03084686f5a576e7e16753c156356975d12b9425e10b7f836c761b94300402"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/key-constructor-receipt.json",
+        "sha256": "688ddc9cd25c5ad0c029e3d1e8b0a4575facb141c8f75aab3e149a3b81e56ab9"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/native.py",
+        "sha256": "06fd7bc2997dd2011a32ea5348cf8cce08f84e4f34241c9cf7f99cd1f789eac1"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/PRETARGET-AMENDMENT.md",
+        "sha256": "1a7b605c0c15eeaa098b7bc9a7f8b3ccba0bf9f83f0687f314f80797bda2ed59"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/run_target.py",
+        "sha256": "22ff2a65125ad089f0c7186394db82e1af97cf7c1451962d8c57212ab136c603"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/analysis/campaign18_skip/armada/payload_ciphertext.py",
+        "sha256": "f31b97ded2b27d55ca20e180416df591d23447f5b9f98b37385a8f9177f702e8"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json",
+        "sha256": "80ad219035d7d9b1783ab7a4d7b36d7a95c85f246b085e9a46955c8c70887bee"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/benchmark.py",
+        "sha256": "957cd16ed65ec41bf20f2f28ab4d80d8e94647ccd9b69b942412e41e740e584b"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/benchmark-plan-frozen.json",
+        "sha256": "27d2aa53750e32020b5254f7a3e6321acf5b751b4a96405c9b1cd714aabeaeae"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/target-audit-receipt.json",
+        "sha256": "2bb35485afc3ded80dede9a5dd3a90e7ad51e357db1e8335ba104dde1429ad7f"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-audit-receipt.json",
+        "sha256": "6af464ac890bdf991ab90298bfafe4bb0ead94c9c3121dc7482d6e089f9118ec"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-results.json",
+        "sha256": "fc65ac1ee2bbbed61ecb2a00dd5bc22cb350eda17b8d68d2a7a00ccae61d9158"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/failure-analysis.json",
+        "sha256": "d3c19513ef657044207cdb7a28efcdc5b64db08f225d8a0b4d80be0243e52420"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-results.json",
+        "sha256": "14b2066691949d31b53254689873bbc3c47d3485b42bb3b1230aee12e1a24bd6"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/benchmark-results.json",
+        "sha256": "f52874c034083115ce89d8fba1f1744d1cf1f4bc27066002cc41e1297f4c3125"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned payload-as-ciphertext source, section 1",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada/payload_ciphertext.py"
+    },
+    {
+      "label": "Pinned conditional-skip decoder",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/skipdecode.py"
+    },
+    {
+      "label": "Pinned source payload artifacts",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/pp49_51"
+    }
+  ],
+  "related": [
+    "dukotah-payload-key-skip",
+    "lp2-pad-payload-target",
+    "payload-phase-skip-grid",
+    "keyword-skip-family"
+  ],
+  "materials": {
+    "summary": "Both exact payload readings, complete 96-case outputs/terminal scores, all controls, frozen source/protocol and independent all-beam audit.",
+    "reuse": "Verify saved scores or replay every control and target using only the self-contained bundle.",
+    "limits": "Source section 1 only. Score passage is not correct text; seven accepted wrong controls remain. No target path exercised the finite zero tail, unlike structural fixtures. No message exclusion or global probability.",
+    "evidence": [
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-results.json",
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-results.json",
+      "experiments/records/payload-ciphertext-skip-replay/independent/target-audit-receipt.json"
+    ]
+  }
+}

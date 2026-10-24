@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 332,
+    "records": 333,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -25105,6 +25105,97 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/parallel-languages.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/parallel-languages/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/parallel-languages.zip"
+    },
+    {
+      "id": "payload-ciphertext-skip-replay",
+      "title": "Number-grid bytes as an encrypted message",
+      "question": "Do the two source number-grid payload readings decode above the fixed English-score gate under the twelve finite source keys and conditional skips?",
+      "summary": "None of 96 complete payload decodes passed the English-score threshold. The known-message controls recovered 137 of 144 readings despite all 144 passing scores; seven wrong outputs outranked retained correct readings.",
+      "tags": [
+        "number grid",
+        "payload as ciphertext",
+        "payload as message",
+        "conditional skips",
+        "English scoring",
+        "reported attempt"
+      ],
+      "finding": "Neither archived grid reading passed the score test under any of the twelve keys. Scores also accepted seven wrong known-message outputs, so this does not rule out a message in the payload.",
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "artifacts": [
+          "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+          "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+          "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json"
+        ],
+        "representation": "Two pinned 256-byte grid readings, each byte reduced modulo 29 to GP indices. Optional ciphertext Atbash maps c to 28-c. These are alternate readings of one grid, not independent messages.",
+        "procedure": "Source payload_ciphertext.py section 1 only. Construct all twelve finite keys, then execute unchanged skipdecode.beam_decode at offset zero for every input/sign/Atbash case. Preserve stable cumulative winner and its normalized score; separately record every retained terminal normalized score and first maximum. Report all exceptions rather than trusting printed denominator.",
+        "parameters": "12 distinct source arrays, exactly 356 symbols each; 2 inputs x 2 signs x 2 Atbash =96 full 256-rune calls. Beam 300, max_skip 3, strict score > -5.5. Source appends 4L+8 zeros when 4L>=key length. Known-message controls: 144 fixed-seed cases plus next-key wrong controls; 24 forced pointer-435 boundaries and 96 allocation checks.",
+        "exclusions": "Other keys, offsets, key clocks, infinite cycling beyond the source prefix, alternate scoring/ranking, other languages, raw-byte reversible interpretations, source sections 2–4 and later probes. No global-null significance or general payload-message rejection. All seven known-reading ranking failures preserved."
+      },
+      "limitations": "Historical source section 1 only, not message/language/cipher-family exclusion or a complete-search probability. Keys are 356-symbol prefixes with source zero tails; no target retained path reaches position 356, while structural controls exercise the tail. Byte modulo 29 loses information. Other byte transforms, decompression, block and later source probes remain unexecuted. Three control fixtures reuse two known passages; seven accepted wrong outputs limit score interpretation.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "polyalphabetic",
+          "title": "Repeating-key and polyalphabetic ciphers",
+          "aliases": [
+            "Vigenere",
+            "Beaufort",
+            "repeating key",
+            "polyalphabetic",
+            "repeating key cipher",
+            "substitution",
+            "polyalphabetic substitution"
+          ]
+        },
+        {
+          "id": "number-streams",
+          "title": "Arithmetic keystreams",
+          "aliases": [
+            "prime shifts",
+            "Fibonacci",
+            "totient sequence",
+            "arithmetic keystream",
+            "numerical sequence"
+          ]
+        },
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-49",
+        "lp2-50",
+        "lp2-51"
+      ],
+      "artifacts": [
+        "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+        "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+        "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-24",
+      "url": "https://jelliottdev.github.io/#/experiments/payload-ciphertext-skip-replay",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/payload-ciphertext-skip-replay.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/payload-ciphertext-skip-replay/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/payload-ciphertext-skip-replay.zip"
     },
     {
       "id": "payload-doublet-gaps",

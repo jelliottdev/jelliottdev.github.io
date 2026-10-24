@@ -6707,7 +6707,7 @@ Homophonic search: synthetic recovery controls · Control
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-40 related records
+41 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -6788,6 +6788,8 @@ Do shifted pages produce English? · Bounded solving test
 
 Keyword search with skipped key positions · Bounded solving test
 
+Number-grid bytes as an encrypted message · Method replay
+
 
 
 Fractionation and coordinate alphabets
@@ -6824,7 +6826,7 @@ Keys, sequences and state
 Arithmetic keystreams
 Generate shifts from a declared numerical sequence.
 
-28 related records
+29 related records
 LP2-00–55: prime-minus-one shifts and known openings · Bounded solving test
 
 LP2-00–55: ordinary primes instead of primes minus one · Bounded solving test
@@ -6880,6 +6882,8 @@ Fibonacci streams with conditional key skips · Bounded solving test
 Moving the number-grid key's starting position · Bounded solving test
 
 Keys based on page order · Bounded solving test
+
+Number-grid bytes as an encrypted message · Method replay
 
 
 
@@ -7042,7 +7046,7 @@ Four archived texts as running keys · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-40 related records
+41 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -7122,6 +7126,8 @@ Keys based on page order · Bounded solving test
 Keyword search with skipped key positions · Bounded solving test
 
 Autokey with skipped key positions · Method replay
+
+Number-grid bytes as an encrypted message · Method replay
 
 
 
@@ -8389,6 +8395,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-shifted-page-pair-english
 - Keyword search with skipped key positions
   https://jelliottdev.github.io/#/experiments/keyword-skip-family
+- Number-grid bytes as an encrypted message
+  https://jelliottdev.github.io/#/experiments/payload-ciphertext-skip-replay
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Does the fractionation reversal undo its own shuffle?
@@ -23369,13 +23377,19 @@ Run python scripts/audit_grid_binary.py --check from the repository or extracted
 
 The report includes each original token, page coordinate, decimal value and eight-bit spelling, plus the source-export hash and resulting byte-stream hash. Save fresh files with python scripts/audit_grid_binary.py --output my-grid.json --svg my-grid.svg; the script refuses to replace existing files. It does not invoke a QR or Data Matrix decoder.
 
-What a barcode experiment would need
+Has this been tested as a barcode?
 
-The supplied exploration reports attempts at QR-like and Data Matrix-like layouts, but the full plotting script and referenced result images were not included. Its later comments also identify changed bases, inconsistent bit widths and whitespace mistakes. Those reports do not define one fully reproducible negative test, and they do not rule out every barcode proposal.
+Yes. No QR Code or Data Matrix message decoded in 64 fixed scans. The barcode experiment tested the complete 32-row image and each of the three pages separately. Each image was rotated, reflected and tested with black and white reversed: 16 variants per image.
 
-A clean experiment would freeze the transcription and conversion first, then list the candidate widths, padding rules, page combinations, rotations, reflections and bit polarities. Specify the decoder and version, settings, and what counts as a valid payload. Preserve outputs and errors for every candidate, and use known valid symbols to confirm the decoder works. A visual resemblance alone is not a decoded result.
+The same decoder correctly read both generated test barcodes. This supports the result for those four images and settings. It does not cover different row widths, disputed glyphs, cropped regions or other barcode types.
 
-Keep related variants in one experiment family, with the changed variables and total candidates visible. The rendering above supplies one fixed input representation for that work; it does not claim that a barcode search has been completed. See search space and bounds and documenting a reproducible attempt.
+The earlier reported exploration did not preserve its final images and full settings. This experiment tests one reproducible version of that idea; it does not recreate every historical attempt. The record includes the four images, results and reproduction files.
+
+Could the grid itself be an encrypted message?
+
+That is a different question from using its numbers as a key for the manuscript. In the payload-as-ciphertext test, each of two preserved 256-byte readings becomes a 256-rune sequence by taking every byte modulo 29. Twelve fixed key streams are then tried, with both signs and an optional alphabet reversal.
+
+None of the 96 settings passed the source program's English-score threshold. But the program preferred a wrong answer in seven of 144 known-message checks, even though it retained the correct reading. The result describes these keys and this search; it does not rule out an encrypted message in the grid.
 
 Do the entries beginning with 4 form a special group?
 
@@ -23480,8 +23494,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_grid_binary.py
 - JSON report
   https://jelliottdev.github.io/exports/grid-binary-audit.json
-- documenting a reproducible attempt
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- barcode experiment; record includes the four images, results and reproduction files
+  https://jelliottdev.github.io/#/experiments/grid-barcode-fixed-render
+- payload-as-ciphertext test
+  https://jelliottdev.github.io/#/experiments/payload-ciphertext-skip-replay
 - published alternative-grid proposal
   https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/README.md
 - directional prime-search reconstruction
@@ -24031,21 +24047,11 @@ Sixteen declared routes per nonempty page produced no matches to the same nine b
 
 A precise report says “no declared opening matched under these rules.” It should not shorten this to “Fibonacci does not work” or “transposition was ruled out.” Conversely, keeping a method open is not evidence in its favor: it identifies what the recorded test has not settled.
 
-What a broader language test would need
+What full-output language tests found
 
-A language score could rank candidates that begin differently. To make that ranking reproducible, a new experiment would need to publish the scoring rule as carefully as the cipher operation. It should specify:
+The full-output row and column test checks the same sixteen routes as the opening test above, but scores the complete output instead of requiring a known beginning. It found no deciphered passage. Its strongest output comes from LP2-22 and begins WRRJJTMUXW…; 16 of 256 shuffled whole-search comparisons scored at least as highly.
 
-
-The representation. Decide whether the model scores rune indices, literal rune labels or interpreted English. Specify how spaces, punctuation and multi-letter labels are handled. Do not silently repair spelling before scoring.
-
-The reference material. Identify the corpus, its version and hash, and the exact conversion into the scored alphabet. Separate material used to build or tune the score from material reserved to check its behavior.
-
-The rule. Publish the formula or executable model, treatment of unseen sequences, length normalization and any acceptance threshold. “Looks like English” is not a reproducible numeric criterion.
-
-The search. Record all keys, offsets, page subsets and score variants examined. A favorable score selected from many candidates needs a comparison that includes that selection process; see chance comparisons.
-
-The controls. Show whether known readings score sensibly, and what happens to appropriate altered or shuffled inputs. A reading used to choose the score cannot also serve as untouched evidence that the chosen score generalizes.
-
+The search covers 55 rune-bearing LP2 pages using archived rows and left-aligned ordinal columns, with a fixed English four-letter score on GP labels. It does not test physical image columns, diagonals, an additional cipher layer or other languages. The shuffled comparison includes selecting the best of all sixteen routes on every page; it does not account for choosing this family after considering other ideas. The chance-comparison guide explains that distinction.
 
 The highest-scoring candidate always exists when a finite nonempty set has numeric scores. Its rank alone does not tell us that the candidate is meaningful. Publish the competing outputs and score differences, rather than showing only the winner.
 
@@ -24088,7 +24094,9 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - Row and column reading routes
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
-- chance comparisons
+- full-output row and column test
+  https://jelliottdev.github.io/#/experiments/lp2-row-column-english
+- chance-comparison guide
   https://jelliottdev.github.io/reference/articles/null-models.html
 - eight-language scorer controls
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
@@ -28258,6 +28266,7 @@ Documented experiments
 
 These records cover particular variants, not this entire family.
 LP2-00–55: simple row and column reading routes
+Full-output English scoring of the same row and column routes: no verified reading; 16 of 256 shuffled searches matched or exceeded the strongest score.
 LP2-00–02: 27 × 27 totient-map route replay
 
 For proposals combining or changing operations, see cipher composition and ordered pipelines.
@@ -28279,6 +28288,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/route-order-example.json
 - LP2-00–55: simple row and column reading routes
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
+- Full-output English scoring of the same row and column routes
+  https://jelliottdev.github.io/#/experiments/lp2-row-column-english
 - LP2-00–02: 27 × 27 totient-map route replay
   https://jelliottdev.github.io/#/experiments/totient-map-route
 - cipher composition and ordered pipelines
@@ -30475,7 +30486,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 332 published reproducible records: 77 bounded solving or extraction tests, 97 proposed-method replay, 83 manuscript measurements, 36 controls, 36 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 333 published reproducible records: 77 bounded solving or extraction tests, 98 proposed-method replay, 83 manuscript measurements, 36 controls, 36 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -97278,6 +97289,283 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "another language",
         "non English",
         "other languages"
+      ]
+    }
+  ]
+}
+
+---
+
+{
+  "id": "payload-ciphertext-skip-replay",
+  "status": "published",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "title": "Number-grid bytes as an encrypted message",
+  "question": "Do the two source number-grid payload readings decode above the fixed English-score gate under the twelve finite source keys and conditional skips?",
+  "reader_question": "Could the number-grid bytes be an encrypted message under these keys?",
+  "summary": "None of 96 complete payload decodes passed the English-score threshold. The known-message controls recovered 137 of 144 readings despite all 144 passing scores; seven wrong outputs outranked retained correct readings.",
+  "reader_finding": "Neither archived grid reading passed the score test under any of the twelve keys. Scores also accepted seven wrong known-message outputs, so this does not rule out a message in the payload.",
+  "reader_limit": "Only this byte-to-rune reading, these twelve finite keys and the source decoder were checked. The two inputs are alternative readings of one grid, and the controls reuse two known passages.",
+  "reader_sections": [
+    "What was treated as the message",
+    "What the controls establish"
+  ],
+  "finding": "All 96 attempted 256-rune decodes completed without errors. Zero source scores and zero normalized terminal maxima exceed strict -5.5. Source best -6.85528881839596: majority-byte input, anend_hash, sign -1, Atbash. Separate normalized best -6.717071296221741: decimal-preferred input, same key/sign/Atbash. All 27,062 ordered terminals were independently reconstructed; 93 cases improve normalized score. Controls: 137/144 exact, 144/144 score passes, 144 feasible and retained truths, zero wrong-key passes. Seven strict ranking losses, no ties; one wrong cumulative winner is worse after normalization.",
+  "limitations": "Historical source section 1 only, not message/language/cipher-family exclusion or a complete-search probability. Keys are 356-symbol prefixes with source zero tails; no target retained path reaches position 356, while structural controls exercise the tail. Byte modulo 29 loses information. Other byte transforms, decompression, block and later source probes remain unexecuted. Three control fixtures reuse two known passages; seven accepted wrong outputs limit score interpretation.",
+  "next_steps": "Any different key catalog, reversible byte encoding or modified ranking requires a separately frozen experiment; keep this finite historical result and all control failures intact.",
+  "outcome": "inconclusive",
+  "tags": [
+    "number grid",
+    "payload as ciphertext",
+    "payload as message",
+    "conditional skips",
+    "English scoring",
+    "reported attempt"
+  ],
+  "pages_note": "The two exact archived 256-byte readings of the LP2-49–51 number-grid payload; no manuscript rune pages are decoded in this direction.",
+  "bounds_note": "Two grid readings, twelve finite keys, both signs and alphabet directions: 96 complete 256-rune decodes; no short screen.",
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json"
+    ],
+    "representation": "Two pinned 256-byte grid readings, each byte reduced modulo 29 to GP indices. Optional ciphertext Atbash maps c to 28-c. These are alternate readings of one grid, not independent messages.",
+    "procedure": "Source payload_ciphertext.py section 1 only. Construct all twelve finite keys, then execute unchanged skipdecode.beam_decode at offset zero for every input/sign/Atbash case. Preserve stable cumulative winner and its normalized score; separately record every retained terminal normalized score and first maximum. Report all exceptions rather than trusting printed denominator.",
+    "parameters": "12 distinct source arrays, exactly 356 symbols each; 2 inputs x 2 signs x 2 Atbash =96 full 256-rune calls. Beam 300, max_skip 3, strict score > -5.5. Source appends 4L+8 zeros when 4L>=key length. Known-message controls: 144 fixed-seed cases plus next-key wrong controls; 24 forced pointer-435 boundaries and 96 allocation checks.",
+    "exclusions": "Other keys, offsets, key clocks, infinite cycling beyond the source prefix, alternate scoring/ranking, other languages, raw-byte reversible interpretations, source sections 2–4 and later probes. No global-null significance or general payload-message rejection. All seven known-reading ranking failures preserved."
+  },
+  "review": {
+    "kind": "Complete finite source replay with pre-target controls and independent exhaustive beam reconstruction",
+    "retested_on": "2026-10-24",
+    "reviewer": "Independent key-constructor proof; all 144 source/RNG/truth-feasibility controls and wrong keys, 24 boundaries and 96 allocations checked. Every one of 96 target beams and all 27,062 ordered terminals independently reconstructed with exact scores, paths, pointers, transformations and maxima; no sampling.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/payload-ciphertext-skip-replay/check.py && python experiments/records/payload-ciphertext-skip-replay/replay.py",
+    "environment": "Python 3.12 standard library only. Both exact target byte files, source/model, known-reading fixtures and audit code are bundled. Full replay uses temporary outputs and compares all deterministic controls/targets before independent complete reconstruction. No installation, external transcript or network.",
+    "script": "experiments/records/payload-ciphertext-skip-replay/replay.py",
+    "script_sha256": "89568c9e10f96ceb9de3f3453876578de50a69a8a070756cfa59101f5a32ca17",
+    "inputs": [
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/article.md",
+        "sha256": "8355739f7ac2b4141f3158f6118b2abb3210e1b9681afb4b9c65a4b916f75164"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/check.py",
+        "sha256": "06980af00449a54916ea84f7bdd97d19501e35933064ed59cfe0b4d8a738ac96"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/audit_controls.py",
+        "sha256": "d0d79600a979f727794e29b6915a704e841e0fe2203c9fcb64fb091b4b095fc0"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/audit_target.py",
+        "sha256": "6bb215fc85c0a6bc75f8a8240389200c697574c316b9b2e861284ed93693c808"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/target-audit-plan-frozen.json",
+        "sha256": "08cdae249054ed556a6e3073b5974b8bb078f48a8c208c4042407f6aac7b9a9e"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/PORTABILITY.md",
+        "sha256": "d86be368e5b2a91a644106e7c0984e4940e422eeba28c21aa21977c29dc1a86b"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/replay.py",
+        "sha256": "89568c9e10f96ceb9de3f3453876578de50a69a8a070756cfa59101f5a32ca17"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/analyze_failures.py",
+        "sha256": "697ce1406368b699091887908782d3ae654c15c186969bc1ce10f0caec143040"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/control-fixtures-frozen.json",
+        "sha256": "5c9d3d180a80b13fc607dfe7f78d21cf492258230f28c49d47b508cbea892f97"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-execution-frozen.json",
+        "sha256": "6e4a1a4435b8c962680796eb40b140d679653c20d4459004a5fad0d22f5920eb"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-plan-frozen.json",
+        "sha256": "7cf1ab1de2a6a297cacba1f362d0a960dc583f4e9d5e959c1c145699dcd6e5f9"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls.py",
+        "sha256": "ccffd3c5a812b9601d9c6cfe5569f43bcd8bb215a9982fcba5189df4cd720407"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/inputs-frozen.json",
+        "sha256": "bf03084686f5a576e7e16753c156356975d12b9425e10b7f836c761b94300402"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/key-constructor-receipt.json",
+        "sha256": "688ddc9cd25c5ad0c029e3d1e8b0a4575facb141c8f75aab3e149a3b81e56ab9"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/native.py",
+        "sha256": "06fd7bc2997dd2011a32ea5348cf8cce08f84e4f34241c9cf7f99cd1f789eac1"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/PRETARGET-AMENDMENT.md",
+        "sha256": "1a7b605c0c15eeaa098b7bc9a7f8b3ccba0bf9f83f0687f314f80797bda2ed59"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/run_target.py",
+        "sha256": "22ff2a65125ad089f0c7186394db82e1af97cf7c1451962d8c57212ab136c603"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/analysis/campaign18_skip/armada/payload_ciphertext.py",
+        "sha256": "f31b97ded2b27d55ca20e180416df591d23447f5b9f98b37385a8f9177f702e8"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-inputs/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-protocol-frozen.json",
+        "sha256": "80ad219035d7d9b1783ab7a4d7b36d7a95c85f246b085e9a46955c8c70887bee"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/benchmark.py",
+        "sha256": "957cd16ed65ec41bf20f2f28ab4d80d8e94647ccd9b69b942412e41e740e584b"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/benchmark-plan-frozen.json",
+        "sha256": "27d2aa53750e32020b5254f7a3e6321acf5b751b4a96405c9b1cd714aabeaeae"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/independent/target-audit-receipt.json",
+        "sha256": "2bb35485afc3ded80dede9a5dd3a90e7ad51e357db1e8335ba104dde1429ad7f"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-audit-receipt.json",
+        "sha256": "6af464ac890bdf991ab90298bfafe4bb0ead94c9c3121dc7482d6e089f9118ec"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-results.json",
+        "sha256": "fc65ac1ee2bbbed61ecb2a00dd5bc22cb350eda17b8d68d2a7a00ccae61d9158"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/failure-analysis.json",
+        "sha256": "d3c19513ef657044207cdb7a28efcdc5b64db08f225d8a0b4d80be0243e52420"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/target-results.json",
+        "sha256": "14b2066691949d31b53254689873bbc3c47d3485b42bb3b1230aee12e1a24bd6"
+      },
+      {
+        "path": "experiments/records/payload-ciphertext-skip-replay/reproduction/benchmark-results.json",
+        "sha256": "f52874c034083115ce89d8fba1f1744d1cf1f4bc27066002cc41e1297f4c3125"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned payload-as-ciphertext source, section 1",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada/payload_ciphertext.py"
+    },
+    {
+      "label": "Pinned conditional-skip decoder",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/skipdecode.py"
+    },
+    {
+      "label": "Pinned source payload artifacts",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/pp49_51"
+    }
+  ],
+  "related": [
+    "dukotah-payload-key-skip",
+    "lp2-pad-payload-target",
+    "payload-phase-skip-grid",
+    "keyword-skip-family"
+  ],
+  "materials": {
+    "summary": "Both exact payload readings, complete 96-case outputs/terminal scores, all controls, frozen source/protocol and independent all-beam audit.",
+    "reuse": "Verify saved scores or replay every control and target using only the self-contained bundle.",
+    "limits": "Source section 1 only. Score passage is not correct text; seven accepted wrong controls remain. No target path exercised the finite zero tail, unlike structural fixtures. No message exclusion or global probability.",
+    "evidence": [
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/target-results.json",
+      "experiments/records/payload-ciphertext-skip-replay/reproduction/controls-results.json",
+      "experiments/records/payload-ciphertext-skip-replay/independent/target-audit-receipt.json"
+    ]
+  },
+  "article": "# Number-grid bytes as an encrypted message\n\nNone of the 96 full-length results crossed the fixed English-score threshold. The result checks twelve specific keys and the source's conditional-skip decoder; it does not establish that the payload contains no message.\n\n## What was treated as the message\n\nThe 256-byte number-grid payload is the message to decode, and one of twelve proposed streams supplies the key. Earlier payload-as-key tests used those bytes to decode manuscript pages; this test runs in the opposite direction.\n\nEach byte is reduced modulo 29 and treated as a rune index. These are two alternative readings of the same grid, not two recovered messages.\n\n| Input reading | Result |\n| --- | --- |\n| Majority-byte payload, 256 bytes | 48 configurations; no score passes |\n| Decimal-preferred payload, 256 bytes | 48 configurations; no score passes |\n\n## What the controls establish\n\nAll 144 test outputs cleared the English-score threshold, but only 137 recovered the complete known message.\n\nThe known-message tests use two existing readings plus an explicitly synthetic concatenation of them to reach 256 runes. They are not three independent historical passages.\n\n| Known-message result | Count |\n| --- | --- |\n| Passing English scores | 144 of 144 |\n| Complete correct readings | 137 of 144 |\n\nEvery correct reading remained among the final candidates. In seven cases, the search put an incorrect reading first.\n\nA high English score can therefore accept an incorrect reading.\n\n## Exact search settings\n\nEach group tests the same twelve source keys, both arithmetic signs and an optional ciphertext alphabet reversal. Every run decodes all 256 runes, starts at key position 0, retains up to 300 beam paths and allows up to 3 conditional skipped key positions per step. The strict final gate is a normalized English score greater than −5.5; there is no short screen or phase selection.\n\nThe keys comprise three prime/totient sequences, the repeated LP2-56 digest, a fixed source excerpt of known readings and seven thematic keywords. Exact source constructors supply 356 key symbols. The decoder appends zeros when more key material is required; it does not continue the original sequence indefinitely.\n\n## Control ranking details\n\nEvery correct reading was feasible and retained in the final beam. All seven nonexact results are strict cumulative-ranking losses, with no ties or pruned truths. In one case, choosing by normalized score would recover the truth; the other six incorrect outputs also score slightly better after normalization. All 144 checks with the fixed next-source-key wrong key failed the score gate.\n\n## Target result and finite-key check\n\nThe best source score was −6.85528881839596, using the majority-byte input, the LP2-56 digest key, sign −1 and alphabet reversal. It fell below −5.5. The separate normalized-score diagnostic inspected all 27,062 retained terminal hypotheses. Its best score was −6.717071296221741 on the decimal-preferred input with the same key and transformations; it also fell below the gate. The historical source winner is preserved separately.\n\nNo target retained path reached key position 356. The zero tail was instead exercised by 24 deliberately constructed structural controls, each with a valid path ending at position 435. Original and explicitly padded native beams agreed exactly; 96 allocation checks verified the source behavior around its padding boundary. These arbitrary-message fixtures test padding and admissibility, not English recovery.\n\nThe independent audit reconstructed every target beam and its ordered terminal candidates, scores and pointers. There were no exceptions or skipped target cases.\n\n## Limits and reproduction\n\nThis is the complete finite grid in source section 1. Other byte transforms, decompression attempts, block comparisons and later probes in that source program remain outside this record. No whole-search null probability was calibrated, and this English score cannot exclude other keys, messages, languages or cipher rules. Reducing bytes modulo 29 also discards byte information; this is a specified rune-reading hypothesis, not a reversible decoding of every original byte value.\n\nThe [reproduction instructions](experiments/records/payload-ciphertext-skip-replay/PORTABILITY.md) distinguish the quick saved-results check from the complete isolated replay. Both exact input variants, frozen controls and protocol, full source/result bytes and independent audit code are included.\n",
+  "article_path": "experiments/records/payload-ciphertext-skip-replay/article.md",
+  "script_sha256": "89568c9e10f96ceb9de3f3453876578de50a69a8a070756cfa59101f5a32ca17",
+  "method_topics": [
+    {
+      "id": "polyalphabetic",
+      "title": "Repeating-key and polyalphabetic ciphers",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key",
+        "polyalphabetic",
+        "repeating key cipher",
+        "substitution",
+        "polyalphabetic substitution"
+      ]
+    },
+    {
+      "id": "number-streams",
+      "title": "Arithmetic keystreams",
+      "aliases": [
+        "prime shifts",
+        "Fibonacci",
+        "totient sequence",
+        "arithmetic keystream",
+        "numerical sequence"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
       ]
     }
   ]

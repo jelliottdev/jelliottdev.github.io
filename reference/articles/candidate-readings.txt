@@ -44,21 +44,11 @@ Sixteen declared routes per nonempty page produced no matches to the same nine b
 
 A precise report says “no declared opening matched under these rules.” It should not shorten this to “Fibonacci does not work” or “transposition was ruled out.” Conversely, keeping a method open is not evidence in its favor: it identifies what the recorded test has not settled.
 
-What a broader language test would need
+What full-output language tests found
 
-A language score could rank candidates that begin differently. To make that ranking reproducible, a new experiment would need to publish the scoring rule as carefully as the cipher operation. It should specify:
+The full-output row and column test checks the same sixteen routes as the opening test above, but scores the complete output instead of requiring a known beginning. It found no deciphered passage. Its strongest output comes from LP2-22 and begins WRRJJTMUXW…; 16 of 256 shuffled whole-search comparisons scored at least as highly.
 
-
-The representation. Decide whether the model scores rune indices, literal rune labels or interpreted English. Specify how spaces, punctuation and multi-letter labels are handled. Do not silently repair spelling before scoring.
-
-The reference material. Identify the corpus, its version and hash, and the exact conversion into the scored alphabet. Separate material used to build or tune the score from material reserved to check its behavior.
-
-The rule. Publish the formula or executable model, treatment of unseen sequences, length normalization and any acceptance threshold. “Looks like English” is not a reproducible numeric criterion.
-
-The search. Record all keys, offsets, page subsets and score variants examined. A favorable score selected from many candidates needs a comparison that includes that selection process; see chance comparisons.
-
-The controls. Show whether known readings score sensibly, and what happens to appropriate altered or shuffled inputs. A reading used to choose the score cannot also serve as untouched evidence that the chosen score generalizes.
-
+The search covers 55 rune-bearing LP2 pages using archived rows and left-aligned ordinal columns, with a fixed English four-letter score on GP labels. It does not test physical image columns, diagonals, an additional cipher layer or other languages. The shuffled comparison includes selecting the best of all sixteen routes on every page; it does not account for choosing this family after considering other ideas. The chance-comparison guide explains that distinction.
 
 The highest-scoring candidate always exists when a finite nonempty set has numeric scores. Its rank alone does not tell us that the candidate is meaningful. Publish the competing outputs and score differences, rather than showing only the winner.
 
@@ -101,7 +91,9 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - Row and column reading routes
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
-- chance comparisons
+- full-output row and column test
+  https://jelliottdev.github.io/#/experiments/lp2-row-column-english
+- chance-comparison guide
   https://jelliottdev.github.io/reference/articles/null-models.html
 - eight-language scorer controls
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
