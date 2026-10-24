@@ -8,6 +8,7 @@ import {createInterpretHandler} from './interpret-handler.mjs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
 import {createPrepareTaskHandler} from './prepare-task.mjs';
 import {createCommunityIdeaHandler} from './community-ideas.mjs';
+import {createCommunityFeedHandler} from './community-feed.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
@@ -171,8 +172,10 @@ const interpret=createInterpretHandler();
 const localTasks=createLocalTaskHandler();
 const prepareTask=createPrepareTaskHandler();
 const communityIdeas=createCommunityIdeaHandler();
+const communityFeed=createCommunityFeedHandler();
 export default {fetch(request,env,ctx){
   const path=new URL(request.url).pathname;
+  if(path==='/community-research')return communityFeed(request,env);
   if(path==='/prepare-task')return prepareTask(request,env);
   if(path==='/ideas'||path.startsWith('/ideas/'))return communityIdeas(request,env);
   if(path==='/tasks'||path.startsWith('/tasks/'))return localTasks(request,env);

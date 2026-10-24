@@ -2,6 +2,28 @@
 
 The registry contains bounded, reproducible experiments. Earlier work is not automatically a published experiment. Write a clear script, retest it, and review its precise claims before publishing.
 
+## Run a community plan in the browser
+
+A confirmed idea can open the site's run workspace. Prepare a plan, review its
+ordered operations, exact pages, input version, criterion and proposed defaults,
+then choose **Run in browser**. The site-owned engine runs on the visitor's CPU in
+a cancellable Web Worker; no download, Python installation or file upload is
+required. Downloads and result-file import remain optional reproduction paths.
+
+Planning supports a bounded set of reviewed primitives. Explicit operations are
+compiled directly; AI may map simple described wording only when a local grammar
+validates the exact source phrases and the complete plan. It cannot generate
+executable code, silently omit conditions or invent keys, scope or a success
+criterion. Unsupported ideas stay saved as needing an adapter. A measurement
+proposed for a deciphering idea is labeled preliminary, not a plaintext test.
+
+Running does not automatically submit an output. On explicit submission, the
+server replays the same fixed task before recording the result. The chart and
+receipt establish that computation, not a correct decryption or an exclusion of
+other methods. Community ideas and run receipts do not automatically become
+reviewed published experiment records. See the [browser loop and backend
+contract](../services/idea-assistant/README.md#browser-experiment-loop).
+
 ## Run a family as a batch
 
 Use a shared engine when proposals change parameters of the same operation. Keep one published account for the common question and attach stable, machine-readable cases. The first engine covers scalar-primed plaintext and ciphertext feedback; its [manifest and engine guide](engines/README.md) defines the exact supported operations.
@@ -81,9 +103,9 @@ External tools can start with `data/experiment-index.json`, a compact discovery 
 
 The site ranks published techniques locally with BM25 term matching, including scope and limitations. Page references are removed from the technique query; a page number alone is never a matching experiment. Selected pages provide scope context, not substitute results. This is lexical retrieval, not exhaustive detection of equivalent ideas. No hit means no matching **documented** experiment. Compare pages, input representation, and parameter bounds yourself.
 
-Hosted AI is deployed through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison above the records; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).
+Hosted AI is deployed through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison alongside the authored findings; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).
 
-The verified service URL is set in `data/assistant.json`. Empty registries and unmatched techniques do not call inference. Answers use complete experiment scopes; excerpts from explicitly named manuscript pages can supply supporting context. Only pressing Check idea can start inference. Repeated answers are cached against the question and exact evidence; changed source contents invalidate the server cache. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
+The verified service URL is set in `data/assistant.json`. Empty registries and unmatched techniques do not call inference. Answers use complete experiment scopes; excerpts from explicitly named manuscript pages can supply supporting context. Idea interpretation and comparison require explicit submission; the separate Prepare action may request the bounded plan mapper described above. Neither typing nor running a prepared browser task starts model inference. Repeated answers are cached against the question and exact evidence; changed source contents invalidate the server cache. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
 
 ## Describe reusable results
 

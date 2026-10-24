@@ -1,6 +1,6 @@
 # Hosted idea comparison
 
-## Local experiment loop foundation
+## Browser experiment loop
 
 The new `/tasks` routes link a confirmed idea to an immutable declarative plan,
 then accept a results file only after replaying the bounded computation. The
@@ -21,18 +21,48 @@ CPU in a cancellable Web Worker and submits replay-checked results. Downloads an
 file uploads are optional reproduction paths. The result and dynamic chart lead;
 exact plan details remain available after a run.
 
-`/prepare-task` currently uses deterministic adapters for explicit supported
-methods, rather than generated executable code. Unsupported or ambiguous cards
-remain saved with `needs-adapter`. AI planning for additional methods and placing
-community entries in the global Research map still need implementation; do not
-describe this initial workflow as general experiment automation.
+`/prepare-task` first checks explicit supported operations with the deterministic
+compiler. If method wording needs mapping and an AI binding is available, one
+model request may propose exact source spans for the reviewed primitives: rune
+reversal within a line, word or page; an affine index mapping with explicit
+parameters; or cumulative difference with an explicit reset. A closed local
+grammar checks every phrase and accounts for all method wording. The deterministic
+compiler then checks the complete proposed plan. The model cannot supply code,
+invent keys or page selections, discard conditions, or decide the result.
+
+The original confirmed card stays unchanged. Proposed interpretations and defaults
+are shown for review before creating the task. Missing exact scope, unresolved
+conditions and unsupported methods remain `needs-adapter`; a deciphering goal does
+not turn a measurement plan into a readability test. The optional mapper makes at
+most one generation per explicit preparation, with a 20-second response deadline,
+three concurrent calls per isolate and a bounded exact-card cache. A timed-out
+provider occupies its slot until it actually settles. No automatic repair or retry
+is performed. This is bounded planning, not automatic execution of arbitrary ideas.
+
+No download, Python installation or uploaded result file is needed for the normal
+flow. The site's fixed browser engine runs the approved plan in a cancellable Web
+Worker. Submitting its output is a separate action. The server
+replays that exact task before storing a content-addressed receipt; the result and
+chart mean **verified computation**, not a correct reading, a language verdict or
+exhaustive coverage of a cipher family. Community run state remains separate from
+published scientific records and proposal review decisions.
 
 `local-experiment.js` and `tools/research_runner.py` share the execution contract.
 `local-run-view.js` renders its result and chart directly from verified data.
 See [the loop contract](../../docs/community-research-loop.md) for required
 states, exact bounds, unsupported methods and the end-to-end acceptance proof.
-Offline checks: `node --experimental-sqlite test-local-tasks.mjs` from this
-directory and `python scripts/test_research_runner.py` from the repository root.
+Offline checks from this directory:
+
+```text
+node test-local-tasks.mjs
+node test-prepare-task.mjs
+node test-propose-task-plan.mjs
+```
+
+These use real local SQLite with injected page/provider fixtures, without hosted
+model calls. From the repository root, `python scripts/test_research_runner.py`
+checks the optional external runner. Passing mocks verifies the contracts; it is
+not evidence of live model mapping quality.
 
 ## Optional interpretation endpoint
 

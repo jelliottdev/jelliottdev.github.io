@@ -43,10 +43,16 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
   if(request.method!==method){headers.Allow=method+', OPTIONS';return reply({error:'Method is not allowed.'},405);}
   if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Local experiments are unavailable.'},503);
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
-  const view=async row=>{
+  const view=async (row,linkedProposalId=null)=>{
    const task=await storedTask(row),latest=await query('SELECT * FROM local_task_results WHERE task_id=? ORDER BY created_at DESC,id DESC LIMIT 1',row.id).first();let run=null;
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
-   return projection(row,task,run);
+   const publicRows=await query(`SELECT json_group_array(proposal_id) AS ids FROM (
+    SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
+    WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
+   const publicIds=JSON.parse(publicRows?.ids||'[]');
+   const linked=linkedProposalId?await query('SELECT input_version,parent_task_id FROM local_task_ideas WHERE task_id=? AND proposal_id=?',row.id,linkedProposalId).first():null;
+   if(linkedProposalId&&!linked)throw Error('Missing task association');
+   return {...projection(row,task,run),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linked?{linkedProposalId,linkedInputVersion:linked.input_version,linkedParentTaskId:linked.parent_task_id}:{})};
   };
   try{
    let body;
@@ -64,11 +70,21 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      task=await L.checkIdentity(body.task);taskJson=L.stable(task);taskHash=await digest(taskJson);createHash=await digest(L.stable(body));
     }catch{return reply({error:'The experiment plan is invalid or changed.'},400);}
     let existing=await find(task.taskId);
-    if(existing){if(existing.create_hash!==createHash)return reply({error:'This task identity already has a different source or parent.'},409);return reply(await view(existing));}
     const proposal=await query('SELECT card_json FROM proposals WHERE id = ?',body.proposalId).first();
     if(!proposal)return reply({error:'Confirmed idea not found.'},404);
     const cardJson=L.stable(validateCard(proposal.card_json));
     if(body.parentTaskId&&!await find(body.parentTaskId))return reply({error:'Parent task not found.'},404);
+    if(existing){
+     const saved=await storedTask(existing);
+     if(existing.task_hash!==taskHash||L.stable(saved)!==taskJson)return reply({error:'This computation identity has different task content.'},409);
+    }
+    const association=()=>query('SELECT * FROM local_task_ideas WHERE task_id=? AND proposal_id=?',task.taskId,body.proposalId).first();
+    const compatible=link=>link.input_version===body.inputVersion&&link.parent_task_id===body.parentTaskId;
+    const linked=await association();
+    if(linked){if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);return reply(await view(existing,body.proposalId));}
+    // Identical bytes under the same already-verified input version can be reused.
+    // A different version must independently match that version's official source.
+    if(!existing||existing.input_version!==body.inputVersion){
     const sourceController=new AbortController(),sourceTimer=setTimeout(()=>sourceController.abort(),20000);
     try{
      let fetched=0,next=0;
@@ -77,7 +93,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
        while(next<task.pages.length){
         if(sourceController.signal.aborted)throw Error();
         const page=task.pages[next++];
-        const response=await fetcher('https://jelliottdev.github.io/data/pages/'+page.id+'.json',{redirect:'error',signal:sourceController.signal});
+        const response=await fetcher('https://jelliottdev.github.io/data/pages/'+page.id+'.json',{redirect:'manual',signal:sourceController.signal});
         if(!response.ok)throw Error();const source=await boundedJSON(response,512*1024);
         const text=body.inputVersion==='raw'?source.raw:source.reviewed_text;
         if(source.id!==page.id||typeof text!=='string'||text!==page.text)throw Error();
@@ -88,12 +104,19 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      await Promise.all(Array.from({length:Math.min(4,task.pages.length)},()=>worker()));
     }catch{return reply({error:'The selected manuscript text could not be verified.'},422);}
     finally{clearTimeout(sourceTimer);}
+    }
     await db.batch([query(`INSERT INTO local_tasks (id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day)
-     SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<50 ON CONFLICT(id) DO NOTHING`,
-     task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day)]);
-    existing=await find(task.taskId);if(!existing)return reply({error:'The daily experiment limit has been reached.'},429);
-    if(existing.create_hash!==createHash)return reply({error:'This task identity already has a different source or parent.'},409);
-    return reply(await view(existing));
+     SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<50
+     AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<50 ON CONFLICT(id) DO NOTHING`,
+     task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day,day),
+     query(`INSERT INTO local_task_ideas (task_id,proposal_id,input_version,parent_task_id,created_at,created_day)
+      SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_tasks WHERE id=? AND task_hash=? AND task_json=?)
+      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<50 ON CONFLICT(task_id,proposal_id) DO NOTHING`,
+      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day)]);
+    existing=await find(task.taskId);const accepted=await association();
+    if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.'},429);
+    if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
+    return reply(await view(existing,body.proposalId));
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
    const task=await storedTask(row);

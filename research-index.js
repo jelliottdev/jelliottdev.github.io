@@ -2,7 +2,7 @@
 (function(root){
   const search=typeof module!=='undefined'?require('./search-engine.js'):root.WikiSearch;
   const labels={method:'Solving tests',replay:'Method replays',measurement:'Measurements',control:'Controls',
-    alphabet:'Alphabet analyses',audit:'Source audits',historical:'Historical reproductions'};
+    alphabet:'Alphabet analyses',audit:'Source audits',historical:'Historical reproductions',idea:'Community ideas'};
   const outcomes={supported:'Supported within scope','not-supported':'Not supported within scope',inconclusive:'Inconclusive'};
   const pageSize=20,positions=new Map(),historyEntries=new Set();
   const historyKey='__liberpediaResearchEntry',historyPrefix=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
@@ -129,9 +129,9 @@
     return `<ol class="research-records" start="${result.start+1}">${result.records.map(record=>{
       const date=checked(record),recent=result.state.sort==='recent'&&date;
       const query=pageQuery(result.state.q||'').text,details=matchingDetails(record,query);
-      return `<li><article class="research-record"><h2><a href="#/experiments/${esc(record.id)}">${esc(record.title)}</a></h2>
-        <p class="research-record-meta">${esc(record.record_type?.label||'Research record')} · ${esc(pageLabel(record))} · ${esc(outcomes[record.outcome]||'Finding not classified')}${recent?' · Checked '+esc(date):''}</p>
-        <p class="research-record-finding">${esc(excerpt(record.reader_finding||record.finding))}</p>
+      return `<li><article class="research-record"><h2><a href="${record.community?esc(record.href):'#/experiments/'+esc(record.id)}">${esc(record.title)}</a></h2>
+        <p class="research-record-meta">${esc(record.record_type?.label||'Research record')} · ${esc(pageLabel(record))} · ${esc(record.community?(root.CommunityResearch?.label(record)||'Untested idea'):outcomes[record.outcome]||'Finding not classified')}${recent?' · Checked '+esc(date):''}</p>
+        <p class="research-record-finding">${esc(excerpt(record.reader_finding||record.finding||record.summary))}</p>
         ${details.map(([label,text,section])=>`<p class="research-match"><a href="#/experiments/${esc(record.id)}?section=${section}">${label==='Not tested'?'Mentioned under “Not tested”':'Matches '+esc(label.toLowerCase())}</a>: ${esc(matchExcerpt(text,query))}</p>`).join('')}
         ${record.family&&result.state.family!==record.family.id?`<a class="research-family-link" href="${esc(href({family:record.family.id,page:1}))}">More in ${esc(record.family.title)}</a>`:''}
       </article></li>`;

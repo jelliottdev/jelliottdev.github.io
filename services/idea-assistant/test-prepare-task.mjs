@@ -17,7 +17,7 @@ function fixture(data=card()){
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,'a'.repeat(64),C.serialize(data),'unused',at);
  let reads=0,calls=0;const urls=[],rate=[];
  const env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert(!sql.includes('original_idea'));assert(!sql.includes('proposal_submissions'));return {bind(...args){return {first:async()=>{reads++;return sqlite.prepare(sql).get(...args)||null;}};}};}},PROPOSAL_LIMIT:{limit:async value=>{rate.push(value);return {success:true};}},AI:{run(){throw Error('Planner must not call AI');}}};
- const handle=createPrepareTaskHandler({now:()=>new Date(at),fetcher:async(url,options)=>{calls++;urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'error');assert(options.signal);return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}});
+ const handle=createPrepareTaskHandler({now:()=>new Date(at),fetcher:async(url,options)=>{calls++;urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}});
  return {sqlite,env,handle,urls,rate,get reads(){return reads;},get calls(){return calls;}};
 }
 const request=(body={proposalId:id,parentTaskId:null},extra={})=>new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json','CF-Connecting-IP':'203.0.113.9',...extra},body:JSON.stringify(body)});
@@ -73,5 +73,11 @@ await test('missing references and source fetch failures are recoverable, no tas
  const handle=createPrepareTaskHandler({fetcher:async()=>Response.json({id:'lp2-15',reviewed_text:reviewed})});assert.equal((await handle(request(),f.env)).status,422);
  const tooLarge=createPrepareTaskHandler({fetcher:async()=>Response.json({id:'lp2-15',raw:'X'.repeat(524289)})});assert.equal((await tooLarge(request(),f.env)).status,422);
  assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+});
+await test('official-source redirects cannot turn a valid AI mapping into an accepted plan',async()=>{
+ const f=fixture(card({method:known({operations:[{id:'described_method',label:'reverse every row'}]})}));let calls=0,aiCalls=0;
+ const handle=createPrepareTaskHandler({fetcher:async(url,options)=>{calls++;assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');return new Response(null,{status:302,headers:{location:'https://untrusted.example/page.json'}});}});
+ const env={...f.env,AI:{run:async()=>{aiCalls++;return {choices:[{message:{content:JSON.stringify({version:1,steps:[{source:{operationIndex:0,start:0,quote:'reverse every row'},step:{op:'reverse',unit:'line'}}],unsupported:[]})}}]};}}};
+ const response=await handle(request(),env),value=await response.json();assert.equal(aiCalls,1);assert.equal(calls,1,'No redirect destination is fetched');assert.equal(response.status,422);assert(!value.task);assert.notEqual(value.state,'plan-ready');assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
 });
 console.log('PASS '+count+' deterministic prepare-task groups; all source fetches mocked, no AI/storage writes/deployment.');

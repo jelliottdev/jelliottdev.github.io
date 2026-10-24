@@ -52,6 +52,16 @@ async function fixture({task,hash,config={},get,post,prepare}={}){
   await idea.click('prepare-experiment');assert(idea.app.getState().prepared);assert.equal(creations,0);assert(idea.doc.getElementById('prepared-plan').innerHTML.includes('does not run'));
   await idea.click('create-experiment');assert.equal(creations,1);assert.equal(idea.doc.defaultView.location.hash,'#task='+plan.taskId);
  }finally{idea.app.destroy();}
+ // Shared computation retains its original provenance, while this POST binds
+ // the reviewed association independently (including a different input version).
+ for(const wrongField of [null,'linkedProposalId','linkedInputVersion','linkedParentTaskId']){
+  const originalCard=structuredClone(card());originalCard.outcome.value={outcomeId:'measure',detail:''};
+  const sharedProjection={...projection(plan),proposalId:'p_'+'2'.repeat(64),card:originalCard,inputVersion:'raw',parentTaskId:'3'.repeat(64),linkedProposalId:proposalId,linkedInputVersion:'reviewed',linkedParentTaskId:null};
+  if(wrongField)sharedProjection[wrongField]=wrongField==='linkedProposalId'?'p_'+'4'.repeat(64):wrongField==='linkedInputVersion'?'raw':'5'.repeat(64);
+  const shared=await fixture({hash:'#idea='+proposalId,prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'reviewed',task:plan,notes:[],purpose:'Measure this method.'}),post:async()=>Response.json(sharedProjection)});
+  try{await shared.click('prepare-experiment');await shared.click('create-experiment');if(wrongField){assert.equal(shared.doc.defaultView.location.hash,'#idea='+proposalId);assert(shared.doc.getElementById('idea-error').textContent.includes('reviewed plan'));}else{assert.equal(shared.doc.defaultView.location.hash,'#task='+plan.taskId);assert.equal(sharedProjection.proposalId,'p_'+'2'.repeat(64));assert.equal(sharedProjection.card.outcome.value.outcomeId,'measure');}}
+  finally{shared.app.destroy();}
+ }
  const unsupported=await fixture({hash:'#idea='+proposalId});try{await unsupported.click('prepare-experiment');assert(!unsupported.app.getState().prepared);assert(unsupported.doc.getElementById('idea-status').textContent.includes('needs a supported runner'));assert.equal(unsupported.executions.length,0);}finally{unsupported.app.destroy();}
  // A completed old file read or browser worker cannot bind to a new hash.
  const stale=await fixture();try{const delayed=deferred(),pending=stale.upload(null,{text:()=>delayed.promise});stale.doc.defaultView.location.hash='#task='+'0'.repeat(64);delayed.resolve(JSON.stringify(E.run(stale.task)));await pending;assert(!stale.app.getState().selected);const running=stale.click('run-browser');stale.app.destroy();stale.executions[0].resolve(E.run(stale.task));await running;assert(!stale.app.getState().selected);}finally{stale.app.destroy();}

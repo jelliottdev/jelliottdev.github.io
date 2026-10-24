@@ -6,6 +6,7 @@
  const chevron='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
  const aliases={'method:feedback':'Autokey & feedback','method:repeating-key':'Repeating keys','method:running-key':'Running keys','method:generated-key':'Keystreams','method:substitution':'Substitution','method:routes':'Routes & extraction','method:numeric':'Numbers','method:payload':'Grid & bytes','method:steganography':'Images','method:hash-target':'Hash targets','method:combined':'Combined ciphers','method:blocks':'Block ciphers','method:rune-patterns':'Rune patterns','method:cipher-models':'Cipher models','method:period-alignment':'Period & alignment','method:language':'Language','method:numerical':'Numbers','method:image-layout':'Image & layout','method:transcription':'Transcription','method:payload-analysis':'Grid analysis','method:decoder-validation':'Decoders','method:search-calibration':'Search & scoring','method:claim-audits':'Claim audits','method:related-artifacts':'Provenance'};
  const outcomes={supported:'Supported within scope','not-supported':'Not supported within scope',inconclusive:'Inconclusive'},resultColours={supported:'#138575','not-supported':'#7b899b',inconclusive:'#75649a'};
+ let publishedBaseline=null,communityEntries=[],communityCursor=null,communityEndpoint=null,communityBusy=false,communityError='',communityPendingRender=false;
  let data,state,nodes,focus,layout=new Map(),camera={x:0,y:0,k:1},cameraViewport=null,previous='',previousRecord='',resizeTimer,dialogReturn=null,worldHeight=600,worldBounds={x:0,y:0,width:600,height:600},labelNodes=[],indexResult,matching=new Set(),lastGraphKey='',preferredMode='graph';
  const listPositions=new Map();let listKey='';try{preferredMode=localStorage.getItem('liberpedia-research-mode')==='list'?'list':'graph'}catch{}
  const activePointers=new Map();let gesture=null,moved=false;
@@ -36,7 +37,7 @@
   let edges='',marks='';labelNodes=[];
   for(const [id,p] of layout){const n=nodes.get(id),parent=layout.get(n.parent),isFocus=id===focus.id,isChild=n.parent===focus.id,record=n.kind==='record',matched=count(n);
    if(parent)edges+=`<path class="edge${matched?'':' muted'}" data-parent="${esc(n.parent)}" data-child="${esc(id)}" d="M${parent.x} ${parent.y} L${p.x} ${p.y}" stroke="${state.colour==='methods'?(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color):'#aab6c3'}" vector-effect="non-scaling-stroke"/>`;
-   const colour=record&&state.colour==='results'?resultColours[data.records[n.record_id].outcome]:(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color);
+   const colour=record&&!data.records[n.record_id].community&&state.colour==='results'?resultColours[data.records[n.record_id].outcome]:(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color);
    const label=lines(isFocus?n.label:aliases[n.id]||n.label.replace(/^LP[12][^:]{0,30}:\s*/,''),isFocus?24:22,isFocus?2:3);
    labelNodes.push({id,p,n,isFocus,isChild,record,matched,label});
    marks+=`<g class="node ${record?'record':''} ${isFocus?'aim':''} ${matched?'':'muted'} ${n.record_id===state.record?'selected':''}" data-node="${esc(id)}" aria-label="${esc(n.label+(record?'':', '+matched+' records'))}"><title>${esc(n.label)}</title><circle class="hit" cx="${p.x}" cy="${p.y}" r="0"/>${n.record_id===state.record?`<circle class="selection" cx="${p.x}" cy="${p.y}" r="0" vector-effect="non-scaling-stroke"/>`:''}${!isFocus?`<circle class="mark" cx="${p.x}" cy="${p.y}" r="0" fill="${colour}" vector-effect="non-scaling-stroke"/>`:''}<g class="node-label"><rect class="label-hit" width="0" height="0"/><text>${label.map((line,i)=>`<tspan x="0" dy="${i?'1.2em':'0'}">${esc(line)}</tspan>`).join('')}</text>${!record?`<text class="count">${matched} records</text>`:''}</g></g>`;
@@ -128,10 +129,10 @@
   const container=$('research-list'),total=count(focus),noun=hasBranches?(children.every(n=>n.kind!=='record')?'branches':'items'):'records';
   listKey=JSON.stringify([state.view,focus.id,state.q,state.type,state.method,state.family,state.result,state.page,state.sort]);
   container.innerHTML=`<div class="research-list-head"><span role="status">${children.length} ${noun} · ${total} matching ${total===1?'record':'records'}</span>${!hasBranches&&children.length?`<button id="research-sort" aria-label="Sort research">${sorts[state.sort]}${chevron}</button>`:''}</div><ul class="research-branch-list">${children.map(n=>{
-   const record=n.kind==='record',r=record?data.records[n.record_id]:null,matched=count(n),colour=record&&state.colour==='results'?resultColours[r?.outcome]:n.color;
+   const record=n.kind==='record',r=record?data.records[n.record_id]:null,matched=count(n),colour=record&&!r?.community&&state.colour==='results'?resultColours[r?.outcome]:n.color;
    const safeColour=/^#[0-9a-f]{3,8}$/i.test(colour||'')?colour:'#64748b';
    const tag=record?(matched?'a':'span'):'button',attributes=record?(matched?`href="${esc(r.href)}" data-list-record="${esc(r.id)}"`:'aria-disabled="true"'):`type="button" data-list-node="${esc(n.id)}"${matched?'':' disabled'}`;
-   return `<li class="research-branch-row${matched?'':' muted'}" style="--branch-colour:${safeColour}"><${tag} class="research-branch-button" ${attributes}><span class="research-branch-mark" aria-hidden="true"></span><span class="research-branch-copy"><strong>${esc(record?r?.title||n.label:aliases[n.id]||n.label)}</strong><span>${record?`${esc(scopeLabel(r))} · ${esc(outcomes[r.outcome]||r.outcome)}`:`${matched} matching ${matched===1?'record':'records'}`}</span></span>${record?arrow:chevron}</${tag}></li>`;
+   return `<li class="research-branch-row${matched?'':' muted'}" style="--branch-colour:${safeColour}"><${tag} class="research-branch-button" ${attributes}><span class="research-branch-mark" aria-hidden="true"></span><span class="research-branch-copy"><strong>${esc(record?r?.title||n.label:aliases[n.id]||n.label)}</strong><span>${record?`${esc(scopeLabel(r))} · ${esc(r.community?CommunityResearch.label(r):outcomes[r.outcome]||r.outcome)}`:`${matched} matching ${matched===1?'record':'records'}`}</span></span>${record?arrow:chevron}</${tag}></li>`;
   }).join('')}</ul>${!total?`<div class="research-empty"><h2>No matching research</h2><p>No published record matches these filters in this area.</p><button data-clear-all>Clear filters</button>${focus.id!==data.views[state.view].root?'<button data-search-all>Look across all research</button>':''}</div>`:''}`;
   container.querySelectorAll('[data-list-node]').forEach(button=>button.onclick=()=>{const n=nodes.get(button.dataset.listNode);if(!n||n.parent!==focus.id||!count(n))return;navigate({branch:n.id,record:''})});
   container.querySelector('[data-clear-all]')?.addEventListener('click',clearFilters);container.querySelector('[data-search-all]')?.addEventListener('click',()=>navigate({view:'all',branch:'',record:''}));
@@ -151,7 +152,7 @@
   const enteringGraph=state?.mode!=='graph',restoreListSortFocus=document.activeElement?.id==='research-sort';
   state=read();indexResult=ResearchIndex.select(Object.values(data.records),{q:state.q,type:state.type,method:state.method,family:state.family,outcome:state.result,sort:state.sort,page:1});state.method=indexResult.state.method;state.family=indexResult.state.family;matching=new Set(indexResult.allRecords.filter(r=>!state.page||r.pages.includes(state.page)).map(r=>r.id));const view=data.views[state.view];nodes=new Map(view.nodes.map(n=>[n.id,n]));focus=nodes.get(state.branch);if(!focus||focus.kind==='record')focus=nodes.get(view.root);
   if(state.record&&(!recordNode(state.record)||!passes(state.record)||!focus.members.includes(state.record)))state.record='';
-  if(state.mode==='list'&&state.record){location.replace(data.records[state.record].href);return;}
+  if(state.record&&(state.mode==='list'||data.records[state.record]?.community)){location.replace(data.records[state.record].href);return;}
   const trail=[];let n=focus;while(n){trail.unshift(n);n=nodes.get(n.parent)}
   $('map-trail').innerHTML=(state.view==='all'?'':'<button data-all-research>All research</button>'+chevron)+trail.map(n=>`<button data-branch="${esc(n.id)}"${n===focus?' aria-current="location"':''}>${esc(n.id===view.root?(state.view==='all'?'All research':n.label):n.label)}</button>`).join(chevron);
   $('map-trail').querySelectorAll('button').forEach(button=>button.onclick=()=>navigate(button.hasAttribute('data-all-research')?{view:'all',branch:'',record:''}:{branch:button.dataset.branch===view.root?'':button.dataset.branch,record:''}));
@@ -163,7 +164,7 @@
   $('map-status').textContent=focus.label+': '+count(focus)+' matching records.';
   document.title=focus.label+' · Research map · Liberpedia';
  }
- function activate(id){const element=world.querySelector(`[data-node="${CSS.escape(id)}"]`),n=element?.dataset.revealed==='true'?nodes.get(id):branchBelow(id);if(!n||n.id===focus.id||!count(n))return;if(n.kind==='record'){navigate({record:n.record_id});return}navigate({branch:n.id,record:''})}
+ function activate(id){const element=world.querySelector(`[data-node="${CSS.escape(id)}"]`),n=element?.dataset.revealed==='true'?nodes.get(id):branchBelow(id);if(!n||n.id===focus.id||!count(n))return;if(n.kind==='record'){const record=data.records[n.record_id];if(record?.community){location.assign(record.href);return;}navigate({record:n.record_id});return}navigate({branch:n.id,record:''})}
  svg.addEventListener('click',event=>{if(event.detail!==0)return;const node=event.target.closest('[data-node]');if(node)activate(node.dataset.node)});
  svg.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target.matches('[data-node]')&&event.target.getAttribute('tabindex')==='0'){event.preventDefault();activate(event.target.dataset.node)}});
  map.addEventListener('keydown',event=>{if(event.target!==map)return;const delta={ArrowLeft:[35,0],ArrowRight:[-35,0],ArrowUp:[0,35],ArrowDown:[0,-35]}[event.key];if(delta){event.preventDefault();camera.x+=delta[0];camera.y+=delta[1];applyCamera()}else if(event.key==='Home'){event.preventDefault();fit()}});
@@ -187,13 +188,49 @@
   openDialog('Find research',`<form id="research-query-form"><label class="sr-only" for="map-find">Method, page or result</label><input id="map-find" class="find-field" type="search" placeholder="Method, page or result" value="${esc(state.q)}" autocomplete="off"><button class="search-research-submit" type="submit">Search research</button></form><div id="map-find-results"></div>`,$('find-button'));
   const field=$('map-find');field.focus();field.select();$('research-query-form').onsubmit=e=>{e.preventDefault();const q=field.value.trim();closeDialog();navigate({q,record:''})};
   field.oninput=()=>{const q=field.value.trim(),ids=new Set(focus.members),candidates=q?ResearchIndex.select(Object.values(data.records),{q,type:state.type,method:state.method,family:state.family,outcome:state.result,sort:state.sort,page:1}).allRecords.filter(r=>ids.has(r.id)&&(!state.page||r.pages.includes(state.page))).slice(0,5):[];
-   $('map-find-results').innerHTML=candidates.map(r=>`<div class="find-result"><button data-find-node="record:${esc(r.id)}">${esc(r.title)}<small>${esc(outcomes[r.outcome])}</small></button></div>`).join('')+(q&&!candidates.length?'<p>No matching records in this area and its filters.</p>':'');
-   dialog.querySelectorAll('[data-find-node]').forEach(b=>b.onclick=()=>{const id=b.dataset.findNode.slice(7);closeDialog();if(state.mode==='list')location.assign(data.records[id].href);else navigate({record:id,q:passes(id)?state.q:''})});
+   $('map-find-results').innerHTML=candidates.map(r=>`<div class="find-result"><button data-find-node="record:${esc(r.id)}">${esc(r.title)}<small>${esc(r.community?CommunityResearch.label(r):outcomes[r.outcome])}</small></button></div>`).join('')+(q&&!candidates.length?'<p>No matching records in this area and its filters.</p>':'');
+   dialog.querySelectorAll('[data-find-node]').forEach(b=>b.onclick=()=>{const id=b.dataset.findNode.slice(7);closeDialog();if(state.mode==='list'||data.records[id].community)location.assign(data.records[id].href);else navigate({record:id,q:passes(id)?state.q:''})});
   };
  };
- $('about-button').onclick=()=>{openDialog('About this map',`<p>The top-level routes are editorial navigation. Below them, the method subtrees retain the existing draft classifications: method, operation, scope, experiment. The outer clusters show individual records. Tap a branch to explore it; tap an experiment to read its finding and limits.</p><p>Drag to move, pinch or use the zoom controls to look closer. Fit restores the current branch. Keyboard: Tab to a branch, Enter to open; arrow keys move the focused map.</p><p>These are related approaches, not proof that every configuration has been tested. The current registry has ${Object.keys(data.records).length} records; ${data.awaiting_classification.length} await classification, and ${data.outside_selected_views.length} belong to other Cicada material.</p><p><a href="research.html#mode=list">Explore in List view</a> · <a href="data/research-map.json">Map data</a></p>`,$('about-button'))};
+ $('about-button').onclick=()=>{openDialog('About this map',`<p>The top-level routes are editorial navigation. Below them, the method subtrees retain the existing draft classifications: method, operation, scope, experiment. The outer clusters show individual records. Tap a branch to explore it; tap an experiment to read its finding and limits.</p><p>Drag to move, pinch or use the zoom controls to look closer. Fit restores the current branch. Keyboard: Tab to a branch, Enter to open; arrow keys move the focused map.</p><p>These are related approaches, not proof that every configuration has been tested. The current registry has ${Object.values(data.records).filter(record=>!record.community).length} published records and ${data.community_count||0} community ideas. Community computations are not published experiment findings; ${data.awaiting_classification.length} await classification, and ${data.outside_selected_views.length} belong to other Cicada material.</p><p><a href="research.html#mode=list">Explore in List view</a> · <a href="data/research-map.json">Map data</a></p>`,$('about-button'))};
+ function communityEndpointAllowed(config){
+  const candidate=config?.communityResearchEndpoint;
+  if(typeof candidate!=='string'||typeof config.endpoint!=='string')return false;
+  if(/^https:\/\/[a-z0-9.-]+\/community-research$/.test(candidate)&&/^https:\/\/[a-z0-9.-]+\/ask$/.test(config.endpoint))return new URL(candidate).hostname===new URL(config.endpoint).hostname;
+  try{const page=new URL(location.href),feed=new URL(candidate),worker=new URL(config.endpoint);return page.protocol==='http:'&&['localhost','127.0.0.1'].includes(page.hostname)&&feed.origin===page.origin&&worker.origin===page.origin&&feed.pathname==='/community-research'&&worker.pathname==='/ask'&&!feed.username&&!feed.password&&!feed.search&&!feed.hash&&!worker.username&&!worker.password&&!worker.search&&!worker.hash;}catch{return false;}
+ }
+ function communityStatus(){
+  const holder=$('community-status'),text=$('community-message'),more=$('community-more'),retry=$('community-retry');
+  if(!holder)return;holder.hidden=!communityError&&(!communityEndpoint||!communityCursor);
+  text.textContent=communityError?'Community ideas could not be loaded. Published research is still available.':communityBusy?'Loading community ideas…':communityEntries.length+' community ideas loaded.';
+  more.hidden=!communityCursor||!!communityError;more.disabled=communityBusy;retry.hidden=!communityError;retry.disabled=communityBusy;
+ }
+ function refreshCommunity(){
+  if(dialog.open){communityPendingRender=true;return;}
+  communityPendingRender=false;const active=document.activeElement,nodeId=active?.getAttribute?.('data-node'),listId=active?.dataset?.listRecord,branchId=active?.dataset?.listNode,panelFocus=panel.contains?.(active)?active?.classList?.contains('preview-back')?'.preview-back':active?.classList?.contains('record-open')?'.record-open':'h2':null;
+  render();
+  if(nodeId){const target=world.querySelector(`[data-node="${CSS.escape(nodeId)}"]`);if(target?.getAttribute('tabindex')==='0')target.focus({preventScroll:true});else if(!map.inert&&!map.hidden)map.focus({preventScroll:true});}
+  else if(listId||branchId)$('research-list').querySelector(listId?`[data-list-record="${CSS.escape(listId)}"]`:`[data-list-node="${CSS.escape(branchId)}"]`)?.focus({preventScroll:true});
+  else if(panelFocus&&!panel.hidden)panel.querySelector(panelFocus)?.focus({preventScroll:true});
+ }
+ async function loadCommunity(resetConfig=false){
+  if(communityBusy||!publishedBaseline||typeof CommunityResearch==='undefined')return;communityBusy=true;communityError='';communityStatus();
+  try{
+   if(!communityEndpoint||resetConfig){const response=await fetch('data/assistant.json',{cache:'no-cache',signal:AbortSignal.timeout(10000)});if(!response.ok)throw Error('Community configuration unavailable');const config=await response.json(),candidate=config?.communityResearchEndpoint;
+    if(!candidate){communityEndpoint=null;return;}
+    if(!communityEndpointAllowed(config))throw Error('Invalid community endpoint');
+    communityEndpoint=candidate;
+   }
+   const requestedCursor=communityCursor,url=new URL(communityEndpoint);if(requestedCursor)url.searchParams.set('before',requestedCursor);
+   const response=await fetch(url.href,{cache:'no-store',signal:AbortSignal.timeout(10000)});if(!response.ok)throw Error('Community feed unavailable');const page=CommunityResearch.validate(await response.json());if(page.nextCursor&&page.nextCursor===requestedCursor)throw Error('Community cursor did not advance');
+   const entries=[...new Map([...communityEntries,...page.entries].map(entry=>[entry.id,entry])).values()],merged=CommunityResearch.merge(publishedBaseline,entries);communityEntries=entries;communityCursor=page.nextCursor;data=merged;refreshCommunity();
+  }catch(error){communityError=error.message;}
+  finally{communityBusy=false;const more=$('community-more'),focusMore=document.activeElement===more;communityStatus();if(focusMore&&more.hidden){const target=$('community-status').hidden?(state.mode==='list'?$('research-list'):map):$('community-message');target?.setAttribute('tabindex','-1');target?.focus({preventScroll:true});}}
+ }
+ $('community-more').onclick=()=>loadCommunity();$('community-retry').onclick=()=>loadCommunity(!communityEndpoint);
+ dialog.addEventListener('close',()=>{if(communityPendingRender)refreshCommunity()});
  let lastMapSize='';const ro=new ResizeObserver(entries=>{const r=entries[0].contentRect;if(!r.width||!r.height)return;const size=r.width+'|'+r.height;if(size===lastMapSize)return;lastMapSize=size;clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{reframe()},80)});ro.observe(map);
  $('research-filter-button').onclick=filterMenu;document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>navigate({mode:b.dataset.mode}));$('research-list').addEventListener('scroll',()=>{if(listKey&&state?.mode==='list'&&!$('research-list').hidden)listPositions.set(listKey,$('research-list').scrollTop)},{passive:true});
  window.addEventListener('hashchange',()=>{if(data)render()});
- Promise.all(['data/research-map.json','data/experiments.json'].map(url=>fetch(url,{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('The research data could not be loaded.');return r.json()}))).then(([mapData,registry])=>{data=ResearchBrowserModel.build(mapData,registry);render()}).catch(error=>{map.innerHTML=`<div class="map-error"><h2>Map unavailable</h2><p>${esc(error.message)}</p><button onclick="location.reload()">Retry</button></div>`});
+ Promise.all(['data/research-map.json','data/experiments.json'].map(url=>fetch(url,{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('The research data could not be loaded.');return r.json()}))).then(([mapData,registry])=>{publishedBaseline=ResearchBrowserModel.build(mapData,registry);data=publishedBaseline;render();loadCommunity(true)}).catch(error=>{map.innerHTML=`<div class="map-error"><h2>Map unavailable</h2><p>${esc(error.message)}</p><button onclick="location.reload()">Retry</button></div>`});
 })();

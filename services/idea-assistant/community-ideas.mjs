@@ -64,14 +64,15 @@ export function createCommunityIdeaHandler({now=()=>new Date()}={}){
   const view=async row=>{
    const card=await publicCard(row);
    if(!iso(row.created_at))throw Error('Stored entry timestamp mismatch');
-   const after=cursor?' AND (created_at<? OR (created_at=? AND id<?))':'';
+   const after=cursor?' AND (a.created_at<? OR (a.created_at=? AND t.id<?))':'';
    const args=cursor?[row.proposal_id,cursor.createdAt,cursor.createdAt,cursor.id]:[row.proposal_id];
    // Plans were validated on creation and are immutable. Project only bounded
    // summary fields; the task endpoint rechecks full identity when opened.
-   const loaded=await query(`SELECT id,json_extract(task_json,'$.title') AS title,
-    json_extract(task_json,'$.taskId') AS embedded_id,created_at,
-    EXISTS(SELECT 1 FROM local_task_results r WHERE r.task_id=local_tasks.id) AS has_results
-    FROM local_tasks WHERE proposal_id=?${after} ORDER BY created_at DESC,id DESC LIMIT 51`,...args).all();
+   const loaded=await query(`SELECT t.id,json_extract(t.task_json,'$.title') AS title,
+    json_extract(t.task_json,'$.taskId') AS embedded_id,a.created_at,
+    EXISTS(SELECT 1 FROM local_task_results r WHERE r.task_id=t.id) AS has_results
+    FROM local_task_ideas a JOIN local_tasks t ON t.id=a.task_id
+    WHERE a.proposal_id=?${after} ORDER BY a.created_at DESC,t.id DESC LIMIT 51`,...args).all();
    const rows=loaded.results;if(!Array.isArray(rows))throw Error('Invalid task response');
    const selected=rows.slice(0,PAGE_SIZE),tasks=[];
    for(const entry of selected){

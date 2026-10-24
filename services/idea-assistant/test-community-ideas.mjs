@@ -11,7 +11,7 @@ const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture(){
  const sqlite=new DatabaseSync(':memory:');
- for(const file of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+file,import.meta.url),'utf8'));
+ for(const file of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+file,import.meta.url),'utf8'));
  const db={sqlite,reads:0,fail:false,queries:[],projected:[],prepare(sql){db.queries.push(sql);return {bind(...args){return {sql,args,
   first:async()=>{db.reads++;return sqlite.prepare(sql).get(...args)||null;},
   all:async()=>{db.reads++;const results=sqlite.prepare(sql).all(...args);db.projected.push(...results);return {results};}};}};},async batch(statements){
@@ -40,9 +40,11 @@ async function task(f,p,i,{verified=false,createdAt=at}={}){
  const text=L.stable(plan);
  f.db.sqlite.prepare('INSERT INTO local_tasks(id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?,?,?,?,?)')
   .run(plan.taskId,await digest(text),'0'.repeat(64),p.id,p.cardJson,text,'raw',null,createdAt,createdAt.slice(0,10));
+ associate(f,p,plan,createdAt);
  if(verified){const result=L.stable(await L.verify(plan,L.run(plan)));f.db.sqlite.prepare('INSERT INTO local_task_results(id,task_id,result_json,created_at,created_day) VALUES(?,?,?,?,?)').run(await digest(result),plan.taskId,result,at,at.slice(0,10));}
  return plan;
 }
+function associate(f,p,plan,createdAt=at){f.db.sqlite.prepare('INSERT INTO local_task_ideas(task_id,proposal_id,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?)').run(plan.taskId,p.id,'raw',null,createdAt,createdAt.slice(0,10));}
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
 
 await test('migration never publishes old private proposals; explicit entry exposes normalized card only',async()=>{
@@ -95,8 +97,8 @@ await test('bounded task summaries crosscheck embedded IDs and accepted results 
  const body=await(await f.handle(get(p.id),f.env)).json();assert.equal(body.tasks.length,2);
  const byId=new Map(body.tasks.map(t=>[t.id,t]));assert.deepEqual(byId.get(a.taskId),{id:a.taskId,title:'Task 1',state:'not-run'});assert.deepEqual(byId.get(b.taskId),{id:b.taskId,title:'Task 2',state:'results-verified'});
  assert(body.tasks.every(t=>Object.keys(t).sort().join(',')==='id,state,title'));assert(!JSON.stringify(body).includes('task_json'));
- const sql=f.db.queries.find(q=>q.includes('FROM local_tasks WHERE'));
- assert.match(sql,/json_extract\(task_json,'\$\.title'\) AS title/);assert.match(sql,/json_extract\(task_json,'\$\.taskId'\) AS embedded_id/);
+ const sql=f.db.queries.find(q=>q.includes('FROM local_task_ideas a'));
+ assert.match(sql,/json_extract\(t.task_json,'\$\.title'\) AS title/);assert.match(sql,/json_extract\(t.task_json,'\$\.taskId'\) AS embedded_id/);
  assert.doesNotMatch(sql,/\bSELECT\s+\*|\bid\s*,\s*task_hash\s*,\s*task_json/);assert(f.db.queries.every(q=>!q.includes('result_json')));
  assert(f.db.projected.every(row=>!Object.hasOwn(row,'task_json')&&!Object.hasOwn(row,'result_json')));
  f.db.sqlite.prepare('UPDATE local_tasks SET task_json=? WHERE id=?').run(JSON.stringify({...a,taskId:'0'.repeat(64)}),a.taskId);
@@ -109,6 +111,21 @@ await test('bounded50 summaries use stable validated cursor with no loss or dupl
  for(const query of ['?before=invalid','?before='+one.nextCursor+'&before='+one.nextCursor,'?other=1','?before='+btoa(JSON.stringify({createdAt:at,id:'bad'}))])assert.equal((await f.handle(get(p.id,query),f.env)).status,400);
  const arrayCursor=btoa(JSON.stringify({createdAt:at,id:['0'.repeat(64)]})).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
  assert.equal((await f.handle(get(p.id,'?before='+arrayCursor),f.env)).status,400);
+});
+await test('one computation appears under every linked public idea without publishing private associations',async()=>{
+ const f=fixture(),one=await proposal(f,'ONE'),two=await proposal(f,'TWO'),privateIdea=await proposal(f,'PRIVATE-ASSOCIATION');
+ await f.handle(post(one.id),f.env);await f.handle(post(two.id),f.env);
+ const plan=await task(f,one,80,{verified:true});associate(f,two,plan,'2026-10-25T01:00:00.000Z');associate(f,privateIdea,plan);
+ for(const p of [one,two]){const response=await f.handle(get(p.id),f.env);assert.equal(response.status,200);const body=await response.json();assert.deepEqual(body.tasks,[{id:plan.taskId,title:plan.title,state:'results-verified'}]);}
+ assert.equal((await f.handle(get(privateIdea.id),f.env)).status,404);
+ assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);
+ assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas').get().n,3);
+});
+await test('per-idea task order uses first association timestamp rather than task origin',async()=>{
+ const f=fixture(),p=await proposal(f,'ORDER');await f.handle(post(p.id),f.env);
+ const plans=[await task(f,p,90),await task(f,p,91)].sort((a,b)=>a.taskId.localeCompare(b.taskId));
+ f.db.sqlite.prepare('UPDATE local_task_ideas SET created_at=?,created_day=? WHERE task_id=? AND proposal_id=?').run('2026-10-25T01:00:00.000Z','2026-10-25',plans[0].taskId,p.id);
+ const body=await(await f.handle(get(p.id),f.env)).json();assert.deepEqual(body.tasks.map(t=>t.id),plans.map(t=>t.taskId));
 });
 await test('malicious and oversized bodies never persist; storage errors do not leak',async()=>{
  const f=fixture(),p=await proposal(f);
@@ -127,4 +144,4 @@ await test('corrupt proposal identity never publishes or returns a public card',
  const f=fixture(),p=await proposal(f);f.db.sqlite.prepare('UPDATE proposals SET card_hash=? WHERE id=?').run('0'.repeat(64),p.id);
  assert.equal((await f.handle(post(p.id),f.env)).status,503);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM research_ideas').get().n,0);
 });
-console.log('PASS '+groups+' community-idea groups: real SQLite migrations1–5; no remote calls, mutations, model or deploy.');
+console.log('PASS '+groups+' community-idea groups: real SQLite migrations1–6; no remote calls, mutations, model or deploy.');
