@@ -15,15 +15,17 @@ target = root / 'experiments/records' / args.id
 if target.exists():
     parser.error('That ID already exists; no files were changed.')
 record = {
-    'id': args.id, 'title': '', 'status': 'draft', 'question': '', 'summary': '', 'tags': [],
+    'schema': 'liberpedia-experiment-v2',
+    'id': args.id, 'title': '', 'status': 'draft', 'question': '', 'tags': [],
     'family': {'id': args.id, 'title': '', 'question': '', 'baseline': args.id},
     'variant': {'label': 'Baseline', 'changes': []},
     'scope': {'pages': [], 'representation': '', 'procedure': '', 'parameters': '', 'exclusions': ''},
-    'outcome': 'inconclusive', 'finding': '', 'limitations': '', 'next_steps': '',
+    'outcome': 'inconclusive', 'result': {'finding': '', 'limits': '', 'next_steps': ''},
+    'analysis': '',
     'reproduction': {'command': f'python experiments/records/{args.id}/run.py',
                     'environment': '', 'script': f'experiments/records/{args.id}/run.py',
                     'script_sha256': '', 'inputs': [], 'outputs': []},
-    'review': {'reviewer': '', 'retested_on': ''}, 'sources': [], 'related': []
+    'review': {'reviewer': '', 'retested_on': '', 'kind': '', 'human_review': 'pending'}, 'sources': [], 'related': []
 }
 if args.baseline:
     if not re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', args.baseline):
@@ -44,11 +46,7 @@ if args.baseline:
     record['scope'] = baseline['scope']
     record['variant'] = {'label': '', 'changes': []}
     record['related'] = [args.baseline]
-target.mkdir(parents=True)
-(target / 'record.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8', newline='\n')
-(target / 'article.md').write_text('''# Experiment title
-
-## Question
+record['analysis'] = '''## Question
 State one testable question.
 
 ## Rationale
@@ -86,20 +84,22 @@ Separate what the run shows from what remains untested.
 
 ## Related work and sources
 Link earlier records and primary evidence; explain what differs.
-''', encoding='utf-8', newline='\n')
+'''
 if args.baseline:
-    with (target / 'article.md').open('a', encoding='utf-8', newline='\n') as article:
-        article.write(f'''
+    record['analysis'] += f'''
 ## Comparison with the baseline
 Baseline: [the existing record](#/experiments/{args.baseline}).
 The draft starts with that record's scope. Describe the proposed change before running.
 For each changed scope field, fill variant.changes with its exact before and after values
 and explain the reason. Do not copy the baseline's finding or review into this record.
 An identical rerun belongs with the original record rather than a new published variant.
-''')
+'''
+target.mkdir(parents=True)
+(target / 'record.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8', newline='\n')
 (target / 'run.py').write_text('''"""Draft only. Replace with a documented reproducible experiment."""
 raise SystemExit("No experiment implemented. Complete and retest before publication.")
 ''', encoding='utf-8', newline='\n')
 print('Created draft:', target)
+print('Author the question, result and analysis in record.json; implement run.py, then use the central publication command.')
 if args.baseline:
     print('Inherited family and scope only. Declare the changes, inputs, plan and review separately.')

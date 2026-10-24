@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "444c5fe1cf8d5dd8594869f74671e62be83f99a64dd76c17a35d15f99f5202e4",
+    "current_experiments_sha256": "6a44f4c1191c32052ed8ee8e883f08f076121a90f2cf356be8d0d807ba76cf4f",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -58,6 +58,7 @@
     ],
     "changed_ids": [
       "alternating-alphabet-interruption-clocks",
+      "cumulative-autokey-literal",
       "dukotah-book-matrix-hill",
       "dukotah-ciphertext-feedback-coefficients",
       "dukotah-fixed-numeric-keys",
@@ -10021,8 +10022,8 @@
       "id": "cumulative-autokey-literal",
       "title": "Literal cumulative-sum autokey on LP2",
       "question": "Does the supplied cumulative plaintext-sum rule yield a plaintext-like rune stream across LP2?",
-      "finding": "The page-local literal cumulative inverse has 12,956 outputs, IoC 0.035319 and 88 F runes; known LP1 readings have IoC 0.061139.",
-      "limitations": "Comparison with solved LP1 is descriptive and does not test added keys, skips, alternative alphabets or a new plaintext language.",
+      "finding": "Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.",
+      "limitations": "This was a frequency comparison, not a complete decryption test. Extra keys, skipped runes, other alphabets and plaintext languages were not tested.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -10147,9 +10148,16 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/cumulative-autokey-literal",
-      "current_sha256": "c1485c91d6429f59174d3012f7593168617301bb9c58667b3cf4fc6bd5367f2a",
+      "current_sha256": "4461524febc271cb750fa55bc7284a0d456fe2aa792f103d3e9c2cca88685be1",
       "snapshot_sha256": "c1485c91d6429f59174d3012f7593168617301bb9c58667b3cf4fc6bd5367f2a",
-      "changed_fields": [],
+      "changed_fields": [
+        "finding",
+        "limitations",
+        "reader_finding",
+        "reader_limit",
+        "summary",
+        "reader_question"
+      ],
       "classification": "draft"
     },
     "cypherpunk-manifesto-running-key": {

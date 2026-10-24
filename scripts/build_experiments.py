@@ -5,6 +5,7 @@ import html
 import json
 import re
 from pathlib import Path
+from experiment_content import compile_content, article_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -202,7 +203,9 @@ def validate_batch(root, record):
 
 def validate_record(root, path, pages):
     """Validate one completed record without publishing it or executing its scripts."""
-    d = json.loads(path.read_text(encoding='utf-8'))
+    raw = json.loads(path.read_text(encoding='utf-8'))
+    d = compile_content(raw)
+    generated_article = article_bytes(raw)
     if 'discovery' in d:
         validate_discovery(d['discovery'])
     require(d.get('status') in ('draft', 'published'), f'{path}: invalid status')
@@ -260,7 +263,8 @@ def validate_record(root, path, pages):
             name = file.get('path', '')
             require('__pycache__' not in name.split('/') and not name.endswith(('.pyc', '.pyo')),
                     'Declare source files, not generated Python caches: ' + name)
-            data = local(root, file.get('path')).read_bytes()
+            data = (generated_article if generated_article is not None and file.get('path') == f'experiments/records/{identifier}/article.md'
+                    else local(root, file.get('path')).read_bytes())
             require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                     'SHA-256 mismatch: ' + str(file.get('path')))
     command_files = set(re.findall(r'(?:experiments/records|scripts)/[\w./-]+\.py',
@@ -298,7 +302,8 @@ def validate_record(root, path, pages):
         text(source.get('label'), 'source label')
         require(isinstance(source.get('url'), str) and source['url'].startswith('https://'),
                 'Source must use HTTPS')
-    article = local(root, f'experiments/records/{identifier}/article.md').read_text(encoding='utf-8')
+    article = (generated_article.decode('utf-8') if generated_article is not None
+               else local(root, f'experiments/records/{identifier}/article.md').read_text(encoding='utf-8'))
     if 'reader_sections' in d:
         validate_reader_sections(article, d['reader_sections'])
     require(len(article.strip()) >= 200 and 'State one testable question.' not in article,
@@ -376,7 +381,8 @@ def article_link_aliases(root, record, published_ids):
         if '/' not in href or not candidate.is_file():
             candidate = root / Path(record['article_path']).parent / href
         resolved = candidate.resolve()
-        require(resolved.is_relative_to(root.resolve()) and resolved.is_file(),
+        known_account = re.fullmatch(r'experiments/records/([a-z0-9-]+)/article\.md', resolved.relative_to(root.resolve()).as_posix()) if resolved.is_relative_to(root.resolve()) else None
+        require(resolved.is_relative_to(root.resolve()) and (resolved.is_file() or (known_account and known_account[1] in published_ids)),
                 'Article link has no in-repository file: ' + record['id'] + ': ' + href)
         target = resolved.relative_to(root.resolve()).as_posix()
         owner = re.match(r'^experiments/records/([a-z0-9-]+)/', target)
@@ -433,6 +439,16 @@ def build(root=ROOT):
             require(f['id'] not in families or families[f['id']] == f,
                     'Conflicting family metadata')
             families[f['id']] = f
+    # All records and relationships passed validation. Materialize compatibility
+    # accounts only now; preflight/validate_record remain strictly read-only.
+    for record in records:
+        source = root / f"experiments/records/{record['id']}/record.json"
+        account = article_bytes(json.loads(source.read_text(encoding='utf-8')))
+        if account is not None:
+            destination = root / record['article_path']
+            require(destination.resolve().is_relative_to(root.resolve()), 'Generated account escapes repository')
+            if not destination.exists() or destination.read_bytes() != account:
+                destination.write_bytes(account)
     registry_text = json.dumps({'schema': 'liberpedia-experiments-v1', 'records': records},
                                ensure_ascii=False, indent=2) + '\n'
     (root / 'data/experiments.json').write_text(registry_text, encoding='utf-8', newline='\n')

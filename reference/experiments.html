@@ -5758,8 +5758,6 @@
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Literal cumulative-sum autokey on LP2&quot;,
   &quot;question&quot;: &quot;Does the supplied cumulative plaintext-sum rule yield a plaintext-like rune stream across LP2?&quot;,
-  &quot;reader_question&quot;: &quot;Does the supplied cumulative plaintext-sum rule yield a plaintext-like rune stream across LP2?&quot;,
-  &quot;summary&quot;: &quot;The literal rule equals adjacent ciphertext differencing; its output remains near-uniform and has 88 F runes.&quot;,
   &quot;tags&quot;: [
     &quot;cumulative autokey&quot;,
     &quot;first difference&quot;,
@@ -5832,9 +5830,6 @@
     &quot;exclusions&quot;: &quot;Across-page state, alternate rune mappings, skips, key layers and manuscript-reading claims.&quot;
   },
   &quot;outcome&quot;: &quot;inconclusive&quot;,
-  &quot;finding&quot;: &quot;The page-local literal cumulative inverse has 12,956 outputs, IoC 0.035319 and 88 F runes; known LP1 readings have IoC 0.061139.&quot;,
-  &quot;limitations&quot;: &quot;Comparison with solved LP1 is descriptive and does not test added keys, skips, alternative alphabets or a new plaintext language.&quot;,
-  &quot;next_steps&quot;: &quot;Specify a complete additional layer or a held-out plaintext prediction before broadening this rule.&quot;,
   &quot;review&quot;: {
     &quot;reviewer&quot;: &quot;Seeded exact recomputation against hashed local inputs&quot;,
     &quot;retested_on&quot;: &quot;2026-10-22&quot;,
@@ -6132,8 +6127,13 @@
     }
   ],
   &quot;reader_note&quot;: &quot;The literal rule equals adjacent ciphertext differencing; its output remains near-uniform and has 88 F runes.&quot;,
-  &quot;reader_limit&quot;: &quot;Comparison with solved LP1 is descriptive and does not test added keys, skips, alternative alphabets or a new plaintext language.&quot;,
   &quot;scope_summary&quot;: &quot;LP2-00–55 · fixed rule and local control.&quot;,
+  &quot;finding&quot;: &quot;Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.&quot;,
+  &quot;summary&quot;: &quot;Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.&quot;,
+  &quot;reader_finding&quot;: &quot;Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.&quot;,
+  &quot;limitations&quot;: &quot;This was a frequency comparison, not a complete decryption test. Extra keys, skipped runes, other alphabets and plaintext languages were not tested.&quot;,
+  &quot;reader_limit&quot;: &quot;This was a frequency comparison, not a complete decryption test. Extra keys, skipped runes, other alphabets and plaintext languages were not tested.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a complete additional layer or a held-out plaintext prediction before broadening this rule.&quot;,
   &quot;article&quot;: &quot;## Finding\n\nThe proposed cumulative rule has no adjustable key: it turns into a difference between neighboring ciphertext runes. Applied separately to every nonempty page of LP2-00–55, its **12,956 output runes remain nearly flat**. Their index of coincidence is **0.035319**, close to the raw LP2 stream&#x27;s **0.034478** and far below the **0.061139** measured from the site&#x27;s 2,797 decoded LP1 runes. That comparison does not prove LP2 uses English or the same spelling conventions as LP1, but it supplies no positive reading under the literal rule.\n\n![F-rune rates for the literal output, solved LP1 readings and raw LP2 ciphertext.](experiments/records/cumulative-autokey-literal/f-rate.svg)\n\nThe output has **88 F runes (0.68%)**. This number is forced by **86 repeated adjacent ciphertext runes** plus the first rune of each of two pages. The LP1 reading control has **44 F runes among 2,797 (1.57%)**. The chart is descriptive: the corpora differ in length, topic and cipher history.\n\n## Rule tested\n\nThe reported formula is `P[k] = C[k] − sum(P[0] ... P[k−1]) mod 29`. We start the sum at zero at the beginning of each page. It follows algebraically that `P[0] = C[0]` and `P[k] = C[k] − C[k−1] mod 29` afterward. The program also re-sums every output prefix and verifies that it reconstructs the exact input rune. This is the literal formula, not a search for primers or a plaintext-feedback Fibonacci recurrence.\n\n## How to reproduce\n\nFrom the repository root, run `python experiments/records/cumulative-autokey-literal/run.py --check`. The saved [29-value distributions and per-page first-rune ledger](experiments/records/cumulative-autokey-literal/results.json) include hashes for every transcription and reading file used.\n\nThis result covers page-local starts and the archived 29-rune transcription. A rule that carries state between pages, skips a rune, adds another key layer, or changes its alphabet is a different test. The known LP1 readings serve only as a transparent comparison, not a formal null distribution for every possible plaintext.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/cumulative-autokey-literal/article.md&quot;,
   &quot;script_sha256&quot;: &quot;01d12871d4e3a9986d74a8731d2ce73b2f93eadc9a3727e536f4cf407fb7ba96&quot;,

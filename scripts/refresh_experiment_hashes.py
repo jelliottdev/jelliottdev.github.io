@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import re
 
+from experiment_content import article_bytes
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -24,6 +26,11 @@ def refresh(root, identifier, write=False):
     record = json.loads(path.read_text(encoding="utf-8"))
     if record["id"] != identifier:
         raise ValueError("Record ID does not match its folder")
+    # A v2 account is authored inside record.json. Its derived file may be
+    # absent or stale until the explicit build; refreshing hashes must not
+    # depend on that file or write it as a side effect.
+    account = article_bytes(record)
+    account_path = f"experiments/records/{identifier}/article.md"
     reproduction = record["reproduction"]
     changes = []
     actual = digest(root, reproduction["script"])
@@ -32,7 +39,9 @@ def refresh(root, identifier, write=False):
         reproduction["script_sha256"] = actual
     for role in ("inputs", "outputs"):
         for entry in reproduction[role]:
-            actual = digest(root, entry["path"])
+            actual = (hashlib.sha256(account).hexdigest()
+                      if account is not None and entry["path"] == account_path
+                      else digest(root, entry["path"]))
             if entry.get("sha256") != actual:
                 changes.append(entry["path"])
                 entry["sha256"] = actual

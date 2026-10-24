@@ -23,20 +23,46 @@ python scripts/refresh_experiment_hashes.py your-record-id --write
 
 Without `--write`, this command only reports drift. It does not execute the experiment, certify its interpretation or change review status. Build the site once after the batch is ready, and publish one combined commit.
 
-## Add an idea
+## Author an experiment once
 
-1. Run `python scripts/new_experiment.py your-short-id` to create a draft.
-2. Write the question, rationale, scope, and pre-run plan in `article.md`. Declare the success criterion and stopping rule before inspecting results. After running, fill in actual results, changes made after inspection, retest details, and limitations.
-3. Replace `run.py` with a readable reproducible script. Use explicit inputs, deterministic ordering, a documented seed where relevant, and machine-readable output. Include dependency versions. The generated stub deliberately refuses to run.
-4. Fill `record.json`. Specify exact pages, transcription choice, transformations, parameter ranges, and exclusions. List every input and output with its SHA-256.
-5. Retest from the repository root with the stated command. Compare the output to the stored result. Document thresholds and controls; stochastic tests need a null model, trial count, seed, and uncertainty.
-6. Retest and review the precise claims, populate the actual reviewer and retest date, and change `status` to `published`. Computational review must identify the agent and explicitly state that human review is pending; never present it as independent human review. A pending label has no assigned reviewer or scheduled deadline. It changes only after a named person independently checks the original sources, stated scope, calculations and interpretation, with their name, date and findings recorded. Publication means the documented result is available, not that its interpretation is endorsed.
+```text
+python scripts/new_experiment.py your-short-id
+```
 
-The `review.reviewer` field identifies the computational checker. To mark human review complete, an independent person must document what they checked in `review.human_findings`, add their name in `review.human_reviewer` and the date in `review.human_reviewed_on`, then set `review.human_review` to `"complete"`. The builder rejects a complete label without those fields. If a finding changes, update the result and repeat its computational retest before publishing the reviewed revision.
-7. Assign the published record's type and method links as described under **Connect a published record to the method map** below. Do not add draft IDs to that map.
-8. Run `python scripts/build_experiments.py`, `python scripts/build_articles.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing. The article build refreshes the method map after the experiment registry changes.
+Edit **`experiments/records/your-short-id/record.json`**. This is the only authored content file. The scaffold also creates `run.py`, a deliberately failing stub to replace with the actual experiment. Scripts, input data, frozen plans and measured outputs remain separate evidence files.
 
-Drafts never enter the public search index. Files committed to a public repository remain publicly readable; never commit private drafts. The builder validates fields, paths, file hashes, page IDs, and related records. For a conventional `plan.json`, it also requires the plan and its listed dependencies to be declared hashed inputs, checks their recorded digests, and checks `plan_sha256` when present in a declared `results.json`. This catches stale nested references even when the outer record hashes match. It does not run scripts or certify findings; other plan/report formats still need their own validation.
+The new format uses `schema: "liberpedia-experiment-v2"`:
+
+- `question`: the question a reader can understand.
+- `result.finding`: what happened and what it means, in one short paragraph.
+- `result.limits`: the qualification needed to interpret that result.
+- `result.next_steps`: what remains worth checking.
+- `analysis`: the full technical account in Markdown, including the method, controls, planned criteria, results and any decisions made after inspection.
+- `scope`, `reproduction`, `review`, `visuals`, `sources`: exact bounds and evidence, as before.
+
+Write the result once. The page, graph preview, search index, checker evidence and ZIP instructions use that same finding and limit. Technical detail belongs in `analysis`; short result fields are limited to 700 characters and are never silently truncated. Duplicate fields such as `reader_finding`, `summary` or a second top-level `finding` are rejected. CI requires the new format for added records and newly published drafts, and prevents downgrading a converted record. `article.md` is a generated compatibility file; do not edit it.
+
+1. Before running, record the hypothesis, exact inputs, bounds, success criterion, controls and stopping rule. Keep the record a draft.
+2. Implement and run the experiment. Check its saved output independently, including whether its controls could detect a known answer. A run or schema check alone does not certify the interpretation.
+3. Fill in the actual result and limitations, and the reviewer and retest date. Declare every dependency and output with its reviewed hash. Hash refresh reports byte changes; it does not approve them:
+
+   ```text
+   python scripts/refresh_experiment_hashes.py your-short-id --write
+   python scripts/preflight_experiments.py your-short-id
+   ```
+
+4. Assign the record type and method links described below. Change status to `published` only when the reviewed record is ready.
+5. Build all derived views once:
+
+   ```text
+   python scripts/build_research.py
+   ```
+
+This command builds records, articles, checker data, downloads, the research map and its home preview in dependency order, then checks catalog hashes and map freshness. It does not run experiments, alter findings, commit or push. Batch related records into one build and release.
+
+Existing records and archived bundles remain supported in their original format. They are not automatically rewritten or summarized. For a deliberate migration, embed the exact account bytes in `analysis` and verify every frozen dependency; never refresh an evidence hash just to make a conversion pass. The source schema is stricter for new records, while public export fields remain compatible with existing tools.
+
+Drafts do not enter public indexes, but committed drafts are still public files. Never commit private material. Review metadata must identify the actual computational reviewer; independent human review is complete only when its name, date and findings are recorded. A pending review has no implied assignee or deadline.
 
 ## Record vocabulary
 
