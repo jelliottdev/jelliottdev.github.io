@@ -14,7 +14,8 @@ function toast(text){$('#notice').textContent=text;$('#notice').classList.add('s
 function safeLink(href,text,className){const a=document.createElement('a');a.href=href;a.textContent=text;if(className)a.className=className;return a}
 function storeLast(id){try{sessionStorage.setItem('manuscript-reader-last-page',id)}catch{}}
 async function fetchJSON(path,signal){const controller=new AbortController();let timer;const abort=()=>controller.abort();if(signal?.aborted)controller.abort();else signal?.addEventListener('abort',abort,{once:true});try{return await Promise.race([fetch(path,{signal:controller.signal}).then(r=>{if(!r.ok)throw Error('Unavailable');return r.json()}),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Request timed out'))},10000)})])}finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);controller.abort()}}
-function remember(){if(!page)return;positions.set(page.id,{imageTop:$('#image-scroll').scrollTop,imageLeft:$('#image-scroll').scrollLeft,textTop:$('#text-scroll').scrollTop,zoom,fitKind});storeLast(page.id)}
+function remember(persist=true){if(!page)return;const prior=positions.get(page.id)||{},image=$('#image-scroll'),text=$('#text-scroll');positions.set(page.id,{imageTop:image.getClientRects().length?image.scrollTop:prior.imageTop||0,imageLeft:image.getClientRects().length?image.scrollLeft:prior.imageLeft||0,textTop:text.getClientRects().length?text.scrollTop:prior.textTop||0,zoom,fitKind});if(persist)storeLast(page.id)}
+function rememberViewportScroll(event){if(event.currentTarget.getClientRects().length)remember(false)}
 function setContinuous(value){continuous=value;$('#continuous-mode').checked=value;if(page){const params=new URLSearchParams(location.hash.split('?')[1]||'');params.set('navigation',value?'continuous':'single');history.replaceState(null,'','#'+page.id+'?'+params)}savePreferences();syncContinuous()}
 function syncContinuous(){const active=continuous&&view!=='text';$('#continuous-scroll').hidden=!active;$('.continuous-tools').hidden=!active||$('#continuous-retry').hidden;$('#image-scroll').hidden=active;$('.image-controls').hidden=active;$('#reader').classList.toggle('continuous-on',active);if(active&&page)continuousController?.open(page.id)}
 function setView(next){remember();if(small.matches&&next==='compare')next='image';view=next;$('#reader').dataset.view=view;$$('[data-view]').filter(x=>x.tagName==='BUTTON').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));savePreferences();syncContinuous();const activePage=page,activeView=view;requestAnimationFrame(()=>{if(page!==activePage||view!==activeView)return;if(fitKind!=='custom')fitImage(fitKind,true);const saved=page&&positions.get(page.id);if(saved){$('#text-scroll').scrollTop=saved.textTop;$('#image-scroll').scrollTop=saved.imageTop;$('#image-scroll').scrollLeft=saved.imageLeft}})}
@@ -101,7 +102,24 @@ $('#find-toggle').onclick=()=>{if(view==='image')setView(small.matches?'text':'c
 $('#fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{toast('Fullscreen is unavailable in this browser')}};document.addEventListener('fullscreenchange',()=>{const active=Boolean(document.fullscreenElement);$('#fullscreen').setAttribute('aria-label',active?'Exit fullscreen':'Enter fullscreen');$('#fullscreen').title=active?'Exit fullscreen':'Fullscreen'});
 document.addEventListener('pointerdown',e=>{if(!$('#settings').hidden&&!e.target.closest('#settings,#settings-toggle')){$('#settings').hidden=true;$('#settings-toggle').setAttribute('aria-expanded','false')}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#navigation-dialog').open){e.preventDefault();$('#navigation-dialog').close()}else if($('#pages-dialog').open){e.preventDefault();$('#pages-dialog').close()}else if(!$('#settings').hidden){$('#settings').hidden=true;$('#settings-toggle').setAttribute('aria-expanded','false');$('#settings-toggle').focus()}else if(!$('#find').hidden)closeFind();else if(!$('#reference-panel').hidden)openReference(false);return}if(e.target.closest('input,textarea,select,dialog')||e.ctrlKey||e.metaKey||e.altKey)return;if(e.key==='ArrowLeft'){e.preventDefault();navigate(-1)}if(e.key==='ArrowRight'){e.preventDefault();navigate(1)}});
-small.addEventListener('change',()=>{if(small.matches&&view==='compare')setView('image')});let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(fitKind!=='custom')fitImage(fitKind,true)},100)}).observe($('#image-scroll'));
+let hiddenResponsiveFocus=null;
+function rememberResponsiveFocus(event){
+ hiddenResponsiveFocus=null;
+ const target=event.target,compare=$('button[data-view="compare"]');
+ if(!event.relatedTarget&&small.matches&&!target.getClientRects().length&&
+  (target===compare||view==='compare'&&$('#text-pane').contains(target)))hiddenResponsiveFocus=target;
+}
+function fitReaderViewport(){
+ const hidden=hiddenResponsiveFocus;hiddenResponsiveFocus=null;
+ if(!small.matches)return;
+ const active=document.activeElement===document.body&&hidden?.isConnected?hidden:document.activeElement,compare=$('button[data-view="compare"]');
+ if(view==='compare')setView($('#text-pane').contains(active)?'text':'image');
+ if(active===compare)$('button[data-view="'+view+'"]')?.focus({preventScroll:true});
+ else if(active===hidden&&active.getClientRects().length)active.focus({preventScroll:true});
+}
+document.addEventListener('focusout',rememberResponsiveFocus);
+[$('#text-scroll'),$('#image-scroll')].forEach(area=>area.addEventListener('scroll',rememberViewportScroll,{passive:true}));
+small.addEventListener('change',fitReaderViewport);let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(fitKind!=='custom')fitImage(fitKind,true)},100)}).observe($('#image-scroll'));
 const touchPoints=new Map();let touchOrigin=null,swipeStart=null;
 function touchGeometry(){const points=[...touchPoints.values()];if(points.length>=2)return {x:(points[0].x+points[1].x)/2,y:(points[0].y+points[1].y)/2,d:Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)};return points[0]||null}
 $('#image-scroll').addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')return;touchPoints.set(e.pointerId,{x:e.clientX,y:e.clientY});swipeStart=touchPoints.size===1?{x:e.clientX,y:e.clientY,eligible:zoom<=fitScale*1.05}:null;e.currentTarget.setPointerCapture(e.pointerId);touchOrigin=touchGeometry()});

@@ -13687,6 +13687,12 @@ Signature validity and identity
 A valid signature ties a signed message to a key. It does not decrypt its body, sign every byte of the enclosing JPEG, or by itself identify a real-world author. Historical association with Cicada is a separate provenance claim.
 The full primary fingerprint of the exported key is 6D854CD7933322A601C3286D181F01E57A35090F. Check the key itself, not its filename or short ID.
 
+What the archived corpus verifies
+
+The archived corpus check submitted all 133 preserved .asc files to GnuPG. It verified 115 under the specified key; 11 were key files, six had no verified signature, and one malformed copy failed. These are files in one pinned snapshot, not 133 distinct messages or a complete historical collection. The saved verification table records each result. To repeat the offline check from the extracted experiment bundle, run python experiments/records/dukotah-g02-signature-corpus/check.py --replay with GnuPG installed.
+
+One valid file, tcp-server.asc, is an armored PGP MESSAGE containing an embedded signature. The original program skipped it because it first looked for a literal BEGIN PGP SIGNATURE header. Let GnuPG inspect the complete preserved object rather than deciding signature absence from that header alone. The cleartext whitespace rules below apply to cleartext-signed messages, not every OpenPGP container.
+
 Signature dates and manuscript pages
 
 A signature contains a clock value supplied by its signer. A valid signature does not independently authenticate that as the publication date.
@@ -13756,6 +13762,10 @@ For how this check fits the complete evidence trail, see source verification and
 Sources, related references, and files
 - exported key
   https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+- archived corpus check
+  https://jelliottdev.github.io/#/experiments/dukotah-g02-signature-corpus
+- saved verification table
+  https://jelliottdev.github.io/experiments/records/dukotah-g02-signature-corpus/independent-verification.json
 - archived-text date check
   https://jelliottdev.github.io/#/experiments/dukotah-c8-timestamp-join
 - its status-format specification

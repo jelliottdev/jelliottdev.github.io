@@ -1,29 +1,36 @@
 {
-  "schema": "liberpedia-execution-ready-queue-v1",
+  "schema": "liberpedia-execution-ready-queue-v2",
   "source": {
     "repository": "Dukotah/cicada3301",
     "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
     "ledger": "../sources/dukotah-f08b20b/LEDGER.json",
     "ledger_sha256": "7718bf90fb4cc6cc0fb98464d65ab898dd0e776da33d9b056bcd908d3b60558d"
   },
-  "counting": "64 reproduction-command ledger entries are source entries, not 64 independent ideas. Parameter configurations inside a command are not counted as ideas. Ready means source rules, local inputs and controls appear available; publication still requires independent replay and input-hash checks.",
+  "counting": "One row is one original ledger entry with a reproduction command, not one idea or one remaining experiment. Current review is copied from the scope reconciliation; initial_assessment is historical. A complete executed grid does not close the wider method. Neither a linked record nor a partial status establishes that a follow-up is ready to run.",
   "counts": {
     "reproduction_command_entries": 64,
-    "ready_unclaimed_source_programs": 0,
-    "completed_draft_partial": 0,
-    "claimed_by_other_agent": 0,
-    "covered_or_partial": 28,
-    "umbrella_verdict_or_audit": 7,
-    "blocked_or_audit_needed": 29,
-    "source_entries_in_disposition_total": 64,
-    "completed_draft_full": 0
+    "entries_with_published_record_links": 39,
+    "entries_with_remaining_scope": 64,
+    "review_statuses": {
+      "blocked-exact-replay": 5,
+      "failed-source-gate": 3,
+      "partial": 37,
+      "reproduced-subclaim": 1,
+      "source-proposal-only": 1,
+      "unsupported-source-verdict": 17
+    },
+    "execution_replay_states": {
+      "complete-executed-grid": 16,
+      "not-recorded": 32,
+      "partial-execution": 10,
+      "replayed-with-invalid-gate": 6
+    },
+    "explicit_priority_entries": 0
   },
   "priority_ready_source_ids": [],
   "command_audit": [
     {
       "source_id": "VERDICT-OTP-CLASS",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "python3 liber-primus/analysis/round12/D3/pc_derivedkey.py",
       "source_evidence": [
         {
@@ -36,12 +43,47 @@
         }
       ],
       "ledger_status": "open",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-kdf-seed-stretch",
+            "covered_subclaim": "The packaged source control reruns D3 pc_derivedkey.py: a 174-rune planted English message under a SHA-256-counter key from CICADA3301 and five source key-position skips. The known-seed skip-aware beam scores −4.170 with 98.9% character agreement; rigid and one wrong-seed decode score −6.835 and −7.349. This is a synthetic recovery, not an LP2 key identification."
+          },
+          {
+            "record_id": "dukotah-b04-full-source-replay",
+            "covered_subclaim": "The formerly unrun source B04 finite derived-key lane has since been replayed: the planted control ranks first among 1,385,600 settings, and none of 6,224,000 bounded LP2 short-text decodes reaches its fixed score bar. This does not test every short seed, key generator or possible decoding rule."
+          },
+          {
+            "record_id": "source-independent-key-floor-audit",
+            "covered_subclaim": "An independent finite-key example and the exact uniform-additive-key comparison distinguish expected adjacent-repeat bounds from impossibility claims about every finite ciphertext or every plaintext-independent key."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "public-kdf-seed-stretch"
+          ],
+          "scope": "Exact pinned D3 synthetic 174-rune source control was rerun and passed. This execution_replay entry refers only to that planted control, not to an LP2 target execution or B4/G5 corpus simulation. The linked B04 and KDF records separately document their bounded LP2 searches.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The exact D3 command is a synthetic, known-seed, key-skip plant. It neither identifies the LP2 cipher nor shows LP2 has a recoverable seed.",
+          "B4/G5 reports no separation in a selected six-statistic, 40-realization-per-model simulation (maximum absolute z 1.603). Its original KJV corpus is absent from pinned Git, so this G5 result is source-reported rather than freshly replayed. Finite non-separation is not an information-theoretic or universal ciphertext-indistinguishability proof.",
+          "B4/G5 uses output-aware value resampling, while D3 uses key-position skips. The source treats them as one filter family, but the two operations differ.",
+          "B4 model A is generated by Python random.Random seeds, not evidence that a true independent one-time pad produced LP2. The original source G4 also places measured LP2 outside model A on diagonal coefficient of variation; a categorical external-pad or derived-key identification is unwarranted.",
+          "The later B04 and KDF replays cover named finite dictionaries and decoder settings only; other seeds, generators, plaintext representations and keys remain outside their scope."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "VERDICT-UNSOLVABLE-BY-DESIGN",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "python3 liber-primus/analysis/round12/D3/pc_derivedkey.py",
       "source_evidence": [
         {
@@ -54,12 +96,45 @@
         }
       ],
       "ledger_status": "superseded",
-      "ledger_control": "none"
+      "ledger_control": "none",
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "public-kdf-seed-stretch",
+            "covered_subclaim": "The packaged source control reruns D3 pc_derivedkey.py: a 174-rune planted English message under a SHA-256-counter key from CICADA3301 and five source key-position skips. The known-seed skip-aware beam scores −4.170 with 98.9% character agreement; rigid and one wrong-seed decode score −6.835 and −7.349. This is a synthetic recovery, not an LP2 key identification."
+          },
+          {
+            "record_id": "dukotah-b04-full-source-replay",
+            "covered_subclaim": "The formerly unrun source B04 finite derived-key lane has since been replayed: the planted control ranks first among 1,385,600 settings, and none of 6,224,000 bounded LP2 short-text decodes reaches its fixed score bar. This does not test every short seed, key generator or possible decoding rule."
+          },
+          {
+            "record_id": "source-independent-key-floor-audit",
+            "covered_subclaim": "An independent finite-key example and the exact uniform-additive-key comparison distinguish expected adjacent-repeat bounds from impossibility claims about every finite ciphertext or every plaintext-independent key."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "public-kdf-seed-stretch"
+          ],
+          "scope": "Exact pinned D3 synthetic 174-rune source control was rerun and passed. It is a counterexample to treating every short-seed construction as computation-proof; it is not a test showing that the actual LP2 ciphertext is solvable or unsolvable.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The source ledger marks this absolute verdict superseded by VERDICT-OTP-CLASS. The D3 plant shows only that one constructed short-seed ciphertext can be recovered when its seed is supplied and a matching decoder is used.",
+          "Neither the D3 plant nor B4/G5 finite feature non-separation proves actual LP2 recoverability, or that LP2 uses a truly random independent unreused pad. The information-theoretic conditions for a one-time-pad impossibility claim are not established for LP2.",
+          "The now-executed B04 finite search has no score-bar hit within its settings, but that result cannot promote a wider method class to impossible or validate this superseded absolute verdict."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-04",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published fixed-opening follow-up; original full language-scoring campaign remains unreplayed. See reconciliation for exact exclusions.",
       "reproduce_command": "cd liber-primus/analysis/round13/B04 && python3 sweep.py --nproc 6",
       "source_evidence": [
         {
@@ -81,18 +156,46 @@
       ],
       "ledger_status": "negative",
       "ledger_control": "passed",
-      "published_record_ids": [
-        "b04-source-seeds-opening-cribs"
-      ],
-      "remaining_source_scope": [
-        "No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.",
-        "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."
-      ]
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published fixed-opening follow-up; original full language-scoring campaign remains unreplayed. See reconciliation for exact exclusions.",
+        "published_record_ids": [
+          "b04-source-seeds-opening-cribs"
+        ],
+        "remaining_source_scope": [
+          "No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.",
+          "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."
+        ]
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "b04-source-seeds-opening-cribs",
+            "covered_subclaim": "New exact-crib extension over all 1,385,600 zero-offset source settings, nine fixed 12-rune readings and 55 page starts. This does not replay or validate the original English-score negative."
+          },
+          {
+            "record_id": "dukotah-b04-full-source-replay",
+            "covered_subclaim": "Fresh G2 plant ranked first among 1,385,600 settings; exact A/B/C source-worker search completed 6,224,000 manuscript opening decodes and D completed 300 longer-text cells. Saved source result fields and histograms match; the accelerated D decoder matches unchanged source fields and key reads on 150 first-page cells and four preselected full-book cells. This verifies the finite source campaign, not all derived keys or languages."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "dukotah-b04-full-source-replay"
+          ],
+          "scope": "Fresh complete source-defined G2 ranking gate, A/B/C 6,224,000 opening decodes and D 300 long-text cells, with pinned inputs, checkpoint/source-result parity and 154 unchanged-source D decoder comparisons. The source’s broader derived-key and language verdict is not verified.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers. The planted 120-rune control does not establish detector power for every full-length true key; the fixed source negative remains conditional.",
+          "For reversed-key candidates, the source reverses different requested stream lengths at short and long stages, so Stage D need not continue the same key prefix. Equal-score ties can also change a top-50 cutoff member. These source behavior limits do not enlarge the tested seed or language space."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-05",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published grid-payload-prf-source-grid replays the source-defined grid-payload PRF scope with its documented controls.",
       "reproduce_command": "cd liber-primus/analysis/round13/B05 && python3 sweep.py",
       "source_evidence": [
         {
@@ -109,12 +212,48 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published grid-payload-prf-source-grid replays the source-defined grid-payload PRF scope with its documented controls."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "grid-payload-prf-seed-corner",
+            "covered_subclaim": "32 offset-zero cases: two payloads, four PRFs, two byte reductions and two signs; first 400 runes, forward, no Atbash."
+          },
+          {
+            "record_id": "grid-payload-prf-contested-masks",
+            "covered_subclaim": "Part 2a: 64 alternate six-byte readings, 3,840 PRF calls and 2,596 distinct key/sign cases; first 400 runes at offset zero, forward, no Atbash."
+          },
+          {
+            "record_id": "grid-payload-prf-source-grid",
+            "covered_subclaim": "All 70,680 executed opening-screen configurations, 180 rigid corners, and five full-stream continuations reproduced with declared source controls. Effective-key duplicates share scores without changing the source configuration set."
+          },
+          {
+            "record_id": "grid-payload-prf-opening-cribs",
+            "covered_subclaim": "New exact-opening extension over all70,680 source cases, nine fixed cribs and55 page starts; separate from the complete English-beam replay."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "grid-payload-prf-source-grid",
+            "grid-payload-prf-contested-masks"
+          ],
+          "scope": "All 70,680 executed opening-screen configurations, 180 rigid corners, and five full-stream continuations reproduced with declared source controls. Effective-key duplicates share scores without changing the source configuration set.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Other payload encodings, generators, key alignments and output languages are outside the published grid. The shuffled-text maximum is not a selection-adjusted probability bound."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-21",
-      "disposition": "input-audit-needed",
-      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
       "reproduce_command": "see liber-primus/analysis/seed_sweep/run_full32.sh",
       "source_evidence": [
         {
@@ -123,12 +262,30 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "input-audit-needed",
+        "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-prng-seed-sweep",
+            "covered_subclaim": "A later bounded source grid tests seven generator implementations, including families the B-21 census named as missing, against 1,877 fixed seeds and a 120-rune LP2 opening. It does not replay the Round-8 ten-variant seed_sweep or its claimed full32 runs."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Independently replay the original Round-8 ten generator/reduction definitions, actual seed ranges, nine reported full32 completion rows, and their controls/scorer gate.",
+          "The ten variants are a choice, not a census: other generator families, wider seeds and key offsets remain outside those searches.",
+          "Saved rows do not independently prove the historical campaigns or scorer sensitivity."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-16",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "python3 liber-primus/analysis/round12/D1_redteam/rewrite_gate.py",
       "source_evidence": [
         {
@@ -145,12 +302,24 @@
         }
       ],
       "ledger_status": "eliminated",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The two exact Mabinogion offset controls now reproduce all eight archived scores and their skip/rewrite counts; internal receipt: research/source-intake/b16-rewrite-gate-mabinogion-partial-2026-10-23.json.",
+          "Other exact original keytexts remain missing from source paths. The full four-key gate and general keytext conclusion remain unverified; later editions are not substituted."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R12-A1",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/analysis/round12/A1/pads/",
       "reproduce_command": "cd liber-primus/analysis/round12/A1 && python3 sweep.py",
       "source_evidence": [
         {
@@ -167,12 +336,24 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "liber-primus/analysis/round12/A1/pads/"
+      },
+      "current_review": {
+        "status": "blocked-exact-replay",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The pinned checkout retains A1 source scripts and saved results, but its analysis/round12/A1/pads directory is absent; the executable cannot replay the same bytes.",
+          "Acquire and pin all source binary pads, including the 118,818,811-byte 560.13 object with the source's recorded SHA-256, and pin the source scorer/controls before claiming the reported head/page grid is reproduced."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R12-C1",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: public-circumference-substitutions",
       "reproduce_command": "cd liber-primus/analysis/round12/C1 && python3 sweep.py",
       "source_evidence": [
         {
@@ -189,12 +370,47 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: public-circumference-substitutions"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-multihistory-feedback",
+            "covered_subclaim": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299."
+          },
+          {
+            "record_id": "two-rune-primer-extension",
+            "covered_subclaim": "New extension: every pair of starting key values for plaintext-sum feedback with k=2, sign minus, forward, page-local. All 46,255 cases, including 44,660 previously unsearched unequal-pair cases, fall below the preset English-score threshold. Both known passages recover under three starts each; 40 of 49 complete shuffled searches score at least as high as the manuscript."
+          },
+          {
+            "record_id": "two-rune-feedback-family",
+            "covered_subclaim": "A new page-local k=2 extension covers all 841 ordered starts across seven source functions, plaintext and mixed history, both signs and directions: 56 labelled branches, 48 effective branches, 2,220,240 effective manuscript settings. No output passes the frozen score gate; 35 of 49 matched whole-family shuffles score at least as highly. All observed scores are independently reconstructed. Known-text ranking failures are retained; this is a diagnostic enumeration, not a validated rejection of the family."
+          }
+        ],
+        "execution_replay": {
+          "state": "replayed-with-invalid-gate",
+          "record_ids": [
+            "public-multihistory-feedback",
+            "two-rune-primer-extension",
+            "two-rune-feedback-family"
+          ],
+          "scope": "The original grid remains replayed with an invalid restricted-start gate. A narrow control-checked sum extension and a broader complete k=2 score enumeration are linked separately. The broader run retains failed unique-ranking controls and its pre-target diagnostic purpose amendment; it does not repair the original whole-family gate.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The original restricted-start grid retains its failed domain-power check: 7/7 ciphertext-history plants recover, but 0/7 plaintext-history and 0/7 mixed-history plants with non-equal true seeds recover.",
+          "The full k=2 extension supplies every two-value start, but unique correct ranking passes only 216 of 336 dependent known-text trials. Eighty-eight tie and 32 rank a wrong output higher. All 336 true-key outputs decode exactly and clear the source score threshold. The declared pre-target purpose amendment therefore permits score enumeration, not a control-validated family rejection.",
+          "Complete k>2 starting keys, continuous streams, alternative reset/skip rules, other functions and plaintext languages remain outside the new extension. Independent null checking covers every retained winning-output score and declared full-grid samples, not every discarded null candidate."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R12-C2",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "Source fetch.sh declares 33 downloads but no sweep or saved execution result; a future test requires a newly specified rule and inputs.",
       "reproduce_command": "bash liber-primus/analysis/round12/C2/fetch.sh  # then no sweep exists yet",
       "source_evidence": [
         {
@@ -203,12 +419,24 @@
         }
       ],
       "ledger_status": "never-run",
-      "ledger_control": "none"
+      "ledger_control": "none",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "Source fetch.sh declares 33 downloads but no sweep or saved execution result; a future test requires a newly specified rule and inputs."
+      },
+      "current_review": {
+        "status": "source-proposal-only",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The sole pinned executable is a downloader, not a decrypting or scoring experiment; there is no saved sweep result to reproduce.",
+          "fetch.sh names 33 download commands (23 Project Gutenberg and 10 other URLs), while the inventory paraphrases 29 texts. A new test must pin the final corpus subset, exact bytes, transliteration, offsets, decoder and control gate before results."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R12-D2",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published source-independent-key-floor-audit reproduces a limited source statistical audit; it does not complete the original independent-key floor claim.",
       "reproduce_command": "python3 liber-primus/analysis/round12/D2/recompute.py",
       "source_evidence": [
         {
@@ -225,12 +453,35 @@
         }
       ],
       "ledger_status": "eliminated",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published source-independent-key-floor-audit reproduces a limited source statistical audit; it does not complete the original independent-key floor claim."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "source-independent-key-floor-audit",
+            "covered_subclaim": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "source-independent-key-floor-audit"
+          ],
+          "scope": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The G3 four-corpus floor and p*=400 power claim are not computed by D2; original corpus files are unavailable."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R12-frontB",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/data/relikd/p45.jpg",
       "reproduce_command": "cd liber-primus/analysis/round12/frontB && python3 run_final.py",
       "source_evidence": [
         {
@@ -247,12 +498,25 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "liber-primus/data/relikd/p45.jpg"
+      },
+      "current_review": {
+        "status": "failed-source-gate",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The source's forced-segmentation arm reports only 12.923% agreement on solved control glyphs and labels that arm inconclusive; its 3.6% target-page agreement cannot support a negative or a proposed corrected rune.",
+          "The source separately reports 98.0% for R9 raw-band decoding on naturally count-exact lines. Independently replaying either image method requires the missing analysis/retranscribe/templates.npz and data/relikd/p45.jpg through p54.jpg and control images.",
+          "The execution-ready queue had linked this entry to unrelated round19/T2 receipts; its evidence mapping must point to round12/frontB."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R17-PUBLIC-PAD",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "external public pad bytes for dense scan",
       "reproduce_command": "python3 liber-primus/analysis/round17/lib_padsweep.py  # instrument gate, then each lane's sweep.py",
       "source_evidence": [
         {
@@ -269,12 +533,24 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "external public pad bytes for dense scan"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No independent replay of the four source lanes or their 8.38-billion effective offset census.",
+          "The source's English trigram prefilter retained only 5 of 8 planted offsets, so its coverage is conditional even where its later beam was sensitive."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R17-P2-CENSUS-CORRECTION",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "python3 liber-primus/analysis/round17/P2_beacons/fetch.py",
       "source_evidence": [
         {
@@ -287,12 +563,24 @@
         }
       ],
       "ledger_status": "superseded",
-      "ledger_control": null
+      "ledger_control": null,
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "blocked-exact-replay",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "A public archive is logically distinct from a short generator seed. This corrects the category assumption without adopting the source sweep verdict.",
+          "The exact 153 RANDOM.ORG daily files, NIST Beacon record sequence, pad assembly and source controls have not been recovered and replayed here; the reported 96 configurations and billions of offsets remain source-reported."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "D-01",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published lp2-filter-fingerprint-models replays the 200-replicate executed model ladder and independently checks rune/window/gap/line statistics; the human-versus-machine claim remains limited to tested controls.",
       "reproduce_command": "python3 liber-primus/analysis/round17/P4_filter/fingerprint.py",
       "source_evidence": [
         {
@@ -310,12 +598,35 @@
       ],
       "ledger_status": "negative",
       "ledger_control": "passed",
-      "liberpedia_record": "lp2-filter-fingerprint-models"
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published lp2-filter-fingerprint-models replays the 200-replicate executed model ladder and independently checks rune/window/gap/line statistics; the human-versus-machine claim remains limited to tested controls.",
+        "liberpedia_record": "lp2-filter-fingerprint-models"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "lp2-filter-fingerprint-models",
+            "covered_subclaim": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "lp2-filter-fingerprint-models"
+          ],
+          "scope": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Untested generators remain open; the no-extra-effect hand-applied model cannot be separated by this battery."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "A-03",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "99.5 percent mapping gate missed by source control",
       "reproduce_command": "python3 liber-primus/analysis/round16/A-03/a03_hapl_bound.py",
       "source_evidence": [
         {
@@ -332,12 +643,30 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "99.5 percent mapping gate missed by source control"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "a03-haplography-source-gate",
+            "covered_subclaim": "Pinned classifier receipts, source agreement gate, doublet-count arithmetic and the logical insufficiency of the proposed K<=26 error bound; not a fresh image transcription."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The archived image agreement 99.4146% misses the 99.5% declared gate. The arithmetic-only planted-K control does not measure glyph detection sensitivity or false classifications.",
+          "Observed image-minus-canon surplus 26 cannot cap hidden merges without a measured classifier error model. The 93-merge finite counterexample demonstrates underdetermination, not empirical evidence for those errors.",
+          "No full historical image-instrument artifact replay, held-out glyph adjudication or general autokey exclusion is established by this audit."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "A-04",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published five-program image-token replay dukotah-grid-cell-adjudication on exact original JPEGs. Saved blind reads are rescored, not recreated. Broader ledger visualization/propagation commands remain separately scoped.",
       "reproduce_command": "cd liber-primus/analysis/round18/L5-payload && python3 grid.py && python3 calibrate.py && python3 pixelmatch.py && python3 adjudicate_all.py && python3 visualpass.py && python3 compare215.py && python3 propagate.py",
       "source_evidence": [
         {
@@ -354,12 +683,36 @@
         }
       ],
       "ledger_status": "eliminated",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published five-program image-token replay dukotah-grid-cell-adjudication on exact original JPEGs. Saved blind reads are rescored, not recreated. Broader ledger visualization/propagation commands remain separately scoped."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "dukotah-grid-cell-adjudication",
+            "covered_subclaim": "Five exact source programs replay on original LP2-49–51 images. All outputs match: 256-cell geometry, 40/40 saved calibration reads, 236/237 eligible trailing-glyph leave-one-out matches, and six contested token/byte choices. Historical blindness cannot be independently verified."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "dukotah-grid-cell-adjudication"
+          ],
+          "scope": "Five source image programs and saved source gates on three byte-pinned JPEGs. Human blindness remains unverified; historical saved reads are rescored, not recreated.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Saved human reads can be rescored, but their historical blindness cannot be recreated. Singleton I/i/l exemplar classes cannot be leave-one-out tested. This is printed-byte adjudication, not a payload decryption or independent human transcription.",
+          "This record executes the five image-reading programs listed in its plan. The broader ledger command also names render-only visualpass.py/compare215.py and downstream propagate.py; those extra steps are not claimed as executed by this record."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "A-06",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published bounded replay or fresh-instrument audit; see reconciliation for exact inputs, failed controls and exclusions. No whole-family closure.",
       "reproduce_command": "cd liber-primus/analysis/round18/L3-ornaments && python3 inventory.py && python3 calibrate.py && python3 controls.py && python3 read_bands.py && python3 nonrunic.py && python3 hypotheses.py && python3 h1score.py",
       "source_evidence": [
         {
@@ -376,12 +729,35 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published bounded replay or fresh-instrument audit; see reconciliation for exact inputs, failed controls and exclusions. No whole-family closure."
+      },
+      "current_review": {
+        "status": "failed-source-gate",
+        "record_links": [
+          {
+            "record_id": "dukotah-ornament-fresh-reader-gate",
+            "covered_subclaim": "Fresh-bank raw-reader held-out solved-image control: 171/205 matched positions (83.4%), below the original 90% requirement. Band-content decoding was not run. Source E/site Y difference on LP2-57 agrees with the image as Y; alternate score is 83.9%."
+          }
+        ],
+        "execution_replay": {
+          "state": "replayed-with-invalid-gate",
+          "record_ids": [
+            "dukotah-ornament-fresh-reader-gate"
+          ],
+          "scope": "Fresh-bank raw-reader held-out solved-image control: 171/205 matched positions (83.4%), below the original 90% requirement. Band-content decoding was not run. Source E/site Y difference on LP2-57 agrees with the image as Y; alternate score is 83.9%.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Historical 226-class reader remains unavailable. The failed fresh prerequisite supplies no negative finding about ornament content."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-02",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "Marsaglia byte corpus fetched separately",
       "reproduce_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && python3 scripts/audit_builders.py && python3 scripts/control_offset.py && python3 scripts/sweep_offset.py --stage A1 && python3 scripts/sweep_offset.py --stage A2",
       "source_evidence": [
         {
@@ -398,12 +774,30 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "Marsaglia byte corpus fetched separately"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "dukotah-offset-model-integrity",
+            "covered_subclaim": "Fresh source builder checks and 40 planted controls under an explicitly changed KJV-only screen. Headline totals match, but five trial rankings and one 1,048,576-offset checkpoint differ. This does not reproduce the exact four-book A1/A2 sweep."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Pinned four-corpus trigram model cannot be rebuilt: exact Moby/Pride bytes absent; current Gutenberg hashes differ.",
+          "A1 unit 0 replay on fallback model disagrees with pinned checkpoint score/rank; no source-exact target negative is reproduced. Matching aggregate control counts cannot validate which true offsets survive.",
+          "A2 2516 source units and other generators/offsets remain unrun."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "C-02",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published line-initial-layout-control covers the available Arm A/B/C cases, layout confound and planted-power curve; external BabelStone font-width validation is absent from the pinned checkout.",
       "reproduce_command": "cd liber-primus/analysis/round18/L4-forcing && python3 parse_structure.py && python3 armA_uniformity.py 200000 && python3 confound_layout.py 5000 && python3 armC_rejection.py 200000 && python3 armB_message.py 1000 && python3 control_power.py",
       "source_evidence": [
         {
@@ -425,14 +819,37 @@
       ],
       "ledger_status": "negative",
       "ledger_control": "passed",
-      "missing_external_validation": "corpus/E-tooling/vendor/0x676f64__Cicada-3301/iddqd/ttf/BabelStoneRunicBeorhtnoth.ttf",
-      "record_id": "line-initial-layout-control",
-      "liberpedia_record": "line-initial-layout-control"
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published line-initial-layout-control covers the available Arm A/B/C cases, layout confound and planted-power curve; external BabelStone font-width validation is absent from the pinned checkout.",
+        "missing_external_validation": "corpus/E-tooling/vendor/0x676f64__Cicada-3301/iddqd/ttf/BabelStoneRunicBeorhtnoth.ttf",
+        "record_id": "line-initial-layout-control",
+        "liberpedia_record": "line-initial-layout-control"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "line-initial-layout-control",
+            "covered_subclaim": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "line-initial-layout-control"
+          ],
+          "scope": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The width-aware comparison does not identify original typesetting, and external font-width correlation remains unchecked."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "E-01",
-      "disposition": "input-audit-needed",
-      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
       "reproduce_command": "cd liber-primus/analysis/round18/L5-payload && python3 extract_moduli.py && python3 e01_extended.py",
       "source_evidence": [
         {
@@ -449,12 +866,45 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "input-audit-needed",
+        "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "rsa-window-54-source-replay",
+            "covered_subclaim": "The R28-L5 E-01w extension: 203 contiguous 54-byte windows in each of three pinned 256-byte payload variants, two byte orders, the published 2013 432-bit modulus and exponents 65537, 3 and 17. Strict PKCS#1/PSS structural checks find no hit; planted RSA and random-buffer controls calibrate this window test."
+          },
+          {
+            "record_id": "public-rsa-payload-e01",
+            "covered_subclaim": "Round18 whole-payload E-01: three pinned 256-byte readings, two Cicada 4096-bit PGP moduli, three valid encodings, three exponents and three structural predicates; all162 evaluated rows reproduced,12 invalid encodings excluded. Independent PGP packet/modulus witnesses and arithmetic checked."
+          },
+          {
+            "record_id": "round19-rsa-key-provenance",
+            "covered_subclaim": "All738 named Round19/C1 settings reconstructed;594 valid,144 invalid,zero structural matches. Packet witnesses show20 of22 PGP packets are unrelated archived keys; only54 valid settings use the two Cicada packets, already covered by Round18."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "public-rsa-payload-e01",
+            "rsa-window-54-source-replay",
+            "round19-rsa-key-provenance"
+          ],
+          "scope": "All deterministic executable grid cells of the Round18 whole256-byte test, Round19/C1 738 named settings and R28-L5 54-byte windows. Round19 key provenance is corrected. Source nondeterministic random-block gate is not treated as a zero-false-positive guarantee.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Exact deterministic grids are reproduced; no claim of all possible RSA keys, padding schemes, byte selections or private-key operations. The source zero-random-hit gate is stochastic, not a proof of zero false positives."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "E-02",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: grid-page-order-permutations, payload-doublet-gaps",
       "reproduce_command": "python3 liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
       "source_evidence": [
         {
@@ -471,12 +921,33 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: grid-page-order-permutations, payload-doublet-gaps"
+      },
+      "current_review": {
+        "status": "reproduced-subclaim",
+        "record_links": [
+          {
+            "record_id": "grid-page-order-permutations",
+            "covered_subclaim": "E-02A: the source's 201 consecutive 56-byte windows contain no permutation of 0–55; its 200 consecutive 57-byte windows contain no permutation of 0–56. The record also tests 16,384 additional fixed grid readings, which are Liberpedia extensions, not source trials."
+          },
+          {
+            "record_id": "payload-doublet-gaps",
+            "covered_subclaim": "E-02B: pinned payload values read as uint8, uint16 little/big endian and fixed varint variants do not reach the source's |Spearman rho|>0.5 effect-size gate against the 85 inter-doublet gaps. The record's seven readings and circular controls extend the source's three core encodings."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "These negatives apply to the stated consecutive windows and seven declared numeric readings, not every payload transform or page-pointer scheme.",
+          "The source hypothesis's sample gap list begins with 122, while its executed report begins 85, 249, 197; the record fixes its event definition and results rather than treating the informal example as input."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "F-01",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: im-near-f-markers",
       "reproduce_command": "python3 liber-primus/analysis/round16/F-01/sweep.py",
       "source_evidence": [
         {
@@ -493,12 +964,41 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: im-near-f-markers"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-lp2-as-pad",
+            "covered_subclaim": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032."
+          },
+          {
+            "record_id": "lp2-pad-payload-target",
+            "covered_subclaim": "The omitted 256-byte pages 49–51 target is run with a supplied canonical payload under all eight original settings (six distinct signed keys). No score passes the source threshold. The strict 256-rune recovery check fails in one setting, so this is a diagnostic completion, not a powered exclusion."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "public-lp2-as-pad",
+            "lp2-pad-payload-target"
+          ],
+          "scope": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032. A separately amended diagnostic supplies the omitted 256-byte target and preserves the failed stricter recovery gate; it does not validate the wider running-key model.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The historical missing payload.bin is not recovered; the added input is the preserved canonical pages 49–51 payload. The original 63-byte AN END input is unchanged.",
+          "The strict longer-control recovery gate fails for one setting; the search can prefer an altered message even when the exact answer survives. Offsets, other skip rules and other constructions remain untested."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "G-01",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "source JPEG image prerequisites need audit",
       "reproduce_command": "python3 liber-primus/analysis/round18/L1-toolchain/jpeg_fingerprint.py --selftest && python3 liber-primus/analysis/round18/L1-toolchain/run_pages.py && python3 liber-primus/analysis/round18/L1-toolchain/pipeline_control.py && python3 liber-primus/analysis/round18/L1-toolchain/chain_control.py",
       "source_evidence": [
         {
@@ -515,12 +1015,25 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "source JPEG image prerequisites need audit"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Historical Ghostscript/render/re-encode chain and candidate-version comparison not rerun.",
+          "Original typeset source PDF/PostScript and original onion-index non-JPEG asset search not independently recovered.",
+          "Original observed glyph specimens and candidate font bank absent; no full face identification."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "G-02",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "WSL/GPG historical signature environment",
       "reproduce_command": "wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && python3 liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py\" && python3 liber-primus/analysis/round18/L8-provenance/build_table_md.py",
       "source_evidence": [
         {
@@ -537,12 +1050,37 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "PASS"
+      "ledger_control": "PASS",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "WSL/GPG historical signature environment"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "dukotah-g02-signature-corpus",
+            "covered_subclaim": "The pinned Git revision has 135 .asc paths, two excluded source-control files, and 133 source-visible files. All 133 were rerun with the source verifier and checked with a separate isolated GnuPG keyring: 114 PASS, 11 KEY, 7 NO-SIG, 1 FAIL. The four source controls pass."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "dukotah-g02-signature-corpus"
+          ],
+          "scope": "All 133 source-visible .asc paths at pinned Git revision f08b20b, reconstructed byte-for-byte from 89 archived blobs; not the older 228-path working-tree snapshot.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The archived 228-path table came from a different working-tree snapshot. Only 123 paths are shared with the pinned Git corpus; 105 archived-only paths are not present in the pinned input set and were not freshly verified.",
+          "All 123 shared paths have the same verdict and signature time. Their raw hashes differ by exact LF versus CRLF line endings, not by conflicting signature decisions.",
+          "Signature status is relative to the specified public key; historical authorship and completeness of all claimed Cicada messages are not established."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "H-03",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: h03-ps-layout-replay",
       "reproduce_command": "python3 liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
       "source_evidence": [
         {
@@ -559,12 +1097,41 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: h03-ps-layout-replay"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "h03-ps-layout-replay",
+            "covered_subclaim": "The R28-L5 H-03r 2012 P.S. branch: the original 131-digit three-line source text in six bare layout readings plus four five-column-indented readings under the amended 95% digit-pair printability gate. Ten readings miss the gate; planted and random-block controls pass their declared checks."
+          },
+          {
+            "record_id": "dukotah-h03-onion-cookie-xor",
+            "covered_subclaim": "All 64 executable hex-decoded-cookie XOR cases reproduce, with independent full-byte recount and an original-source planted ASCII recovery. Retrospective helper/strict padding and one named-prefix checks on these same outputs have explicit predicates and passing plants."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "dukotah-h03-onion-cookie-xor",
+            "h03-ps-layout-replay"
+          ],
+          "scope": "64 executable cookie cases and a separately amended P.S. layout extension. Written raw/digest branches are not fully specified, and extra structure tests are retrospective.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Written raw-cookie trials cannot be reconstructed: 64 ASCII characters versus 32-byte blocks, with no alignment or reduction rule. The full digest/string target set and encoding are unspecified. The executable64 must not be described as the written128.",
+          "P.S. layout source original gate was invalid; the published P.S. test uses its explicitly amended 95% predicate. No blanket cookie/key or layout exclusion follows."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "I-01",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "fetched historical base-rate corpus",
       "reproduce_command": "bash liber-primus/analysis/round18/L8-provenance/fetch_baserate.sh && wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && python3 liber-primus/analysis/round18/L8-provenance/compare_keys.py\"",
       "source_evidence": [
         {
@@ -577,12 +1144,29 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "PASS"
+      "ledger_control": "PASS",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "fetched historical base-rate corpus"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": {
+          "state": "partial-execution",
+          "scope": "Public-key field comparison only, with explicit canonical-key path alias."
+        },
+        "remaining_scope": [
+          "Packet listing does not validate revocation signatures; source key-date prose is not newly authenticated.",
+          "Canonical key bytes use the separately G02-verified retained public key rather than the missing source path; exact old-file replay remains unavailable.",
+          "Preference/default agreement cannot establish exact toolchain, implementation version, common operator or identity. No matched Jan2012-frozen key population was obtained; four later/current release keys are not a discriminating era base rate.",
+          "Source factory-default labels and era-software source-code attribution are archival; the GnuPG release tree was not independently fetched or checked here."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "I-03",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "external archive corpora; bitcointalk half has no control",
       "reproduce_command": "wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && bash liber-primus/analysis/round18/L8-provenance/predisclosure_search.sh && bash liber-primus/analysis/round18/L8-provenance/grep_archives.sh && bash liber-primus/analysis/round18/L8-provenance/wayback_probe.sh\"",
       "source_evidence": [
         {
@@ -595,12 +1179,28 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "PARTIAL. The metzdowd half is searched against the REAL corpus (monthly mbox files downloaded and zgrep'd locally), so its silence is a measurable bound. The bitcointalk half rests on a search index rather than a local corpus and is therefore labelled 'reported', not 'verified' â€” that half has no control and its negative is correspondingly weaker."
+      "ledger_control": "PARTIAL. The metzdowd half is searched against the REAL corpus (monthly mbox files downloaded and zgrep'd locally), so its silence is a measurable bound. The bitcointalk half rests on a search index rather than a local corpus and is therefore labelled 'reported', not 'verified' â€” that half has no control and its negative is correspondingly weaker.",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "external archive corpora; bitcointalk half has no control"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": {
+          "state": "partial-execution",
+          "scope": "16 technical regex line-count predicates on eight held gzip files, excluding two handle terms."
+        },
+        "remaining_scope": [
+          "Only one held month is pre-Jan2012; these files do not cover the 13-month window. Empty/unreachable external archive responses are not searched-and-clear negatives.",
+          "No new date-attested post, bitcointalk full-text index search or public archive retrieval was performed.",
+          "Saved cpunks_export records 20-byte/zero-message response objects; metadata does not establish historical absence."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-08",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "same Marsaglia corpus as B-02",
       "reproduce_command": "as B-02",
       "source_evidence": [
         {
@@ -617,12 +1217,24 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "same Marsaglia corpus as B-02"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Seeds above 2^32, other generator families, and broad nonzero-offset combinations remain outside the finite source grids.",
+          "Exact four-corpus source scorer unavailable locally."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-11",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/data/relikd/p0.jpg; fetched fonts",
       "reproduce_command": "python3 liber-primus/analysis/round18/L1-toolchain/glyph_extract.py && bash liber-primus/analysis/round18/L1-toolchain/get_fonts.sh && python3 liber-primus/analysis/round18/L1-toolchain/font_match.py && python3 liber-primus/analysis/round18/L1-toolchain/font_sheet.py && python3 liber-primus/analysis/round18/L1-toolchain/font_verdict.py",
       "source_evidence": [
         {
@@ -639,12 +1251,25 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "liber-primus/data/relikd/p0.jpg; fetched fonts"
+      },
+      "current_review": {
+        "status": "blocked-exact-replay",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Exact candidate font bank and extracted runes_observed.png absent from pinned tree/current checkout.",
+          "font_match_sheet.png and original pdf_hunt.jsonl absent; source493-PDF specimen scan and controls not regenerated.",
+          "Recover verified specimen files before comparing font shape or promoting attribution."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-12",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published bounded replay or fresh-instrument audit; see reconciliation for exact inputs, failed controls and exclusions. No whole-family closure.",
       "reproduce_command": "cd liber-primus/analysis/round18/L3-ornaments && python3 linegeom.py && python3 linetests.py && python3 greyglyphs.py",
       "source_evidence": [
         {
@@ -661,12 +1286,35 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published bounded replay or fresh-instrument audit; see reconciliation for exact inputs, failed controls and exclusions. No whole-family closure."
+      },
+      "current_review": {
+        "status": "failed-source-gate",
+        "record_links": [
+          {
+            "record_id": "dukotah-line-geometry-channel-replay",
+            "covered_subclaim": "Exact source programs on 56 original JPEGs reproduce all counts and verdicts, with only floating-point differences below 1e-12. Best planted 64-bit recovery is 55/64, below the declared 95% requirement."
+          }
+        ],
+        "execution_replay": {
+          "state": "replayed-with-invalid-gate",
+          "record_ids": [
+            "dukotah-line-geometry-channel-replay"
+          ],
+          "scope": "Exact source programs on 56 original JPEGs reproduce all counts and verdicts, with only floating-point differences below 1e-12. Best planted 64-bit recovery is 55/64, below the declared 95% requirement.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "A source PASS on tiny English fragments is not intended-message recovery. Canonical 604-line versus image 616-row alignment remains a limitation. No broad layout-channel exclusion follows."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R16-KDF",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published public-kdf-seed-stretch replays the complete executed Stage A decode grid and its available controls; it does not cover unstaged key space.",
       "reproduce_command": "cd liber-primus/analysis/round16/KDF && python sweep.py  # reuses round15/KDF/sweep.py + kdf.py",
       "source_evidence": [
         {
@@ -683,12 +1331,35 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published public-kdf-seed-stretch replays the complete executed Stage A decode grid and its available controls; it does not cover unstaged key space."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-kdf-seed-stretch",
+            "covered_subclaim": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "public-kdf-seed-stretch"
+          ],
+          "scope": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Other secret dictionaries, salts, iterations, offsets, languages and lengths remain outside the executed source grid. The 200 fixed-key shuffles do not calibrate the maximum over the selected search."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R16-PRNG",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: public-prng-seed-sweep",
       "reproduce_command": "cd liber-primus/analysis/round16/prng && python prng_sweep.py",
       "source_evidence": [
         {
@@ -705,12 +1376,36 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: public-prng-seed-sweep"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-prng-seed-sweep",
+            "covered_subclaim": "Executed seven-generator, 1,877-seed, four-orientation sweep: 52,556 first-120-rune decodes, best -6.347 versus -5.5; planted control recovers 120/120."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "public-prng-seed-sweep"
+          ],
+          "scope": "Executed seven-generator, 1,877-seed, four-orientation sweep: 52,556 first-120-rune decodes, best -6.347 versus -5.5; planted control recovers 120/120.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The replay covers executed daily-spaced seeds, not hourly seeds in the source plan.",
+          "Generator vectors were self-generated, not checked against external PHP/.NET/ISAAC runtimes; other seeds, offsets, reductions and languages remain open."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R16-scorer",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: rune-matched-scorer-calibration",
       "reproduce_command": "cd liber-primus/analysis/round16/scorer && python measure.py",
       "source_evidence": [
         {
@@ -727,12 +1422,35 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: rune-matched-scorer-calibration"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "rune-matched-scorer-calibration",
+            "covered_subclaim": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "rune-matched-scorer-calibration"
+          ],
+          "scope": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "This does not establish improved error rates across arbitrary corpora, languages or selected cipher searches."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R18-L2-A-LOCUS",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 a_locus.py --reps 200",
       "source_evidence": [
         {
@@ -746,14 +1464,41 @@
       ],
       "ledger_status": "measured",
       "ledger_control": "passed",
-      "published_record_ids": [
-        "r18-filter-locus-replay"
-      ]
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
+        "published_record_ids": [
+          "r18-filter-locus-replay"
+        ]
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "rejection-channel-information",
+            "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay."
+          },
+          {
+            "record_id": "r18-filter-locus-replay",
+            "covered_subclaim": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "r18-filter-locus-replay"
+          ],
+          "scope": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "No held-out classifier-power estimate or proof of actual LP2 filter locus; other key and plaintext models remain untested."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R18-L2-B-DRIFT",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b_drawcount.py",
       "source_evidence": [
         {
@@ -767,14 +1512,41 @@
       ],
       "ledger_status": "measured",
       "ledger_control": "passed",
-      "published_record_ids": [
-        "r18-keyskip-drift-power"
-      ]
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
+        "published_record_ids": [
+          "r18-keyskip-drift-power"
+        ]
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "rejection-channel-information",
+            "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay."
+          },
+          {
+            "record_id": "r18-keyskip-drift-power",
+            "covered_subclaim": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "r18-keyskip-drift-power"
+          ],
+          "scope": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Synthetic English/source-key recovery does not establish that LP2 uses this filter or that a real correct key is known."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R18-L2-BEAM-LENGTH-POWER",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 fastbeam.py && PYTHONUTF8=1 python3 b_drawcount.py",
       "source_evidence": [
         {
@@ -792,14 +1564,37 @@
       ],
       "ledger_status": "eliminated",
       "ledger_control": "passed",
-      "published_record_ids": [
-        "r18-keyskip-drift-power"
-      ]
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
+        "published_record_ids": [
+          "r18-keyskip-drift-power"
+        ]
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "r18-keyskip-drift-power",
+            "covered_subclaim": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "r18-keyskip-drift-power"
+          ],
+          "scope": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "No observed LP2 key or held-out natural-language corpus test."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R18-L2-DRIFT-LADDER",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "liber-primus/data/kjv.txt",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b4_ladder.py --stage b4pc && PYTHONUTF8=1 python3 b4_ladder.py --stage ladder --cands 400 --nproc 6",
       "source_evidence": [
         {
@@ -813,15 +1608,39 @@
       ],
       "ledger_status": "negative",
       "ledger_control": "passed",
-      "record_ids": [
-        "r18-drift-ladder-replay"
-      ],
-      "execution_note": "All230source candidate rows,3planted controls andF0 gate replayed with exact recovered KJV and pinned ct.bin dependency amendment. Broader keys and starts remain open."
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "liber-primus/data/kjv.txt",
+        "record_ids": [
+          "r18-drift-ladder-replay"
+        ],
+        "execution_note": "All230source candidate rows,3planted controls andF0 gate replayed with exact recovered KJV and pinned ct.bin dependency amendment. Broader keys and starts remain open."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "r18-drift-ladder-replay",
+            "covered_subclaim": "F0 and3/3 planted offset controls plus230 source candidate streams at5,961 start positions,1,371,030 decodes; all candidate rows reproduce after a pinned missing-dependency amendment. No candidate reaches the source-5.5 bar."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "r18-drift-ladder-replay"
+          ],
+          "scope": "Exact230-row source B4 ladder and3 planted controls, with documented staged ct.bin recovery. B5 skip-channel controls are a separate ongoing source run.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Only the first100 runes of55 nonempty pages, one continuous skip law, a score-mined candidate list and the source offset band are covered. Other keys, offsets, longer segments and skip laws remain open.",
+          "Source nonempty-segment ordinal52 corresponds to manuscriptLP2-53, notLP2-52."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R18-L2-SKIP-CHANNEL",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published bounded replay or fresh-instrument audit; see reconciliation for exact inputs, failed controls and exclusions. No whole-family closure.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b4_ladder.py --stage skipchannel",
       "source_evidence": [
         {
@@ -834,12 +1653,35 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published bounded replay or fresh-instrument audit; see reconciliation for exact inputs, failed controls and exclusions. No whole-family closure."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "r18-skip-channel-power",
+            "covered_subclaim": "Full executable B5 skip-channel experiment including forty wrong-key controls and twenty candidate controls. The beam chooses paths with an English quadgram score, so its inferred draw count is not English-independent."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "r18-skip-channel-power"
+          ],
+          "scope": "Full executable B5 skip-channel experiment including forty wrong-key controls and twenty candidate controls. The beam chooses paths with an English quadgram score, so its inferred draw count is not English-independent.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "One planted key and its fitted threshold do not establish held-out power. No general keytext exclusion or English-independent channel is demonstrated."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R18-L2-INFO-BUDGET",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Exact source C computation replayed after recovering the KJV input. Source entropy/determinacy inference is audited as incompatible model accounting, not an LP2 uniqueness result.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 c_budget.py",
       "source_evidence": [
         {
@@ -853,15 +1695,42 @@
       ],
       "ledger_status": "eliminated",
       "ledger_control": "passed",
-      "published_record_ids": [
-        "rejection-channel-information",
-        "r18-entropy-budget-replay"
-      ]
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Exact source C computation replayed after recovering the KJV input. Source entropy/determinacy inference is audited as incompatible model accounting, not an LP2 uniqueness result.",
+        "published_record_ids": [
+          "rejection-channel-information",
+          "r18-entropy-budget-replay"
+        ]
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "rejection-channel-information",
+            "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed."
+          },
+          {
+            "record_id": "r18-entropy-budget-replay",
+            "covered_subclaim": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "r18-entropy-budget-replay"
+          ],
+          "scope": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "KJV cross-entropy is not measured LP2 plaintext entropy. Source seed-budget arithmetic does not establish a unique plaintext; a consistent joint model must include all random inputs."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "B-13-MARSAGLIA",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "fetched Marsaglia byte corpus",
       "reproduce_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && bash scripts/fetch_marsaglia.sh && python3 scripts/verify_marsaglia.py && python3 scripts/control_marsaglia.py && python3 scripts/sweep_marsaglia.py",
       "source_evidence": [
         {
@@ -878,12 +1747,24 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "fetched Marsaglia byte corpus"
+      },
+      "current_review": {
+        "status": "blocked-exact-replay",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The 1.2 GB gitignored CDROM data are not in the pinned Git checkout; no fresh pad hash verification or sweep was run.",
+          "Current English scorer corpus also fails exact hash gate."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "G-09",
-      "disposition": "input-audit-needed",
-      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
       "reproduce_command": "python3 liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
       "source_evidence": [
         {
@@ -900,12 +1781,28 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": null
+      "ledger_control": null,
+      "initial_assessment": {
+        "disposition": "input-audit-needed",
+        "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": {
+          "state": "partial-execution",
+          "scope": "Seed candidate builder only; no generator/target cells."
+        },
+        "remaining_scope": [
+          "No candidate was tried against an RNG or LP2 target.",
+          "Archived MESSAGES and 228-path signature table are a different snapshot from the independently checked 133-path G02 corpus. Source verified labels do not authenticate release dates.",
+          "Post times, file mtimes and new timeline sources remain outside this finite list."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R21-L1-SEAL",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "cross-fold real-mode proxy and held-out hallucination controls",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py && python3 analysis/round21/L1-seal-realmode-proxy/audit_catch.py",
       "source_evidence": [
         {
@@ -927,12 +1824,28 @@
       ],
       "ledger_status": "audit",
       "ledger_control": "passed",
-      "blocker": "Exact pinned source corpus bytes absent: data/keys/mabinogion.txt, data/kjv.txt, data/keys/welsh/welsh_mabinogion.txt. A different cached edition cannot reproduce sampled offsets. Source receipts are not an independent replay."
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "cross-fold real-mode proxy and held-out hallucination controls",
+        "blocker": "Exact pinned source corpus bytes absent: data/keys/mabinogion.txt, data/kjv.txt, data/keys/welsh/welsh_mabinogion.txt. A different cached edition cannot reproduce sampled offsets. Source receipts are not an independent replay."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "r21-fold-tail-scope-controls",
+            "covered_subclaim": "Six fresh known-key plants verify executable fold-helper comparison domains only; excludes unavailable language panel and original catch surface."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Missing exact nine-register model and Welsh prevent audit_catch.py replay. The new helper test does not reproduce45 hallucinations, heldout surrogate, panel scores or source catch rate and is not a complete no-oracle gate test."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R21-L2-NSKIPS-CROSSOVER-LENGTH",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Exact 34-cell source replay is running with a resumable checkpoint in public-nskips-crossover; not yet published.",
       "reproduce_command": "cd liber-primus/analysis/round21/L2-nskips-crossover-length && python3 crossover.py  (reuses ../../round20/P2/nskips_lib.py; seed 3301; Q1-gate runs first as the Q5 kill checkpoint, then the ladder; writes nskips_crossover.json incrementally).",
       "source_evidence": [
         {
@@ -954,15 +1867,38 @@
       ],
       "ledger_status": "measured",
       "ledger_control": "passed",
-      "published_record_ids": [
-        "public-nskips-crossover"
-      ],
-      "note": "All 34 executable source cells replayed; this covers the implemented grid, not the omitted planned surrogate or a whole cipher family."
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Exact 34-cell source replay is running with a resumable checkpoint in public-nskips-crossover; not yet published.",
+        "published_record_ids": [
+          "public-nskips-crossover"
+        ],
+        "note": "All 34 executable source cells replayed; this covers the implemented grid, not the omitted planned surrogate or a whole cipher family."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "public-nskips-crossover",
+            "covered_subclaim": "All34 executable cells at ten lengths replay with exact seeded null samples;20 distinct distributions reused across identical calls. Exact-channel crossing lies in(3600,6000] for this single English-source plant ladder. No LP2 key or universal language-power claim is tested."
+          }
+        ],
+        "execution_replay": {
+          "state": "complete-executed-grid",
+          "record_ids": [
+            "public-nskips-crossover"
+          ],
+          "scope": "All34 executable cells at ten lengths replay with exact seeded null samples;20 distinct distributions reused across identical calls. Exact-channel crossing lies in(3600,6000] for this single English-source plant ladder. No LP2 key or universal language-power claim is tested.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Planned order-preserving shuffle surrogate was not executed by the source; the four register labels are English windows; skip-by-two recovery fails. Broader plants/nulls remain outside scope."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R21-L3-PY27-REDUCERS",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published py27-reducer-sweep-source-audit checks source configuration and control scope; it is not a complete LP2 decode-grid replay.",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py && cd analysis/round21/L3-py27-reducers-plus-64bit-map && python3 poscontrol.py && python3 sweep.py --seconds-per-config 240 --procs 5",
       "source_evidence": [
         {
@@ -983,12 +1919,32 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published py27-reducer-sweep-source-audit checks source configuration and control scope; it is not a complete LP2 decode-grid replay."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "py27-reducer-sweep-source-audit",
+            "covered_subclaim": "All 95 saved survivors and the 45,975-seed front reconcile; direct control wiring bypasses Stage A and the source perfect-recovery count is 67, not 71."
+          },
+          {
+            "record_id": "py27-prior-front-opening-cribs",
+            "covered_subclaim": "New fixed-opening check over the exact45,975-word priority front and four reducer/ABI settings,183,900 generated cases. Does not reproduce the original884,000-call English-panel screen."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The reported 884,000 screening calls cannot be independently replayed without the original private panel and training corpora."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R22-A-SELFEMBEDDED-READ",
-      "disposition": "input-audit-needed",
-      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py (5/5) && cd analysis/round22/A-selfembedded-read && python3 PHASE0-GATE.py (recovery 1.000 PASS) && python3 run_sweep.py (0 family survivors -> NULL).",
       "source_evidence": [
         {
@@ -1005,12 +1961,35 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "input-audit-needed",
+        "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared."
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "solved-text-selection-source-gate",
+            "covered_subclaim": "Formal record of already independently replayed source receipts and final-gate positive-control failure; not a power-validated negative."
+          }
+        ],
+        "execution_replay": {
+          "state": "replayed-with-invalid-gate",
+          "record_ids": [],
+          "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Both planted controls pass length bars but neither passes the final family bar, so power of the final negative rule is unproven.",
+          "The five decoded sections span ten LP1 images and are not in manuscript order.",
+          "Printed-line and word geometry belongs to R23-A2."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R22-D-ILLUSTRATION-DROPCAP",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: red-initial-presence-order",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py (5/5) && cd analysis/round22/D-illustration-dropcap && python3 extract_illustration.py && python3 test_order.py && python3 test_illuminated_runes.py (min p=0.18, survivor=False).",
       "source_evidence": [
         {
@@ -1027,12 +2006,30 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: red-initial-presence-order"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "red-initial-presence-order",
+            "covered_subclaim": "The corrected 13-page large-initial presence list has ordinary spacing under four stated measures. This is a new page-presence test, not a replay of the source's 15-page five-statistic verdict."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The image audit reproduces all 58 source red-pixel totals but shows that LP2-07 and LP2-53 have no large initial despite crossing the source's total-red-pixel threshold.",
+          "The source's 15-page feature list, initial string, gap counts and conclusion cannot be transferred to the corrected 13-page set.",
+          "Multiple initials and initials below earlier text require an explicit within-page order; identity, centroid and full source statistics remain untested on the corrected features."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R22-R-REDTEAM",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "Read RESULTS.md; recomputed statistics are inline (Poisson/binomial P>=6, per-candidate sigma, hit-count recomputation from B's g3_results.json / ledger rows).",
       "source_evidence": [
         {
@@ -1045,12 +2042,23 @@
         }
       ],
       "ledger_status": "audit",
-      "ledger_control": "n/a-audit"
+      "ledger_control": "n/a-audit",
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Saved p-values were not regenerated from geometry/null campaigns. Distribution tails assume named model, not proven detector independence. R22A/C/D anti-repeat and control reports remain source evidence; audit is not a new cipher negative."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R23-A2-LINE-ACROSTIC",
-      "disposition": "input-audit-needed",
-      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py (5/5) && cd analysis/round23/A2-line-acrostic && python3 PHASE0-GATE.py (3/3 gates, recovery 1.000 PASS) && python3 run_sweep.py (0 family survivors -> NULL).",
       "source_evidence": [
         {
@@ -1067,12 +2075,35 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "input-audit-needed",
+        "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared."
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "solved-text-selection-source-gate",
+            "covered_subclaim": "Formal record of already independently replayed source receipts and final-gate positive-control failure; not a power-validated negative."
+          }
+        ],
+        "execution_replay": {
+          "state": "replayed-with-invalid-gate",
+          "record_ids": [],
+          "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "Both planted acrostics beat their own length bars but neither meets the final family bar; zero family survivors is therefore not a control-validated absence of comparable hidden text.",
+          "The source null shuffles pooled letters and does not preserve printed-line or word-start structure; family calibration over the full selection procedure is unresolved.",
+          "Liberpedia's LP1 row breaks do not match the source's image-row geometry, so a local archive variant cannot be treated as the same test."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R26-A-GEN-SWEEP-FIRST-FIRE",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Published fixed-opening follow-up; original full language-scoring campaign remains unreplayed. See reconciliation for exact exclusions.",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py && cd analysis/round26/A && python3 sweep.py  # controls gate then sweep -> sweep.jsonl + control.json",
       "source_evidence": [
         {
@@ -1082,45 +2113,109 @@
       ],
       "ledger_status": "partially-run",
       "ledger_control": "PASS (all three generators). Plant a keystream from the exact generator-under-test, encipher held-out English (self_reliance.txt L=240) under the repo keyskip1 relation, adjudicate with hitfn20(truth_idx): Perl r29 median recovery 1.000 (HIT=True, control pmax 24.90 vs bar 7.63); TeX pgf_rnd29 1.000 (HIT=True); Py2.7 grb5_mod wordsize=64 1.000 (HIT=True). control_min_recovery=1.000>=0.90 -> all validated (control.json all_controls_validated:true). Power ~1.0 on win-condition registers -> a null is a real negative.",
-      "published_record_ids": [
-        "r26-derived-generators-opening-cribs"
-      ],
-      "remaining_source_scope": [
-        "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
-        "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."
-      ]
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Published fixed-opening follow-up; original full language-scoring campaign remains unreplayed. See reconciliation for exact exclusions.",
+        "published_record_ids": [
+          "r26-derived-generators-opening-cribs"
+        ],
+        "remaining_source_scope": [
+          "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
+          "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."
+        ]
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "r26-derived-generators-opening-cribs",
+            "covered_subclaim": "New fixed-opening check over all 48,462 executable source key/preset cases, nine cribs and 55 unsolved nonempty page starts. Zero complete12-rune openings; this does not replay the original English-panel sweep."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
+          "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R26-B-KEYTEXT-RUNNINGKEY-SKIPAWARE",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "33 exact source keytext files",
       "reproduce_command": "cd analysis/round26/B && python3 control.py && python3 sweep.py && python3 finalize.py  (control.json proves recovery=1.00; sweep.jsonl holds per-decode rows; finalize.py rebuilds sweep_summary.json + honest per-page coverage from whatever rows completed).",
       "source_evidence": [],
       "ledger_status": "partially-run",
-      "ledger_control": "control.py plants plotinus_enneads_mackenna.txt as the running key over English self_reliance (L=240, 7 seeds, random keytext offsets), enciphered under BOTH keyskip1 and skip_by_two filters; the matched skip-aware presets recover it at median/min = 1.000/1.000 rune-index recovery (control.json). CONTROL_PASSED=True. Null is from a validated instrument."
+      "ledger_control": "control.py plants plotinus_enneads_mackenna.txt as the running key over English self_reliance (L=240, 7 seeds, random keytext offsets), enciphered under BOTH keyskip1 and skip_by_two filters; the matched skip-aware presets recover it at median/min = 1.000/1.000 rune-index recovery (control.json). CONTROL_PASSED=True. Null is from a validated instrument.",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "33 exact source keytext files"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "The pinned source itself reports only 1,562 partial decodes; the remainder of its planned page/offset grid is not a settled negative.",
+          "No Liberpedia replay of the 33-source corpus, exact/pair skip relations or language-panel gate."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R26-C-SEMANTIC-SEED-ZOO",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: semantic-seed-screen-gate-audit",
       "reproduce_command": "cd analysis/round26/C && python3 build_seeds.py && python3 sweep.py",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: semantic-seed-screen-gate-audit"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [
+          {
+            "record_id": "semantic-seed-screen-gate-audit",
+            "covered_subclaim": "The source's exact 4,274 screening rows and best score −6.5781 reproduce. Its +5 promotion condition is unreachable for the nonpositive normalized log-probability score; an independently planted 120/120 correct key scores −4.35 and is also discarded. This reproduces a gate defect, not a negative seed-search result."
+          }
+        ],
+        "execution_replay": {
+          "state": "replayed-with-invalid-gate",
+          "record_ids": [
+            "semantic-seed-screen-gate-audit"
+          ],
+          "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The original nine-register model and three training corpora are missing from the pinned source; the final hitfn20 path was not independently run.",
+          "A corrected score-scale gate with a planted key passing screen and final check is needed before this bounded seed set can receive a negative verdict."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R26-D-REDTEAM",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "analysis/round26/D/RESULTS.md",
       "source_evidence": [],
       "ledger_status": "audit",
-      "ledger_control": null
+      "ledger_control": null,
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No new source panel adjudication or source recovery-score recomputation; existing r26-derived-generators-opening-cribs and other records cover distinct narrower tests. Audit verdict not counted as an LP2 negative."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R27-CPORT-MT32-FULLSWEEP",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "long-running C/OpenMP source environment and state receipts",
       "reproduce_command": "cd analysis/round27/P1-engine && python3 export_data.py && gcc -O3 -march=native -fopenmp -std=gnu17 -ffp-contract=off -o grind27 grind27.c -lm && ./grind27 --self-test && ./grind27 --drill; bash ../P2-harness/run_all.sh (acceptance); setsid launch per MONITORING.md; status: ./grind27 --status --run-dir run. Red-team: analysis/round27/R-redteam/{audit1.py,audit2.py,miniplan.json}.",
       "source_evidence": [
         {
@@ -1137,39 +2232,117 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "long-running C/OpenMP source environment and state receipts"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "r28-c-generator-port-controls",
+            "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No full-space sweep or scored C V1/V2/drill rerun. Exact panel input missing; full native engine build also fails on fsync/readlink. S2 FLAG vs zero hit-counter inconsistency remains unresolved and is not an LP2 survivor verdict."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R28-L1-CICADAOS-PADS-DENSE-PAIR",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "CicadaOS raw pad binaries",
       "reproduce_command": "analysis/round28/L1/: PREREG.md (+ dated addendum), control.py -> control.json, sweep.py -> sweep_rows.jsonl (24,080 rows) + results.json + sweep.log; RESULTS.md.",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "CicadaOS raw pad binaries"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No independent replay of the two large source binaries, 24,080-cell grid, stage-B candidate adjudication or planted keyskip2 control.",
+          "The source's tested strides leave most byte offsets off-grid; its result is conditional on those offsets, five byte reductions and the stated language registers."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R28-L2-CONTESTED-BYTES",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "exact contested-image byte inputs and >21M case cost require audit",
       "reproduce_command": "analysis/round28/L2/: PREREG.md (+ Amendment 1, dated pre-run), reader.py -> reader_out.json, keysweep.py + resume_sweep.py -> sweep_rows.jsonl + sweep_summary.json, plant_control.json, null_calibration.json; RESULTS.md.",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "exact contested-image byte inputs and >21M case cost require audit"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No independent 15-cell blind image reading, 128-variant battery or 21,628,416 source decodes.",
+          "The source's 100/100 witness-unanimous control and first failed control run require separate validation before accepting its read-half conclusion."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R28-L5-PAYLOAD-MICRO",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: rsa-window-54-source-replay, h03-ps-layout-replay, payload-doublet-gaps",
       "reproduce_command": "analysis/round28/L5/: PREREG.md (+3 dated amendments), l5_payload_micro.py, h03r_indented.py -> results.json; RESULTS.md; ledger_rows_proposed.json (this row absorbs it).",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: rsa-window-54-source-replay, h03-ps-layout-replay, payload-doublet-gaps"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "rsa-window-54-source-replay",
+            "covered_subclaim": "E-01w: the exact bounded 203-window, three-payload, two-order, three-exponent 432-bit RSA structural check and controls."
+          },
+          {
+            "record_id": "payload-doublet-gaps",
+            "covered_subclaim": "E-02v overlap: seven explicitly declared numeric readings against the fixed 85 inter-doublet gaps remain below |Spearman rho| 0.5. This is not the full source 12-reading by three-payload-variant census."
+          },
+          {
+            "record_id": "h03-ps-layout-replay",
+            "covered_subclaim": "H-03r: six original and four indented P.S. layouts under the amended 95% digit-pair gate with planted and random-block controls."
+          },
+          {
+            "record_id": "dukotah-payload-varint-matrix",
+            "covered_subclaim": "Complete E-02v executable matrix: 3 payload variants ×4 varint decoders ×2 targets =24 comparisons; exact source row parity and independent ranks plus a planted encoding round-trip. Twelve decoded streams are not twelve distinct decoder types."
+          }
+        ],
+        "execution_replay": {
+          "state": "partial-execution",
+          "record_ids": [
+            "rsa-window-54-source-replay",
+            "dukotah-payload-varint-matrix",
+            "h03-ps-layout-replay"
+          ],
+          "scope": "Bounded RSA window grid, complete deterministic varint matrix, and P.S. layout extension with an amended gate. Original stochastic receipts and invalid original layout gate are not converted into successful source-wide closure.",
+          "wider_method_excluded": false
+        },
+        "remaining_scope": [
+          "The complete E-02v deterministic matrix is reproduced, while its original random-control receipt is archived evidence rather than a replay with the original RNG state. No row triggers the conditional 100,000-permutation second stage.",
+          "E-01w uses its bounded RSA grid; H-03r uses an amended 95% gate after the original source control failed. These do not establish a general cryptographic or steganographic exclusion."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R28-R-REDTEAM",
-      "disposition": "umbrella-verdict-or-audit",
-      "runnable_method": "Not an independent source solving program; review the component lanes.",
       "reproduce_command": "analysis/round28/R/RESULTS.md + T1-PATCH-PROPOSALS.md + t2_hist_check.py / t3_subsumption_test.py / t4_l1_check.py + work/; analysis/round28/R-redteam/RESULTS.md (second pass).",
       "source_evidence": [
         {
@@ -1178,12 +2351,23 @@
         }
       ],
       "ledger_status": "audit",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "umbrella-verdict-or-audit",
+        "runnable_method": "Not an independent source solving program; review the component lanes."
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Finite C generator parity does not independently verify language scores, gate recovery, chainer safety or live process history. No audit is counted as a new cipher negative."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R28-L4-UNSWEPT-GENERATORS-QUEUE",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "source explicitly says DO-NOT-FIRE hold",
       "reproduce_command": "analysis/round28/L4/BUILD.md (build + launch recipe), QUEUE.md (order, bars, ETAs, DO-NOT-FIRE hold), grind28.c, gen28.py, make_gates.py, receipts/, smoke/; chainer: analysis/round28/chain_after_s2.sh + chain.log + chainer.pid.",
       "source_evidence": [
         {
@@ -1200,57 +2384,134 @@
         }
       ],
       "ledger_status": "never-run",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "source explicitly says DO-NOT-FIRE hold"
+      },
+      "current_review": {
+        "status": "partial",
+        "record_links": [
+          {
+            "record_id": "r28-c-generator-port-controls",
+            "covered_subclaim": "Finite compiled generator output parity only: 72 streams of 2000 symbols and 64 archived 128-symbol vectors; no scored decoder, native runtime or manuscript seed-space replay."
+          }
+        ],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No native PHP/glibc runtime replay, scored gate replay, queue execution or sanctioned target coverage. Saved gate booleans do not constitute local control-recovery measurements."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R29-L1-ONION-STEGO",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "source onion JPEGs, OutGuess/steghide executables, hard-coded Linux paths",
       "reproduce_command": "analysis/round29/L1-onion3-crack/sweep_fast.py",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "source onion JPEGs, OutGuess/steghide executables, hard-coded Linux paths"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No local 24,078 image/key/tool extraction replay or onion3-divider artifact check.",
+          "Default-key manuscript-image scans are a different test."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R30-A1-FONT",
-      "disposition": "record-overlap-or-partial",
-      "runnable_method": "Existing: image-row-coverage",
       "reproduce_command": "analysis/round30/A1-font/font_signature.py",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "record-overlap-or-partial",
+        "runnable_method": "Existing: image-row-coverage"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No local image/crop alignment, clustering or planted/different-rune controls.",
+          "Prose and variant_clusters.json used different clean-filter settings."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R30-A2-SUBPIXEL",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "source JPEG inputs require audit",
       "reproduce_command": "analysis/round30/A2-subpixel/",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "source JPEG inputs require audit"
+      },
+      "current_review": {
+        "status": "blocked-exact-replay",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "Recover exact original image bytes and verify their provenance.",
+          "Freeze a detector that passes full planted-signal recovery before interpreting its manuscript result.",
+          "No independent image execution or full source-method closure."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R30-B1-BLOB-CRYPTO",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/analysis/armada_osint/artifacts/folly.bin",
       "reproduce_command": "analysis/round30/B1-blob-crypto/",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "liber-primus/analysis/armada_osint/artifacts/folly.bin"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No local three-blob, roughly 37-key battery, detector controls or 12 pairwise XORs.",
+          "An off-corpus key remains outside scope."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R30-B2-RSA-GPG",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/analysis/armada_osint/artifacts/folly.bin; hard-coded developer ROOT",
       "reproduce_command": "analysis/round30/B2-rsa-gpg/",
       "source_evidence": [],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "liber-primus/analysis/armada_osint/artifacts/folly.bin; hard-coded developer ROOT"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No exact three-blob RSA/GPG/key replay or byte0 base-rate guard.",
+          "Source script hard-codes a developer path that needs audited local replacement."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     },
     {
       "source_id": "R19-FINITE-ORNAMENT-REGISTER",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/analysis/round19/I2/models/testhalves.npz",
       "reproduce_command": "cd liber-primus/analysis/round19/finite && python3 run_bands.py",
       "source_evidence": [
         {
@@ -1267,7 +2528,21 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "initial_assessment": {
+        "disposition": "blocked-or-input-audit-needed",
+        "runnable_method": "liber-primus/analysis/round19/I2/models/testhalves.npz"
+      },
+      "current_review": {
+        "status": "unsupported-source-verdict",
+        "record_links": [],
+        "execution_replay": null,
+        "remaining_scope": [
+          "No exact 74-band, 2,000-null-per-length or restricted-alphabet-gate replay.",
+          "Three source panel crossings fail its separate decoration guard; model/data inputs need audit."
+        ],
+        "whole_entry_coverage_verified": false
+      }
     }
   ],
   "additional_idea_queues": [
@@ -1276,6 +2551,21 @@
       "scope": "26 grouped additions from a 156-idea supplied compilation; separate conceptual intake, not additional source reproduction commands or completed tests."
     }
   ],
-  "reconciled_on": "2026-10-23",
-  "reconciliation_note": "Removed two stale agent claims after verifying their published fixed-opening follow-ups. These are partial matches, not replays or closure of the original language-scoring campaigns. Exact R18 A and B source runs are now linked; B-DRIFT and BEAM-LENGTH are two source ledger entries sharing one grouped experiment, not two independently counted test methods."
+  "reconciled_on": "2026-10-24",
+  "reconciliation_note": "Refresh current_review from the named reconciliation after each published batch. Preserve the initial source/input audit separately. An empty priority list means no ready item is currently nominated here; it does not mean the archive or its remaining scopes are complete. Proposal-only entries without source commands remain in the full reconciliation.",
+  "initial_counts": {
+    "reproduction_command_entries": 64,
+    "ready_unclaimed_source_programs": 0,
+    "completed_draft_partial": 0,
+    "claimed_by_other_agent": 0,
+    "covered_or_partial": 28,
+    "umbrella_verdict_or_audit": 7,
+    "blocked_or_audit_needed": 29,
+    "source_entries_in_disposition_total": 64,
+    "completed_draft_full": 0
+  },
+  "current_review_source": {
+    "path": "research/public-attempt-reconciliation.json",
+    "sha256": "febe84f07e167e4de63e3b23cd76d2f96e50c11c0a4bef205dbb0af5ceeb86bb"
+  }
 }

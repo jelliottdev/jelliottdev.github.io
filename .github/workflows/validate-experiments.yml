@@ -69,6 +69,7 @@ jobs:
       - run: node scripts/test_checker_payload.cjs
       - run: node scripts/test_keyboard_focus.cjs
       - run: node scripts/test_reader_state.cjs
+      - run: node scripts/test_reader_responsive_focus.cjs
       - run: node scripts/test_reader_supplementary.cjs
       - run: node scripts/test_image_dialog_state.cjs
       - run: node scripts/test_route_image_modal.cjs
@@ -113,6 +114,10 @@ jobs:
       - run: python tests/test_bundle_ci_dispatch.py
         if: steps.scope.outputs.science == 'true'
       - run: python tests/test_prior_work.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python research/test_refresh_command_queue.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python research/refresh_command_queue.py --check
         if: steps.scope.outputs.science == 'true'
       - run: python tests/test_source_batches.py
         if: steps.scope.outputs.science == 'true'
