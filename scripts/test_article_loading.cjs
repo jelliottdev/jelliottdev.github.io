@@ -166,7 +166,7 @@ async function main(){
  const markup=fs.readFileSync(path.join(root,'index.html'),'utf8');
  for(const [id,expected] of Object.entries(navigationCases)){
   assert.equal(vm.runInContext(`wikiSidebarHref(${JSON.stringify(id)})`,sandbox),expected,id);
-  if(expected){const route=require('../workspace-routes.js').destination(expected);if(expected.startsWith('#/wiki/'))assert(route?.startsWith('library.html#/guide/'),'Category destination remains a direct guide route in the new library');else assert(require('../site-navigation.js').secondary.some(([,href])=>href==='index.html'+expected),'Reference category remains in the shared navigation');}
+  if(expected){const route=require('../workspace-routes.js').destination(expected);if(expected.startsWith('#/wiki/')){const target=new URL(route,'https://example.org/');assert.equal(target.pathname,'/library.html','Category destination remains in the library');assert.equal(target.hash,expected.replace('#/wiki/','#/guide/'),'Category destination retains its exact guide and section');}else assert(require('../site-navigation.js').secondary.some(([,href])=>href==='index.html'+expected),'Reference category remains in the shared navigation');}
  }
  console.log('PASS: guide categories retain subject navigation context.');
  await checkNavigationRace(false);
