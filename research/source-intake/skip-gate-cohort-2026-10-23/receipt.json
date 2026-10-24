@@ -1,0 +1,56 @@
+{
+  "schema": "liberpedia-source-control-cohort-receipt-v1",
+  "plan_sha256": "0de7db384e3e45f636c305bd9f54980f2ab11ade5b119c25e6f1e3e6a92051cd",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "execution_location": "isolated copy at work/skip-gate-replay-20261023/liber-primus; pinned source checkout and archived outputs left unchanged",
+  "checks": [
+    {
+      "command": "python p3b_seedprior.py",
+      "exit_code": 0,
+      "fresh_output": "fresh-seedprior20.json",
+      "sha256": "cd03b213dcb46cd4d338c399a18ad0960c64dd4efbc7e9dee8eee89be2860b0f",
+      "finding": "433 distinct source-ranked seeds reproduced, rank one 1325734783; archived JSON fields agree after generated timestamp and Windows path separator normalization. This is a prior ordering, not a target decode."
+    },
+    {
+      "command": "python p3a_panelmax.py build",
+      "exit_code": 0,
+      "fresh_output": "fresh-panelmax20.json",
+      "sha256": "f8e270e92e4d031ab82c633cf83dfe45e6a9e21a89acc64c89c1e8ca3972456f",
+      "finding": "Four source panel-max bar objects reproduced from already-saved null fits; exact-preset claim bar at a million comparisons is 7.6341931878728095. The million decoder draws were not rerun."
+    },
+    {
+      "command": "python control_ext.py",
+      "exit_code": 0,
+      "fresh_output": "fresh-control-ext.json",
+      "sha256": "790dad031d874776812d26f1e4bfcf992ade067526caf8b74e1cf81de7a43659",
+      "finding": "Eight source plant/decoder pairs over seven fixed seeds each reproduced archived JSON numerically and all met the source recovery gate. Six pairs are skip-by-two generators; two pairs share the A6 drift generator. This does not replay the 113432-key manuscript sweep."
+    },
+    {
+      "command": "python guard.py",
+      "exit_code": 1,
+      "output": "hitfn-blocker.txt",
+      "finding": "Original guard cannot start its panel builder because data/keys/mabinogion.txt is absent from the pinned Git tree and checkout. Source-reported fake/real plant verdicts were not locally reproduced."
+    },
+    {
+      "command": "python redteam21.py",
+      "exit_code": 1,
+      "output": "l5-blocker.txt",
+      "finding": "The full 45+45+10 fold-seal audit stops at the same missing data/keys/mabinogion.txt. Its source-reported L1-KILL is not a fresh local replay."
+    }
+  ],
+  "independent_check": "python check.py ..\\source-cache\\dukotah-cicada3301: PASS pinned source SHA-256, all 56 row medians and control gates, 433 seed ranks/uniqueness, and numerical parity with archived JSON excluding timestamp/path separators",
+  "source_input_blockers": [
+    "data/keys/mabinogion.txt absent from pinned Git tree; required by round18/L7-redteam/a1_scorer_language.py build_panels used by HITFN and L5",
+    "data/keys/welsh/welsh_mabinogion.txt expected 524561 bytes SHA-256 4b3fd9261e284a8aa653d2d84d5766aa67ab8f0f161f6102981cb0c0bbb1e237 and round19/I2/models/panel.npz absent; see research/dukotah-i2-input-dependency-2026-10-23.json; blocks exact R24 C2-EXT manuscript sweep"
+  ],
+  "ledger_dispositions": {
+    "B-22": "source recovered, branch matrix still only partially reconciled; same source status as J-01, no new negative claimed",
+    "J-01": "same source-recovery claim as B-22, not an independent cipher experiment",
+    "I1-04": "existing round19-decoder-null-bars exactly replays 26 saved-tail fits; generating 34000 prior decoder rows remains separate",
+    "R20-HITFN-RECOVERY-GATE": "blocked exact planted guard; source claim remains source-reported",
+    "R20-P3-PANELMAX-SEEDPRIOR-DRIFT": "partial: P3a build and P3b prior exact, P3a fresh null/plant and P3c drift not rerun",
+    "R21-L5-REDTEAM-SEAL": "blocked exact population replay; source-reported failed seal remains unverified locally",
+    "R24-C2-EXT-SKIP-GENERATORS": "partial: all eight source plant controls exact; manuscript sweep and wrong-key red-team not rerun"
+  },
+  "publication_decision": "Internal source-reconciliation receipt only. Do not add a public experiment page or infer any LP2 method exclusion from these controls."
+}

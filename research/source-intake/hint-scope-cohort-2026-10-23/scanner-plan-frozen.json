@@ -1,0 +1,29 @@
+{
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_id": "C-01",
+  "seed": 330120261023,
+  "corpus_length": 5000,
+  "windows": [
+    120,
+    400,
+    2928
+  ],
+  "offsets": [
+    "0",
+    "2048",
+    "L-W"
+  ],
+  "block": 4096,
+  "size": 8192,
+  "rules": "For each W/offset: generate uniform integers 1..15; add independently seeded 0..3 F counts to planted observed pattern. Run exact and directional-interval source patterns over same corpus. Check every offset against direct independent match counts; interval truth must equal W. This is a synthetic instrument test, not corpus replay.",
+  "inputs": [
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/scanner.py",
+      "sha256": "683ace872739c278ff80cfdfcb3f875ae2b648ae5b95e1caa757c588ab3f8029"
+    },
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/skel.py",
+      "sha256": "649f7fe62c243a20c2fd09ea56c68d5b07d340d75fd8f8d37250bb992156f567"
+    }
+  ]
+}

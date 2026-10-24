@@ -1,0 +1,40 @@
+{
+  "schema": "liberpedia-c2-extension-control-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "timing": "Retrospective package of the frozen 2026-10-23 intake receipt and source-defined finite controls. No independent prospective preregistration.",
+  "purpose": "Check recovery of known planted text with supplied correct generator streams; no manuscript inference.",
+  "parameters": {
+    "length": 240,
+    "seeds": [
+      3301,
+      3302,
+      3303,
+      3304,
+      3305,
+      3306,
+      3307
+    ],
+    "pairs": 8,
+    "decodes": 112,
+    "key_length": 3424,
+    "suppression": 0.83,
+    "sign": -1,
+    "offset": 0,
+    "beam_width": 400,
+    "baseline": "exact_ms8: keyskip1, max_skip=8",
+    "pair": "keyskip2, max_skip=8",
+    "drift": "permissive, max_skip=40, max_free=2, lam=12, start_slack=2",
+    "free_drift_q": 0.05,
+    "fixed_drifts": 10
+  },
+  "gate": "Per pair: median modeled recovery >=0.90 and median baseline recovery <0.90 across seven seeds.",
+  "comparisons": "Replayed score/recovery floats must equal archived source exactly. Independent path rescoring accepts absolute 1e-12 accumulation roundoff; this diagnostic tolerance was added after observing summation-order differences and does not relax source parity.",
+  "exclusions": [
+    "No wrong-key red-team or null calibration",
+    "No 113432-key manuscript sweep: exact Welsh text and I2 panel model missing",
+    "No native Bash/Perl/TeX/Python2.7 runtime parity",
+    "A5 source label says offset!=0; the actual control uses o=0 and cannot validate nonzero-offset coverage",
+    "Seven source axis names produce eight plant/generator pairs; two A6 plants share one generator"
+  ],
+  "source_fixture_provenance": "The unchanged source text selection, generators and planting functions reproduce every compact fixture; source corpus and model included offline."
+}

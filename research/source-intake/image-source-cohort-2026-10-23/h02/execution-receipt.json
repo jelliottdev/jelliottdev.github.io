@@ -1,0 +1,113 @@
+{
+  "checks": {
+    "gpg_whitespace_control": "PASS original and modified body retain same canonical-key VALIDSIG",
+    "independent_checker": "PASS all 111 blocks and all nonzero per-line counts; exact and canonical dedup agree",
+    "planted_parser_fixtures": "7 PASS",
+    "run_py_check": "PASS saved result identical",
+    "schema_preflight": "PASS",
+    "source_script_bytes": "Matches git show at pinned revision",
+    "svg": "XML parses"
+  },
+  "files": [
+    {
+      "bytes": 4815,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/article.md",
+      "sha256": "09916830c716246c8af20b1f5c553d2730a005723fd8a2fe3ceacd9bdd7db842"
+    },
+    {
+      "bytes": 1838,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/census.svg",
+      "sha256": "701cc7a41398964bce299bb02322959d2649b37650d7c867549820e89a0cc446"
+    },
+    {
+      "bytes": 5490,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/check.py",
+      "sha256": "10e7c8e79c85553adddfc01aca0a3466c42d6a131d54d2256eb1e40e1e31c8e9"
+    },
+    {
+      "bytes": 1683,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/fixtures.json",
+      "sha256": "ecf0ae48b17bd824bbd24fa527c5912f7790bfd5f4c036ddb727383261cbef66"
+    },
+    {
+      "bytes": 692,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/gpg-control.json",
+      "sha256": "7c830599ed636f5a3ead35fc93969c7dbfac94363347ba81363499fbc1db7423"
+    },
+    {
+      "bytes": 6467,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/independent-check.json",
+      "sha256": "b70545a474e0701de815b962311a31bb9dd1f4c90302aeea36bafcfbbc7bc30e"
+    },
+    {
+      "bytes": 1839,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/LICENSE.source",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "bytes": 3303,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/plan-frozen-original.json",
+      "sha256": "43085a4e839ae88038e1ad1d2a1f3e470dd18a29228c6a58865f18c1a39fd8c9"
+    },
+    {
+      "bytes": 4169,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/plan.json",
+      "sha256": "39e40cb8df496e250d9071b5a98aa3f0b1ad2ca156d485c281960400aba3fa4f"
+    },
+    {
+      "bytes": 1828,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/plot.py",
+      "sha256": "41e2099affe72da8ba0227f4856e7777cfacc46d5699943832f23083519682a2"
+    },
+    {
+      "bytes": 8242,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/record.json",
+      "sha256": "34f2b8284c64b0c2cd4396273c207a9e127fcc7468bee0cec00a699bc8e00645"
+    },
+    {
+      "bytes": 138375,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/results.json",
+      "sha256": "15bccc755f019697a3cf67b4eddebb84d8e1aba768cec6b8c441913115d470ff"
+    },
+    {
+      "bytes": 7002,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/run-frozen-original.py",
+      "sha256": "58be8e356e313e0660f0d99f6df641ba3034406950c58c5986642dc1761bfa6f"
+    },
+    {
+      "bytes": 7387,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/run.py",
+      "sha256": "5e6d9ba76939795dc77f2cafaae4a7763d44e14b7c3385f0fb0a684a1bab0c87"
+    },
+    {
+      "bytes": 5917,
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/source-ws_audit.py",
+      "sha256": "b8dd5cfed0b829414db88a1ecd47f4c0a555a70efa2df3baeee73df2bfbaad47"
+    }
+  ],
+  "limitations": [
+    "22 strict-parser exclusions including four saved G-02 PASS paths.",
+    "Original three raw Markdown inputs unavailable; original source heuristic not run.",
+    "One signed data blob dominates line totals.",
+    "Cleartext signature ignores trailing spaces/tabs; cannot authenticate their originality.",
+    "No claims about intent, all whitespace channels, or LP2."
+  ],
+  "original_plan_sha256": "43085a4e839ae88038e1ad1d2a1f3e470dd18a29228c6a58865f18c1a39fd8c9",
+  "plan_sha256": "39e40cb8df496e250d9071b5a98aa3f0b1ad2ca156d485c281960400aba3fa4f",
+  "record_id": "dukotah-h02-raw-whitespace-census",
+  "result": {
+    "canonical_groups": 54,
+    "canonical_groups_with_whitespace_difference": 13,
+    "exact_bodies": 67,
+    "exact_bodies_with_whitespace": 16,
+    "fixed_sequence_matches": 0,
+    "strict_paths": 111,
+    "trailing_spaces": 564,
+    "trailing_tabs": 278,
+    "whitespace_lines": 62
+  },
+  "scope": "New bounded raw clear-signed corpus census; not unavailable historical Markdown replay",
+  "source_id": "H-02",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "status": "completed-draft"
+}

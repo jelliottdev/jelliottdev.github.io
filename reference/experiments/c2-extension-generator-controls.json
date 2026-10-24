@@ -1,0 +1,277 @@
+{
+  "id": "c2-extension-generator-controls",
+  "status": "published",
+  "title": "Does a matching decoder recover the planted message?",
+  "question": "Do matching source decoder rules recover known planted text across the eight C2-EXT generator-and-plant pairs when supplied the correct key?",
+  "reader_question": "Can a decoding tool miss the right message even with the right key?",
+  "summary": "Matching the decoder to the planted rule raises median recovery from 10–33% to 98–100% across eight source generator-and-plant pairs. All source recovery gates pass.",
+  "finding": "All eight seven-seed source gates pass. Six paired-skip generator pairs have 100% median recovery; two drift plants have 98.33%. Baseline keyskip1 medians range from 10% to 32.92%. All 112 replay score/recovery values exactly match archived source; minimum matching-rule seed recovery is 96.25%.",
+  "reader_finding": "With the right key supplied, a decoder that matches the planted rule recovered 98–100% of runes at the median; the comparison decoder recovered 10–33%.",
+  "reader_limit": "This checks a decoding tool on planted messages. It does not search manuscript keys, test nonzero offsets, or establish native generator runtime parity.",
+  "limitations": "Finite known-key English-derived plants at 240 runes; seven fixed seeds per pair. No wrong-key calibration or manuscript sweep. Exact Welsh corpus and I2 panel model are missing for the target sweep. Source generator models are not tested against native runtimes. A5 uses offset zero despite its source label. Independent score rescoring uses disclosed 1e-12 summation tolerance; direct source replay matches exactly.",
+  "next_steps": "Test any proposed manuscript search with matched wrong-key/search-maximum controls and exact source inputs before interpreting its output.",
+  "outcome": "supported",
+  "tags": [
+    "source control",
+    "decoder recovery",
+    "key skipping",
+    "generator models",
+    "known key",
+    "drift",
+    "skipping two key draws",
+    "two-draw rejection",
+    "paired skip"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/c2-extension-generator-controls/plan.json",
+      "experiments/records/c2-extension-generator-controls/fixtures.json",
+      "experiments/records/c2-extension-generator-controls/source-control.json"
+    ],
+    "representation": "Source-derived English GP29 plaintext, correct generator streams, planted ciphertext and decoded rune paths; no manuscript candidate.",
+    "procedure": "Regenerate all 56 exact source fixtures, run unchanged matching/baseline source beams, compare every archived score and recovery, independently count rune matches and rescore all paths.",
+    "parameters": "Eight generator-and-plant pairs × seven seeds 3301–3307 × two decoders; 240 runes; width 400; sign -1; offset 0; suppression .83; paired skips or q=.05 / ten fixed drifts; median recovery gate .90.",
+    "exclusions": "Manuscript sweep, wrong-key calibration, native runtime parity, nonzero-offset recovery, other lengths or languages and general cipher exclusion."
+  },
+  "review": {
+    "kind": "Source-bound finite instrument control replay",
+    "reviewer": "Exact unchanged-source replay and independent rune/score/gate recount",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "related": [
+    "round19-decoder-repair-controls",
+    "l7-score-recovery-controls",
+    "round19-decoder-null-bars"
+  ],
+  "sources": [
+    {
+      "label": "Pinned Round 24 C2-EXT plant controls and generator harness",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C2-ext-skip-generators"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/c2-extension-generator-controls/recovery.svg",
+      "caption": "Seven seed recoveries and medians for each source generator-and-plant pair; all correct keys are supplied. The comparison is a single-skip beam, not rigid subtraction."
+    }
+  ],
+  "scope_summary": "56 plants using seven plaintext windows · eight generator/plant pairs · seven seeds · correct key · 112 decodes.",
+  "reproduction": {
+    "command": "python experiments/records/c2-extension-generator-controls/run.py && python experiments/records/c2-extension-generator-controls/check.py && python experiments/records/c2-extension-generator-controls/plot.py --check",
+    "script": "experiments/records/c2-extension-generator-controls/run.py",
+    "script_sha256": "3704b93392ab14791e659dfead0bfd30fc79c57eda6b5ebbfef962135c6da68a",
+    "environment": "Python 3 standard library; all unchanged source modules, source text/model, compact fixtures and traces bundled offline. run.py --check avoids the 112-beam replay.",
+    "inputs": [
+      {
+        "path": "experiments/records/c2-extension-generator-controls/check.py",
+        "sha256": "89268a4c86f185d71068be8c78c9be2ee4afa2abf4b55cc68e21ebd64d46d2fb"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/fixtures.json",
+        "sha256": "afe639c519da8936c6811849c7e79d620950015dd648c2a9933c74966797f5a3"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/plan.json",
+        "sha256": "b023fcd9b9fd550c15e1b52ebe3da47cc800372efffb847f1b3ac561b130c571"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/plot.py",
+        "sha256": "6e0a7a050cb10cc476dd996ac6aa0c867d8eb33f71e7f15cd0cc0c313db26e50"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/run.py",
+        "sha256": "3704b93392ab14791e659dfead0bfd30fc79c57eda6b5ebbfef962135c6da68a"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round12/C1/feedback.py",
+        "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round13/B04/seeds.py",
+        "sha256": "6921c49a2f7250633c5ac311d94cfb560251c5181051ad2f0d2aa1975d379c7a"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G1/gen_bash.py",
+        "sha256": "fef0c358b42383d335e511e33816cde10a9267d6f856d7a4ac3987bff999a55d"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G1/gen_coreutils.py",
+        "sha256": "477da958a13c31d4ebe18ebdbe88618bed1f1f4bf815039cf266fed0defd14b6"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G1/gen_glibc.py",
+        "sha256": "06e2c53aef4d259819e78d9d169d3a57b438892c443f99d2e9b115ddc584ea1e"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G1/keystream.py",
+        "sha256": "fdb95a91de1ca90c8b5ff6683cf9c2ee6aff60fe9bfb332e6849d5203c0913f1"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G1/reduce29.py",
+        "sha256": "53647506b363c57fd35efe0a02b186249dd8f53c2757e30827d4ea1fad667f21"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G2/gen_perl.py",
+        "sha256": "42ed5db2577b4f6db564192634ab8930e2d4a8db1eda3fa09e77ba1f2b4919ee"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G3/gen_py27.py",
+        "sha256": "01217361c1d873046bb8d85a2030d18c046f49365a172313e84f30f198a1190d"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/G4/gen_tex.py",
+        "sha256": "4dc8c14bfd14f6c3e6ba637e23de72439a1cb5324404094a93691646878d0796"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round19/I1/driftbeam.py",
+        "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round24/C2-ext-skip-generators/axes.py",
+        "sha256": "4697ba2b0c16a64354e7a76a9f8ed6482a3d5ab432923ab9fcbd1f1aeed1c180"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/round24/C2-ext-skip-generators/control_ext.py",
+        "sha256": "795574e04ea8d0c705ad9215314f8e02d38aa743bf314d7df04865c89f33f5f6"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/benchmark/plant.py",
+        "sha256": "88d2a57227642a80e9e64474860875992bb9641bd00821ee2172e05e1008c25d"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source-control.json",
+        "sha256": "790dad031d874776812d26f1e4bfcf992ade067526caf8b74e1cf81de7a43659"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/source-manifest.json",
+        "sha256": "305a3fa19d41e221de341f2790db2cfde8c87255adf266c5d43a823c5936bda4"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/.gitattributes",
+        "sha256": "eb4dae18d952078ef650cf426de083f20f083966cd4822c5db6d0f0c841c8eba"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/c2-extension-generator-controls/recovery.svg",
+        "sha256": "7fa3145755c75514e08b8fd895116c963b004c0ec9a74cfdf7310ed6c09a5662"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/results.json",
+        "sha256": "1685edd025f290ccc107ef660dc93a361a551cf98ed1043a815525ea81fec182"
+      },
+      {
+        "path": "experiments/records/c2-extension-generator-controls/traces.json",
+        "sha256": "54e33ef581e6a23a1d2a9a41fa2f4c05f6cf3e9da4a9e932307c6ee50a83f323"
+      }
+    ]
+  },
+  "family": {
+    "id": "c2-extension-generator-controls",
+    "title": "Extended skip-decoder controls",
+    "question": "Does matching a planted interruption rule improve recovery with a supplied key?",
+    "baseline": "c2-extension-generator-controls"
+  },
+  "variant": {
+    "label": "Pinned source scope and controls",
+    "changes": []
+  },
+  "article": "# Does a matching decoder recover the planted message?\n\n**With the correct key supplied, matching the decoder to the planted rule raises median recovery from 10–33% to 98–100%.** All eight generator-and-plant pairs pass the source recovery gate across seven fixed seeds each. These are controls for a decoding tool, not candidate readings of the manuscript.\n\n![Seven seed recoveries and medians per generator and plant rule.](experiments/records/c2-extension-generator-controls/recovery.svg)\n\nSix pairs reject a repeated ciphertext rune by consuming two key draws. Their matching paired-skip decoder has 100% median recovery. Two further plants share the Python 2.7 generator model: one adds random free advances with probability 0.05, and one adds ten evenly placed advances. Their permissive drift decoder has 98.33% median recovery. Across all 56 matching decodes the lowest recovery is 96.25%; the SHA-256 pair includes one 99.58% result, so a 100% median is not perfect recovery in every seed.\n\nThe comparison decoder is the source's `exact_ms8` beam: it allows single-draw collision skips with a skip budget of eight. It is not rigid subtraction. The same seven plaintext windows are reused across pairs; these are not 56 independent texts. All decoders receive the correct key, use beam width 400, sign -1 and starting offset zero. The source gate requires matching-rule median recovery at least 90% and comparison-rule median recovery below 90%. All eight pairs meet both conditions.\n\n## What is distinct here?\n\n[Round 19 repair controls](#/experiments/round19-decoder-repair-controls) compare a larger construction-and-decoder grid. [L7 score/recovery controls](#/experiments/l7-score-recovery-controls) test the scoring instrument and four older plants. [Decoder null bars](#/experiments/round19-decoder-null-bars) refit wrong-key scores. This finite Round 24 control instead checks six paired-skip generator models plus two drift plants using their source-defined streams. It belongs to the same decoder-control question and supplies no new general cipher exclusion.\n\nThe generator labels refer to Python implementations of Bash, Perl, TeX and Python 2.7 streams, plus a SHA-256 counter. This replay does not test agreement with native language runtimes. The A5 source label mentions nonzero offsets, but its control calls the decoder with `o=0`; nonzero-offset recovery is not measured. Seven generator-axis labels yield eight tested pairs because A6 has two plants.\n\n## Exact finite replay\n\nThe package preserves the unchanged source modules, English quadgram counts, source Self-Reliance text, compact plaintext/key/ciphertext fixtures and all 112 decoded rune paths. Fixtures are regenerated from the original source functions and text selection. A fresh replay of 112 decodes exactly reproduces every archived source score and rune-recovery value. An independent checker counts correct rune indices and recomputes path scores without the beam or source scorer. Independent rescoring allows absolute 1e-12 summation roundoff; source-output comparison remains exact. The packaged plan is retrospective, based on the frozen intake and original source settings.\n\n## Limits\n\nThese 240-rune controls use seven source seeds, one English-derived corpus and supplied correct keys. They do not calibrate wrong-key false positives, prove a large search threshold, identify the manuscript's language or cipher, or guarantee recovery for other keys or lengths. The 113,432-key manuscript sweep and wrong-key red-team were not rerun. The exact Welsh corpus and I2 panel model required for that sweep are absent; no manuscript negative follows from passing these controls.\n\n## Reproduce offline\n\nFrom the repository root:\n\n```text\npython experiments/records/c2-extension-generator-controls/run.py\npython experiments/records/c2-extension-generator-controls/check.py\npython experiments/records/c2-extension-generator-controls/plot.py --check\n```\n\n`run.py` repeats all 112 source beams. `run.py --check` verifies source hashes, regenerates all 56 fixtures and checks the saved traces without repeating beams. Python 3 and its standard library are sufficient. No checkout, network or missing manuscript-sweep inputs are required. Source code is MIT licensed; see the bundled license and source manifest.\n",
+  "article_path": "experiments/records/c2-extension-generator-controls/article.md",
+  "script_sha256": "3704b93392ab14791e659dfead0bfd30fc79c57eda6b5ebbfef962135c6da68a",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "seeded",
+      "title": "Seeded generators and generated keystreams",
+      "aliases": [
+        "PRNG",
+        "seed",
+        "generated keystream"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
+      ]
+    },
+    {
+      "id": "automatic-search",
+      "title": "Automatic search and language scoring",
+      "aliases": [
+        "hill climbing",
+        "simulated annealing",
+        "genetic algorithm",
+        "brute force",
+        "automatic search",
+        "beam search"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}

@@ -52,6 +52,8 @@ Leave the preserved .signed.asc file intact and let GnuPG parse it. If you extra
 
 These checks complement each other. The cleartext rules above do not mean that arbitrary edits, different words or changed payload digits preserve a signature. They also do not describe every possible OpenPGP signature format.
 
+The archived-message census finds copies of 13 messages with different trailing-whitespace counts. Its controlled edit adds a space and tab while retaining the same valid signature: verification cannot decide which copy preserves the original invisible formatting.
+
 Different files, different purposes
 The manifest separately hashes full extractions, signed blocks, and bodies. Verifying an edited body is not equivalent to verifying the preserved signed block. See extraction and checksums.
 Sources and verification
@@ -79,6 +81,8 @@ Sources, related references, and files
   https://www.rfc-editor.org/rfc/rfc9580.html#section-7
 - chain recipe
   https://jelliottdev.github.io/reference/articles/cover-chain.html
+- archived-message census
+  https://jelliottdev.github.io/#/experiments/dukotah-h02-raw-whitespace-census
 - manifest
   https://jelliottdev.github.io/data/evidence/embedded-payloads.json
 - extraction

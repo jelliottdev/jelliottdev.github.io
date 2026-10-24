@@ -1,0 +1,87 @@
+{
+  "schema": "liberpedia-hint-scope-local-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "F-02",
+    "B-06",
+    "B-07",
+    "B-15",
+    "B-19",
+    "B-20",
+    "B-24",
+    "C-01"
+  ],
+  "purpose": "Initial entry review and a new bounded LENGTH measurement; source review is not method closure.",
+  "execution": "Execute exact pinned length_anomaly.enc and words_of; source passage-index sampling and minimum 2*n candidate rule. Test both observed upper mean and all-F-null lower mean. Independently recount every sampled passage in check.py.",
+  "controls": [
+    "PARABLE: exact 20 word lengths before target calls",
+    "constant-4/constant-5 synthetic passage threshold checks before target calls"
+  ],
+  "omissions": [
+    "No substitute DIRECTION quadgram model: seed_sweep/ngram.bin absent.",
+    "No network fetch, archive hunt, full Gutenberg, huge seed sweep, or new language model."
+  ],
+  "interpretation": "Local subset replay, not recovery of the missing 47-text corpus or an inferential p-value. Existing archived LENGTH output was visible before this plan.",
+  "inputs": [
+    {
+      "path": "liber-primus/analysis/skeleton/length_anomaly.py",
+      "sha256": "d2d5c19e0bd716d5f90a9f86c2f33fe7b2718969b9baf7049643466496111439",
+      "bytes": 7086,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+      "bytes": 4283,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+      "bytes": 43739,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/kjv.txt",
+      "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986",
+      "bytes": 4436268,
+      "provenance": "Previously recovered local bytes; matches handoff/capsule/MANIFEST.json corpus.kjv pin (see existing dukotah-offset-model-integrity receipt)."
+    },
+    {
+      "path": "liber-primus/data/keys/runepoem_oe.txt",
+      "sha256": "e418d496af6ebf34281c60d98ab487a969b766101046bde40631007ed46c095c",
+      "bytes": 3382,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/keys/runepoem_translit.txt",
+      "sha256": "847a996333e8b491493028a1404c252cb6d50197c3dc51879141df3fd07b5971",
+      "bytes": 3382,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/keys/self_reliance.txt",
+      "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0",
+      "bytes": 56483,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/keys/solved_plaintext.txt",
+      "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473",
+      "bytes": 17388,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/keys/thematic.txt",
+      "sha256": "f9db06ae01ed8437b98eeedaafe002fabab1665752b3be55c2ce5e25ba205d7f",
+      "bytes": 378,
+      "provenance": "Exact committed git bytes at source_revision."
+    },
+    {
+      "path": "liber-primus/data/keys/words_expanded.txt",
+      "sha256": "9b924d9d37f9b4ef5a49e2fc7f008c9ee48edbb77df9ea0edcd9a6faaa76269f",
+      "bytes": 4719,
+      "provenance": "Exact committed git bytes at source_revision."
+    }
+  ]
+}

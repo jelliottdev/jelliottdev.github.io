@@ -1,0 +1,254 @@
+{
+  "id": "dukotah-ornament-component-recount",
+  "status": "published",
+  "title": "What does the low-n ornament filter count?",
+  "question": "Do fresh image component counts reproduce the stored counts in the 30 ornament boxes selected by n <= 16?",
+  "reader_question": "Do the thirty low-n ornament boxes contain at most sixteen glyphs?",
+  "reader_finding": "The low-n field is not a glyph count. Fresh image counts match all 30 stored component counts, but only 9 match the old n field; 13 boxes exceed 16 components.",
+  "reader_limit": "Connected ink components do not identify glyphs or rule out hidden content. No band decoding was run.",
+  "summary": "Exact-image recount reproduces all 30 stored component counts. The old n <= 16 selection does not mean at most sixteen glyphs.",
+  "finding": "All 30 fresh component counts match stored n_components. Nine match n_reported, thirteen exceed 16, and the fresh range is 0–341 across 19 byte-verified JPEGs.",
+  "limitations": "Component topology is not glyph segmentation. Only the frozen 30 boxes were measured. No templates or band reading were used; the separate 83.4% fresh-reader gate remains failed. This does not assess hidden content.",
+  "next_steps": "Validate an image reader on held-out solved pages and planted bands before testing content hypotheses.",
+  "outcome": "supported",
+  "tags": [
+    "ornament bands",
+    "component counts",
+    "source reproduction",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-08",
+      "lp2-09",
+      "lp2-14",
+      "lp2-22",
+      "lp2-24",
+      "lp2-26",
+      "lp2-27",
+      "lp2-33",
+      "lp2-40",
+      "lp2-48",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-ornament-component-recount/plan.json"
+    ],
+    "representation": "19 exact JPEGs and all 30 low-n source inventory boxes; pinned source counts and component geometry functions.",
+    "procedure": "Whole-page Pillow L conversion, ink <128; 4-connected components; area >=6 pixels; select component bounding boxes with positive x/y overlap and overlap rectangle area >= half component bounding rectangle area. End coordinates exclusive as scipy find_objects.",
+    "parameters": "Threshold <128; 4-connectivity; area >=6; overlap bounding rectangle >=50%; original coordinates frozen before measurement.",
+    "exclusions": "Glyph naming, template matching, reading or decoding ornament bands, hidden-content exclusion, and the other 79 source boxes."
+  },
+  "review": {
+    "reviewer": "Independent implementation plus allowlisted pinned-source component-function comparison",
+    "retested_on": "2026-10-23",
+    "kind": "fresh exact-image component measurement",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-ornament-component-recount/run.py --check && python experiments/records/dukotah-ornament-component-recount/check.py && python experiments/records/dukotah-ornament-component-recount/plot.py --check",
+    "environment": "Python 3.9+ with NumPy, SciPy and Pillow; offline with declared images/lp2-NN.jpg inputs supplied from the separate original image bundle.",
+    "script": "experiments/records/dukotah-ornament-component-recount/run.py",
+    "script_sha256": "b59ba7d9f2e5624255691b288a1120974a97e1bbacf59287db9144eef34611a1",
+    "inputs": [
+      {
+        "path": "images/lp2-00.jpg",
+        "sha256": "197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e"
+      },
+      {
+        "path": "images/lp2-01.jpg",
+        "sha256": "f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f"
+      },
+      {
+        "path": "images/lp2-02.jpg",
+        "sha256": "74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34"
+      },
+      {
+        "path": "images/lp2-08.jpg",
+        "sha256": "6b1026dfdfb447a5a76819883fe576254e8a47fdf1e97ecf1825166833bc6f00"
+      },
+      {
+        "path": "images/lp2-09.jpg",
+        "sha256": "b8b7ee73d51de45833b36d864cb1c9067432cb4efadcf6c319eaef94d52c929d"
+      },
+      {
+        "path": "images/lp2-14.jpg",
+        "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"
+      },
+      {
+        "path": "images/lp2-22.jpg",
+        "sha256": "e232eb4649f89125d0edeab7022cbe189185d46ccbf0823fd964b6e71e9bafe7"
+      },
+      {
+        "path": "images/lp2-24.jpg",
+        "sha256": "62148ef272d17bcedf5df30f6cc9e52df127113c18c1cf57ea92c75feedfce80"
+      },
+      {
+        "path": "images/lp2-26.jpg",
+        "sha256": "ed88f5fcdca3d1f846538caa8be979aa28cde969eb99c9464d60daa26c1f9af7"
+      },
+      {
+        "path": "images/lp2-27.jpg",
+        "sha256": "c92c972f41dd038e136d8589aa7b113e268c36f2860c279cce712cd037cb3a8e"
+      },
+      {
+        "path": "images/lp2-33.jpg",
+        "sha256": "13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d"
+      },
+      {
+        "path": "images/lp2-40.jpg",
+        "sha256": "3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69"
+      },
+      {
+        "path": "images/lp2-48.jpg",
+        "sha256": "341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea"
+      },
+      {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+      },
+      {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+      },
+      {
+        "path": "images/lp2-52.jpg",
+        "sha256": "d34a38f51759284f68fb916122ed6774c3b498dddb5537929355ac674453a0f3"
+      },
+      {
+        "path": "images/lp2-53.jpg",
+        "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548"
+      },
+      {
+        "path": "images/lp2-54.jpg",
+        "sha256": "dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4"
+      },
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/source/inventory.json",
+        "sha256": "768913514ddd57e10dce70dda116725bb05b9fcef917d737349ae51b8ac6c82b"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/source/bands.json",
+        "sha256": "90ceff57d9089de38e421ee7ad47656d37b987be0e93d325b07013be3ca5785e"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/source/hashes.json",
+        "sha256": "974498676a6f7ddac27c37682203cd3dca27dbe101019458b74540e8f58c6370"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/source/reader.py",
+        "sha256": "7cfa562a6b02a435563a99ecec1cdfd6393324bb6bb7e721f4a97071e3d031df"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/source/read_bands.py",
+        "sha256": "887038c41c6a40f5770b8679620b4c6bbf244bcc6d52cf0e5095ae4ed8c4df90"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/plan.json",
+        "sha256": "79ecb19b8e1070b496454f2ba62c06d42e12059578b920ef220aec4b49829a85"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/run.py",
+        "sha256": "b59ba7d9f2e5624255691b288a1120974a97e1bbacf59287db9144eef34611a1"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/check.py",
+        "sha256": "1d5c74217d89ae7e7f4638cd37b98880126a606e83ab42accc59beff412fc5f4"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/plot.py",
+        "sha256": "237b5e2aafc211392138d91d5a968f265a1dd04c12727aa43aae5bd3e40f8e68"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/results.json",
+        "sha256": "56c48be5f1c3dda9ad15369e30b06cd07cba0ba11e9a49ef6a4a9079b6547bfd"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-component-recount/component-counts.svg",
+        "sha256": "358000c0b67259f74daf89adbdbe7de0239441e2b2a9521d02049b9cad06dd4d"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned C3 P-9 source finding",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C3/RESULTS.md"
+    },
+    {
+      "label": "Pinned ornament component method",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C3/l3"
+    }
+  ],
+  "related": [
+    "dukotah-ornament-fresh-reader-gate"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-ornament-component-recount/component-counts.svg",
+      "caption": "Fresh component counts reproduce the stored counts; the old n field differs in 21 of 30 boxes. Components do not name glyphs."
+    }
+  ],
+  "family": {
+    "id": "dukotah-ornament-component-recount",
+    "title": "Ornament component counts",
+    "question": "What do the catalogue counts measure in the source image boxes?",
+    "baseline": "dukotah-ornament-component-recount"
+  },
+  "variant": {
+    "label": "Pinned source scope and controls",
+    "changes": []
+  },
+  "article": "The frozen P-9 selection contains all 30 inventory boxes whose original n field is at most 16. A fresh count from 19 JPEGs matches the source's stored n_components in every box. Only 9 boxes match the old n field; 13 have more than 16 connected components. The fresh range is 0 to 341.\n\nThis measures a field-definition mismatch. The inventory's old n is an upstream catalogue field, not a validated glyph count. Connected components are also not glyph counts: touching strokes can merge, detached parts can split, and edge selection can omit ink. The measurement does not establish how many runes any box contains.\n\nBefore segmentation, plan.json froze all selected IDs, coordinates, expected JPEG hashes, parameters and stop rules. All 19 local images matched the pinned source target_renders SHA-256 values. run.py independently implements whole-page grayscale thresholding below 128, four-connected segmentation, minimum ink area six pixels, and the source's bounding-box overlap selection of at least half the component bounding rectangle area. Coordinates use exclusive component stops exactly as scipy.find_objects does.\n\ncheck.py uses Python AST selection to execute only page_ink, labelled and comp_table from the bundled hash-verified reader source. It compares every selected component rectangle and pixel area with the independent run, then checks the stored counts. It does not import the full reader, load its missing templates, or run its glyph decoder. A small synthetic topology/minimum-area control is also checked. The source snapshot is pinned to f08b20b632d91209ddbaa747e8e2f23df0c78ba1.\n\nThese exact image measurements support the saved component counts and reject treating the old low-n filter as a count of at most sixteen glyphs. They do not support the stronger source verdict that a hidden artwork channel is absent. The separate fresh ornament reader gate reached 83.4%, below its 90% threshold, so no band text reading or decoding is attempted here. A new validated reader and appropriate controls would be needed for a content test.\n\nReproduce offline from the repository root after supplying the declared original image bundle:\n\n    python experiments/records/dukotah-ornament-component-recount/run.py --check\n    python experiments/records/dukotah-ornament-component-recount/check.py\n    python experiments/records/dukotah-ornament-component-recount/plot.py --check\n",
+  "article_path": "experiments/records/dukotah-ornament-component-recount/article.md",
+  "script_sha256": "b59ba7d9f2e5624255691b288a1120974a97e1bbacf59287db9144eef34611a1",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  },
+  "method_topics": [
+    {
+      "id": "image-processing",
+      "title": "Image transforms and overlays",
+      "aliases": [
+        "overlay",
+        "threshold",
+        "contrast",
+        "tree image alignment",
+        "image source match",
+        "mirrored tree"
+      ]
+    },
+    {
+      "id": "provenance",
+      "title": "Source verification and transcription audits",
+      "aliases": [
+        "signature",
+        "provenance",
+        "transcription",
+        "source audit",
+        "input verification",
+        "wrong file",
+        "missing rows"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "source_entries": 172,
+  "awaiting_initial_review": 36,
+  "selected_initial_reviews": 5,
+  "selected_followups": 0,
+  "interpretation": "Reviewed does not mean completed or excluded. Entries can overlap and contain several subclaims.",
+  "entries": [
+    {
+      "source_id": "R20-P1-SIEVE-INFEASIBLE",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "A cheap, skip-aware, MULTI-REGISTER prefilter (sieve) can screen a PRNG keyspace at >=100x reduction while retaining >=0.90 of true keys per register, making the enumerable 2012-Linux generator families affordable to sweep. Load-bearing precondition for all of Round 20's Phase S.",
+      "reproduction_command": null,
+      "evidence": [
+        "analysis/round20/P1/RESULTS.md",
+        "analysis/round20/P1/PREREG.md",
+        "analysis/round20/P1/survival_surface.json",
+        "analysis/round20/SYNTHESIS.md"
+      ]
+    },
+    {
+      "source_id": "R20-P2-NSKIPS-NULL",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "The decoder-path statistic n_skips (the rejection-loop footprint) separates a correct key from wrong keys at PAGE-WINDOW length, and can therefore serve as a language-free sieve statistic.",
+      "reproduction_command": null,
+      "evidence": [
+        "analysis/round20/P2/RESULTS.md",
+        "analysis/round20/P2/PREREG.md",
+        "analysis/round20/P2/nskips_null.json",
+        "analysis/round20/SYNTHESIS.md"
+      ]
+    },
+    {
+      "source_id": "R20-R-REDTEAM",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "Standing red-team lane (doctrine R6). Target: Round 20's own claims -- does P1 manufacture survival, is Phase S a silent re-run, does the sieve interact with the panel-max null, and can a row be certified on score alone?",
+      "reproduction_command": null,
+      "evidence": [
+        "analysis/round20/R/RESULTS.md",
+        "analysis/round20/R/PREREG.md",
+        "analysis/round20/R/interaction_b.json",
+        "analysis/round20/R/structured_null.json",
+        "analysis/round20/SYNTHESIS.md"
+      ]
+    },
+    {
+      "source_id": "R20-SRESCOPE-B04-SURVIVORS",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "Re-adjudicating the stored B-04 English-argmax survivors through the repaired, recovery-gated instrument recovers a key the original English-only sweep discarded. No new key space.",
+      "reproduction_command": null,
+      "evidence": [
+        "analysis/round20/S-RESCOPE/RESULTS.md",
+        "analysis/round20/S-RESCOPE/PREREG.md",
+        "analysis/round20/S-RESCOPE/out_rescope.json",
+        "analysis/round20/S-RESCOPE/out_heldout_proxy_audit.json",
+        "analysis/round20/S-RESCOPE/out_poscontrol.json",
+        "analysis/round20/SYNTHESIS.md"
+      ]
+    },
+    {
+      "source_id": "R20-SMARS-SCAFFOLDED",
+      "work_type": "initial review",
+      "current_review_state": "unreviewed",
+      "claim": "The pad is one of the 679 held Marsaglia CDROM physical-randomness units (~21 CPU-h). This is the round's HONEST CONTROL: real physical randomness, so a survival number here would mean what we think it means.",
+      "reproduction_command": null,
+      "evidence": [
+        "analysis/round20/S-MARS/PREREG.md",
+        "analysis/round20/S-MARS/smars_sweep.py",
+        "analysis/round20/S-MARS/out/control.json",
+        "analysis/round20/SYNTHESIS.md"
+      ]
+    }
+  ]
+}

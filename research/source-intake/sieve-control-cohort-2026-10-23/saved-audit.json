@@ -1,0 +1,67 @@
+{
+  "amendment": "NEW function-level AST isolation of named pure/loader functions; dependencies injected explicitly. No claim of unchanged original full entrypoint replay, survival experiment replay or source closure.",
+  "p2": {
+    "marginal_histogram_cells": [
+      {
+        "cell": "keyskip1|L120",
+        "n": 20000,
+        "q99": 9
+      },
+      {
+        "cell": "keyskip1|L400",
+        "n": 2000,
+        "q99": 19
+      },
+      {
+        "cell": "drift|L120",
+        "n": 2500,
+        "q99": 20
+      },
+      {
+        "cell": "drift|L400",
+        "n": 300,
+        "q99": 47
+      }
+    ],
+    "total_saved_wrongkey_counts": 24800,
+    "plant_function_uses": "CX.long_plain(L, seed) for every register label; _reg_stream returns None and is not called by plant.",
+    "not_replayed": "Fresh wrong-key or planted beam decodes; existing public-nskips-crossover covers distinct length ladder."
+  },
+  "redteam": {
+    "saved_screened": [
+      5,
+      200
+    ],
+    "saved_unscreened": [
+      0,
+      200
+    ],
+    "saved_ratio_field": 25000000.0,
+    "ratio_against_text_nominal_1e8": 2500000.0,
+    "finding": "Raw counts agree with prose 5/200 and 0/200. Saved ratio is 25,000,000 but prose nominal 1e-8 implies 2,500,000; do not quote these as numerically identical.",
+    "not_replayed": "Original screened/unscreened beam populations and full recovery controls."
+  },
+  "rescope": {
+    "loaded_survivors": 250,
+    "stages": {
+      "A": 50,
+      "B": 50,
+      "C": 50,
+      "D:D_page0_full": 50,
+      "D:D_unsolved_full": 50
+    },
+    "saved_proxy_caught": 15,
+    "saved_proxy_missed": 30,
+    "not_replayed": "487 survivor adjudications, 96 payload reseeds, plants and proxy beam audit. Truthless self-consistency is not measured plaintext recovery."
+  },
+  "smars": {
+    "local_computed_held": 756,
+    "grid_total": 756,
+    "local_checkpointed": 0,
+    "source_reported_held": 679,
+    "source_reported_checkpointed": 77,
+    "local_iso_exists": false,
+    "population_blocker": "77 source checkpoint JSONs are absent locally; original held_units() reconstructs all 756 units, not the source-reported 679. This is missing input, not a changed run result.",
+    "not_replayed": "Physical Marsaglia positive/wrong-key controls and null sweep; no fetch attempted."
+  }
+}

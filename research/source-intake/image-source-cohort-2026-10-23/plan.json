@@ -1,0 +1,95 @@
+{
+  "schema": "liberpedia-source-cohort-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "date": "2026-10-23",
+  "entries": [
+    {
+      "source_id": "H-02",
+      "source_hypothesis": "Full-corpus whitespace re-audit at scale. T6 ran run-length decoding and reproduced known numbers; the sweep still lists the at-scale re-audit as open, and the wiki's own note is that the tab/space channel was \"never fully utilized\".",
+      "source_status": "partially-run",
+      "source_lane": "recon-a",
+      "source_reproduction_command": null,
+      "source_evidence_urls": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/OSINT-SWEEP-2026-07-27.md"
+      ],
+      "source_supersedes": [],
+      "source_superseded_by": null,
+      "reconciliation_state": "unreconciled",
+      "candidate_records": [],
+      "coverage_verified": false
+    },
+    {
+      "source_id": "B-13",
+      "source_hypothesis": "O/A/AE per-glyph adjudication — bounded, never individually settled",
+      "source_status": "partially-run",
+      "source_lane": "recon-b",
+      "source_reproduction_command": null,
+      "source_evidence_urls": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/independent-read/FINDINGS.md"
+      ],
+      "source_supersedes": [],
+      "source_superseded_by": null,
+      "reconciliation_state": "unreconciled",
+      "candidate_records": [],
+      "coverage_verified": false
+    },
+    {
+      "source_id": "P-9",
+      "source_hypothesis": "PARKED item: the 30 catalogued bands with n <= 16 glyphs are 'the only real candidates' for hidden content.",
+      "source_status": "measured",
+      "source_lane": "round19/C3 (closeout of round18/L3-ornaments)",
+      "source_reproduction_command": null,
+      "source_evidence_urls": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C3/RESULTS.md#21-p-9-is-refuted-and-by-a-field-definition-error",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C3/l3/bands.json"
+      ],
+      "source_supersedes": [],
+      "source_superseded_by": null,
+      "reconciliation_state": "unreconciled",
+      "candidate_records": [],
+      "coverage_verified": false
+    },
+    {
+      "source_id": "C-CANON-PAYLOAD-3BYTES",
+      "source_hypothesis": "DECISION-PENDING (Round 20 C-canon): should the 3 changed payload bytes -- idx 45, 50, 246, corrected by Round 19 C1 into payload_resolved.bin -- become the canonical payload? This is flagged, NOT decided by Lane C. B-04, R16-KDF and R17 are all input-sensitive downstream of the payload bytes, so promoting payload_resolved.bin to canon would require re-checking those lanes' coverage against the new input.",
+      "source_status": "open",
+      "source_lane": "closeout/canon-governance",
+      "source_reproduction_command": null,
+      "source_evidence_urls": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C1/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T1/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/C/RESULTS.md"
+      ],
+      "source_supersedes": [],
+      "source_superseded_by": null,
+      "reconciliation_state": "candidate-overlap",
+      "candidate_records": [
+        {
+          "record_id": "rune-reading-sensitivity-t3",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round19/T1/RESULTS.md"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false
+    }
+  ],
+  "predeclared_checks": [
+    "P-9: recount saved n_reported versus component counts; independently reproduce image component counts in the frozen 30 low-n boxes if image hash matches; no glyph-template reading or hidden-message exclusion.",
+    "B-13: establish exact missing clustering inputs, rerun deterministic family-collapse statistics from frozen source text; global naming permutations cannot be adjudicated by partition statistics. No source glyph confirmation.",
+    "C-CANON-PAYLOAD-3BYTES: compare source variants byte-for-byte against current hosted grid record; distinguish exact variant arithmetic from naming adjudication and downstream search repetition.",
+    "H-02: identify actual corpus/scope of published whitespace decoder; only rerun on exact locally available bytes and fixed extraction rule, no universal payload-absence claim."
+  ],
+  "existing_reviews_not_new": [
+    "R30-A3-PDF-FORENSICS",
+    "R30-E1-RENDER-REOPEN"
+  ],
+  "stop_rules": [
+    "No source-file modification. No substitute model/image/text claimed as identical. No closure from low-level metadata audit."
+  ]
+}

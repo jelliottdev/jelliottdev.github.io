@@ -1,0 +1,61 @@
+[
+  {
+    "name": "spaces-tabs-blank-dash-indent",
+    "patterns": [
+      [
+        "ss",
+        "t",
+        "st",
+        "sss",
+        ""
+      ]
+    ],
+    "raw": "-----BEGIN PGP SIGNED MESSAGE-----\nHash: SHA1\n\nalpha  \nbeta\t\n \t\n- -escaped   \n    leading\n-----BEGIN PGP SIGNATURE-----\nopaque \t\n-----END PGP SIGNATURE-----\n",
+    "rejected": 0
+  },
+  {
+    "name": "crlf",
+    "patterns": [
+      [
+        "s",
+        "t"
+      ]
+    ],
+    "raw": "-----BEGIN PGP SIGNED MESSAGE-----\r\nHash: SHA1\r\n\r\nx \r\ny\t\r\n-----BEGIN PGP SIGNATURE-----\r\nopaque \t\r\n-----END PGP SIGNATURE-----\r\n",
+    "rejected": 0
+  },
+  {
+    "name": "cr",
+    "patterns": [
+      [
+        "s"
+      ]
+    ],
+    "raw": "-----BEGIN PGP SIGNED MESSAGE-----\rHash: SHA1\r\rz \r-----BEGIN PGP SIGNATURE-----\ropaque \t\r-----END PGP SIGNATURE-----\r",
+    "rejected": 0
+  },
+  {
+    "name": "indented-armor-excluded",
+    "patterns": [],
+    "raw": "    -----BEGIN PGP SIGNED MESSAGE-----\nHash: SHA1\n\nx  \n-----BEGIN PGP SIGNATURE-----\nopaque \t\n-----END PGP SIGNATURE-----\n",
+    "rejected": 0
+  },
+  {
+    "name": "opaque-message-excluded",
+    "patterns": [],
+    "raw": "-----BEGIN PGP MESSAGE-----\nAA  \n-----END PGP MESSAGE-----\n",
+    "rejected": 0
+  },
+  {
+    "name": "missing-header-rejected",
+    "patterns": [],
+    "raw": "-----BEGIN PGP SIGNED MESSAGE-----\n\nx \n-----BEGIN PGP SIGNATURE-----\nopaque \t\n-----END PGP SIGNATURE-----\n",
+    "rejected": 1
+  },
+  {
+    "name": "missing-end-rejected",
+    "patterns": [],
+    "raw": "-----BEGIN PGP SIGNED MESSAGE-----\nHash: SHA1\n\nx \n-----BEGIN PGP SIGNATURE-----\nopaque \t\n",
+    "rejected": 1
+  }
+]

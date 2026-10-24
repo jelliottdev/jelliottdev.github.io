@@ -238,6 +238,8 @@ To reproduce the inventory, extract the reference-data bundle and run python scr
 
 Can an image detector find a missing line?
 
+A count of ink regions is not a count of glyphs. The ornament-box recount reproduces 30 stored component counts, but shows that the old n ≤ 16 filter did not select only boxes with at most sixteen glyphs. It does not read those regions or rule out hidden content.
+
 A comparison that starts with a supplied list of text rows cannot independently check whether that list contains every row. An image-only detector can propose additional regions, but those regions still need interpretation. In our eight-page row-coverage experiment, a fixed detector matched 43 of 65 manually annotated rune rows. Its other proposals included non-runic text, artwork and several rune rows merged into a single band.
 
 The seventh-onion transcription audit gives a concrete two-source example: all 58 ordered rune streams agree, while 26 page texts differ outside the runes. Five differences are individual alphanumeric grid cells. Use its page table to find a specific disagreement before inspecting the corresponding page image.
@@ -422,6 +424,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/reader/lp2-55
 - Download the script
   https://jelliottdev.github.io/scripts/page_boundary_inventory.py
+- ornament-box recount
+  https://jelliottdev.github.io/#/experiments/dukotah-ornament-component-recount
 - eight-page row-coverage experiment
   https://jelliottdev.github.io/#/experiments/image-row-coverage
 - seventh-onion transcription audit

@@ -55,6 +55,18 @@ assert.deepEqual(lagEvidence.tests,[],
  'An exact numeric/statistical claim must retain measurement evidence ahead of a generic doublet method');
 assert.deepEqual(lagEvidence.supporting.map(hit=>hit.document.id),
  ['word-internal-affine-lags','word-internal-affine-all-lags','lp2-page-join-lag-six-sensitivity']);
+// New source records must be reachable through ordinary descriptions. A leading
+// measurement/control/audit keeps that type; it must not become a cipher result.
+for(const [query,id,type] of [
+ ['Could confusing O A AE rune readings explain low doublets?','oae-uniform-remapping','measurement'],
+ ['Do the archived signed messages retain trailing spaces and tabs?','dukotah-h02-raw-whitespace-census','audit'],
+ ['Have we tried skipping two key draws when repeated runes collide?','c2-extension-generator-controls','control'],
+ ['Do the ornament boxes with n less than 16 have only 16 glyphs?','dukotah-ornament-component-recount','measurement']
+]){
+ const selected=Search.select(docs,query);
+ assert.equal(selected[0]?.id,id,query);
+ assert.equal(selected[0]?.recordType,type,query);
+}
 for(const query of [long,short,auditQuery,'OutGuess on LP2-31']){
  const found=Search.select(withPages,query);
  assert(found.filter(doc=>doc.kind==='experiment').reduce((sum,doc)=>sum+doc.text.length,0)<=9000);

@@ -1,0 +1,90 @@
+{
+  "fixed_sequences": {
+    "primes": [
+      2,
+      3,
+      5,
+      7,
+      11,
+      13,
+      17,
+      19,
+      23,
+      29,
+      31,
+      37
+    ],
+    "riddle": [
+      5,
+      3,
+      2,
+      2,
+      3,
+      5
+    ],
+    "tab_message_source_literal": [
+      137,
+      103,
+      45,
+      14
+    ]
+  },
+  "frozen_at_utc": "2026-10-24T01:02:47.670217+00:00",
+  "historical_replay_limit": "The source ws_audit.py expects three raw Markdown files missing from pinned checkout; this is a newly scoped raw-corpus census, not replay of its historical output.",
+  "inputs": [
+    {
+      "path": "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip",
+      "sha256": "8ada99a4dfa71aab8111eca8d45cef1acc5539e8875fa0a71527b7d4a8d73548"
+    },
+    {
+      "path": "experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json",
+      "sha256": "9e07605ffefd2e1b256c0127ebc16780755b0d26b466f3c27c68bc1f2e3cf959"
+    },
+    {
+      "path": "experiments/records/dukotah-g02-signature-corpus/independent-verification.json",
+      "sha256": "08b15e02d59fff7dbf11aa554b0d66d8be46c798f5380140a58b590e26727c26"
+    },
+    {
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/source-ws_audit.py",
+      "sha256": "b8dd5cfed0b829414db88a1ecd47f4c0a555a70efa2df3baeee73df2bfbaad47"
+    },
+    {
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/fixtures.json",
+      "sha256": "ecf0ae48b17bd824bbd24fa527c5912f7790bfd5f4c036ddb727383261cbef66"
+    },
+    {
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/run.py",
+      "sha256": "5e6d9ba76939795dc77f2cafaae4a7763d44e14b7c3385f0fb0a684a1bab0c87"
+    },
+    {
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/LICENSE.source",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/plan-frozen-original.json",
+      "sha256": "43085a4e839ae88038e1ad1d2a1f3e470dd18a29228c6a58865f18c1a39fd8c9"
+    },
+    {
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/run-frozen-original.py",
+      "sha256": "58be8e356e313e0660f0d99f6df641ba3034406950c58c5986642dc1761bfa6f"
+    }
+  ],
+  "question": "What trailing space/tab patterns survive in strictly parsed clear-signed bodies in the preserved 133-path G-02 archive, after exact and canonical deduplication?",
+  "report_encoding_amendment": {
+    "at_utc": "2026-10-24T01:04:04.583179+00:00",
+    "original_plan_sha256": "43085a4e839ae88038e1ad1d2a1f3e470dd18a29228c6a58865f18c1a39fd8c9",
+    "reason": "Initial dense per-line receipts exceeded 108 MB because one signed data body has 221730 lines. Store only nonzero line receipts, with all other lines explicitly zero; retain line-ending histogram and exact-body hash. No parser, corpus, comparison rule, or measured quantity changed."
+  },
+  "rules": [
+    "No stripping leading indentation or normalizing raw bytes before parsing.",
+    "Exact line armor only; require Hash headers and blank separator; exclude signature armor and opaque PGP MESSAGE packets.",
+    "Count every body line including empty and whitespace-only lines; expose suffix spaces/tabs and line endings.",
+    "Exact body identity includes raw line terminators; canonical identity dash-unescapes, strips trailing space/tab, then joins with LF; this is a comparison key, not a complete OpenPGP verification implementation.",
+    "Match only entire or prefix nonzero-count sequences against the three literal source lists; no binary decoding, adaptive thresholds, broad cipher search or LP2 inference.",
+    "Saved G-02 verdicts provide context; a valid cleartext signature ignores trailing whitespace and cannot authenticate its originality.",
+    "Run planted parser fixtures before census; independently recompute line counts and dedup after census.",
+    "Optional isolated GPG control uses only archived public key and a saved PASS message, modifies trailing whitespace, and records validity."
+  ],
+  "schema": "liberpedia-frozen-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1"
+}

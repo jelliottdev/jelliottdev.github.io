@@ -1,0 +1,146 @@
+{
+  "finding": "The 133-path, 89-file archive yields 111 strict clear-signed bodies, all with saved G-02 PASS verdicts. Exact dedup gives 67 bodies; canonical dedup gives 54 groups. Sixteen exact bodies contain 62 whitespace-bearing lines with 564 spaces and 278 tabs. Thirteen canonical groups differ in suffix count sequences. None of three fixed source lists matches as an exact or prefix sequence. Both original and whitespace-edited copies pass the isolated GnuPG control.",
+  "id": "dukotah-h02-raw-whitespace-census",
+  "limitations": "This newly scoped raw-byte census is not replay of the source historical three-Markdown scan. Strict parsing omits 22 paths, including four saved PASS cases; opaque packets are excluded. Whitespace originality, intent, other encodings and LP2 decryption are untested. One data blob contributes 221730 of 224213 exact-body lines, so line totals do not count independent prose evidence.",
+  "next_steps": "Obtain independently preserved original byte copies for the 13 discrepant canonical groups and compare their provenance; signatures alone cannot select original whitespace.",
+  "outcome": "supported",
+  "question": "What trailing space/tab patterns survive in the preserved raw clear-signed corpus, and do copies agree?",
+  "reader_finding": "Copies of 13 messages disagree about trailing whitespace. The strict census counts 564 spaces and 278 tabs across 16 distinct raw bodies. A signature control shows those bytes can change while the signature remains valid.",
+  "reader_limit": "The archive is a preserved subset; the original three Markdown inputs are missing. Zero matches to three literal lists does not exclude known or other whitespace channels.",
+  "reader_question": "Do archived signed messages preserve the same invisible whitespace?",
+  "related": [
+    "dukotah-g02-signature-corpus"
+  ],
+  "reproduction": {
+    "command": "python experiments/records/dukotah-h02-raw-whitespace-census/run.py --check && python experiments/records/dukotah-h02-raw-whitespace-census/check.py --gpg-control",
+    "environment": "Python 3.9+ standard library; GnuPG for optional isolated whitespace-signature control. Offline; reuses the declared G-02 archive.",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip",
+        "sha256": "8ada99a4dfa71aab8111eca8d45cef1acc5539e8875fa0a71527b7d4a8d73548"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json",
+        "sha256": "9e07605ffefd2e1b256c0127ebc16780755b0d26b466f3c27c68bc1f2e3cf959"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/independent-verification.json",
+        "sha256": "08b15e02d59fff7dbf11aa554b0d66d8be46c798f5380140a58b590e26727c26"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/source-ws_audit.py",
+        "sha256": "b8dd5cfed0b829414db88a1ecd47f4c0a555a70efa2df3baeee73df2bfbaad47"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/fixtures.json",
+        "sha256": "ecf0ae48b17bd824bbd24fa527c5912f7790bfd5f4c036ddb727383261cbef66"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/run.py",
+        "sha256": "5e6d9ba76939795dc77f2cafaae4a7763d44e14b7c3385f0fb0a684a1bab0c87"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/plan-frozen-original.json",
+        "sha256": "43085a4e839ae88038e1ad1d2a1f3e470dd18a29228c6a58865f18c1a39fd8c9"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/run-frozen-original.py",
+        "sha256": "58be8e356e313e0660f0d99f6df641ba3034406950c58c5986642dc1761bfa6f"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/plan.json",
+        "sha256": "39e40cb8df496e250d9071b5a98aa3f0b1ad2ca156d485c281960400aba3fa4f"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/check.py",
+        "sha256": "10e7c8e79c85553adddfc01aca0a3466c42d6a131d54d2256eb1e40e1e31c8e9"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/plot.py",
+        "sha256": "a48ccef1a133e7a628ed6b44cd0d1e867690635db089d984fad56ecb1ab60aa7"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/article.md",
+        "sha256": "09916830c716246c8af20b1f5c553d2730a005723fd8a2fe3ceacd9bdd7db842"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/results.json",
+        "sha256": "15bccc755f019697a3cf67b4eddebb84d8e1aba768cec6b8c441913115d470ff"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/independent-check.json",
+        "sha256": "b70545a474e0701de815b962311a31bb9dd1f4c90302aeea36bafcfbbc7bc30e"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/gpg-control.json",
+        "sha256": "7c830599ed636f5a3ead35fc93969c7dbfac94363347ba81363499fbc1db7423"
+      },
+      {
+        "path": "experiments/records/dukotah-h02-raw-whitespace-census/census.svg",
+        "sha256": "c38083204b528c05dd76e5a3e6c6893beaa04be614971a34669c3f4e45f7842a"
+      }
+    ],
+    "script": "experiments/records/dukotah-h02-raw-whitespace-census/run.py",
+    "script_sha256": "5e6d9ba76939795dc77f2cafaae4a7763d44e14b7c3385f0fb0a684a1bab0c87"
+  },
+  "review": {
+    "human_review": "pending",
+    "kind": "bounded raw-corpus preservation census",
+    "retested_on": "2026-10-23",
+    "reviewer": "Raw-byte census plus independent delimiter/regex checker and isolated GnuPG control"
+  },
+  "scope": {
+    "artifacts": [
+      "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip",
+      "experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json",
+      "experiments/records/dukotah-h02-raw-whitespace-census/source-ws_audit.py"
+    ],
+    "exclusions": "Missing historical raw Markdown, 22 nonaccepted archive paths, opaque PGP MESSAGE bodies, binary or adaptive decoding, intent/authorship/original-format claims and LP2 inference.",
+    "pages": [],
+    "parameters": "133 source paths / 89 unique files; exact unindented armor and Hash header gate; literal nonzero sequences [5,3,2,2,3,5], [2,3,5,7,11,13,17,19,23,29,31,37], [137,103,45,14]; exact or prefix only.",
+    "procedure": "Freeze rules, hash-check archive and aliases, run seven planted fixtures, count suffix spaces/tabs per body line, deduplicate raw and canonical bodies, independently reconstruct all accepted bodies, and verify one trailing-whitespace edit in an isolated public-key GnuPG home.",
+    "representation": "Exact archived .asc bytes at pinned Dukotah f08b20b; strict raw clear-signed bodies only."
+  },
+  "sources": [
+    {
+      "label": "Pinned source whitespace heuristic and literal lists",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/armada_osint/ws_audit.py"
+    },
+    {
+      "label": "OpenPGP cleartext signature canonicalization, RFC 4880 section 7.1",
+      "url": "https://www.rfc-editor.org/rfc/rfc4880#section-7.1"
+    }
+  ],
+  "status": "published",
+  "summary": "A strict 111-file subset contains 67 exact bodies and 54 canonical message groups. Sixteen exact bodies carry trailing whitespace; 13 canonical groups have copies with different suffix counts. Valid signatures do not authenticate those bytes.",
+  "tags": [
+    "source audit",
+    "whitespace",
+    "preservation",
+    "PGP",
+    "positive control"
+  ],
+  "title": "Which archived signed bodies retain trailing whitespace?",
+  "visuals": [
+    {
+      "caption": "Copies of 13 canonical messages differ in trailing-whitespace counts. In one isolated control, adding a space and tab preserves the signature. This does not establish an intentional channel.",
+      "path": "experiments/records/dukotah-h02-raw-whitespace-census/census.svg"
+    }
+  ],
+  "family": {
+    "id": "dukotah-h02-raw-whitespace-census",
+    "title": "Signed-message trailing whitespace",
+    "question": "Which preserved clear-signed copies retain the same trailing whitespace?",
+    "baseline": "dukotah-h02-raw-whitespace-census"
+  },
+  "variant": {
+    "label": "Pinned source scope and controls",
+    "changes": []
+  }
+}

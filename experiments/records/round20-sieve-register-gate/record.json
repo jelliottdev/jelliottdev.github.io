@@ -1,0 +1,143 @@
+{
+  "id": "round20-sieve-register-gate",
+  "status": "published",
+  "title": "Does the sieve's pass gate require every register?",
+  "question": "Does the Round-20 P1 decision require measurements of all nine named registers before its full PASS?",
+  "reader_question": "Can a filter pass a test when some required measurements are missing?",
+  "summary": "The source gate passes all 510 incomplete high-survival register subsets. Replaying its four saved pilots exactly preserves their original INFEASIBLE decision.",
+  "finding": "All 511 nonempty subsets return PASS at reported survival .95 and reduction 100, including 510 incomplete subsets. Three comparison controls behave as numerically specified. All four archived pilot cells reproduce exactly as SHORTFALL; best simultaneous CY/HALFVOWEL survival is 2/3.",
+  "reader_finding": "The gate can issue a full pass even when some required text groups were never measured.",
+  "reader_limit": "This tests the gate function with constructed summaries; the source’s actual infeasibility decision remains unchanged.",
+  "limitations": "New function-level coverage control and archived-output aggregation only. No survival plants, Marsaglia scans, model training or manuscript key search rerun. Exact Welsh corpus and I2 model remain absent.",
+  "next_steps": "Require explicit measurement coverage before labeling a future subset result a full all-register PASS.",
+  "outcome": "supported",
+  "tags": [
+    "source control",
+    "measurement coverage",
+    "sieve",
+    "registers",
+    "software contract"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/round20-sieve-register-gate/plan.json",
+      "experiments/records/round20-sieve-register-gate/source/survival_surface.json"
+    ],
+    "representation": "Constructed register-survival summaries and archived pilot summaries; no plaintext candidate.",
+    "procedure": "Run unchanged P1 adjudicate over every nonempty register subset plus three complete comparison summaries; reproduce all four source pilot cells and independently check coverage and threshold logic.",
+    "parameters": "9 named registers; 511 nonempty subsets; included survival .95; reduction 100; low-survival comparison CY=.89; low-reduction comparison 99.",
+    "exclusions": "Original survival measurement replay, missing-corpus substitutions, model training, target searches and cipher-method exclusion."
+  },
+  "review": {
+    "kind": "New function-level software coverage control",
+    "reviewer": "Exhaustive subset controls, pinned source hashes and independent specification/archival arithmetic check",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "related": [
+    "public-nskips-crossover",
+    "round19-decoder-null-bars"
+  ],
+  "sources": [
+    {
+      "label": "Pinned Round-20 P1 source gate and pilots",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/P1"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/round20-sieve-register-gate/coverage.svg",
+      "caption": "Constructed high-survival subset summaries all pass, while the archived four-pilot decision remains unchanged."
+    }
+  ],
+  "scope_summary": "511 constructed register subsets · 3 threshold comparisons · 4 archived pilot summaries · no target decodes",
+  "reproduction": {
+    "command": "python experiments/records/round20-sieve-register-gate/run.py --check && python experiments/records/round20-sieve-register-gate/check.py",
+    "script": "experiments/records/round20-sieve-register-gate/run.py",
+    "script_sha256": "e6ed8a61b5b2fce44baeb3b84eb5a4a147d938d456fc545f00c25c1cb7babb8b",
+    "environment": "Python 3 standard library; exact source script, pilots, archived surface and MIT license bundled offline.",
+    "inputs": [
+      {
+        "path": "experiments/records/round20-sieve-register-gate/.gitattributes",
+        "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/article.md",
+        "sha256": "8acfef7275cf8c28382374677376843b03050eef8e709b893d9c93cc18151b21"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/check.py",
+        "sha256": "edbb63e61d82496db69209cdefb08feef060f5ff8d5a02a039bba706224c842b"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/plan.json",
+        "sha256": "38af8b33a74b896413b3426c9ce959c2bcca6886e62fb22db68929386f6a1409"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/run.py",
+        "sha256": "e6ed8a61b5b2fce44baeb3b84eb5a4a147d938d456fc545f00c25c1cb7babb8b"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/build_surface.py",
+        "sha256": "1518b48a7986e99873f89c0c7db4cafc8db69625c0baf622790a73ab79611f2d"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/pilot_fA1e2_W32.json",
+        "sha256": "b043c20e5cb53a9e5cefc1699c29af7c61678174f7365a94aaa15f0944d78687"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/pilot_keyskip.json",
+        "sha256": "7e747b6569dca3464cafab4ec5b3293bc0defee3f461b6c082ecb4cdfccd6486"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/pilot_sbt_drift.json",
+        "sha256": "85f89ed37f01e4a96a97df65b8c7eea68839a6390557208334fa53875b222609"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/pilot_sbt_keyskip1.json",
+        "sha256": "81b10da816c8331d3c4d28b8d843595a0974cf93f18765a0b942de80f9de4bba"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/PREREG.md",
+        "sha256": "8046e7c34c341ea5e611aa633fe93b94006c5bf7f648b8cbeb5fe304fb3f5733"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/RESULTS.md",
+        "sha256": "a0288769ce9eb4ffc81327b11d0356b2b037630ffe9b67771fe7039e13ba3a58"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source/survival_surface.json",
+        "sha256": "45abfdb5678563fe7a6e5923d10aefaf78eec9059c09c2542e493c5d02a9e298"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/source-manifest.json",
+        "sha256": "fb9136375f710229a49b981b7146c269a71c1d5d9ef0e6e26749a4d35680aa5d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/round20-sieve-register-gate/results.json",
+        "sha256": "c5a6a916d80ff86cbc730e0ae3227f68c4da88b1106c12bfbbfffefd8a6e736e"
+      },
+      {
+        "path": "experiments/records/round20-sieve-register-gate/coverage.svg",
+        "sha256": "c3b96af83f22783e412136484c59a057a5d17e6be1d5a9ff00cf3867ffa95ff6"
+      }
+    ]
+  },
+  "family": {
+    "id": "round20-sieve-register-gate",
+    "title": "Sieve measurement-completeness controls",
+    "question": "Does a source gate require every measurement named in its full-pass condition?",
+    "baseline": "round20-sieve-register-gate"
+  },
+  "variant": {
+    "label": "Exhaustive missing-group summaries and saved pilots",
+    "changes": []
+  }
+}
