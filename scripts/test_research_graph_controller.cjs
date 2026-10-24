@@ -36,8 +36,8 @@ function fixture({width=1000,height=700,focus='root',real=false,panelFraction=.4
  const controls={getBoundingClientRect:()=>rect(width-60,!panel.hidden&&width<=760?height*(1-panelFraction)-145:height-150,40,120)};
  const help={getBoundingClientRect:()=>!panel.hidden&&width<=760?rect(0,0,0,0):rect(22,height-54,105,36),getClientRects:()=>!panel.hidden&&width<=760?[]:[help.getBoundingClientRect()]};
  const list={inert:false},map={inert:false,getBoundingClientRect:()=>rect(0,0,width,height),querySelector:selector=>selector==='.map-help'?help:controls,querySelectorAll:()=>[controls,help]};
- const c={ResearchGraphGeometry:G,CSS:{escape:s=>s},getComputedStyle:el=>({display:el.hidden||!el.getBoundingClientRect().width?'none':'block'}),camera:{x:width/2,y:height/2,k:1},world,map,panel,innerWidth:width,state:{mode:'graph',record:'',colour:'methods'},nodes,focus:nodes.get(focus),data:{records},matching:new Set(Object.keys(records)),layout:new Map(),labelNodes:[],worldBounds:{},worldHeight:600,aliases:{},resultColours:{},$:id=>id==='about-button'?help:null,esc:s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'),navigate:change=>events.push(change)};
- c.$=id=>id==='research-list'?list:id==='about-button'?help:null;c.list=list;
+ const c={ResearchGraphGeometry:G,CSS:{escape:s=>s},document:{activeElement:null},getComputedStyle:el=>({display:el.hidden||!el.getBoundingClientRect().width?'none':'block'}),camera:{x:width/2,y:height/2,k:1},world,map,panel,innerWidth:width,state:{mode:'graph',record:'',colour:'methods'},nodes,focus:nodes.get(focus),data:{records},matching:new Set(Object.keys(records)),layout:new Map(),labelNodes:[],worldBounds:{},worldHeight:600,aliases:{},resultColours:{},$:id=>id==='about-button'?help:null,esc:s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'),navigate:change=>events.push(change)};
+ c.$=id=>id==='research-list'?list:id==='about-button'?help:null;c.list=list;map.focus=options=>{c.document.activeElement=map;map.focusOptions=options};
  vm.createContext(c);vm.runInContext(source.match(/^ const count=.*$/m)[0],c);for(const name of ['passes','lines','branchBelow','position','paintGraph','applyCamera','availableMapHeight','recordNode','revealSelection','updatePreviewMode','fit','activate'])vm.runInContext(production(name),c);
  c.position();c.paintGraph();return{c,groups,events,width,height};
 }
@@ -79,3 +79,17 @@ for(const width of [320,390])for(const panelFraction of [.4,.55,.7,.8]){
  f.c.panel.hidden=true;f.c.updatePreviewMode();assert(!f.c.map.inert&&!f.c.list.inert,'Back makes the retained workspace interactive again');
 }
 console.log('PASS production graph VM: screen-constant marks/hits and non-scaling strokes; collision-free measured-stub labels; deep reveal/activation; actual dense-branch fit bounds at320/390/768/1440. CSS/font/browser QA remains separate.');
+
+// Zooming out must not leave keyboard focus on a now-hidden deep target.
+const keyboard=fixture();keyboard.c.camera.k=1.2;keyboard.c.applyCamera();
+const deep=[...keyboard.groups].find(([id,el])=>id.startsWith('leaf')&&el.getAttribute('tabindex')==='0');assert(deep);
+keyboard.c.document.activeElement=deep[1];keyboard.c.camera.k=.5;keyboard.c.applyCamera();
+assert.equal(deep[1].getAttribute('tabindex'),null);assert(keyboard.c.document.activeElement===keyboard.c.map,'Hidden deep focus returns to the retained map');assert.equal(keyboard.c.map.focusOptions.preventScroll,true);
+const child=keyboard.groups.get('branch');assert.equal(child.getAttribute('tabindex'),'0');keyboard.c.document.activeElement=child;keyboard.c.applyCamera();assert.equal(keyboard.c.document.activeElement,child,'A visible immediate-child marker keeps focus without a label');
+const toolbar={};keyboard.c.document.activeElement=toolbar;keyboard.c.applyCamera();assert.equal(keyboard.c.document.activeElement,toolbar,'Camera updates do not steal toolbar focus');
+let keyHandler;keyboard.c.svg={addEventListener(type,handler){assert.equal(type,'keydown');keyHandler=handler}};
+vm.runInContext(source.match(/^ svg.addEventListener\('keydown'.*$/m)[0],keyboard.c);
+const event=(target,key)=>({target,key,preventDefault(){this.prevented=true}});
+for(const key of ['Enter',' ']){const e=event({matches:()=>true,getAttribute:()=>null,dataset:{node:deep[0]}},key),count=keyboard.events.length;keyHandler(e);assert.equal(keyboard.events.length,count,'A stale hidden target cannot activate');}
+const activeEvent=event({matches:()=>true,getAttribute:()=> '0',dataset:{node:'branch'}},'Enter');keyHandler(activeEvent);assert.equal(keyboard.events.at(-1).branch,'branch');assert(activeEvent.prevented);
+console.log('PASS graph keyboard: hidden deep focus returns without scrolling; visible marker/toolbar focus retained; stale Enter/Space ignored and visible Enter works.');

@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "ef446a01cd73f2ce1d1781b3924eccd30e30b491d00fa372f93b2106ee4db2df",
+    "current_experiments_sha256": "444c5fe1cf8d5dd8594869f74671e62be83f99a64dd76c17a35d15f99f5202e4",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -57,9 +57,16 @@
       "two-rune-primer-extension"
     ],
     "changed_ids": [
+      "alternating-alphabet-interruption-clocks",
+      "dukotah-book-matrix-hill",
       "dukotah-ciphertext-feedback-coefficients",
+      "dukotah-fixed-numeric-keys",
+      "dukotah-line-geometry-channel-replay",
+      "dukotah-longkey-skip-beam",
       "dukotah-mdl-order-profile",
       "dukotah-nonenglish-control-gate",
+      "dukotah-payload-key-skip",
+      "dukotah-reading-direction-cipher-grid",
       "lp2-row-column-english",
       "lp2-row-column-routes",
       "lp2-trigram-repeats",
@@ -71,7 +78,9 @@
       "public-lp2-as-pad",
       "public-multihistory-feedback",
       "wholepage-progressive-caesar",
-      "word-internal-affine-lags"
+      "word-internal-affine-lags",
+      "wulfic-periodic-word-crib-votes",
+      "wulfic-two-time-pad-premise"
     ]
   },
   "views": {
@@ -8529,8 +8538,8 @@
       "id": "alternating-alphabet-interruption-clocks",
       "title": "Alternating alphabets with two interruption clocks",
       "question": "Could F pause the key, the alphabet, or both?",
-      "finding": "Neither rule revealed a known opening. Pausing just the key or both clocks was tested with both known keys, every starting phase, and both arithmetic directions.",
-      "limitations": "This checks two specified ciphers and nine predicted beginnings. Other keys, interruption rules and unknown openings remain possible.",
+      "finding": "Neither way of pausing at an F rune produced any of the nine predicted twelve-rune beginnings on the 55 tested pages. One rule paused just the key; the other also paused the switch between alphabets.",
+      "limitations": "A real reading could begin differently from all nine predictions. Other keys and interruption rules remain untested; the successful roundtrip controls show the rules work as specified, not that Cicada used them.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -8653,9 +8662,13 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/alternating-alphabet-interruption-clocks",
-      "current_sha256": "522e9bff03ea589d2644e6c5f7efd72903fdceee2559e38ca983d5bc494d3b06",
+      "current_sha256": "f4fcc8a4c1d14fa6a85693fdca822ebba0e8ce15764d80a9707f21fe72868c10",
       "snapshot_sha256": "522e9bff03ea589d2644e6c5f7efd72903fdceee2559e38ca983d5bc494d3b06",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit",
+        "reproduction"
+      ],
       "classification": "draft"
     },
     "artifact-stream-skip-grid": {
@@ -12407,8 +12420,8 @@
       "id": "dukotah-book-matrix-hill",
       "title": "Number panels as Hill-cipher keys",
       "question": "Could the manuscript’s number panels be matrices that decrypt the runes?",
-      "finding": "The best source result scores -6.873 versus a −5.0 flag; its one-cell-corrected 4×4 arm scores at best -6.907. Zero outputs in either grid cross the flag. The complete known-reading plant recovers for all 28 operations; 146/199 and 69/199 complete shuffled searches equal or exceed the respective observed maxima.",
-      "limitations": "This is a fixed-matrix, zero-origin, English-score test, not an exhaustive Hill search. The source discards incomplete final blocks, omitting 80 runes across the 4×4 page runs and 116 across the 5×5 page runs. The source’s 4×4 panel cell 820 differs from printed 1820; only that single-cell variant was retested. The source’s separate phi arrays are treated literally. Shuffled maxima are conditional order controls, not a cipher-generation probability.",
+      "finding": "The selected number matrices, including a correction to one printed cell, produced no candidate passing the English-language check. Each of the 28 matrix operations did recover the complete short known message planted to check it.",
+      "limitations": "Only the specified matrices and starting position were tested, and incomplete blocks at the ends were dropped. Passing or failing the language score does not establish a correct reading or rule out other matrix ciphers.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -12538,9 +12551,12 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/dukotah-book-matrix-hill",
-      "current_sha256": "d3e41095c9f81e7232285c489c79a6cc1cd656ec9b7c6a306688fbd5d737cbf9",
+      "current_sha256": "33a7d097dd6da74485bc73d3bf3cf8850aabde7409bba5b86c1d12bacb391672",
       "snapshot_sha256": "d3e41095c9f81e7232285c489c79a6cc1cd656ec9b7c6a306688fbd5d737cbf9",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "dukotah-c8-timestamp-join": {
@@ -12609,8 +12625,8 @@
       "id": "dukotah-fixed-numeric-keys",
       "title": "Rotation, hash and cuneiform keys",
       "question": "Could the rotation sequence, LP2-56 hash or cuneiform numbers serve as keys?",
-      "finding": "B1 Mayan rotations: best −6.895 on LP2-22, 0/896 above bar. B4 printed-hash streams: best −6.679 on LP2-49, 0/2,240. C2 cuneiform/digit strings: best −6.725 on LP2-51, 0/2,240. All three original scripts reproduce archived JSON; independent scalar checks match all 5,376 complete outputs and 55 source/site pages.",
-      "limitations": "The −5.2 bar misses three of 144 correct F-null planted messages, and literal-F plants sometimes replace an original known rune with F to satisfy the source rule. This does not exclude other numerical keys, phases, clocks, transcripts or scorer models. The 2012 and cuneiform provenance descriptions are source attributions, not separately verified historical claims.",
+      "finding": "None of the twelve fixed numerical key streams produced a candidate passing the English-language check on the 55 tested pages or their joined text. The keys came from the specified Mayan numbers, printed hash and digit strings.",
+      "limitations": "The language check missed three correctly recovered planted messages. Some controls required replacing known runes with F. This does not rule out other numerical keys, starting positions or rules for handling F.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -12739,9 +12755,12 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/dukotah-fixed-numeric-keys",
-      "current_sha256": "f3333a116348894ffdb68f9b041d02af8a1608dad4ea3e09eb18c3f1d5566bd7",
+      "current_sha256": "527d1e4d0faaeca38833b9ac167bfa19ad552a31553a0d7f1d010f00b3991c4c",
       "snapshot_sha256": "f3333a116348894ffdb68f9b041d02af8a1608dad4ea3e09eb18c3f1d5566bd7",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "dukotah-g02-signature-corpus": {
@@ -13250,8 +13269,8 @@
       "id": "dukotah-line-geometry-channel-replay",
       "title": "Do LP2's lines carry another message?",
       "question": "Could line spacing or layout hide a message?",
-      "finding": "Five of eleven measured layout features pass the source's two-group screen; none of eight bit-channel searches passes. Yet the strongest planted 64-bit line-fill message recovers only 55/64 bits (85.9%) against a 95% requirement, and a separate source-labeled PASS decodes only 29/77 intended ASCII characters.",
-      "limitations": "This is an exact-source, source-known replay of one line detector. The image/canonical line alignment and control failures limit interpretation. No actual payload is recovered; other measurements, encodings or detectors remain open.",
+      "finding": "No message was recovered from the tested line measurements. The decoder also failed to recover deliberately hidden messages reliably, so its negative result does not show that line layout carries no information.",
+      "limitations": "This checked one line detector and eight ways of turning measurements into bits. Some measurements fell into two groups, but that alone does not establish a hidden message. Other measurements and decoding rules remain untested.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -13379,17 +13398,20 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/dukotah-line-geometry-channel-replay",
-      "current_sha256": "658f087129f36e800435b5790e324e589604500ccf7763e6f1664fe84a960eb2",
+      "current_sha256": "001a9a01ea096b4fa1aa170713e483977a87851143b393439363253ef21c22b1",
       "snapshot_sha256": "658f087129f36e800435b5790e324e589604500ccf7763e6f1664fe84a960eb2",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "dukotah-longkey-skip-beam": {
       "id": "dukotah-longkey-skip-beam",
       "title": "Long-key search with optional skipped positions",
       "question": "Could a long running key stay hidden by skipping key positions?",
-      "finding": "Best manuscript score: −6.086 on LP2-17; 0/54 exceed −5. All 18 planted collision-skip cases exceed −5 but 0/18 reproduce the full known plaintext. An additional 18 no-skip plants score above the bar and 11/18 recover exact text. Independent reconstruction confirms all source outputs are full-length.",
-      "limitations": "The executable beam permits a one- or two-position key advance at every rune without enforcing a would-be doublet collision. The fixed English score can prefer incorrect paths. The three texts, three coarse offsets, six longest pages and beam width120 do not represent all long keys or decoders. Repeated known text is a synthetic detector check.",
+      "finding": "None of the tested long-text keys produced a candidate passing the English-language check. But the decoder also failed to recover any of the 18 complete known messages planted with skipped key positions, even though all passed that language check.",
+      "limitations": "The failed recovery checks make the manuscript result inconclusive. Only three texts, three starting positions and six pages were tested; other keys and decoding rules remain open.",
       "pages": [
         "lp2-29",
         "lp2-43",
@@ -13418,9 +13440,12 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/dukotah-longkey-skip-beam",
-      "current_sha256": "e76882105c31840b12ca68b61fb27c9ea77e04e80407f48e02ada6c1298aa446",
+      "current_sha256": "e9afae8370b8f6cf3f818f499df4e650b5b1349eb98550f48a8d71aba08c01a5",
       "snapshot_sha256": "e76882105c31840b12ca68b61fb27c9ea77e04e80407f48e02ada6c1298aa446",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "dukotah-mdl-order-profile": {
@@ -13570,8 +13595,8 @@
       "id": "dukotah-nonenglish-control-gate",
       "title": "Two language-scoring controls missed their frozen rules",
       "question": "Did these language searches validate their scoring controls?",
-      "finding": "Four language-specific models all tied English at 24/24 plants under the frozen own-null detection-rate rule; the program instead passed them by d-prime. A separate orthography-matched English scorer also tied ordinary English under its frozen rule on Latin, Greek and vowel-dropped English; its program passed Latin via an OR with a fixed-score-bar comparison. Neither reported zero-survivor manuscript grid is control-validated under its original rule.",
-      "limitations": "This independently checks pinned plans, decision code and saved control summaries from two source lanes. Neither planted simulation nor either reported 20,480-case manuscript grid was locally rerun. An orthography-matched English scorer is not a Latin or Greek language model; no actual plaintext language is established.",
+      "finding": "The reported search does not rule out another language. Its language checks did not meet their original success rules; the programs used different rules to continue and report no candidates.",
+      "limitations": "This audit checked the saved results and decision rules, not a fresh run of the language tests or manuscript search. It does not identify the language of LP2.",
       "pages": [],
       "scope": {
         "pages": [],
@@ -13590,11 +13615,13 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/dukotah-nonenglish-control-gate",
-      "current_sha256": "840c33aaf4bb7c7dbffd0415383d86e4a54bfcbe7a43a6736d1e7b2c39b33175",
+      "current_sha256": "e7a8075f82c9188ed949a5b3fc197e3a03f326e103295345a42c28925c839478",
       "snapshot_sha256": "7fb96ad5cede339718b383eb219411b6fca40e6a30b5d46fba787111971c38da",
       "changed_fields": [
         "article",
         "materials",
+        "reader_finding",
+        "reader_limit",
         "reproduction"
       ],
       "classification": "draft"
@@ -13723,8 +13750,8 @@
       "id": "dukotah-payload-key-skip",
       "title": "Number-grid bytes as a key with skipped positions",
       "question": "Could the number-grid bytes be a key whose positions sometimes get skipped?",
-      "finding": "Best manuscript score −6.756 on LP2-15; zero of 880 settings exceed the source −5.5 bar. All 16 payload, sign and Atbash planted known-reading cases recover all 85 runes and clear that bar. An independent scalar beam agrees on all 880 path hashes and scores, and all 55 source page arrays match site pages.",
-      "limitations": "The original generic wrong-key gate cannot finish because its Mabinogion file is absent, though its correct-key part and our payload-specific plants pass. Source beam pads zero key values beyond allocated payload repeats; indefinitely cycling the payload through every hypothetical skip is outside this replay. No other keys, offsets, grid readings, English models or Campaign XVIII branches are excluded.",
+      "finding": "Using the number-grid bytes as a key produced no candidate that passed the English-language check on the 55 tested pages. The decoder did recover all 16 short messages with known answers.",
+      "limitations": "Passing or failing the language score does not establish a correct reading. Other grid-derived keys were not tested, and the separate wrong-key comparison could not finish.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -13851,9 +13878,12 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/dukotah-payload-key-skip",
-      "current_sha256": "4c97e4ce0933f74ec36fde14333181382e59e95133134355f9f5e8a0bc841ee5",
+      "current_sha256": "f405218efb26f2e29fcc7db64a4b650c96c3453f6e6dee9ffbcb6cdcc438e3d3",
       "snapshot_sha256": "4c97e4ce0933f74ec36fde14333181382e59e95133134355f9f5e8a0bc841ee5",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "dukotah-payload-varint-matrix": {
@@ -13893,8 +13923,8 @@
       "id": "dukotah-reading-direction-cipher-grid",
       "title": "Reading directions followed by simple ciphers",
       "question": "Has changing the reading direction and then trying familiar ciphers worked?",
-      "finding": "All 10,175 unsolved page/settings outputs reproduced. The highest score was −6.717 on LP2-49, versus −4.421 for the known direct Parable reading; 40/49 full-grid shuffle controls matched or exceeded the LP2 maximum. Two planted route-plus-shift controls recovered the known passage exactly.",
-      "limitations": "The English quadgram threshold is demonstrated on the direct Parable passage and two plants, not every possible plaintext. Page-preserving shuffles are a selection reference, not a cipher model. Only five archival layout orders, the source 37 ciphers and complete page text were tested.",
+      "finding": "The best result from the five reading directions was no stronger than the best result in 40 of 49 shuffled-page searches. Two planted short messages were recovered exactly, but these tests do not establish a manuscript reading.",
+      "limitations": "This compares five fixed reading orders and 37 cipher settings on 55 pages. Shuffled pages provide a score comparison, not a model of the cipher; other routes, keys and languages remain untested.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -14021,9 +14051,12 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/dukotah-reading-direction-cipher-grid",
-      "current_sha256": "9d64a4f45ad83e3cf9ac8b7a1b6ee911050dd40bae3193394b034b94eef7baa7",
+      "current_sha256": "0e794455bdae843830f87b65a05e2536d5c43804237d5d5b8c840c662a4cf93b",
       "snapshot_sha256": "9d64a4f45ad83e3cf9ac8b7a1b6ee911050dd40bae3193394b034b94eef7baa7",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "dukotah-t2-fresh-controls": {
@@ -34295,8 +34328,8 @@
       "id": "wulfic-periodic-word-crib-votes",
       "title": "Can word cribs predict a periodic key?",
       "question": "Can familiar words reveal a repeating key?",
-      "finding": "Archived page_30 and page_27 correspond exactly to current LP2-13 and LP2-10. Across both pages, both alternating-word folds and all three directions, zero untouched words match an encoded source dictionary word. The source full-stream scores of 10–19 count substrings, not recovered words. Twelve planted periodic-key folds recover at most 11 of roughly 30 untouched words, below the fixed 50% gate; no null-rank exclusion follows.",
-      "limitations": "The source solver votes for each residue separately and enforces only within-word consistency, despite its description of cross-word consistency. The two periods are source examples rather than detected cycles. The 199-shuffle selected maximum is retained as a receipt but not interpreted because the positive gate fails. Missing public GPU checkpoint prevents reproduction of four related validators.",
+      "finding": "Keys fitted to guessed words on LP2-10 and LP2-13 predicted no dictionary words in the parts kept aside for checking. The method also missed most words in messages with known answers, so this attempt cannot rule out repeating-key ciphers.",
+      "limitations": "Only two pages, two proposed key lengths and one dictionary were tested. The key lengths were examples supplied with the method, not periods established in the manuscript.",
       "pages": [
         "lp2-10",
         "lp2-13"
@@ -34316,9 +34349,12 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/wulfic-periodic-word-crib-votes",
-      "current_sha256": "f33a46a3f453f33d2ce38427dce7c729c6d16505a07c9f0a071d502a6df4930e",
+      "current_sha256": "1ea5e3dc8be6986c379aa63041cf3fb6bfa5223902d19a910163b22c0ba8e87d",
       "snapshot_sha256": "f33a46a3f453f33d2ce38427dce7c729c6d16505a07c9f0a071d502a6df4930e",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     },
     "wulfic-position-alphabet-flatness-bound": {
@@ -35445,8 +35481,8 @@
       "id": "wulfic-two-time-pad-premise",
       "title": "Do the proposed two-time-pad regions match?",
       "question": "Do the claimed identical rune spans actually occur?",
-      "finding": "The corrected source stream has 8,226 runes. Five of six proposed paired regions exceed it; the sole in-bounds region matches at 7/404 aligned positions and differs at the first. The P27/P44 prefix also fails. The independent 1,122-case page-pair screen reaches IoC 1.2296 at most; 43/199 page-shuffled full searches reach at least that maximum. Only 2/10 matched-length planted known-reading pairs encrypted with a shared key cross the source 1.15 threshold.",
-      "limitations": "This falsifies six named identical-ciphertext premises, not general shared-key encryption: equal keys can yield different ciphertexts when plaintexts differ, and equal ciphertext alone does not prove equal keys. All 34 source page blobs exist in Git despite the sparse local checkout and match the site pages; the source pair-score functions were replayed exactly. The period and crib loops based on the failed alignments are not meaningful complete decoding tests. The page-pair controls were added after preliminary outcomes were viewed. Page shuffling preserves unigram counts, not natural plaintext, and the IoC screen misses most planted reuse pairs at length 137. Running-key branches of one source script are separate from this grouped claim.",
+      "finding": "The proposed matching passages do not match. Five of the six pairs extend beyond the supplied text; the remaining pair agrees at only 7 of 404 rune positions. The separate page-pair search also missed most known examples of key reuse.",
+      "limitations": "This rejects the specific claims of identical passages, not key reuse in general. Different messages can produce different ciphertext under the same key, and this search was not reliable enough to rule that out.",
       "pages": [
         "lp2-04",
         "lp2-05",
@@ -35533,9 +35569,12 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/wulfic-two-time-pad-premise",
-      "current_sha256": "9968d7e8653a504b4ae0ab2fce305a5fbec9844da4e48c3a0dfb97ebf9a2e6bc",
+      "current_sha256": "c7a05f99aa0e83ed613546da8e738e83b44b35e1e91f74a97b165fc2562c60a0",
       "snapshot_sha256": "9968d7e8653a504b4ae0ab2fce305a5fbec9844da4e48c3a0dfb97ebf9a2e6bc",
-      "changed_fields": [],
+      "changed_fields": [
+        "reader_finding",
+        "reader_limit"
+      ],
       "classification": "draft"
     }
   },
