@@ -53,6 +53,14 @@ function openEditor(doc){doc.getElementById('edit').fire('click');assert(doc.get
 function save(doc){doc.getElementById('editor').fire('submit');assert(!doc.getElementById('editor'),doc.getElementById('error')?.textContent);}
 
 (async()=>{
+ // A no-op editor save keeps the exact objective, including supplied spacing.
+ const exactGoal=await appFor('Find readable text using Vigenere with key ABC on LP2-15');
+ const goalDraft=exactGoal.app.getSnapshot().draft;
+ goalDraft.aim=C.normalizeAim(known({outcomeId:'decipher',wording:'Decipher the text',detail:'  Find readable text  '}));
+ const beforeGoal=C.serialize(goalDraft.aim);openEditor(exactGoal.doc);
+ assert.equal(exactGoal.doc.getElementById('edit-objective').value,'  Find readable text  ');
+ save(exactGoal.doc);assert.equal(C.serialize(exactGoal.app.getSnapshot().draft.aim),beforeGoal);
+ exactGoal.app.destroy();
  // No-op/aim-only editing of the actual parsed page+passage object must not
  // reduce it to only the displayed description or rewrite its provenance.
  const first=await appFor('Reverse each row on LP2-43, lines 2–3');

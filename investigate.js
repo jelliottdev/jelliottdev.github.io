@@ -213,7 +213,8 @@
   if(r.label==='Aim'&&spec.aim.status==='specified'){
    const outcome=C.normalizeOutcome(spec.aim.value),detail=outcome.detail||outcome.wording;
    if(outcome.id==='unclassified')content='<span class="tag unknown">Outcome not classified</span>';
-   if(detail&&detail!==outcome.label&&(outcome.id==='unclassified'||C.normalizeOutcome(detail).id!==outcome.id))content+='<p class="objective-detail">'+esc(detail)+'</p>';
+   const labelText=value=>value.toLowerCase().replace(/[\p{P}\s]+/gu,'');
+   if(detail&&(outcome.id==='unclassified'||labelText(detail)!==labelText(outcome.label)))content+='<p class="objective-detail">'+esc(detail)+'</p>';
   }
   if(r.label==='Aim'&&spec.aim.status!=='specified')content='<span class="tag unknown">Outcome undecided</span>';
   if(r.label==='Method'){const families=C.classifyMethod(spec.method).familyIds;if(tags.length===1&&families.some(id=>C.METHOD_FAMILIES[id]===tags[0].text))content='';content=families.map(id=>'<span class="tag">'+esc(C.METHOD_FAMILIES[id])+'</span>').join('')+content;}
@@ -555,11 +556,12 @@
      flushMethodSteps();
      const ruleText=doc.getElementById('edit-rules').value.trim();
      const scopeText=doc.getElementById('edit-scope').value.trim();
-     const outcomeId=doc.getElementById('edit-aim').value,objective=doc.getElementById('edit-objective').value.trim();
+     const outcomeId=doc.getElementById('edit-aim').value,objectiveInput=doc.getElementById('edit-objective').value;
      const priorOutcome=draft.aim.status==='specified'?C.normalizeOutcome(draft.aim.value):{id:'',wording:'',detail:''};
+     const priorObjective=priorOutcome.detail||priorOutcome.wording,objective=objectiveInput===priorObjective?priorObjective:objectiveInput.trim();
      const patch={},scopeChange=scopeEdit(draft.scope,scopeText);
      if(scopeChange!==undefined)patch.scope=scopeChange;
-     if(outcomeId!==priorOutcome.id||objective!==(priorOutcome.detail||priorOutcome.wording))patch.aim=outcomeId?clarified({outcomeId:outcomeId==='unclassified'?C.normalizeOutcome(objective).id:outcomeId,wording:outcomeId==='unclassified'?objective:priorOutcome.wording||objective,detail:objective}):objective?clarified({outcomeId:'unclassified',wording:objective,detail:objective}):C.field();
+     if(outcomeId!==priorOutcome.id||objective!==priorObjective)patch.aim=outcomeId?clarified({outcomeId:outcomeId==='unclassified'?C.normalizeOutcome(objective).id:outcomeId,wording:outcomeId==='unclassified'?objective:priorOutcome.wording||objective,detail:objective}):objective?clarified({outcomeId:'unclassified',wording:objective,detail:objective}):C.field();
      const removed=C.RULES.filter(key=>doc.getElementById('remove-rule-'+key)?.checked);
      const rulesChange=ruleEdits(draft.rules,ruleText,removed);
      if(rulesChange)patch.rules=rulesChange;

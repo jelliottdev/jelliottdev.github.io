@@ -25,6 +25,11 @@ The research index remains separate. Optional research maps help discover relate
 
 Organize an idea as outcome, ordered methods, scope, and bounds or rules. Reuse the small maintained outcome and method-family vocabularies; spelling or phrasing changes do not create categories. Keep the exact objective and output-changing settings alongside the shared labels. A readable passage and a complete solution can share a deciphering outcome without sharing a success criterion.
 
+Show the exact objective beneath its outcome category on review cards, results
+and printed packets. Suppress only a repeated category label, never a different
+objective that happens to belong to that category. Editing another field must
+not silently rewrite an unchanged objective.
+
 Free text can clarify an existing category or remain unclassified. It cannot add categories automatically. Expand the maintained vocabulary only when an existing category cannot describe the distinction. Scope and parameter changes belong in the specification, not in new method names. A broad method label helps find related work; it never establishes that an exact configuration was executed. An outcome alone is not a method and must not retrieve arbitrary experiments.
 
 ### Home composition (24 October)

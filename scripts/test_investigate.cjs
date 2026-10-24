@@ -224,6 +224,31 @@ test('canonical outcomes retain exact wording and do not create visitor categori
  assert(I.rowsHTML(custom).includes('objective-detail'));assert.deepEqual(Object.keys(C.OUTCOMES),ids);
  const alias=I.answerIntake(I.initialDraft('Try a keyed spiral'),'aim','unclassified','solve LP2');assert.equal(alias.aim.outcome.id,'decipher');assert.equal(alias.aim.value.wording,'solve LP2');
 });
+test('exact objectives remain visible beneath shared categories on screen, packet and shared draft',()=>{
+ const H=require('../claim-share.js'),ids=Object.keys(C.OUTCOMES);
+ const goals=['solve LP2','Find readable text',{outcomeId:'decipher',wording:'Decipher the text',detail:'Find readable text'},
+  {outcomeId:'decipher',detail:'Solve only the selected opening'},
+  {outcomeId:'unclassified',detail:'Compare <img src=x onerror=alert(1)> & shapes'}];
+ for(const aim of goals){
+  const d=C.createDraft({source:{text:'An exact supplied method'},aim:C.field('specified',aim),
+   method:C.field('specified',{operations:[{id:'reverse_row_runes',label:'Reverse each row'}]}),scope:C.field('specified',{pages:['lp2-15']})});
+  const c=C.confirm(d,{id:'exact-goal',at}),detail=C.normalizeOutcome(c.aim).detail;
+  const expected=detail.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const binding=C.binding(c),query=C.retrievalQuery(c),rank=S.select(docs,query.query).map(r=>r.id);
+  assert(I.rowsHTML(c).includes('<p class="objective-detail">'+expected+'</p>'));
+  assert.equal(I.rowsHTML(c).includes('<img'),false);
+  const r=C.bindResearch(c,{id:'goal-result',at,evidence:{snapshotId:'x',records:[],documents:[],search:{reason:'no-matching-records'}},answer:'No match.'});
+  assert(I.packetHTML(C.packetSnapshot(c,r)).includes('<p class="objective-detail">'+expected+'</p>'));
+  const shared=H.decode(H.encode(c)).draft;
+  assert.equal(C.normalizeOutcome(shared.aim).detail,detail);assert(I.rowsHTML(shared).includes('<p class="objective-detail">'+expected+'</p>'));
+  assert.equal(C.binding(c),binding);assert.deepEqual(C.retrievalQuery(c),query);assert.deepEqual(S.select(docs,query.query).map(r=>r.id),rank);
+ }
+ for(const detail of ['Decipher the text','  DECIPHER THE TEXT.  ']){
+  const d=C.createDraft({source:{text:'Rule'},aim:C.field('specified',{outcomeId:'decipher',detail})});
+  assert(!I.rowsHTML(d).includes('objective-detail'),'Only a repetition of the canonical label is suppressed');
+ }
+ assert.deepEqual(Object.keys(C.OUTCOMES),ids);
+});
 test('outcome-only inputs never invent a method or retrieve arbitrary attempts',()=>{
  for(const text of ['Find readable text','solve LP2','Decipher LP2','Decrypt LP2',...Object.values(C.OUTCOMES)]){
   let d=I.initialDraft(text);assert.equal(d.method.status,'unspecified',text);assert(I.intakeQuestions(d).some(q=>q.id==='method'));
