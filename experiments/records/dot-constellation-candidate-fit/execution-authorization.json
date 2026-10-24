@@ -1,0 +1,36 @@
+{
+  "status": "Authorized execution after root review; frozen before any real target or reference scoring",
+  "authorization_origin": "Root agent /root explicitly reviewed PRETARGET-GATE.md and matching-plan-frozen.json and authorized only the frozen primary LP2-07, dependent LP2-23/56 robustness and both 4095-query full-selection references. No tuning, alternate projections or omissions authorized.",
+  "authorized_utc": "2026-10-24T05:21:35.006935+00:00",
+  "plan_sha256": "26ca51b70daf04ac798663053a517bc02d6d7cdd162279ed8e45dd1f6b4391a7",
+  "gate_sha256": "aa0b837d19e2b28db2646233b492fa162be1a1f8e7f2f1a73bea254232c83713",
+  "verified_frozen_input_hashes": 16,
+  "additional_code_sha256": {
+    "execute_matching.py": "625c4cb23b04d20191b4d84d56b09cc286eb0e92c8befad98857af9dd11ff496",
+    "check_matching.py": "b771772fe442715d8f48a94c8d8a3e612edb2f4fb303678bf4882e7bc33f65ab"
+  },
+  "additional_runner_details": {
+    "reference_order": [
+      "uniform_disk",
+      "catalogue_sets"
+    ],
+    "catalogue_sampling": "For each ordinal choose constellation with PCG64.integers(88) in alphabetic IAU-name order, then PCG64.choice(group_size,5,replace=False), retaining source membership-file order inside groups.",
+    "uniform_draw_order": "Five angles followed by five squared-radius uniforms per query.",
+    "reference_attempt_cap": 100,
+    "independent_reference_SVD_ordinals": [
+      0,
+      1,
+      2,
+      3,
+      4091,
+      4092,
+      4093,
+      4094
+    ],
+    "replay_float_tolerance": {
+      "absolute": 1e-12,
+      "relative": 1e-12
+    },
+    "reporting_uncertainty": "Wilson 95% Monte Carlo interval for each generator fraction; does not measure astronomical meaning or confirmatory probability."
+  }
+}

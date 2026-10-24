@@ -58,3 +58,7 @@ Record-type labels and definitions travel inside each complete research excerpt.
 
 
 24 October 2026: deployed the confirmed-idea context contract as Worker version `49ea3923-4991-4ed9-bf8e-38cd7bc0350e`. A concise `query` (up to 1,500 characters) drives retrieval; optional `confirmedQuery` (up to 6,000 characters) supplies the full interpretation and original wording to the comparison. The request body is capped at 32,000 bytes. Missing parameters remain unknown. Cache version `research-v8-confirmed-context` includes the exact confirmed context as well as selected evidence. Existing query-only clients remain supported. Mocked tests cover retrieval isolation, context-sensitive caching, and input bounds; the deployed page-only no-match check returned without inference. No hosted generation was used.
+
+The comparison uses the confirmed aim as well as the procedure and scope. The response explains the closest usable finding, the difference that matters, and only a justified next action. Reusing saved output, recovering a missing input and checking reproducibility are distinct from a new experiment; a next step is optional. Prompt changes invalidate the answer cache. No extra inference call is used for these presentation changes.
+
+24 October 2026: deployed this response guidance as Worker version `ef98e2a1-b9c9-46ee-9b78-acd7a66f44fd`, with cache version `research-v9-decision-value`. Mocked inference tests pass; deployment retained the existing AI and rate-limit bindings. No hosted generation was used, so this is not a live model-quality evaluation.

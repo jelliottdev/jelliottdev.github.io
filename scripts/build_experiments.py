@@ -349,6 +349,7 @@ def build(root=ROOT):
             'id': identifier, 'title': record['title'], 'question': record['question'],
             'summary': record['summary'], 'tags': record['tags'],
             'finding': record.get('reader_finding') or record['finding'],
+            'scope': record['scope'], 'limitations': record['limitations'],
             'record_type': record.get('record_type'),
             'method_topics': record.get('method_topics', []),
             'family': record.get('family'), 'variant_label': record.get('variant', {}).get('label'),

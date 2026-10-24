@@ -3,7 +3,7 @@ const fs=require('node:fs'),vm=require('node:vm');
 const routes=require('../workspace-routes.js');
 assert.equal(routes.destination('#/reader/lp2-15?view=text&line=4-8'),'reader.html#lp2-15?view=text&line=4-8');
 assert.equal(routes.destination('#/experiments?q=autokey%20LP2-15'),'investigate.html?q=autokey%20LP2-15');
-for(const route of ['#/experiments/word-internal-affine-lags','#/research','#/wiki/line-gaps','#/reader/../../bad'])assert.equal(routes.destination(route),null);
+for(const route of ['#/experiments?browse=prime','#/experiments?section=browse-experiments','#/experiments/word-internal-affine-lags','#/research','#/wiki/line-gaps','#/reader/../../bad'])assert.equal(routes.destination(route),null);
 const app=fs.readFileSync(require('node:path').join(__dirname,'../app.js'),'utf8');
 const slice=app.slice(app.indexOf('function requireStartupData('),app.indexOf('\nconst optionalStartupData='));
 let resolveMap,mounts=0;

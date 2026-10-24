@@ -20,6 +20,7 @@ const typedResponse=await typedHandler(request(),{...env,AI:{run:async(model,opt
 }}});
 assert(captured[0].content.includes('bounded solving tests'));
 assert(captured[0].content.includes('source audit'));
+for(const principle of ['user’s aim','ordered compound methods','reusing saved output','not wildcards','Do not invent a variation'])assert(captured[0].content.includes(principle));
 const supplied=JSON.parse(captured[1].content).records;
 assert.deepEqual(JSON.parse(supplied[0].text).record_type,typed.record_type);
 assert.equal((await typedResponse.json()).sources[0].recordType,'method',

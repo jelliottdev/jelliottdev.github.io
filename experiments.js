@@ -139,10 +139,11 @@ async function ensureResearchRecords(){
     const data=await response.json();
     if(!Array.isArray(data.records))throw Error('The research index has an invalid format.');
     const complete=data.records.every(record=>typeof record.finding==='string'&&record.record_type?.id&&
-      Array.isArray(record.method_topics)&&Array.isArray(record.pages));
+      Array.isArray(record.method_topics)&&Array.isArray(record.pages)&&typeof record.limitations==='string'&&
+      ['representation','procedure','parameters','exclusions'].every(key=>typeof record.scope?.[key]==='string'));
     if(!complete)return ensureExperimentRecords();
     return data.records.map(record=>({...record,status:'published',
-      scope:{pages:record.pages,artifacts:record.artifacts||[]},review:{retested_on:record.retested_on}}));
+      scope:{...record.scope,pages:record.pages,artifacts:record.artifacts||[]},review:{retested_on:record.retested_on}}));
   }).catch(error=>{researchRecordsPromise=null;throw error});
   researchRecords=await researchRecordsPromise;
   return researchRecords;
@@ -539,7 +540,7 @@ function experimentArticle(r,catalog=experimentRecords){
       <h3 id="experiment-remaining">What remains open</h3><p>${esc(r.next_steps)}</p>
     </details>
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
-      <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Method</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Not tested</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
+      <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt id="experiment-input">Input</dt><dd>${esc(r.scope.representation)}</dd><dt id="experiment-procedure">Method</dt><dd>${esc(r.scope.procedure)}</dd><dt id="experiment-bounds">Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt id="experiment-exclusions">Not tested</dt><dd>${esc(r.scope.exclusions)}</dd><dt id="experiment-limitations">Limitations</dt><dd>${esc(r.limitations)}</dd></dl>
       <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles,r.article_links||{},(r.visuals||[]).map(visual=>visual.path))}</div>
       <div id="experiment-method-guides">${experimentMethodGuidesContent(r)}</div>
       <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>

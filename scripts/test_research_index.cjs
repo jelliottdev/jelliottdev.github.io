@@ -66,6 +66,15 @@ const grouped=Index.results(Index.select(records,state('q=Case+2')));
 assert(grouped.includes('href="#/research?family=prime-reversal"'),'Related-group traversal clears the narrowing title query');
 assert(grouped.includes('Inconclusive'),'Finding classification is explicit in every row');
 assert(Index.familyContext(Index.select(records,state('family=prime-reversal'))).includes('Related test group:'));
+const detailOnly=fixture('details','A bounded test',{scope:{pages:['lp2-15'],procedure:'Rotate each column',representation:'Prime digits',parameters:'Three fixed seeds',exclusions:'Unrestricted autokey and <script> are not tested.'},limitations:'No independent holdout was used.'});
+for(const [query,label,section] of [['column','Matches method','experiment-procedure'],['unrestricted autokey','Mentioned under “Not tested”','experiment-exclusions'],['holdout','Matches limitations','experiment-limitations']]){
+ const selected=Index.select([detailOnly],state('q='+encodeURIComponent(query)));
+ assert.equal(selected.total,1);
+ const html=Index.results(selected);assert(html.includes(label));assert(html.includes('?section='+section));assert(!html.includes('<script>'));
+}
+assert.equal(Index.select([detailOnly],state('q=LP2-31+autokey')).total,0,'Exclusion discovery does not expand page scope');
+assert(!Index.results(Index.select([detailOnly],state('q=bounded'))).includes('research-match'),'No redundant matching panel for ordinary title matches');
+assert(Index.results(Index.select([fixture('unknown','No page metadata',{scope:{pages:[]}})],state(''))).includes('Page scope not recorded'));
 const published=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json'),'utf8')).records;
 const all=[];
 for(let page=1;page<=Math.ceil(published.length/Index.pageSize);page++){
@@ -148,7 +157,7 @@ const lifecycleGuard=setTimeout(()=>{console.error('Research lifecycle test did 
   const discovery=published.map(record=>({id:record.id,title:record.title,summary:record.summary,tags:record.tags,
     family:record.family,outcome:record.outcome,finding:record.reader_finding||record.finding,
     record_type:record.record_type,method_topics:record.method_topics,pages:record.scope.pages,artifacts:record.scope.artifacts,
-    retested_on:record.review.retested_on}));
+    retested_on:record.review.retested_on,scope:record.scope,limitations:record.limitations}));
   const clearCaches=()=>vm.runInContext('experimentRecords=undefined;experimentRecordsPromise=null;researchRecords=undefined;researchRecordsPromise=null;',context);
   clearCaches();const requests=[];
   context.fetch=async url=>{requests.push(url);return {ok:true,json:async()=>({records:discovery})}};

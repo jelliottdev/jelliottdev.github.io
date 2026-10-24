@@ -9,6 +9,7 @@
       if(!/^lp[12]-\d{2}$/.test(id))return null;
       return 'reader.html#'+id+(query?'?'+query:'');
     }
+    if(parts[0]==='experiments' && parts.length===1 && (new URLSearchParams(query).has('browse') || new URLSearchParams(query).get('section')==='browse-experiments'))return null;
     if(parts[0]==='experiments' && parts.length===1)return 'investigate.html'+(query?'?'+query:'');
     return null;
   }

@@ -1,0 +1,100 @@
+{
+  "status": "proposed; root review required before any LP2 dot-to-star score",
+  "queue_id": "dot-constellation-candidate-extension",
+  "question": "How closely does the fixed five-brightest-catalogue-entry pattern in each IAU constellation match the existing LP2 five-dot artwork under a similarity transform?",
+  "claim_limit": "Geometric measurement of this finite catalogue/projection selection, not constellation identification, a cipher solution or discovery. Not every five-star subset or traditional line map.",
+  "primary_artwork": {
+    "file": "inputs/five-dot-geometry.json",
+    "region": "lp2-07",
+    "points": "Five existing threshold140 component centroids, in their frozen left-to-right order. No new point measurement, threshold selection or crop changes.",
+    "replication_only": [
+      "lp2-23",
+      "lp2-56"
+    ],
+    "dependence": "Repeated shared artwork, not three independent observations. Primary selected before fitting; no best-of-three search or combined p-value."
+  },
+  "catalogue": "Fixed constellation-candidates.json: 88 official IAU constellations; exactly five HR entries each, ranked by Vmag then integer HR after Roman1987 membership on fixed FK5 J2000 coordinates. No proper-motion, epoch, star-subset or membership tuning.",
+  "duplicates": "Retain distinct HR components, including selected close pairs in Cen/Cru/Gem. Explicitly call these five catalogue entries, not five unresolved naked-eye points. No merging, flux combination or hand replacement.",
+  "projection": "Already-fixed gnomonic_xy in constellation-candidates.json, tangent centre at unweighted mean unit direction of those five stars. No alternate projection or fitted centre. All88 validated finite/front-hemisphere/nonzero radius.",
+  "fit": {
+    "correspondence": "Enumerate all120 bijections between the fixed five stars and five target dots.",
+    "transforms": "Translation, arbitrary planar rotation, positive uniform scale; both orientation-preserving and reflected similarities. Exactly2 determinant branches perpermutation; no anisotropic scale,shear,star omission or line-map choices.",
+    "objective": "For centred X(stars),Y(permuted dots), solve constrained orthogonal Procrustes analytically. Optimize positive uniform scale. Primary score sqrt(SSE/sum||Y-Ymean||²), equivalently RMS residual divided by target RMSradius; lower is closer. Save RMS pixels, maximum residual, scale,angle,reflection,permutation and allfive residual vectors.",
+    "candidate_count": "88 ×120 ×2 =21120 labelled registrations for the primary shape. Nuisance choices and parameter settings are not separate solving ideas.",
+    "ties": "Scores equal within1e-12 reported as tie set; stable display order by IAU shortname,lexicographic permutation,orientation-preserving before reflected. Preserve full scores, not only chosen winner.",
+    "implementation_check": "Direct NumPy SVD reference versus exact2D closed-form/optimized batched implementation on fixed synthetic cases; residual agreement<=1e-12 before target. Near-collinear and reflected cases included."
+  },
+  "reporting": {
+    "named_candidates": [
+      "Ori",
+      "Aql",
+      "Boo"
+    ],
+    "full_search": "Publish all88 candidate minima and ranks, plus full-search best, not only the named3. Compare named scores with the same complete88-candidate reference minima.",
+    "no_binary_astronomy_claim": "No threshold alone identifies an astronomical source. Report normalized distance,physical pixel residual and structural null comparisons with explicit null assumptions."
+  },
+  "positive_controls": {
+    "rng": "NumPy PCG64 seed330120261024",
+    "exact": "One transformed/reordered plant from each of88 fixed candidates. Rotation=(137.5deg*ordinal)%360,scale=3.7,translation=(123,-45),reflection=ordinal mod2; frozen seeded permutation. Requireowncandidate appears in optimum tie set and residual<=1e-10; do not requireuniqueconstellation when candidate patterns alias.",
+    "noise": "Eight plants per88candidate atGaussian percoordinate sigma0.001 and0.01 of centred shape RMSradius; full88candidate search eachtime. Report truecandidate rank/recovery and score distributions for every case,notselective success.",
+    "interpretation": "88 exact +1408 noisy queries are power/implementation diagnostics; related patterns and repeats are not independent evidence for LP2."
+  },
+  "full_selection_controls": {
+    "rng": "Separate NumPy PCG64 seeds330120261025 and330120261026",
+    "uniform_disk": "4095 queries,each five iid points uniformly inunitdisk: angleU(0,2pi),radius=sqrt(U(0,1)). Run identical full88×120×2search,retainminimumscore perquery. Reject only exactzeroRMSradius withattempt logged.",
+    "catalogue_sets": "4095 queries. Drawoneof88constellations uniformly,then five eligible HRentries without replacement fromthat completeconstellationmembership. Same mean-centred J2000gnomonic projection,then full88candidate similaritysearch. If projection fails its geometric domain,recordandretry witha fixed100attempt cap; no targetbasedacceptance. Exact duplicates or overlaps with candidate sets are retained.",
+    "comparison": "For each predefined reference model, report (1+number(nullminimum<=observedscore))/(4095+1), rawcount and binomial uncertainty. Report bothmodels; do not choose favourable one. These are conditional geometric selection references,not probability the manuscript authors chose a constellation.",
+    "permutation_not_null": "Randomly reordering thefive observed dots is not a null because the match already optimizes everypermutation."
+  },
+  "execution_gate": "After root review, freeze final code,input hashes,seeds,count andcontrols before anytargetscore. Benchmark the complete search on synthetic queries first. If expensive, optimize only afterreference parity; do not silently reduce constellation/registration choices. No publicrecord or claim untilreviewed.",
+  "inputs": [
+    {
+      "path": "candidate-selection-plan.json",
+      "sha256": "b3995d7813ad75a7b70e8759b9cb525febb0c5921b18b2b3b8892737b9b301c7"
+    },
+    {
+      "path": "candidate-selection-amendment.json",
+      "sha256": "decc56c487f553d8147623765f072592627e7a6d4adf2a1b139bc047df100abb"
+    },
+    {
+      "path": "candidate-preparation-receipt.json",
+      "sha256": "74339d2cb639896e4d20b3434156020538fcf03703efe688624448dece9f1646"
+    },
+    {
+      "path": "constellation-candidates.json",
+      "sha256": "1f39044682c4883a1fb3e783b4349f5f1df6f8f892bb5317df062829baa3d3e5"
+    },
+    {
+      "path": "catalogue-membership.json",
+      "sha256": "407d21924ce349302926eec55e5371453246e5ac51ad734fe53a9ff075e4e44b"
+    },
+    {
+      "path": "inputs/five-dot-geometry.json",
+      "sha256": "4135c8a83e3d56d81451e0000ab4ff98e05dff5a508ed344c2405c1b6cd22e00"
+    },
+    {
+      "path": "inputs/cds-vizier-v50-all.tsv",
+      "sha256": "ade01e2d4a7ac6316afad9b34b8f247bbf0a225990c3df2654c2f6e8eb7e16a7"
+    },
+    {
+      "path": "inputs/cds-readme.html",
+      "sha256": "d5b5ed04784847eb775a02107ba8035704d1262d0c49c1d24d26f8a8b67c80fd"
+    },
+    {
+      "path": "inputs/constellation_data_roman87.dat",
+      "sha256": "17407174f8d1e2771e4e693bc007d542b69ae0b604cec311774c7e91e146f196"
+    },
+    {
+      "path": "inputs/constellation_names.dat",
+      "sha256": "905b9005b4fe86c81140dbb818c186b96cc7f6c1bebce75113434466b35f28b2"
+    },
+    {
+      "path": "requirements-lock.txt",
+      "sha256": "1d35a749734553ab96ffebc6fc00ea9156a93c4367c141e183437d0ed3db4122"
+    },
+    {
+      "path": "astropy-install-report.json",
+      "sha256": "fa6266d04a53431cfcb24f78eba9cd3979e6a427b479a5674adeaa83cba7e798"
+    }
+  ]
+}

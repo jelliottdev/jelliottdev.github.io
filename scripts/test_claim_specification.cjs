@@ -89,6 +89,11 @@ test('compound method order and unknown parameters remain explicit',()=>{
  const clarified=C.clarify(ambiguous,'operation','reverse_value_digits');
  assert.equal(clarified.method.value.operations[1].id,'keyword_cipher');
  assert.equal(clarified.method.value.operations[1].key.status,'unspecified');
+ const manual=draft({method:known({operations:[{id:'ambiguous',label:'Original ambiguous piece',key:'FOO'},{id:'cipher',key:'BAR'}]}),unresolved:[{kind:'operation_ambiguity',operationIndex:0}]});
+ const chosen=C.clarify(manual,'operation','reverse_row_runes');
+ assert.equal(chosen.method.value.operations[0].sourceText,'Original ambiguous piece');
+ assert.equal(chosen.method.value.operations[0].key,'FOO');
+ assert.deepEqual(chosen.method.value.operations[1],manual.method.value.operations[1]);
 });
 test('confirmation approves incomplete meaning and never marks work executed',()=>{
  const d=draft(),s=confirmed(d);

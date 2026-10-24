@@ -1,0 +1,44 @@
+{
+  "scope": "Star candidate input preparation only, frozen before candidate selection; no LP2 matching authorized",
+  "catalogue": "CDS V/50/catalog complete VizieR TSV. NASA retained as provenance mirror, not merged.",
+  "nonstellar": "Explicitly exclude HR92,95,182,1057,1841,2472,2496,3515,3671,6309,6515,7189,7539,8296, the14 nonstellar retained-number entries identified by catalogue documentation. Also exclude any missing/unparseable/nonfiniteJ2000RA/Dec orVmag; log every row.",
+  "photometry": "Source Vmag visual value, flags retained but not silently excluded; no magnitude epoch, variability selection or colour cut. Rank ascending (Vmag,integerHR), exactly5 perconstellation.",
+  "membership": "Astropy8.0.2 get_constellation(SkyCoord(FK5(equinox=J2000), catalogueJ2000positions),short_name=True); Roman1987 IAU boundaries with B1875precession insidepinnedlibrary. No manualBayer/Flamsteed suffix membership. Disable IERS downloads. No propermotion or epoch tuning.",
+  "duplicates": "Each distinctHR record retained, including binary/multiple components and coincident/nearcoincident coordinates. No angular merge, flux combination or handreplacement; record closepairs and flags so fivecataloguerecords is not represented as fiveunresolvedvisualsources.",
+  "projection": "One J2000gnomonic plane perselectedfive, centred on normalized unweighted mean ofJ2000unitvectors. East/north basis fromcentreRA/Dec; x=(v·east)/(v·centre),y=(v·north)/(v·centre). Stop before matching if centreundefined,anydenominator<=0,orzeroRMSradius. No centreoptimization.",
+  "validation": "Requireall88 official shortnames andatleast5 eligible rows each. Exact installedRoman/names files must match recoveredtaggedsource bytes. Candidate lists/projections are fixed inputs to later reviewedmatchingplan, not outcomes.",
+  "inputs": [
+    {
+      "path": "inputs/cds-vizier-v50-all.tsv",
+      "sha256": "ade01e2d4a7ac6316afad9b34b8f247bbf0a225990c3df2654c2f6e8eb7e16a7"
+    },
+    {
+      "path": "inputs/cds-readme.html",
+      "sha256": "d5b5ed04784847eb775a02107ba8035704d1262d0c49c1d24d26f8a8b67c80fd"
+    },
+    {
+      "path": "inputs/constellation_data_roman87.dat",
+      "sha256": "17407174f8d1e2771e4e693bc007d542b69ae0b604cec311774c7e91e146f196"
+    },
+    {
+      "path": "inputs/constellation_names.dat",
+      "sha256": "905b9005b4fe86c81140dbb818c186b96cc7f6c1bebce75113434466b35f28b2"
+    },
+    {
+      "path": "inputs/astropy-v8.0.2-utils.py",
+      "sha256": "43c0717ddbd877aa7b15cbe725707e8768f70382a0ffecf6d7cd2554644c7112"
+    },
+    {
+      "path": "inputs/astropy-license.rst",
+      "sha256": "97d28d33c40cadc630cddfca53969fdd9dc44ede20faa2d892ba730933e9a20e"
+    },
+    {
+      "path": "astropy-install-report.json",
+      "sha256": "fa6266d04a53431cfcb24f78eba9cd3979e6a427b479a5674adeaa83cba7e798"
+    },
+    {
+      "path": "select_candidates.py",
+      "sha256": "d585bb167eaeb702d8ad9bb34920f12c99fe160ef52bc926fb2cf46d0dcb1fdc"
+    }
+  ]
+}

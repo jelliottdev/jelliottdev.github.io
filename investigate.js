@@ -22,23 +22,108 @@
   return C.field('specified',{pages:C.pages(selected)},provenance);
  }
  function initialDraft(text){
-  // Only explicit known reversal ambiguities are interpreted. Arbitrary method
-  // wording remains exactly that: editable supplied wording, not parsed code.
-  let id='described_method',label=text,unresolved=[];
-  if(/\brevers(?:e|ing)\b[^.!?]*\bprime values\b[^.!?]*\brows?\b/i.test(text)&&! /\bdigits?\b/i.test(text)){
-   unresolved=[{kind:'operation_ambiguity',operationIndex:0,text,provenance:prov}];
-  }else if(/\brevers(?:e|ing)\b[^.!?]*\bdigits?\b/i.test(text)){id='reverse_value_digits';label='Reverse decimal digits of each value';}
-  else if(/\bread each row backwards\b|\breverse (?:the )?(?:rune )?order within each row\b|\breverse each row\b/i.test(text)){id='reverse_row_runes';label='Reverse rune order within rows';}
-  const rules={};
-  if(/\b(?:keep(?:ing)?|preserv(?:e|ing)) word boundaries\b/i.test(text))rules.wordBoundaries=known('preserve');
+  // Recognize complete, tiny prose forms only. Substring recognition would
+  // silently discard appended ciphers, conditions, keys and negative wording.
+  // Conditions/negations/code stay opaque and fully visible, not "understood".
+  const opaque=/\b(?:not|never|unless|except|excluding|exclude|avoid|if|when|without|only|instead|otherwise|but|until|provided)\b|\bdon['’]t\b|[`{}\n]/i.test(text);
+  const rules={},unresolved=[];
+  function recognized(piece){
+   if(opaque)return null;
+   let value=piece.trim().replace(/[.]$/,'');
+   value=value.replace(/,?\s+(?:keeping|preserving|keep|preserve) word boundaries$/i,'');
+   // Strip only an exact, independently valid trailing positive page clause.
+   const on=value.match(/\s+on\s+(LP[12]-[^.!?]+)$/i);
+   if(on){try{parseScope(on[1]);value=value.slice(0,on.index);}catch{}}
+   if(/^reverse (?:the )?prime values (?:of|in) (?:each|every) row$/i.test(value))return {ambiguous:true,id:'ambiguous_reversal',label:piece,sourceText:piece};
+   if(/^reverse (?:the )?(?:decimal )?digits of each (?:prime )?value(?: in (?:each|every) row)?$/i.test(value))return {
+    id:'reverse_value_digits',label:/\bprime\b/i.test(value)?'Reverse decimal digits of each prime value':'Reverse decimal digits of each value',sourceText:piece};
+   if(/^(?:read each row backwards|reverse (?:the )?(?:rune )?order within each row|reverse each row)$/i.test(value))return {id:'reverse_row_runes',label:'Reverse rune order within rows',sourceText:piece};
+   return null;
+  }
+  // An explicit "then" supplies order, not a general program parse. Keep the
+  // entire remaining phrase(s) as opaque operations, including their key/rules.
+  const separator=opaque?null:/\s*[,;]?\s+then\s+/i.exec(text);
+  // Split at most once. The tail may contain arbitrary code, quoted keys or
+  // more steps: its complete wording stays together instead of being parsed.
+  const pieces=separator?[text.slice(0,separator.index),text.slice(separator.index+separator[0].length)]:[text];
+  const parsed=pieces.map(recognized);
+  const hasKnown=parsed.some(Boolean);
+  const operations=hasKnown?pieces.map((piece,index)=>{
+   const operation=parsed[index]||{id:'described_method',label:piece,sourceText:piece};
+   if(operation.ambiguous){unresolved.push({kind:'operation_ambiguity',operationIndex:index,text:piece,provenance:prov});delete operation.ambiguous;}
+   return operation;
+  }):[{id:'described_method',label:text,sourceText:text}];
+  if(hasKnown&&/\b(?:keep(?:ing)?|preserv(?:e|ing)) word boundaries[.]?$/i.test(text))rules.wordBoundaries=known('preserve');
   // Recognize only fully qualified, explicit page IDs/ranges. A shorthand
   // continuation is kept unresolved instead of claiming a partial exact set.
   const refs=text.match(/\bLP[12]-\d{1,2}(?:\s*[-–—]\s*(?:LP[12]-)?\d{1,2})?/gi)||[];
   let scope=C.field();
-  if(refs.length&&!/LP[12]-\d{1,2}\s*(?:and|,)\s*\d/i.test(text)){
+  if(!opaque&&refs.length&&!/LP[12]-\d{1,2}\s*(?:and|,)\s*\d/i.test(text)){
    try{scope=parseScope(refs.join(','));}catch{/* Keep unknown and let the user edit. */}
   }
-  return C.createDraft({source:{text},method:known({operations:[{id,label}]}),scope,rules,unresolved});
+  // A page mention followed by an explicit passage qualifier is not a whole
+  // page selection. Retain the source's qualifier as prose, without guessing
+  // its numbering convention, endpoints or execution semantics.
+  if(!opaque&&scope.status==='specified'){
+   const passages=[...text.matchAll(/\bLP[12]-\d{1,2}\s*,?\s+(?:lines?|rows?|runes?|positions?|words?|paragraphs?|clauses?)\b[^.!?\n;]*/gi)]
+    .map(match=>match[0].split(/,?\s+then\s+/i)[0].trim());
+   if(passages.length)scope=known({...scope.value,description:passages.join('; ')});
+  }
+  if(!opaque&&/\ball (?:the )?unsolved LP2(?: pages)?\b/i.test(text))scope=known({pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0'))});
+  let aim=C.field();
+  if(!opaque){
+   const explicit=text.match(/\b(?:my\s+)?(?:aim|goal)\s*(?:is|:)\s*([^.!?\n]+)/i);
+   if(explicit)aim=known(explicit[1].trim());
+   else if(/^(?:I (?:want|would like) to\s+)?(?:find|recover|produce) (?:readable (?:text|plaintext)|plaintext)\b/i.test(text.trim()))aim=known('Find readable text');
+   else if(/^(?:I (?:want|would like) to\s+)?(?:test|measure|check) (?:a |the )?statistical (?:effect|pattern|difference)\b/i.test(text.trim()))aim=known('Test a statistical effect');
+   else if(/^(?:I (?:want|would like) to\s+)?(?:reproduce|replicate|rerun)\b/i.test(text.trim()))aim=known('Reproduce an existing result');
+  }
+  return C.createDraft({source:{text},aim,method:known({operations}),scope,rules,unresolved});
+ }
+ function intakeQuestions(draft){
+  const result=C.questions(draft);
+  const acknowledged=name=>draft.clarifications.some(c=>c.question===name&&c.choice==='undecided');
+  if(draft.aim.status==='unspecified'&&!acknowledged('aim'))result.push({id:'aim',prompt:'What do you want to find out?',choices:[
+   {id:'readable',label:'Find readable text'},
+   {id:'statistical',label:'Test a statistical effect'},
+   {id:'reproduce',label:'Reproduce an existing result'},
+   {id:'other',label:'Another aim',requiresText:true,fieldLabel:'Describe your aim'},
+   {id:'undecided',label:'Leave the aim undecided'}]});
+  if(draft.scope.status==='unspecified'&&!acknowledged('scope'))result.push({id:'scope',prompt:'Which material should this apply to?',choices:[
+   {id:'unsolved-lp2',label:'The unsolved LP2 pages',example:'LP2-00–55'},
+   {id:'specific',label:'Specific pages or a passage',requiresText:true,fieldLabel:'Name the pages or passage',placeholder:'LP2-15, LP2-17; or LP2-43, lines 2–3'},
+   {id:'undecided',label:'Leave the scope undecided'}]});
+  return result;
+ }
+ function chosenScope(text){
+  try{return parseScope(text,editProvenance);}catch(error){
+   // A malformed page list is an error; a prose passage remains exact prose.
+   const residue=text.replace(/lp[12]-/gi,'').replace(/\band\b/gi,'').replace(/[\s\d,;–—-]/g,'');
+   if(!residue)throw error;
+   return clarified({description:text.trim()});
+  }
+ }
+ function answerIntake(draft,id,choice,text=''){
+  if(!['aim','scope'].includes(id))return C.clarify(draft,id,choice,text);
+  const question=intakeQuestions(draft).find(q=>q.id===id),option=question?.choices.find(c=>c.id===choice);
+  if(!option)throw Error('Choose an available answer.');
+  if(option.requiresText&&!text.trim())throw Error(option.fieldLabel+'.');
+  let value=C.field();
+  if(id==='aim'&&choice!=='undecided')value=clarified(choice==='other'?text.trim():option.label);
+  if(id==='scope'&&choice==='specific')value=chosenScope(text);
+  if(id==='scope'&&choice==='unsolved-lp2')value=clarified({pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0'))});
+  const next=C.revise(draft,{[id]:value});
+  next.clarifications.push({question:id,choice,...(option.requiresText?{text}:{}),revision:next.revision});
+  return next;
+ }
+ function compactPages(values){
+  const selected=C.pages(values),ranges=[];
+  for(let i=0;i<selected.length;){
+   const first=selected[i];let last=first,j=i+1;
+   while(j<selected.length&&selected[j].slice(0,3)===first.slice(0,3)&&Number(selected[j].slice(4))===Number(last.slice(4))+1)last=selected[j++];
+   ranges.push({id:'scope-range:'+first+':'+last,text:first.toUpperCase()+(last===first?'':'–'+last.slice(4)),unknown:false});i=j;
+  }
+  return ranges;
  }
  function validateAnswer(data,knownDocuments){
   if(!data||typeof data.answer!=='string'||!data.answer.trim()||data.answer.length>12000||!Array.isArray(data.sources)||!data.sources.length||data.sources.length>4)throw Error('A sourced comparison is unavailable. You can inspect the related records below.');
@@ -53,19 +138,23 @@
   if(!citations.length||citations.some(n=>n<1||n>data.sources.length))throw Error('The comparison could not be checked against its sources.');
   return {answer:data.answer,sources:data.sources.map(s=>knownDocuments.find(d=>d.id===s.id&&d.href===s.href)),cached:Boolean(data.cached)};
  }
- function rowsHTML(spec){return '<dl>'+C.reviewRows(spec).filter(r=>r.label!=='Unresolved'&&(r.tags||[]).length).map(r=>'<div class="tag-row"><dt>'+esc(r.label)+'</dt><dd>'+r.tags.map(t=>'<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(t.text)+'</span>').join('')+'</dd></div>').join('')+'</dl>';}
+ function rowsHTML(spec){return '<dl>'+C.reviewRows(spec).filter(r=>r.label!=='Unresolved'&&(r.tags||[]).length).map(r=>{
+  const originalTags=r.label==='Scope'&&spec.scope.status==='specified'?r.tags.map(t=>t.id==='scope:description'?{...t,text:spec.scope.value.description}:t):r.tags;
+  const tags=r.label==='Scope'&&spec.scope.status==='specified'&&spec.scope.value.pages?[...compactPages(spec.scope.value.pages),...originalTags.filter(t=>!/^lp[12]-\d{2}$/.test(t.id))]:originalTags;
+  return '<div class="tag-row"><dt>'+esc(r.label)+'</dt><dd>'+tags.map(t=>'<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(t.text)+'</span>').join('')+'</dd></div>';
+ }).join('')+'</dl>';}
  function methodText(spec){return C.reviewRows(spec).find(r=>r.label==='Method').tags.map(t=>t.text).join('; then ');}
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
- function sourceHTML(doc,records){
+ function sourceHTML(doc,records,full=false){
   const record=records.find(r=>r.id===doc.id);
   return '<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(doc.title)+'</a></h3>'+
-   (record?'<p>'+esc(record.reader_finding||record.finding)+'</p><p><strong>Limit:</strong> '+esc(record.reader_limit||record.limitations)+'</p>':'<p>Supporting manuscript context, not evidence that the idea was tested.</p>')+'</section>';
+   (record?'<p>'+esc(record.reader_finding||record.finding)+'</p><p><strong>Limit:</strong> '+esc(record.reader_limit||record.limitations)+'</p>'+(full?'<dl class="source-facts">'+[['Pages',(record.scope.pages||[]).map(p=>p.toUpperCase()).join(', ')||'No manuscript page selection'],['Method',record.scope.procedure],['Bounds',record.scope.parameters],['Not tested',record.scope.exclusions],['Run',record.reproduction?.command],['Inputs',(record.reproduction?.inputs||[]).map(f=>f.path).join(', ')]].filter(([,value])=>value).map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>':''):'<p>Supporting manuscript context, not evidence that the idea was tested.</p>')+'</section>';
  }
  function packetHTML(packet){
   const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[];
   return '<h1>Liberpedia · Research note</h1><p>'+esc(r.at)+'</p>'+rowsHTML(s)+
-   '<h2>Research comparison</h2><div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
-   '<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records)).join('')+
+   '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
+   (docs.length?'<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,true)).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
  function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout}={}){
@@ -80,15 +169,16 @@
   function stop(){generation++;controller?.abort();controller=null;busy=false;}
   function render(){
    const prior=doc.activeElement?.id;
+   const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    if(stage==='input'){
     host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="1500" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
    }else{
-    host.innerHTML='<button class="back" id="back" type="button">Back to idea</button><h1 id="review-title" tabindex="-1">'+(stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+
-     (stage==='research'?'<details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
+    host.innerHTML='<button class="back" id="back" type="button">Back to idea</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+
+     (pending?'':(stage==='research'?'<details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
      '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>':'</section>')+
-     (editing?editorHTML():questionsHTML())+
+     '')+(editing?editorHTML():questionsHTML())+(pending?'<button id="edit" type="button">Edit interpretation</button>':'')+
      (stage==='review'?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
-     (stage==='review'&&!editing&&!C.questions(draft).length?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p><div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p><div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
@@ -96,19 +186,19 @@
    if(prior&&doc.getElementById(prior))focus('#'+prior);
   }
   function editorHTML(){
-   const scope=draft.scope.status==='specified'?(draft.scope.value.pages||[]).map(p=>p.toUpperCase()).join(', '):'';
+   const scope=draft.scope.status==='specified'?(draft.scope.value.description||(draft.scope.value.pages||[]).map(p=>p.toUpperCase()).join(', ')):'';
    const method=draft.method.status==='specified'?methodText(draft):'';
    const rule=C.reviewRows(draft).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text).join('\n');
-   return '<form class="editor" id="editor"><label for="edit-aim">Aim <span class="small">(optional)</span></label><input type="text" id="edit-aim" maxlength="240" value="'+esc(draft.aim.status==='specified'?draft.aim.value:'')+'"><label for="edit-method">Method</label><textarea id="edit-method" required maxlength="1200">'+esc(method)+'</textarea><label for="edit-scope">Pages <span class="small">(optional)</span></label><input type="text" id="edit-scope" value="'+esc(scope)+'" placeholder="LP2-15, LP2-17"><label for="edit-rules">Additional rules <span class="small">(optional)</span></label><textarea id="edit-rules" maxlength="600">'+esc(rule)+'</textarea><div class="actions"><button id="cancel-edit" type="button">Cancel</button><button class="primary" type="submit">Review changes</button></div></form>';
+   return '<form class="editor" id="editor"><label for="edit-aim">Aim <span class="small">(optional)</span></label><input type="text" id="edit-aim" maxlength="240" value="'+esc(draft.aim.status==='specified'?draft.aim.value:'')+'"><label for="edit-method">Method</label><textarea id="edit-method" required maxlength="1200">'+esc(method)+'</textarea><label for="edit-scope">Pages or passage <span class="small">(optional)</span></label><input type="text" id="edit-scope" value="'+esc(scope)+'" placeholder="LP2-15, LP2-17"><label for="edit-rules">Additional rules <span class="small">(optional)</span></label><textarea id="edit-rules" maxlength="600">'+esc(rule)+'</textarea><div class="actions"><button id="cancel-edit" type="button">Cancel</button><button class="primary" type="submit">Review changes</button></div></form>';
   }
   function questionsHTML(){
    if(stage!=='review')return '';
-   const q=C.questions(draft)[0];if(!q)return '';
-   return '<form id="clarification" class="question"><fieldset><legend>'+esc(q.prompt)+'</legend>'+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
+   const q=intakeQuestions(draft)[0];if(!q)return '';
+   return '<form id="clarification" class="question"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
-   if(result)return '<h2>What the records establish</h2><div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div><p class="small">AI comparison · Check the cited scope and findings.'+(result.cached?' Reused answer.':'')+'</p>'+result.sources.map(d=>sourceHTML(d,records)).join('')+controls;
+   if(result)return '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls+(result.noMatch?'':'<p class="small answer-note">AI comparison based on the linked records.</p>');
    const q=C.retrievalQuery(confirmed),scope=C.queryForResearch(confirmed,{maxLength:6000}),related=q.query?S.select(documents,q.query,scope.pages||[]).filter(d=>d.kind==='experiment').slice(0,2):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records)).join(''):'');
   }
@@ -127,7 +217,8 @@
      const current=draft.method.status==='specified'?methodText(draft):'';
      const ruleText=doc.getElementById('edit-rules').value.trim();
      const previousRules=C.reviewRows(draft).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text).join('\n');
-     const patch={aim:doc.getElementById('edit-aim').value.trim()?clarified(doc.getElementById('edit-aim').value.trim()):C.field(),scope:parseScope(doc.getElementById('edit-scope').value,editProvenance)};
+     const scopeText=doc.getElementById('edit-scope').value.trim();
+     const patch={aim:doc.getElementById('edit-aim').value.trim()?clarified(doc.getElementById('edit-aim').value.trim()):C.field(),scope:scopeText?chosenScope(scopeText):C.field()};
      if(ruleText!==previousRules){patch.rules=Object.fromEntries(C.RULES.map(k=>[k,C.field()]));patch.rules.exceptionalCases=ruleText?clarified(ruleText):C.field();}
      if(wording!==current)patch.method=clarified({operations:[{id:'described_method',label:wording}]});
      draft=C.revise(draft,patch);
@@ -136,20 +227,22 @@
     }catch(e){error=e.message;doc.getElementById('error').textContent=error;}
    });
    doc.getElementById('clarification')?.addEventListener('change',()=>{
-    const other=doc.querySelector('input[name=choice]:checked')?.value==='other';
-    doc.getElementById('other-label').hidden=!other;doc.getElementById('other-detail').hidden=!other;doc.getElementById('other-detail').required=other;
+    const selected=doc.querySelector('input[name=choice]:checked')?.value,q=intakeQuestions(draft)[0],option=q.choices.find(c=>c.id===selected),other=Boolean(option?.requiresText);
+    doc.getElementById('other-label').hidden=!other;doc.getElementById('other-label').textContent=option?.fieldLabel||'Describe what you mean';doc.getElementById('other-detail').hidden=!other;doc.getElementById('other-detail').required=other;doc.getElementById('other-detail').placeholder=option?.placeholder||'';
    });
    doc.getElementById('clarification')?.addEventListener('submit',event=>{
     event.preventDefault();const choice=doc.querySelector('input[name=choice]:checked')?.value;if(!choice)return;
-    const q=C.questions(draft)[0];
-    if(choice==='other'){
+    const q=intakeQuestions(draft)[0];
+    if(['aim','scope'].includes(q.id)){
+     try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
+    }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;
      draft=C.clarify(draft,q.id,choice,text);editing=true;message='Your explanation is kept. Edit the method wording to make the interpretation explicit.';
     }else{draft=C.clarify(draft,q.id,choice);message='';}
     error='';render();focus(editing?'#edit-method':'#review-title');
    });
    doc.getElementById('confirm')?.addEventListener('click',()=>{
-    try{confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
+    try{if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
      if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
      if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
      stage='research';error='';message='';compare();
@@ -201,7 +294,11 @@
    try{
     const data=await json(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:compact.query,confirmedQuery:query.query,pages:query.pages.length<=2?query.pages:[]}),signal:requestController.signal});
     if(token!==generation||confirmed!==snapshot)return;
-    if(!data.answer&&data.reason==='no-matching-records'){message='No close record was returned for this wording. That does not establish that the idea is new or untried.';return;}
+    if(!data.answer&&data.reason==='no-matching-records'){
+     const answer='No close research record was returned for this confirmed idea. The search covered the published research index; it does not establish that nobody has tried the idea.\n\nYou can edit the method wording or inspect the research index. Without a closer record, this comparison cannot judge what has already been tested or whether another run would add useful evidence.';
+     const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:[],documents:[],search:{query:compact.query,reason:data.reason}},answer});
+     packet=C.packetSnapshot(snapshot,research);result=Object.freeze({answer,sources:[],noMatch:true});printHost.innerHTML=packetHTML(packet);return;
+    }
     const checked=validateAnswer(data,documents);
     const evidenceRecords=records.filter(r=>checked.sources.some(s=>s.kind==='experiment'&&s.id===r.id));
     if(!evidenceRecords.length)throw Error('No research record supports this comparison.');
@@ -213,7 +310,7 @@
   render();load();
   return {getSnapshot:()=>({stage,draft,confirmed,result,packet,busy}),destroy:stop};
  }
- const api={parseScope,initialDraft,validateAnswer,rowsHTML,packetHTML,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

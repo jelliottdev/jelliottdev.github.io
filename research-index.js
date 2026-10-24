@@ -53,6 +53,31 @@
     return [record.title,record.summary,record.reader_finding||record.finding,record.family?.title,
       ...(record.tags||[]),...(record.method_topics||[]).flatMap(topic=>[topicId(topic),topic?.title,...(topic?.aliases||[])]),...pages].join(' ');
   }
+  function detailFields(record){
+    return [
+      ['Input',record.scope?.representation,'experiment-input'],
+      ['Method',record.scope?.procedure,'experiment-procedure'],
+      ['Bounds',record.scope?.parameters,'experiment-bounds'],
+      ['Not tested',record.scope?.exclusions,'experiment-exclusions'],
+      ['Limitations',record.limitations,'experiment-limitations']
+    ].filter(([,text])=>typeof text==='string'&&text.trim());
+  }
+  function matchingDetails(record,query){
+    if(!query||search.has(recordText(record),query))return [];
+    const fields=detailFields(record),whole=fields.filter(([,text])=>search.has(text,query));
+    if(whole.length)return whole.slice(0,2);
+    const terms=search.terms(query);
+    return fields.filter(([,text])=>terms.some(term=>search.has(text,term))).slice(0,2);
+  }
+  function matchExcerpt(text,query){
+    text=String(text||'').replace(/\s+/g,' ').trim();
+    const words=search.terms(query),tokens=[...text.matchAll(/\S+/g)];
+    const first=tokens.find(token=>words.some(word=>search.norm(token[0]).includes(word)));
+    // Cut at a word boundary, leaving enough context to retain qualifiers such as "excluded".
+    const start=first?Math.max(0,first.index-75):0;
+    const from=start?text.lastIndexOf(' ',start)+1:0;
+    return (from?'…':'')+excerpt(text.slice(from));
+  }
   const checked=record=>/^\d{4}-\d{2}-\d{2}$/.test(record.review?.retested_on||'')?record.review.retested_on:'';
   function select(records,requested){
     const value={...requested},query=pageQuery(value.q||'');
@@ -66,7 +91,7 @@
     const matches=records.filter(record=>(!value.type||record.record_type?.id===value.type)&&
       (!value.method||(record.method_topics||[]).some(topic=>topicId(topic)===value.method))&&
       (!value.family||record.family?.id===value.family)&&(!value.outcome||record.outcome===value.outcome)&&
-      query.pages.every(id=>(record.scope?.pages||[]).includes(id))&&search.has(recordText(record),query.text));
+      query.pages.every(id=>(record.scope?.pages||[]).includes(id))&&search.has([recordText(record),...detailFields(record).map(([,text])=>text)].join(' '),query.text));
     const byTitle=(a,b)=>collator.compare(a.title,b.title)||a.id.localeCompare(b.id);
     matches.sort((a,b)=>value.sort==='recent'?
       (checked(a)&&checked(b)?checked(b).localeCompare(checked(a)):checked(a)?-1:checked(b)?1:0)||byTitle(a,b):
@@ -77,7 +102,7 @@
   }
   function pageLabel(record){
     const pages=record.scope?.pages||[];
-    if(!pages.length)return 'Source files';
+    if(!pages.length)return record.scope?.artifacts?.length?'Source files':'Page scope not recorded';
     if(pages.length===1)return pages[0].toUpperCase();
     const first=pages[0],last=pages.at(-1);
     const contiguous=pages.every((id,n)=>id.slice(0,3)===first.slice(0,3)&&Number(id.slice(4))===Number(first.slice(4))+n);
@@ -100,12 +125,14 @@
       (value.page<result.pages?pageLink(value.page+1,'Next','rel="next"'):'')+'</nav>';
   }
   function results(result){
-    if(!result.total)return '<div class="empty research-empty"><h2>No matching research</h2><p>Try a shorter method name, a page ID such as LP2-15, or clear the filters.</p><button type="button" data-research-reset>Clear filters</button></div>';
+    if(!result.total)return '<div class="empty research-empty"><h2>No matching research</h2><p>No record matches this combination of search terms and filters. Try fewer terms or clear the filters.</p><button type="button" data-research-reset>Clear filters</button></div>';
     return `<ol class="research-records" start="${result.start+1}">${result.records.map(record=>{
       const date=checked(record),recent=result.state.sort==='recent'&&date;
+      const query=pageQuery(result.state.q||'').text,details=matchingDetails(record,query);
       return `<li><article class="research-record"><h2><a href="#/experiments/${esc(record.id)}">${esc(record.title)}</a></h2>
         <p class="research-record-meta">${esc(record.record_type?.label||'Research record')} · ${esc(pageLabel(record))} · ${esc(outcomes[record.outcome]||'Finding not classified')}${recent?' · Checked '+esc(date):''}</p>
         <p class="research-record-finding">${esc(excerpt(record.reader_finding||record.finding))}</p>
+        ${details.map(([label,text,section])=>`<p class="research-match"><a href="#/experiments/${esc(record.id)}?section=${section}">${label==='Not tested'?'Mentioned under “Not tested”':'Matches '+esc(label.toLowerCase())}</a>: ${esc(matchExcerpt(text,query))}</p>`).join('')}
         ${record.family&&result.state.family!==record.family.id?`<a class="research-family-link" href="${esc(href({family:record.family.id,page:1}))}">More in ${esc(record.family.title)}</a>`:''}
       </article></li>`;
     }).join('')}</ol>${pagination(result)}`;

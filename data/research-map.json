@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "8834251d85566c219ea0752c6d7e5f4aa3dede82bf6cf83520ea91293662220e",
+    "current_experiments_sha256": "d3c5f58426ea516f59b36cf576321f3c32a43736218538ee766187916ba534bf",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -33,11 +33,12 @@
       }
     },
     "snapshot_records": 314,
-    "current_records": 321,
+    "current_records": 322,
     "missing_snapshot_ids": [],
     "new_ids": [
       "artifact-stream-skip-grid",
       "d04-remaining-page-feedback",
+      "dot-constellation-candidate-fit",
       "fibonacci-stream-skip-grid",
       "numeric-stream-skip-grid",
       "page-number-prime-skip-grid",
@@ -10966,6 +10967,42 @@
       "snapshot_sha256": "355fc85e102ec51bfc63f3b310e8837c9ab903f136226cf0b5636c558dba63ed",
       "changed_fields": [],
       "classification": "draft"
+    },
+    "dot-constellation-candidate-fit": {
+      "id": "dot-constellation-candidate-fit",
+      "title": "Five-star catalogue patterns against the five dots",
+      "question": "Do fixed five-star patterns match the five dots?",
+      "finding": "Volans fits most closely among the 88 fixed five-entry patterns, but still misses the measured dot centres with a typical mismatch of about 35 pixels (RMS). The specified Orion, Aquila and Bootes patterns fit less closely.",
+      "limitations": "This compares one fixed five-brightest-entry rule and projection. It does not identify a constellation, test every asterism or explain a cipher; the other two page appearances repeat the same artwork.",
+      "pages": [
+        "lp2-07",
+        "lp2-23",
+        "lp2-56"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-07",
+          "lp2-23",
+          "lp2-56"
+        ],
+        "artifacts": [
+          "experiments/records/dot-constellation-candidate-fit/matching-plan-frozen.json",
+          "experiments/records/dot-constellation-candidate-fit/execution-authorization.json",
+          "experiments/records/dot-constellation-candidate-fit/constellation-candidates.json",
+          "experiments/records/dot-constellation-candidate-fit/catalogue-membership.json",
+          "experiments/records/dot-constellation-candidate-fit/inputs/five-dot-geometry.json"
+        ],
+        "representation": "Existing threshold-140 five-dot centroids in original-image pixels, and fixed J2000 gnomonic projections of the five brightest eligible HR entries in each of 88 constellations. Distinct close components retained and flagged.",
+        "procedure": "After the reviewed synthetic gate and frozen execution-code hashes, fit every correspondence and both orientation branches by exact 2D similarity. Treat LP2-07 as primary, other appearances as dependent robustness. Repeat the whole search for two fixed 4095-query geometric reference generators. Independently check every target score/witness with SVD and recount all saved comparisons.",
+        "parameters": "88 candidates × 120 bijections × 2 determinant branches = 21120 labelled registrations per query; translation, arbitrary rotation and positive uniform scale; tie tolerance 1e-12. Three target queries; 4095 uniform-disk queries (PCG64 330120261025) and 4095 within-constellation catalogue-set queries (330120261026). Synthetic gate: 96 math fixtures, 88 exact and 1408 noisy plants; no omitted failures.",
+        "exclusions": "Other star subsets, traditional line maps, merging close components, proper-motion or epoch tuning, alternative projections, anisotropic scale/shear, star omission, new dot measurements, interpreting repeated artwork as independent evidence, confirmatory astronomy probabilities and decryption."
+      },
+      "outcome": "inconclusive",
+      "href": "#/experiments/dot-constellation-candidate-fit",
+      "current_sha256": "91f7b288ccb0c8c532c4c17f512535147bbfa9efb367d6bc56d14eb2f66c0a7a",
+      "snapshot_sha256": null,
+      "changed_fields": [],
+      "classification": "awaiting-classification"
     },
     "doublet-boundaries": {
       "id": "doublet-boundaries",
@@ -34481,6 +34518,7 @@
   "awaiting_classification": [
     "artifact-stream-skip-grid",
     "d04-remaining-page-feedback",
+    "dot-constellation-candidate-fit",
     "fibonacci-stream-skip-grid",
     "numeric-stream-skip-grid",
     "page-number-prime-skip-grid",

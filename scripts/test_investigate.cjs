@@ -24,6 +24,53 @@ test('only known consequential reversal ambiguity is questioned',()=>{
  assert.equal(C.questions(d).length,0);assert(C.summary(d).includes('space positions'));
  assert(!C.summary(d).includes('prime values of each row'));
 });
+test('recognized reversal never drops an appended cipher, key, tail or explicit ordering',()=>{
+ const text='Reverse digits of each prime value, then apply Vigenere with key FOO and reset at each page';
+ const d=I.initialDraft(text),c=C.confirm(d,{id:'compound',at});
+ assert.equal(d.method.value.operations.length,2);
+ assert.equal(d.method.value.operations[0].id,'reverse_value_digits');
+ assert.equal(d.method.value.operations[1].label,'apply Vigenere with key FOO and reset at each page');
+ assert(C.summary(c).includes('prime value'));assert(C.summary(c).includes('key FOO'));assert(C.summary(c).includes('reset at each page'));
+ assert(C.retrievalQuery(c).query.includes('key FOO'));assert(C.queryForResearch(c,{maxLength:6000}).query.includes('reset at each page'));
+ const quoted=I.initialDraft('Reverse digits of each value, then use key "FOO then BAR", then Atbash');
+ assert.equal(quoted.method.value.operations.length,2);
+ assert.equal(quoted.method.value.operations[1].label,'use key "FOO then BAR", then Atbash');
+ assert.equal(d.source.text,text);
+});
+test('ambiguous piece clarification preserves the cipher key and every later supplied step',()=>{
+ let d=I.initialDraft('Reverse the prime values of each row on LP2-15, then apply Vigenere with key FOO; then rotate columns');
+ const tail=C.serialize(d.method.value.operations[1]);
+ assert.equal(C.questions(d)[0].id,'operation');
+ d=C.clarify(d,'operation','reverse_value_digits');
+ assert.equal(C.serialize(d.method.value.operations[1]),tail);
+ assert.equal(d.method.value.operations[0].sourceText,'Reverse the prime values of each row on LP2-15');
+ const c=C.confirm(d,{id:'clarified-compound',at});
+ assert(C.summary(c).includes('key FOO'));assert(C.summary(c).includes('rotate columns'));
+ assert(C.retrievalQuery(c).query.includes('key FOO'));
+ assert.deepEqual(c.scope.value.pages,['lp2-15']);
+});
+test('negations, exceptions and uncertain attachments remain fully opaque instead of positive rules',()=>{
+ for(const text of [
+  'Do not reverse digits of each prime value on LP2-15',
+  "Don't reverse each row; use Vigenere with key FOO instead",
+  'Reverse each row except the heading on LP2-15',
+  'Reverse digits of each prime value unless it is unmapped; keep the original rune',
+  'If there is an F, then reverse each row',
+  'Reverse the order within each row without preserving word boundaries',
+  'Reverse each row, but never change key FOO',
+  'Reverse digits of each prime value and apply Vigenere with key FOO',
+  'Reverse each row after applying Vigenere with key FOO',
+  'Do not preserve word boundaries; reverse each row on all pages excluding LP2-15'
+ ]){
+  const d=I.initialDraft(text),c=C.confirm(d,{id:'opaque',at});
+  assert.equal(d.method.value.operations.length,1,text);
+  assert.equal(d.method.value.operations[0].id,'described_method',text);
+  assert.equal(d.method.value.operations[0].label,text);
+  assert.equal(d.rules.wordBoundaries.status,'unspecified');
+  assert.equal(C.questions(d).length,0);assert(C.summary(c).includes(text));
+ }
+ assert.equal(I.initialDraft('Reverse each row except LP2-15').scope.status,'unspecified');
+});
 test('answer validation binds ID, href AND complete exact source text',()=>{
  const source=docs.find(d=>d.id==='fibonacci-stream-skip-grid');
  const answer={answer:'A bounded result [1].',sources:[source]};
@@ -53,6 +100,65 @@ test('three-page request can omit hint only while full confirmed scope remains e
  assert.equal(full.pages.length,3);assert(full.query.includes('lp2-16'));assert(compact.query.includes('LP2-16'));
  assert.equal(C.queryForResearch(c,{maxLength:20}).query,null);
 });
+test('missing aim and scope ask once, without selecting values or conflating undecided with all',()=>{
+ let d=I.initialDraft('Try a keyed spiral');
+ assert.deepEqual(I.intakeQuestions(d).map(q=>q.id),['aim','scope']);
+ assert.equal(d.aim.status,'unspecified');assert.equal(d.scope.status,'unspecified');
+ d=I.answerIntake(d,'aim','undecided');assert.deepEqual(I.intakeQuestions(d).map(q=>q.id),['scope']);
+ d=I.answerIntake(d,'scope','undecided');assert.equal(I.intakeQuestions(d).length,0);
+ assert.equal(d.scope.status,'unspecified');assert.equal(d.aim.status,'unspecified');
+ assert.equal(d.source.text,'Try a keyed spiral');
+ assert.throws(()=>I.answerIntake(d,'scope','unsolved-lp2'));
+});
+test('explicit positive aim/scope skip questions while negation does not invent a goal',()=>{
+ for(const text of ['Find readable text on LP2-15','Test a statistical effect on LP2-17','Reproduce the archived result on LP2-43','My goal is to compare the alignments on LP2-15']){
+  const d=I.initialDraft(text);assert.equal(d.aim.status,'specified',text);assert.equal(d.scope.status,'specified',text);assert(!I.intakeQuestions(d).some(q=>['aim','scope'].includes(q.id)),text);
+ }
+ for(const text of ['Do not find readable text','Never reproduce the result','Compare whether others wanted to find readable text'])assert.equal(I.initialDraft(text).aim.status,'unspecified');
+ const all=I.initialDraft('Find readable text on all unsolved LP2 pages');assert.equal(all.scope.value.pages.length,56);
+ assert.equal(I.initialDraft('Find readable text on all unsolved LP2 pages except LP2-15').scope.status,'unspecified');
+});
+test('explicit page passage qualifier remains in confirmed scope instead of implying the whole page',()=>{
+ const text='Reverse each row on LP2-43, lines 2–3';let d=I.initialDraft(text);
+ assert.deepEqual(d.scope.value,{pages:['lp2-43'],description:'LP2-43, lines 2–3'});
+ assert(!I.intakeQuestions(d).some(q=>q.id==='scope'));
+ d=I.answerIntake(d,'aim','undecided');const c=C.confirm(d,{id:'passage',at});
+ assert(I.rowsHTML(c).includes('LP2-43, lines 2–3'));
+ assert(C.queryForResearch(c,{maxLength:6000}).query.includes('lines 2–3'));
+ assert.equal(c.source.text,text);
+ assert.equal(I.initialDraft('Do not reverse each row on LP2-43, lines 2–3').scope.status,'unspecified');
+});
+test('aim options/custom and exact custom scope preserve method, boundaries, source and independent fields',()=>{
+ let d=I.initialDraft('Read each row backwards, keeping word boundaries.');d=C.clarify(d,'word-boundary','fixed_spaces');
+ const oldMethod=C.serialize(d.method),source=d.source.text;
+ d=I.answerIntake(d,'aim','other','Check a visual symmetry');
+ d=I.answerIntake(d,'scope','specific','LP2-43, lines 2–3');
+ assert.equal(d.aim.value,'Check a visual symmetry');assert.equal(d.aim.provenance.kind,'user_clarification');
+ assert.deepEqual(d.scope.value,{description:'LP2-43, lines 2–3'});assert.equal(C.serialize(d.method),oldMethod);
+ assert(I.rowsHTML(d).includes('LP2-43, lines 2–3'));assert(!I.rowsHTML(d).includes('description:'));
+ assert.equal(d.rules.boundaryMode.value,'fixed_spaces');assert.equal(d.source.text,source);
+ const changed=C.revise(d,{aim:C.field('specified','Measure alignment',{kind:'user_clarification',refs:[]})});assert.deepEqual(changed.scope,d.scope);
+ let exact=I.answerIntake(I.answerIntake(I.initialDraft('Try this'),'aim','readable'),'scope','specific','LP2-15, LP2-17');
+ assert.deepEqual(exact.scope.value.pages,['lp2-15','lp2-17']);
+ assert.throws(()=>I.answerIntake(I.initialDraft('Try this'),'scope','specific','LP2-99'));
+ assert.throws(()=>I.answerIntake(I.initialDraft('Try this'),'aim','other',''));
+});
+test('bounded unsolved selection renders ranges without expanding holes or mutating confirmed scope',()=>{
+ let d=I.answerIntake(I.answerIntake(I.initialDraft('Try this'),'aim','statistical'),'scope','unsolved-lp2');
+ assert.equal(d.scope.value.pages.length,56);const before=C.serialize(d.scope);
+ const html=I.rowsHTML(d);assert(html.includes('LP2-00–55'));assert.equal((html.match(/scope-range/g)||[]).length,0);
+ assert.equal(C.serialize(d.scope),before);
+ assert.deepEqual(I.compactPages(['lp2-15','lp2-17']).map(t=>t.text),['LP2-15','LP2-17']);
+ assert.deepEqual(I.compactPages(['lp1-15','lp1-16','lp2-00','lp2-01','lp2-03']).map(t=>t.text),['LP1-15–16','LP2-00–01','LP2-03']);
+});
+test('aim choices do not derail strong actual-record technique retrieval',()=>{
+ for(const [text,id] of [['Fibonacci keys on LP2-15','fibonacci-stream-skip-grid'],['Test fixed invertible Hill matrix keys in two-rune blocks on LP2-15','direct-hill-key-feasibility']]){
+  for(const aim of ['readable','statistical','reproduce']){
+   const c=C.confirm(I.answerIntake(I.initialDraft(text),'aim',aim),{id:'qa',at});
+   assert.equal(S.select(docs,C.retrievalQuery(c).query)[0].id,id);
+  }
+ }
+});
 console.log('PASS '+count+' investigate helper/retrieval tests; all research uses actual registry records and no inference.');
 
 // Minimal event-DOM harness: no browser engine, network or UI automation.
@@ -71,8 +177,12 @@ function fakeDocument(search=''){
    if(id==='investigate')return host;if(id==='print-snapshot')return print;
    if(!host.html.includes('id="'+id+'"'))return null;
    if(!cache.has(id))cache.set(id,new Element(id));return cache.get(id);
-  },querySelector(selector){if(selector==='.privacy')return null;if(selector.startsWith('#'))return this.getElementById(selector.slice(1));return null;},
+  },querySelector(selector){if(selector==='input[name=choice]:checked')return this.selectedChoice?{value:this.selectedChoice}:null;if(selector==='.privacy')return null;if(selector.startsWith('#'))return this.getElementById(selector.slice(1));return null;},
   host,print};
+}
+function answerInDOM(doc,choice,text=''){
+ doc.selectedChoice=choice;doc.getElementById('other-detail').value=text;
+ doc.getElementById('clarification').fire('change');doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;
 }
 (async()=>{
  const doc=fakeDocument('?q=Fibonacci%20keys&pages=lp2-15&pages=lp2-17');
@@ -86,6 +196,8 @@ function fakeDocument(search=''){
  await new Promise(resolve=>setTimeout(resolve,15));
  doc.getElementById('idea').value='Fibonacci keys';doc.getElementById('intake').fire('submit');
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15','lp2-17']);
+ assert(doc.host.html.includes('class="question-title"'));assert(!doc.host.html.includes('id="confirm"'));
+ answerInDOM(doc,'undecided');
  assert.equal(doc.getElementById('confirm').disabled,false,'Optional context cannot stall confirmation');
  doc.getElementById('edit').fire('click');
  const before=doc.host.innerHTML;doc.getElementById('edit-method').value='Unsaved method edit';
@@ -103,6 +215,7 @@ function fakeDocument(search=''){
  },now:()=>at,id:()=> 'test-'+(++serial),printer:()=>{prints++;},schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{}});
  await new Promise(resolve=>setTimeout(resolve,15));
  journey.getElementById('idea').value='Fibonacci keys on LP2-15';journey.getElementById('intake').fire('submit');
+ answerInDOM(journey,'undecided');
  journey.getElementById('confirm').fire('click');
  assert.equal(requests.length,1);assert.equal(application.getSnapshot().busy,true);
  const sent=JSON.parse(requests[0].options.body);
@@ -132,5 +245,20 @@ function fakeDocument(search=''){
  const saved=application.getSnapshot().packet;
  journey.getElementById('back').fire('click');assert.equal(application.getSnapshot().stage,'input');assert.equal(application.getSnapshot().packet,null);
  assert.equal(saved.research.answer,'The published Fibonacci stream test is bounded [1].','Old frozen packet remains unchanged after leaving');
+ journey.getElementById('idea').value='Unmatched careful idea';journey.getElementById('intake').fire('submit');
+ answerInDOM(journey,'other','Check the visual alignment');answerInDOM(journey,'specific','LP2-43, lines 2–3');
+ journey.getElementById('confirm').fire('click');
+ assert.equal(requests.length,4);
+ const noMatchConfirmed=application.getSnapshot().confirmed;
+ requests[3].resolve(Response.json({answer:null,sources:[],reason:'no-matching-records'}));await new Promise(resolve=>setTimeout(resolve,5));
+ const empty=application.getSnapshot();assert.equal(empty.result.noMatch,true);assert.deepEqual(empty.result.sources,[]);
+ assert.equal(C.binding(empty.packet.confirmed),C.binding(noMatchConfirmed));assert(!journey.host.html.includes('AI comparison'));
+ assert(journey.getElementById('print'));assert(!journey.getElementById('retry'));
+ journey.getElementById('edit').fire('click');assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');journey.getElementById('cancel-edit').fire('click');assert.equal(application.getSnapshot().result.noMatch,true);
+ journey.getElementById('edit').fire('click');assert(journey.host.html.includes('LP2-43, lines 2–3'));
+ journey.getElementById('edit-aim').value='Check a different alignment';journey.getElementById('edit-method').value='Unmatched careful idea';journey.getElementById('edit-scope').value='LP2-43, lines 2–3';journey.getElementById('edit-rules').value='';
+ journey.getElementById('editor').fire('submit');
+ assert.deepEqual(application.getSnapshot().draft.scope.value,{description:'LP2-43, lines 2–3'},'Custom passage survives an unrelated aim edit');
+ assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');
  application.destroy();console.log('PASS mocked full journey: success, exact print packet, edit/cancel restoration, new confirmation, cancel/retry, stale response guard and request-local timeout.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

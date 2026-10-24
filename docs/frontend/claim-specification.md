@@ -183,7 +183,7 @@ tabs to preserve the working result. Response ID/href and **full source text**
 must match loaded evidence; changed-source responses are rejected instead of
 printing a different version. Safe Markdown rendering escapes untrusted content.
 
-`node scripts/test_investigate.cjs` passes seven helper/retrieval groups and two
+`node scripts/test_investigate.cjs` passes fifteen helper/retrieval groups and two
 mocked event-DOM journeys, including success→packet→print→edit/cancel, cancel/
 retry, stale responses, request-local timeout, source binding and optional-context
 races. All model responses are mocked; evidence is from the actual registry.
@@ -197,3 +197,45 @@ boundary choice, confirmation, mocked sourced result, edit and cancel. The
 browser print dialog/PDF pagination was not verified; Node tests prove the print
 markup derives from the same frozen reviewed packet. A desktop screenshot is
 stored outside the repository at `../investigate-qa-1440.png`.
+
+### Conservative compound interpretation
+
+Initial interpretation recognizes complete small reversal forms, not substrings
+inside arbitrary prose. An explicit `then` may separate a recognized operation
+from one opaque tail; every later key, step and qualifier stays verbatim in that
+tail. It does not split quoted key contents or claim to parse the remaining
+cipher. If wording includes negation, conditions, exceptions, uncertain order or
+code, the full supplied method remains visible without inferred positive rules
+or an inferred scope that could mistake an excluded page for a target. Other
+unrecognized attachments likewise remain in the method wording.
+
+Each ambiguous operation has an explicit operationIndex. A choice replaces only
+that piece and preserves its sourceText, existing parameters and all sibling
+operations. Tests cover Vigenere key FOO and resets after digit reversal, an
+ambiguous reversal followed by Vigenere and rotation, quoted `FOO then BAR`, and
+ten negation/exception/uncertain-order forms. These checks prevent a row-only
+retrieval result from silently answering a compound proposal.
+
+### Conditional aim and scope questions
+
+The standalone flow now asks missing aim and scope before confirmation, after
+any consequential operation/boundary ambiguity. Aim offers readable text,
+statistical effect, reproduction, custom wording and undecided; scope offers
+the bounded unsolved LP2 set, exact pages/passage and undecided. Nothing is
+preselected. A custom passage remains exact prose rather than pretending to be
+a whole-page selection. The unsolved choice explicitly selects LP2-00–55;
+undecided leaves the original field unspecified. A recorded undecided answer
+prevents repeated questioning without turning unknown into all material.
+
+Only confident positive source goal forms are recognized; negative/opaque goal
+wording is not assigned a positive aim. Supplied exact page lists and explicit
+all-unsolved scope are retained rather than reasked. A question is the main
+heading with choices immediately below; tags appear when the questions are
+resolved. This is not an execution questionnaire: missing transcription version,
+evaluation and other protocol parameters remain secondary requirements.
+
+The compact scope renderer coalesces only consecutive pages of one release.
+It leaves gaps and release changes explicit and never changes the confirmed
+page array. An unrelated interpretation edit preserves a custom passage scope.
+Additional tests cover no-match findings/packet/printing and edit restoration,
+and ensure generic aim wording does not derail strong technique retrieval.

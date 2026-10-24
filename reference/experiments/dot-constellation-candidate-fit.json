@@ -1,0 +1,281 @@
+{
+  "id": "dot-constellation-candidate-fit",
+  "status": "published",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  },
+  "title": "Five-star catalogue patterns against the five dots",
+  "question": "How closely do the fixed five-brightest-catalogue-entry patterns in all 88 IAU constellations match the existing LP2 five-dot geometry under the frozen similarity grid?",
+  "reader_question": "Do fixed five-star patterns match the five dots?",
+  "summary": "Volans is closest in the fixed 88-pattern library, with RMS distance 34.9 pixels from LP2-07 dot centres. Orion, Aquila and Bootes rank 69, 72 and 24. Full-selection geometric references sometimes match this closely.",
+  "finding": "Primary LP2-07: Volans rank 1 of 88, normalized RMS 0.11407900287766708, RMS residual 34.87034651573557 pixels, maximum 55.01971239994527 pixels. Ori/Aql/Boo ranks 69/72/24. Complete-search reference minima are at or below the observed best in 171/4095 uniform-disk and 243/4095 sampled-catalogue queries; plus-one fractions 172/4096 and 244/4096. Dependent LP2-23/56 repetitions also select Volans. All 63360 target registration scores and 264 candidate witnesses independently checked by SVD; all 528 reference counts rechecked.",
+  "reader_finding": "Volans fits most closely among the 88 fixed five-entry patterns, but still misses the measured dot centres with a typical mismatch of about 35 pixels (RMS). The specified Orion, Aquila and Bootes patterns fit less closely.",
+  "reader_limit": "This compares one fixed five-brightest-entry rule and projection. It does not identify a constellation, test every asterism or explain a cipher; the other two page appearances repeat the same artwork.",
+  "limitations": "One exploratory, preselected five-dot query; LP2-23 and LP2-56 are dependent repeats. Five brightest catalogue entries can include close components and do not reproduce every traditional constellation shape. Fixed J2000 gnomonic projection; no proper-motion, epoch, star-subset or projection search. Two geometric reference generators give conditional selection comparisons and Monte Carlo uncertainty, not confirmatory probabilities of astronomical intent. Existing threshold-140 centroids are reused, not independently remeasured.",
+  "next_steps": "Any different star subset, projection or proposed reading instruction needs a separately frozen rule, appropriate selection references and a reproducible consequence beyond a visual resemblance.",
+  "outcome": "inconclusive",
+  "tags": [
+    "five dots",
+    "constellation",
+    "catalogue geometry",
+    "Orion",
+    "Aquila",
+    "Bootes",
+    "Volans",
+    "similarity fit",
+    "selection controls"
+  ],
+  "related": [
+    "compass-shared-radii"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-07",
+      "lp2-23",
+      "lp2-56"
+    ],
+    "artifacts": [
+      "experiments/records/dot-constellation-candidate-fit/matching-plan-frozen.json",
+      "experiments/records/dot-constellation-candidate-fit/execution-authorization.json",
+      "experiments/records/dot-constellation-candidate-fit/constellation-candidates.json",
+      "experiments/records/dot-constellation-candidate-fit/catalogue-membership.json",
+      "experiments/records/dot-constellation-candidate-fit/inputs/five-dot-geometry.json"
+    ],
+    "representation": "Existing threshold-140 five-dot centroids in original-image pixels, and fixed J2000 gnomonic projections of the five brightest eligible HR entries in each of 88 constellations. Distinct close components retained and flagged.",
+    "procedure": "After the reviewed synthetic gate and frozen execution-code hashes, fit every correspondence and both orientation branches by exact 2D similarity. Treat LP2-07 as primary, other appearances as dependent robustness. Repeat the whole search for two fixed 4095-query geometric reference generators. Independently check every target score/witness with SVD and recount all saved comparisons.",
+    "parameters": "88 candidates × 120 bijections × 2 determinant branches = 21120 labelled registrations per query; translation, arbitrary rotation and positive uniform scale; tie tolerance 1e-12. Three target queries; 4095 uniform-disk queries (PCG64 330120261025) and 4095 within-constellation catalogue-set queries (330120261026). Synthetic gate: 96 math fixtures, 88 exact and 1408 noisy plants; no omitted failures.",
+    "exclusions": "Other star subsets, traditional line maps, merging close components, proper-motion or epoch tuning, alternative projections, anisotropic scale/shear, star omission, new dot measurements, interpreting repeated artwork as independent evidence, confirmatory astronomy probabilities and decryption."
+  },
+  "review": {
+    "kind": "Frozen exploratory geometry measurement",
+    "reviewer": "Reviewed pretarget scope; independent SVD arithmetic and witness reconstruction; portable full-selection replay and all plant outcomes retained",
+    "retested_on": "2026-10-24",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Hoffleit and Warren (1991), Bright Star Catalogue 5th edition, CDS V/50",
+      "url": "https://cdsarc.cds.unistra.fr/viz-bin/ReadMe/V/50?format=html"
+    },
+    {
+      "label": "Official CDS/VizieR catalogue request, exact response retained",
+      "url": "https://vizier.cds.unistra.fr/viz-bin/asu-tsv?-source=V%2F50%2Fcatalog&-out.all&-out.max=unlimited"
+    },
+    {
+      "label": "Astropy get_constellation: Roman (1987) boundary lookup",
+      "url": "https://docs.astropy.org/en/stable/api/astropy.coordinates.get_constellation.html"
+    },
+    {
+      "label": "Existing Liberpedia five-dot measurements",
+      "url": "https://jelliottdev.github.io/exports/five-dot-geometry.json"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dot-constellation-candidate-fit/star-overlays.svg",
+      "caption": "Existing LP2-07 dot centroids (filled) and fitted star entries (open), at the same scale in every panel. Dashes show residuals; no traditional constellation lines are inferred. Volans is the best of the fixed 88 candidates; the other panels show the three named leads."
+    }
+  ],
+  "reproduction": {
+    "script": "experiments/records/dot-constellation-candidate-fit/run.py",
+    "script_sha256": "c5e2bd74fc3c5e7742d9025e16a20c7d8ea476ebe3b8475589b611697653075a",
+    "command": "python experiments/records/dot-constellation-candidate-fit/run.py --check && python experiments/records/dot-constellation-candidate-fit/check.py && python experiments/records/dot-constellation-candidate-fit/replay_gate.py && python experiments/records/dot-constellation-candidate-fit/plot.py --check",
+    "environment": "Offline Python 3.12 with NumPy 2.5.4. Frozen catalogue membership/projections/centroids are bundled; no source-cache, image download or network required. Original preparation used Astropy 8.0.2 and the exact lock/install report. Full targets plus 8190 references replay in about 28 seconds on the measured runtime; controls about 8 seconds.",
+    "inputs": [
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/astropy-install-report.json",
+        "sha256": "fa6266d04a53431cfcb24f78eba9cd3979e6a427b479a5674adeaa83cba7e798"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/candidate-preparation-receipt.json",
+        "sha256": "74339d2cb639896e4d20b3434156020538fcf03703efe688624448dece9f1646"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/candidate-selection-amendment.json",
+        "sha256": "decc56c487f553d8147623765f072592627e7a6d4adf2a1b139bc047df100abb"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/candidate-selection-plan.json",
+        "sha256": "b3995d7813ad75a7b70e8759b9cb525febb0c5921b18b2b3b8892737b9b301c7"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/catalogue-membership.json",
+        "sha256": "407d21924ce349302926eec55e5371453246e5ac51ad734fe53a9ff075e4e44b"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/check.py",
+        "sha256": "299ba3c891d6dd96e250452bfaa42d9b377361f89c2e0785ad3e1d74c0c5ba53"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/check_matching.py",
+        "sha256": "b771772fe442715d8f48a94c8d8a3e612edb2f4fb303678bf4882e7bc33f65ab"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/constellation-candidates.json",
+        "sha256": "1f39044682c4883a1fb3e783b4349f5f1df6f8f892bb5317df062829baa3d3e5"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/execute_matching.py",
+        "sha256": "625c4cb23b04d20191b4d84d56b09cc286eb0e92c8befad98857af9dd11ff496"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/execution-authorization.json",
+        "sha256": "3dfa4d6169018be1d946ed609f7a8f999db1d402ef418d172f0337d440321937"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/astropy-license.rst",
+        "sha256": "97d28d33c40cadc630cddfca53969fdd9dc44ede20faa2d892ba730933e9a20e"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/astropy-v8.0.2-utils.py",
+        "sha256": "43c0717ddbd877aa7b15cbe725707e8768f70382a0ffecf6d7cd2554644c7112"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/cds-readme.html",
+        "sha256": "d5b5ed04784847eb775a02107ba8035704d1262d0c49c1d24d26f8a8b67c80fd"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/cds-vizier-data-license.html",
+        "sha256": "f6bab16f7060f41c98958f0044fa3a526eeeeacdd23cb2fa7a529016d2b29e9f"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/cds-vizier-v50-all.tsv",
+        "sha256": "ade01e2d4a7ac6316afad9b34b8f247bbf0a225990c3df2654c2f6e8eb7e16a7"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/constellation_data_roman87.dat",
+        "sha256": "17407174f8d1e2771e4e693bc007d542b69ae0b604cec311774c7e91e146f196"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/constellation_names.dat",
+        "sha256": "905b9005b4fe86c81140dbb818c186b96cc7f6c1bebce75113434466b35f28b2"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/inputs/five-dot-geometry.json",
+        "sha256": "4135c8a83e3d56d81451e0000ab4ff98e05dff5a508ed344c2405c1b6cd22e00"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/LICENSE-NOTICE.txt",
+        "sha256": "2b93b16c9be012cb287d4b076656470a4156ccd468afd5fd6a565120dd066ed0"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/matching-plan-frozen.json",
+        "sha256": "26ca51b70daf04ac798663053a517bc02d6d7cdd162279ed8e45dd1f6b4391a7"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/plot.py",
+        "sha256": "3f19998b8342cdf952429af935574fb4e39e01eda45a9611bf0812109121af88"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/preflight_matching.py",
+        "sha256": "db03e02e7ee3801e5cbfd801ed104554ce99fd481f4238fdb98def50cd45c35e"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/pretarget-gate.json",
+        "sha256": "aa0b837d19e2b28db2646233b492fa162be1a1f8e7f2f1a73bea254232c83713"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/PRETARGET-GATE.md",
+        "sha256": "3bedc54d9cdcb082bc2f306fc2b90d02cbf11569608b4cb5d2c4ddc092b9a308"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/proposed-matching-plan.json",
+        "sha256": "290e1add6e0b56912b05b63fa03d924817ee7237222237c999c0af90d4de21dd"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/recovery-alternatives.json",
+        "sha256": "3e05e4d62223048d072d71e52d975b2e4c75ce7177d6e3631524ca7b2ecd5d29"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/recovery-license-runtime.json",
+        "sha256": "109f05c60a08a9c29575df160a52df50ad1fc79451e0108bf8d020c31667cee7"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/recovery-manifest.json",
+        "sha256": "72f4fab924cf64acb795841fd91b8333bb95ea5a2d912200a98a5516eaa16b60"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/replay_gate.py",
+        "sha256": "79927aff8844a000ceff8886391ef5f89373983f01585960afccd42d7877f7cb"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/requirements-lock.txt",
+        "sha256": "1d35a749734553ab96ffebc6fc00ea9156a93c4367c141e183437d0ed3db4122"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/select_candidates-initial.py",
+        "sha256": "d585bb167eaeb702d8ad9bb34920f12c99fe160ef52bc926fb2cf46d0dcb1fdc"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/select_candidates.py",
+        "sha256": "bd5a1dcd6bf4074b14835ba80dbc4876231812d622aa4dd8d3537139f2b2d3bd"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/similarity.py",
+        "sha256": "074b1a993a9df5ed356798786ef5e7a595c03b2e3ef41ded7a1588ce362faba1"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/svd_reference.py",
+        "sha256": "0e543d82dea7a56d512b51129499a42957d3397e18247094a6e140d736ec5ea5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/matching-results.json",
+        "sha256": "4c5be2143eec584b29230c22da538aad00a3ebc0b2745d4676395f683a442d1a"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/reference-results.json",
+        "sha256": "c269275994129fe6ed25c276ede71428f78e2818f580e5dcb8f67498ed03ffda"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/star-overlays.svg",
+        "sha256": "59913fec711689ee61b813293ade4c5bae441fe2ee168547b3822012ee06b0e1"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/target-scores.npy",
+        "sha256": "88e180139a12bc6e095ae8f9f8bfefc9e8e431a0d1a0c4c9cd0e668809f7e53b"
+      },
+      {
+        "path": "experiments/records/dot-constellation-candidate-fit/visual-data.json",
+        "sha256": "f59225653696a0d8bb0dfa8154844b0e325a3599cfe131c1e3925938cca42487"
+      }
+    ]
+  },
+  "scope_summary": "The five dots on LP2-07 against five bright catalogue entries from each of 88 constellations. LP2-23 and LP2-56 check the repeated artwork.",
+  "reader_note": "About 4% of random disk patterns and 6% of sampled star patterns fit at least this closely after the same search. Those comparisons help put the visual resemblance in context; they do not measure the chance that Cicada intended a constellation.",
+  "article": "The fixed five-entry pattern for **Volans fits the five dots most closely**, with a typical mismatch of about 35 pixels, measured as root mean square (RMS). Orion, Aquila and Boötes fit less closely. This comparison does not identify a constellation or explain a cipher: other generated five-point shapes also achieve fits this close after the same complete search.\n\nThe primary measurement uses [LP2-07](#/reader/lp2-07). The [existing five-dot comparison](#/wiki/dots?section=five-dot-geometry) establishes that its pattern repeats on LP2-23 and LP2-56. Those appearances are checked here for robustness, not counted as independent observations.\n\n## What the overlay shows\n\nFilled markers show the existing measured dot centres. Open markers show fitted catalogue entries. Dashes connect each star entry to its assigned dot. Every panel uses the same pixel scale; marker sizes are symbolic. These are point plots, not manuscript images or traditional constellation line drawings.\n\nThe figure shows the best of the fixed 88 candidates and the three named leads. Every other candidate's minimum, rank, transform and residual vectors remain in [the complete results](matching-results.json). [The overlay points](visual-data.json) retain both original-image centroid coordinates and fitted star coordinates for inspection.\n\n| Fixed five-entry candidate | Rank among 88 | Normalized RMS | RMS miss, pixels | Largest miss, pixels |\n| --- | ---: | ---: | ---: | ---: |\n| Volans | 1 | 0.114079 | 34.87 | 55.02 |\n| Boötes | 24 | 0.312279 | 95.45 | 141.05 |\n| Orion | 69 | 0.452143 | 138.21 | 232.55 |\n| Aquila | 72 | 0.475296 | 145.28 | 216.74 |\n\n“RMS miss” is the root mean square of the five Euclidean residual distances. The normalized value divides that distance by the dot pattern's RMS radius. Smaller values mean a closer shape fit. All numbers in this table use the preselected LP2-07 pattern.\n\n## A fixed catalogue rule\n\nEach constellation contributes its **five brightest eligible catalogue entries**, ranked by visual magnitude and then HR number in the Bright Star Catalogue, fifth edition. Membership follows the pinned Roman boundary lookup on fixed J2000 coordinates. This is one explicit star-selection rule; it does not represent every asterism, traditional line drawing, five-star subset or interpretation of a constellation name.\n\nThe named inputs are Orion HR1713/2061/1790/1903/1948; Aquila HR7557/7525/7235/7710/7377; and Boötes HR5340/5235/5506/5435/5681. The full library contains 88 candidates. Fourteen documented nonstellar catalogue rows are excluded; the remaining 9,096 entries all have usable coordinates and magnitude. Equal magnitudes use integer HR order. No proper-motion correction, epoch adjustment, hand replacement or photometric tuning was applied.\n\nDistinct catalogue components remain distinct. Three selected pairs lie within 60 arcseconds: Centaurus HR5459/5460, Crux HR4730/4731 and Gemini HR2891/2890. Consequently, five catalogue entries are not always five unresolved naked-eye points. These cases were retained and flagged rather than removed after seeing their fits.\n\nEach fixed five-entry set is projected onto one gnomonic plane centred on its unweighted mean unit direction. Every candidate receives all 120 point correspondences and both reflected and unreflected branches. Translation, rotation and one uniform scale are fitted; anisotropic stretching, shear, star omission and alternate projection centres are excluded. That makes 21,120 labelled registrations per query, all parts of one bounded measurement.\n\nThe dot inputs are the previously exported threshold-140 centroids, with their original image hashes and component rules. No new dots were measured, and no crop, threshold or centroid was chosen to improve a star fit.\n\n## Two complete-search references\n\nA candidate's apparent closeness must be considered alongside the many alignments searched. Both predefined reference generators therefore repeat the complete 88 × 120 × 2 selection for every generated query.\n\n| Reference generator | Complete searches at least as close as LP2-07 | Plus-one fraction | Monte Carlo interval for that generator |\n| --- | ---: | ---: | ---: |\n| Five independent uniform-disk points | 171 / 4,095 | 172 / 4,096 ≈ 4.20% | 3.60–4.83% |\n| Five catalogue entries sampled within a randomly selected constellation | 243 / 4,095 | 244 / 4,096 ≈ 5.96% | 5.25–6.70% |\n\nThe intervals are Wilson 95% intervals for simulation uncertainty in each specified generator's fraction. They do not quantify uncertainty about astronomical meaning or the artist's intent. These are exploratory conditional shape references, **not confirmatory probabilities of a constellation or decryption**. The generators are choices too: random disk points and random catalogue sets do not model every way artwork or a proposed sky pattern could arise. No reference draw required rejection; all 8,190 planned queries were retained.\n\nFor the three named leads, almost every reference search fits at least as closely: 4,093/4,095 under each generator for Boötes, and all 4,095 for Orion and Aquila. The saved results retain the same whole-search comparisons for every candidate, not just the selected best.\n\n## Repeated artwork and controls\n\nLP2-23 and LP2-56 also select Volans, at normalized RMS 0.114146 and 0.114155, with RMS misses of 34.89 and 34.90 pixels. Their agreement is expected for a repeated dot pattern. There is no best-of-three target choice or combined probability.\n\nBefore any target score, the frozen fitter was compared with an independent SVD implementation on 96 mathematical fixtures, including collinear, nearly collinear, repeated-point and symmetric cases. All 88 transformed exact catalogue plants retain their true candidate in the optimum tie set. All 1,408 noisy plants also rank their true candidate first or tied at the two specified noise levels. [The complete gate receipt](pretarget-gate.json) preserves every outcome; none was omitted. These controls establish recognition of the fixed library under these perturbations, not the correctness of the astronomical hypothesis.\n\nThe target and reference runner was then hashed and authorized against the unchanged [frozen plan](matching-plan-frozen.json). Independent SVD checks reproduce all 63,360 target registration scores and all 264 candidate witnesses, with maximum normalized score disagreement below 3.4 × 10⁻¹⁶. All 528 saved reference counts are independently recounted; 16 predeclared reference samples also undergo complete-search SVD checks. The target fits took 0.029 seconds; the two reference campaigns took 13.74 seconds each, with total execution time 27.72 seconds on the task runtime.\n\n## Reproduce and inspect\n\nThe experiment bundle contains the frozen catalogue, membership, projections, centroid export, input hashes, code and saved results. Matching is offline and requires NumPy 2.5.4. The original candidate-preparation environment is documented separately with Astropy 8.0.2 and its pinned dependencies; matching does not redownload a catalogue or redo membership through a different version.\n\n```text\npython experiments/records/dot-constellation-candidate-fit/run.py --check\npython experiments/records/dot-constellation-candidate-fit/check.py\npython experiments/records/dot-constellation-candidate-fit/replay_gate.py\npython experiments/records/dot-constellation-candidate-fit/plot.py --check\n```\n\nThe first command repeats all three targets and both 4,095-query references without writing expected outputs. The independent checker uses SVD rather than the optimized fit. The gate replay compares every mathematical and plant outcome while ignoring timing differences, again without overwriting the original pre-target receipt. All candidate minima and reference-query coordinates are available for inspection, including a numerical tie policy of 10⁻¹².\n\nCatalogue attribution: Hoffleit and Warren (1991), *The Bright Star Catalogue*, fifth revised preliminary edition, CDS V/50; [CDS/VizieR catalogue and documentation](https://cdsarc.cds.unistra.fr/viz-bin/ReadMe/V/50?format=html). The preserved VizieR usage notice permits scientific use with original-author/publication attribution; it is not an MIT licence. Roman membership lookup is from the pinned [Astropy constellation implementation](https://docs.astropy.org/en/stable/api/astropy.coordinates.get_constellation.html), with its BSD terms retained in the bundle.\n\nThe separate [shared-radii experiment](#/experiments/compass-shared-radii) tests a compass construction on different dots. Its result does not supply a star-identification rule here. Rune selection, reading instructions, astronomical intent and plaintext recovery remain outside this measurement.\n",
+  "article_path": "experiments/records/dot-constellation-candidate-fit/article.md",
+  "script_sha256": "c5e2bd74fc3c5e7742d9025e16a20c7d8ea476ebe3b8475589b611697653075a",
+  "method_topics": [
+    {
+      "id": "geometry",
+      "title": "Geometric constructions and navigation",
+      "aliases": [
+        "compass",
+        "geometry",
+        "coordinates",
+        "geometric construction"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ],
+  "article_links": {
+    "matching-results.json": "experiments/records/dot-constellation-candidate-fit/matching-results.json",
+    "visual-data.json": "experiments/records/dot-constellation-candidate-fit/visual-data.json",
+    "pretarget-gate.json": "experiments/records/dot-constellation-candidate-fit/pretarget-gate.json",
+    "matching-plan-frozen.json": "experiments/records/dot-constellation-candidate-fit/matching-plan-frozen.json"
+  }
+}
