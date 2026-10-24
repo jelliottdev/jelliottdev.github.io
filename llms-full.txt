@@ -6677,7 +6677,7 @@ Symbol substitutions
 Fixed alphabet substitutions
 Replace each rune consistently with one other symbol.
 
-5 related records
+6 related records
 LP2-00–55: fixed alphabet transforms against the warning opening · Bounded solving test
 
 Keyword-mixed GP alphabets · Bounded solving test
@@ -6687,6 +6687,8 @@ Every static affine map on complete LP2 pages · Bounded solving test
 Simple substitution and page-opening cribs · Control
 
 Literal web markers under every fixed affine rune map · Manuscript measurement
+
+EGALITARIANISM on LP2-43 · Bounded solving test
 
 
 
@@ -7744,7 +7746,7 @@ Does the sieve's pass gate require every register? · Control
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-24 related records
+25 related records
 Does matching the opening text identify a seed? · Control
 
 LP2-39: twenty proposed red-header cribs · Bounded solving test
@@ -7792,6 +7794,8 @@ Do the proposed two-time-pad regions match? · Method replay
 Can a guessed word seed a short feedback key? · Method replay
 
 Alternating alphabets with two interruption clocks · Bounded solving test
+
+EGALITARIANISM on LP2-43 · Bounded solving test
 
 
 
@@ -8267,6 +8271,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/monoalphabetic-crib-capacity
 - Literal web markers under every fixed affine rune map
   https://jelliottdev.github.io/#/experiments/url-marker-affine-census
+- EGALITARIANISM on LP2-43
+  https://jelliottdev.github.io/#/experiments/lp2-43-egalitarianism-compatibility
 - Homophonic and many-to-one substitutions
   https://jelliottdev.github.io/reference/articles/method-homophonic.html
 - Two letter-encoding bounds on LP2
@@ -17221,6 +17227,8 @@ Compare the published LP2-31 tests
 
 The worked manuscript comparison connects the column formula to two completed experiments. The whole-page shuffle baseline and within-row variant both scan periods 2–20 and compare maxima with maxima. Their p-values are 0.214 and 0.246 under different shuffle constraints. These are separate experiment results, not additional outputs of the descriptive whole-page IoC script.
 
+Another application compares differences between shifted pages. Among 331,908 alignments, the strongest IoC was matched or exceeded in 77 of 128 shuffled searches. That result concerns this concentration test; it does not rule out every way two pages could share a key.
+
 Sources and verification
 
 Historical background: William F. Friedman, The Index of Coincidence and Its Applications in Cryptanalysis, preserved by the NSA. The counting convention and derivation used by this script are stated explicitly above; do not assume every historical or modern use of “IoC” has identical scaling.
@@ -17295,6 +17303,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
 - within-row variant
   https://jelliottdev.github.io/#/experiments/lp2-31-row-shuffle-ioc
+- differences between shifted pages
+  https://jelliottdev.github.io/reference/articles/method-running-key.html#page-pair-test
 - The Index of Coincidence and Its Applications in Cryptanalysis
   https://www.nsa.gov/portals/75/documents/news-features/declassified-documents/friedman-documents/publications/folder_233/41761039080018.pdf
 - single-rune entropy; Single-rune entropy
@@ -27998,6 +28008,21 @@ Reusing the same aligned key has a consequence
 
 Under additive encoding, C₁ = P₁ + K and C₂ = P₂ + K imply C₁ − C₂ = P₁ − P₂ mod 29. The key cancels only where it is the same and aligned. This exposes a relation between plaintexts; it does not reveal either plaintext by itself. Different offsets or interruption rules invalidate that direct comparison.
 
+Have we tried subtracting one page from another?
+
+Yes, including shifted alignments. The page-pair experiment checked 331,908 alignments across 52 pages, keeping at least 120 overlapping runes. Its strongest result was ordinary compared with the strongest results from shuffled pages.
+
+	Comparison	Result
+
+	Strongest actual alignment	LP2-14 from rune 0 against LP2-35 from rune 140; 131 runes overlap.
+
+	Shuffled searches that matched or beat it	77 of 128, each repeating the whole alignment search.
+
+	What was measured	Repeated-symbol concentration in the differences, using IoC; not readable text.
+
+
+Comparing the best alignment with the best shuffled alignment allows for all the chances the search had to find a high score. It found no exceptional concentration under this comparison. It does not rule out key reuse: when a shared key cancels, the remaining difference between two unknown plaintexts need not have a high IoC. The controls recovered shifted copies of pages, not two unrelated plaintexts sharing a key.
+
 Check the arithmetic
 
 source = [9, 4, 1, 7, 2, 8]
@@ -28034,6 +28059,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/works-and-influences.html
 - adaptive-choice accounting
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- page-pair experiment
+  https://jelliottdev.github.io/#/experiments/lp2-shifted-page-pair-differences
+- IoC
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Emerson running-key test
   https://jelliottdev.github.io/#/experiments/emerson-running-key
 - two Cypherpunk Manifesto conversions on three pages
@@ -28302,6 +28331,12 @@ Here is an invented example. Suppose the ciphertext starts 10, 20, 5, and the pr
 
 Changing the third plaintext symbol to 28 would imply 7, 11, 6, contradicting the period-two rule. It would still fit the unrestricted model. That is why a crib cannot be assessed independently of the cipher and key restrictions. See repeating-key decoding and unrestricted keys.
 
+A repeated rune can rule out a fixed alphabet
+
+The proposed word EGALITARIANISM gives a concrete example on LP2-43. In the inferred fourteen-rune word, the same cipher rune F occurs at positions 2 and 6. The proposed spelling would require those occurrences to mean G and T. One fixed substitution cannot do both. Joining I and A into the single IA rune instead leaves thirteen runes for the fourteen-rune word.
+
+The illustrated compatibility test checks both spellings and every invertible affine key. It rules out those fixed-alphabet readings at that location. The original proposal did not specify a fixed alphabet, so this does not rule out its unspecified cipher.
+
 Separate fitting positions from prediction positions
 
 In the toy example, the first two ciphertext/plaintext pairs determine the period-two key 7, 11. The third pair then checks a repeated key position. If all three plaintext values were supplied as the crib, that check is internal consistency, not a test on withheld text.
@@ -28347,6 +28382,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/vigenere.html
 - unrestricted keys
   https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- LP2-43
+  https://jelliottdev.github.io/reference/lp2-43.html
+- illustrated compatibility test
+  https://jelliottdev.github.io/#/experiments/lp2-43-egalitarianism-compatibility
 - matrix example
   https://jelliottdev.github.io/reference/articles/method-blocks.html#cribs
 - Known-crib seed controls
@@ -30282,7 +30321,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 322 published reproducible records: 72 bounded solving or extraction tests, 95 proposed-method replay, 82 manuscript measurements, 34 controls, 36 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 323 published reproducible records: 73 bounded solving or extraction tests, 95 proposed-method replay, 82 manuscript measurements, 34 controls, 36 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -74819,6 +74858,312 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "lp2-43-egalitarianism-compatibility",
+  "status": "published",
+  "title": "EGALITARIANISM on LP2-43",
+  "question": "Do the two fixed GP encodings of EGALITARIANISM fit the inferred LP2-43 slot [37,51) under one bijective substitution or any of 812 invertible affine decoders?",
+  "reader_question": "Can one fixed alphabet turn this LP2-43 word into EGALITARIANISM?",
+  "summary": "The 13-rune encoding has the wrong length. The 14-rune encoding requires the same ciphertext F to mean G and T; none of 812 affine decoders fits.",
+  "reader_finding": "Using one rune for IA gives 13 runes for a 14-rune word. Keeping I and A separate gives 14, but the same cipher rune F would need to mean both G and T. None of 812 fixed affine decoders fits.",
+  "reader_limit": "These are newly specified fixed-alphabet tests. The 2019 proposal did not specify a cipher, and its mapping diagrams remain uninspected; this does not reject that broader idea.",
+  "finding": "At the one inferred 14-rune slot [37,51), the IA-one encoding fails the 13-versus-14 whole-slot length gate. The separate-I/A encoding conflicts with one static bijection: ciphertext F at word positions 2 and 6 would require G and T, with two additional inverse-map conflicts. There are zero bijective extensions and zero fits among all 812 invertible affine decoders P = aC + b modulo 29.",
+  "limitations": "One source-inferred slot and two exact GP encodings only. The historical author explicitly did not assume a monoalphabetic cipher, and no transformation or independently expected continuation is recovered. The inaccessible original/corrected mapping diagrams were not inspected. Other ciphers, encodings and slots remain untested; the affine test is a subset of the bijection test, not independent corroboration.",
+  "next_steps": "Recover the original mapping diagram and mathematical transformation before claiming an exact historical replay. Any other encoding, slot or cipher needs its own fixed specification.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-43",
+    "EGALITARIANISM",
+    "crib",
+    "cribbing",
+    "monoalphabetic substitution",
+    "simple substitution",
+    "fixed alphabet substitutions",
+    "affine",
+    "GP29",
+    "repeated symbols",
+    "word boundaries"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-43"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-43-egalitarianism-compatibility/plan.json"
+    ],
+    "representation": "One inferred complete 14-rune word [37,51), zero-based page-rune indices including headings. Last 10 runes of physical line 2 plus first 4 of line 3; exterior hyphens delimit, internal slash/newline is a transparent wrap. Exact GP Latin labels only, indices 0–28 rather than prime values.",
+    "procedure": "Apply the whole-slot length gate to the two fixed spellings; check forward/inverse static-bijection consistency; enumerate every invertible affine decoder P = aC + b modulo 29 on the eligible spelling and retain every mismatch.",
+    "parameters": "One slot; two encodings of 13 and 14 runes; one eligible encoding; all 812 affine decoders a = 1..28, b = 0..28. Four planted 274-rune contexts, 1,624 affine-key plants, three deliberate failure fixtures and 7,722 exhaustive small-alphabet pair controls.",
+    "exclusions": "Other slots/pages, aliases or spelling changes, sliding a 13-rune fragment into the 14-rune word, nulls/padding/deletions, transposition, repeating keys, interruptions, language ranking, significance claims and the unspecified historical cipher."
+  },
+  "review": {
+    "kind": "finite compatibility baseline with independent equality/permutation and algebraic affine checks",
+    "retested_on": "2026-10-24",
+    "reviewer": "Independent equality-pair oracle and affine key derivation; original code/control hashes frozen before target execution; portable isolated reproduction checked",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-43-egalitarianism-compatibility/run.py --check && python experiments/records/lp2-43-egalitarianism-compatibility/check.py controls && python experiments/records/lp2-43-egalitarianism-compatibility/check.py target && python experiments/records/lp2-43-egalitarianism-compatibility/plot.py --check",
+    "environment": "Python 3 standard library; offline and self-contained. No private queue/transcripts or external image downloads required.",
+    "script": "experiments/records/lp2-43-egalitarianism-compatibility/run.py",
+    "script_sha256": "a68ab7d9b1fc0f51cb7355d044084c0bb5d385959bcdc9a4cd4c5f24d8549cff",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/plan.json",
+        "sha256": "bd5b5a337e32df385e7053c78527345bd8a940b8c89f9d453d801de7289c839b"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/alphabet.json",
+        "sha256": "43d38627e8f7fbddeb4f0ca26c6774fe71e154918ccf88a7e68dd0c309a06370"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/inputs.json",
+        "sha256": "99130f05e2d859554f03fc9b6d0057f8e1c7ced862d09c43d550471fe5dba94d"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/page.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/check.py",
+        "sha256": "416437710d2c6b8fa3875ffa71dc70a5c10672d5666d13669c9f5ce3a76b60b6"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/plot.py",
+        "sha256": "15cc5a5a90cd8ee6c8432d5381a5b7a38be8004446ec9d12edce9a424c230c7d"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/provenance.json",
+        "sha256": "baa30d2ac3d1ab0fa284e7c546d22465951a1aeba719db2f0a444b263ce34d68"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/source-freeze.json",
+        "sha256": "372562a754adf4d6a98419fd8ef6c81f1e176b1abe83ddd3a2fecf61ecde3905"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/article.md",
+        "sha256": "bdd2f3425f7c14ed88b40055b1e0029c9834fc8b0509f3f9321d0245a2e716e4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/target-results.json",
+        "sha256": "dc4ad07e4da41a3824638938cd46b34d4fc6d52667e096ec29e1cb8f22068cb7"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/target-check.json",
+        "sha256": "1e65ecd7a347a460532baf443a510b1be52ec6b938e50c7a8333f9f377b2566d"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/controls.json",
+        "sha256": "81916383e306a584920e248d6712b046156df2158d6e30efe0dd9cdd0470e818"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/controls-check.json",
+        "sha256": "186215bb0f5b82e268b67998cb48dbba3bccfb74d23f5470d2b2fcc975d83054"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/conflict.svg",
+        "sha256": "b4dbcc9b9673e2066d90e29ffe61e267db3ddb9a055f2feec0dff67ffc2ad14d"
+      },
+      {
+        "path": "experiments/records/lp2-43-egalitarianism-compatibility/isolated-reproduction.json",
+        "sha256": "31ea773db94820dd79df7235e8767fd48ce951f890b6ce930b73b4f9a09fb69f"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-43-egalitarianism-compatibility/conflict.svg",
+      "caption": "Within the inferred word, the same ciphertext label F at positions 2 and 6 would need G and T. One fixed substitution cannot make both assignments."
+    }
+  ],
+  "materials": {
+    "summary": "The ledger retains both encoding outcomes, all static conflicts and every affine decoder with exact mismatch positions.",
+    "reuse": "Use the archived slot and fixed spellings to check the finite compatibility result; control outputs and independent checks are included.",
+    "limits": "These are not decoded text or a recovered historical cipher. No unknown continuation was evaluated.",
+    "evidence": [
+      "experiments/records/lp2-43-egalitarianism-compatibility/target-results.json",
+      "experiments/records/lp2-43-egalitarianism-compatibility/controls-check.json"
+    ]
+  },
+  "sources": [
+    {
+      "label": "2019 public EGALITARIANISM proposal and comments",
+      "url": "https://www.reddit.com/r/cicada/comments/ctqe6t/"
+    },
+    {
+      "label": "LP2-43 original page and archived text",
+      "url": "https://jelliottdev.github.io/#/page/lp2-43"
+    },
+    {
+      "label": "Canonical Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    },
+    {
+      "label": "Original mapping link; not inspected",
+      "url": "https://imgbox.com/76FcAKp4"
+    },
+    {
+      "label": "Corrected mapping link; not inspected",
+      "url": "https://imgbox.com/cIJoYMKc"
+    }
+  ],
+  "related": [
+    "monoalphabetic-crib-capacity",
+    "lp2-39-header-cribs",
+    "periodic-affine-crib-capacity"
+  ],
+  "family": {
+    "id": "monoalphabetic-crib-capacity",
+    "title": "Fixed-substitution crib compatibility",
+    "question": "Can a fixed proposed plaintext fit a selected rune passage under a static bijection?",
+    "baseline": "monoalphabetic-crib-capacity"
+  },
+  "variant": {
+    "label": "EGALITARIANISM on LP2-43",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "after": [
+          "lp2-43"
+        ],
+        "reason": "Change from 55 rune-bearing LP2 pages to the one source-named LP2-43 page."
+      },
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/monoalphabetic-crib-capacity/plan.json"
+        ],
+        "after": [
+          "experiments/records/lp2-43-egalitarianism-compatibility/plan.json"
+        ],
+        "reason": "Use the fixed interior-slot plan and its self-contained public inputs."
+      },
+      {
+        "field": "representation",
+        "before": "First 24 recognized GP29 runes including headings on each of 55 rune-bearing LP2-00–55 pages.",
+        "after": "One inferred complete 14-rune word [37,51), zero-based page-rune indices including headings. Last 10 runes of physical line 2 plus first 4 of line 3; exterior hyphens delimit, internal slash/newline is a transparent wrap. Exact GP Latin labels only, indices 0–28 rather than prime values.",
+        "reason": "Compare the one inferred 14-rune word and two exact GP encodings, rather than the first 24 page runes and nine opening cribs."
+      },
+      {
+        "field": "procedure",
+        "before": "Compare each first-twelve-rune ciphertext against nine fixed known-reading openings for consistency under a bijection f(C)=P; count complete keys as (29-m)! for m assigned symbols; count which of the next twelve positions are forced.",
+        "after": "Apply the whole-slot length gate to the two fixed spellings; check forward/inverse static-bijection consistency; enumerate every invertible affine decoder P = aC + b modulo 29 on the eligible spelling and retain every mismatch.",
+        "reason": "Retain static-bijection compatibility, add the explicit whole-slot length gate and complete affine subset ledger; no continuation is assessed because neither spelling fits."
+      },
+      {
+        "field": "parameters",
+        "before": "55 page starts ×9 fixed 12-rune cribs =495 comparisons; one 29-symbol substitution permutation per comparison.",
+        "after": "One slot; two encodings of 13 and 14 runes; one eligible encoding; all 812 affine decoders a = 1..28, b = 0..28. Four planted 274-rune contexts, 1,624 affine-key plants, three deliberate failure fixtures and 7,722 exhaustive small-alphabet pair controls.",
+        "reason": "Replace 495 opening comparisons with two fixed spelling gates at one slot and 812 affine decoder checks on the length-eligible spelling; retain the newly frozen control cohort."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other openings, later alignments, ciphertext-transposition, homophonic or polyalphabetic substitutions, multiple substitution layers, non-English plaintext, page-specific crib selection after output, and full-page language scoring.",
+        "after": "Other slots/pages, aliases or spelling changes, sliding a 13-rune fragment into the 14-rune word, nulls/padding/deletions, transposition, repeating keys, interruptions, language ranking, significance claims and the unspecified historical cipher.",
+        "reason": "Hold the declared word, interior slot and encodings fixed; do not extend this finite baseline to the unspecified historical cipher."
+      }
+    ]
+  },
+  "bounds_note": "One inferred LP2-43 word; two rune spellings; all 812 invertible affine decoders.",
+  "article": "## Finding\n\n**EGALITARIANISM does not fit this fixed word under one fixed alphabet substitution.** Joining `IA` into one GP rune gives 13 runes for a 14-rune slot. Keeping `I A` separate gives 14, but the same ciphertext F at positions 2 and 6 would have to mean G and T. A fixed substitution cannot do both. None of the 812 invertible affine decoders fits the fourteen-rune spelling.\n\n![The same ciphertext F at positions 2 and 6 would require G and T under the proposed spelling.](experiments/records/lp2-43-egalitarianism-compatibility/conflict.svg)\n\nThis is a **newly specified compatibility baseline**, not a replay of the 2019 author's cipher. That proposal explicitly did not assume a monoalphabetic cipher. Its transformation remains unspecified, and the original and corrected mapping diagrams have not been inspected. This result therefore does not reject the broader historical idea.\n\n## The word and the spelling\n\nThe inferred slot on [LP2-43](#/page/lp2-43) is page-rune interval **[37,51)**, counting from zero and including every recognized GP rune from the top. It comprises the last ten runes of physical line 2 and first four of line 3. Exterior hyphens delimit the word; its internal slash and newline mark a line wrap.\n\nThis slot was inferred from the proposal's page/line description and the original page. It is not a recovered diagram annotation. The supplied page text contains 274 recognized GP runes. The public inputs retain the exact page text, alphabet labels and source coordinates so the extraction can be checked independently.\n\nOnly these two exact GP encodings were tested:\n\n| Encoding | Rune count | Result |\n| --- | --- | --- |\n| E G A L I T A R IA N I S M | 13 | Whole-slot length mismatch |\n| E G A L I T A R I A N I S M | 14 | Repetition conflict; no bijection or affine fit |\n\nNo phonetic aliases, spelling changes, padding, deletions or sliding alignments were allowed. The calculations use alphabet indices 0–28, not prime values.\n\n## What the fixed models establish\n\nA static bijection assigns each ciphertext rune exactly one plaintext rune, and distinct ciphertext runes must receive distinct plaintext runes. The fourteen-rune spelling violates both requirements. Besides the F-to-G/T conflict, ciphertext labels J and S would both need A, while W and B would both need I. All three conflicts are recorded.\n\nThe affine check exhausts `P = aC + b (mod 29)`, with `a = 1..28` and `b = 0..28`. Every one of its **812 decoder outcomes**, including all mismatch positions, is saved. There are zero fits. Affine decoders are a subset of static bijections; these are not independent lines of evidence.\n\nNo continuation was decoded or ranked because neither baseline fit. Other cipher families, other positions and altered spellings were not tested. A freely chosen per-position key could fit an arbitrary same-length word, but would supply no independent prediction; no such key was fitted here.\n\n## Correctness checks\n\nBefore the original target calculation, implementation and synthetic-control hashes were frozen. The public copy preserves that [freeze manifest](experiments/records/lp2-43-egalitarianism-compatibility/source-freeze.json); [input provenance](experiments/records/lp2-43-egalitarianism-compatibility/provenance.json) distinguishes the original calculation from this portable packaging.\n\nBoth encodings were planted at offset 37 in synthetic 274-rune contexts. An affine encoder and its specified non-affine output-label swap passed full alphabet and context round trips. All 812 affine encoder keys for each encoding returned their planted inverse: **1,624 planted-key controls**. Deliberate forward-map, inverse-map and length failures were detected.\n\nThe independent checker uses equality relations between position pairs, rather than the producer's assignment tables. It also derives affine keys algebraically. On alphabet sizes 2 and 3, lengths 0–4, all **7,722** ordered ciphertext/plaintext pairs agree with exhaustive permutation counts and affine enumeration. The target ledger is independently checked as well.\n\nThese are checks of the implementation, not evidence that the proposed word or a particular cipher was intended.\n\n## Relation to existing work\n\n[Simple substitution and page-opening cribs](#/experiments/monoalphabetic-crib-capacity) applies the same kind of equality constraint to nine fixed twelve-rune openings at page starts. This record adds only one interior word and two encodings. [The LP2-39 header crib test](#/experiments/lp2-39-header-cribs) uses the same finite affine keyspace on a different three-rune passage. Neither earlier scope covered this particular word and slot.\n\n## Reproduce\n\nThe download is self-contained: Python's standard library, the small public input files, control receipts and complete target ledger. It needs no private queue, transcript, internet connection or original image download. The source image's hash and public location are preserved in provenance.\n\n```text\npython experiments/records/lp2-43-egalitarianism-compatibility/run.py --check\npython experiments/records/lp2-43-egalitarianism-compatibility/check.py controls\npython experiments/records/lp2-43-egalitarianism-compatibility/check.py target\npython experiments/records/lp2-43-egalitarianism-compatibility/plot.py --check\n```\n\nThe [complete target ledger](experiments/records/lp2-43-egalitarianism-compatibility/target-results.json) retains the wrong-length encoding instead of silently discarding it.\n",
+  "article_path": "experiments/records/lp2-43-egalitarianism-compatibility/article.md",
+  "script_sha256": "a68ab7d9b1fc0f51cb7355d044084c0bb5d385959bcdc9a4cd4c5f24d8549cff",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "method_topics": [
+    {
+      "id": "fixed-substitution",
+      "title": "Fixed alphabet substitutions",
+      "aliases": [
+        "Atbash",
+        "Caesar",
+        "affine substitution",
+        "substitution",
+        "monoalphabetic",
+        "affine cipher",
+        "fixed substitution",
+        "Caesar shifts",
+        "affine maps"
+      ]
+    },
+    {
+      "id": "cribs",
+      "title": "Known plaintext and crib searches",
+      "aliases": [
+        "crib",
+        "known plaintext",
+        "guessed word",
+        "known plaintext attack",
+        "crib search"
+      ]
+    }
+  ]
+}
+
+---
+
+{
   "id": "lp2-53-red-equality-invariants",
   "status": "published",
   "title": "Equality structure of the LP2-53 red passage",
@@ -85294,6 +85639,8 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "question": "Does LP2-00–55 have an excess of within-page matching trigram pairs compared with independent whole-page fixed-count shuffles?",
   "summary": "55 observed matching trigram pairs; 798 of 999 shuffled datasets have at least that many. Corrected upper-tail p=0.799, with no evidence of aggregate excess under this model.",
   "tags": [
+    "trigram repeats",
+    "repeated trigrams",
     "trigrams",
     "repeated runes",
     "repeated sequences",
@@ -88243,6 +88590,16 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "crib-inferred-feedback-table",
     "wholepage-affine-gp29"
   ],
+  "family": {
+    "id": "monoalphabetic-crib-capacity",
+    "title": "Fixed-substitution crib compatibility",
+    "question": "Can a fixed proposed plaintext fit a selected rune passage under a static bijection?",
+    "baseline": "monoalphabetic-crib-capacity"
+  },
+  "variant": {
+    "label": "Page-opening cribs",
+    "changes": []
+  },
   "article": "# Can a simple substitution fit a proposed opening?\n\n**One of 495 fixed page-and-opening pairs fits a single, one-to-one rune substitution.** LP2-12 can be paired with the archived second-koan opening under this rule. That fit assigns 10 of the 29 rune mappings and leaves **19! = 121,645,100,408,832,000** complete substitution keys. It fixes only five of the next twelve positions. A compatible opening is therefore not a reading of the page.\n\n![One compatible page opening assigns ten rune mappings and fixes five of the following twelve positions.](experiments/records/monoalphabetic-crib-capacity/continuation.svg)\n\nThe twelve numbered boxes represent positions 13–24 after the proposed opening. Blue marks positions whose ciphertext rune appeared in the first twelve, so the proposed mapping determines their output. Gray positions use a ciphertext rune not yet assigned; their outputs are still free. The boxes do **not** display verified plaintext.\n\n## What was checked\n\nWe paired the first 12 runes of each of the 55 rune-bearing unsolved LP2 pages with each of nine openings fixed from the [archived known readings](#/experiments/lp2-known-vigenere-keys). Headings count as runes; spaces and punctuation do not. LP2-50 contains no runes and is excluded. The rule is one permutation of the 29 Gematria Primus symbols for a whole page: every occurrence of a ciphertext rune maps to the same plaintext rune, and two different ciphertext runes cannot map to the same plaintext rune.\n\nThat rule gives a direct consistency check. If a crib contradicts either mapping direction, no substitution key fits it. If it consistently assigns *m* distinct ciphertext symbols, the other 29 − *m* outputs can be permuted in **(29 − *m*)!** ways. The first twelve positions were used for the fit; the following twelve were used only to count which positions would already be determined.\n\n| Fixed comparison | Result |\n| --- | ---: |\n| Page starts × proposed openings | 55 × 9 = 495 |\n| Incompatible equality patterns | 494 |\n| Compatible patterns | 1 |\n| Next twelve positions fixed in that case | 5 |\n\nThe lone fit is an **algebraic possibility**, not evidence that the second koan occurs on LP2-12. There is no independently known LP2 continuation to compare with its five forced outputs. The 19! keys also disagree on the remaining seven positions. Other words, later alignments, page-specific key changes and more complex ciphers were not tested.\n\n## Reproduce\n\nThe [plan](experiments/records/monoalphabetic-crib-capacity/plan.json) fixes the inputs and rule. Run `python experiments/records/monoalphabetic-crib-capacity/run.py --check`, then `python experiments/records/monoalphabetic-crib-capacity/check.py` from the repository root. The independent checker reconstructs every page from its JSON transcription and verifies all 495 counts with a separate pair-set calculation. It also exhaustively enumerates 2,118 small-alphabet cases and checks a planted 24-rune known reading. The full [case results](experiments/records/monoalphabetic-crib-capacity/results.json) retain each page/crib outcome.\n\nThis is a bounded test of **simple substitution at page starts**. It does not eliminate substitution with a different plaintext, placement or preprocessing rule, and it does not identify a cipher for LP2.\n",
   "article_path": "experiments/records/monoalphabetic-crib-capacity/article.md",
   "script_sha256": "2be60bcc06e13fbfd575568725c0839e551cdb9be77b00883455d8f8aced5b75",

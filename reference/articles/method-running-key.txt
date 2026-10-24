@@ -47,6 +47,21 @@ Reusing the same aligned key has a consequence
 
 Under additive encoding, C₁ = P₁ + K and C₂ = P₂ + K imply C₁ − C₂ = P₁ − P₂ mod 29. The key cancels only where it is the same and aligned. This exposes a relation between plaintexts; it does not reveal either plaintext by itself. Different offsets or interruption rules invalidate that direct comparison.
 
+Have we tried subtracting one page from another?
+
+Yes, including shifted alignments. The page-pair experiment checked 331,908 alignments across 52 pages, keeping at least 120 overlapping runes. Its strongest result was ordinary compared with the strongest results from shuffled pages.
+
+	Comparison	Result
+
+	Strongest actual alignment	LP2-14 from rune 0 against LP2-35 from rune 140; 131 runes overlap.
+
+	Shuffled searches that matched or beat it	77 of 128, each repeating the whole alignment search.
+
+	What was measured	Repeated-symbol concentration in the differences, using IoC; not readable text.
+
+
+Comparing the best alignment with the best shuffled alignment allows for all the chances the search had to find a high score. It found no exceptional concentration under this comparison. It does not rule out key reuse: when a shared key cancels, the remaining difference between two unknown plaintexts need not have a high IoC. The controls recovered shifted copies of pages, not two unrelated plaintexts sharing a key.
+
 Check the arithmetic
 
 source = [9, 4, 1, 7, 2, 8]
@@ -83,6 +98,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/works-and-influences.html
 - adaptive-choice accounting
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- page-pair experiment
+  https://jelliottdev.github.io/#/experiments/lp2-shifted-page-pair-differences
+- IoC
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Emerson running-key test
   https://jelliottdev.github.io/#/experiments/emerson-running-key
 - two Cypherpunk Manifesto conversions on three pages

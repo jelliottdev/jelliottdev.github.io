@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "f7a0a9d8fee8560e0d405bed6b925f4fc4b4ec21e73dd95944337f798b647621",
+    "current_experiments_sha256": "f8739a65d175d54484ac09875e26ac5aa8ddd6611df5bdfe3c42720989991da2",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -33,13 +33,14 @@
       }
     },
     "snapshot_records": 314,
-    "current_records": 322,
+    "current_records": 323,
     "missing_snapshot_ids": [],
     "new_ids": [
       "artifact-stream-skip-grid",
       "d04-remaining-page-feedback",
       "dot-constellation-candidate-fit",
       "fibonacci-stream-skip-grid",
+      "lp2-43-egalitarianism-compatibility",
       "numeric-stream-skip-grid",
       "page-number-prime-skip-grid",
       "payload-phase-skip-grid",
@@ -50,9 +51,11 @@
       "dukotah-nonenglish-control-gate",
       "lp2-row-column-english",
       "lp2-row-column-routes",
+      "lp2-trigram-repeats",
       "lp2-turtle-spatial-replay",
       "lp2-word-order-reversal",
       "lp2-word-reversal",
+      "monoalphabetic-crib-capacity",
       "prime-lag-autokey-openings",
       "wholepage-progressive-caesar",
       "word-internal-affine-lags"
@@ -18626,6 +18629,34 @@
       "changed_fields": [],
       "classification": "draft"
     },
+    "lp2-43-egalitarianism-compatibility": {
+      "id": "lp2-43-egalitarianism-compatibility",
+      "title": "EGALITARIANISM on LP2-43",
+      "question": "Can one fixed alphabet turn this LP2-43 word into EGALITARIANISM?",
+      "finding": "Using one rune for IA gives 13 runes for a 14-rune word. Keeping I and A separate gives 14, but the same cipher rune F would need to mean both G and T. None of 812 fixed affine decoders fits.",
+      "limitations": "These are newly specified fixed-alphabet tests. The 2019 proposal did not specify a cipher, and its mapping diagrams remain uninspected; this does not reject that broader idea.",
+      "pages": [
+        "lp2-43"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-43"
+        ],
+        "artifacts": [
+          "experiments/records/lp2-43-egalitarianism-compatibility/plan.json"
+        ],
+        "representation": "One inferred complete 14-rune word [37,51), zero-based page-rune indices including headings. Last 10 runes of physical line 2 plus first 4 of line 3; exterior hyphens delimit, internal slash/newline is a transparent wrap. Exact GP Latin labels only, indices 0–28 rather than prime values.",
+        "procedure": "Apply the whole-slot length gate to the two fixed spellings; check forward/inverse static-bijection consistency; enumerate every invertible affine decoder P = aC + b modulo 29 on the eligible spelling and retain every mismatch.",
+        "parameters": "One slot; two encodings of 13 and 14 runes; one eligible encoding; all 812 affine decoders a = 1..28, b = 0..28. Four planted 274-rune contexts, 1,624 affine-key plants, three deliberate failure fixtures and 7,722 exhaustive small-alphabet pair controls.",
+        "exclusions": "Other slots/pages, aliases or spelling changes, sliding a 13-rune fragment into the 14-rune word, nulls/padding/deletions, transposition, repeating keys, interruptions, language ranking, significance claims and the unspecified historical cipher."
+      },
+      "outcome": "not-supported",
+      "href": "#/experiments/lp2-43-egalitarianism-compatibility",
+      "current_sha256": "070ebd436a3949e9b14a9f7ae6c50ea5a403d0637dcf4a92eddb0e178296f74d",
+      "snapshot_sha256": null,
+      "changed_fields": [],
+      "classification": "awaiting-classification"
+    },
     "lp2-53-red-equality-invariants": {
       "id": "lp2-53-red-equality-invariants",
       "title": "Equality structure of the LP2-53 red passage",
@@ -21652,9 +21683,11 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-trigram-repeats",
-      "current_sha256": "1c1e951e2457efec67d31d4ce18a64cc400e0dc14ff4967d4357ae14e3e53344",
+      "current_sha256": "cefe12210038c49a4b2c9fe8ca58d66a55596b12863b5cfb7242380e917b25d3",
       "snapshot_sha256": "1c1e951e2457efec67d31d4ce18a64cc400e0dc14ff4967d4357ae14e3e53344",
-      "changed_fields": [],
+      "changed_fields": [
+        "tags"
+      ],
       "classification": "draft"
     },
     "lp2-turtle-spatial-replay": {
@@ -22415,9 +22448,12 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/monoalphabetic-crib-capacity",
-      "current_sha256": "120f83f8b1252c4466976af7b445735c95a3fa7aba41273baf31504f95405b81",
+      "current_sha256": "ce1c6c9b6adc0ba331c0970efc5669b9e39689a505942153281c731b6f42c0c0",
       "snapshot_sha256": "120f83f8b1252c4466976af7b445735c95a3fa7aba41273baf31504f95405b81",
-      "changed_fields": [],
+      "changed_fields": [
+        "family",
+        "variant"
+      ],
       "classification": "draft"
     },
     "multiplicative-ciphertext-autokey": {
@@ -34556,6 +34592,7 @@
     "d04-remaining-page-feedback",
     "dot-constellation-candidate-fit",
     "fibonacci-stream-skip-grid",
+    "lp2-43-egalitarianism-compatibility",
     "numeric-stream-skip-grid",
     "page-number-prime-skip-grid",
     "payload-phase-skip-grid",

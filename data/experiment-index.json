@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 322,
+    "records": 323,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -16422,6 +16422,91 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/lp2-39-header-cribs.zip"
     },
     {
+      "id": "lp2-43-egalitarianism-compatibility",
+      "title": "EGALITARIANISM on LP2-43",
+      "question": "Do the two fixed GP encodings of EGALITARIANISM fit the inferred LP2-43 slot [37,51) under one bijective substitution or any of 812 invertible affine decoders?",
+      "summary": "The 13-rune encoding has the wrong length. The 14-rune encoding requires the same ciphertext F to mean G and T; none of 812 affine decoders fits.",
+      "tags": [
+        "LP2-43",
+        "EGALITARIANISM",
+        "crib",
+        "cribbing",
+        "monoalphabetic substitution",
+        "simple substitution",
+        "fixed alphabet substitutions",
+        "affine",
+        "GP29",
+        "repeated symbols",
+        "word boundaries"
+      ],
+      "finding": "Using one rune for IA gives 13 runes for a 14-rune word. Keeping I and A separate gives 14, but the same cipher rune F would need to mean both G and T. None of 812 fixed affine decoders fits.",
+      "scope": {
+        "pages": [
+          "lp2-43"
+        ],
+        "artifacts": [
+          "experiments/records/lp2-43-egalitarianism-compatibility/plan.json"
+        ],
+        "representation": "One inferred complete 14-rune word [37,51), zero-based page-rune indices including headings. Last 10 runes of physical line 2 plus first 4 of line 3; exterior hyphens delimit, internal slash/newline is a transparent wrap. Exact GP Latin labels only, indices 0–28 rather than prime values.",
+        "procedure": "Apply the whole-slot length gate to the two fixed spellings; check forward/inverse static-bijection consistency; enumerate every invertible affine decoder P = aC + b modulo 29 on the eligible spelling and retain every mismatch.",
+        "parameters": "One slot; two encodings of 13 and 14 runes; one eligible encoding; all 812 affine decoders a = 1..28, b = 0..28. Four planted 274-rune contexts, 1,624 affine-key plants, three deliberate failure fixtures and 7,722 exhaustive small-alphabet pair controls.",
+        "exclusions": "Other slots/pages, aliases or spelling changes, sliding a 13-rune fragment into the 14-rune word, nulls/padding/deletions, transposition, repeating keys, interruptions, language ranking, significance claims and the unspecified historical cipher."
+      },
+      "limitations": "One source-inferred slot and two exact GP encodings only. The historical author explicitly did not assume a monoalphabetic cipher, and no transformation or independently expected continuation is recovered. The inaccessible original/corrected mapping diagrams were not inspected. Other ciphers, encodings and slots remain untested; the affine test is a subset of the bijection test, not independent corroboration.",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      },
+      "method_topics": [
+        {
+          "id": "fixed-substitution",
+          "title": "Fixed alphabet substitutions",
+          "aliases": [
+            "Atbash",
+            "Caesar",
+            "affine substitution",
+            "substitution",
+            "monoalphabetic",
+            "affine cipher",
+            "fixed substitution",
+            "Caesar shifts",
+            "affine maps"
+          ]
+        },
+        {
+          "id": "cribs",
+          "title": "Known plaintext and crib searches",
+          "aliases": [
+            "crib",
+            "known plaintext",
+            "guessed word",
+            "known plaintext attack",
+            "crib search"
+          ]
+        }
+      ],
+      "family": {
+        "id": "monoalphabetic-crib-capacity",
+        "title": "Fixed-substitution crib compatibility",
+        "question": "Can a fixed proposed plaintext fit a selected rune passage under a static bijection?",
+        "baseline": "monoalphabetic-crib-capacity"
+      },
+      "variant_label": "EGALITARIANISM on LP2-43",
+      "pages": [
+        "lp2-43"
+      ],
+      "artifacts": [
+        "experiments/records/lp2-43-egalitarianism-compatibility/plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-24",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-43-egalitarianism-compatibility",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/lp2-43-egalitarianism-compatibility.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/lp2-43-egalitarianism-compatibility/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/lp2-43-egalitarianism-compatibility.zip"
+    },
+    {
       "id": "lp2-53-red-equality-invariants",
       "title": "Equality structure of the LP2-53 red passage",
       "question": "Does the 51-rune red passage on LP2-53 have the equality structure of archived decoded GP passages, and does it differ from the same page’s black text?",
@@ -20532,6 +20617,8 @@
       "question": "Does LP2-00–55 have an excess of within-page matching trigram pairs compared with independent whole-page fixed-count shuffles?",
       "summary": "55 observed matching trigram pairs; 798 of 999 shuffled datasets have at least that many. Corrected upper-tail p=0.799, with no evidence of aggregate excess under this model.",
       "tags": [
+        "trigram repeats",
+        "repeated trigrams",
         "trigrams",
         "repeated runes",
         "repeated sequences",
@@ -21730,8 +21817,13 @@
           ]
         }
       ],
-      "family": null,
-      "variant_label": null,
+      "family": {
+        "id": "monoalphabetic-crib-capacity",
+        "title": "Fixed-substitution crib compatibility",
+        "question": "Can a fixed proposed plaintext fit a selected rune passage under a static bijection?",
+        "baseline": "monoalphabetic-crib-capacity"
+      },
+      "variant_label": "Page-opening cribs",
       "pages": [
         "lp2-00",
         "lp2-01",

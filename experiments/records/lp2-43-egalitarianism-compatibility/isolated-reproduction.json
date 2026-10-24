@@ -1,0 +1,114 @@
+{
+  "schema": "egalitarianism-isolated-reproduction-v1",
+  "passed": true,
+  "network_required": false,
+  "private_inputs_required": false,
+  "target_cases_equal_original_frozen_run": true,
+  "controls_byte_equal_original": true,
+  "verification_byte_immutable": true,
+  "execution_root": "temporary directory containing only declared execution files; this self-referential receipt excluded",
+  "executions": [
+    {
+      "command": "python run.py --check",
+      "exit_code": 0,
+      "stdout": "Controls passed: 4 contexts, 1624 planted affine keys, 3 deliberate failures, 7722 exhaustive pairs.\nFixed target: 13-rune encoding length-ineligible; 14-rune encoding incompatible; zero of 812 affine decoders fit.",
+      "stderr": ""
+    },
+    {
+      "command": "python check.py controls",
+      "exit_code": 0,
+      "stdout": "Independent controls passed: exhaustive permutation counts and derived affine keys agree in all 7722 pairs.",
+      "stderr": ""
+    },
+    {
+      "command": "python check.py target",
+      "exit_code": 0,
+      "stdout": "Independent target check passed: length/equality relation and all 812 affine outcomes agree.",
+      "stderr": ""
+    },
+    {
+      "command": "python plot.py --check",
+      "exit_code": 0,
+      "stdout": "Conflict diagram checked against actual target positions 2 and 6.",
+      "stderr": ""
+    }
+  ],
+  "tampered_receipt_checks": [
+    {
+      "command": "python check.py controls",
+      "tampered_receipt": "controls-check.json",
+      "expected_failure": true,
+      "exit_code": 1,
+      "receipt_unchanged": true
+    },
+    {
+      "command": "python check.py target",
+      "tampered_receipt": "target-check.json",
+      "expected_failure": true,
+      "exit_code": 1,
+      "receipt_unchanged": true
+    }
+  ],
+  "files": [
+    {
+      "name": "alphabet.json",
+      "sha256": "43d38627e8f7fbddeb4f0ca26c6774fe71e154918ccf88a7e68dd0c309a06370"
+    },
+    {
+      "name": "article.md",
+      "sha256": "bdd2f3425f7c14ed88b40055b1e0029c9834fc8b0509f3f9321d0245a2e716e4"
+    },
+    {
+      "name": "check.py",
+      "sha256": "416437710d2c6b8fa3875ffa71dc70a5c10672d5666d13669c9f5ce3a76b60b6"
+    },
+    {
+      "name": "conflict.svg",
+      "sha256": "b4dbcc9b9673e2066d90e29ffe61e267db3ddb9a055f2feec0dff67ffc2ad14d"
+    },
+    {
+      "name": "controls-check.json",
+      "sha256": "186215bb0f5b82e268b67998cb48dbba3bccfb74d23f5470d2b2fcc975d83054"
+    },
+    {
+      "name": "controls.json",
+      "sha256": "81916383e306a584920e248d6712b046156df2158d6e30efe0dd9cdd0470e818"
+    },
+    {
+      "name": "inputs.json",
+      "sha256": "99130f05e2d859554f03fc9b6d0057f8e1c7ced862d09c43d550471fe5dba94d"
+    },
+    {
+      "name": "page.txt",
+      "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+    },
+    {
+      "name": "plan.json",
+      "sha256": "bd5b5a337e32df385e7053c78527345bd8a940b8c89f9d453d801de7289c839b"
+    },
+    {
+      "name": "plot.py",
+      "sha256": "15cc5a5a90cd8ee6c8432d5381a5b7a38be8004446ec9d12edce9a424c230c7d"
+    },
+    {
+      "name": "provenance.json",
+      "sha256": "baa30d2ac3d1ab0fa284e7c546d22465951a1aeba719db2f0a444b263ce34d68"
+    },
+    {
+      "name": "run.py",
+      "sha256": "a68ab7d9b1fc0f51cb7355d044084c0bb5d385959bcdc9a4cd4c5f24d8549cff"
+    },
+    {
+      "name": "source-freeze.json",
+      "sha256": "372562a754adf4d6a98419fd8ef6c81f1e176b1abe83ddd3a2fecf61ecde3905"
+    },
+    {
+      "name": "target-check.json",
+      "sha256": "1e65ecd7a347a460532baf443a510b1be52ec6b938e50c7a8333f9f377b2566d"
+    },
+    {
+      "name": "target-results.json",
+      "sha256": "dc4ad07e4da41a3824638938cd46b34d4fc6d52667e096ec29e1cb8f22068cb7"
+    }
+  ]
+}

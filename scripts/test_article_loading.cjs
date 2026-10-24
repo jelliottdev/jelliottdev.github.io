@@ -90,9 +90,26 @@ async function checkNavigationRace(oldRequestFails){
  assert.equal(directoryQuery,'prime shift');
  assert.equal(sandbox.location.hash,'#/research?q=prime+shift','Legacy archive links route to the research directory');
  sandbox.experimentsPage=async id=>{recordID=id;main.innerHTML='Record'};
+ const navLinks=['research','experiments','pages'].map(type=>({
+  dataset:{nav:type},attributes:{href:'#/'+type},active:false,
+  getAttribute(name){return this.attributes[name]},setAttribute(name,value){this.attributes[name]=value},
+  removeAttribute(name){delete this.attributes[name]},closest(){return null},
+  classList:{toggle(name,on){if(name==='active')navLinks.find(link=>link.classList===this).active=on}},
+ }));
+ sandbox.document.querySelectorAll=selector=>selector==='#sidebar nav a'?navLinks:[];
  sandbox.location.hash='#/experiments/fixed-rule';
  await vm.runInContext('route()',sandbox);
  assert.equal(recordID,'fixed-rule','Direct experiment routes remain unchanged');
+ assert.deepEqual(navLinks.filter(link=>link.active).map(link=>link.dataset.nav),['research'],
+  'An experiment detail belongs to the research index, not the separate idea checker');
+ assert.equal(navLinks[0].attributes['aria-current'],'location');
+ assert.equal(navLinks[1].attributes['aria-current'],undefined);
+ sandbox.location.hash='#/experiments?q=reverse';
+ await vm.runInContext('route()',sandbox);
+ assert.deepEqual(navLinks.filter(link=>link.active).map(link=>link.dataset.nav),['experiments'],
+  'The checker route retains its own navigation destination');
+ assert.equal(navLinks[1].attributes['aria-current'],'page');
+ assert.equal(navLinks[0].attributes['aria-current'],undefined);
  const ordinaryQuery=main.querySelector.bind(main),scrolls=[];
  main.querySelector=selector=>selector==='.research-index'?{dataset:{researchState:'#/research?q=prime'}}:ordinaryQuery(selector);
  sandbox.window.scrollY=320;sandbox.window.scrollTo=(x,y)=>scrolls.push(y);

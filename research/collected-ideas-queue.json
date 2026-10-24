@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 49,
+    "published_followup_records": 50,
     "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
@@ -2787,17 +2787,23 @@
       "source_idea_ids": [
         "16.2"
       ],
-      "state": "needs-rule",
-      "next_action": "Fix the IA encoding and cipher model for the inferred 14-rune word spanning LP2-43 lines 2-3, then demand a prediction outside the fitted word. The original mapping image remains unavailable.",
+      "state": "bounded-followup-recorded",
+      "next_action": "Recover the original mapping diagram and explicit transformation before an exact historical replay. The new fixed-alphabet baseline covers one inferred slot and two spellings only.",
       "existing_record_ids": [
         "lp2-39-header-cribs"
       ],
       "scope_and_gates": [
-        "The 2019 source proposes EGALITARIANISM; the inferred word slot has 14 runes. Encoding IA as one rune gives 13, while spelling I and A separately gives 14.",
-        "No exact original mapping reproduction or full-page cipher test has been run. Fix the rule first; a free per-position key can fit an arbitrary same-length word."
+        "At the inferred 14-rune LP2-43 slot [37,51), joining IA gives 13 runes and fails the whole-word length requirement. Keeping I and A separate gives 14 but conflicts with a static bijection; all 812 invertible affine decoders fail.",
+        "This newly specified baseline is not the historical method: the source explicitly did not assume a monoalphabetic cipher. Other slots, spellings and cipher models remain outside this result."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-43-egalitarianism-compatibility"
+        ],
+        "scope": "One inferred complete word, two fixed GP encodings, static-bijection compatibility and all 812 invertible affine decoders; controls and independent checks passed.",
+        "remaining": "Historical mapping diagrams and exact cipher rule remain unavailable; no historical closure or full-page decoding claim."
+      },
+      "has_been_run": true,
       "related_queue_ids": [],
       "source_recovery": {
         "public_url": "https://www.reddit.com/r/cicada/comments/ctqe6t",

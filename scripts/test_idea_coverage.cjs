@@ -12,6 +12,8 @@ assert.equal(Search.supporting(researchDocs,'dead tree on LP2-55')[0]?.document.
 assert(Search.experiments(researchDocs,'prime-minus-one shifts').slice(0,2).some(r=>r.document.id==='lp2-prime-minus-one-openings'));
 assert.equal(Search.experiments(researchDocs,'trigram repeats on LP2-31').length,0);
 assert.equal(Search.supporting(researchDocs,'trigram repeats on LP2-31')[0]?.document.id,'lp2-trigram-repeats');
+assert.equal(Search.supporting(researchDocs,'repeated trigrams on LP2-31')[0]?.document.id,'lp2-trigram-repeats');
+assert.equal(Search.supporting(researchDocs,'trigram shift control')[0]?.document.id,'relikd-trigram-shift-control');
 const statuses=new Set(['Needs a defined rule','Partially covered','Proposed; not run']);
 assert.equal(new Set(notes.map(n=>n.id)).size,notes.length);
 for(const n of notes){
@@ -196,8 +198,9 @@ const control=experiments.find(r=>r.id==='seed-crib-controls');
 assert(detail.experimentSearchResult(control).includes('Control ·'));
 assert(detail.experimentSearchResult(control).includes(detail.esc(control.finding)));
 const tree=experiments.find(r=>r.id==='dead-tree-alignment');
-assert(!detail.experimentBrowse(experiments).split('<h3>Measurements, controls and source checks</h3>')[0].includes('dead-tree-alignment'));
-assert(detail.experimentBrowse(experiments).split('<h3>Measurements, controls and source checks</h3>')[1].includes('dead-tree-alignment'));
+const ResearchIndex=require('../research-index.js');
+assert(!ResearchIndex.select(experiments,ResearchIndex.state(new URLSearchParams('type=method&q=dead+tree'))).records.some(r=>r.id===tree.id));
+assert(ResearchIndex.select(experiments,ResearchIndex.state(new URLSearchParams('type=audit&q=dead+tree'))).records.some(r=>r.id===tree.id));
 assert(detail.experimentArticle(tree).includes('What we found'));
 vm.runInContext('methodRecordKinds={};',detail);
 assert(detail.experimentRecordType(control).includes('<strong>Control</strong>'));
