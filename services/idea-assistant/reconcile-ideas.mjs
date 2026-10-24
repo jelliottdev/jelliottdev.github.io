@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import C from '../../claim-specification.js';
 import Share from '../../claim-share.js';
+import Research from '../../claim-research.js';
 import Search from '../../assistant-search.js';
 import {compareCards,validateCard} from './idea-relations.mjs';
 
@@ -68,13 +69,23 @@ export function reconcile(data,registry,{inputHash,registryHash,generatedAt=new 
    // Deliberately exclude original wording, outcome and scope prose from ranking.
    // Ordered method parameters and specified rules remain method-search terms.
    const ready=C.completeness(confirmed).researchReady;
-   const rows=C.reviewRows(confirmed);
-   const query=ready?[...rows.find(r=>r.label==='Method').tags.map(t=>t.text),C.serialize(row.card.method.value),...rows.find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text)].join('. '):null;
    const pages=row.card.scope.status==='specified'?(row.card.scope.value.pages||[]):[];
-   const bounded=!!query&&query.length<=1500;
-   const hits=bounded?Search.select(docs,query,pages).filter(d=>d.kind==='experiment'):[];
+   let projection=null;
+   if(ready){
+    // Use the shared parameter/operand projection, without turning private
+    // background, aims, passage prose or unresolved notes into ranking terms.
+    // The complete original card remains below for the owner's comparison.
+    const ranking=C.confirm(C.createDraft({source:{text:'Offline method-only discovery.',origin:'shared_link'},
+     method:confirmed.method,rules:confirmed.rules,
+     scope:row.card.scope.status==='specified'?C.field('specified',{pages}):C.field()}),
+     {id:'offline-ranking',at:'2000-01-01T00:00:00.000Z'});
+    try{projection=Research.prepare(ranking);}
+    catch(error){if(!['query-too-long','context-too-long','body-too-long'].includes(error.code))throw error;}
+   }
+   const query=projection?.query||null;
+   const hits=projection?Search.select(docs,query,pages,projection.discovery).filter(d=>d.kind==='experiment'):[];
    group={id:row.id,card_hash:row.card_hash,card_json:row.card_json,card:row.card,fragment:row.fragment,proposals:[],contributions:[],
-    retrieval:{query:bounded?query:null,pages,state:!ready?'needs_clarification':!bounded?'needs_shorter_method':hits.length?'candidate_records_found':'needs_comparison',basis:'standardized method and rules only; pages break ties; lexical candidates are not exact coverage'},
+    retrieval:{query,pages,discovery:projection?.discovery||null,state:!ready?'needs_clarification':!projection?'needs_shorter_method':hits.length?'candidate_records_found':'needs_comparison',basis:'standardized method and rules only; shared per-step hints support discovery; pages break ties; candidates are not exact coverage'},
     candidates:hits.map(hit=>({id:hit.id,citation:'https://jelliottdev.github.io/#/experiments/'+hit.id,record_sha256:sha(C.serialize(publishedMap.get(hit.id))),record:publishedMap.get(hit.id)})),novelty:'not_assessed',coverage:'not_assessed'};
    groups.push(group);
   }
@@ -109,7 +120,7 @@ export function privateOutput(out){
 }
 export function run(options){
  const out=privateOutput(options.out),input=readJSON(options.input,MAX_INPUT),registry=readJSON(options.registry,MAX_REGISTRY);
- const codeHashes=Object.fromEntries(['reconcile-ideas.mjs','idea-relations.mjs','../../assistant-search.js','../../claim-share.js','../../claim-specification.js'].map(p=>[p,sha(readFileSync(new URL(p,import.meta.url)))]));
+ const codeHashes=Object.fromEntries(['reconcile-ideas.mjs','idea-relations.mjs','../../assistant-search.js','../../claim-share.js','../../claim-specification.js','../../claim-research.js'].map(p=>[p,sha(readFileSync(new URL(p,import.meta.url)))]));
  const report=reconcile(input.value,registry.value,{inputHash:input.hash,registryHash:registry.hash,codeHashes}),json=JSON.stringify(report,null,2)+'\n',markdown=render(report);
  if(Buffer.byteLength(json)+Buffer.byteLength(markdown)>MAX_OUTPUT)fail('Output exceeds bounded report size');
  mkdirSync(out,{mode:0o700});const written=[];

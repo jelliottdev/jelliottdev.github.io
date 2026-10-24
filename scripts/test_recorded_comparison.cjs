@@ -12,7 +12,9 @@ test('generic authored overlap retains exact source objects and limits, without 
  const d=doc(),before=JSON.stringify(d),s=make(),identity=C.binding(s),result=compare(s,[d]);
  assert.equal(result.kind,'recorded-overlap');assert.equal(result.sources[0],d);assert.equal(JSON.stringify(d),before);assert.equal(C.binding(s),identity);
  assert(result.answer.includes('LP2-15 [1]'));assert(result.answer.includes('matches the reversal step; other unspecified settings may differ'));
- for(const value of [metadata().input_description,metadata().reuse,metadata().evaluation.description,metadata().evaluation.limitation])assert(result.answer.includes(value));
+ for(const value of [metadata().input_description,metadata().evaluation.description])assert(result.answer.includes(value));
+ for(const value of [metadata().reuse,metadata().evaluation.limitation])assert(!result.answer.includes(value),'Supporting facts are not repeated in the comparison');
+ assert.equal(result.sources[0].recordedComparison.evaluation.limitation,metadata().evaluation.limitation,'Complete source metadata is retained');
  assert.deepEqual(M.citationNumbers(result.answer,1),[1]);assert.equal(result.answer.split('\n\n').length,2);assert(result.answer.split(/\s+/).length<=180);
  assert(!/failed|unreadable|solved|independent trials/i.test(result.answer));
 });
@@ -24,7 +26,7 @@ test('two evaluation purposes retain citation binding and shared prose without d
  const imported=H.decode(H.encode(make())).draft,shared=C.confirm(imported,{id:'shared',at});assert.equal(compare(shared,[a,b]).answer,result.answer);
 });
 test('separate authored metadata drives direct comparison without changing ordinary evidence text',()=>{
- const original=doc(),changed={...original,recordedComparison:metadata({reuse:'Inspect the saved complete rune output.'})};
+ const original=doc(),changed={...original,recordedComparison:metadata({input_description:'Rows including headings were reversed without retaining spaces.'})};
  assert.equal(changed.text,original.text);assert(!original.text.includes('recorded_comparison'));
  assert.notEqual(compare(make(),[changed]).answer,compare(make(),[original]).answer);
  assert.equal(compare(make(),[{...original,recordedComparison:metadata({executed_pages:['lp2-56']})}]),null);
@@ -73,7 +75,7 @@ test('discovery hints, audits, malformed evidence and mismatched citation destin
 });
 test('at most two distinct sources, finite answer budget and deterministic browser parity',()=>{
  const documents=[doc('first'),doc('first'),doc('second'),doc('third')],result=compare(make(),documents);assert.deepEqual(result.sources,[documents[0],documents[2]]);
- const manyWords=Array(100).fill('word').join(' '),long=doc('long',metadata({input_description:manyWords,reuse:manyWords,evaluation:{kind:'known-opening',description:manyWords,limitation:manyWords+' extra'}}));
+ const manyWords=Array(100).fill('word').join(' '),long=doc('long',metadata({input_description:manyWords,reuse:manyWords,evaluation:{kind:'known-opening',description:manyWords+' extra',limitation:manyWords}}));
  assert.equal(compare(make(),[long]),null);
  const browser={ClaimSpecification:C};vm.runInNewContext(fs.readFileSync(require.resolve('../recorded-comparison.js'),'utf8'),browser);
  assert.equal(JSON.stringify(browser.RecordedComparison.compare({snapshot:make(),documents})),JSON.stringify(result));

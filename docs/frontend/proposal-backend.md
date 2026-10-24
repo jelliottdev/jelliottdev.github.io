@@ -2,18 +2,17 @@
 
 `services/idea-assistant/proposals.mjs` is a separate persistence handler. It
 does not call AI, run an experiment, fetch source URLs, authenticate a person,
-or publish a proposal. Root integration must route `/proposals` to
-`handleProposal(request, env)` and provision its bindings before advertising it.
-No deployment or remote database operation is part of these implementation tests.
+or publish a proposal. The deployed Worker routes `/proposals` to
+`handleProposal(request, env)` with the D1 and rate-limit bindings provisioned.
+Implementation tests use local fixtures without remote database operations.
 
 ## Request and response
 
 POST saves the original confirmed idea from exactly `env.SITE_ORIGIN` as part of
 the explicit confirmation/check action. It is not a separate proposal form or
 a client-side novelty decision. Internal reconciliation decides how to review
-and queue the idea. The persistence route remains an unenabled scaffold until
-root deployment/configuration enables it; loading/importing a page alone must
-not save an idea.
+and queue the idea. The route is enabled in production; loading or importing a
+page alone does not save an idea.
 
 ```json
 {

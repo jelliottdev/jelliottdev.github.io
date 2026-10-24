@@ -45,3 +45,8 @@ reviewed execution metadata should use those recorded conditions and limits
 without a model rewrite or an AI label. It still describes only the matched
 operation, not unprovided settings or success at the visitor's whole objective.
 Keep the same evidence and attribution in the printed research note.
+
+The comparison explains the matching operation, input treatment and evaluation.
+Do not repeat the findings, limits or saved-file descriptions underneath them.
+Keep complete source details available without making unrelated page exceptions
+part of a comparison about one page.

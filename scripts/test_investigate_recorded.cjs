@@ -7,6 +7,7 @@ const documents=S.experimentDocs(registry.records),known=value=>C.field('specifi
 const snapshot=C.confirm(C.createDraft({source:{text:'Reverse each row on LP2-15'},aim:known('Find readable text'),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows',sourceText:'Reverse each row on LP2-15'}]}),scope:known({pages:['lp2-15']})}),{id:'recorded-ui',at});
 const reply=D.compare({snapshot:R.prepare(snapshot).snapshot,documents});assert(reply,'Current published registry needs reviewed execution metadata');
 const checked=I.validateAnswer(reply,documents,snapshot);assert.equal(checked.kind,'recorded-overlap');assert.equal(checked.answer,reply.answer);
+assert(!/LP2-(?:49|50|55)/.test(reply.answer),'A page-15 comparison should not narrate unrelated page exceptions');
 for(const changed of [{...reply,answer:reply.answer.replace('LP2-15','all LP2 pages')},{...reply,kind:'proved'}, {...reply,sources:[...reply.sources].reverse()}, {...reply,sources:reply.sources.map((s,i)=>i? s:{...s,text:s.text+' '})}])assert.throws(()=>I.validateAnswer(changed,documents,snapshot));
 for(const metadata of [undefined,{...reply.sources[0].recordedComparison,executed_pages:['lp2-56']}])assert.throws(()=>I.validateAnswer({...reply,sources:reply.sources.map((s,i)=>i?s:{...s,recordedComparison:metadata})},documents,snapshot));
 const differentlyScoped=C.confirm(C.revise(snapshot,{scope:known({pages:['lp2-56']})}),{id:'different',at});assert.throws(()=>I.validateAnswer(reply,documents,differentlyScoped));
@@ -15,7 +16,7 @@ function packetFor(kind,answer=reply.answer){return C.packetSnapshot(snapshot,C.
 const html=I.packetHTML(packetFor('recorded-overlap'));
 assert(!html.includes('AI interpretation'));assert(html.includes('How this relates to your idea'));
 assert(html.indexOf('Recorded findings')<html.indexOf('How this relates to your idea'));
-for(const source of reply.sources){const evidence=JSON.parse(source.text);assert(html.includes(evidence.reader_finding||evidence.finding),'Authored findings remain visible before the direct comparison');}
+for(const source of reply.sources){const evidence=JSON.parse(source.text);assert(html.includes(evidence.reader_finding||evidence.finding),'Authored findings remain visible before the direct comparison');const limit=evidence.reader_limit||evidence.limitations;assert(limit&&html.replace(/&#39;/g,"'").includes(limit),'Short comparison does not hide the source limitations');}
 assert(I.packetHTML(packetFor(undefined)).includes('AI interpretation'),'Ordinary generated answers keep their attribution');
 assert(I.packetHTML(packetFor('recorded-overlap','A changed assertion [1].')).includes('AI interpretation'),'A claimed direct kind alone cannot hide attribution');
 // Transport removes redundant source provenance; both sides compare the exact card sent.

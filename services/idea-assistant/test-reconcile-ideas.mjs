@@ -7,6 +7,8 @@ import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import C from '../../claim-specification.js';
 import S from '../../claim-share.js';
+import Research from '../../claim-research.js';
+import Search from '../../assistant-search.js';
 import {parseArgs,reconcile,render,run,privateOutput} from './reconcile-ideas.mjs';
 const sha=s=>createHash('sha256').update(s).digest('hex'),clone=x=>JSON.parse(JSON.stringify(x));
 const known=value=>C.field('specified',value),stamp='2026-10-24T12:00:00.000Z';
@@ -47,6 +49,39 @@ test('different original wording and generic/custom outcomes cannot change metho
  const a=reconcile(first,registry,evidence).groups[0],b=reconcile(second,registry,evidence).groups[0];
  assert.equal(a.retrieval.query,b.retrieval.query);assert.deepEqual(a.candidates.map(c=>c.id),b.candidates.map(c=>c.id));assert.notDeepEqual(a.card.outcome,b.card.outcome);
 });
+test('row, within-word and fixed-space reversals use shared exact operand discovery',()=>{
+ const docs=Search.experimentDocs(registry.records);
+ for(const [boundary,expected,within] of [[null,'lp2-row-column-routes','row'],['within_words','lp2-word-reversal','word'],['fixed_spaces','lp2-row-column-routes','row']]){
+  const row=make(['lp2-15'],{method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),
+   aim:known('Find readable text'),rules:boundary?{wordBoundaries:known('preserve'),boundaryMode:known(boundary)}:{}});
+  const data=exported([row]),before=C.serialize(data),report=reconcile(data,registry,evidence),group=report.groups[0];
+  const snapshot=C.confirm(S.decode(row.fragment).draft,{id:'parity',at:stamp}),shared=Research.prepare(snapshot);
+  assert.deepEqual(group.candidates.map(c=>c.id),Search.select(docs,shared.query,shared.pages,shared.discovery).filter(d=>d.kind==='experiment').map(d=>d.id),boundary||'row');
+  assert.equal(group.candidates[0].id,expected);assert.equal(group.retrieval.discovery.steps[0].operation.operand,'rune-order');
+  assert.equal(group.retrieval.discovery.steps[0].operation.within,within);
+  if(expected==='lp2-row-column-routes')assert(group.candidates.some(c=>c.id==='lp2-row-column-english'),'English follow-up remains discoverable');
+  assert.equal(group.card_json,row.card_json);assert.equal(C.serialize(data),before);assert.deepEqual(group.contributions,data.submissions);
+ }
+});
+test('scope prose and long custom goals cannot contaminate or block method-only owner discovery',()=>{
+ const plain=make(),scoped=make(['lp2-15'],{aim:known({outcomeId:'measure',detail:'PRIVATE AIM '+('constellation '.repeat(400))}),
+  scope:known({pages:['lp2-15'],description:'PRIVATE PASSAGE: Fibonacci gematria language row reversal'})});
+ const data=exported([scoped]);data.submissions[0].original_idea='PRIVATE ORIGINAL: within-word lag six';
+ const first=reconcile(exported([plain]),registry,evidence).groups[0],second=reconcile(data,registry,evidence).groups[0];
+ assert.equal(second.retrieval.query,first.retrieval.query);assert.deepEqual(second.retrieval.discovery,first.retrieval.discovery);
+ assert.deepEqual(second.candidates.map(c=>c.id),first.candidates.map(c=>c.id));assert(!second.retrieval.query.includes('PRIVATE'));
+ assert.equal(second.card_json,scoped.card_json);assert.equal(second.card.scope.value.description,scoped.card.scope.value.description);
+ assert.equal(second.contributions[0].original_idea,data.submissions[0].original_idea);assert.deepEqual(second.card.unresolved,scoped.card.unresolved);
+ const unresolved=make(['lp2-15'],{unresolved:[{kind:'source_note',text:'Preserve this unresolved condition'}]});
+ const held=reconcile(exported([unresolved]),registry,evidence).groups[0];assert.equal(held.retrieval.state,'needs_clarification');
+ assert.deepEqual(held.card.unresolved,unresolved.card.unresolved);assert.equal(held.retrieval.discovery,null);
+});
+test('overlong complete method projection remains explicitly bounded without changing the card',()=>{
+ const row=make(['lp2-15'],{method:known({operations:[{id:'described_method',label:'Reverse rune order '.repeat(100)}]})});
+ const group=reconcile(exported([row]),registry,evidence).groups[0];
+ assert.equal(group.retrieval.state,'needs_shorter_method');assert.equal(group.retrieval.query,null);assert.equal(group.retrieval.discovery,null);
+ assert.equal(group.candidates.length,0);assert.equal(group.card_json,row.card_json);
+});
 test('partial, stale, malformed, duplicated and missing immutable information fails closed',()=>{
  const checks=[d=>d.notes_complete_for_selection=false,d=>d.next_after_note='cursor',d=>d.submissions=[],d=>delete d.submissions[0].original_idea,d=>d.submissions.push(clone(d.submissions[0])),d=>d.submissions[0].proposal_id='missing',d=>d.cards[0].card_hash='0'.repeat(64),d=>d.cards[0].id='p_stale',d=>d.cards[0].card.scope.value.pages=['lp2-17'],d=>d.cards[0].fragment=make(['lp2-17']).fragment,d=>d.cards[0].record_id='stale-record',d=>d.cards[0].status='planned',d=>d.submissions[0].note='x'.repeat(1201),d=>d.counts.selected_submissions=2,d=>d.cards.push(clone(d.cards[0])),d=>d.submissions[0].received_day='2020-01-01'];
  for(const change of checks){const data=exported();change(data);assert.throws(()=>reconcile(data,registry,evidence));}
@@ -68,7 +103,7 @@ test('actual private files, byte snapshots, refusal to overwrite or write reposi
  try{
   const result=run(parseArgs(['--input',input,'--out',out]));assert.equal(result.counts.saved_incoming_cards,1);
   const report=JSON.parse(readFileSync(join(out,'queue-review.json'),'utf8'));assert.equal(report.snapshot.input_sha256,sha(readFileSync(input)));assert.equal(report.snapshot.registry_sha256,sha(readFileSync(new URL('../../data/experiments.json',import.meta.url))));
-  assert(report.snapshot.code_sha256['idea-relations.mjs']);assert.throws(()=>run(parseArgs(['--input',input,'--out',out])),/new private/);
+  assert(report.snapshot.code_sha256['idea-relations.mjs']);assert(report.snapshot.code_sha256['../../claim-research.js']);assert.throws(()=>run(parseArgs(['--input',input,'--out',out])),/new private/);
   assert.throws(()=>privateOutput(fileURLToPath(new URL('../../data/no-private-test-output',import.meta.url))),/outside/);
   const redirected=join(temp,'redirected-public');symlinkSync(fileURLToPath(new URL('../../',import.meta.url)),redirected,process.platform==='win32'?'junction':'dir');
   try{assert.throws(()=>privateOutput(join(redirected,'no-private-test-output')),/outside/);}finally{if(process.platform==='win32')rmdirSync(redirected);else unlinkSync(redirected);}

@@ -64,7 +64,9 @@
  }
  function answerFor(sources,metadata,target){
   const sentences=[];
-  for(let i=0;i<metadata.length;i++)for(const text of [metadata[i].input_description,metadata[i].evaluation.description,metadata[i].evaluation.limitation,metadata[i].reuse]){
+  // Findings and limits are shown before this comparison; complete conditions
+  // and saved outputs remain in source details. Explain only the method match.
+  for(let i=0;i<metadata.length;i++)for(const text of [metadata[i].input_description,metadata[i].evaluation.description]){
    const existing=sentences.find(entry=>entry.text===text);if(existing)existing.citations.push(i+1);else sentences.push({text,citations:[i+1]});
   }
   const citations=sources.map((_,i)=>i+1).join(', ');

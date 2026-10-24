@@ -175,6 +175,9 @@ validation, rate limits, source loading and confirmed-card binding. The browser
 recomputes the reply from the same normalized transport card and exact cited
 evidence before accepting its type. Screen and printed packets show the authored
 findings first, with no AI-attribution label on a validated direct comparison.
+The comparison describes the matched operation, input treatment and evaluation;
+it does not repeat the already-visible findings and limits. Complete metadata
+and saved-output descriptions remain in the cited sources.
 The broader source-guidance prompt remains version 15; this is not an improvement
 claim about untested model responses.
 
