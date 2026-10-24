@@ -3,7 +3,12 @@ const fs=require('node:fs'),vm=require('node:vm');
 const routes=require('../workspace-routes.js');
 assert.equal(routes.destination('#/reader/lp2-15?view=text&line=4-8'),'reader.html#lp2-15?view=text&line=4-8');
 assert.equal(routes.destination('#/experiments?q=autokey%20LP2-15'),'investigate.html?q=autokey%20LP2-15');
-for(const route of ['#/experiments?browse=prime','#/experiments?section=browse-experiments','#/experiments/word-internal-affine-lags','#/research','#/wiki/line-gaps','#/reader/../../bad'])assert.equal(routes.destination(route),null);
+for(const route of ['#/reader/../../bad','#/experiments/word-internal-affine-lags?full=1','#/wiki/line-gaps?full=1'])assert.equal(routes.destination(route),null);
+assert.equal(routes.destination('#/research?q=prime&page=3'),'research.html#q=prime&p=3&mode=list');
+assert.equal(routes.destination('#/research-map?view=analytics&branch=method%3Alanguage'),'research.html#view=analytics&branch=method%3Alanguage');
+assert.equal(routes.destination('#/experiments?browse=prime'),'research.html#q=prime&mode=list');
+assert.equal(routes.destination('#/wiki/line-gaps?section=measurements'),'library.html#/guide/line-gaps?section=measurements');
+assert.equal(routes.destination('#/experiments/word-internal-affine-lags'),'library.html#/experiment/word-internal-affine-lags');
 for(const route of ['', '#/', '#/overview'])assert.equal(routes.destination(route),'home.html');
 const app=fs.readFileSync(require('node:path').join(__dirname,'../app.js'),'utf8');
 const slice=app.slice(app.indexOf('function requireStartupData('),app.indexOf('\nconst optionalStartupData='));
@@ -34,5 +39,7 @@ const checkerScripts=[...checkerHTML.matchAll(/<script\b([^>]*)>/g)].map(([,attr
  assert(fs.existsSync(require.resolve('../'+filename)),'Entry dependency exists: '+filename);
  return filename;
 });
-assert.deepEqual(checkerScripts,['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','recorded-comparison.js','idea-input.js','investigate.js'],'The formatter and all dependencies must load before the checker');
+assert.deepEqual(checkerScripts.filter(name=>name!=='site-navigation.js'),['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','recorded-comparison.js','idea-input.js','investigate.js'],'The formatter and all dependencies must load before the checker');
 console.log('PASS: checker entry script attributes, dependency paths and load order.');
+
+assert.equal(routes.destination('#/research?page=lp2-15'),'research.html#page=lp2-15&mode=list');

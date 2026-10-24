@@ -286,17 +286,28 @@ function answerInDOM(doc,choice,text=''){
  doc.selectedChoice=choice;doc.getElementById('other-detail').value=text;
  doc.getElementById('clarification').fire('change');doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;
 }
+async function mockInterpretation(options){
+ const P=require('../claim-interpretation'),text=JSON.parse(options.body).text,draft=I.initialDraft(text),pages=P.pagesFromSource(text);
+ const candidate={schema:P.SCHEMA,outcome:draft.aim.status==='specified'?{id:C.normalizeOutcome(draft.aim.value).id,source:{start:0,quote:text}}:null,
+  steps:draft.method.status==='specified'?draft.method.value.operations.map(op=>({id:op.id==='ambiguous_reversal'?'ambiguous_reversal':['reverse_row_runes','reverse_value_digits'].includes(op.id)?op.id:'described_method',familyId:null,source:{start:text.indexOf(op.sourceText||op.label),quote:op.sourceText||op.label},parameters:{}})):[],
+  scope:pages.length?{pages,passage:null,source:{start:0,quote:text}}:null,rules:{}};
+ P.validateCandidate(text,candidate);
+ return Response.json({candidate,sourceBinding:Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))).toString('hex')});
+}
+async function waitForReview(app){for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await new Promise(resolve=>setImmediate(resolve));assert.equal(app.getSnapshot().stage,'review','Validated mocked interpretation reaches review');}
 (async()=>{
  const doc=fakeDocument('?q=Fibonacci%20keys&pages=lp2-15&pages=lp2-17');
  let resolveOptional;const optional=new Promise(resolve=>{resolveOptional=resolve;});
- const app=I.createApp(doc,{fetcher:async url=>{
+ const app=I.createApp(doc,{fetcher:async(url,options)=>{
   if(url==='data/experiments.json')return Response.json(registry);
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask'});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'});
+  if(url==='https://mock.example/interpret')return mockInterpretation(options);
   return optional;
  },now:()=>at,id:()=> 'test-id'});
  assert(doc.host.html.includes('Fibonacci keys'));assert.equal(app.getSnapshot().stage,'input');
  await app.ready;
  doc.getElementById('idea').value='Fibonacci keys';doc.getElementById('intake').fire('submit');
+ await waitForReview(app);
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15','lp2-17']);
  assert(doc.host.html.includes('class="question-title"'));assert(!doc.host.html.includes('id="confirm"'));
  answerInDOM(doc,'undecided');
@@ -311,12 +322,14 @@ function answerInDOM(doc,choice,text=''){
  const requests=[],timers=[];let prints=0,serial=0;
  const application=I.createApp(journey,{fetcher:async(url,options)=>{
   if(url==='data/experiments.json')return Response.json(registry);
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask'});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'});
+  if(url==='https://mock.example/interpret')return mockInterpretation(options);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   return new Promise(resolve=>requests.push({resolve,options}));
  },now:()=>at,id:()=> 'test-'+(++serial),printer:()=>{prints++;},schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{}});
  await application.ready;
  journey.getElementById('idea').value='Fibonacci keys on LP2-15';journey.getElementById('intake').fire('submit');
+ await waitForReview(application);
  answerInDOM(journey,'undecided');
  journey.getElementById('confirm').fire('click');
  assert.equal(requests.length,1);assert.equal(application.getSnapshot().busy,true);
@@ -348,6 +361,7 @@ function answerInDOM(doc,choice,text=''){
  journey.getElementById('back').fire('click');assert.equal(application.getSnapshot().stage,'input');assert.equal(application.getSnapshot().packet,null);
  assert.equal(saved.research.answer,'The published Fibonacci stream test is bounded [1].','Old frozen packet remains unchanged after leaving');
  journey.getElementById('idea').value='Unmatched careful idea';journey.getElementById('intake').fire('submit');
+ await waitForReview(application);
  answerInDOM(journey,'unclassified','Check the visual alignment');answerInDOM(journey,'specific','LP2-43, lines 2–3');
  journey.getElementById('confirm').fire('click');
  assert.equal(requests.length,4);
@@ -372,16 +386,17 @@ function answerInDOM(doc,choice,text=''){
   assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');
  }
  const beforeGoalOnly=requests.length;journey.getElementById('back').fire('click');journey.getElementById('idea').value='solve LP2';journey.getElementById('intake').fire('submit');
+ await waitForReview(application);
  assert(journey.host.html.includes('What method do you want to check?'));answerInDOM(journey,'undecided');answerInDOM(journey,'undecided');
- assert.equal(journey.getElementById('confirm'),null);assert(journey.host.html.includes('Browse the research index'));assert.equal(requests.length,beforeGoalOnly,'A goal without method sends no research request');
+ assert.equal(journey.getElementById('confirm'),null);assert(journey.host.html.includes('Browse research'));assert.equal(requests.length,beforeGoalOnly,'A goal without method sends no research request');
  application.destroy();console.log('PASS mocked full journey: success, exact print packet, edit/cancel restoration, new confirmation, cancel/retry, stale response guard and request-local timeout.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
 
 (async()=>{
- const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async url=>Response.json(url==='data/experiments.json'?registry:url==='data/assistant.json'?{endpoint:'https://mock.example/ask'}:{documents:[]})});
+ const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async(url,options)=>url==='https://mock.example/interpret'?mockInterpretation(options):Response.json(url==='data/experiments.json'?registry:url==='data/assistant.json'?{endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'}:{documents:[]})});
  await app.ready;
  const source='Reverse each row on LP2-15, then apply Vigenere with key FIRFUMFERENFE';
- doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');answerInDOM(doc,'decipher');
+ doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');await waitForReview(app);answerInDOM(doc,'decipher');
  const original=app.getSnapshot().draft;
  original.method.value.operations[1].parameters={key:'FIRFUMFERENFE',offset:7};
  original.unresolved.push({kind:'source_note',text:'Preserve this independent constraint'});

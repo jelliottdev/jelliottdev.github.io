@@ -47,12 +47,15 @@ async function fixture(session,backend,options={}){
  const app=I.createApp(doc,{now:()=>options.at||AT,schedule:()=>0,unschedule:()=>{},renderCard:()=>Promise.reject(),fetcher:async(url,request)=>{
   if(url==='data/experiments.json')return Response.json(registry);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals'});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals',interpretationEndpoint:'https://mock.example/interpret'});
+  if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(request);
   if(url.endsWith('/proposals'))return backend.fetch(JSON.parse(request.body));
   return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  }});await app.ready;return {doc,app};
 }
-function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('intake').fire('submit');
+async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('intake').fire('submit');
+ for(let i=0;i<100&&f.app.getSnapshot().stage!=='review';i++)await turn();
+ require('./mock_interpretation_response.cjs').acknowledge(f.doc,f.app);
  const d=f.app.getSnapshot().draft;d.aim=C.normalizeAim(known({outcomeId:'decipher',wording:'Find readable text',detail:''}));d.method=known({operations:JSON.parse(JSON.stringify(operations))});d.scope=known({pages:['lp2-15']});
  // Re-render through the existing edit/cancel path after replacing fixture fields.
  f.doc.getElementById('edit').fire('click');f.doc.getElementById('cancel-edit').fire('click');
@@ -65,11 +68,11 @@ async function main(){
  }
  const malformed=await fixture(storage(),server(),{hash:'#input=%E1'});assert(malformed.doc.host.html.includes('This idea link could not be read'));assert.equal(malformed.app.getSnapshot().stage,'input');malformed.app.destroy();
  const longText='ᚠ'.repeat(1501),over=await fixture(storage(),server(),{hash:'#input='+encodeURIComponent(longText)});
- over.doc.getElementById('intake').fire('submit');assert.equal(over.app.getSnapshot().stage,'input');assert.equal(over.doc.getElementById('idea').value,longText);assert(over.doc.host.html.includes('1,500 characters'));over.app.destroy();
+ over.doc.getElementById('intake').fire('submit');assert.equal(over.app.getSnapshot().stage,'input');assert.equal(over.doc.getElementById('idea').value,longText);assert(over.doc.getElementById('interpretation-error').textContent.includes('1,500 characters'));over.app.destroy();
  console.log('PASS fragment entry: exact input, no automatic submission, malformed-link recovery and editable over-limit text.');
  const text='  Use Vigenere with key ABC on LP2-15.\nKeep this original wording: \u16a0.  ';
  const session=storage(),backend=server();backend.defer=true;
- let f=await fixture(session,backend);submit(f,text);await confirm(f);
+ let f=await fixture(session,backend);await submit(f,text);await confirm(f);
  assert.equal(backend.posts.length,1,f.doc.host.html);const first=backend.posts[0].body;
  assert.equal(first.originalIdea,text);assert(I.readIntake(session.getItem(INTAKE),Date.parse(AT)));
  f.app.destroy();
@@ -80,19 +83,19 @@ async function main(){
  f=await fixture(session,backend);assert.equal(backend.posts.length,2);await confirm(f);assert.equal(backend.posts.length,3,'Reconfirmation verifies a local receipt by rePOSTing the same UUID');assert.deepEqual(backend.posts[2].body,first);assert.equal(backend.ledger.size,1);assert.equal(f.doc.getElementById('idea-save-status').textContent||f.doc.host.html.match(/id="idea-save-status"[^>]*>([^<]*)/)[1], 'Saved.');f.app.destroy();
  console.log('PASS refresh/receipt: explicit reconfirmation only, original bytes, server-commit ambiguity and one idempotent contribution, server-verified local receipts.');
 
- backend.defer=true;f=await fixture(session,backend);submit(f,'A changed original, with the same standardized method.');await confirm(f);const oldPost=backend.posts.at(-1);assert.notEqual(oldPost.body.requestId,first.requestId);assert.equal(oldPost.body.fragment,first.fragment,'Only original wording changed');
+ backend.defer=true;f=await fixture(session,backend);await submit(f,'A changed original, with the same standardized method.');await confirm(f);const oldPost=backend.posts.at(-1);assert.notEqual(oldPost.body.requestId,first.requestId);assert.equal(oldPost.body.fragment,first.fragment,'Only original wording changed');
  f.doc.getElementById('edit').fire('click');oldPost.resolve();await turn();assert.equal(JSON.parse(session.getItem(INTAKE)).receipt,null,'Old pending completion while editing cannot attach a receipt');
- f.doc.getElementById('cancel-edit').fire('click');f.doc.getElementById('back').fire('click');submit(f,'A third source wording.');await confirm(f);const newest=backend.posts.at(-1);assert.notEqual(newest.body.requestId,oldPost.body.requestId);
+ f.doc.getElementById('cancel-edit').fire('click');f.doc.getElementById('back').fire('click');await submit(f,'A third source wording.');await confirm(f);const newest=backend.posts.at(-1);assert.notEqual(newest.body.requestId,oldPost.body.requestId);
  oldPost.resolve();await turn();assert.deepEqual(JSON.parse(session.getItem(INTAKE)).body,newest.body);assert.equal(JSON.parse(session.getItem(INTAKE)).receipt,null);
  newest.resolve();await turn();await turn();assert.equal(f.doc.getElementById('idea-save-status').textContent||f.doc.host.html.match(/id="idea-save-status"[^>]*>([^<]*)/)[1], 'Saved.');f.app.destroy();
  console.log('PASS edits: new original gets new contribution; late old receipt never binds a changed card or editor.');
- const changed=await fixture(session,backend);submit(changed,'A third source wording.');
+ const changed=await fixture(session,backend);await submit(changed,'A third source wording.');
  const changedDraft=changed.app.getSnapshot().draft;changedDraft.scope=known({pages:['lp2-17']});
  await confirm(changed);const different=backend.posts.at(-1);
  assert.equal(different.body.originalIdea,newest.body.originalIdea);assert.notEqual(different.body.fragment,newest.body.fragment);assert.notEqual(different.body.requestId,newest.body.requestId,'Changed card with unchanged original creates a new contribution');changed.app.destroy();
  const failedSession=storage(),failedBackend=server();let failedBody;
  const normal=failedBackend.fetch;failedBackend.fetch=function(body){failedBody=body;return Promise.reject(Error('Offline'));};
- f=await fixture(failedSession,failedBackend);submit(f,text);await confirm(f);assert.equal(f.doc.getElementById('retry-save').hidden,false);f.app.destroy();
+ f=await fixture(failedSession,failedBackend);await submit(f,text);await confirm(f);assert.equal(f.doc.getElementById('retry-save').hidden,false);f.app.destroy();
  failedBackend.fetch=normal;f=await fixture(failedSession,failedBackend);assert.equal(failedBackend.posts.length,0);await confirm(f);assert.deepEqual(failedBackend.posts[0].body,failedBody,'Failed unsaved request also retries exact UUID/body after refresh');f.app.destroy();
  console.log('PASS contribution identity: changed card with same original gets new UUID; failed save survives refresh without background submission.');
 
@@ -109,8 +112,8 @@ async function main(){
  const valid=JSON.parse(storedReceipt),bad=[null,{}, {...valid,version:2},{...valid,at:Date.parse(AT)-86400001},{...valid,at:Date.parse(AT)+1},{...valid,at:String(valid.at)},{...valid,url:'https://evil.example'}, {...valid,body:{...valid.body,endpoint:'https://evil.example/proposals'}},{...valid,body:{...valid.body,requestId:'bad'}},{...valid,body:{...valid.body,fragment:'#idea=broken'}},{...valid,body:{...valid.body,originalIdea:42}},{...valid,receipt:{...valid.receipt,token:'credential'}},{...valid,receipt:{...valid.receipt,status:'pending'}}];
  for(const value of bad)assert.equal(I.readIntake(JSON.stringify(value),Date.parse(AT)),null);
  assert.equal(I.readIntake('x'.repeat(40001),Date.parse(AT)),null);
- const stale=storage();stale.setItem(INTAKE,JSON.stringify({...valid,at:Date.parse(AT)-86400001}));const staleServer=server();f=await fixture(stale,staleServer);submit(f,text);await confirm(f);assert.notEqual(staleServer.posts[0].body.requestId,first.requestId);f.app.destroy();
- const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('quota');},removeItem(){throw Error('blocked');}};f=await fixture(blocked,server());submit(f,text);await confirm(f);assert.equal(f.doc.getElementById('idea-save-status').textContent||f.doc.host.html.match(/id="idea-save-status"[^>]*>([^<]*)/)[1], 'Saved.');f.app.destroy();
+ const stale=storage();stale.setItem(INTAKE,JSON.stringify({...valid,at:Date.parse(AT)-86400001}));const staleServer=server();f=await fixture(stale,staleServer);await submit(f,text);await confirm(f);assert.notEqual(staleServer.posts[0].body.requestId,first.requestId);f.app.destroy();
+ const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('quota');},removeItem(){throw Error('blocked');}};f=await fixture(blocked,server());await submit(f,text);await confirm(f);assert.equal(f.doc.getElementById('idea-save-status').textContent||f.doc.host.html.match(/id="idea-save-status"[^>]*>([^<]*)/)[1], 'Saved.');f.app.destroy();
  console.log('PASS bounded storage: expiry, malformed/extra fields, invalid share/UUID, no stored endpoint/credentials, unavailable storage fallback.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

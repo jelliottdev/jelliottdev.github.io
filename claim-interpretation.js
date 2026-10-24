@@ -83,7 +83,7 @@ function knownMatches(id,quote){
  const q=semanticQuote(quote);
  if(id==='reverse_row_runes')return /^(?:read (?:each|every) row backwards|reverse (?:the )?(?:(?:rune )?order|order of (?:the )?runes|runes) (?:within|in) (?:(?:each|every) row|rows)|reverse (?:each|every) row)$/i.test(q);
  if(id==='reverse_value_digits')return /^reverse (?:the )?(?:decimal )?digits of each (?:prime )?value(?: in (?:each|every) row)?$/i.test(q);
- if(id==='ambiguous_reversal')return /^reverse (?:the )?prime values (?:of|in) (?:each|every) row$/i.test(q);
+ if(id==='ambiguous_reversal')return /^reverse (?:the )?prime values (?:of|in) (?:(?:each|every) row|rows)$/i.test(q);
  return true;
 }
 function pageReferences(quote){return quote.matchAll(/\bLP([12])-(\d{1,2})(?:\s*(?:[-–—]|to\b|through\b)\s*(?:LP\1-)?(\d{1,2}))?/gi);}

@@ -34,7 +34,8 @@ async function setup(enabled=true,shared=true){
  if(!shared)doc.defaultView.location.hash='';
  const app=I.createApp(doc,{id:()=>`00000000-0000-4000-8000-${String(++serial).padStart(12,'0')}`,renderCard:async()=>new Blob(['PNG']),schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{},fetcher:async(url,options)=>{
   if(url==='data/experiments.json')return Response.json(registry);
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',...(enabled?{proposalEndpoint:'https://mock.example/proposals'}:{})});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret',...(enabled?{proposalEndpoint:'https://mock.example/proposals'}:{})});
+  if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(options);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   return new Promise(resolve=>(url.endsWith('/proposals')?requests:research).push({resolve,options}));
  }});
@@ -42,6 +43,7 @@ async function setup(enabled=true,shared=true){
  assert.equal(requests.length,0);assert.equal(research.length,0,'Viewing the page or imported card never submits');
  if(!shared){
   doc.getElementById('idea').value='Use Vigenere with key ABC on LP2-15';doc.getElementById('intake').fire('submit');
+  for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await turn();
   doc.selectedChoice='decipher';doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;
  }
  assert.equal(app.getSnapshot().stage,'review');assert.equal(requests.length,0,'Review is not confirmation');

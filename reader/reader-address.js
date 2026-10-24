@@ -4,6 +4,7 @@ const ReaderAddress={
  parse(input,currentRelease='LP2'){
   let text=input.trim().replace(/[–—]/g,'-');
   const natural=/^(?:(LP[12])\s+)?(?:page\s+)?(\d{1,2}(?:\s*-\s*\d{1,2})?)(?:\s*,?\s+lines?\s+(\d+(?:\s*-\s*\d+)?))?(?:\s*,?\s+words?\s+(\d+(?:\s*-\s*\d+)?))?$/i.exec(text);
+  if(natural?.[4]&&!natural[3])return {error:'Choose a line before adding a word address.'};
   if(natural)text=[natural[1]||'',natural[2],natural[3]?':'+natural[3]:'',natural[4]?':'+natural[4]:''].join(' ').replace(/\s*:\s*/g,':').trim();
   const match=/^(?:(LP[12])\s*[- ]?\s*)?(\d{1,2}(?:\s*-\s*\d{1,2})?)(?::(\d+(?:\s*-\s*\d+)?))?(?::(\d+(?:\s*-\s*\d+)?))?$/i.exec(text);
   if(!match)return null;

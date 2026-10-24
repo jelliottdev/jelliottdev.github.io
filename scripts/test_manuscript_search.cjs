@@ -17,19 +17,24 @@ assert(api.pageHits(grid,index.alphabet,'&',['raw']).length===0,'Standalone sepa
  console.log('PASS: actual current/other-page source-layer phrases, offsets/rows/separators, contextual deduplication without invented alignment, max4 concurrent metadata requests, partial failures/cancel/retry.');
 })().catch(e=>{console.error(e);process.exitCode=1});
 
-// Reopening a current result has no hashchange; restore its exact marks after closing Find.
-{
+// Dedicated reader keeps native modified links and renders exact offsets in the selected stored layer.
+(async()=>{
  const vm=require('node:vm'),source=fs.readFileSync(path.join(root,'manuscript-reader.js'),'utf8');
- const handler=source.slice(source.indexOf('function openManuscriptSearchResult('),source.indexOf('function drawManuscriptSearchResults('));
- const events=[],hash='#lp1-06?view=text&version=reading&reading=context&textmatch=38-60';
- const context={location:{hash},URLSearchParams,closeFind:()=>events.push('clear'),applyAddressHighlight:p=>events.push(['address',p.get('line')]),applyTextMatch:p=>events.push(['mark',p.get('textmatch')])};
- vm.createContext(context);vm.runInContext(handler,context);
- context.openManuscriptSearchResult({button:0},hash);
- assert.deepEqual(events,['clear',['address',null],['mark','38-60']]);
- events.length=0;context.openManuscriptSearchResult({button:0},'#lp2-15?view=text&line=6&match=2-5');
- assert.deepEqual(events,['clear'],'A different target uses the normal hashchange loader');
- for(const modifier of ['ctrlKey','metaKey','shiftKey','altKey']){events.length=0;context.openManuscriptSearchResult({button:0,[modifier]:true},hash);assert.deepEqual(events,[],'Modified links keep the current search available');}
- events.length=0;context.openManuscriptSearchResult({button:1},hash);assert.deepEqual(events,[]);
- assert(source.includes('a.onclick=event=>openManuscriptSearchResult(event,a.hash)'));
- console.log('PASS: same-target search result restores exact highlighting after Find closes; other targets and modified clicks retain native navigation.');
-}
+ const fragment=(start,end)=>source.slice(source.indexOf(start),source.indexOf(end,source.indexOf(start)));
+ const state={id:'lp1-06'},events=[];let value,mark;
+ const context={state,navigationVersion:0,URLSearchParams,addressOf:id=>({id}),async go(target){state.id=target.id;events.push('go');return true},async render(){events.push(['render',state.mode]);},history:{replaceState(a,b,hash){events.push(['hash',hash])}},node(tag,text){mark={tag,textContent:text,scrollIntoView(){events.push('reveal')}};return mark},document:{createTextNode:text=>({textContent:text}),querySelector(){return{querySelector:()=>value}}}};
+ vm.createContext(context);vm.runInContext(fragment('function storedMatchHash(','let finderDraft='),context);
+ const cases=[...local,...api.pageHits(warning,index.alphabet,warning.reading.literal.slice(5,22),['literal']), ...raw.filter(h=>h.line===6).slice(0,1), ...api.pageHits(grid,index.alphabet,'3299',['latin','reviewed'])];
+ for(const hit of cases){
+  const p=load(hit.page);const text=hit.line!==null?(hit.layer==='latin'?p.lines[hit.line-1].latin:api.sourceRows(hit.layer==='reviewed'?p.reviewed_text:p.raw).find(r=>r.line===hit.line).text):hit.layer==='context'?p.reading.reading:p.reading.literal;
+  value={textContent:text,replaceChildren(...nodes){this.children=nodes}};events.length=0;
+  let prevented=false;await context.openStoredMatchEvent({button:0,preventDefault(){prevented=true}},hit);
+  assert(prevented);assert.equal(state.mode,hit.layer);assert.equal(mark.textContent,hit.match);assert.equal(value.children.map(n=>n.textContent).join(''),text,'Highlighting preserves exact layer bytes');assert(events.includes('reveal'));
+  assert.equal(events.find(e=>Array.isArray(e)&&e[0]==='hash')[1],context.storedMatchHash(hit));
+  const params=new URLSearchParams(context.storedMatchHash(hit).split('?')[1]);assert.equal(params.get(hit.line===null?'textmatch':'match'),hit.start+'-'+hit.end);
+  for(const modifier of ['ctrlKey','metaKey','shiftKey','altKey']){events.length=0;context.openStoredMatchEvent({button:0,[modifier]:true,preventDefault(){throw Error('Must remain native')}},hit);assert.deepEqual(events,[])}
+  context.openStoredMatchEvent({button:1,preventDefault(){throw Error('Must remain native')}},hit);
+ }
+ assert(source.includes('a.onclick=event=>openStoredMatchEvent(event,hit)'));
+ console.log('PASS: production stored-result navigation preserves native modified links, exact literal/context/raw/Latin/reviewed offsets and layer bytes, including numeric duplicate layers.');
+})().catch(e=>{console.error(e);process.exitCode=1});

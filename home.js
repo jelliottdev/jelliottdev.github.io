@@ -112,10 +112,4 @@
   field.setCustomValidity(!text.trim()?'Describe the idea to compare.':text.length>limit?'The current text checker accepts up to 1,500 characters. Keep the original file and describe its idea here.':'');
   if(!field.reportValidity())return;idea.value=text;rememberText();goToChecker(text);
  });
- $('site-search').addEventListener('submit',event=>{
-  event.preventDefault();const field=$('search'),query=field.value.trim();
-  field.setCustomValidity(query?'':'Enter something to search for.');if(!field.reportValidity())return;
-  location.assign('index.html#/search/'+encodeURIComponent(query));
- });
- $('search').addEventListener('input',()=>$('search').setCustomValidity(''));
 })();

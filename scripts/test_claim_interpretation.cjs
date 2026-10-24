@@ -14,6 +14,15 @@ let count=0;const test=(name,fn)=>{fn();count++;console.log('PASS '+name);};
 
 (async()=>{
  const E=await import('../services/idea-assistant/interpretation.mjs');
+ const Adapter=await import('../services/idea-assistant/interpret-handler.mjs');
+ test('plural rows wire reaches ambiguity instead of generic invalid interpretation',()=>{
+  const raw='Reverse prime values in rows';
+  const wire={schema:I.SCHEMA,outcome:null,steps:[{id:'ambiguous_reversal',familyId:null,source:source(raw,raw)}],scope:null,rules:[]};
+  const proposed=Adapter.fromWire(wire,raw),draft=I.toDraft(raw,proposed).draft;
+  assert.equal(draft.source.text,raw);assert.equal(require('../claim-specification.js').questions(draft)[0].id,'operation');
+  assert.deepEqual(plain(B.toDraft(raw,local(proposed))),I.toDraft(raw,proposed));
+  for(const text of ['Do not reverse prime values in rows','Reverse prime values in rows with key ABC','Reverse prime values in rows then apply Atbash','Reverse prime values in rows only if marked'])assert.throws(()=>I.validateCandidate(text,candidate(text,[step(text,text,'ambiguous_reversal')])));
+ });
  test('browser UMD, CommonJS and existing ESM wrapper preserve the exact exports',()=>{
   assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft','pagesFromSource','keyDeclarations','outcomeEvidence'].sort());
   for(const key of Object.keys(I))assert.equal(E[key],I[key]);

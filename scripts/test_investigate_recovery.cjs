@@ -34,17 +34,19 @@ function documentFixture(session,search='',hash=''){
 async function fixture(session,options={}){
  const doc=documentFixture(session,options.search,options.hash),calls=[];
  const app=I.createApp(doc,{now:()=>options.at||'2026-10-24T12:00:00.000Z',id:()=> 'recovery-test',schedule:()=>0,unschedule:()=>{},renderCard:()=>Promise.reject(),fetcher:async(url,request)=>{
+  if(url==='https://mock.example/interpret'&&!options.interpret)return require('./mock_interpretation_response.cjs')(request);
   if(request?.method==='POST'){calls.push({url,request});return new Promise(()=>{});}
   if(url==='data/experiments.json')return Response.json(registry);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
-  return Response.json({endpoint:'https://mock.example/ask',...(options.interpret?{interpretationEndpoint:'https://mock.example/interpret'}:{})});
- }});await app.ready;return {doc,app,calls};
+  return Response.json({endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'});
+ }});await app.ready;return {doc,app,calls,pending:options.interpret};
 }
-function submit(f,text){const field=f.doc.getElementById('idea');field.value=text;field.fire('input');f.doc.getElementById('intake').fire('submit');}
+async function submit(f,text){const field=f.doc.getElementById('idea');field.value=text;field.fire('input');f.doc.getElementById('intake').fire('submit');if(!f.pending)await reviewed(f);}
+async function reviewed(f){const end=Date.now()+5000;while(f.app.getSnapshot().stage!=='review'&&Date.now()<end)await new Promise(resolve=>setImmediate(resolve));assert.equal(f.app.getSnapshot().stage,'review',f.doc.getElementById('interpretation-error')?.textContent);}
 function answer(f,choice,text=''){for(const radio of f.doc.querySelectorAll('input[name=choice]'))radio.checked=radio.value===choice;f.doc.getElementById('other-detail').value=text;f.doc.getElementById('clarification').fire('submit');}
 async function main(){
  const session=storage(),text='Use Vigenere with key "A B".';
- let f=await fixture(session);submit(f,text);answer(f,'undecided');answer(f,'specific','LP2-00, LP2-02; lines 2–3');
+ let f=await fixture(session);await submit(f,text);answer(f,'undecided');answer(f,'specific','LP2-00, LP2-02; lines 2–3');
  const baseline=C.serialize(f.app.getSnapshot().draft);f.app.destroy();
  f=await fixture(session);assert.equal(f.app.getSnapshot().stage,'review');assert.equal(C.serialize(f.app.getSnapshot().draft),baseline);assert.deepEqual(I.intakeQuestions(f.app.getSnapshot().draft),[]);assert.equal(f.app.getSnapshot().confirmed,null);assert.equal(f.calls.length,0);assert.match(f.doc.host.html,/Draft restored\./);
  f.doc.getElementById('edit').fire('click');
@@ -57,16 +59,16 @@ async function main(){
  assert.equal(f.calls.length,0);f.doc.getElementById('cancel-edit').fire('click');assert.equal(C.serialize(f.app.getSnapshot().draft),baseline,'Cancel restores original draft including acknowledgements');f.app.destroy();
 
  // Newly rendered method controls keep their recovery listeners.
- const steps=storage();f=await fixture(steps);submit(f,'Reverse each row.');f.doc.getElementById('edit').fire('click');const stepBaseline=C.serialize(f.app.getSnapshot().draft);f.doc.getElementById('method-add').fire('click');const newStep=f.doc.getElementById('edit-method-1');assert(newStep);newStep.value='Apply Vigenere with key Z';newStep.fire('input');f.app.destroy();f=await fixture(steps);assert.equal(f.doc.getElementById('edit-method-1').value,'Apply Vigenere with key Z');assert.equal(f.app.getSnapshot().draft.method.value.operations[1].label,'','New unsaved step wording is only an overlay');f.doc.getElementById('cancel-edit').fire('click');assert.equal(f.app.getSnapshot().draft.method.value.operations.length,1);assert.equal(f.app.getSnapshot().draft.revision,JSON.parse(stepBaseline).revision-1);f.app.destroy();
+ const steps=storage();f=await fixture(steps);await submit(f,'Reverse each row.');require('./mock_interpretation_response.cjs').acknowledge(f.doc,f.app);f.doc.getElementById('edit').fire('click');const stepBaseline=C.serialize(f.app.getSnapshot().draft);f.doc.getElementById('method-add').fire('click');const newStep=f.doc.getElementById('edit-method-1');assert(newStep);newStep.value='Apply Vigenere with key Z';newStep.fire('input');f.app.destroy();f=await fixture(steps);assert.equal(f.doc.getElementById('edit-method-1').value,'Apply Vigenere with key Z');assert.equal(f.app.getSnapshot().draft.method.value.operations[1].label,'','New unsaved step wording is only an overlay');f.doc.getElementById('cancel-edit').fire('click');assert.equal(f.app.getSnapshot().draft.method.value.operations.length,1);assert.equal(f.app.getSnapshot().draft.revision,JSON.parse(stepBaseline).revision-1);f.app.destroy();
 
  // Pending Other text and selected radio survive without applying the answer.
- const pending=storage();f=await fixture(pending);submit(f,'Reverse each row.');
+ const pending=storage();f=await fixture(pending);await submit(f,'Reverse each row.');
  const radio=f.doc.querySelectorAll('input[name=choice]').find(r=>r.value==='unclassified');radio.checked=true;radio.fire('change');const other=f.doc.getElementById('other-detail');other.value='Explain the spacing';other.fire('input');const before=C.serialize(f.app.getSnapshot().draft);f.app.destroy();
  f=await fixture(pending);assert.equal(f.doc.querySelector('input[name=choice]:checked').value,'unclassified');assert.equal(f.doc.getElementById('other-detail').value,'Explain the spacing');assert.equal(f.doc.getElementById('other-detail').hidden,false);assert.equal(C.serialize(f.app.getSnapshot().draft),before);f.app.destroy();
 
  // An in-flight interpretation returns to exact input and never restarts.
- const waiting=storage();f=await fixture(waiting,{interpret:true});submit(f,'Try an autokey on LP2-15.');assert.equal(f.calls.length,1);f.app.destroy();f=await fixture(waiting,{interpret:true});assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.doc.getElementById('idea').value,'Try an autokey on LP2-15.');assert.equal(f.calls.length,0);f.app.destroy();
- const hinted=storage(),search='?q=Reverse+each+row.&pages=LP2-17';f=await fixture(hinted,{search});f.app.destroy();f=await fixture(hinted,{search});f.doc.getElementById('intake').fire('submit');assert.deepEqual(f.app.getSnapshot().draft.scope.value.pages,['lp2-17'],'An input-stage recovery retains the unconsumed URL page hint');f.app.destroy();
+ const waiting=storage();f=await fixture(waiting,{interpret:true});await submit(f,'Try an autokey on LP2-15.');assert.equal(f.calls.length,1);f.app.destroy();f=await fixture(waiting,{interpret:true});assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.doc.getElementById('idea').value,'Try an autokey on LP2-15.');assert.equal(f.calls.length,0);f.app.destroy();
+ const hinted=storage(),search='?q=Reverse+each+row.&pages=LP2-17';f=await fixture(hinted,{search});f.app.destroy();f=await fixture(hinted,{search});f.doc.getElementById('intake').fire('submit');await reviewed(f);assert.deepEqual(f.app.getSnapshot().draft.scope.value.pages,['lp2-17'],'An input-stage recovery retains the unconsumed URL page hint');f.app.destroy();
 
  // A finalized card is recovered only as a draft, with no result or POST.
  f=await fixture(session);f.doc.getElementById('confirm').fire('click');assert.equal(f.app.getSnapshot().stage,'research');assert(f.app.getSnapshot().confirmed);f.app.destroy();f=await fixture(session);assert.equal(f.app.getSnapshot().stage,'review');assert.equal(f.app.getSnapshot().confirmed,null);assert.equal(f.app.getSnapshot().result,null);assert.equal(f.app.getSnapshot().packet,null);assert.equal(f.calls.length,0);f.app.destroy();
@@ -79,7 +81,7 @@ async function main(){
 
  for(const stored of ['{broken',JSON.stringify({version:99}), 'x'.repeat(160001)]){const bad=storage();bad.setItem(KEY,stored);f=await fixture(bad);assert.equal(f.app.getSnapshot().stage,'input');f.app.destroy();}
  const stale=storage();stale.setItem(KEY,session.getItem(KEY));f=await fixture(stale,{at:'2026-10-26T12:00:00Z',hash:fragment});assert.equal(f.doc.getElementById('edit-method'),null);f.app.destroy();
- const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('quota');},removeItem(){throw Error('blocked');}};f=await fixture(blocked);submit(f,'Reverse each row.');assert.equal(f.app.getSnapshot().stage,'review');f.app.destroy();
+ const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('quota');},removeItem(){throw Error('blocked');}};f=await fixture(blocked);await submit(f,'Reverse each row.');assert.equal(f.app.getSnapshot().stage,'review');f.app.destroy();
  console.log('PASS tab-session recovery: exact draft/source/acknowledgements, unapplied editor+Cancel, pending Other, no restarted services/results, entry precedence, shared-card edits, stale/corrupt/unavailable storage.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

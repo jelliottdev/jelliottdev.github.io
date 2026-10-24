@@ -32,7 +32,7 @@ let registered;context.matchMedia=()=>({addEventListener(type,fn){assert.equal(t
 context.setNavigation=open=>events.push(['navigation',open]);
 context.main={focus(options){events.push(['focus','main',options.preventScroll])}};
 element('search-form').contains=node=>node===element('search')||node===element('suggestion-link');
-const start=app.indexOf('function adaptHeaderToViewport('),end=app.indexOf("$('#search-form').onsubmit",start);
+const start=app.indexOf('function adaptHeaderToViewport('),end=app.indexOf("if($('#search-form'))",start);
 assert(start>=0&&end>start);vm.runInContext(app.slice(start,end),context);
 assert.equal(registered,context.adaptHeaderToViewport);
 const run=(mobile,active)=>{events.length=0;context.document.activeElement=active;registered({matches:mobile});return [...events]};

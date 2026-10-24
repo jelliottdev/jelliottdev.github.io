@@ -166,7 +166,7 @@ async function main(){
  const markup=fs.readFileSync(path.join(root,'index.html'),'utf8');
  for(const [id,expected] of Object.entries(navigationCases)){
   assert.equal(vm.runInContext(`wikiSidebarHref(${JSON.stringify(id)})`,sandbox),expected,id);
-  if(expected)assert(markup.includes(`href="${expected}"`),'Category destination must be in navigation');
+  if(expected){const route=require('../workspace-routes.js').destination(expected);if(expected.startsWith('#/wiki/'))assert(route?.startsWith('library.html#/guide/'),'Category destination remains a direct guide route in the new library');else assert(require('../site-navigation.js').secondary.some(([,href])=>href==='index.html'+expected),'Reference category remains in the shared navigation');}
  }
  console.log('PASS: guide categories retain subject navigation context.');
  await checkNavigationRace(false);

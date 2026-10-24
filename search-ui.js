@@ -4,7 +4,7 @@ function searchResultHTML(hit,q,compact=false){const preview=hit.text?.trim()===
 function closeSearchSuggestions(){const panel=$('#search-suggestions');if(panel)panel.hidden=true;$('#search')?.setAttribute('aria-expanded','false');}
 function submitWikiSearch(value){const q=value.trim();closeSearchSuggestions();$('#search').blur();setNavigation(false);const target='#/search/'+encodeURIComponent(q);if(location.hash===target)route();else location.hash=target;}
 function bindWikiSearch(){
- const input=$('#search'),form=$('#search-form');
+ const input=$('#search'),form=$('#search-form');if(!input||!form)return;
  const panel=document.createElement('div');panel.id='search-suggestions';panel.hidden=true;panel.setAttribute('role','region');panel.setAttribute('aria-label','Search suggestions');form.append(panel);
  input.setAttribute('aria-controls',panel.id);input.setAttribute('aria-expanded','false');
  const size=()=>{panel.style.maxHeight=Math.max(100,Math.min(420,(window.visualViewport?.height||innerHeight)-form.getBoundingClientRect().bottom-12))+'px';};

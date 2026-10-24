@@ -39,14 +39,17 @@ function fakeDocument(){
  };
 }
 async function appFor(text){
- const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async url=>{
+ const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async(url,options)=>{
   if(url==='data/experiments.json')return Response.json(registry);
-  if(url==='data/assistant.json')return Response.json({endpoint:null});
+  if(url==='data/assistant.json')return Response.json({endpoint:null,interpretationEndpoint:'https://mock.example/interpret'});
+  if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(options);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   throw Error('No inference or external fetch is allowed');
  }});
  await app.ready;
  doc.getElementById('idea').value=text;doc.getElementById('intake').fire('submit');
+ for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await new Promise(resolve=>setImmediate(resolve));
+ require('./mock_interpretation_response.cjs').acknowledge(doc,app);
  return {doc,app};
 }
 function openEditor(doc){doc.getElementById('edit').fire('click');assert(doc.getElementById('editor'));}

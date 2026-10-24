@@ -134,7 +134,7 @@ await test('captured synthetic model output aligns unique exact quotes without c
  const original=JSON.stringify(captured),aligned=alignQuotePositions(text,original);
  assert.equal(aligned.steps[0].source.start,4);assert.equal(aligned.scope.source.start,4);assert.equal(aligned.rules.wordBoundaries.source.start,text.indexOf('preserving'));
  const expected=JSON.parse(original);expected.steps[0].source.start=4;expected.scope.source.start=4;expected.rules.wordBoundaries.source.start=text.indexOf('preserving');assert.deepEqual(aligned,expected);assert.equal(JSON.stringify(captured),original);
- let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v8-literal-scope');
+ let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v9-plural-rows');
 });
 await test('alignment uses UTF-16 positions and only whitelisted evidence fields',async()=>{
  const text='😀 Use key "ABC" on LP2-15; measure a pattern; reset each word.',candidate=proposal(text);

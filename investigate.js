@@ -14,6 +14,7 @@
  const known=v=>C.field('specified',v,prov);
  const editProvenance={kind:'user_clarification',refs:['interpretation editor']};
  const clarified=v=>C.field('specified',v,editProvenance);
+ const plainPrimeReversal=/^reverse (?:the )?prime values (?:of|in) (?:(?:each|every) row|rows)$/i;
  function parseScope(text,provenance=prov){
   if(!text.trim())return C.field();
   const selected=[];
@@ -34,12 +35,12 @@
   const rules={},unresolved=[];
   function recognized(piece){
    if(opaque)return null;
-   let value=piece.trim().replace(/[.]$/,'');
+   let value=piece.trim().replace(/[.!?]$/,'');
    value=value.replace(/,?\s+(?:keeping|preserving|keep|preserve) word boundaries$/i,'');
    // Strip only an exact, independently valid trailing positive page clause.
    const on=value.match(/\s+on\s+(LP[12]-[^.!?]+)$/i);
    if(on){try{parseScope(on[1]);value=value.slice(0,on.index);}catch{}}
-   if(/^reverse (?:the )?prime values (?:of|in) (?:each|every) row$/i.test(value))return {ambiguous:true,id:'ambiguous_reversal',label:piece,sourceText:piece};
+   if(plainPrimeReversal.test(value))return {ambiguous:true,id:'ambiguous_reversal',label:piece,sourceText:piece};
    if(/^reverse (?:the )?(?:decimal )?digits of each (?:prime )?value(?: in (?:each|every) row)?$/i.test(value))return {
     id:'reverse_value_digits',label:/\bprime\b/i.test(value)?'Reverse decimal digits of each prime value':'Reverse decimal digits of each value',sourceText:piece};
    if(/^(?:read each row backwards|reverse (?:the )?(?:rune )?order within each row|reverse each row)$/i.test(value))return {id:'reverse_row_runes',label:'Reverse rune order within rows',sourceText:piece};
@@ -398,23 +399,20 @@
    const selection=sameResearch&&prior&&Number.isInteger(doc.activeElement.selectionStart)&&Number.isInteger(doc.activeElement.selectionEnd)?{value:doc.activeElement.value,start:doc.activeElement.selectionStart,end:doc.activeElement.selectionEnd}:null;
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    if(stage==='input'){
-    host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
-   }else if(stage==='interpreting'){
-    host.innerHTML='<button class="back" id="cancel-interpretation" type="button">Back to idea</button><h1 id="interpret-title" tabindex="-1">Review your idea</h1>'+
-     '<p role="status">'+esc(interpreting?'Preparing the method and scope for your review…':interpretError||'Continue with your original wording.')+'</p>'+
-     '<details><summary>Original idea</summary><pre>'+esc(raw)+'</pre></details><div class="actions"><button id="use-original" type="button">Use my original wording</button>'+(!interpreting?'<button class="primary" id="retry-interpretation" type="button">Try again</button>':'')+'</div>';
+    host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><div class="actions"><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form>';
    }else{
-    host.innerHTML='<button class="back" id="back" type="button">Back to idea</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+
+    host.innerHTML='<button class="back" id="back" type="button">'+(pending?'Edit idea':'Back to idea')+'</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+(pending?'<p class="idea-wording">'+esc(draft.source.text)+'</p>':'')+
      (pending?'':(stage==='research'?'<section class="confirmed-card"><button id="share-idea" class="share-icon" type="button" aria-label="Share confirmed idea" title="Share idea"'+(shareBusy?' disabled':'')+'><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-4 4 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/></svg></button><details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
      '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>'+intakeHTML()+'<p id="share-status" class="small" role="status">'+esc(shareNotice)+'</p><div id="share-fallback"></div></section>':'</section>')+
-     '')+(editing?editorHTML():questionsHTML())+(pending?'<button id="edit" type="button">Edit interpretation</button>':'')+
-     (stage==='review'?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
-     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="index.html#/research">Browse the research index</a> for approaches.</p>':'')+
+     '')+(editing?editorHTML():questionsHTML())+
+     (stage==='review'&&!pending?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="research.html#mode=list">Browse research</a> for approaches.</p>':'')+
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
    bind();
+   if(stage==='input')updateInterpretationInput();
    if(restoringOverlay){restoreFields(restoringOverlay);restoringOverlay=null;}
    if(sameResearch)restoreDisclosureState(host,disclosures);
    if(prior&&doc.getElementById(prior))doc.getElementById(prior).focus({preventScroll:true});
@@ -531,31 +529,29 @@
   function questionsHTML(){
    if(stage!=='review')return '';
    const q=intakeQuestions(draft)[0];if(!q)return '';
-   return '<form id="clarification" class="question"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
+   return '<form id="clarification" class="question"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Continue</button></div></form>';
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
-   if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls;
+   if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="research.html#mode=list" target="_blank" rel="noopener">Browse research</a></p>')+controls;
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
    const related=q.query?S.select(documents,q.query,scope.pages||[],scope.discovery).filter(d=>d.kind==='experiment'):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true})).join(''):'');
   }
   function bind(){
-   doc.getElementById('cancel-interpretation')?.addEventListener('click',()=>{stopInterpretation();stage='input';error='';message='';render();focus('#idea');});
-   doc.getElementById('use-original')?.addEventListener('click',()=>{stopInterpretation();acceptDraft(initialDraft(raw),'Using your original wording. Review the method and scope below.');});
-   doc.getElementById('retry-interpretation')?.addEventListener('click',()=>interpret());
    doc.getElementById('retry-save')?.addEventListener('click',()=>saveIntake());
    doc.getElementById('share-idea')?.addEventListener('click',shareIdea);
    if(stage==='research')updateShare();
    bindMethodSteps();
    doc.getElementById('method-add')?.addEventListener('click',()=>editMethodStep({type:'add',index:methodOperations().length,operation:{id:'described_method',label:''}},'#'+(methodOperations().length?'edit-method-'+methodOperations().length:'edit-method')));
-   doc.getElementById('idea')?.addEventListener('input',event=>{raw=event.target.value;saveRecovery();});
+   doc.getElementById('idea')?.addEventListener('input',event=>{if(interpreting)stopInterpretation();raw=event.target.value;interpretError='';updateInterpretationInput();saveRecovery();});
+   doc.getElementById('idea')?.addEventListener('keydown',event=>{if(event.key==='Escape'&&interpreting){event.preventDefault();stopInterpretation();interpretError='';updateInterpretationInput();}});
    for(const name of Object.keys(recoveryFields()))if(name!=='choice'&&!name.startsWith('edit-method'))for(const type of ['input','change'])doc.getElementById(name)?.addEventListener(type,saveRecovery);
    for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.addEventListener('change',saveRecovery);
    doc.getElementById('intake')?.addEventListener('submit',event=>{
-    event.preventDefault();raw=doc.getElementById('idea').value;const inputError=Input.issue(raw);if(inputError){error=inputError;render();focus('#idea');return;}
+    event.preventDefault();if(interpreting)return;raw=doc.getElementById('idea').value;const inputError=Input.issue(raw);if(inputError){interpretError=inputError;updateInterpretationInput();focus('#idea');return;}
     stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
-    if(configResolved&&!interpretationEndpoint)acceptDraft(initialDraft(raw));else interpret();
+    interpret();
    });
    doc.getElementById('back')?.addEventListener('click',()=>{stopIntake(true);stop();stage='input';editing=false;confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#idea');});
    doc.getElementById('edit')?.addEventListener('click',()=>{stopIntake(true);stop();editingBackup={stage,draft,confirmed,result,packet,message,error};editing=true;stage='review';draft=C.revise(draft,{});confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#edit-method');});
@@ -617,16 +613,23 @@
    if(legacyScope){draft=C.revise(draft,{scope:legacyScope});legacyScope=null;notice='The linked page selection is included below; the original wording is unchanged.';}
    stage='review';editing=false;error='';message=notice;render();focus('#review-title');
   }
+  function updateInterpretationInput(){
+   const button=doc.getElementById('interpret-submit'),status=doc.getElementById('interpretation-status'),notice=doc.getElementById('interpretation-error');
+   if(button){button.disabled=interpreting;button.textContent=interpreting?'Checking idea…':'Check idea';}
+   if(status)status.textContent=interpreting?'Checking the wording…':'';
+   if(notice)notice.textContent=interpretError;
+  }
   async function interpret(){
    stopInterpretation();const token=interpretVersion,text=raw;
-   stage='interpreting';interpreting=true;interpretError='';error='';message='';render();focus('#interpret-title');
+   if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))){acceptDraft(initialDraft(text));return;}
+   stage='input';interpreting=true;interpretError='';error='';message='';updateInterpretationInput();
    try{
     while(!configResolved){
      await configReady;
-     if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
+     if(token!==interpretVersion||stage!=='input'||!interpreting||text!==raw)return;
     }
-    if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
-    if(!interpretationEndpoint){interpreting=false;acceptDraft(initialDraft(text));return;}
+    if(token!==interpretVersion||stage!=='input'||!interpreting||text!==raw)return;
+    if(!interpretationEndpoint)throw Error('Interpretation unavailable');
     P.validateInput(text);
     const requestController=new AbortController();interpretController=requestController;
     const timer=schedule(()=>requestController.abort(),30000);
@@ -637,14 +640,14 @@
      const digest=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
      const expected=[...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('');
      if(requestController.signal.aborted)throw Error('Interpretation timed out. Your original wording is kept.');
-     if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
+     if(token!==interpretVersion||stage!=='input'||!interpreting||text!==raw)return;
      if(data.sourceBinding!==expected)throw Error('The interpretation did not match your wording. You can continue with the original.');
      const proposed=P.toDraft(text,data.candidate);
      interpreting=false;acceptDraft(proposed.draft);
     }finally{unschedule(timer);}
    }catch(e){
-    if(token===interpretVersion&&stage==='interpreting'){
-     interpreting=false;interpretError=e.name==='AbortError'?'Interpretation timed out. Your original wording is kept.':'The idea could not be interpreted reliably. You can continue with your original wording.';render();focus('#use-original');
+    if(token===interpretVersion&&stage==='input'){
+     interpreting=false;interpretError=e.name==='AbortError'?'Checking timed out. Please check the idea again.':'The idea could not be checked. Please try checking it again.';updateInterpretationInput();
     }
    }finally{if(token===interpretVersion){interpreting=false;interpretController=null;}}
   }
@@ -720,7 +723,7 @@
     if(token!==generation||confirmed!==snapshot)return;
     if(expectedBinding&&data.claimBinding!==expectedBinding)throw Error('This response does not match your confirmed idea. Try the comparison again.');
     if(!data.answer&&data.reason==='no-matching-records'){
-     const answer='No close match was found in the published research index. This does not establish whether the idea has been tried elsewhere.';
+     const answer='No close match was found in the published research. This does not establish whether the idea has been tried elsewhere.';
      const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:[],documents:[],search:{query:compact.query,reason:data.reason}},answer});
      packet=C.packetSnapshot(snapshot,research);result=Object.freeze({answer,sources:[],noMatch:true});printHost.innerHTML=packetHTML(packet);return;
     }

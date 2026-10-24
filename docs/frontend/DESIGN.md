@@ -5,7 +5,7 @@ Liberpedia is a reference work and research archive. The first decision on each 
 - Use white for reading surfaces and cool gray for navigation, figure grounds, and secondary panels. Blue identifies links and active controls; manuscript red is reserved for source features or a specific data meaning. Do not add a warm paper tint or color filter to original images.
 - Keep typography editorial and restrained: serif page and section titles, readable sans-serif prose, monospace only for exact data and commands. No decorative hero language, oversized cards, or long process explanations in primary UI.
 - Put frequent destinations first. Group secondary navigation, and automatically reveal the group containing the current page. On phones, keep search and the primary action reachable before deep directories.
-- Keep idea checking and archive browsing separate. The Research index uses visible findings, method/type/outcome filters and pagination; related test groups remain directly linked without nested directory disclosures.
+- Keep idea checking and archive browsing separate. The Research map combines Graph and List modes over the same current records, filters and selection; individual experiments and source-family comparisons remain directly linked.
 - Let the site header and reader controls scroll away so a phone keeps its full reading area. Experiment records lead with the finding, limit, bounds and reproduction action; group secondary research material in labeled disclosures.
 - Use native HTML/CSS for symbolic mappings, small diagrams, sequences, comparisons, and tables so they reflow and remain selectable. Use source images for manuscript evidence, artwork, archival captures, and geometry that cannot be faithfully represented as code. A downloadable SVG may supplement an inline explanation.
 - Every figure must remain understandable without color. Put the variables, bounds, and conclusion beside the visual; place provenance and reproduction details after the finding or in a disclosure.
@@ -55,3 +55,11 @@ The comparison explains the matching operation, input treatment and evaluation.
 Do not repeat the findings, limits or saved-file descriptions underneath them.
 Keep complete source details available without making unrelated page exceptions
 part of a comparison about one page.
+
+## Complete current handoff (24 October)
+
+The complete-current package supersedes older global navigation and separate research-directory layouts. Use a closed-by-default native drawer on every viewport, with one menu button and the Liberpedia wordmark in a scrolling header. Search lives inside the drawer. Five primary destinations are Home, Read the manuscript, Have we tried it?, Research map, and Guides & methods. Do not restore a separate global Experiments or Research index destination: Graph and List are modes of the same research browser.
+
+Guide pages use a readable article column and section navigation, with mobile contents in a dialog. Experiment records lead with their finding and visual; Scope, Reproduce, Analysis and Sources remain direct tabs. Current records and original files are authoritative; prototype snapshots and illustrative claims must never replace them. Preserve specialist interactives and old section links. Source-family comparisons compare exact recorded fields, not inferred semantic equivalence.
+
+Keep interpretation loading and errors beside the editable idea input. Preserve wording and cursor position; only move to clarification/review after a usable draft exists. Editing cancels a pending interpretation. A service failure must not become a separate error page or automatically submit an unverified claim. Straightforward, fully recognized phrases can ask local clarification without a model call.

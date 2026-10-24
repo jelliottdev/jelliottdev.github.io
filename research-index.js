@@ -98,7 +98,7 @@
       value.sort==='title-desc'?-byTitle(a,b):byTitle(a,b));
     const pages=Math.max(1,Math.ceil(matches.length/pageSize));value.page=Math.min(value.page,pages);
     const start=(value.page-1)*pageSize;
-    return {state:value,total:matches.length,pages,start,records:matches.slice(start,start+pageSize),families,topics};
+    return {allRecords:matches,state:value,total:matches.length,pages,start,records:matches.slice(start,start+pageSize),families,topics};
   }
   function pageLabel(record){
     const pages=record.scope?.pages||[];

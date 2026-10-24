@@ -46,7 +46,8 @@ async function fixture(){
  const doc=makeDocument(),saves=[],research=[];
  const app=I.createApp(doc,{id:()=>crypto.randomUUID(),renderCard:async()=>new Blob(['PNG']),sharer:async()=>({status:'copied',url:'https://example.org/investigate.html#idea=sample'}),fetcher:async(url,options)=>{
   if(url==='data/experiments.json')return Response.json(registry);
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals'});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals',interpretationEndpoint:'https://mock.example/interpret'});
+  if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(options);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   return new Promise((resolve,reject)=>{(url.endsWith('/proposals')?saves:research).push({resolve,options});options.signal.addEventListener('abort',()=>reject(Object.assign(Error('Aborted'),{name:'AbortError'})),{once:true});});
  }});
@@ -84,7 +85,7 @@ async function selectionAndStage(){
  assert.equal(doc.getElementById('edit-method'),method);assert.equal(method.value,'Unsaved exact method');assert.equal(doc.activeElement,method);assert.equal(method.selectionStart,3);assert.equal(method.selectionEnd,9,'An older save cannot replace an editing textarea/caret');
  doc.getElementById('cancel-edit').fire('click');assert.equal(doc.details.find(d=>d.summary.textContent==='Your idea').open,false,'Disclosure state does not leak across an editing-stage transition');
  doc.details.find(d=>d.summary.textContent==='Your idea').open=true;doc.getElementById('back').fire('click');
- doc.getElementById('idea').value='Find readable text using Vigenere with key XYZ on LP2-17';doc.getElementById('intake').fire('submit');doc.getElementById('confirm').fire('click');
+ doc.getElementById('idea').value='Find readable text using Vigenere with key XYZ on LP2-17';doc.getElementById('intake').fire('submit');for(let i=0;i<100&&app.getSnapshot().stage!=='review';i++)await turn();doc.getElementById('confirm').fire('click');
  assert.deepEqual(app.getSnapshot().confirmed.scope.value.pages,['lp2-17']);assert.equal(doc.details.find(d=>d.summary.textContent==='Your idea').open,false,'A different confirmed card gets its own initial disclosure state');
  app.destroy();
 }

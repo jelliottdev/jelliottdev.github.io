@@ -127,7 +127,8 @@ context.renderIdeaChecker('reverse');assert(html.includes('reverse on LP2-31'),'
 const app=fs.readFileSync(path.join(root,'app.js'),'utf8'),shell=fs.readFileSync(path.join(root,'index.html'),'utf8');
 assert(app.includes("type==='research'"));assert(app.includes('ResearchIndex.legacyHref'));
 assert(app.includes('ResearchIndex.position(main)'));assert(app.includes('ResearchIndex.remember(main,window.scrollY)'));
-assert.equal((shell.match(/href="#\/research" data-nav="research"/g)||[]).length,2);
+assert(shell.includes('site-navigation.js'),'The shared drawer owns research navigation');
+assert.equal(require('../site-navigation.js').primary.filter(([,href])=>href==='research.html').length,1);
 console.log('PASS: focused checker has no archive/page picker; natural-language pages and old page links remain usable; directory route/navigation/scroll hooks are installed. No live model requests.');
 
 const lifecycleGuard=setTimeout(()=>{console.error('Research lifecycle test did not finish');process.exitCode=1},5000);

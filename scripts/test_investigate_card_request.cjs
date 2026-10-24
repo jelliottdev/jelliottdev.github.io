@@ -24,7 +24,7 @@ function documentFixture(){
   getElementById(id){if(id==='investigate')return host;if(id==='print-snapshot')return print;
    if(!host.html.includes('id="'+id+'"')&&!cache.get('method-step-list')?.html.includes('id="'+id+'"'))return null;
    if(!cache.has(id))cache.set(id,new Element(id));return cache.get(id);},
-  querySelector(selector){return selector.startsWith('#')?this.getElementById(selector.slice(1)):null;}};
+  querySelector(selector){if(selector==='input[name=choice]:checked')return this.selectedChoice?{value:this.selectedChoice}:null;return selector.startsWith('#')?this.getElementById(selector.slice(1)):null;}};
 }
 async function fixture({gateBinding=false,legacy=false}={}){
  const doc=documentFixture(),requests=[],timers=[];let releaseBinding,bindingStarted=false,serial=0;
@@ -32,12 +32,15 @@ async function fixture({gateBinding=false,legacy=false}={}){
  if(gateBinding)R.binding=async request=>{bindingStarted=true;await new Promise(resolve=>{releaseBinding=resolve;});return realBinding(request);};
  const app=I.createApp(doc,{id:()=> 'card-test-'+(++serial),now:()=> '2026-10-24T12:00:00Z',schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{},fetcher:async(url,options)=>{
   if(url==='data/experiments.json')return Response.json(registry);
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',...(!legacy?{researchContract:'card-v1'}:{})});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret',...(!legacy?{researchContract:'card-v1'}:{})});
+  if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(options);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   assert.equal(url,'https://mock.example/ask');return new Promise(resolve=>requests.push({resolve,options}));
  }});
  await app.ready;
  doc.getElementById('idea').value=original;doc.getElementById('intake').fire('submit');
+ await until(()=>app.getSnapshot().stage==='review','Mocked interpretation did not reach review');
+ require('./mock_interpretation_response.cjs').acknowledge(doc,app);
  const draft=app.getSnapshot().draft;
  draft.aim=C.normalizeAim(known('Find readable text'));
  draft.method=known({operations:[{id:'vigenere',label:'Vigenere',key:'FIRFUMFERENFE',offset:7},{id:'atbash',label:'Atbash',offset:3}]});

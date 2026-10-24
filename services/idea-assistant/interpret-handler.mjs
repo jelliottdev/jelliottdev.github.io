@@ -2,7 +2,7 @@
 import {SCHEMA,JSON_SCHEMA,validateInput,toDraft,pagesFromSource,keyDeclarations} from './interpretation.mjs';
 
 export const MODEL='@cf/google/gemma-4-26b-a4b-it';
-export const PROMPT_VERSION='interpret-v8-literal-scope';
+export const PROMPT_VERSION='interpret-v9-plural-rows';
 export const LIMITS=Object.freeze({bodyBytes:12000,modelBytes:24000,responseBytes:26000,timeoutMs:20000,concurrency:3,cacheEntries:50,cacheMs:600000,cooldownMs:60000});
 const encoder=new TextEncoder();
 const stepProperties=JSON_SCHEMA.properties.steps.items.properties;

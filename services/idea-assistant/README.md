@@ -37,6 +37,12 @@ A timed-out generation retains its slot until the provider settles. These are
 not a global daily quota. See `docs/frontend/claim-specification.md` for the
 review contract and `test-interpret-handler.mjs` for offline verification.
 
+24 October 2026: deployed the plural-row clarification validator as Worker version
+`cb302f9b-0731-4d73-a986-4a99d200c41d`. The exact phrase “Reverse prime values in
+rows” retains its ambiguity for user clarification. Offline Worker and browser
+validator checks reproduce the former rejection and verify the correction. No
+model generation was needed for this deployment check.
+
 ## Confirmed idea storage
 
 The `/proposals` endpoint stores the confirmed standardized card and its original
