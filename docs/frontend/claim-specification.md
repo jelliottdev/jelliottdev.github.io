@@ -1,7 +1,7 @@
 # Claim model integration contract
 
-Implemented only `claim-specification.js` and `scripts/test_claim_specification.cjs`.
-No worker, UI, shared data or deployment was changed. The handoff's curated
+Core model: `claim-specification.js` and `scripts/test_claim_specification.cjs`.
+The standalone surface and Worker context contract are described below. The handoff's curated
 research results and example identifiers such as `method=covered` are not imported.
 
 ## Loading and principal shapes
@@ -102,12 +102,18 @@ is null and `needsShorter:true`: no truncation, omitted boundary, inferred scope
 or silent source summarization. Unsupported interpretation instead returns
 `needsClarification:true`. Preserve the full source snapshot when explaining a
 length limitation; arbitrary long code ingestion is not implemented by this API.
+`retrievalQuery` separately returns the compact specified aim/method/scope/rules
+without unknown-state JSON scaffolding. It is a discovery query, not the full
+meaning of the confirmed idea. Tests against actual registry records preserve
+the original top two results for Fibonacci, Hill and language-comparison queries.
 
-Current browser-only integration may send the returned query to the unchanged
-service, attach the result to its exact originating immutable snapshot, and
-discard stale asynchronous results. The server in that mode sees the explicit
-query, not a validated confirmed object; do not claim server enforcement of
-confirmation. Current page parameter cap is **two**. Never slice a larger exact
+The standalone interface sends `{query: compactQuery, confirmedQuery: fullQuery,
+pages}`. Its compact discovery query is limited to 1,500 characters and the full
+confirmed query to 6,000, matching the accompanying Worker adaptation. Both are
+derived from the same immutable snapshot, and stale responses are discarded.
+The server sees explicit confirmed wording, not a validated confirmed object;
+do not claim server enforcement of confirmation. The page parameter cap is
+**two**. Never slice a larger exact
 set: either explicitly support it in the service or omit the optional page hint
 as a whole while retaining the full scope in the untruncated query. The latter
 only preserves lexical context, not a structured page-coverage guarantee.
@@ -116,7 +122,7 @@ Future server contract adaptation:
 
 1. Accept a versioned confirmed snapshot, validate bounded JSON and schema with
    `validateConfirmed`, and derive the research query server-side. Raise the
-   current 6,500-byte body / 1,500-character query limits only through an explicit
+   current 32,000-byte body / 1,500-character discovery query / 6,000-character context limits only through an explicit
    bounded request-budget decision; do not truncate snapshots.
 2. Preserve exact selected page sets, unknowns, non-page targets and positional
    selections. Current `readQuery()` only accepts query + at most two page IDs;
@@ -156,4 +162,38 @@ operation preservation, unsupported Other, nested unknowns, immutable prior
 confirmations, no execution through confirmation, bounded nontruncating research
 queries, current published evidence preservation and stale packet rejection.
 No hosted inference, network fetch, new manuscript computation or fixture
-research was used.
+research is used by these Node tests.
+
+## Standalone surface
+
+`investigate.html`, `investigate.js`, `investigate.css` implement capture,
+consequential clarification, editable tagged confirmation, comparison and print.
+Known reversal wording gets concrete choices. Other methods remain editable
+supplied wording without guessed cipher semantics. User edits carry clarification
+provenance separately from original text. File/image extraction is not offered.
+Legacy `?q=` is prefilled without submission; valid repeated/comma-separated
+`pages` hints enter scope explicitly without changing the original wording.
+
+The real registry and endpoint configuration load in parallel. Optional manuscript
+context times out separately and does not gate confirmation or rerender an input
+or editor. Request-local controllers and revision guards prevent canceled/late
+responses or old timeouts from corrupting a later result. Canceling an edit
+restores the same confirmed result and packet. Source/citation links open new
+tabs to preserve the working result. Response ID/href and **full source text**
+must match loaded evidence; changed-source responses are rejected instead of
+printing a different version. Safe Markdown rendering escapes untrusted content.
+
+`node scripts/test_investigate.cjs` passes seven helper/retrieval groups and two
+mocked event-DOM journeys, including success→packet→print→edit/cancel, cancel/
+retry, stale responses, request-local timeout, source binding and optional-context
+races. All model responses are mocked; evidence is from the actual registry.
+
+`node scripts/preview_investigate.cjs` starts a localhost-only preview on4397 with
+a fail-closed injected fetch mock. It never needs hosted inference. QA variants
+`?qa=offline`, `empty`, `delay` and `changed` exercise recovery conditions. This
+server must not be used for production. CUA rendered the actual interface at
+320,390,768,1440 pixels without horizontal overflow, and exercised ambiguity,
+boundary choice, confirmation, mocked sourced result, edit and cancel. The
+browser print dialog/PDF pagination was not verified; Node tests prove the print
+markup derives from the same frozen reviewed packet. A desktop screenshot is
+stored outside the repository at `../investigate-qa-1440.png`.
