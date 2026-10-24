@@ -78,3 +78,31 @@ rescue a setting already rejected on the same initial positions.
 
 Multiple settings stay grouped under their originating record. The map uses
 one accessible selector and review action instead of repeating full cards.
+
+## Shared record actions
+
+`record-followup-view.js` renders and binds the same canonical declarations in
+both the research-map preview and full library record. It provides one setting
+selector and one review link, with no creation or execution on selection.
+Missing or malformed declarations expose no runnable action. Source and control
+validation still happens at plan review; view validation is not execution proof.
+
+## Remaining execution boundaries
+
+The current prepared follow-ups do not make every research record runnable.
+Do not equate an exclusion or next-step paragraph with an executable open test:
+it may be covered elsewhere, lack a precise rule, or require another runner.
+
+The next useful transform adapter is a finite, non-repeating key stream. Existing
+keyed-shift modes repeat or feed back runes, with a 256-index seed limit; the
+longest current manuscript page contains 277 runes. A faithful finite stream
+needs explicit pinned residues, add/subtract and reset rules, a pre-execution
+length check, no wrapping, and independent full recovery controls. Prime,
+Fibonacci, totient and documented-reading schedules must retain their actual
+rules rather than silently becoming repeating keys.
+
+Statistical records need separate controlled measurement adapters: declared
+statistics, shuffle constraints, full-search correction and bounded work.
+An exact-prefix comparison cannot substitute for those experiments. The current
+authoring constructor also restricts criteria to documented Warning prefixes;
+other reading criteria need explicit source pins and independent controls.

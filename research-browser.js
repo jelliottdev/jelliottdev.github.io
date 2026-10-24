@@ -110,21 +110,8 @@
    (excluded||next?'<section class="record-open-questions"><h3>Further checks</h3>'+(excluded?'<p><strong>Not tested:</strong> '+esc(excluded)+'</p>':'')+(next?'<p><strong>Next check:</strong> '+esc(next)+'</p>':'')+'</section>':'')+
    (distinctLimit?'<p class="record-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'');
  }
- function followupRecipes(record){
-  const slug=value=>typeof value==='string'&&value.length<=100&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
-  if(!slug(record.id)||!Array.isArray(record.browser_followups)||record.browser_followups.length>8)return [];
-  const seen=new Set();return record.browser_followups.filter(item=>{if(!item||!slug(item.id)||seen.has(item.id)||typeof item.title!=='string'||!item.title.trim()||Array.from(item.title).length>300||typeof item.scope_change!=='string'||!item.scope_change.trim()||Array.from(item.scope_change).length>1200)return false;seen.add(item.id);return true;});
- }
- function previewFollowupsHTML(record){
-  const items=followupRecipes(record);if(!items.length)return '';const first=items[0],href='run.html#record='+record.id+'&amp;followup='+first.id;
-  if(items.length===1)return '<section class="record-followups"><h3>Prepared follow-up</h3><p><strong>'+esc(first.title)+'</strong><br>'+esc(first.scope_change)+'</p><a href="'+href+'">Run a follow-up</a></section>';
-  return '<section class="record-followups"><h3>Prepared follow-ups</h3><label for="prepared-followup-setting">Setting</label><select id="prepared-followup-setting" data-prepared-setting>'+items.map(item=>'<option value="'+item.id+'">'+esc(item.title)+'</option>').join('')+'</select><p data-prepared-scope>'+esc(first.scope_change)+'</p><a data-prepared-link href="'+href+'">Review this follow-up</a></section>';
- }
- function bindPreviewFollowups(record){
-  const select=panel.querySelector('[data-prepared-setting]');if(!select)return;
-  const items=followupRecipes(record),scope=panel.querySelector('[data-prepared-scope]'),link=panel.querySelector('[data-prepared-link]');if(!scope||!link||items.length<2)return;let selected=items[0].id;
-  select.onchange=()=>{const item=items.find(item=>item.id===select.value);if(!item){select.value=selected;return;}selected=item.id;scope.textContent=item.scope_change;link.href='run.html#record='+record.id+'&followup='+item.id;};
- }
+ function previewFollowupsHTML(record){return globalThis.RecordFollowupView?.render(record)||'';}
+ function bindPreviewFollowups(record){globalThis.RecordFollowupView?.bind(panel,record);}
  function showInspector(){
   const record=data.records[state.record];panel.hidden=!record;updatePreviewMode();if(!record)return;
   const labels={supported:'Supported within this test','not-supported':'Not supported by this test',inconclusive:'Inconclusive'};
