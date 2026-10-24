@@ -56,6 +56,7 @@ test('actual checked-in registry/catalog allow app-only changes and workflow ret
  assert.equal(classifyChanges([entry('app.js')],r,c).science,false);assert.equal(classifyChanges([entry('home.js'),entry('scripts/test_home_preview.cjs')],r,c).science,false);
  const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');assert(workflow.includes('  workflow_dispatch:\n'));assert(workflow.includes('  validate:\n'));
  const blocks=workflow.split('    steps:\n')[1].split(/(?=^      - )/m).filter(s=>s.startsWith('      - '));
+ for(const b of blocks)assert((b.match(/^        if:/gm)||[]).length<=1,'Duplicate workflow condition makes YAML invalid: '+b.split('\n')[0]);
  const python=blocks.findIndex(s=>s.includes('actions/setup-python@'));assert(python>0);for(const [i,b]of blocks.entries()){if(/run: node\b/.test(b))assert(i<python,'Node check delayed behind science setup');if(/run: python\b|uses: actions\/setup-python@|git diff --exit-code/.test(b))assert(b.includes("if: steps.scope.outputs.science == 'true'"),'Science gate removed: '+b.split('\n')[0]);}
  for(const command of ['python scripts/test_export_reproducibility.py','python scripts/ci_experiment_bundles.py','python tests/test_bundle_ci_dispatch.py','python scripts/build_experiments.py','python scripts/reproduce_reading.py --check-all','git diff --exit-code --'])assert(workflow.includes(command),'Existing scientific gate missing');
 });
