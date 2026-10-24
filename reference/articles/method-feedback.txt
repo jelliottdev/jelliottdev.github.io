@@ -27,6 +27,10 @@ The weighted ciphertext-feedback test and its remaining-page extension cover all
 
 The multi-rune history replay shows why a known-seed demonstration is not enough: its restricted seed search misses the source’s planted plaintext-history and mixed-history messages, even though supplying the correct seed recovers them. That search cannot exclude those broader feedback models.
 
+The full two-value starting-key test follows up on one rule: subtract the sum of the two preceding decoded rune indices. It tries all 841 pairs of starting values on 55 rune-bearing LP2 pages. Known-text examples recover correctly, but no manuscript output reaches the English-score threshold; 40 of 49 shuffled-text searches score at least as high. This fills one starting-key gap. Other feedback rules, longer keys and different boundary rules remain untested by this follow-up.
+
+For that particular two-rune sum rule, a wrong starting key does not correct itself later. Its effect repeats every three positions. Trying only equal starting values therefore misses possible readings throughout the page, not just at its beginning. The linked test explains this repeating pattern and checks the complete two-value range.
+
 A changing alphabet is another way to store state. See moving disks, rotors and evolving alphabets for a worked example.
 
 An interruption needs a complete state rule
@@ -66,6 +70,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/d04-remaining-page-feedback
 - multi-rune history replay
   https://jelliottdev.github.io/#/experiments/public-multihistory-feedback
+- full two-value starting-key test
+  https://jelliottdev.github.io/#/experiments/two-rune-primer-extension
 - moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
 - LP2-54–55 case study

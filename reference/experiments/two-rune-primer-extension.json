@@ -1,0 +1,351 @@
+{
+  "id": "two-rune-primer-extension",
+  "status": "published",
+  "title": "All two-rune starts for one feedback rule",
+  "question": "Can searching every pair of starting key values, including unequal values, reveal an English-like reading under the two-rune plaintext-sum feedback rule?",
+  "reader_question": "Could two unequal starting values reveal an English-like page under this feedback rule?",
+  "summary": "All 841 starts on 55 pages produced no candidate above the fixed English-score gate. Both known control passages were recovered under each of three unequal starts; 40 of 49 shuffled whole searches scored at least as highly as the manuscript.",
+  "finding": "The full 46,255-case grid has best score −6.504483411536969 on LP2-49 with primer [11,8], below −5.5. The 1,595 overlapping diagonal cases have best −6.557488304189059; 44,660 off-diagonal cases extend the baseline. No candidate meets score >= max(−5.5, largest 49-shuffle maximum + 0.5). Forty of 49 whole-search shuffled maxima are at least the observed maximum. All six controls (two texts × three primers) recover completely and rank uniquely first among 841; native-source control parity and independent all-target scores and decodes match exactly.",
+  "reader_finding": "Unequal starts improved the best score slightly, but no candidate passed the fixed English-score gate. Forty of 49 shuffled searches scored at least as highly.",
+  "reader_limit": "One two-rune plaintext-feedback rule and one English scorer only. The controls reuse two known passages; this does not exclude other autokey rules or plaintext languages.",
+  "limitations": "Other six source functions, other history sources, k outside 2, sign +1, reversed/continuous/word-reset streams, skips, other alphabets or languages, broader autokey exclusion and plaintext identification. The six plants reuse two texts; 49 null searches do not establish a general probability. Independent checking reconstructs all 46,255 target outputs and scores and 49 null maximum witnesses, but not every nonwinning shuffled candidate. The manuscript maximum comes from a short 66-rune page.",
+  "next_steps": "Inspect any concrete alternative recurrence or plaintext-language proposal under a separately frozen, control-validated scope; do not treat the finite score result as a whole-family exclusion.",
+  "outcome": "not-supported",
+  "tags": [
+    "autokey",
+    "plaintext feedback",
+    "two-rune primer",
+    "unequal starting values",
+    "two-rune starting keys",
+    "English score",
+    "matched search controls"
+  ],
+  "family": {
+    "id": "public-multihistory-feedback",
+    "title": "Multi-rune feedback and autokey",
+    "question": "Do fixed multi-rune feedback rules produce English-like page outputs?",
+    "baseline": "public-multihistory-feedback"
+  },
+  "variant": {
+    "label": "All two-rune primers for plaintext-sum feedback",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt"
+        ],
+        "after": [
+          "experiments/records/two-rune-primer-extension/plan-frozen.json",
+          "experiments/records/two-rune-primer-extension/input-manifest.json"
+        ],
+        "reason": "Bound the extension to one fixed source recurrence while exhaustively covering its two-key primer domain and calibrating the same complete search."
+      },
+      {
+        "field": "representation",
+        "before": "Zero-based GP rune indices from the pinned source transcription: 12,956 unsolved runes in 55 nonempty source segments, plus their concatenation.",
+        "after": "Zero-based GP29 indices from the same pinned source transcription: 12,956 runes in 55 nonempty LP2-00–55 pages, excluding empty LP2-50. Page-local streams only; score source Latin transliteration after omitting the first two decoded runes.",
+        "reason": "Bound the extension to one fixed source recurrence while exhaustively covering its two-key primer domain and calibrating the same complete search."
+      },
+      {
+        "field": "procedure",
+        "before": "For each stream, sweep seven fixed feedback functions, k=2..6, three history sources, both signs and both directions; score decoded transliteration using the pinned English quadgram table and 29 all-equal seeds for plaintext/mixed history.",
+        "after": "For plaintext-history f_sum, k=2, sign −1, forward and page-local reset, enumerate every two-rune key primer. Decode P0=C0−s0, P1=C1−s1, Pi=Ci−P(i−1)−P(i−2) modulo 29; preserve the source English quadgram scorer. Repeat the complete page/primer search on 49 within-page-shuffled corpora; independently check all target outputs and scores and retained null maxima.",
+        "reason": "Bound the extension to one fixed source recurrence while exhaustively covering its two-key primer domain and calibrating the same complete search."
+      },
+      {
+        "field": "parameters",
+        "before": "56 streams x 7 functions x 5 history lengths x 3 sources x 2 signs x 2 directions = 23,520 scored configurations. Ciphertext history ignores the seed after k; plaintext/mixed source probe eq0 through eq28. Twenty-one k=3 planted controls.",
+        "after": "55 pages × 841 ordered primer pairs = 46,255 cases: 1,595 overlapping equal-primer cases and 44,660 new unequal-primer cases. 49 matched whole-search shuffles, random.Random seeds 3301241024–3301241072. Hit requires score >= max(−5.5, largest null maximum + 0.5). 40 top outputs, 55 per-page outputs and all 50 × 55 × 841 scores retained. Two known passages × three unequal primers give six full-search plants; exact source parity across 5,046 candidates.",
+        "reason": "Bound the extension to one fixed source recurrence while exhaustively covering its two-key primer domain and calibrating the same complete search."
+      },
+      {
+        "field": "exclusions",
+        "before": "Non-equal initial seeds, k outside 2..6, formulas outside the seven-source basis, state crossing other page boundaries, skip-aware decoding, different transliterations or language scorers.",
+        "after": "Other six source functions, other history sources, k outside 2, sign +1, reversed/continuous/word-reset streams, skips, other alphabets or languages, broader autokey exclusion and plaintext identification. The six plants reuse two texts; 49 null searches do not establish a general probability.",
+        "reason": "Bound the extension to one fixed source recurrence while exhaustively covering its two-key primer domain and calibrating the same complete search."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/two-rune-primer-extension/plan-frozen.json",
+      "experiments/records/two-rune-primer-extension/input-manifest.json"
+    ],
+    "representation": "Zero-based GP29 indices from the same pinned source transcription: 12,956 runes in 55 nonempty LP2-00–55 pages, excluding empty LP2-50. Page-local streams only; score source Latin transliteration after omitting the first two decoded runes.",
+    "procedure": "For plaintext-history f_sum, k=2, sign −1, forward and page-local reset, enumerate every two-rune key primer. Decode P0=C0−s0, P1=C1−s1, Pi=Ci−P(i−1)−P(i−2) modulo 29; preserve the source English quadgram scorer. Repeat the complete page/primer search on 49 within-page-shuffled corpora; independently check all target outputs and scores and retained null maxima.",
+    "parameters": "55 pages × 841 ordered primer pairs = 46,255 cases: 1,595 overlapping equal-primer cases and 44,660 new unequal-primer cases. 49 matched whole-search shuffles, random.Random seeds 3301241024–3301241072. Hit requires score >= max(−5.5, largest null maximum + 0.5). 40 top outputs, 55 per-page outputs and all 50 × 55 × 841 scores retained. Two known passages × three unequal primers give six full-search plants; exact source parity across 5,046 candidates.",
+    "exclusions": "Other six source functions, other history sources, k outside 2, sign +1, reversed/continuous/word-reset streams, skips, other alphabets or languages, broader autokey exclusion and plaintext identification. The six plants reuse two texts; 49 null searches do not establish a general probability."
+  },
+  "review": {
+    "kind": "finite primer-domain extension with known-reading and matched whole-search controls",
+    "retested_on": "2026-10-24",
+    "reviewer": "Source parity on 5,046 control candidates; independent direct-recurrence and string-scoring checks on all 46,255 target candidates plus 49 null maximum witnesses; separate pre-target algebra proof",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/two-rune-primer-extension/quick_verify.py && python experiments/records/two-rune-primer-extension/replay.py && python experiments/records/two-rune-primer-extension/check_algebra_portable.py && python experiments/records/two-rune-primer-extension/plot.py --check",
+    "environment": "Recorded Python 3.12.10, NumPy 2.5.4 and Numba 0.67.0; exact package pins in requirements.txt. Install dependencies separately; no network or package installs by scripts. All required source, scorer, transcription and known-control bytes are bundled. Replay uses a temporary output directory, checks deterministic values and exact score bytes, and leaves expected files unchanged.",
+    "script": "experiments/records/two-rune-primer-extension/replay.py",
+    "script_sha256": "b393a82714b21ea94219220372ec14ae3f04e670ae1e69072e4f23da7c8bd114",
+    "inputs": [
+      {
+        "path": "experiments/records/two-rune-primer-extension/article.md",
+        "sha256": "da996862957543fdfe3a66633680a7d49507c45c88473272e0849d987414ccb4"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/check.py",
+        "sha256": "503751ba0ac08cc2aec44beafa60eb80bb0d40e806489f1f0d4c8916639d37e7"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/check_algebra_portable.py",
+        "sha256": "37e7c1c68437d750377b1dd901f980280b2a5d0f7ab336883b57fa9ba8654f2d"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/engine.py",
+        "sha256": "2d4f50589bac9e9bc675729ce56853724c6186206a0305e5e018702cbb6ea04a"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/independent/ADAPTATION.txt",
+        "sha256": "ec7ff67059ab406b8fb0e6c47f40852fc636b066251cabb0e99ea5191b341fb5"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/independent/check_algebra.py",
+        "sha256": "da7655e63149efeccda413c0037e844a1e1ae32b9dc6e5e6dd1716767492e99b"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/input-manifest.json",
+        "sha256": "c173bef206532f7ce684268d9da1d074615a197115815ac3c863d9b6fd7755c3"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/pages.json",
+        "sha256": "552bd7a9db0a43ca3480523864ebc04182c6142b9ef89858e32f62728522905f"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/plan-frozen.json",
+        "sha256": "664c5692221cec5c3ba72a2dfc0a3ac0f710eff18fb03e753a8e375a253f4826"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/plot.py",
+        "sha256": "efaa5585f93f2bdf3a83979c0fd11e3c4556247bc74b02e4a3158e4958bcde27"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/quick_verify.py",
+        "sha256": "93806241c0b39c55da638fcd2aa066a780efbd7f652151a35e485fc382fc8d7f"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/replay.py",
+        "sha256": "b393a82714b21ea94219220372ec14ae3f04e670ae1e69072e4f23da7c8bd114"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/reporting-supplement-frozen.json",
+        "sha256": "cdb1fcde93cc57dd347fe65ad1d552fa606cd3cc6187d3c449582f7d19d925b7"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/requirements.txt",
+        "sha256": "85ca4c5b217056a3b1e9a77b497ffdde09518222b94c0139dc838ea10601ea99"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/run.py",
+        "sha256": "4b22b82d2b9caa628cdba047700b00ad5370276bd20351b8307c600355d71cfc"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/analysis/round12/C1/control.py",
+        "sha256": "c309ef3bab8f1bcbf5cc9b3dd95774bc9d804333c14b7270043c6c040edc65c3"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/analysis/round12/C1/feedback.py",
+        "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/analysis/round12/C1/sweep.py",
+        "sha256": "0eb8799373237f30c1e589cb8a1ba59ac5e4df7228787ffecacd7c11e86481b0"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/source/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/summarize.py",
+        "sha256": "2a2c6c515fabaa1a0f4471b1de33b647eb24942bbb03f780a76d43beb5fc25a1"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/two-rune-primer-extension/controls.json",
+        "sha256": "58bc7e8553d30bd2dcc216da3bb5845dc7f704369d1affe92c7e2a2dde5921ed"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/independent-check.json",
+        "sha256": "575fd74b4103e29edfe44cc62df94d609c62f6c6ee973b58d4fce8f1d34148b4"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/independent/algebra-check.json",
+        "sha256": "5caf78689ec82f6ae9896cb063b957f47b92fe24e06c5266903cf61cb45170db"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/page-maxima.json",
+        "sha256": "d2389a1bbd1f449c37a6d4f0e40a026a2982fd6115822090140eb427b4b337c0"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/primer-grid.svg",
+        "sha256": "69ba027cd8aad26dd475ae2795a351b195cf5228efd9030522d4f3e9c4d7d76b"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/results.json",
+        "sha256": "044b09663b75fcc651b786a6cc08c43b6d644d6fccb3705a40493b3702826715"
+      },
+      {
+        "path": "experiments/records/two-rune-primer-extension/scores.npy",
+        "sha256": "48605831b99ba6a8870a8ceb809f690944ae4727929098890f985ea83ec44f7a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/two-rune-primer-extension/primer-grid.svg",
+      "caption": "The complete primer search remains below the fixed English-score gate; 40 of 49 shuffled full searches score at least as highly. For this exact rule, starting errors repeat every three positions."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Dukotah source C1 feedback decoder",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/feedback.py"
+    },
+    {
+      "label": "Original C1 restricted-primer sweep",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/sweep.py"
+    }
+  ],
+  "related": [
+    "public-multihistory-feedback",
+    "feedback-opening-census",
+    "wulfic-autokey-seed-families"
+  ],
+  "materials": {
+    "summary": "Full observed/null score arrays, 55 page witnesses, 40 leading outputs and 49 null maximum witnesses.",
+    "reuse": "Inspect this exact rule, reproduce its complete primer grid, or independently reconstruct retained outputs.",
+    "limits": "Candidate rune outputs are not plaintexts. All target scores independently checked; nonwinning shuffled candidates are not all independently rescored.",
+    "evidence": [
+      "experiments/records/two-rune-primer-extension/scores.npy",
+      "experiments/records/two-rune-primer-extension/page-maxima.json",
+      "experiments/records/two-rune-primer-extension/independent-check.json"
+    ]
+  },
+  "article": "# All two-rune starts for one feedback rule\n\nThe earlier test forced the two starting key values to be equal. Allowing every pair still produced no candidate above the preset English-score threshold. Across 55 pages, the search checked 46,255 combinations of page and starting-key pair; 40 of 49 shuffled complete searches scored at least as highly as the manuscript. This tests one fixed rule, not every autokey cipher or plaintext language.\n\n![The full primer search and why starting errors persist](experiments/records/two-rune-primer-extension/primer-grid.svg)\n\nRune values here are alphabet indices 0–28, not gematria primes. The rule subtracts the previous two recovered plaintext rune values from each ciphertext rune, modulo 29. The first two positions instead subtract two starting key values. We tried every pair of values from 0 to 28 on each of the 55 nonempty LP2-00–55 source pages, resetting at each page. LP2-50 has no rune stream and is excluded. The first two output runes are omitted before source GP transliteration and English quadgram scoring.\n\nThe [earlier multi-history search](#/experiments/public-multihistory-feedback) tried only 29 equal-value starts for this fixed rule. Those 1,595 page/primer cases overlap here; 44,660 cases add unequal starts. Other functions, signs, directions and history lengths in the earlier search are not repeated or completed by this extension.\n\n## Known inputs and the manuscript result\n\nBefore target scoring, the complete 841-pair search recovered both the original source control passage and the separate known Warning reading under three unequal starting-key pairs each. The true text ranked uniquely first in all six plants. These are two passages with three starts each, not six independent text samples, and they do not establish power for every possible reading. All 5,046 candidate outputs and scores in these controls matched the unchanged source exactly.\n\nOn the manuscript, the best was [LP2-49](#/reader/lp2-49), with starting key values 11 and 8, scoring −6.504 against the −5.5 threshold. Its full output has 66 runes; the scored tail has 79 Latin quadgrams. The best prior equal-start score was −6.557, so allowing unequal starts improved the score slightly but still missed the frozen gate. None of the candidates passed. The 49 controls repeat the entire page-and-primer selection after shuffling each page. They provide a bounded comparison, not a general probability or proof about the cipher.\n\n## Why a wrong start does not disappear\n\nFor this exact two-plaintext-rune sum rule, changing the start adds errors that repeat every three positions. If the first two plaintext errors are A and B, the third is −A−B modulo 29, followed again by A, B, −A−B. A wrong start therefore does not automatically “lock on” after a short transient. This identity justifies faster evaluation without dropping any of the 841 starts; it does not apply to every feedback recurrence.\n\n## Evidence and reproduction\n\nThe frozen plan, all score arrays, 55 best-per-page outputs, 40 leading outputs and 49 shuffled-search maximum witnesses are retained. The whole target plus null search took 7.24 seconds on the recorded machine. An independent direct recurrence and separate string-based scorer checked all 46,255 manuscript outputs and scores with exact agreement; the 49 null maxima were also reconstructed. The checker does not independently rescore every nonwinning shuffled candidate.\n\nFrom the extracted bundle root, run the quick byte/arithmetic check or the complete isolated replay:\n\n```text\npython experiments/records/two-rune-primer-extension/quick_verify.py\npython experiments/records/two-rune-primer-extension/replay.py\npython experiments/records/two-rune-primer-extension/check_algebra_portable.py\npython experiments/records/two-rune-primer-extension/plot.py --check\n```\n\nPython 3.12.10, NumPy 2.5.4 and Numba 0.67.0 are the recorded environment. The bundled requirements list packages; scripts do not install them. Replay stages unchanged scientific files in a temporary directory, reruns controls and the entire target/null grid, independently checks results and compares deterministic values plus exact score-file bytes. Timings and hashes of timing-bearing reports are handled separately; expected files remain unchanged.\n\nDukotah’s source decoder, scorer, source control and transcription are pinned at revision `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`, with their exact source license retained. This is a new bounded primer extension, not a replay of a source unequal-primer campaign. English scoring, page boundaries, the fixed sum rule and no skipping are substantive limits; no new decipherment is claimed.\n",
+  "article_path": "experiments/records/two-rune-primer-extension/article.md",
+  "script_sha256": "b393a82714b21ea94219220372ec14ae3f04e670ae1e69072e4f23da7c8bd114",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "method_topics": [
+    {
+      "id": "feedback",
+      "title": "Autokey and ciphertext feedback",
+      "aliases": [
+        "autokey",
+        "feedback",
+        "ciphertext feedback",
+        "plaintext autokey"
+      ]
+    }
+  ]
+}

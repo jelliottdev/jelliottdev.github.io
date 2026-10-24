@@ -1,0 +1,26 @@
+{
+  "status": "pass",
+  "target_data_loaded": false,
+  "random_seed": 241026,
+  "lengths": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    29,
+    57,
+    200
+  ],
+  "primer_pairs_per_stream": 841,
+  "cases": 6728,
+  "rune_positions_checked": 248936,
+  "source_sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66",
+  "checked_plaintexts_sha256": "f342fa1c0ea641bf6260b3d55c92ecf69043bfe4db92e366b3a4fe2cbdf91e62",
+  "identities": [
+    "P[i] = C[i] - P[i-1] - P[i-2] mod29 for i>=2",
+    "P[i] = C[i] - C[i-1] + P[i-3] mod29 for i>=3",
+    "relative to zero primer, changes repeat (-s0,-s1,s0+s1) every three positions"
+  ],
+  "limits": "Only fixed k2 plaintext-sum feedback with sign minus and initial additive key values. Does not apply to nonlinear, mixed-history or skip-aware variants. No evidence of an LP2 solution."
+}

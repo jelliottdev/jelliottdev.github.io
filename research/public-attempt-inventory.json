@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "dfbdfc2269760845e2b399d324a601805426be824d541468b4cfa3dc6e3a7a02",
-    "record_count": 325
+    "sha256": "1b75e18c2cafc5c930629553195a38631f0dbe46867c650f577b351db9abe917",
+    "record_count": 327
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -516,6 +516,17 @@
               ]
             }
           ]
+        },
+        {
+          "record_id": "two-rune-primer-extension",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round12/C1/sweep.py"
+              ]
+            }
+          ]
         }
       ],
       "coverage_verified": false,
@@ -524,11 +535,15 @@
           {
             "record_id": "public-multihistory-feedback",
             "covered_subclaim": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299."
+          },
+          {
+            "record_id": "two-rune-primer-extension",
+            "covered_subclaim": "New extension: every pair of starting key values for plaintext-sum feedback with k=2, sign minus, forward, page-local. All 46,255 cases, including 44,660 previously unsearched unequal-pair cases, fall below the preset English-score threshold. Both known passages recover under three starts each; 40 of 49 complete shuffled searches score at least as high as the manuscript."
           }
         ],
         "unresolved_parts": [
           "The full 23,520 executed settings are published; the actual 29 all-equal primer search now recovers 7/7 ciphertext-history source plants but 0/7 plaintext-history and 0/7 mixed-history plants with the source control’s non-equal true seed. This is a failed domain-power check for those latter classes.",
-          "The new audit is retrospective, k=3 and sign−1 with the published source control text. Other seeds, recurrences, lengths, scoring and reset rules remain open; no source whole-family exclusion."
+          "The original control audit is retrospective, k=3 and sign−1 with the source control text. The later full-pair extension covers only plaintext f_sum at k=2/sign−1/forward/page-local with the same English scorer. Other functions, longer starting keys, signs, directions, languages, and reset or skip rules remain open; no whole-family exclusion."
         ],
         "rejected_candidates": [],
         "audit_note": null
@@ -536,9 +551,10 @@
       "execution_replay": {
         "state": "replayed-with-invalid-gate",
         "record_ids": [
-          "public-multihistory-feedback"
+          "public-multihistory-feedback",
+          "two-rune-primer-extension"
         ],
-        "scope": "Published source grid plus a retrospective actual-seed-domain audit: original true-seed plants pass, but plaintext/mixed plants cannot be recovered by its all-equal search domain.",
+        "scope": "The original published grid retains its failed restricted-start power check. A separate control-checked extension covers all two-value starts for one plaintext-sum rule, with full-search shuffles; this does not repair the original gate for its other rules or lengths.",
         "wider_method_excluded": false
       }
     },
@@ -1542,6 +1558,19 @@
       "reconciliation_state": "partial",
       "candidate_records": [
         {
+          "record_id": "lp2-pad-payload-target",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round16/F-01/PREREG.md",
+                "liber-primus/analysis/round16/F-01/RESULTS.md",
+                "liber-primus/analysis/round16/F-01/sweep.py"
+              ]
+            }
+          ]
+        },
+        {
           "record_id": "public-lp2-as-pad",
           "reasons": [
             {
@@ -1561,10 +1590,15 @@
           {
             "record_id": "public-lp2-as-pad",
             "covered_subclaim": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032."
+          },
+          {
+            "record_id": "lp2-pad-payload-target",
+            "covered_subclaim": "The omitted 256-byte pages 49–51 target is run with a supplied canonical payload under all eight original settings (six distinct signed keys). No score passes the source threshold. The strict 256-rune recovery check fails in one setting, so this is a diagnostic completion, not a powered exclusion."
           }
         ],
         "unresolved_parts": [
-          "The sixth target was skipped; the hard-coded AN END input has only 63 bytes; offsets and other constructions remain untested."
+          "The historical missing payload.bin is not recovered; the added input is the preserved canonical pages 49–51 payload. The original 63-byte AN END input is unchanged.",
+          "The strict longer-control recovery gate fails for one setting; the search can prefer an altered message even when the exact answer survives. Offsets, other skip rules and other constructions remain untested."
         ],
         "rejected_candidates": [],
         "audit_note": null
@@ -1572,9 +1606,10 @@
       "execution_replay": {
         "state": "complete-executed-grid",
         "record_ids": [
-          "public-lp2-as-pad"
+          "public-lp2-as-pad",
+          "lp2-pad-payload-target"
         ],
-        "scope": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032.",
+        "scope": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032. A separately amended diagnostic supplies the omitted 256-byte target and preserves the failed stricter recovery gate; it does not validate the wider running-key model.",
         "wider_method_excluded": false
       }
     },

@@ -1,0 +1,72 @@
+{
+  "inputs_sha256": "486424851257d1395951927c7ed51870d75233faf30671519c15334c3a7c0045",
+  "runner_sha256": "23e190e87105556cacba58508c9e5f5c33435606595dd3c6a1976483b6ce01c8",
+  "labelled_cases": [
+    {
+      "key_variant": "lp2_fwd",
+      "sign": -1,
+      "signed_key_sha256": "df9b57fc4f1a1452e3818953bc488ed607f3e008eb2073dc326cf25e7574416e"
+    },
+    {
+      "key_variant": "lp2_fwd",
+      "sign": 1,
+      "signed_key_sha256": "023312066df471005264b9cbe7997cb77d2a9a6a2dc9b3316d22674023af1585"
+    },
+    {
+      "key_variant": "lp2_rev",
+      "sign": -1,
+      "signed_key_sha256": "1c7efdfda37b39aadbf319865744250934f9a84f875a73fff3990403e03da693"
+    },
+    {
+      "key_variant": "lp2_rev",
+      "sign": 1,
+      "signed_key_sha256": "f989673d788f101fe45019dd333b51040ee6aab57704c553372b86bbd4496c5c"
+    },
+    {
+      "key_variant": "lp2_atbash",
+      "sign": -1,
+      "signed_key_sha256": "3a7856a4537a8c925fcf644532941c15cf34c40de5bcfbfd230f421e3457dd8c"
+    },
+    {
+      "key_variant": "lp2_atbash",
+      "sign": 1,
+      "signed_key_sha256": "ed52b99da24ad5cbf8314f6159c899676aacf8da73bb41cabd001f0c599c4388"
+    },
+    {
+      "key_variant": "lp2_neg",
+      "sign": -1,
+      "signed_key_sha256": "023312066df471005264b9cbe7997cb77d2a9a6a2dc9b3316d22674023af1585"
+    },
+    {
+      "key_variant": "lp2_neg",
+      "sign": 1,
+      "signed_key_sha256": "df9b57fc4f1a1452e3818953bc488ed607f3e008eb2073dc326cf25e7574416e"
+    }
+  ],
+  "effective_signed_keys": 6,
+  "source_rule": {
+    "beam_w": 400,
+    "max_skip": 3,
+    "offset": 0,
+    "score_bar": -5.5,
+    "null_margin": 0.5,
+    "full_selection_top": 5,
+    "null_draws": 200,
+    "null_seed": 3301
+  },
+  "controls": {
+    "original_source": "Call unchanged positive_control with100 source shuffles; retain actual80% character gate separately from exact rune recovery.",
+    "full256_plain": "Repeat source positive_control eng_to_idx sequence cyclically, truncate exactly256runes; no new spelling or corpus.",
+    "base_plain_text": "THEPRIMESARESACREDANDTHETOTIENTFUNCTIONISSACREDALLTHINGSSHOULDBEENCRYPTEDCNOWTHISSHADOWSAETHEREALBUFFER",
+    "full256_indices_sha256": "86d5390859624d9ffd2ce3de3617ca41e7242fad7f0063132dba96f38ad50eae",
+    "seed": 3301,
+    "suppression": 0.83,
+    "full_cases": 8,
+    "power_gate": "All8full256 plants must decode completely with exact rune recovery, source score>=-5.5 and no true skip>3; report rigid/source-score criteria separately. Fwd/sign-1 also gets100 source null shuffles and source score/null/rigid margins.",
+    "baseline_identity": "Recompute all40 source primary rows and compare score/head/length/above_bar exactly; check saved original/replay substantive equality. Do not rerun old null panels.",
+    "benchmark": "Time synthetic256rune decoding; conservatively report max measured per-cell time times possible1000 new source null decodes before targets."
+  },
+  "target_rule": "Only supplied canon_256 bytes mod29 as ciphertext; unchanged LP2 variants/signs;8labelledsource calls,6effective signed keys; no offsets or AN END repair.",
+  "selection": "After new8rows: reconstruct original target/key/sign insertion order including T5 before T6; stable descending score over48. Reuse saved nulls only for selected old rows; compute source200-shuffle panels for newly selected T5 rows, reuse exact signed-key alias panels with explicit labelled/effective work counts.",
+  "limits": "Source ranks by cumulative quadgram score then reports normalized score. Score gate is not plaintext. Only selected5null panels, not a whole-search calibrated probability. No historical missing-payload bytes recovered."
+}

@@ -1,0 +1,343 @@
+{
+  "id": "lp2-pad-payload-target",
+  "status": "published",
+  "title": "Using LP2 as a key for the 256-byte payload",
+  "question": "Can the unsolved LP2 rune stream decode the 256-byte payload from pages 49–51 when the running key may skip positions?",
+  "reader_question": "Can the manuscript itself unlock the payload from pages 49–51?",
+  "summary": "Adds the previously skipped pages 49–51 payload to the LP2-as-key search. No tested setting produces a qualifying reading, but a known-message check shows why this cannot rule out the method.",
+  "finding": "All eight payload labels return complete 256-rune outputs; none passes the −5.5 source score bar. The best source-selected score is −7.090111. Seven of eight 256-rune plants recover exactly; reversed-key/+ recovers 253/256 despite a higher score than the retained true path. Original source 80% character gate passes. Combined 48-label selection has no source hit.",
+  "reader_finding": "None of the eight settings reached the English-score threshold. In a separate check, the search preferred three wrong runes over the known answer. This result does not rule out using LP2 as a key.",
+  "limitations": "No historical payload.bin identification, other payloads, offsets, encodings, key/skip models, repaired AN END bytes, full-search significance, plaintext confirmation or power-validated model exclusion. Only the best new source case receives a separate post-target normalized terminal-beam audit. The supplied canon_256 input is an amendment, not recovery of the unavailable historical payload.bin. The stronger exact-recovery gate failed before target decoding; the dated amendment authorizes diagnostic source completion only. The source chooses by cumulative score but reports a normalized score.",
+  "reader_limit": "Only the stated payload and key-skipping rules were tested. Its bytes come from a preserved canonical file; the missing historical input was not recovered.",
+  "next_steps": "A separate preregistered study would need a decoder whose recovery criterion is validated for its intended claim; retain these failed controls rather than treating target score failure as rejection.",
+  "outcome": "inconclusive",
+  "tags": [
+    "running key",
+    "conditional key skips",
+    "numeric payload",
+    "Cicada cross-artifact",
+    "failed exact-recovery control",
+    "source completion",
+    "LP2 as a key for the payload",
+    "pages 49–51 payload",
+    "256-byte payload running key",
+    "F-01 missing target",
+    "LP2 as a key",
+    "manuscript as a running key",
+    "256-byte payload"
+  ],
+  "family": {
+    "id": "public-lp2-as-pad",
+    "title": "LP2 as a running key",
+    "question": "Can the LP2 rune stream decode other Cicada objects under specified key-skipping rules?",
+    "baseline": "public-lp2-as-pad"
+  },
+  "variant": {
+    "label": "Supplied 256-byte payload completion",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/public-lp2-as-pad/source/liber-primus/data/krisyotam_runes.txt",
+          "experiments/records/public-lp2-as-pad/source/liber-primus/SOLVED-PAGES.json",
+          "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+          "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt"
+        ],
+        "after": [
+          "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/pp49_51/payload.bin",
+          "experiments/records/lp2-pad-payload-target/source/liber-primus/data/krisyotam_runes.txt"
+        ],
+        "reason": "Explicitly complete the previously skipped supplied-payload target while preserving failed controls and original-source rules."
+      },
+      {
+        "field": "representation",
+        "before": "The pinned source's 12,956 unsolved rune indices are key material; English targets are converted to GP rune indices and the hard-coded byte target is reduced modulo 29.",
+        "after": "The same 12,956 source LP2 rune indices supply the key. The committed canon_256 bytes, explicitly supplied at payload.bin, are reduced modulo 29 to form a 256-rune ciphertext; unavailable historical payload bytes are not recovered.",
+        "reason": "Explicitly complete the previously skipped supplied-payload target while preserving failed controls and original-source rules."
+      },
+      {
+        "field": "procedure",
+        "before": "Use the source beam decoder with up to three key skips and its English quadgram score. Sweep five targets, four LP2 key variants and two signs at offset zero; compare the selected top five with 200 target-order shuffles each.",
+        "after": "Preserve source beam400/max_skip3 at offset zero for the eight payload labels. Reproduce original controls and 40 primary rows, then merge 48 labels in source order and apply the unchanged selected-top-five null policy. Proceed only as diagnostic completion under the pre-target amendment because the stronger exact-recovery gate failed.",
+        "reason": "Explicitly complete the previously skipped supplied-payload target while preserving failed controls and original-source rules."
+      },
+      {
+        "field": "parameters",
+        "before": "40 source decodes (some arithmetically equivalent); 500-rune cap on the three English-text targets, 63-byte numeric target, 200-rune LP2 prefix target; beam width 400; 100 shuffles for the planted control.",
+        "after": "Four LP2 variants times two signs: eight labels, six effective signed keys; 256 payload runes; one new 200-shuffle panel shared by two selected aliases, three selected old null receipts reused. Eight 256-rune plants plus the original source plant; source 80% character gate and strict exact-rune gate reported separately.",
+        "reason": "Explicitly complete the previously skipped supplied-payload target while preserving failed controls and original-source rules."
+      },
+      {
+        "field": "exclusions",
+        "before": "Absent pp49–51 payload, other key offsets, other targets and encodings, alternative boundary rules or skip models, and the reverse use of other objects as keys.",
+        "after": "No historical payload.bin identification, other payloads, offsets, encodings, key/skip models, repaired AN END bytes, full-search significance, plaintext confirmation or power-validated model exclusion. Only the best new source case receives a separate post-target normalized terminal-beam audit.",
+        "reason": "Explicitly complete the previously skipped supplied-payload target while preserving failed controls and original-source rules."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/pp49_51/payload.bin",
+      "experiments/records/lp2-pad-payload-target/source/liber-primus/data/krisyotam_runes.txt"
+    ],
+    "representation": "The same 12,956 source LP2 rune indices supply the key. The committed canon_256 bytes, explicitly supplied at payload.bin, are reduced modulo 29 to form a 256-rune ciphertext; unavailable historical payload bytes are not recovered.",
+    "procedure": "Preserve source beam400/max_skip3 at offset zero for the eight payload labels. Reproduce original controls and 40 primary rows, then merge 48 labels in source order and apply the unchanged selected-top-five null policy. Proceed only as diagnostic completion under the pre-target amendment because the stronger exact-recovery gate failed.",
+    "parameters": "Four LP2 variants times two signs: eight labels, six effective signed keys; 256 payload runes; one new 200-shuffle panel shared by two selected aliases, three selected old null receipts reused. Eight 256-rune plants plus the original source plant; source 80% character gate and strict exact-rune gate reported separately.",
+    "exclusions": "No historical payload.bin identification, other payloads, offsets, encodings, key/skip models, repaired AN END bytes, full-search significance, plaintext confirmation or power-validated model exclusion. Only the best new source case receives a separate post-target normalized terminal-beam audit."
+  },
+  "review": {
+    "reviewer": "Independent raw-table scoring, admissible paths and beam/control audit; old primary output identity and stable combined selection checked",
+    "retested_on": "2026-10-24",
+    "kind": "amended-input source completion with failed stronger control",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-pad-payload-target/run.py --output f01-fresh-output",
+    "environment": "Python 3.12 standard library; pinned source and all inputs bundled. Fresh output directory required. Runs actual controls and diagnostic target sweep, then compares deterministic outputs. PORTABILITY.md gives extraction-root commands; check.py --check is a separate quick saved-evidence audit.",
+    "script": "experiments/records/lp2-pad-payload-target/run.py",
+    "script_sha256": "97dd4b076125c822c8cb07bd1f7706844096a16e3e2ce06470efdf86e76b9b97",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-pad-payload-target/article.md",
+        "sha256": "7bebccd95592da2a7ff2f2279d018c619049d586a40c9e391a1d60a8ea83c20d"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/audit_control.py",
+        "sha256": "66aebdd6b6bb3f4231c415695b8daae9ce7d3dcb83c4a998cb6cc8105c661389"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/audit_target.py",
+        "sha256": "a7ae8493ae876a2517fd3834d9ef82a5c6fa293fc61422670d8fefecbabf04e1"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/check.py",
+        "sha256": "8c71276273d29c324b73494a44091965c7215f872e2f09c258b7e01c6460ca90"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/diagnostic-amendment-before-target.json",
+        "sha256": "c4f0e7067e3fd0c6f365d05c486f8af8458e517b91dc1a6cf0af9d4eb0e3ec1f"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/inputs-frozen.json",
+        "sha256": "486424851257d1395951927c7ed51870d75233faf30671519c15334c3a7c0045"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/PORTABILITY.md",
+        "sha256": "566d0406aaba257c5b08c20f22cad281558351eaeab59892d0ceb393d6fa6f5d"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/preflight-plan-frozen.json",
+        "sha256": "1df8e39f06d4f145ef1ce4ad4e7c92b898a9769b2f05ee8c5900ac269d17983f"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/replay.py",
+        "sha256": "23e190e87105556cacba58508c9e5f5c33435606595dd3c6a1976483b6ce01c8"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/run.py",
+        "sha256": "97dd4b076125c822c8cb07bd1f7706844096a16e3e2ce06470efdf86e76b9b97"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/pp49_51/payload.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/round16/F-01/original_results.json",
+        "sha256": "4930202f05535fcb13ce49620181f3eb9135d814b50c72660028367e2aac21e7"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/round16/F-01/PREREG.md",
+        "sha256": "900747ab47b114b433c2e158b2d50751104e86ffc94720ee97211db909013b3c"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/round16/F-01/results.json",
+        "sha256": "9d8b28d687172831972cebdfab787d174dca458a4ebf6679c78568090c026019"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/round16/F-01/RESULTS.md",
+        "sha256": "e5c6405f2b8ec231912b667bcddaab3bafea5bd1895a689d366a37adeeab5f90"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/round16/F-01/sweep.py",
+        "sha256": "de5ac41cbb4e770f3b78f22ff22ed69b283dd596095eb1a4e216e04c8ecbac29"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+        "sha256": "7acb899b537efdb4d0426041fcbb4a5b42d54fdda40a64e02745b3edc1f6f9c5"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt",
+        "sha256": "5c5b2dcd24b26a4b7dda3fd555bf5c3b0966bb4eb74fe39660d2b0af31d26ead"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/SOLVED-PAGES.json",
+        "sha256": "cd3c6d55800375dea4d5d95f87f758ba5e832396e63fb2130f1079eb63bafc85"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/target-plan-frozen.json",
+        "sha256": "7066a7b91da471963a4f834740b145c2c0b88b7fde3181684f1f50878b41afbd"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-pad-payload-target/control-failure-audit.json",
+        "sha256": "611276ec5ec97aecf5ce0131892727ae02fd45d460820a94b92b93277f38ef1c"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/control-results.json",
+        "sha256": "e536622cf72214ed6d0765941f46afe0399a076b2e00b3ae09b9d00d903b8abf"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/independent-target-audit.json",
+        "sha256": "63312b0a06e2aeb6ab363bd738df319411c41985b0e09a4ab1bc6705b390cf4e"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/result.svg",
+        "sha256": "2739b2c0ad0c531f092cc7fd177d8348953c331760e131fe0cb3ec7b735fc98f"
+      },
+      {
+        "path": "experiments/records/lp2-pad-payload-target/target-results.json",
+        "sha256": "f17bf1d4850c637d6cc9185c00fc94cb22537436b00ddc774dcc6442e82a62ec"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-pad-payload-target/result.svg",
+      "caption": "The search recovered seven known messages exactly and changed three runes in the eighth. None of the eight payload settings passed the score threshold."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned F-01 executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/sweep.py"
+    },
+    {
+      "label": "Pinned F-01 plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/PREREG.md"
+    },
+    {
+      "label": "Pinned F-01 results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/RESULTS.md"
+    },
+    {
+      "label": "Committed canonical payload supplied by this amendment",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/pp49_51/canon_256.bin"
+    }
+  ],
+  "related": [
+    "public-lp2-as-pad",
+    "public-rsa-payload-e01"
+  ],
+  "materials": {
+    "summary": "Saved complete rune outputs for eight payload settings, source controls and selected null comparisons.",
+    "reuse": "Inspect source-selected outputs, failed recovery and the exact combined selection without rerunning.",
+    "limits": "Scores do not prove plaintext; strict recovery failed. Supplied canonical bytes do not identify missing historical payload bytes.",
+    "evidence": [
+      "experiments/records/lp2-pad-payload-target/target-results.json",
+      "experiments/records/lp2-pad-payload-target/control-failure-audit.json",
+      "experiments/records/lp2-pad-payload-target/diagnostic-amendment-before-target.json"
+    ]
+  }
+}

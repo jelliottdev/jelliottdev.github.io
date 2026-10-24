@@ -282,3 +282,25 @@ for(const query of ['matching word lengths to books','C-01 skeleton scan']){
  assert(hit.document.text.includes('224-text'), 'The missing historical corpus must remain in retrieved evidence');
 }
 console.log('PASS: homophonic controls and bounded corpus replays retain their distinct evidence roles.');
+
+for(const query of ['unequal starting values plaintext feedback','all two-rune starting keys','two-rune primer']){
+ const hit=Search.experiments(liveDocs,query)[0];
+ assert.equal(hit?.document.id,'two-rune-primer-extension',query);
+ assert.equal(Search.select(liveDocs,query)[0]?.id,hit.document.id,
+  'The complete matched starting-key scope must fit in comparison context');
+ assert(hit.document.text.includes('44,660')&&hit.document.text.includes('49'),
+  'New coverage and shuffled-search bounds remain in retrieved evidence');
+}
+console.log('PASS: everyday starting-key wording reaches the complete two-value feedback test.');
+
+for(const query of ['LP2 as a key for the 256-byte payload','using the manuscript as a running key for the payload','F-01 missing target']){
+ const hit=Search.experiments(liveDocs,query)[0];
+ assert.equal(hit?.document.id,'lp2-pad-payload-target',query);
+ assert.equal(Search.select(liveDocs,query)[0]?.id,hit.document.id,
+  'The full payload scope and failed recovery control must fit in context');
+ assert(hit.document.text.includes('253/256')&&hit.document.text.includes('amendment'),
+  'Retrieval must preserve the failed stricter control and supplied-input qualification');
+}
+assert.notEqual(Search.select(liveDocs,'payload-derived PRF keys')[0]?.id,'lp2-pad-payload-target',
+ 'Using the payload as a key must not be conflated with using LP2 as the key');
+console.log('PASS: LP2-as-key payload queries retain the inconclusive diagnostic and its direction.');

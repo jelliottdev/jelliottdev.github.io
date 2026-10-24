@@ -1,0 +1,90 @@
+{
+  "schema": "r12-c1-unequal-primer-extension-v1",
+  "frozen_at_utc": "2026-10-24T12:03:05.836667+00:00",
+  "authorization": "Root authorized full841-pair fixed pt/f_sum/k2/sign−1/forward/page-local extension after control/parity/synthetic benchmark. Private only; no publication or source edits.",
+  "files": [
+    {
+      "path": "engine.py",
+      "sha256": "2d4f50589bac9e9bc675729ce56853724c6186206a0305e5e018702cbb6ea04a"
+    },
+    {
+      "path": "run.py",
+      "sha256": "4b22b82d2b9caa628cdba047700b00ad5370276bd20351b8307c600355d71cfc"
+    },
+    {
+      "path": "check.py",
+      "sha256": "503751ba0ac08cc2aec44beafa60eb80bb0d40e806489f1f0d4c8916639d37e7"
+    },
+    {
+      "path": "input-manifest.json",
+      "sha256": "c173bef206532f7ce684268d9da1d074615a197115815ac3c863d9b6fd7755c3"
+    },
+    {
+      "path": "pages.json",
+      "sha256": "552bd7a9db0a43ca3480523864ebc04182c6142b9ef89858e32f62728522905f"
+    },
+    {
+      "path": "known-readings.json",
+      "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+    }
+  ],
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "equation": "P0=C0−s0; P1=C1−s1; Pi=Ci−P(i−1)−P(i−2) mod29 for i>=2. Seeds are key values, not initial plaintext.",
+  "score": "Unchanged source Quadgram.score_norm of source GP transliteration of P[2:]; exclude first2 runes before expansion; actual Latin quadgram count denominator.",
+  "primer_order": "s0=0..28 outer, s1=0..28 inner; all841 labelled pairs; ties retain earliest page/primer order.",
+  "target": "All55 nonempty first55 source transcription segments, exactly verified against LP2-00..55 excludingemptyLP2-50; no continuous stream, reverse, mixed history or other function.",
+  "target_runes": 12956,
+  "target_cases": 46255,
+  "prior_diagonal_cases": 1595,
+  "new_off_diagonal_cases": 44660,
+  "absolute_gate": -5.5,
+  "null_margin": 0.5,
+  "decision": "Candidate hit if score >= max(−5.5, largest49 complete-null-search maxima +0.5). Report absolute-gate crossings separately; no result is a plaintext identification. This replaces source raw-stream null with explicitly matched selection and is not a historical replay.",
+  "null_trials": 49,
+  "null_seed": 3301241024,
+  "null_procedure": "For eachtrial random.Random(null_seed+trial), shuffle eachsourcepage independently in fixedpageorder with one shared trial RNG; search all841pairs on all55pages; retain fullscorematrix and maximumwitness.",
+  "top_witnesses": 40,
+  "controls": {
+    "texts": [
+      "Original C1 control.PLAIN mapped by unchanged control.eng_to_idx",
+      "Separate warning known-reading actual rune_indices from current known-readings.json"
+    ],
+    "primers": [
+      [
+        7,
+        11
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        0
+      ]
+    ],
+    "count": 6,
+    "gate": "Every exact known plaintext must be present/recovered completely, uniquely rankfirst (tie tolerance1e−12) among841primers, and score>=−5.5. All5046 candidate decoded arrays must equal sourcefb.decode and scores within1e−12. Failure stops targets.",
+    "language_limit": "Two known passages; no claim of independent training corpus or power for all English/non-English texts."
+  },
+  "benchmark": {
+    "seed": 2410263301,
+    "length": 256,
+    "repeats": 5,
+    "max_projected_seconds": 180,
+    "gate": "Warm synthetic841-primer grid, worstrepeat scaledby12956/256 and50searches <=180sec; excludes compilation/I/O/checker overhead."
+  },
+  "optimization": "Period3 additive offsets (−s0,−s1,s0+s1) against zero-primer decode; independentrootcheck covers6728syntheticcases. Numba nofastmath, sequential Latin-letter quadgram sum in source order.",
+  "independent_check": "All46255target decodedbyte arrays and scores via separate directrecurrence/stringscorer;40topwitnesses and49nullmaximawitnesses; savedfullmatrixmax/gatechecks; no claim independentrescore ofallnonwinningnulls.",
+  "limits": [
+    "Exact onefunction/k/sign/direction/pageboundary/scorer only.",
+    "49shuffles provide a coarse matched comparison, not confirmatory probability or wholefamily exclusion.",
+    "Previous diagonal cases are overlapping baseline, not new coverage.",
+    "Wrong primer errors repeat every3positions for thislinear k2 rule; no convergence claim for other recurrences."
+  ],
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "numpy": "2.5.4",
+    "numba": "0.67.0"
+  }
+}

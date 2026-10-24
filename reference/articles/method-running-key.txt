@@ -91,6 +91,12 @@ The Emerson running-key test searches every offset of one preserved source under
 
 A long-key test allowing skipped positions exposes another limit: all its planted skip cases pass the English-score bar, but none returns the exact known reading. A score-only result therefore cannot establish correct recovery or exclude other skipped-key rules.
 
+Could the unsolved manuscript itself be the key?
+
+The LP2-as-key search uses the manuscript's rune stream to decode other Cicada objects, allowing a small number of skipped key positions. The original five-target run found no result above its English-score threshold. A follow-up adds the 256-byte payload from pages 49–51, which that run had skipped because its input file was missing. Its eight settings also produced no result above the threshold.
+
+The search can prefer a wrong reading. In a known-message check for the follow-up, seven of eight settings recovered the full message. The remaining setting changed three runes: the correct answer was still among the candidates, but the English scorer preferred the altered one. The payload result therefore records what this search returned; it does not rule out using LP2 as a key.
+
 Sources, related references, and files
 - book-code reproduction
   https://jelliottdev.github.io/reference/articles/book-ciphers.html
@@ -110,5 +116,9 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/solved-reading-running-key
 - long-key test allowing skipped positions
   https://jelliottdev.github.io/#/experiments/dukotah-longkey-skip-beam
+- LP2-as-key search
+  https://jelliottdev.github.io/#/experiments/public-lp2-as-pad
+- follow-up adds the 256-byte payload from pages 49–51
+  https://jelliottdev.github.io/#/experiments/lp2-pad-payload-target
 
 Article: https://jelliottdev.github.io/reference/articles/method-running-key.html
