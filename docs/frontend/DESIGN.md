@@ -45,6 +45,15 @@ standardized `#idea=` cards remain supported. Opening an input never submits it.
 
 The confirmed standardized idea is the intake. Do not add a second “Suggest a test” form. Preserve original wording beside its standardized interpretation internally; checking overlap and designing a bounded test are maintainer work. Exact duplicate storage does not establish semantic novelty. Sharing remains an optional card action. No automatic experiment result or public untested page is implied by saving.
 
+The later community-loop request supersedes the maintainer-only queue boundary:
+confirmed uncovered ideas should lead to persistent untested entries, prepared
+bounded plans, optional local execution and returned evidence. Use
+`docs/community-research-loop.md` as the implementation contract. Keep the one
+idea intake; do not ask visitors to design and submit a second test. An AI plan
+is proposed work, and an accepted computation is not a cipher solution. Until
+the persistent entry/download/return journey is implemented and verified, do not
+replace the existing saved receipt with a claim that this loop is available.
+
 Show authored findings before comparison prose. A direct comparison backed by
 reviewed execution metadata should use those recorded conditions and limits
 without a model rewrite or an AI label. It still describes only the matched

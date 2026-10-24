@@ -30,6 +30,7 @@ jobs:
       - run: node services/idea-assistant/test-interpret-handler.mjs
       - run: node scripts/test_claim_interpretation.cjs
       - run: node --experimental-sqlite services/idea-assistant/test-proposals.mjs
+      - run: node --experimental-sqlite services/idea-assistant/test-local-tasks.mjs
       - run: node services/idea-assistant/test-review-proposals.mjs
       - run: node services/idea-assistant/test-idea-relations.mjs
       - run: node services/idea-assistant/test-reconcile-ideas.mjs
@@ -155,6 +156,8 @@ jobs:
       - run: python scripts/check_experiment_authoring.py --github-event --fetch-base
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_authoring.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_research_runner.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_refresh_experiment_hashes.py
         if: steps.scope.outputs.science == 'true'

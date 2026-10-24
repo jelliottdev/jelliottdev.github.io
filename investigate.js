@@ -624,6 +624,7 @@
    if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))){acceptDraft(initialDraft(text));return;}
    stage='input';interpreting=true;interpretError='';error='';message='';updateInterpretationInput();
    try{
+    if(configResolved&&!configValid)loadConfig().catch(()=>{});
     while(!configResolved){
      await configReady;
      if(token!==interpretVersion||stage!=='input'||!interpreting||text!==raw)return;

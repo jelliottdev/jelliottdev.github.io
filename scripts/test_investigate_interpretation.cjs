@@ -26,13 +26,13 @@ const quote=(text,value)=>({start:text.indexOf(value),quote:value});
 function candidate(text=raw){return {schema:P.SCHEMA,outcome:null,steps:[{id:'described_method',familyId:'polyalphabetic',source:quote(text,text),parameters:{key:{value:'A B',source:quote(text,'key "A B"')}}}],scope:{pages:['lp2-00','lp2-02','lp2-17'],passage:null,source:quote(text,'LP2-00, LP2-02 and LP2-17')},rules:{wordBoundaries:{status:'specified',value:'preserve',source:quote(text,'Keep word boundaries')}}};}
 async function sourceBinding(text){return Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))).toString('hex');}
 async function response(text=raw,proposed=candidate(text)){return Response.json({candidate:proposed,sourceBinding:await sourceBinding(text)});}
-async function fixture({configured=true,delayConfig=false,delayRegistry=false,failRegistry=false,failConfig=false,malformedConfig=false,search='',hash=''}={}){
+async function fixture({configured=true,delayConfig=false,delayConfigAfterFailure=false,delayRegistry=false,failRegistry=false,failConfig=false,malformedConfig=false,search='',hash=''}={}){
  const doc=documentFixture(search,hash),requests=[],timers=[],loads=[];let resolveConfig,resolveRegistry,serial=0,registryCalls=0,configCalls=0;
  const config={endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals',...(configured?{interpretationEndpoint:'https://mock.example/interpret'}:{})};
  const app=I.createApp(doc,{id:()=> 'interpret-'+(++serial),schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{},fetcher:async(url,options)=>{
   loads.push(url);
   if(url==='data/experiments.json'){registryCalls++;if(delayRegistry&&registryCalls===1)return new Promise(resolve=>{resolveRegistry=resolve;});return failRegistry&&registryCalls===1?Response.json({error:'Unavailable'},{status:503}):Response.json(registry);}
-  if(url==='data/assistant.json'){configCalls++;if(failConfig&&configCalls===1)return Response.json({error:'Unavailable'},{status:503});if(malformedConfig&&configCalls===1)return Response.json(null);return delayConfig?new Promise(resolve=>{resolveConfig=resolve;}):Response.json(config);}
+  if(url==='data/assistant.json'){configCalls++;if((failConfig===true&&configCalls===1)||(Number.isInteger(failConfig)&&configCalls<=failConfig))return Response.json({error:'Unavailable'},{status:503});if(malformedConfig&&configCalls===1)return Response.json(null);return (delayConfig||delayConfigAfterFailure&&configCalls>1)?new Promise(resolve=>{resolveConfig=resolve;}):Response.json(config);}
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   assert.match(url,/^https:\/\/mock\.example\/(interpret|ask|proposals)$/);
   // Deliberately ignore abort: the UI must reject a late completed response itself.
@@ -95,13 +95,41 @@ async function stale(){
 async function entryAndReadiness(){
  const waiting=await fixture({delayConfig:true});try{waiting.submit();assert.equal(waiting.requests.length,0);assert.equal(waiting.app.getSnapshot().stage,'input');waiting.releaseConfig();await waiting.app.ready;await until(()=>waiting.requests.length===1,'Config wait not resumed');waiting.requests[0].resolve(await response());await until(()=>waiting.app.getSnapshot().stage==='review','Config-delayed response not reviewed');}finally{waiting.destroy();}
  const canceled=await fixture({delayConfig:true,delayRegistry:true});try{canceled.submit();edit(canceled,'Changed before configuration');canceled.releaseConfig();await turn();await turn();assert.equal(canceled.requests.length,0);assert.equal(canceled.app.getSnapshot().stage,'input');canceled.releaseRegistry();await canceled.app.ready;assert.equal(canceled.requests.length,0);}finally{canceled.destroy();}
- for(const options of [{configured:false},{failConfig:true},{malformedConfig:true}]){const f=await fixture(options);try{f.submit();await until(()=>!f.app.getSnapshot().interpreting,'Unavailable config did not settle');assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.app.getSnapshot().draft,null);assert.equal(f.requests.length,0,'Unavailable service cannot silently promote an unverified original');assert(f.doc.getElementById('interpretation-error').textContent);}finally{f.destroy();}}
+ for(const options of [{configured:false}]){const f=await fixture(options);try{f.submit();await until(()=>!f.app.getSnapshot().interpreting,'Unavailable config did not settle');assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.app.getSnapshot().draft,null);assert.equal(f.requests.length,0,'Unavailable service cannot silently promote an unverified original');assert(f.doc.getElementById('interpretation-error').textContent);}finally{f.destroy();}}
  const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
  const shared=C.confirm(C.createDraft({source:{text:'Original shared fixture'},aim:known('Find readable text'),method:known({operations:[{id:'described_method',label:'Inspect this exact relationship'}]}),scope:known({pages:['lp2-17']})}),{id:'shared',at:'2026-10-24T12:00:00Z'});
  const imported=await fixture({hash:H.encode(shared)});try{assert.equal(imported.app.getSnapshot().stage,'review');assert.equal(imported.requests.length,0);imported.doc.getElementById('edit').fire('click');imported.doc.getElementById('cancel-edit').fire('click');assert.equal(imported.requests.length,0);}finally{imported.destroy();}
  const hinted=await fixture({search:'?pages=lp2-15&pages=lp2-17'});try{hinted.submit();hinted.requests[0].resolve(await response());await until(()=>hinted.app.getSnapshot().stage==='review','Hint not reviewed');assert.deepEqual(hinted.app.getSnapshot().draft.scope.value.pages,['lp2-15','lp2-17']);assert.equal(hinted.app.getSnapshot().draft.source.text,raw);}finally{hinted.destroy();}
 }
+async function configRetry(){
+ for(const options of [{failConfig:2},{malformedConfig:true}]){
+  const f=await fixture(options);try{
+   assert.equal(f.loads.filter(url=>url==='data/assistant.json').length,1);
+   const field=edit(f,raw);field.selectionStart=7;field.selectionEnd=11;f.doc.activeElement=field;
+   if(options.failConfig){
+    f.submit();await until(()=>!f.app.getSnapshot().interpreting,'Explicit failed config retry did not settle');
+    assert.equal(f.loads.filter(url=>url==='data/assistant.json').length,2);assert.equal(f.requests.length,0);
+    assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.app.getSnapshot().draft,null);assert(f.doc.getElementById('interpretation-error').textContent);
+    await turn();await turn();assert.equal(f.loads.filter(url=>url==='data/assistant.json').length,2,'No automatic retry loop');
+   }
+   f.submit();await until(()=>f.requests.length===1,'Regular Check idea did not reload recovered configuration');
+   assert.equal(f.doc.getElementById('idea'),field);assert.equal(field.value,raw);assert.equal(field.selectionStart,7);assert.equal(field.selectionEnd,11);
+   assert.equal(f.loads.filter(url=>url==='data/assistant.json').length,options.failConfig?3:2);
+   assert(f.requests.every(r=>r.url.endsWith('/interpret')),'Configuration recovery cannot ask or save');
+   f.requests[0].resolve(await response());await until(()=>f.app.getSnapshot().stage==='review','Recovered interpretation did not advance');
+   assert.equal(f.app.getSnapshot().draft.source.text,raw);assert.equal(f.app.getSnapshot().confirmed,null);
+  }finally{f.destroy();}
+ }
+ for(const action of ['edit','escape','destroy']){
+  const f=await fixture({failConfig:true,delayConfigAfterFailure:true});try{
+   f.submit();assert(f.app.getSnapshot().interpreting);assert.equal(f.requests.length,0);
+   if(action==='edit')edit(f,'Changed while configuration retry is pending');else if(action==='escape')cancel(f);else f.destroy();
+   f.releaseConfig();await turn();await turn();assert.equal(f.requests.length,0,'Cancelled config recovery cannot submit interpretation');
+   assert.equal(f.app.getSnapshot().draft,null);if(action!=='destroy')assert.equal(f.app.getSnapshot().stage,'input');
+  }finally{f.destroy();}
+ }
+}
 async function registryIndependentReview(){
  const f=await fixture({delayRegistry:true});try{f.submit();await until(()=>f.requests.length===1,'Slow registry blocked interpretation');f.requests[0].resolve(await response());await until(()=>f.app.getSnapshot().stage==='review','Slow registry blocked review');answer(f,'decipher');assert(f.doc.getElementById('confirm').disabled);f.doc.getElementById('confirm').fire('click');assert.equal(f.requests.length,1);assert.equal(f.app.getSnapshot().confirmed,null);f.releaseRegistry();await f.app.ready;assert(!f.doc.getElementById('confirm').disabled);assert.equal(f.requests.length,1);}finally{f.destroy();}
 }
-(async()=>{await accepted();await ambiguity();await tinyAmbiguity();await failures();await stale();await entryAndReadiness();await registryIndependentReview();console.log('PASS single-input interpretation: editable pending form/caret, inline failures and regular retry, exact tiny grammar, no unverified fallback, binding/key/scope validation, edit/Escape/stale/destroy/config/import guards; no automatic comparison/save.');})().catch(error=>{console.error(error);process.exitCode=1;});
+(async()=>{await accepted();await ambiguity();await tinyAmbiguity();await failures();await stale();await entryAndReadiness();await configRetry();await registryIndependentReview();console.log('PASS single-input interpretation: editable pending form/caret, inline failures and regular retry, exact tiny grammar, no unverified fallback, binding/key/scope validation, edit/Escape/stale/destroy/config/import guards; no automatic comparison/save.');})().catch(error=>{console.error(error);process.exitCode=1;});

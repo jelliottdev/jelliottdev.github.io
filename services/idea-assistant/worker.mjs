@@ -5,6 +5,7 @@ import ClaimResearch from '../../claim-research.js';
 import RecordedComparison from '../../recorded-comparison.js';
 import {handleProposal} from './proposals.mjs';
 import {createInterpretHandler} from './interpret-handler.mjs';
+import {createLocalTaskHandler} from './local-tasks.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
@@ -165,7 +166,10 @@ export function createHandler(loadRecords = records) {
 
 const ask=createHandler();
 const interpret=createInterpretHandler();
+const localTasks=createLocalTaskHandler();
 export default {fetch(request,env,ctx){
+  const path=new URL(request.url).pathname;
+  if(path==='/tasks'||path.startsWith('/tasks/'))return localTasks(request,env);
   if(new URL(request.url).pathname==='/interpret')return interpret(request,env);
   if(new URL(request.url).pathname==='/proposals')return handleProposal(request,env);
   return ask(request,env,ctx);

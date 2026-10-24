@@ -1,5 +1,25 @@
 # Hosted idea comparison
 
+## Local experiment loop foundation
+
+The new `/tasks` routes link a confirmed idea to an immutable declarative plan,
+then accept a results file only after replaying the bounded computation. The
+handler verifies bundled page text against the site's selected raw or reviewed
+text. Task and result storage are separate from proposal review status; neither
+the original idea wording nor private notes appear in task projections.
+
+Migration `0004_local_tasks.sql` is required before enabling these routes in a
+deployed Worker. This source change alone does not apply a migration or deploy
+the service. The browser preparation/download/submission journey and AI plan
+adapter are not yet connected; do not describe the contribution loop as live.
+
+`local-experiment.js` and `tools/research_runner.py` share the execution contract.
+`local-run-view.js` renders its result and chart directly from verified data.
+See [the loop contract](../../docs/community-research-loop.md) for required
+states, exact bounds, unsupported methods and the end-to-end acceptance proof.
+Offline checks: `node --experimental-sqlite test-local-tasks.mjs` from this
+directory and `python scripts/test_research_runner.py` from the repository root.
+
 ## Optional interpretation endpoint
 
 The `/interpret` route is enabled through `interpretationEndpoint` in
