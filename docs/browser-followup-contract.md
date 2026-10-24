@@ -93,13 +93,27 @@ The current prepared follow-ups do not make every research record runnable.
 Do not equate an exclusion or next-step paragraph with an executable open test:
 it may be covered elsewhere, lack a precise rule, or require another runner.
 
-The next useful transform adapter is a finite, non-repeating key stream. Existing
-keyed-shift modes repeat or feed back runes, with a 256-index seed limit; the
-longest current manuscript page contains 277 runes. A faithful finite stream
-needs explicit pinned residues, add/subtract and reset rules, a pre-execution
-length check, no wrapping, and independent full recovery controls. Prime,
-Fibonacci, totient and documented-reading schedules must retain their actual
-rules rather than silently becoming repeating keys.
+Finite, non-repeating streams now use the distinct reviewed primitive
+`{op:'finite-shift',key:[...],direction:'add'|'subtract',reset:'page'|'line'|'word'}`.
+The engine accepts 1–20,000 explicit GP29 residues and validates every complete
+segment before any execution or progress. Separators do not consume terms;
+word boundaries are any non-rune character, line boundaries are CR/LF, and each
+page starts fresh. No wrapping, inferred continuation, skip or cross-page carry
+is allowed. The canonical operation is `finite_key`, with label `Finite key
+stream` and the same key/direction/reset fields. Both independent runners and
+the authoring inverse support it. Authoring checks target lengths without
+transforming target text, as well as complete synthetic recovery.
+
+Existing standardized-card limits (12,000 bytes and structural budgets) remain
+in force. Engine capacity does not promise that a 20,000-value array can be
+shared or saved as a card. Current complete pages need at most 277 terms, which
+fit; oversized cards fail rather than truncating or silently raising limits.
+The source-bound phrase mapper accepts only fully written arrays and explicit
+arithmetic/reset wording, within its existing quote/response limits. It never
+invents prime, Fibonacci or totient values from a sequence name. Numeric schedule
+provenance and existing-prefix exclusions must be checked before a new recipe
+is declared. The plan view shows stream length and behavior first; complete
+values are available in one optional disclosure and reproduction files.
 
 Statistical records need separate controlled measurement adapters: declared
 statistics, shuffle constraints, full-search correction and bounded work.

@@ -116,6 +116,14 @@ def compile_card(card):
             require('label' not in op or op['label'] in labels[identifier], 'unsupported operation wording')
             steps.append({'op': 'keyed-shift', 'key': op['key'], 'mode': modes[identifier],
                           'direction': op['direction'], 'reset': op['reset']})
+        elif identifier == 'finite_key':
+            require(set(op) in ({'id', 'key', 'direction', 'reset'}, {'id', 'label', 'key', 'direction', 'reset'})
+                    and ('label' not in op or op['label'] == 'Finite key stream'), 'finite operation fields/wording')
+            require(isinstance(op['key'], list) and 1 <= len(op['key']) <= 20000
+                    and all(type(n) is int and 0 <= n <= 28 for n in op['key']), 'finite key needs 1..20000 GP29 indices')
+            require(op['direction'] in ('add', 'subtract') and op['reset'] in ('page', 'line', 'word'),
+                    'finite key needs explicit direction and reset')
+            steps.append({'op': 'finite-shift', 'key': op['key'], 'direction': op['direction'], 'reset': op['reset']})
         elif identifier == 'reverse_runes':
             fields(op, ('id', 'label', 'unit'), 'reverse operation')
             require(op['unit'] in ('line', 'word', 'page')
@@ -251,6 +259,11 @@ def inverse_step(plaintext, step, ordered_alphabet):
             if step['op'] == 'cumulative-difference':
                 cumulative = (cumulative + value) % 29
                 encoded = cumulative
+            elif step['op'] == 'finite-shift':
+                position = len(ciphertext)
+                require(position < len(step['key']), 'finite key exhausted while encoding the complete synthetic control')
+                amount = step['key'][position]
+                encoded = (value + (amount if step['direction'] == 'subtract' else -amount)) % 29
             else:
                 key, mode, position = step['key'], step['mode'], len(ciphertext)
                 if mode == 'repeat':
@@ -288,7 +301,7 @@ def _construct_followup(root, *, identifier, title, question, scope_change, limi
         'wordBoundaries': 'preserve', 'evaluation': criterion}.items()})
     require(isinstance(operations, list) and all(isinstance(op, dict) for op in operations), 'operations must be an explicit list')
     resets = [op.get('reset') for op in operations if op.get('id') in
-              ('repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey', 'cumulative_difference')]
+              ('repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey', 'cumulative_difference', 'finite_key')]
     if resets and all(reset == resets[0] for reset in resets):
         rules['reset'] = specified(resets[0])
     if any(op.get('id') == 'cumulative_difference' for op in operations):
@@ -315,12 +328,21 @@ def _construct_followup(root, *, identifier, title, question, scope_change, limi
     task['taskId'] = runner.task_identity(task)
     result = runner.run(task)
     require(result['transformed'][0]['text'] == plaintext, 'complete Warning control recovery failed')
-    pins = []
+    pins, target_pages = [], []
     for page_id in pages:
         source = json.loads((root / 'data/pages' / (page_id + '.json')).read_text(encoding='utf-8'))
         text = source.get('raw' if input_version == 'raw' else 'reviewed_text')
         require(isinstance(text, str), 'requested exact source text unavailable: ' + page_id)
         pins.append({'id': page_id, 'text_sha256': text_hash(text)})
+        target_pages.append({'id': page_id, 'text': text})
+    if any(step['op'] == 'finite-shift' for step in plan['steps']):
+        # Length validation is structural only: finite keys must cover every
+        # declared segment, not merely the acceptance prefix or the control.
+        target_shape = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE,
+                        'title': title, 'pages': target_pages, 'alphabet': a,
+                        'steps': plan['steps'], 'criterion': criterion}
+        target_shape['taskId'] = runner.task_identity(target_shape)
+        runner.validate(target_shape)
     recipe = {
         'id': identifier, 'title': title, 'question': question, 'scope_change': scope_change,
         'limitation': limitation, 'card': card,

@@ -51,6 +51,21 @@
     for(const value of step.key)integer(value,0,28);
     if(!['repeat','plaintext-autokey','ciphertext-autokey'].includes(step.mode)||!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the key mode, arithmetic direction and reset.');
    }
+   else if(step?.op==='finite-shift'){
+    object(step,['op','key','direction','reset']);
+    if(!Array.isArray(step.key)||!step.key.length||step.key.length>20000)throw Error('Give one to 20,000 finite key indices.');
+    for(const value of step.key)integer(value,0,28);
+    if(!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the finite stream direction and reset.');
+    // Every supported step preserves rune positions and separators, so the
+    // original geometry proves sufficiency even after reversals or shifts.
+    for(const page of task.pages){
+     let position=0;
+     for(const ch of page.text){
+      if(runes.has(ch)){if(++position>step.key.length)throw Error('The finite key stream is shorter than a reset segment on '+page.id+'.');}
+      else if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;
+     }
+    }
+   }
    else throw Error('This method needs an execution adapter before it can run.');
   }
   if(task.criterion?.kind==='measurement')object(task.criterion,['kind']);
@@ -89,6 +104,13 @@
     chars=chars.map(ch=>{
      if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))sum=0;return ch;}
      const p=mod(index.get(ch)-sum);sum=mod(sum+p);return alphabet[p].rune;
+    });
+   }else if(step.op==='finite-shift'){
+    let position=0;
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;return ch;}
+     const k=step.key[position++];
+     return alphabet[mod(index.get(ch)+(step.direction==='add'?k:-k))].rune;
     });
    }else if(step.op==='keyed-shift'){
     let input=[],output=[];

@@ -87,6 +87,23 @@ def validate(task):
             require(step['mode'] in ('repeat', 'plaintext-autokey', 'ciphertext-autokey'), 'Invalid key mode')
             require(step['direction'] in ('subtract', 'add'), 'Invalid key direction')
             require(step['reset'] in ('page', 'line', 'word'), 'Invalid key reset')
+        elif step.get('op') == 'finite-shift':
+            fields(step, ('op', 'key', 'direction', 'reset'), 'Finite-shift step')
+            require(isinstance(step['key'], list) and 1 <= len(step['key']) <= 20000
+                    and all(integer(value, 0, 28) for value in step['key']), 'Invalid finite key indices')
+            require(step['direction'] in ('subtract', 'add'), 'Invalid finite key direction')
+            require(step['reset'] in ('page', 'line', 'word'), 'Invalid finite key reset')
+            # All supported transforms preserve the rune/separator geometry.
+            # Check every segment before any transformation can produce output.
+            for page in pages:
+                position = 0
+                for character in page['text']:
+                    if character in runes:
+                        position += 1
+                        require(position <= len(step['key']),
+                                'Finite key stream underrun on ' + page['id'])
+                    elif boundary(character, step['reset'], runes):
+                        position = 0
         elif step.get('op') == 'cumulative-difference':
             fields(step, ('op', 'reset'), 'Cumulative step')
             require(step['reset'] in ('page', 'line', 'word'), 'Invalid cumulative reset')
@@ -127,6 +144,16 @@ def transform(text, step, runes, indices):
             elif ch in indices:
                 positions.append(i)
         flush()
+    elif step['op'] == 'finite-shift':
+        position = 0
+        sign = -1 if step['direction'] == 'subtract' else 1
+        for i, character in enumerate(chars):
+            if character not in indices:
+                if boundary(character, step['reset'], indices):
+                    position = 0
+                continue
+            chars[i] = runes[(indices[character] + sign * step['key'][position]) % 29]
+            position += 1
     elif step['op'] == 'keyed-shift':
         # Histories belong to this step's current reset segment, not to the
         # original program input or a preceding page. Separators never consume.

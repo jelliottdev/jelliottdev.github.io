@@ -65,6 +65,9 @@ async function authoredControlTests(){
 }
 (async()=>{
  await authoredControlTests();
+ const finiteTask=await E.prepare({...await makeTask('Synthetic finite-stream task'),steps:[{op:'finite-shift',key:Array.from({length:277},(_,i)=>i%29),direction:'subtract',reset:'page'}]},webcrypto),finiteFixture=await fixture({task:finiteTask});
+ try{const html=finiteFixture.doc.host.innerHTML;assert(html.includes('finite stream of 277 GP indices'));assert(html.includes('stream never repeats'));assert(html.includes('<details class="finite-key-values"><summary>Exact stream values (277)</summary>'));assert(!html.includes('Repeat GP key'));assert.equal(finiteFixture.executions.length,0);const pending=finiteFixture.click('run-browser');finiteFixture.executions[0].resolve(E.run(finiteTask));await pending;assert(finiteFixture.app.getState().selected);assert.equal(finiteFixture.requests.filter(r=>r.options.method==='POST').length,0);}finally{finiteFixture.app.destroy();}
+
  for(const mode of ['repeat','plaintext-autokey','ciphertext-autokey']){
   const text=UI.stepText({op:'keyed-shift',key:[1,2,3],mode,direction:'subtract',reset:'word'});
   assert(text.includes('[1, 2, 3]')&&text.includes('subtract')&&text.includes('word'));
