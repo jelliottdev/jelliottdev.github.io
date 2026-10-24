@@ -1,3 +1,4 @@
+import {loadInputBundle} from './official-inputs.mjs';
 /* Bounded declarative computation persistence. No user code or scientific verdicts. */
 import L from '../../local-experiment.js';
 import {validateCard} from './idea-relations.mjs';
@@ -114,13 +115,14 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     const sourceController=new AbortController(),sourceTimer=setTimeout(()=>sourceController.abort(),20000);
     try{
      let fetched=0,next=0;
+     const bundle=task.pages.length>40?await loadInputBundle({fetcher,signal:sourceController.signal,read:boundedJSON}):null;if(bundle&&L.stable(bundle.alphabet)!==L.stable(task.alphabet))throw Error();
      const worker=async()=>{
       try{
        while(next<task.pages.length){
         if(sourceController.signal.aborted)throw Error();
         const page=task.pages[next++];
-        const response=await fetcher('https://jelliottdev.github.io/data/pages/'+page.id+'.json',{redirect:'manual',signal:sourceController.signal});
-        if(!response.ok)throw Error();const source=await boundedJSON(response,512*1024);
+        const response=bundle?null:await fetcher('https://jelliottdev.github.io/data/pages/'+page.id+'.json',{redirect:'manual',signal:sourceController.signal});
+        if(response&&!response.ok)throw Error();const source=bundle?bundle.pages.get(page.id):await boundedJSON(response,512*1024);
         const text=body.inputVersion==='raw'?source.raw:source.reviewed_text;
         if(source.id!==page.id||typeof text!=='string'||text!==page.text)throw Error();
         fetched+=new TextEncoder().encode(text).length;if(fetched>MAX_BODY)throw Error();

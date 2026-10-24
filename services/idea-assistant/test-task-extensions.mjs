@@ -9,18 +9,23 @@ import {createTaskExtensionHandler} from './task-extensions.mjs';
 
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const alphabet=Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2}));
+const bundleURL=origin+'/data/local-run-inputs.json';
+const sourcePage=id=>({id,raw:id==='lp2-50'?'':alphabet[Number(id.slice(4))%29].rune+' /\r\n',reviewed_text:alphabet[(Number(id.slice(4))+1)%29].rune});
+const pageIds=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))];
+const sourceBundle=(letters=alphabet)=>({schema:'liberpedia-local-inputs-v1',alphabet:letters.map(entry=>({...entry})),pages:pageIds.map(sourcePage)});
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture({fetcher,timeoutMs=20000}={}){
  const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
- const queries=[],calls=[],rates=[];let aiCalls=0;
+ const queries=[],calls=[],rates=[];let aiCalls=0,bundleAlphabet=alphabet;
  const db={prepare(sql){assert.match(sql,/^\s*SELECT\b/i,'Extension must not write');queries.push(sql);return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}};
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async value=>{rates.push(value);return {success:true};}},AI:{run(){aiCalls++;throw Error('No AI allowed');}}};
  const handle=createTaskExtensionHandler({timeoutMs,fetcher:async(url,options)=>{
-  calls.push({url,options});assert.match(url,/^https:\/\/jelliottdev\.github\.io\/data\/pages\/lp2-(?:[0-4]\d|5[0-5])\.json$/);assert.equal(options.redirect,'manual');
+  calls.push({url,options});assert(url===bundleURL||/^https:\/\/jelliottdev\.github\.io\/data\/pages\/lp2-(?:[0-4]\d|5[0-5])\.json$/.test(url));assert.equal(options.redirect,'manual');
   if(fetcher)return fetcher(url,options);
-  const id=url.split('/').pop().slice(0,-5);return Response.json({id,raw:id==='lp2-50'?'':alphabet[Number(id.slice(4))%29].rune+' /\r\n',reviewed_text:alphabet[(Number(id.slice(4))+1)%29].rune});
+  if(url===bundleURL)return Response.json(sourceBundle(bundleAlphabet));
+  return Response.json(sourcePage(url.split('/').pop().slice(0,-5)));
  }});
- return {sqlite,env,handle,calls,queries,rates,get aiCalls(){return aiCalls;}};
+ return {sqlite,env,handle,calls,queries,rates,setAlphabet(value){bundleAlphabet=value;},get aiCalls(){return aiCalls;}};
 }
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
 async function proposal(f,name='public',published=true){
@@ -55,7 +60,14 @@ await test('exact remaining-only plan preserves scientific inputs, publishes not
  assert.deepEqual(output.task.pages.map(p=>p.id),Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')).filter(id=>!['lp2-00','lp2-15'].includes(id)));
  assert(output.task.pages.every(page=>page.text===alphabet[(Number(page.id.slice(4))+1)%29].rune));await L.checkIdentity(output.task);assert.notEqual(output.task.taskId,t.taskId);
  assert.match(output.purpose,/beyond the original request/);assert(!JSON.stringify(output).includes('PRIVATE'));
- assert.equal(f.calls.length,54);assert(f.calls.every(c=>c.options.signal===f.calls[0].options.signal));assert.equal(f.aiCalls,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,changes);assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_tasks').all(),before);
+ assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert(f.calls.every(c=>c.options.signal===f.calls[0].options.signal));assert.equal(f.aiCalls,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,changes);assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_tasks').all(),before);
+});
+await test('large55-page scopes use one exact aggregate fetch with raw/reviewed bytes and no fallback',async()=>{
+ for(const version of ['raw','reviewed']){const f=fixture(),p=await proposal(f),t=await parent(f,p,{version}),out=await ready(f,t);assert.equal(out.task.pages.length,55);assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert.deepEqual(out.task.pages,out.task.pages.map(page=>({id:page.id,text:sourcePage(page.id)[version==='raw'?'raw':'reviewed_text']})));assert.equal(out.task.pages.find(page=>page.id==='lp2-50').text,version==='raw'?'':sourcePage('lp2-50').reviewed_text);if(version==='raw')assert(out.task.pages.find(page=>page.id==='lp2-00').text.endsWith(' /\r\n'));await L.checkIdentity(out.task);}
+ for(const damage of [bundle=>{bundle.pages[1]=bundle.pages[0];},bundle=>{bundle.pages.pop();},bundle=>{bundle.schema='other';},bundle=>{bundle.alphabet[0].latin='DIFFERENT';},bundle=>{bundle.pages.find(p=>p.id==='lp2-00').reviewed_text=null;}]){
+  const bundle=sourceBundle();damage(bundle);const f=fixture({fetcher:async()=>Response.json(bundle)}),p=await proposal(f),t=await parent(f,p),before=f.sqlite.prepare('SELECT total_changes() n').get().n,response=await f.handle(req(t.taskId),f.env);assert.equal(response.status,422);assert(!Object.hasOwn(await response.json(),'task'));assert.equal(f.calls.length,1,'Invalid aggregate never falls back to55 external page requests');assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ }
+ const oversized=fixture({fetcher:async()=>new Response('{}',{headers:{'Content-Type':'application/json','Content-Length':String(2*1024*1024+1)}})}),p=await proposal(oversized),t=await parent(oversized,p);assert.equal((await oversized.handle(req(t.taskId),oversized.env)).status,422);assert.equal(oversized.calls.length,1);
 });
 await test('public association selected instead of private original, retaining its input version',async()=>{
  const f=fixture(),privateIdea=await proposal(f,'private',false),publicIdea=await proposal(f),t=await parent(f,privateIdea,{version:'raw'});
@@ -69,17 +81,18 @@ await test('covered scope returns exact parent/idea context without fetching or 
  const g=fixture(),q=await proposal(g),long=await parent(g,q,{title:'🧪'.repeat(300)});const plan=await ready(g,long);assert(Array.from(plan.task.title).length<=300);assert(plan.task.title.endsWith(' · remaining LP2 pages'));await L.checkIdentity(plan.task);
 });
 await test('source batch max4 concurrent workers, shared abort, redirect rejection and actual deadline',async()=>{
- let active=0,max=0;const f=fixture({fetcher:async(url)=>{active++;max=Math.max(max,active);await new Promise(resolve=>setTimeout(resolve,1));active--;return Response.json({id:url.split('/').pop().slice(0,-5),raw:'ᚠ'});}}),p=await proposal(f),t=await parent(f,p,{version:'raw'});
- assert.equal((await ready(f,t)).state,'plan-ready');assert.equal(max,4);
+ let active=0,max=0;const f=fixture({fetcher:async(url)=>{active++;max=Math.max(max,active);await new Promise(resolve=>setTimeout(resolve,1));active--;return Response.json({id:url.split('/').pop().slice(0,-5),raw:'ᚠ'});}}),p=await proposal(f),t=await parent(f,p,{version:'raw',pages:Array.from({length:20},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:'ᚠ'}))});
+ assert.equal((await ready(f,t)).state,'plan-ready');assert.equal(max,4);assert.equal(f.calls.length,36);assert(f.calls.every(c=>c.url!==bundleURL),'Small remaining scopes retain bounded per-page loading');
  for(const fetcher of [async()=>new Response(null,{status:302,headers:{location:'https://evil.example'}}),async()=>Response.json({id:'wrong',raw:'ᚠ'}),()=>{throw Error('PRIVATE failure');}]){
-  const g=fixture({fetcher}),q=await proposal(g),u=await parent(g,q,{version:'raw'});const response=await g.handle(req(u.taskId),g.env);assert.equal(response.status,422);assert(g.calls.every(c=>c.options.signal.aborted));assert.equal(g.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert(!(await response.text()).includes('PRIVATE'));
+  const g=fixture({fetcher}),q=await proposal(g),u=await parent(g,q,{version:'raw'});const response=await g.handle(req(u.taskId),g.env);assert.equal(response.status,422);assert.equal(g.calls.length,1);assert.equal(g.calls[0].url,bundleURL,'Failed aggregate cannot fall back to page requests');assert.equal(g.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert(!(await response.text()).includes('PRIVATE'));
  }
+ const failedSmall=fixture({fetcher:async()=>{throw Error('Small source failure');}}),smallIdea=await proposal(failedSmall),smallParent=await parent(failedSmall,smallIdea,{pages:Array.from({length:20},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:'ᚠ'}))});assert.equal((await failedSmall.handle(req(smallParent.taskId),failedSmall.env)).status,422);assert(failedSmall.calls.every(c=>c.options.signal.aborted),'Small per-page failures still cancel the whole shared batch');
  const hanging=fixture({timeoutMs:10,fetcher:()=>new Promise(()=>{})}),q=await proposal(hanging),u=await parent(hanging,q);
- const response=await hanging.handle(req(u.taskId),hanging.env);assert.equal(response.status,422);assert.equal(hanging.calls.length,4);assert(hanging.calls.every(c=>c.options.signal.aborted));
+ const response=await hanging.handle(req(u.taskId),hanging.env);assert.equal(response.status,422);assert.equal(hanging.calls.length,1);assert.equal(hanging.calls[0].url,bundleURL);assert(hanging.calls.every(c=>c.options.signal.aborted));
 });
 await test('source and final runner bounds fail closed without altering parent or returning partial plan',async()=>{
- for(const text of ['ᚠ'.repeat(20001),' '.repeat(300001),'x'.repeat(512*1024)]){
-  const f=fixture({fetcher:async url=>Response.json({id:url.split('/').pop().slice(0,-5),raw:text})}),p=await proposal(f),t=await parent(f,p,{version:'raw'});
+ for(const text of ['ᚠ'.repeat(401),' '.repeat(6000)]){
+  const f=fixture({fetcher:async url=>{assert.equal(url,bundleURL);const bundle=sourceBundle();bundle.pages=bundle.pages.map(page=>({...page,raw:text}));return Response.json(bundle);}}),p=await proposal(f),t=await parent(f,p,{version:'raw'});
   const before=f.sqlite.prepare('SELECT total_changes() n').get().n,response=await f.handle(req(t.taskId),f.env);assert.equal(response.status,422);assert(!Object.hasOwn(await response.json(),'task'));assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
  }
 });
@@ -136,7 +149,7 @@ await test('changed protocol or input version stops history without excluding ol
  for(const change of ['steps','alphabet','criterion','inputVersion']){
   const f=fixture(),p=await proposal(f),old=await parent(f,p),body=structuredClone(old);delete body.taskId;body.title='Changed '+change;body.pages=[{id:'lp2-00',text:'ᚠ'}];
   if(change==='steps')body.steps[1].b=8;if(change==='alphabet')body.alphabet[0].latin='OTHER';if(change==='criterion')body.criterion.values=[4];
-  const child=await L.prepare(body);await insertTask(f,p,child,{version:change==='inputVersion'?'raw':'reviewed',parentTaskId:old.taskId});
+  const child=await L.prepare(body);if(change==='alphabet')f.setAlphabet(child.alphabet);await insertTask(f,p,child,{version:change==='inputVersion'?'raw':'reviewed',parentTaskId:old.taskId});
   const output=await ready(f,child);assert.equal(output.state,'plan-ready');assert.deepEqual(output.coveredPages,['lp2-00']);assert(output.task.pages.some(page=>page.id==='lp2-15'));assert(output.notes.some(note=>note.includes('Earlier tasks used different settings')));
  }
 });

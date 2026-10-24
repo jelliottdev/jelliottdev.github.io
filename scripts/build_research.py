@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGES = (
+    ('build_local_run_inputs.py',),
     ('build_experiments.py',),
     ('build_articles.py',),
     ('build_assistant.py',),

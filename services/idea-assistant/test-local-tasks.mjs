@@ -188,4 +188,27 @@ await test('official-source redirect is rejected without task or result persiste
  const response=await handle(request('/tasks','POST',body(t)),f.env);assert.equal(response.status,422);assert.equal(calls,1,'No redirect destination is fetched');assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
  assert.equal((await handle(request('/tasks/'+t.taskId+'/results','POST',{result:L.run(t)}),f.env)).status,404);
 });
+await test('large-scope source verification uses one aggregate and preserves exact raw/reviewed snapshots',async()=>{
+ const officialAlphabet=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
+ const ids=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))];
+ const selected=Array.from({length:55},(_,i)=>'lp2-'+String(i).padStart(2,'0'));
+ const bundle={schema:'liberpedia-local-inputs-v1',alphabet:officialAlphabet,pages:ids.map((id,i)=>({id,raw:'ᚠᚢ-ᚦ  \r\n'+i,reviewed_text:id==='lp1-00'?null:id==='lp2-00'?'':'ᚢᚠ-ᚦ\r\n '+i}))};
+ const buildTask=async(version,b=bundle)=>L.prepare({title:'Synthetic55-page '+version+' task',alphabet:officialAlphabet,steps:[{op:'reverse',unit:'line'}],criterion:{kind:'measurement'},pages:selected.map(id=>({id,text:b.pages.find(p=>p.id===id)[version==='raw'?'raw':'reviewed_text']}))});
+ for(const version of ['raw','reviewed']){
+  const f=fixture(),t=await buildTask(version);let calls=0;
+  const handle=createLocalTaskHandler({fetcher:async(url,options)=>{calls++;assert.equal(url,origin+'/data/local-run-inputs.json');assert.equal(options.redirect,'manual');assert(options.signal);return Response.json(bundle);}});
+  const response=await handle(request('/tasks','POST',{...body(t),inputVersion:version}),f.env),value=await response.json();assert.equal(response.status,200);assert.deepEqual(value.plan,t);assert.equal(value.inputVersion,version);assert.equal(calls,1);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
+  assert.equal((await handle(request('/tasks','POST',{...body(t),inputVersion:version}),f.env)).status,200);assert.equal(calls,1,'Exact stored retry does not refetch75 inputs');
+ }
+ for(const failure of ['changed-text','changed-alphabet','null-reviewed','missing-reviewed','duplicate-page','redirect','oversize']){
+  const f=fixture(),version='reviewed',t=await buildTask(version),altered=structuredClone(bundle);let calls=0;
+  if(failure==='changed-text')altered.pages.find(p=>p.id==='lp2-00').reviewed_text='ᚠ';
+  if(failure==='changed-alphabet')altered.alphabet[0].prime=997;
+  if(failure==='null-reviewed')altered.pages.find(p=>p.id==='lp2-00').reviewed_text=null;
+  if(failure==='missing-reviewed')delete altered.pages.find(p=>p.id==='lp2-00').reviewed_text;
+  if(failure==='duplicate-page')altered.pages[1]=altered.pages[0];
+  const handle=createLocalTaskHandler({fetcher:async url=>{calls++;assert.equal(url,origin+'/data/local-run-inputs.json');return failure==='redirect'?new Response(null,{status:302,headers:{location:'https://evil.example/source'}}):failure==='oversize'?new Response('{}',{headers:{'content-type':'application/json','content-length':'2097153'}}):Response.json(altered);}});
+  const response=await handle(request('/tasks','POST',{...body(t),inputVersion:version}),f.env);assert.equal(response.status,422,failure);assert.equal(calls,1,'Invalid bundle cannot trigger individual-page fallback');assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
+ }
+});
 console.log('PASS '+count+' SQLite-backed local-task groups; all official-source fetches injected, no execution of external code.');

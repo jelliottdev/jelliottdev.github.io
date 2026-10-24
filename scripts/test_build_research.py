@@ -6,6 +6,15 @@ from build_research import build
 
 
 class BuildTests(unittest.TestCase):
+    def test_stale_or_invalid_runtime_inputs_stop_before_publication(self):
+        names = []
+        def failing(command, **options):
+            names.append(Path(command[1]).name)
+            raise subprocess.CalledProcessError(1, command)
+        with self.assertRaises(subprocess.CalledProcessError):
+            build(Path('/fixture'), run=failing)
+        self.assertEqual(names, ['build_local_run_inputs.py'])
+
     def test_preview_runs_content_and_map_without_archive_or_catalog_writes(self):
         calls = []
         build(Path('/fixture'), run=lambda command, **options: calls.append((command, options)), preview=True)
@@ -21,9 +30,10 @@ class BuildTests(unittest.TestCase):
                 raise subprocess.CalledProcessError(1, command)
         with self.assertRaises(subprocess.CalledProcessError):
             build(Path('/fixture'), run=failing)
-        self.assertEqual(names, ['build_experiments.py'])
+        self.assertEqual(names, ['build_local_run_inputs.py', 'build_experiments.py'])
         names.clear()
         build(Path('/fixture'), run=lambda command, **options: names.append(Path(command[1]).name))
+        self.assertEqual(names[0], 'build_local_run_inputs.py')
         self.assertLess(names.index('build_experiments.py'), names.index('build_access_exports.py'))
         self.assertLess(names.index('build_research_map.py'), names.index('build_home_clusters.py'))
         self.assertLess(names.index('build_home_clusters.py'), names.index('check_download_catalog.py'))

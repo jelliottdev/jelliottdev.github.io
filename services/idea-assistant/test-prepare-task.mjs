@@ -124,4 +124,22 @@ await test('official-source redirects cannot turn a valid AI mapping into an acc
  const env={...f.env,AI:{run:async()=>{aiCalls++;return {choices:[{message:{content:JSON.stringify({version:1,steps:[{source:{operationIndex:0,start:7,quote:'reverse every row'},step:{op:'reverse',unit:'line'}}],unsupported:[]})}}]};}}};
  const response=await handle(request(),env),value=await response.json();assert.equal(aiCalls,1);assert.equal(calls,1,'No redirect destination is fetched');assert.equal(response.status,422);assert(!value.task);assert.notEqual(value.state,'plan-ready');assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
 });
+await test('large exact scopes use one aggregate fetch and preserve raw/reviewed text without fallback',async()=>{
+ const ids=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))];
+ const pages=Array.from({length:55},(_,i)=>'lp2-'+String(i).padStart(2,'0'));
+ const bundle={schema:'liberpedia-local-inputs-v1',alphabet,pages:ids.map((id,i)=>({id,raw:raw+'  \r\n'+i,reviewed_text:id==='lp1-00'?null:id==='lp2-00'?'':reviewed+'\r\n '+i}))};
+ for(const version of ['raw','reviewed']){
+  const f=fixture(card({scope:known({pages}),rules:{inputVersion:known(version)}}));let calls=0;
+  const handle=createPrepareTaskHandler({fetcher:async(url,options)=>{calls++;assert.equal(url,origin+'/data/local-run-inputs.json');assert.equal(options.redirect,'manual');assert(options.signal);return Response.json(bundle);}});
+  const response=await handle(request(),f.env),value=await response.json();assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.equal(calls,1,'55 pages must not incur55 subrequests');assert.deepEqual(value.task.alphabet,alphabet);assert.deepEqual(value.task.pages,pages.map(id=>({id,text:bundle.pages.find(p=>p.id===id)[version==='raw'?'raw':'reviewed_text']})));await L.checkIdentity(value.task);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+ }
+ for(const failure of ['null-reviewed','missing-reviewed','changed-alphabet','redirect','oversize']){
+  const f=fixture(card({scope:known({pages}),rules:{inputVersion:known('reviewed')}})),altered=structuredClone(bundle);let calls=0;
+  if(failure==='null-reviewed')altered.pages.find(p=>p.id==='lp2-00').reviewed_text=null;
+  if(failure==='missing-reviewed')delete altered.pages.find(p=>p.id==='lp2-00').reviewed_text;
+  if(failure==='changed-alphabet')altered.alphabet[0].latin='Different';
+  const handle=createPrepareTaskHandler({fetcher:async url=>{calls++;assert.equal(url,origin+'/data/local-run-inputs.json');return failure==='redirect'?new Response(null,{status:302,headers:{location:'https://evil.example/source'}}):failure==='oversize'?new Response('{}',{headers:{'content-type':'application/json','content-length':'2097153'}}):Response.json(altered);}});
+  const response=await handle(request(),f.env),value=await response.json();assert.equal(response.status,422,failure);assert(!value.task);assert.equal(calls,1,'Rejected aggregate never falls back to individual pages');assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+ }
+});
 console.log('PASS '+count+' deterministic prepare-task groups; all source fetches mocked, no AI/storage writes/deployment.');

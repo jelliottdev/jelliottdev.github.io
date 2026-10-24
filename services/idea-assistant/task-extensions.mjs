@@ -1,3 +1,4 @@
+import {loadInputBundle} from './official-inputs.mjs';
 /* Propose a fixed scope extension only. No AI, persistence or execution. */
 import C from '../../claim-specification.js';
 import L from '../../local-experiment.js';
@@ -86,12 +87,14 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
    if(!ids.length)return reply({state:'scope-covered',...context,reason:'Saved runs cover all 56 LP2 pages for this method and these inputs.'});
    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
    const aborted=new Promise((_,reject)=>controller.signal.addEventListener('abort',()=>reject(Error('Source batch aborted')),{once:true}));
+   aborted.catch(()=>{}); // The aggregate branch observes cancellation through its own bounded loader.
    const pages=new Array(ids.length);let next=0,total=0;
    try{
+    const bundle=ids.length>40?await loadInputBundle({fetcher,signal:controller.signal,read:async(response,max)=>(await jsonBody(response,max)).value}):null;if(bundle&&L.stable(bundle.alphabet)!==L.stable(parent.alphabet))throw Error('Source alphabet changed');
     const worker=async()=>{try{while(next<ids.length){
      if(controller.signal.aborted)throw Error('Source batch aborted');const index=next++,id=ids[index];
-     const response=await Promise.race([Promise.resolve().then(()=>fetcher('https://jelliottdev.github.io/data/pages/'+id+'.json',{redirect:'manual',signal:controller.signal})),aborted]);
-     if(!response.ok)throw Error('Source unavailable');const {value:page}=await Promise.race([jsonBody(response,MAX_SOURCE),aborted]);
+     const response=bundle?null:await Promise.race([Promise.resolve().then(()=>fetcher('https://jelliottdev.github.io/data/pages/'+id+'.json',{redirect:'manual',signal:controller.signal})),aborted]);
+     if(response&&!response.ok)throw Error('Source unavailable');const page=bundle?bundle.pages.get(id):(await Promise.race([jsonBody(response,MAX_SOURCE),aborted])).value;
      const text=row.input_version==='raw'?page.raw:page.reviewed_text;
      if(page.id!==id||typeof text!=='string')throw Error('Source mismatch');total+=new TextEncoder().encode(text).length;if(total>MAX_TOTAL)throw Error('Sources exceed bounds');
      pages[index]={id,text};

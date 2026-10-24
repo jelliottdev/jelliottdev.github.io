@@ -49,3 +49,12 @@ Map actions, validation and execution consume this declaration. Do not maintain
 parallel handwritten button text or per-record UI branches. Nodes without a
 declared runnable follow-up continue to show authored bounds and next checks;
 they must not advertise that arbitrary variants can already run.
+
+## Large manuscript scopes
+
+Scopes over 40 pages load the generated `data/local-run-inputs.json` in one
+fixed official request. The bundle contains exact raw/reviewed text for all 75
+archived pages and the ordered alphabet; CI checks it against the original
+page JSON files. Authored follow-ups still verify every selected text hash and
+the alphabet pin. Invalid or missing bundles fail without per-page fallback.
+This bounds external requests on the free Worker plan.

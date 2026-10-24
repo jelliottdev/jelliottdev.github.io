@@ -2,6 +2,7 @@
 import L from '../../local-experiment.js';
 import {validateCard} from './idea-relations.mjs';
 import {planCard} from './prepare-task.mjs';
+import {loadInputBundle} from './official-inputs.mjs';
 const BASE='https://jelliottdev.github.io',HEX=/^[a-f0-9]{64}$/,ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 export const recordPlanDigest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',typeof text==='string'?new TextEncoder().encode(text):text))].map(v=>v.toString(16).padStart(2,'0')).join('');
@@ -38,8 +39,17 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
   for(const field of ['steps','alphabet','criterion'])if(L.stable(control.task[field])!==L.stable(field==='steps'?plan.steps:field==='alphabet'?alphabet:plan.criterion))throw Error('The control uses a different program, alphabet or criterion.');
   const result=L.run(control.task);if(!result.matches.length||result.matches.some(v=>v.matched!==true)||await recordPlanDigest(L.stable(result))!==control.expected_result_sha256)throw Error('The declared synthetic control failed.');
   const pages=Array(plan.pages.length);let next=0,total=0;
-  const worker=async()=>{while(next<pages.length){if(controller.signal.aborted)throw Error('Source loading cancelled.');const i=next++,id=plan.pages[i],page=(await get('/data/pages/'+id+'.json')).value,text=pins.version==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string'||await recordPlanDigest(text)!==pins.pages[i].text_sha256)throw Error('The pinned manuscript input changed.');total+=new TextEncoder().encode(text).length;if(total>2000000)throw Error('The selected inputs exceed their bound.');pages[i]={id,text};}};
-  await Promise.all(Array.from({length:Math.min(4,pages.length)},worker));
+  const accept=async(i,page)=>{const id=plan.pages[i],text=pins.version==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string'||await recordPlanDigest(text)!==pins.pages[i].text_sha256)throw Error('The pinned manuscript input changed.');total+=new TextEncoder().encode(text).length;if(total>2000000)throw Error('The selected inputs exceed their bound.');pages[i]={id,text};};
+  if(pages.length>40){
+   // One fixed source keeps authored large scopes below Workers' subrequest cap.
+   // Invalid aggregates must not trigger an unbounded per-page fallback.
+   const bundle=await loadInputBundle({fetcher,signal:controller.signal,read:async(response,max)=>(await readJSON(response,max)).value});
+   if(L.stable(bundle.alphabet)!==L.stable(alphabet))throw Error('The official input aggregate alphabet changed.');
+   for(let i=0;i<pages.length;i++)await accept(i,bundle.pages.get(plan.pages[i]));
+  }else{
+   const worker=async()=>{while(next<pages.length){if(controller.signal.aborted)throw Error('Source loading cancelled.');const i=next++,page=(await get('/data/pages/'+plan.pages[i]+'.json')).value;await accept(i,page);}};
+   await Promise.all(Array.from({length:Math.min(4,pages.length)},worker));
+  }
   const task=await L.prepare({title:recipe.title,pages,alphabet,steps:plan.steps,criterion:plan.criterion});
   return {state:'plan-ready',origin:{recordId,followupId,recordSha256:await recordPlanDigest(raw.bytes),protocolSha256:await recordPlanDigest(L.stable(recipe))},card,task,inputVersion:plan.inputVersion,control,question:recipe.question,scopeChange:recipe.scope_change,limitation:recipe.limitation,snapshot:recipe};
  };
