@@ -7,7 +7,8 @@ import copy
 
 SCHEMA = 'liberpedia-experiment-v2'
 DERIVED = {'summary', 'finding', 'limitations', 'next_steps', 'reader_finding',
-           'reader_limit', 'reader_question', 'article', 'article_path', 'reader_sections'}
+           'reader_limit', 'reader_question', 'article', 'article_path', 'reader_sections',
+           'record_type', 'method_topics', 'script_sha256', 'article_links'}
 
 
 def article_bytes(raw):
@@ -29,6 +30,9 @@ def compile_content(raw):
     duplicate = DERIVED.intersection(record)
     if duplicate:
         raise ValueError('V2 derives these fields; edit result or analysis instead: ' + ', '.join(sorted(duplicate)))
+    classification = record.get('classification')
+    if not isinstance(classification, dict) or set(classification) != {'kind', 'methods', 'map_parent'}:
+        raise ValueError('V2 classification needs kind, methods and map_parent')
     result = record.get('result')
     if not isinstance(result, dict) or set(result) != {'finding', 'limits', 'next_steps'}:
         raise ValueError('V2 result needs finding, limits and next_steps only')

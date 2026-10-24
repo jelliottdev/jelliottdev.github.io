@@ -19,6 +19,7 @@ class ContentTests(unittest.TestCase):
     def source(self):
         d = copy.deepcopy(self.record)
         d['schema'] = SCHEMA
+        d['classification'] = {'kind': 'measurement', 'methods': ['feedback'], 'map_parent': 'method:feedback'}
         d['result'] = {'finding': d.pop('finding'), 'limits': d.pop('limitations'), 'next_steps': d.pop('next_steps')}
         d.pop('summary')
         d['analysis'] = '# Exact technical account\n\n' + 'The tested procedure and controls are documented here. ' * 8 + '\n'
@@ -92,6 +93,24 @@ class ContentTests(unittest.TestCase):
         raw['analysis'] += 'Changed evidence'; self.write(raw)
         with self.assertRaisesRegex(ValueError, 'SHA-256 mismatch'):
             validate_record(self.root, p, {'lp2-15'})
+
+    def test_one_new_source_also_registers_existing_categories(self):
+        raw = self.source(); self.write(raw)
+        taxonomy = {'record_kinds': {'measurement': {'label': 'Measurement', 'description': 'A bounded comparison'}},
+                    'record_kind_by_id': {}, 'families': [{'id': 'feedback', 'title': 'Feedback', 'aliases': [], 'related': []}]}
+        (self.root / 'data/method-families.json').write_text(json.dumps(taxonomy))
+        mapped = {'views': {'solving': {'nodes': [{'id': 'method:feedback', 'kind': 'method'}]}}}
+        (self.root / 'data/research-map.json').write_text(json.dumps(mapped))
+        records = build(self.root)
+        registered = json.loads((self.root / 'data/method-families.json').read_bytes())
+        self.assertEqual(registered['record_kind_by_id'], {'test-record': 'measurement'})
+        self.assertEqual(registered['families'][0]['related'], ['test-record'])
+        self.assertEqual(records[0]['method_topics'][0]['id'], 'feedback')
+        raw['classification']['map_parent'] = 'invented:branch'; self.write(raw)
+        before = self.files()
+        with self.assertRaisesRegex(ValueError, 'existing branch'):
+            build(self.root)
+        self.assertEqual(before, self.files())
 
     def test_legacy_projection_is_unchanged(self):
         self.assertEqual(compile_content(self.record), self.record)

@@ -3,7 +3,8 @@ import argparse
 import json
 import re
 
-from build_experiments import ROOT, article_link_aliases, require, validate_family, validate_record
+from build_experiments import ROOT, article_link_aliases, require, validate_family, validate_record, validate_record_placement
+from experiment_taxonomy import apply_classifications
 
 
 def preflight(identifiers, root=ROOT):
@@ -18,6 +19,10 @@ def preflight(identifiers, root=ROOT):
         record = validate_record(root, path, pages)
         selected.append(record)
         by_id[identifier] = record
+    taxonomy = root / 'data/method-families.json'
+    if taxonomy.exists():
+        apply_classifications(json.loads(taxonomy.read_text(encoding='utf-8')), list(by_id.values()))
+    validate_record_placement(root, selected)
     for record in selected:
         require(all(identifier in by_id and identifier != record['id']
                     for identifier in record['related']), 'Related IDs must be published or in this batch')
@@ -33,4 +38,4 @@ if __name__ == '__main__':
     records = preflight(args.ids)
     for record in records:
         print(f"PASS: {record['id']} - schema, declared bytes, plan, article, related IDs and family differences")
-    print('No scripts executed, no outcomes certified, no site files changed. Publication type/family assignments remain a release step.')
+    print('No scripts executed, no outcomes certified, no site files changed. Build derived views only after review; this command publishes nothing.')

@@ -39,6 +39,7 @@ The new format uses `schema: "liberpedia-experiment-v2"`:
 - `result.next_steps`: what remains worth checking.
 - `analysis`: the full technical account in Markdown, including the method, controls, planned criteria, results and any decisions made after inspection.
 - `scope`, `reproduction`, `review`, `visuals`, `sources`: exact bounds and evidence, as before.
+- `classification`: the existing record kind, method-family IDs and research-map parent branch. The build updates those indexes from this field; no separate assignment-file edit is needed. Unknown categories or branches are rejected.
 
 Write the result once. The page, graph preview, search index, checker evidence and ZIP instructions use that same finding and limit. Technical detail belongs in `analysis`; short result fields are limited to 700 characters and are never silently truncated. Duplicate fields such as `reader_finding`, `summary` or a second top-level `finding` are rejected. CI requires the new format for added records and newly published drafts, and prevents downgrading a converted record. `article.md` is a generated compatibility file; do not edit it.
 
@@ -51,7 +52,7 @@ Write the result once. The page, graph preview, search index, checker evidence a
    python scripts/preflight_experiments.py your-short-id
    ```
 
-4. Assign the record type and method links described below. Change status to `published` only when the reviewed record is ready.
+4. Set `classification` using existing kinds, methods and the closest existing map branch. Change status to `published` only when the reviewed record is ready.
 5. Build all derived views once:
 
    ```text
@@ -150,24 +151,27 @@ Each note has a coverage status, an explanation, the information needed to make 
 
 The solving-method directory is built from `data/method-families.json` by `scripts/build_method_map.py`, called during the article build. When publishing a result, assign it to at least one relevant method family. These links are editorial associations, not claims that a whole family has been tested. The directory copies each linked record's question and exclusions so changes to scope do not leave stale summaries.
 
-## Connect a published record to the method map
+## Choose existing categories in the experiment file
 
-Three different fields organize the work:
+`classification` belongs in the same authored record:
 
-| Field | Purpose | Example |
-| --- | --- | --- |
-| `record.json` → `family` and `variant` | Group a baseline and follow-ups addressing the same bounded research question. | One row-sum experiment and a variant changing its boundary policy. |
-| `data/method-families.json` → `families[].related` | Link records to broad method guides. Membership is non-exclusive. | A route-plus-key test can link to both route and key families. |
-| `data/method-families.json` → `record_kind_by_id` | Describe the role of the evidence. This is not an outcome or confidence rating. | A tree-source alignment is a source audit, not a bounded solving test; a synthetic decoder check is a control. |
+```json
+"classification": {
+  "kind": "method",
+  "methods": ["feedback"],
+  "map_parent": "method:feedback"
+}
+```
 
-When the retested record is ready to publish:
+`kind` describes the evidence: use an existing key from `record_kinds` in `data/method-families.json`. It is not a confidence rating. A reproduced proposed method is a `replay`; a synthetic decoder check is a `control`; artwork provenance is an `audit`.
 
-1. Add its exact ID to `related` for at least one relevant method family. Link only families that help describe the actual procedure; a word mentioned in the background is not enough. Do not create a new broad family for every parameter change.
-2. Add its ID to `record_kind_by_id` with an existing key from `record_kinds`: `method`, `measurement`, `control`, `alphabet`, `audit`, `historical`, or `replay`. Read the definitions in the same file before choosing. A method replay can reproduce a proposed procedure without confirming its reading.
-3. Keep these edits together with the record's publication. The experiment builder requires type assignments to cover exactly the published records. The method-map builder requires linked records to be published. Drafts must therefore remain absent from both structures.
-4. Run the build commands above, then `node scripts/test_idea_coverage.cjs` and `python scripts/check_article_links.py`. Inspect the experiment's type label, its method-guide links, and its placement among baseline/variants. These checks validate organization and references; they do not reproduce the scientific calculation.
+`methods` names existing broad family IDs from that file. These links are non-exclusive: a route-plus-key experiment may belong to two methods. Choose families describing the tested procedure, not words mentioned only in its background.
 
-If withdrawing a record to draft, remove its type assignment and method links in the same change, and review published records that reference it. Do not replace a missing or withdrawn test with a family-level claim that the method failed. If a retest changes only the result of an existing record, keep its identity and update the scope, outputs and explanation as required.
+`map_parent` names the closest existing branch ID in a solving or analysis tree in `data/research-map.json`. A baseline draft inherits its existing placement. The build adds the record to that branch and updates ancestor counts; it does not infer a method from the title or create a new category.
+
+For new-format records, do not separately edit `families[].related` or `record_kind_by_id`: those assignments are derived. Existing legacy records retain their current assignments. Adding an entirely new category remains an explicit taxonomy decision, not a side effect of publishing a record.
+
+`family` and `variant` remain separate: they group a baseline and follow-ups addressing one bounded question. Use them when only specific scope variables change, rather than creating a new method family for each parameter change.
 
 ## Parallel work and publication
 

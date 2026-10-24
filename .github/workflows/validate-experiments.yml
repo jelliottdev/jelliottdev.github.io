@@ -21,8 +21,6 @@ jobs:
       - name: Select conservative validation scope
         id: scope
         run: node scripts/ci_validation_scope.cjs
-      - run: python scripts/check_experiment_authoring.py
-      - run: python scripts/test_experiment_authoring.py
       - run: node scripts/test_ci_validation_scope.cjs
       - run: node services/idea-assistant/test-worker.mjs
       - run: node services/idea-assistant/test-research-card.mjs
@@ -153,9 +151,18 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_search_maximum_controls.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/check_experiment_authoring.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_experiment_authoring.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_refresh_experiment_hashes.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_experiment_taxonomy.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_content.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_new_experiment.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_article_links.py
@@ -164,7 +171,6 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_suite_registry.py
         if: steps.scope.outputs.science == 'true'
-      - run: python scripts/test_new_experiment.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_experiments.py
         if: steps.scope.outputs.science == 'true'

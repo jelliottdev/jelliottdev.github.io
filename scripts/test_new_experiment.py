@@ -28,9 +28,20 @@ class DraftTests(unittest.TestCase):
                     [sys.executable, str(root / 'scripts/new_experiment.py'), *args],
                     capture_output=True, text=True)
 
+            (root / 'data').mkdir()
+            taxonomy = {'record_kinds': {'measurement': {'label': 'Measurement'}},
+                        'record_kind_by_id': {baseline['id']: 'measurement'},
+                        'families': [{'id': 'number-streams', 'related': [baseline['id']]},
+                                     {'id': 'feedback', 'related': []}]}
+            (root / 'data/method-families.json').write_text(json.dumps(taxonomy), encoding='utf-8')
+            navigation = {'views': {'solving': {'nodes': [
+                {'id': 'method:numerical', 'parent': None},
+                {'id': 'record:' + baseline['id'], 'record_id': baseline['id'], 'parent': 'method:numerical'}]}}}
+            (root / 'data/research-map.json').write_text(json.dumps(navigation), encoding='utf-8')
             result = run('new-variant', '--baseline', baseline['id'])
             self.assertEqual(result.returncode, 0, result.stderr)
             draft = json.loads((records / 'new-variant/record.json').read_text())
+            self.assertEqual(draft['classification'], {'kind': 'measurement', 'methods': ['number-streams'], 'map_parent': 'method:numerical'})
             self.assertEqual(draft['scope'], baseline['scope'])
             self.assertEqual(draft['family'], baseline['family'])
             self.assertEqual(draft['related'], [baseline['id']])
@@ -45,7 +56,7 @@ class DraftTests(unittest.TestCase):
                         'reader_limit', 'reader_question', 'article', 'article_path'):
                 self.assertNotIn(key, draft)
             self.assertIn('record.json', result.stdout)
-            self.assertIn('central publication', result.stdout)
+            self.assertIn('python scripts/build_research.py', result.stdout)
             self.assertEqual(draft['review'], {'reviewer': '', 'retested_on': '', 'kind': '', 'human_review': 'pending'})
             self.assertEqual(draft['reproduction']['inputs'], [])
             self.assertEqual(draft['reproduction']['outputs'], [])
@@ -63,6 +74,7 @@ class DraftTests(unittest.TestCase):
             self.assertEqual(run('independent').returncode, 0)
             independent = json.loads((records / 'independent/record.json').read_text())
             self.assertEqual(independent['family']['baseline'], 'independent')
+            self.assertEqual(independent['classification'], {'kind': '', 'methods': [], 'map_parent': ''})
             self.assertEqual(independent['scope']['pages'], [])
             self.assertEqual(independent['result'], {'finding': '', 'limits': '', 'next_steps': ''})
             self.assertEqual({p.name for p in (records / 'independent').iterdir()}, {'record.json', 'run.py'})
@@ -73,6 +85,7 @@ class DraftTests(unittest.TestCase):
             v2['schema'] = 'liberpedia-experiment-v2'
             v2['family']['baseline'] = v2['id']
             v2['result'] = {'finding': 'Prior result', 'limits': 'Prior limit', 'next_steps': 'Prior next'}
+            v2['classification'] = {'kind': 'measurement', 'methods': ['feedback'], 'map_parent': 'method:feedback'}
             v2['analysis'] = 'Prior analysis with \u03a9 and exact parameters.'
             for key in ('finding', 'limitations', 'next_steps', 'summary', 'article'):
                 v2.pop(key, None)
@@ -84,11 +97,17 @@ class DraftTests(unittest.TestCase):
             self.assertEqual(made.returncode, 0, made.stderr)
             sibling = json.loads((records / 'v2-sibling/record.json').read_text(encoding='utf-8'))
             self.assertEqual(sibling['family'], v2['family'])
+            self.assertEqual(sibling['classification'], v2['classification'])
             self.assertEqual(sibling['scope'], v2['scope'])
             self.assertEqual(sibling['result'], {'finding': '', 'limits': '', 'next_steps': ''})
             self.assertNotIn('Prior analysis', sibling['analysis'])
             self.assertEqual(sibling['review'], {'reviewer': '', 'retested_on': '', 'kind': '', 'human_review': 'pending'})
             self.assertEqual(v2_path.read_bytes(), v2_before)
+            (root / 'data/method-families.json').unlink()
+            (root / 'data/research-map.json').unlink()
+            self.assertEqual(run('without-taxonomy', '--baseline', baseline['id']).returncode, 0)
+            missing = json.loads((records / 'without-taxonomy/record.json').read_text(encoding='utf-8'))
+            self.assertEqual(missing['classification'], {'kind': '', 'methods': [], 'map_parent': ''})
             for invalid_id in ('../escape', 'Upper-Case', 'bad_id'):
                 self.assertNotEqual(run(invalid_id).returncode, 0)
             self.assertFalse((root / 'escape').exists())

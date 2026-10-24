@@ -4,6 +4,36 @@ import json
 import re
 from pathlib import Path
 
+def legacy_classification(root, record_id):
+    """Copy only existing editorial assignments; missing data stays unassigned."""
+    result = {'kind': '', 'methods': [], 'map_parent': ''}
+    try:
+        taxonomy = json.loads((root / 'data/method-families.json').read_text(encoding='utf-8'))
+        kind = taxonomy.get('record_kind_by_id', {}).get(record_id)
+        if isinstance(kind, str) and kind in taxonomy.get('record_kinds', {}):
+            result['kind'] = kind
+        result['methods'] = list(dict.fromkeys(
+            family['id'] for family in taxonomy.get('families', [])
+            if isinstance(family, dict) and isinstance(family.get('id'), str)
+            and family['id'] and record_id in family.get('related', [])))
+    except (OSError, ValueError, TypeError, AttributeError):
+        pass
+    try:
+        navigation = json.loads((root / 'data/research-map.json').read_text(encoding='utf-8'))
+        parents = set()
+        for view in navigation.get('views', {}).values():
+            nodes = view.get('nodes', [])
+            known = {node.get('id') for node in nodes}
+            parents.update(node['parent'] for node in nodes
+                           if node.get('record_id') == record_id and node.get('parent') in known
+                           and isinstance(node.get('parent'), str) and node['parent'])
+        if len(parents) == 1:
+            result['map_parent'] = parents.pop()
+    except (OSError, ValueError, TypeError, AttributeError):
+        pass
+    return result
+
+
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('id')
 parser.add_argument('--baseline', help='Published family baseline whose scope the draft starts from.')
@@ -21,7 +51,7 @@ record = {
     'variant': {'label': 'Baseline', 'changes': []},
     'scope': {'pages': [], 'representation': '', 'procedure': '', 'parameters': '', 'exclusions': ''},
     'outcome': 'inconclusive', 'result': {'finding': '', 'limits': '', 'next_steps': ''},
-    'analysis': '',
+    'analysis': '', 'classification': {'kind': '', 'methods': [], 'map_parent': ''},
     'reproduction': {'command': f'python experiments/records/{args.id}/run.py',
                     'environment': '', 'script': f'experiments/records/{args.id}/run.py',
                     'script_sha256': '', 'inputs': [], 'outputs': []},
@@ -42,6 +72,10 @@ if args.baseline:
                        for key in ('id', 'title', 'question', 'baseline'))
             or not isinstance(baseline.get('scope'), dict)):
         parser.error('Choose a published family baseline, not a draft or sibling variant.')
+    if baseline.get('schema') == 'liberpedia-experiment-v2' and isinstance(baseline.get('classification'), dict):
+        record['classification'] = baseline['classification']
+    else:
+        record['classification'] = legacy_classification(root, args.baseline)
     record['family'] = family
     record['scope'] = baseline['scope']
     record['variant'] = {'label': '', 'changes': []}
@@ -100,6 +134,6 @@ target.mkdir(parents=True)
 raise SystemExit("No experiment implemented. Complete and retest before publication.")
 ''', encoding='utf-8', newline='\n')
 print('Created draft:', target)
-print('Author the question, result and analysis in record.json; implement run.py, then use the central publication command.')
+print('Author the question, result and analysis in record.json; implement run.py, then run python scripts/build_research.py after review.')
 if args.baseline:
-    print('Inherited family and scope only. Declare the changes, inputs, plan and review separately.')
+    print('Inherited family, scope and available classification. Declare the changes, inputs, plan and review.')

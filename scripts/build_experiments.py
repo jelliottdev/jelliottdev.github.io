@@ -6,6 +6,7 @@ import json
 import re
 from pathlib import Path
 from experiment_content import compile_content, article_bytes
+from experiment_taxonomy import apply_classifications
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -394,6 +395,23 @@ def article_link_aliases(root, record, published_ids):
     return aliases
 
 
+def validate_record_placement(root, records):
+    """Check explicit placements against existing branches before writing views."""
+    path = root / 'data/research-map.json'
+    if not path.exists():
+        return
+    mapped = json.loads(path.read_text(encoding='utf-8'))
+    parents = {}
+    for view in ('solving', 'analytics'):
+        for node in mapped.get('views', {}).get(view, {}).get('nodes', []):
+            if node.get('kind') != 'record':
+                parents[node['id']] = parents.get(node['id'], 0) + 1
+    for record in records:
+        if 'classification' in record:
+            parent = record['classification']['map_parent']
+            require(parents.get(parent) == 1, 'Map parent must name one existing branch: ' + parent)
+
+
 def build(root=ROOT):
     records = []
     pages = {p['id'] for p in json.loads((root / 'data/index.json').read_text(encoding='utf-8'))['pages']}
@@ -407,7 +425,7 @@ def build(root=ROOT):
     # Editorial record types travel with complete evidence, including offline exports.
     type_path = root / 'data/method-families.json'
     if type_path.exists():
-        types = json.loads(type_path.read_text(encoding='utf-8'))
+        types = apply_classifications(json.loads(type_path.read_text(encoding='utf-8')), records)
         assignments = types['record_kind_by_id']
         require(set(assignments) == ids, 'Record types must cover exactly the published records')
         for record in records:
@@ -422,6 +440,7 @@ def build(root=ROOT):
                 {'id': family['id'], 'title': family['title'], 'aliases': family['aliases']}
                 for family in types['families'] if record['id'] in family['related']
             ]
+    validate_record_placement(root, records)
     for d in records:
         require(all(x in ids and x != d['id'] for x in d['related']),
                 'Related IDs must name other published records')
@@ -439,6 +458,10 @@ def build(root=ROOT):
             require(f['id'] not in families or families[f['id']] == f,
                     'Conflicting family metadata')
             families[f['id']] = f
+    if type_path.exists():
+        taxonomy_bytes = (json.dumps(types, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+        if type_path.read_bytes() != taxonomy_bytes:
+            type_path.write_bytes(taxonomy_bytes)
     # All records and relationships passed validation. Materialize compatibility
     # accounts only now; preflight/validate_record remain strictly read-only.
     for record in records:
