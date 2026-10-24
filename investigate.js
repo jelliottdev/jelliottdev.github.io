@@ -192,7 +192,7 @@
    if(source.text!==current.text)throw Error('The source record changed while this comparison was prepared. Reload the research and try again.');
    seen.add(source.id);
   }
-  const citations=[...data.answer.matchAll(/\[(\d+)\]/g)].map(m=>Number(m[1]));
+  const citations=M.citationNumbers(data.answer,data.sources.length);
   if(!citations.length||citations.some(n=>n<1||n>data.sources.length))throw Error('The comparison could not be checked against its sources.');
   return {answer:data.answer,sources:data.sources.map(s=>knownDocuments.find(d=>d.id===s.id&&d.href===s.href)),cached:Boolean(data.cached)};
  }

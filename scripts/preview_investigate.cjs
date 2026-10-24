@@ -3,6 +3,8 @@
 'use strict';
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
+// Optional local receipt replay: no provider call and no replacement evidence.
+const receipt=process.env.CLAIM_QA_RECEIPT?JSON.parse(fs.readFileSync(path.resolve(process.env.CLAIM_QA_RECEIPT),'utf8')):null;
 const qa=`window.__investigateMockCore=async function(url,options){
  const proposalMode=new URLSearchParams(location.search).get('qa');
  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',researchContract:'card-v1',interpretationEndpoint:proposalMode?.startsWith('interpret')?'https://mock.example/interpret':null,proposalEndpoint:proposalMode?.startsWith('intake-')?'https://mock.example/proposals':null});
@@ -19,6 +21,12 @@ const qa=`window.__investigateMockCore=async function(url,options){
  if(url==='https://mock.example/proposals')return Response.json({id:'p_'+'c'.repeat(64),status:'received',receivedAt:new Date().toISOString()});
  if(!String(url).startsWith('https://'))return fetch(url,options);
  const mode=new URLSearchParams(location.search).get('qa');
+ if(mode==='receipt'){
+  const response=await fetch('/__receipt.json');if(!response.ok)return Response.json({error:'No local QA receipt configured'},{status:503});
+  const receipt=await response.json(),sent=ClaimResearch.validate(JSON.parse(options.body)).request.card,expected=ClaimResearch.validate(receipt.request).request.card;
+  if(ClaimSpecification.serialize(sent)!==ClaimSpecification.serialize(expected))return Response.json({error:'Local receipt card mismatch'},{status:400});
+  return Response.json(receipt.result);
+ }
  if(mode==='offline')return Response.json({error:'Mock outage'},{status:503});
  if(mode==='empty')return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  if(mode==='delay')await new Promise((resolve,reject)=>{let t=setTimeout(resolve,10000);options.signal.addEventListener('abort',()=>{clearTimeout(t);reject(new DOMException('Canceled','AbortError'));});});
@@ -40,6 +48,15 @@ window.__investigateMock=async function(url,options){
 http.createServer((req,res)=>{
  const url=new URL(req.url,'http://localhost');
  if(url.pathname==='/__qa.js'){res.setHeader('Content-Type','text/javascript');res.end(qa);return;}
+ if(url.pathname==='/__receipt.json'){
+  if(!receipt){res.writeHead(404).end();return;}
+  res.setHeader('Content-Type','application/json; charset=utf-8');res.end(JSON.stringify(receipt));return;
+ }
+ if(url.pathname==='/__receipt-card.html'){
+  if(!receipt){res.writeHead(404).end();return;}
+  const H=require('../claim-share.js'),R=require('../claim-research.js'),href='investigate.html?qa=receipt'+H.encode(R.validate(receipt.request).snapshot);
+  res.setHeader('Content-Type','text/html; charset=utf-8');res.end('<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Local receipt replay</title><style>body{font:16px/1.6 Arial;margin:24px}a{display:inline-block;padding:12px}</style><p>Local saved-response replay; no model call. Saved answer and evidence text are replayed unchanged.</p><a href="'+href+'">Review saved-response idea</a>');return;
+ }
  if(url.pathname==='/__share-card.html'){
   const C=require('../claim-specification.js'),H=require('../claim-share.js'),known=value=>C.field('specified',value,{kind:'supplied',refs:['local QA fixture']});
   const spec=C.confirm(C.createDraft({source:{text:'Private original wording is excluded from the shared card.'},aim:known({outcomeId:'decipher',detail:'Recover readable text with the two steps below'}),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'},{id:'vigenere',label:'Apply Vigenere with key FIRFUMFERENFE',key:'FIRFUMFERENFE',offset:7}]}),scope:known({pages:['lp2-15','lp2-16','lp2-17'],description:'Only the visible rune text'}),rules:{wordBoundaries:known('preserve'),boundaryMode:known('within_words'),reset:known('Restart on each page')}}),{id:'local-share-qa',at:'2026-10-24T12:00:00Z'});

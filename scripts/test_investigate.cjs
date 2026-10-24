@@ -77,6 +77,9 @@ test('answer validation binds ID, href AND complete exact source text',()=>{
  assert.equal(I.validateAnswer(answer,docs).sources[0],source);
  for(const changed of [{...source,text:source.text+'x'},{...source,href:'javascript:alert(1)'},{...source,id:'unknown'}])assert.throws(()=>I.validateAnswer({...answer,sources:[changed]},docs));
  assert.throws(()=>I.validateAnswer({...answer,answer:'Unsupported [2].'},docs));
+ const second=docs.find(d=>d.id!==source.id);
+ assert.equal(I.validateAnswer({answer:'Both studies [1, 2].',sources:[source,second]},docs).sources.length,2);
+ assert.throws(()=>I.validateAnswer({...answer,answer:'Valid [1], invalid group [1, 99].'},docs));
  assert.throws(()=>I.validateAnswer({...answer,sources:[source,source]},docs));
 });
 test('source and answer HTML are escaped and native citations stay local',()=>{

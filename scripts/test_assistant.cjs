@@ -44,6 +44,25 @@ assert(!Markdown.render('`[1]`',sources).includes('<a '));
 assert(Markdown.render('WHY fit at $a=7, b=7$ [1].',sources).includes('<code>a=7, b=7</code>'));
 assert(Markdown.render('WHY fit at \\(a=7, b=7\\) [1].',sources).includes('<code>a=7, b=7</code>'));
 assert(!Markdown.render('$<img src=x>$').includes('<img'));
+assert.equal(Markdown.render('Before.\n**Next step**\nInspect the saved output.'),'<p>Before.</p><p><strong>Next step</strong></p><p>Inspect the saved output.</p>');
+assert.equal(Markdown.render('Keep **this emphasis** within prose.'),'<p>Keep <strong>this emphasis</strong> within prose.</p>');
+assert(!Markdown.render('```\n**Next step**\n```').includes('<strong>'));
+const groupedSources=[...sources,{title:'Second <scope>',href:'#/page/lp2-15'}];
+const groupedCitations=Markdown.render('Compared [1, 2] and [2,1].',groupedSources);
+assert.equal((groupedCitations.match(/class="answer-citation"/g)||[]).length,4);
+assert(groupedCitations.includes('aria-label="Source 2: Second &lt;scope&gt;"'));
+assert(groupedCitations.includes('>[1</a>')===false,'Grouped brackets must not be put inside one source link');
+for(const text of ['[1, 99]','[0, 1]','[1, 9007199254740993]']){
+ assert(!Markdown.render(text,groupedSources).includes('<a '),'Never partially link an invalid group');
+ assert.deepEqual(Markdown.citationNumbers(text,2),[]);
+}
+assert(!Markdown.render('[1, 2]',[sources[0],{title:'External',href:'https://example.com'}]).includes('<a '));
+assert(!Markdown.render('`[1, 2]`\n\n```\n[1, 2]\n```',groupedSources).includes('<a '));
+assert.deepEqual(Markdown.citationNumbers('Compared [1, 2] then [2,1].',2),[1,2]);
+assert.deepEqual(Markdown.citationNumbers('Good [1] but invalid [1, 99].',2),[]);
+assert.deepEqual(Markdown.citationNumbers('`[99]` $[99]$ \\([99]\\)\n```\n[99]\n```\nActual [2].',2),[2]);
+assert.deepEqual(Markdown.citationNumbers('[1](javascript:alert) and no citations',2),[]);
+assert.deepEqual(Markdown.citationNumbers('No numeric evidence.',2),[]);
 console.log('PASS: no page-only experiment matches, scope separation, page ID parsing, Markdown tables/lists/code, citation links and HTML/URL escaping.');
 
 // Published experiment prose must preserve literal reproduction syntax.

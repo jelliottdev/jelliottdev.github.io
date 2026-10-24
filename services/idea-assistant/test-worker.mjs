@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createHandler, createRecordLoader, citationNumbers} from './worker.mjs';
+import {createHandler, createRecordLoader, citationNumbers, COMPARISON_PROMPT} from './worker.mjs';
 import Search from '../../assistant-search.js';
 const origin='https://jelliottdev.github.io';
 const record={id:'fixture',status:'published',title:'Reverse primes',question:'Reverse a row?',summary:'Fixture',tags:['reverse'],scope:{pages:['lp2-15'],representation:'raw runes',procedure:'reverse values',parameters:'one row',exclusions:'other rows'},outcome:'inconclusive',finding:'One row only',limitations:'Other rows were not tested',article:'Fixture'};
@@ -18,9 +18,9 @@ const typedResponse=await typedHandler(request(),{...env,AI:{run:async(model,opt
  captured=options.messages;
  return {choices:[{message:{content:'This is a bounded test [1].'}}]};
 }}});
-assert(captured[0].content.includes('bounded solving tests'));
-assert(captured[0].content.includes('source audit'));
-for(const principle of ['user’s aim','ordered compound methods','reusing saved output','not wildcards','Do not invent a variation','shared grouping vocabulary','success criterion and scope','Unclassified wording does not create a new category'])assert(captured[0].content.includes(principle));
+// This verifies prompt wiring, not semantic quality; live answers need source review.
+assert.equal(captured[0].role,'system');
+assert.equal(captured[0].content,COMPARISON_PROMPT);
 const supplied=JSON.parse(captured[1].content).records;
 assert.deepEqual(JSON.parse(supplied[0].text).record_type,typed.record_type);
 assert.equal((await typedResponse.json()).sources[0].recordType,'method',
@@ -33,8 +33,7 @@ const materialEnv={...env,AI:{run:async(model,options)=>{materialCalls++;materia
 const materialResult=await (await materialHandler(request(),materialEnv)).json();
 assert.deepEqual(JSON.parse(JSON.parse(materialPrompt[1].content).records[0].text).materials,materials);
 assert.equal(materialResult.sources[0].text,materialDocs[0].text);
-assert(materialPrompt[0].content.includes('reuse availability is unknown'));
-assert(materialPrompt[0].content.includes('not file contents you have inspected'));
+assert.equal(materialPrompt[0].content,COMPARISON_PROMPT);
 await materialHandler(request(),materialEnv);assert.equal(materialCalls,1);
 materialDocs=Search.experimentDocs([{...typed,materials:{...materials,limits:'Only selected scores are retained.'}}]);
 await materialHandler(request(),materialEnv);assert.equal(materialCalls,2,'Changed reuse limits invalidate answer caches');
@@ -64,6 +63,9 @@ r=await invalid(request(),{...env,AI:{run:async()=>({choices:[{message:{content:
 let concurrent=0;const shared=createHandler(async()=>docs);
 await Promise.all([1,2,3].map(()=>shared(request(),{...env,AI:{run:async()=>{concurrent++;await new Promise(r=>setTimeout(r,15));return {choices:[{message:{content:'One test [1].'}}]};}}})));assert.equal(concurrent,1);
 assert.deepEqual(citationNumbers('Invalid [0].',2),[]);
+assert.deepEqual(citationNumbers('Two sources [1, 2], repeated [2].',2),[1,2]);
+assert.deepEqual(citationNumbers('Valid [1], hidden invalid [1, 99].',2),[]);
+assert.deepEqual(citationNumbers('Invalid grouped [0, 1].',2),[]);
 assert.equal((await handle(new Request('https://fixture.workers.dev/ask',{method:'OPTIONS',headers:{Origin:origin}}),env)).status,204);
 console.log('PASS: technique gate, cache reuse/invalidation, duplicate suppression, validation, CORS, rate limit and outage cooldown. All inference mocked.');
 

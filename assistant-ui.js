@@ -132,7 +132,7 @@ function renderIdeaChecker(query,version){
       const data=await response.json();if(experimentRequest!==controller)return;
       if(!response.ok)throw Error(response.status===429?'Please wait a minute before another comparison.':'AI comparison is unavailable right now.');
       const known=[...documents(),...index.documents],sources=data.sources||[];
-      const cited=[...(data.answer||'').matchAll(/\[(\d+)\]/g)].map(m=>Number(m[1]));
+      const cited=AssistantMarkdown.citationNumbers(typeof data.answer==='string'?data.answer:'',sources.length);
       if(!data.answer||typeof data.answer!=='string'||data.answer.length>12000||!sources.length||sources.length>4||!cited.length||
         sources.some(s=>!known.some(d=>d.id===s.id&&d.href===s.href)||!AssistantMarkdown.safe(s.href))||
         cited.some(n=>n<1||n>sources.length))throw Error('A sourced comparison is unavailable for this search.');

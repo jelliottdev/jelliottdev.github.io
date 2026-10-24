@@ -2,17 +2,30 @@
 (function(root){
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const safe=href=>/^#\/(?:page\/lp[12]-\d{2}|reader\/lp[12]-\d{2}|experiments\/[a-z0-9-]+|spelling|conventions|alphabet|readings|topics|sources)$/.test(href);
+  const citationPattern=/\[(\d+(?:\s*,\s*\d+)*)\]/g;
+  function citationNumbers(text,count){
+    // Code and math are literal examples, not assertions supported by citations.
+    const prose=String(text).replace(/```[^]*?(?:```|$)/g,'').replace(/`[^`]+`|\$[^$\n]+\$|\\\([^\n]+?\\\)|\[[^\]\n]+\]\([^)]+\)/g,'');
+    const numbers=[...prose.matchAll(citationPattern)].flatMap(match=>match[1].split(',').map(n=>Number(n.trim())));
+    return numbers.length&&numbers.every(n=>Number.isSafeInteger(n)&&n>=1&&n<=count)?[...new Set(numbers)]:[];
+  }
   function render(text,sources=[]){
     const inline=(s,depth=0)=>{
       if(depth>3)return esc(s);
-      return s.split(/(`[^`]+`|\$[^$\n]+\$|\\\([^\n]+?\\\)|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]\n]+\]\([^)]+\)|\[\d+\])/g).map(part=>{
+      return s.split(/(`[^`]+`|\$[^$\n]+\$|\\\([^\n]+?\\\)|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]\n]+\]\([^)]+\)|\[\d+(?:\s*,\s*\d+)*\])/g).map(part=>{
         if(/^`[^`]+`$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
         if(/^\$[^$\n]+\$$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
         if(/^\\\([^\n]+\\\)$/.test(part))return '<code>'+esc(part.slice(2,-2))+'</code>';
         if(/^\*\*[^*]+\*\*$/.test(part))return '<strong>'+inline(part.slice(2,-2),depth+1)+'</strong>';
         if(/^\*[^*]+\*$/.test(part))return '<em>'+inline(part.slice(1,-1),depth+1)+'</em>';
-        const citation=part.match(/^\[(\d+)\]$/);
-        if(citation){const source=sources[Number(citation[1])-1];if(source&&safe(source.href))return `<a class="answer-citation" href="${esc(source.href)}" title="${esc(source.title)}" aria-label="Source ${citation[1]}: ${esc(source.title)}">${esc(part)}</a>`;}
+        const citation=part.match(/^\[(\d+(?:\s*,\s*\d+)*)\]$/);
+        if(citation){
+          const numbers=citation[1].split(',').map(n=>Number(n.trim()));
+          if(numbers.every(n=>Number.isSafeInteger(n)&&n>=1&&sources[n-1]&&safe(sources[n-1].href))){
+            const anchor=(n,label)=>{const source=sources[n-1];return `<a class="answer-citation" href="${esc(source.href)}" title="${esc(source.title)}" aria-label="Source ${n}: ${esc(source.title)}">${esc(label)}</a>`;};
+            return numbers.length===1?anchor(numbers[0],part):'['+numbers.map(n=>anchor(n,String(n))).join(', ')+']';
+          }
+        }
         const link=part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if(link)return sources.some(s=>s.href===link[2])&&safe(link[2])?`<a href="${esc(link[2])}">${esc(link[1])}</a>`:esc(link[1]);
         return esc(part);
@@ -38,6 +51,7 @@
       }
       const heading=line.match(/^(#{1,6})\s+(.+)$/);
       if(heading){close();out.push(`<h3>${inline(heading[2])}</h3>`);continue;}
+      if(/^\s*\*\*[^*\n]+\*\*\s*$/.test(line)){close();out.push('<p>'+inline(line.trim())+'</p>');continue;}
       const item=line.match(/^\s*(?:([-*])|\d+[.)])\s+(.+)$/);
       if(item){flush();const type=item[1]?'ul':'ol';if(type!==list){close();list=type;out.push(`<${type}>`);}out.push('<li>'+inline(item[2])+'</li>');continue;}
       closeList();
@@ -47,6 +61,6 @@
     close();if(code!==null)out.push('<pre tabindex="0"><code>'+esc(code.join('\n'))+'</code></pre>');
     return out.join('');
   }
-  const api={render,safe};
+  const api={render,safe,citationNumbers};
   if(typeof module!=='undefined')module.exports=api;else root.AssistantMarkdown=api;
 })(globalThis);
