@@ -64,7 +64,7 @@ test('legacy record sections select the correct complete panel',()=>{
  assert.equal(L.sectionTab('experiment-finding'),'overview');assert.equal(L.sectionTab('made-up'),null);
 });
 test('one research directory receives supported query/filter state',()=>{
- assert.equal(L.researchHref({q:'rune words',family:'routes',page:2}),'research.html#mode=list&q=rune+words&family=routes&page=2');
+ assert.equal(L.researchHref({q:'rune words',family:'routes',page:2}),'research.html?v=workspace-20261024b#mode=list&q=rune+words&family=routes&page=2');
  assert.equal(L.guideSource({id:'reading-warning',source:'readings/reading-warning.html'}),'articles/readings/reading-warning.html');
  assert.throws(()=>L.guideSource({source:'../escape.html'}));
 });

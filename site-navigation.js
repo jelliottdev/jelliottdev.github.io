@@ -1,8 +1,8 @@
 /* Shared supplied sidebar. Navigation/search only; no research or file requests. */
 (function(root){
  'use strict';
- const primary=[['Home','home.html','home'],['Read the manuscript','reader.html#lp1-01','reader'],['Have we tried it?','investigate.html?v=complete-current-20261024','idea'],['Research map','research.html','research'],['Guides & methods','library.html#/guides','guides']];
- const secondary=[['Introduction','library.html#/guide/quick-start'],['Known readings','index.html#/readings'],['Alphabet','index.html#/alphabet'],['Artwork & symbols','library.html#/guide/visual-index'],['Downloads','index.html#/downloads'],['Sources','index.html#/sources']];
+ const primary=[['Home','home.html','home'],['Read the manuscript','reader.html#lp1-01','reader'],['Have we tried it?','investigate.html?v=complete-current-20261024','idea'],['Research map','research.html?v=workspace-20261024b','research'],['Guides & methods','library.html?v=workspace-20261024b#/guides','guides']];
+ const secondary=[['Introduction','library.html?v=workspace-20261024b#/guide/quick-start'],['Known readings','index.html#/readings'],['Alphabet','index.html#/alphabet'],['Artwork & symbols','library.html?v=workspace-20261024b#/guide/visual-index'],['Downloads','index.html#/downloads'],['Sources','index.html#/sources']];
  const icons={menu:'M4 6.5h16M4 12h16M4 17.5h16',close:'m6 6 12 12M18 6 6 18',search:'m16 16 4 4'};
  const icon=name=>'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+(name==='search'?'<circle cx="10.5" cy="10.5" r="6.5"/>':'')+'<path d="'+icons[name]+'"/></svg>';
  function create(doc,win=doc.defaultView){
@@ -33,7 +33,7 @@
   dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close()}});
   dialog.querySelectorAll('a').forEach(link=>link.addEventListener('click',event=>{if(!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&event.button===0)close()}));
   field.addEventListener('input',()=>field.setCustomValidity(''));
-  form.addEventListener('submit',event=>{event.preventDefault();const query=field.value.trim();field.setCustomValidity(query?'':'Enter a search term.');if(!field.reportValidity())return;close();win.location.assign('library.html#/search?q='+encodeURIComponent(query))});
+  form.addEventListener('submit',event=>{event.preventDefault();const query=field.value.trim();field.setCustomValidity(query?'':'Enter a search term.');if(!field.reportValidity())return;close();win.location.assign('library.html?v=workspace-20261024b#/search?q='+encodeURIComponent(query))});
   doc.addEventListener('keydown',event=>{if(event.defaultPrevented)return;if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();open(true)}});
   win.addEventListener('hashchange',active);active();return {open,close,active,dialog};
  }

@@ -14,7 +14,9 @@ for(const record of published){
   assert.equal(data.records[record.id].finding,record.finding);
   assert.equal(data.records[record.id].limitations,record.limitations);
   assert.deepEqual(data.records[record.id].method_topics,record.method_topics);
-  assert.match(data.records[record.id].href,/^library\.html#\/experiment\//);
+  const target=new URL(data.records[record.id].href,'https://example.org/');
+  assert.equal(target.pathname,'/library.html');assert.equal(target.searchParams.get('v'),'workspace-20261024b');
+  assert.equal(target.hash,'#/experiment/'+encodeURIComponent(record.id));
 }
 for(const view of Object.values(source.views))for(const node of view.nodes){
   if(!nodes.has(node.id)||!nodes.has(node.parent))continue;

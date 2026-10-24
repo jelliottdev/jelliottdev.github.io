@@ -74,3 +74,20 @@ dialog{color:var(--ink);background:#fff;border:1px solid var(--line);border-radi
 .line-gap-view [hidden]{display:none!important}
 .line-gap-source{display:flex;flex-wrap:wrap;gap:0 16px;margin-bottom:0;font-size:14px}
 .line-gap-source a{display:inline-flex;align-items:center;min-height:44px;overflow-wrap:anywhere}
+
+/* Keep mobile article identification compact so the finding starts sooner. */
+@media(max-width:760px){
+ main{margin-top:12px}
+ .breadcrumb{margin-bottom:10px;line-height:1.5}
+ .article-header{margin-bottom:16px}
+ .article-header h1{font-size:28px;line-height:1.2;margin-bottom:10px}
+ .experiment-header{margin-bottom:12px}
+ .experiment-header h1{font-size:26px;line-height:1.2;margin-bottom:8px}
+ .record-meta{margin:0;font-size:12px;line-height:1.5}
+ .record-tabs{gap:20px;margin-bottom:14px;scrollbar-width:none;
+  background:linear-gradient(to left,#fff 30%,#fff0) right/28px 100% no-repeat local,
+   linear-gradient(to left,#dde3e9,#fff0) right/8px 100% no-repeat scroll}
+ .record-tabs::-webkit-scrollbar{display:none}
+ .record-tabs a{min-height:44px;font-size:14px;flex-shrink:0;padding:4px 0 6px}
+ .record-panel p,.scope-list dd{font-size:16px}
+}

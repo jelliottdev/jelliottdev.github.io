@@ -18,17 +18,17 @@
         if(/^\d+$/.test(params.get('page')||'')){params.set('p',params.get('page'));params.delete('page');}
         if(!params.has('mode'))params.set('mode','list');
       }
-      return 'research.html'+(params.size?'#'+params:'');
+      return 'research.html?v=workspace-20261024b'+(params.size?'#'+params:'');
     }
     if(parts[0]==='wiki'&&parts.length<=2){
       const id=parts[1];if(id&&!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id))return null;
-      return 'library.html#/'+(id?'guide/'+id:'guides')+(query?'?'+query:'');
+      return 'library.html?v=workspace-20261024b#/'+(id?'guide/'+id:'guides')+(query?'?'+query:'');
     }
-    if(parts[0]==='experiments'&&parts.length===2&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(parts[1]))return 'library.html#/experiment/'+parts[1]+(query?'?'+query:'');
+    if(parts[0]==='experiments'&&parts.length===2&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(parts[1]))return 'library.html?v=workspace-20261024b#/experiment/'+parts[1]+(query?'?'+query:'');
     if(parts[0]==='experiments' && parts.length===1 && (params.has('browse') || params.get('section')==='browse-experiments')){
       params.set('q',params.get('browse')||params.get('q')||'');params.delete('browse');params.delete('section');params.set('mode','list');
       if(params.has('page')){params.set('p',params.get('page'));params.delete('page');}
-      return 'research.html#'+params;
+      return 'research.html?v=workspace-20261024b#'+params;
     }
     if(parts[0]==='experiments' && parts.length===1){
       const entry=new URLSearchParams({v:'complete-current-20261024'});
