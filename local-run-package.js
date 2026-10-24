@@ -4,7 +4,7 @@
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const encoder=new TextEncoder(),MAX_RUNNER=100000,MAX_TASK=2000000;
  const Control=typeof module==='object'&&module.exports?require('./local-control.js'):root.LocalControl;
- const GUARD_SHA256='0d858588069fe403591e89629bbaa8eb3f94104771bef52689e96e80023ceec7';
+ const GUARD_SHA256='ef7503f81d950ceead2e3eb946b69f3f969824c6b7d68fcc9c03440e731b6ef3';
  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(k=>Object.hasOwn(value,k));
  const hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
  async function digest(bytes){const hash=await root.crypto.subtle.digest('SHA-256',bytes);return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('');}
@@ -63,13 +63,14 @@
   const address=returnAddress(returnURL,snapshot.taskId),runner=textBytes(runnerText,'Runner source',MAX_RUNNER);
   const taskBytes=textBytes(E.stable(snapshot)+'\n','Task',MAX_TASK);
   if(savedOrigins.length){
-   if(!['exact-prefix','word-affine-count'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
+   if(!['measurement','exact-prefix','word-affine-count'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
    const guard=textBytes(guardText,'Control guard source',MAX_RUNNER);
    if(await digest(guard)!==GUARD_SHA256)throw Error('The fixed control guard source changed.');
    const controls=new Map();
    for(const entry of savedOrigins){
     const c=entry.control;await E.checkIdentity(c.task);
-    for(const key of ['steps','alphabet','criterion'])if(E.stable(c.task[key])!==E.stable(snapshot[key]))throw Error('The control uses a different '+key+'.');
+    for(const key of ['steps','alphabet'])if(E.stable(c.task[key])!==E.stable(snapshot[key]))throw Error('The control uses a different '+key+'.');
+    if(!Control.compatible(c.task,snapshot))throw Error('The control uses an unsupported criterion.');
     const result=E.run(c.task);
     if(!Control.passed(c.task,result))throw Error('The synthetic control failed; target package not prepared.');
     if(await digest(encoder.encode(E.stable(result)))!==c.expected_result_sha256)throw Error('The complete synthetic control result changed.');

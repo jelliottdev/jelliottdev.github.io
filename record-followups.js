@@ -2,7 +2,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports;
- const C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,E=node?require('./local-experiment.js'):root.LocalExperiment;
+ const C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,E=node?require('./local-experiment.js'):root.LocalExperiment,Control=node?require('./local-control.js'):root.LocalControl;
  const HEX=/^[a-f0-9]{64}$/,SLUG='[a-z0-9]+(?:-[a-z0-9]+)*',ID=new RegExp('^'+SLUG+'$');
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -19,7 +19,7 @@
    const key=E.stable(item.origin);if(seen.has(key))throw Error('A published origin is repeated.');seen.add(key);
    const control=item.control;if(!exact(control,['label','task','expected_result_sha256'])||!text(control.label,300)||!HEX.test(control.expected_result_sha256))throw Error('The synthetic control metadata is invalid.');
    await E.checkIdentity(control.task,cryptoAPI);
-   if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>runes.has(ch)).length>4096||!['exact-prefix','word-affine-count'].includes(plan.criterion.kind)||!['alphabet','steps','criterion'].every(k=>same(control.task[k],plan[k])))throw Error('The synthetic control does not match this bounded experiment.');
+   if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>runes.has(ch)).length>4096||!Control.compatible(control.task,plan))throw Error('The synthetic control does not match this bounded experiment.');
   }
   return clone(origins);
  }
@@ -32,7 +32,7 @@
  function cardProgram(card){
   const snapshot=cardSnapshot(card),draft=snapshot,rules=draft.rules,known=k=>rules[k].status==='specified';
   if(draft.unresolved.length||draft.method.status!=='specified'||draft.scope.status!=='specified'||!exact(draft.scope.value,['pages'])||!Array.isArray(draft.scope.value.pages)||!draft.scope.value.pages.length||Object.values(rules).some(v=>v.status==='unrestricted'))throw Error('The published idea is not a fixed complete-page experiment.');
-  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!['exact-prefix','word-affine-count'].includes(rules.evaluation.value?.kind))throw Error('The published input and evaluation must be explicit.');
+  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||['exact-prefix','word-affine-count'].includes(rules.evaluation.value?.kind)))throw Error('The published input and evaluation must be explicit.');
   for(const k of ['searchBounds','searchProtocol','exceptionalCases'])if(known(k))throw Error('The published conditions need an execution adapter.');
   if(known('unmapped')&&rules.unmapped.value!=='preserve'||known('wordBoundaries')&&rules.wordBoundaries.value!=='preserve')throw Error('The published separator rule needs an adapter.');
   if(draft.method.value.operations.some(op=>op.id==='word_affine_count')){
@@ -40,10 +40,10 @@
    if(operations.length!==1||op.id!=='word_affine_count'||Object.keys(op).some(k=>!['id','label','declaredFamilyId','lag','a','b','boundaries'].includes(k))||op.label!==undefined&&op.label!=='Within-word affine pair count'||!exact(evaluation,['kind','lag','a','b','boundaries'])||!same(evaluation,{kind:'word-affine-count',lag:op.lag,a:op.a,b:op.b,boundaries:op.boundaries})||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The published measurement and evaluation must agree.');
    return {snapshot,steps:[],pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:evaluation};
   }
-  if(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values']))throw Error('The published transformation needs an exact-prefix criterion.');
+  if(rules.evaluation.value!=='measurement'&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');
   const modes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};let reversed=false,cumulative=false,resetUsed=false;
   const steps=draft.method.value.operations.map(op=>{
-   const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];
+   const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:op.id==='interrupted_repeating_key'?['key','direction','reset','interrupts']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];
    if(Object.keys(op).some(k=>!allowed.includes(k)))throw Error('The published operation has unsupported parameters.');
    if(op.id==='reverse_row_runes'||op.id==='reverse_runes'){
     reversed=true;let unit=op.id==='reverse_row_runes'?(known('boundaryMode')&&rules.boundaryMode.value==='within_words'?'word':'line'):op.unit;
@@ -51,16 +51,17 @@
     const labels=op.id==='reverse_row_runes'?['Reverse rune order within rows','Reverse rune order within each row']:['Reverse rune order within each '+unit];if(op.label!==undefined&&!labels.includes(op.label))throw Error('The published reversal wording is unsupported.');return {op:'reverse',unit};
    }
    if(op.id==='affine'){if(op.label!==undefined&&!['Affine','Affine substitution'].includes(op.label))throw Error('The published affine wording is unsupported.');return {op:'affine',a:op.a,b:op.b};}
-   if(op.id==='cumulative_difference'||op.id==='finite_key'||Object.hasOwn(modes,op.id)){
+   if(op.id==='cumulative_difference'||op.id==='finite_key'||op.id==='interrupted_repeating_key'||Object.hasOwn(modes,op.id)){
     resetUsed=true;if(rules.reset.status==='not_applicable'||known('reset')&&rules.reset.value!==op.reset)throw Error('The published reset conflicts.');
     if(op.id==='cumulative_difference'){cumulative=true;if(op.label!==undefined&&op.label!=='Cumulative difference'||rules.initialState.status==='not_applicable'||known('initialState')&&rules.initialState.value!==0)throw Error('The published initial state conflicts.');return {op:'cumulative-difference',reset:op.reset};}
+    if(op.id==='interrupted_repeating_key'){if(op.label!=='Interrupted repeating key')throw Error('The published interrupted-key wording is unsupported.');return {op:'interrupted-keyed-shift',key:op.key,direction:op.direction,reset:op.reset,interrupts:op.interrupts};}
     if(op.id==='finite_key'){if(op.label!==undefined&&op.label!=='Finite key stream')throw Error('The published finite stream wording is unsupported.');return {op:'finite-shift',key:op.key,direction:op.direction,reset:op.reset};}
     const labels={vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey']};if(op.label!==undefined&&!labels[op.id].includes(op.label))throw Error('The published keyed wording is unsupported.');return {op:'keyed-shift',key:op.key,mode:modes[op.id],direction:op.direction,reset:op.reset};
    }
    throw Error('The published method needs a supported adapter.');
   });
   if(known('boundaryMode')&&!reversed||known('reset')&&!resetUsed||known('initialState')&&!cumulative)throw Error('A published condition is not represented by the plan.');
-  return {snapshot,steps,pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:rules.evaluation.value};
+  return {snapshot,steps,pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:rules.evaluation.value==='measurement'?{kind:'measurement'}:rules.evaluation.value};
  }
  async function validatePlan(value,ref,cryptoAPI){
   if(!exact(value,['state','origin','card','task','inputVersion','control','question','scopeChange','limitation',...(value&&Object.hasOwn(value,'existingTask')?['existingTask']:[])])||value.state!=='plan-ready'||value.origin?.recordId!==ref.recordId||value.origin?.followupId!==ref.followupId)throw Error('The reviewed plan belongs to another published follow-up.');

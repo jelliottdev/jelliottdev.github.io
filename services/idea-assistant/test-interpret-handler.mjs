@@ -133,6 +133,26 @@ await test('old generated key/status fields and overlapping evidence steps rejec
  const generatedPages=copy();generatedPages.scope.pages=['lp2-15'];cases.push(generatedPages);
  for(const candidate of cases){let calls=0;const response=await createInterpretHandler()(request(text),environment(async()=>{calls++;return providerResult(candidate);}));assert.equal(response.status,503);assert.equal((await response.json()).reason,'invalid-interpretation');assert.equal(calls,1);}
 });
+await test('captured table-reversal misclassification stays exact opaque wording rather than failing',async()=>{
+ const text='Reverse the gematria prime table (F=109, U=107 ...) and sum the words',first='Reverse the gematria prime table (F=109, U=107 ...)',second='sum the words';
+ const wire={schema:SCHEMA,outcome:null,steps:[{id:'ambiguous_reversal',familyId:'number-streams',source:{start:0,quote:first}},{id:'described_method',familyId:'number-streams',source:{start:text.indexOf(second),quote:second}}],scope:null,rules:[]},before=structuredClone(wire),candidate=fromWire(wire,text);
+ assert.equal(candidate.steps[0].id,'described_method');assert.deepEqual(candidate.steps.map(s=>s.source),wire.steps.map(s=>s.source));assert.deepEqual(candidate.steps.map(s=>s.parameters),[{},{}]);assert.deepEqual(wire,before);assert.equal(candidate.scope,null);assert.equal(candidate.outcome,null);assert.deepEqual(candidate.rules,{});assert.equal(toDraft(text,candidate).candidate.steps[0].source.quote,first);
+ const strict=structuredClone(candidate);strict.steps[0].id='ambiguous_reversal';assert.throws(()=>toDraft(text,strict),/unsupported known-operation wording/,'The shared validator remains strict; only the wire category is conservatively made opaque');
+ const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire))),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,candidate);assert.equal(data.requiresConfirmation,true);assert.equal(data.meaningVerified,false);
+ for(const quote of ['gematria prime table','prime table']){const withRepresentation=structuredClone(wire);withRepresentation.rules=[{name:'representation',source:{start:text.indexOf(quote),quote}}];const adapted=fromWire(withRepresentation,text);assert.equal(adapted.rules.representation.value,quote);assert.equal(toDraft(text,adapted).draft.rules.representation.value,quote,'Explicit representation wording remains literal, not GP29 or an invented value map');}
+ const negative='Do not reverse each row',partial={schema:SCHEMA,outcome:null,steps:[{id:'reverse_row_runes',familyId:'transposition',source:{start:negative.indexOf('reverse'),quote:'reverse each row'}}],scope:null,rules:[]};assert.throws(()=>toDraft(negative,fromWire(partial,negative)),/negation|condition/);
+ const unknown=structuredClone(wire);unknown.steps[0].id='invented_operation';assert.throws(()=>fromWire(unknown,text),/operation\/family/);
+ const invented=structuredClone(wire);invented.steps[0].source.quote='reverse a different table';assert.throws(()=>fromWire(invented,text),/source mismatch/);
+ const overlap=structuredClone(wire);overlap.steps[1].source=overlap.steps[0].source;assert.throws(()=>toDraft(text,fromWire(overlap,text)),/overlap/);
+});
+await test('invalid-candidate cooldown protects only the exact input, not unrelated valid ideas',async()=>{
+ const time=clock(),handler=createInterpretHandler(time),bad='One malformed proposal.',good='Use a different exact rule.';let calls=0;
+ const env=environment(async(_,payload)=>{calls++;const text=JSON.parse(payload.messages[1].content).text;return calls===1?providerResult('{'):providerResult(proposal(text));});
+ const failed=await handler(request(bad),env);assert.equal(failed.status,503);assert.equal((await failed.json()).reason,'invalid-interpretation');
+ const repeated=await handler(request(bad),env);assert.equal(repeated.status,503);assert.equal((await repeated.json()).reason,'invalid-interpretation');assert.equal(calls,1,'An exact invalid input does not automatically retry');
+ assert.equal((await handler(request(good),env)).status,200);assert.equal(calls,2,'Unrelated valid work is not blocked by another candidate');
+ time.advance(LIMITS.cooldownMs+1);assert.equal((await handler(request(bad),env)).status,200);assert.equal(calls,3,'The same input may be explicitly retried after its bounded cooldown');
+});
 await test('captured synthetic model output aligns unique exact quotes without changing meaning fields',async()=>{
  const text='Try reversing rune order within each row on LP2-15, preserving word boundaries.';
  // Exact candidate content captured in the local-only synthetic diagnostic.
@@ -141,7 +161,7 @@ await test('captured synthetic model output aligns unique exact quotes without c
  const original=JSON.stringify(captured),aligned=alignQuotePositions(text,original);
  assert.equal(aligned.steps[0].source.start,4);assert.equal(aligned.scope.source.start,4);assert.equal(aligned.rules.wordBoundaries.source.start,text.indexOf('preserving'));
  const expected=JSON.parse(original);expected.steps[0].source.start=4;expected.scope.source.start=4;expected.rules.wordBoundaries.source.start=text.indexOf('preserving');assert.deepEqual(aligned,expected);assert.equal(JSON.stringify(captured),original);
- let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v10-numeric-key-descriptors');
+ let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v11-opaque-known-operation-guards');
 });
 await test('alignment uses UTF-16 positions and only whitelisted evidence fields',async()=>{
  const text='😀 Use key "ABC" on LP2-15; measure a pattern; reset each word.',candidate=proposal(text);

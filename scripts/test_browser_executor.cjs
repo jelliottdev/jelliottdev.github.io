@@ -4,10 +4,10 @@ const E=require('../local-experiment.js'),{createExecutor}=require('../local-run
 const root=path.resolve(__dirname,'..'),engine=fs.readFileSync(path.join(root,'local-experiment.js'),'utf8'),workerSource=fs.readFileSync(path.join(root,'local-run-worker.js'),'utf8');
 const workers=[];
 class WorkerFixture{
- constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-word-pairs');this.stopped=false;workers.push(this);
+ constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-interrupted-key');this.stopped=false;workers.push(this);
   const self={postMessage:data=>{if(!this.stopped)this.onmessage?.({data:structuredClone(data)});}};
   const context=vm.createContext({self,crypto:webcrypto,TextEncoder,structuredClone});
-  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-word-pairs');vm.runInContext(engine,context);};
+  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-interrupted-key');vm.runInContext(engine,context);};
   vm.runInContext(workerSource,context);this.receive=self.onmessage;
  }
  postMessage(data){this.message=structuredClone(data);queueMicrotask(()=>{if(!this.stopped)Promise.resolve(this.receive({data:this.message})).catch(()=>this.onerror?.({preventDefault(){}}));});}
@@ -34,6 +34,15 @@ let groups=0;async function test(name,fn){await fn();console.log('PASS '+name);g
   const input=await E.prepare({...await task(),steps:[{op:'finite-shift',key:[1,2,3,4,5,6],direction:'subtract',reset:'page'}]},webcrypto);
   const output=await createExecutor({WorkerClass:WorkerFixture}).start(input).promise;assert.deepEqual(await E.verify(input,output,webcrypto),E.run(input));
   const short=structuredClone(input);short.steps[0].key=[1];short.taskId=await E.identity(short,webcrypto);const before=workers.length;await assert.rejects(createExecutor({WorkerClass:WorkerFixture}).start(short).promise,/shorter/);assert.equal(workers.length,before);
+ });
+ await test('actual worker preserves literal interrupt runes and the held key clock',async()=>{
+  for(const direction of ['subtract','add'])for(const reset of ['page','line','word']){
+   const input=await E.prepare({...await task(),steps:[{op:'interrupted-keyed-shift',key:[1,3],direction,reset,interrupts:[0]}]},webcrypto);
+   const output=await createExecutor({WorkerClass:WorkerFixture}).start(input).promise;
+   assert.deepEqual(await E.verify(input,output,webcrypto),E.run(input));assert.equal(output.transformed[0].text[0],'A');assert(workers.at(-1).stopped);
+  }
+  const invalid=await task();invalid.steps=[{op:'interrupted-keyed-shift',key:[1],direction:'subtract',reset:'page',interrupts:[0,0]}];invalid.taskId=await E.identity(invalid,webcrypto);
+  const before=workers.length;await assert.rejects(createExecutor({WorkerClass:WorkerFixture}).start(invalid).promise);assert.equal(workers.length,before);
  });
  await test('stop terminates the worker and rejects without accepting late output',async()=>{
   const executor=createExecutor({WorkerClass:WorkerFixture}),run=executor.start(await task());

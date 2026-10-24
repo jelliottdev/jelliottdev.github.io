@@ -1,3 +1,4 @@
+import Control from '../../local-control.js';
 /* Offline official-source fixtures and real SQLite. No AI or target execution. */
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
@@ -66,7 +67,7 @@ await test('every published authored declaration loads exact pins, task identity
   let bytes;try{bytes=readFileSync(new URL(entry.name+'/record.json',recordsRoot));}catch(error){if(error.code==='ENOENT')continue;throw error;}const record=JSON.parse(bytes.toString('utf8'));if(record.status!=='published'||!record.browser_followups?.length)continue;
   for(const recipe of record.browser_followups){let requests=0;
    const fetcher=async(url,options)=>{assert.equal(new URL(url).origin,origin);assert.equal(options.redirect,'manual');const path=new URL(url).pathname;assert(/^(?:\/experiments\/records\/[a-z0-9]+(?:-[a-z0-9]+)*\/record\.json|\/data\/(?:index|local-run-inputs)\.json|\/data\/pages\/lp[12]-\d{2}\.json)$/.test(path),'Only fixed local canonical source fixtures are readable');assert(++requests<=50);return new Response(readFileSync(new URL('../..'+path,import.meta.url)),{headers:{'content-type':'application/json'}});};
-   const plan=await loadRecordPlan({recordId:record.id,followupId:recipe.id},{fetcher});await L.checkIdentity(plan.task);assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.control,recipe.control);assert.equal(plan.inputVersion,recipe.inputs.version);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.deepEqual(plan.task.pages.map(page=>page.id),recipe.inputs.pages.map(page=>page.id));assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.task.alphabet,recipe.control.task.alphabet);assert.deepEqual(plan.task.criterion,recipe.control.task.criterion);
+   const plan=await loadRecordPlan({recordId:record.id,followupId:recipe.id},{fetcher});await L.checkIdentity(plan.task);assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.control,recipe.control);assert.equal(plan.inputVersion,recipe.inputs.version);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.deepEqual(plan.task.pages.map(page=>page.id),recipe.inputs.pages.map(page=>page.id));assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.task.alphabet,recipe.control.task.alphabet);assert(Control.compatible(recipe.control.task,plan.task));
    for(let i=0;i<plan.task.pages.length;i++)assert.equal(await sha(plan.task.pages[i].text),recipe.inputs.pages[i].text_sha256);declarations++;
   }
  }

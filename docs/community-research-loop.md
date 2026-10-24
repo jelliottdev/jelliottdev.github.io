@@ -66,6 +66,20 @@ steps. `taskId` is SHA-256 of canonical sorted compact UTF-8 JSON, excluding
   autokey). Non-rune characters do not advance the key. Every page starts fresh;
   a request to carry state across pages is not represented by this operation.
 
+A complete canonical `interrupted_repeating_key` operation also supports literal
+interruptions of a repeating key. Its explicit `interrupts` list contains sorted,
+unique GP indices. On those current-step input runes, copy the rune unchanged and
+hold the key position; decode all other runes normally and advance the key. This
+is different from decoding a marker while only pausing its clock. Reset remains
+explicit per page, line or word. No feedback/autokey mode is implied. Unsupported
+free-text mappings remain unresolved rather than becoming ordinary Vigenère.
+
+This literal interruption map is not always invertible. An expected non-marker
+rune may require an input marker, which the operation would instead copy. The
+synthetic control constructor rejects such an unreachable known plaintext; it
+must not alter the key, criterion or expected text to manufacture a passing
+control. A supported operation alone does not make a published follow-up ready.
+
 Autokey uses the seed first, then the rune one seed-length earlier in that step's
 decoded or input stream. `add` means `P = C + K`, not an alternative encryption
 API. A compound method uses each step's own input and output, not the untouched
@@ -150,3 +164,14 @@ links to prepared runnable plans. Narrative exclusions alone do not define an
 exhaustive complement, and a browser measurement does not test an arbitrary
 solving hypothesis. Evaluation adapters with declared success criteria and
 positive/negative controls remain required for that broader workflow.
+
+### Controls for descriptive follow-ups
+
+An authored measurement can use a synthetic exact-prefix control with the exact
+same ordered steps and alphabet. Its known answer checks implementation of the
+method; it is not a plaintext criterion for the manuscript. Both complete task
+identities and the complete synthetic result digest remain mandatory. A generic
+measurement control cannot certify itself through an empty success condition.
+Existing exact-prefix and word-pair tests still require identical control and
+target criteria. The controls run before any manuscript computation. Findings
+for a descriptive target remain measurements, with no readability verdict.

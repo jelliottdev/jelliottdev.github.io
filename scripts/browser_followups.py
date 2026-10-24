@@ -112,8 +112,11 @@ def compile_card(card):
         for name in ('boundaryMode', 'reset', 'initialState'):
             require(values[name] is None, 'irrelevant word-pair rule ' + name)
         return {'pages': scope['pages'], 'steps': [], 'criterion': criterion, 'inputVersion': values['inputVersion']}
-    fields(criterion, ('kind', 'values'), 'evaluation')
-    require(criterion['kind'] == 'exact-prefix', 'exact-prefix evaluation required')
+    if criterion == 'measurement':
+        criterion = {'kind': 'measurement'}
+    else:
+        fields(criterion, ('kind', 'values'), 'evaluation')
+        require(criterion['kind'] == 'exact-prefix', 'explicit evaluation required')
     steps = []
     labels = {'repeating_key': ('Repeating key', 'Repeating-key', 'Vigenere', 'Vigenère'),
               'vigenere': ('Vigenere', 'Vigenère'),
@@ -138,6 +141,19 @@ def compile_card(card):
             require(op['direction'] in ('add', 'subtract') and op['reset'] in ('page', 'line', 'word'),
                     'finite key needs explicit direction and reset')
             steps.append({'op': 'finite-shift', 'key': op['key'], 'direction': op['direction'], 'reset': op['reset']})
+        elif identifier == 'interrupted_repeating_key':
+            fields(op, ('id', 'label', 'key', 'direction', 'reset', 'interrupts'), 'interrupted repeating key')
+            require(op['label'] == 'Interrupted repeating key', 'interrupted operation wording')
+            require(isinstance(op['key'], list) and 1 <= len(op['key']) <= 256
+                    and all(type(n) is int and 0 <= n <= 28 for n in op['key']), 'interrupted key needs 1..256 GP29 indices')
+            require(op['direction'] in ('add', 'subtract') and op['reset'] in ('page', 'line', 'word'),
+                    'interrupted key needs explicit direction and reset')
+            interrupts = op['interrupts']
+            require(isinstance(interrupts, list) and 1 <= len(interrupts) <= 29
+                    and all(type(n) is int and 0 <= n <= 28 for n in interrupts)
+                    and interrupts == sorted(set(interrupts)), 'interrupts must be explicit sorted unique GP29 indices')
+            steps.append({'op': 'interrupted-keyed-shift', 'key': op['key'], 'direction': op['direction'],
+                          'reset': op['reset'], 'interrupts': interrupts})
         elif identifier == 'reverse_runes':
             fields(op, ('id', 'label', 'unit'), 'reverse operation')
             require(op['unit'] in ('line', 'word', 'page')
@@ -209,8 +225,15 @@ def validate_followups(value, root, known_pages=None):
         require('synthetic' in control['label'].lower() and 'synthetic' in control['task'].get('title', '').lower(), 'control must be labeled synthetic')
         task = control['task']
         runner.validate(task)
-        require(task['alphabet'] == ordered_alphabet and task['steps'] == plan['steps']
-                and task['criterion'] == plan['criterion'], 'control differs from proposed target protocol')
+        require(task['alphabet'] == ordered_alphabet and task['steps'] == plan['steps'],
+                'control differs from proposed target program')
+        if plan['criterion']['kind'] == 'measurement':
+            require(task['criterion']['kind'] == 'exact-prefix', 'measurement target requires an exact synthetic control')
+            control_runes = {entry['rune'] for entry in ordered_alphabet}
+            require(all(sum(ch in control_runes for ch in page['text']) == len(task['criterion']['values'])
+                        for page in task['pages']), 'measurement control must check every synthetic output rune')
+        else:
+            require(task['criterion'] == plan['criterion'], 'control differs from proposed target criterion')
         result = runner.run(task)
         if plan['criterion']['kind'] == 'word-affine-count':
             measured = result['wordPairs']
@@ -285,6 +308,17 @@ def inverse_step(plaintext, step, ordered_alphabet):
                 require(position < len(step['key']), 'finite key exhausted while encoding the complete synthetic control')
                 amount = step['key'][position]
                 encoded = (value + (amount if step['direction'] == 'subtract' else -amount)) % 29
+            elif step['op'] == 'interrupted-keyed-shift':
+                if value in step['interrupts']:
+                    # Deliberately choose literal passthrough where both
+                    # passthrough and ordinary decoding could yield this value.
+                    # This is one partial encoder, not a bijective inverse.
+                    output[i] = ch
+                    continue
+                amount = step['key'][len(ciphertext) % len(step['key'])]
+                encoded = (value + (amount if step['direction'] == 'subtract' else -amount)) % 29
+                require(encoded not in step['interrupts'],
+                        'desired synthetic plaintext cannot be encoded at this interrupted key position')
             else:
                 key, mode, position = step['key'], step['mode'], len(ciphertext)
                 if mode == 'repeat':
@@ -322,7 +356,7 @@ def _construct_followup(root, *, identifier, title, question, scope_change, limi
         'wordBoundaries': 'preserve', 'evaluation': criterion}.items()})
     require(isinstance(operations, list) and all(isinstance(op, dict) for op in operations), 'operations must be an explicit list')
     resets = [op.get('reset') for op in operations if op.get('id') in
-              ('repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey', 'cumulative_difference', 'finite_key')]
+              ('repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey', 'cumulative_difference', 'finite_key', 'interrupted_repeating_key')]
     if resets and all(reset == resets[0] for reset in resets):
         rules['reset'] = specified(resets[0])
     if any(op.get('id') == 'cumulative_difference' for op in operations):
@@ -461,6 +495,69 @@ def construct_word_pair_followup(root, *, identifier, title, question, scope_cha
               'scope_change': scope_change, 'limitation': limitation, 'card': card,
               'inputs': {'version': input_version, 'alphabet_sha256': digest(ordered_alphabet), 'pages': pins},
               'control': {'label': 'Count every planted synthetic pair using the declared word boundaries and distinguish its shuffled-order mean',
+                          'task': task, 'expected_result_sha256': digest(result)}}
+    validate_followups([recipe], root)
+    return recipe
+
+
+def construct_measurement_followup(root, *, identifier, title, question, scope_change,
+                                   limitation, operations, pages, control_cipher,
+                                   control_plain, input_version='raw'):
+    """Pin a descriptive transform and an explicit complete synthetic witness.
+
+    The caller must independently derive control_plain. The target has no
+    plaintext acceptance criterion; the control checks every supplied rune.
+    No manuscript target is transformed here.
+    """
+    root = Path(root)
+    ordered_alphabet = alphabet(root)
+    runes = {row['rune']: n for n, row in enumerate(ordered_alphabet)}
+    require(isinstance(control_cipher, str) and isinstance(control_plain, str)
+            and len(control_cipher) == len(control_plain), 'control texts need equal exact lengths')
+    require(all((left in runes) == (right in runes) and (left in runes or left == right)
+                for left, right in zip(control_cipher, control_plain)), 'control separators must be identical')
+    expected = [runes[ch] for ch in control_plain if ch in runes]
+    require(1 <= len(expected) <= 256, 'control must contain 1..256 explicitly expected runes')
+    require(isinstance(pages, (list, tuple)) and all(isinstance(p, str) for p in pages)
+            and len(set(pages)) == len(pages), 'pages must be an explicit unique list')
+    pages = sorted(pages)
+    operations = copy.deepcopy(operations)
+    specified = lambda value: {'status': 'specified', 'value': value}
+    require(isinstance(operations, list) and all(isinstance(op, dict) for op in operations),
+            'operations must be an explicit list')
+    rules = {name: {'status': 'unspecified'} for name in RULES}
+    rules.update({name: specified(value) for name, value in {
+        'inputVersion': input_version, 'representation': 'GP29', 'unmapped': 'preserve',
+        'wordBoundaries': 'preserve', 'evaluation': 'measurement'}.items()})
+    resets = [op.get('reset') for op in operations if isinstance(op, dict) and op.get('id') in
+              ('repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey',
+               'cumulative_difference', 'finite_key', 'interrupted_repeating_key')]
+    if resets and all(reset == resets[0] for reset in resets):
+        rules['reset'] = specified(resets[0])
+    if any(isinstance(op, dict) and op.get('id') == 'cumulative_difference' for op in operations):
+        rules['initialState'] = specified(0)
+    card = {'version': 1, 'outcome': specified({'outcomeId': 'measure',
+            'detail': 'Report the declared transform and descriptive rune metrics; no plaintext or significance threshold is inferred.'}),
+            'method': specified({'operations': operations}), 'scope': specified({'pages': pages}),
+            'rules': rules, 'unresolved': []}
+    plan = compile_card(card)
+    task = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE,
+            'title': 'Synthetic complete-output control: ' + identifier,
+            'pages': [{'id': 'lp1-01', 'text': control_cipher}], 'alphabet': ordered_alphabet,
+            'steps': plan['steps'], 'criterion': {'kind': 'exact-prefix', 'values': expected}}
+    task['taskId'] = runner.task_identity(task)
+    result = runner.run(task)
+    require(result['transformed'][0]['text'] == control_plain, 'independent complete synthetic output differs')
+    pins = []
+    for page_id in pages:
+        source = json.loads((root / 'data/pages' / (page_id + '.json')).read_text(encoding='utf-8'))
+        text = source.get('raw' if input_version == 'raw' else 'reviewed_text')
+        require(isinstance(text, str), 'requested exact source text unavailable: ' + page_id)
+        pins.append({'id': page_id, 'text_sha256': text_hash(text)})
+    recipe = {'id': identifier, 'title': title, 'question': question, 'scope_change': scope_change,
+              'limitation': limitation, 'card': card,
+              'inputs': {'version': input_version, 'alphabet_sha256': digest(ordered_alphabet), 'pages': pins},
+              'control': {'label': 'Recover every independently specified output rune in a synthetic control',
                           'task': task, 'expected_result_sha256': digest(result)}}
     validate_followups([recipe], root)
     return recipe

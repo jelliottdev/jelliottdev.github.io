@@ -1,6 +1,15 @@
 /* Success properties for replayed synthetic controls, never target verdicts. */
 (function(root){
  'use strict';
+ const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
+ // Compare validated programs; callers verify complete task identities separately.
+ function compatible(control,target){
+  if(!Array.isArray(control?.alphabet)||!Array.isArray(target?.alphabet)||!Array.isArray(control?.steps)||!Array.isArray(target?.steps)||E.stable(control.alphabet)!==E.stable(target.alphabet)||E.stable(control.steps)!==E.stable(target.steps))return false;
+  const c=control.criterion,t=target.criterion;
+  const runes=new Set(control.alphabet.map(v=>v.rune)),count=Array.isArray(control.pages)?control.pages.reduce((n,page)=>n+Array.from(page.text||'').filter(ch=>runes.has(ch)).length,0):0;
+  if(t?.kind==='measurement')return Object.keys(t).length===1&&c?.kind==='exact-prefix'&&Object.keys(c).length===2&&Array.isArray(c.values)&&c.values.length>0&&c.values.length<=256&&c.values.length===count&&c.values.every(v=>Number.isInteger(v)&&v>=0&&v<=28);
+  return ['exact-prefix','word-affine-count'].includes(t?.kind)&&E.stable(c)===E.stable(t);
+ }
  function passed(task,result){
   if(task?.criterion?.kind==='exact-prefix')return Array.isArray(result?.matches)&&result.matches.length>0&&result.matches.every(v=>v.matched===true);
   if(task?.criterion?.kind==='word-affine-count'){
@@ -10,5 +19,5 @@
   }
   return false;
  }
- const api={passed};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalControl=api;
+ const api={passed,compatible};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalControl=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

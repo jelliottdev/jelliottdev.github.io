@@ -88,6 +88,15 @@ def validate(task):
             require(step['mode'] in ('repeat', 'plaintext-autokey', 'ciphertext-autokey'), 'Invalid key mode')
             require(step['direction'] in ('subtract', 'add'), 'Invalid key direction')
             require(step['reset'] in ('page', 'line', 'word'), 'Invalid key reset')
+        elif step.get('op') == 'interrupted-keyed-shift':
+            fields(step, ('op', 'key', 'direction', 'reset', 'interrupts'), 'Interrupted-keyed step')
+            require(isinstance(step['key'], list) and 1 <= len(step['key']) <= 256
+                    and all(integer(value, 0, 28) for value in step['key']), 'Invalid interrupted key indices')
+            require(step['direction'] in ('subtract', 'add'), 'Invalid interrupted key direction')
+            require(step['reset'] in ('page', 'line', 'word'), 'Invalid interrupted key reset')
+            require(isinstance(step['interrupts'], list) and 1 <= len(step['interrupts']) <= 29
+                    and all(integer(value, 0, 28) for value in step['interrupts'])
+                    and step['interrupts'] == sorted(set(step['interrupts'])), 'Interrupt indices must be unique and sorted')
         elif step.get('op') == 'finite-shift':
             fields(step, ('op', 'key', 'direction', 'reset'), 'Finite-shift step')
             require(isinstance(step['key'], list) and 1 <= len(step['key']) <= 20000
@@ -153,6 +162,20 @@ def transform(text, step, runes, indices):
             elif ch in indices:
                 positions.append(i)
         flush()
+    elif step['op'] == 'interrupted-keyed-shift':
+        position = 0
+        interrupts = set(step['interrupts'])
+        sign = -1 if step['direction'] == 'subtract' else 1
+        for i, character in enumerate(chars):
+            if character not in indices:
+                if boundary(character, step['reset'], indices):
+                    position = 0
+                continue
+            value = indices[character]
+            if value in interrupts:
+                continue
+            chars[i] = runes[(value + sign * step['key'][position % len(step['key'])]) % 29]
+            position += 1
     elif step['op'] == 'finite-shift':
         position = 0
         sign = -1 if step['direction'] == 'subtract' else 1

@@ -24,7 +24,7 @@ let count=0;const test=(name,fn)=>{fn();count++;console.log('PASS '+name);};
   for(const text of ['Do not reverse prime values in rows','Reverse prime values in rows with key ABC','Reverse prime values in rows then apply Atbash','Reverse prime values in rows only if marked'])assert.throws(()=>I.validateCandidate(text,candidate(text,[step(text,text,'ambiguous_reversal')])));
  });
  test('browser UMD, CommonJS and existing ESM wrapper preserve the exact exports',()=>{
-  assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft','pagesFromSource','keyDeclarations','outcomeEvidence'].sort());
+  assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft','pagesFromSource','keyDeclarations','knownOperationMatches','outcomeEvidence'].sort());
   for(const key of Object.keys(I))assert.equal(E[key],I[key]);
   assert.equal(B.SCHEMA,I.SCHEMA);assert.equal(B.MAX_TEXT,I.MAX_TEXT);assert.equal(B.PROMPT,I.PROMPT);assert.deepEqual(plain(B.JSON_SCHEMA),I.JSON_SCHEMA);
   assert.equal(context.document,undefined);assert.equal(context.fetch,undefined);assert.equal(context.localStorage,undefined);

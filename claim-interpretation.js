@@ -255,6 +255,6 @@ function toDraft(raw,input){
  return {candidate,draft,questions:C.questions(draft),uninterpreted:remainder,requiresConfirmation:true,meaningVerified:false};
 }
 
-const api={SCHEMA,MAX_TEXT,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations,outcomeEvidence};
+const api={SCHEMA,MAX_TEXT,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations,outcomeEvidence,knownOperationMatches:knownMatches};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimInterpretation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

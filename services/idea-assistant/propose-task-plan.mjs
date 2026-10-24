@@ -2,7 +2,7 @@
 import {validateCard} from './idea-relations.mjs';
 import L from '../../local-experiment.js';
 export const MODEL='@cf/google/gemma-4-26b-a4b-it';
-export const VERSION='source-plan-grammar-v5-finite-key';
+export const VERSION='source-plan-grammar-v6-explicit-interrupter-guard';
 export const LIMITS=Object.freeze({timeoutMs:20000,concurrency:3,cacheEntries:50,cacheMs:600000,responseBytes:16000});
 const object=(properties,required=Object.keys(properties))=>({type:'object',additionalProperties:false,properties,required});
 const integer={type:'integer',minimum:0,maximum:28};
@@ -15,6 +15,8 @@ Example label: reverse each line, then apply affine a=7,b=7
 Example steps: [{"source":{"operationIndex":0,"start":0,"quote":"reverse each line"},"step":{"op":"reverse","unit":"line"}},{"source":{"operationIndex":0,"start":24,"quote":"apply affine a=7,b=7"},"step":{"op":"affine","a":7,"b":7}}]`;
 const exact=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).length===keys.length&&keys.every(k=>Object.hasOwn(o,k));
 const clone=value=>JSON.parse(JSON.stringify(value));
+const requiresExplicitInterrupters=card=>card.method.status==='specified'&&card.method.value.operations.some(op=>op.id==='interrupted_repeating_key'||Object.hasOwn(op,'interrupts'));
+const INTERRUPTER_REASON='Interrupted repeating keys require complete explicit canonical parameters; generated mapping is unavailable.';
 function parse(quote){
  const q=quote.trim().replace(/[.!]$/,'').trim();let m;
  if((m=q.match(/^reverse (?:each|every) (line|row|word)$/i)))return {op:'reverse',unit:m[1].toLowerCase()==='word'?'word':'line'};
@@ -39,6 +41,7 @@ export function validateCandidate(input,candidate,{compile}={}){
   if(card.unresolved.length)return {reason:'The idea has unresolved conditions.'};
   if(Object.values(card.rules).some(rule=>rule.status==='unrestricted'))return {reason:'An explicitly unrestricted rule cannot be represented by one fixed experiment.'};
   if(card.method.status!=='specified')return {reason:'The method wording is unspecified.'};
+  if(requiresExplicitInterrupters(card))return {reason:INTERRUPTER_REASON};
   if(!exact(candidate,['version','steps','unsupported'])||candidate.version!==1||!Array.isArray(candidate.steps)||!candidate.steps.length||candidate.steps.length>8||!Array.isArray(candidate.unsupported)||candidate.unsupported.length>32||candidate.unsupported.some(s=>typeof s!=='string'||s.length>500)||new TextEncoder().encode(JSON.stringify(candidate)).length>LIMITS.responseBytes)return {reason:'The proposed mapping is malformed.'};
   if(candidate.unsupported.length)return {reason:'Some method wording needs an execution adapter.'};
   const original=card.method.value.operations,coverage=original.map(()=>[]),steps=[],notes=[];let previous=[-1,-1];
@@ -80,6 +83,7 @@ export function createAIPlanner({AI,compile,now=()=>Date.now(),schedule=setTimeo
  return async function propose(input,env={}){
   let card;try{card=validateCard(input);}catch{return failure('The confirmed idea could not be read.');}
   if(typeof compile!=='function')return failure('A reviewed deterministic compiler is required.');
+  if(requiresExplicitInterrupters(card))return failure(INTERRUPTER_REASON);
   if(card.unresolved.length)return failure('The idea has unresolved conditions.');
   if(Object.values(card.rules).some(rule=>rule.status==='unrestricted'))return failure('An explicitly unrestricted rule cannot be represented by one fixed experiment.');
   if(card.scope.status!=='specified'||!Array.isArray(card.scope.value.pages)||!card.scope.value.pages.length||Object.keys(card.scope.value).some(key=>key!=='pages'))return failure('Exact complete-page scope is required before proposing an execution plan.');

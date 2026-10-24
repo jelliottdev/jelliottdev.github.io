@@ -73,15 +73,27 @@ def verified_controls(task, document, folder):
     runner.require(type(document['version']) is int and document['version'] == 1
                    and isinstance(document['origins'], list) and 1 <= len(document['origins']) <= 10,
                    'Unsupported or empty origins document')
-    runner.require(task['criterion']['kind'] in ('exact-prefix', 'word-affine-count'), 'Controls require supported evaluation')
+    runner.require(task['criterion']['kind'] in ('measurement', 'exact-prefix', 'word-affine-count'), 'Controls require supported evaluation')
     checked = set()
     for value in document['origins']:
         control = validate_origin(value)
         fixture = control['task']
         runner.validate(fixture)
         runner.require('synthetic' in fixture['title'].lower(), 'Control task must be labeled synthetic')
-        for key in ('steps', 'alphabet', 'criterion'):
+        control_runes = {entry['rune'] for entry in fixture['alphabet']}
+        runner.require(len(fixture['pages']) == 1
+                       and sum(ch in control_runes for ch in fixture['pages'][0]['text']) <= 4096,
+                       'Synthetic control exceeds its bound')
+        for key in ('steps', 'alphabet'):
             runner.require(fixture[key] == task[key], 'Control uses a different ' + key)
+        if task['criterion']['kind'] == 'measurement':
+            runner.require(fixture['criterion']['kind'] == 'exact-prefix'
+                           and bool(fixture['criterion']['values'])
+                           and len(fixture['criterion']['values']) == sum(
+                               ch in control_runes for ch in fixture['pages'][0]['text']),
+                           'Measurement target requires a complete synthetic exact-prefix control')
+        else:
+            runner.require(fixture['criterion'] == task['criterion'], 'Control uses a different criterion')
         saved = read_json(folder / 'controls' / (fixture['taskId'] + '.json'))
         runner.require(saved == fixture, 'Control file differs from the origin snapshot')
         identity = (fixture['taskId'], control['expected_result_sha256'])

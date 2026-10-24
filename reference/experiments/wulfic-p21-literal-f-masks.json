@@ -131,6 +131,316 @@
     "wulfic-keyed-transposition-cohort",
     "wulfic-systematic-stream-source"
   ],
+  "browser_followups": [
+    {
+      "id": "deor-literal-f-word-reset",
+      "title": "Restart the DEOR key at each word while copying F",
+      "question": "What does the fixed DEOR rule output when F stays literal and the key restarts at every word?",
+      "scope_change": "Keep LP2-11 and the source DEOR array [23, 12, 4], subtraction and phase zero. Copy every F unchanged without consuming a key rune, then restart the key at every non-rune boundary. The earlier mask search tested page-local key counters, including the all-F mask; it did not restart at words.",
+      "limitation": "This is a new descriptive clock variant, not a replay of the source singleton gate, mask selection or IoC/bigram ranking. The browser reports the complete output and basic rune metrics. It does not identify readable language, claim a decryption or test other keys, phases, selective F masks, page joins or cipher layers. Every non-rune ends a transcription word; these are not verified plaintext word boundaries.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "measure",
+            "detail": "Report the declared transform and descriptive rune metrics; no plaintext or significance threshold is inferred."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "interrupted_repeating_key",
+                "label": "Interrupted repeating key",
+                "key": [
+                  23,
+                  12,
+                  4
+                ],
+                "direction": "subtract",
+                "reset": "word",
+                "interrupts": [
+                  0
+                ]
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-11"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": "measurement"
+          },
+          "reset": {
+            "status": "specified",
+            "value": "word"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-11",
+            "text_sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover every independently specified output rune in a synthetic control",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic complete-output control: deor-literal-f-word-reset",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᚹᚠᚱᚠᛗᚠᚦᚻᚠ- ᚹᚠᚱᚠᛗᚠᚦᚻᚠ /\r\nᚹᚠᚱᚠᛗᚠᚦᚻᚠ"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "interrupted-keyed-shift",
+              "key": [
+                23,
+                12,
+                4
+              ],
+              "direction": "subtract",
+              "reset": "word",
+              "interrupts": [
+                0
+              ]
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0,
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0,
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0
+            ]
+          },
+          "taskId": "1a050ea24145848947fb1c02633cccbf9bd36f87a333697e5af2947cba59693b"
+        },
+        "expected_result_sha256": "cadf3d0b4431949f4159b936925137899dcab77dc137eb0e928bb276c4682f08"
+      }
+    }
+  ],
   "article": "# Can selected F runes rescue these fixed keyword decodes?\n\nThe [archived second-layer program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_second_layer.py) proposes one keyword and arithmetic direction for each of ten page files. For every ciphertext F rune, it tries two possibilities: decrypt it normally, or output a literal F and **pause key advancement**. The committed files `page_21`–`page_30` match current **LP2-04–13** rune for rune.\n\n## Result\n\nAcross the ten pages, the program's bounds allow **27,402 F masks**. **None** makes every one-rune word an I or A under the program's own separator rule. The unmodified source consequently takes its fallback branch and chooses a mask by index of coincidence (IoC) on every page. That fallback is a frequency ranking, not a successful one-rune-word check.\n\n![The best-IoC F mask raises concentration on some pages, while zero of 27,402 masks passes the required word gate.](experiments/records/wulfic-p21-literal-f-masks/comparison.svg)\n\nThe source's next stage tries **45 fixed rune routes per page** on the *ordinary no-mask* decode. None crosses its printing gates. It also prints prime-word, reversed-word and first-25-word magic-square views, but does not score those word orders. Reordering whole words cannot change how many individual words match a dictionary.\n\nWe repeated the full mask selection on 19 seeded rune-order shuffles of all ten pages, keeping each page's rune inventory and visible word slots. **All 19 also produced zero pages with an all-singleton-valid mask.** That comparison shows this strict gate has little ability to distinguish the actual pages under this control; it does not provide evidence for or against other F-skip rules.\n\n## What was checked\n\nBefore using the manuscript, a planted 20-rune message with **two literal-F pauses** was recovered exactly and passed both one-rune-word checks. The source functions and a separate scalar recurrence agreed on 48 small mask/mode cases, and the compiled all-mask selector agreed on the plant. We then ran the unmodified source script against the exact committed page bytes. Its ten fallback choices match the saved scan. An independent scalar checker enumerates every manuscript mask again and reconstructs the first complete shuffled search.\n\nThe source's keyword parser is part of this result. It turns `DEOR` into three GP runes because `EO` is a digraph; it silently drops the `V` in `DIVINITY`, despite a comment that suggests `V` should map to `U`. We preserved that actual behavior. A corrected parser or a different keyword would be a new test. The source only treats period, hyphen, bullet, space and newline as word separators, so its singleton positions can differ from other transcriptions.\n\n## Reproduce and limits\n\nThe downloaded experiment contains everything needed for `python check.py` and `python plot.py`: run those commands from the extracted directory containing the scripts. To repeat the original-source parity check and full search, clone Wulfic at commit `bf89d3d` and run `python gate.py --source-root ABSOLUTE_CLONE_PATH --check` and `python run.py --source-root ABSOLUTE_CLONE_PATH --check` from the same directory. `snapshot_inputs.py --source-root ABSOLUTE_CLONE_PATH --check` additionally compares the source pages with Liberpedia's `data/pages` files, so run that check in a full Liberpedia checkout. The packaged input snapshot already records the exact Git-object hashes and page text.\n\nThis is one grouped replay of the source's **fixed ten keyword assignments and finite F-mask search**. It does not eliminate F as an interruption elsewhere, different mask semantics, other page keys, or a later decoding layer. The standard repeating-key outputs overlap the earlier [prime and keyword streams test](#/experiments/wulfic-prime-keyword-stream-families); the mask scan and the source's second-layer screens are the additions here.\n",
   "article_path": "experiments/records/wulfic-p21-literal-f-masks/article.md",
   "script_sha256": "de7d7577470fbd3e219649a82f5a28bdb937067380770441d5281c5def178fea",

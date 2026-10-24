@@ -51,6 +51,14 @@
     for(const value of step.key)integer(value,0,28);
     if(!['repeat','plaintext-autokey','ciphertext-autokey'].includes(step.mode)||!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the key mode, arithmetic direction and reset.');
    }
+   else if(step?.op==='interrupted-keyed-shift'){
+    object(step,['op','key','direction','reset','interrupts']);
+    if(!Array.isArray(step.key)||!step.key.length||step.key.length>256)throw Error('Give one to 256 key indices.');
+    for(const value of step.key)integer(value,0,28);
+    if(!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the interrupted key direction and reset.');
+    if(!Array.isArray(step.interrupts)||!step.interrupts.length||step.interrupts.length>29)throw Error('Give one to 29 sorted interrupt indices.');
+    for(let i=0;i<step.interrupts.length;i++){integer(step.interrupts[i],0,28);if(i&&step.interrupts[i]<=step.interrupts[i-1])throw Error('Interrupt indices must be unique and sorted.');}
+   }
    else if(step?.op==='finite-shift'){
     object(step,['op','key','direction','reset']);
     if(!Array.isArray(step.key)||!step.key.length||step.key.length>20000)throw Error('Give one to 20,000 finite key indices.');
@@ -112,6 +120,15 @@
     chars=chars.map(ch=>{
      if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))sum=0;return ch;}
      const p=mod(index.get(ch)-sum);sum=mod(sum+p);return alphabet[p].rune;
+    });
+   }else if(step.op==='interrupted-keyed-shift'){
+    let position=0;const interrupts=new Set(step.interrupts);
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;return ch;}
+     const value=index.get(ch);
+     if(interrupts.has(value))return ch;
+     const k=step.key[position++%step.key.length];
+     return alphabet[mod(value+(step.direction==='add'?k:-k))].rune;
     });
    }else if(step.op==='finite-shift'){
     let position=0;

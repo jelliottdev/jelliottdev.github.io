@@ -130,5 +130,315 @@
     "wulfic-prime-keyword-stream-families",
     "wulfic-keyed-transposition-cohort",
     "wulfic-systematic-stream-source"
+  ],
+  "browser_followups": [
+    {
+      "id": "deor-literal-f-word-reset",
+      "title": "Restart the DEOR key at each word while copying F",
+      "question": "What does the fixed DEOR rule output when F stays literal and the key restarts at every word?",
+      "scope_change": "Keep LP2-11 and the source DEOR array [23, 12, 4], subtraction and phase zero. Copy every F unchanged without consuming a key rune, then restart the key at every non-rune boundary. The earlier mask search tested page-local key counters, including the all-F mask; it did not restart at words.",
+      "limitation": "This is a new descriptive clock variant, not a replay of the source singleton gate, mask selection or IoC/bigram ranking. The browser reports the complete output and basic rune metrics. It does not identify readable language, claim a decryption or test other keys, phases, selective F masks, page joins or cipher layers. Every non-rune ends a transcription word; these are not verified plaintext word boundaries.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "measure",
+            "detail": "Report the declared transform and descriptive rune metrics; no plaintext or significance threshold is inferred."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "interrupted_repeating_key",
+                "label": "Interrupted repeating key",
+                "key": [
+                  23,
+                  12,
+                  4
+                ],
+                "direction": "subtract",
+                "reset": "word",
+                "interrupts": [
+                  0
+                ]
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-11"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": "measurement"
+          },
+          "reset": {
+            "status": "specified",
+            "value": "word"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-11",
+            "text_sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover every independently specified output rune in a synthetic control",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic complete-output control: deor-literal-f-word-reset",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᚹᚠᚱᚠᛗᚠᚦᚻᚠ- ᚹᚠᚱᚠᛗᚠᚦᚻᚠ /\r\nᚹᚠᚱᚠᛗᚠᚦᚻᚠ"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "interrupted-keyed-shift",
+              "key": [
+                23,
+                12,
+                4
+              ],
+              "direction": "subtract",
+              "reset": "word",
+              "interrupts": [
+                0
+              ]
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0,
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0,
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0
+            ]
+          },
+          "taskId": "1a050ea24145848947fb1c02633cccbf9bd36f87a333697e5af2947cba59693b"
+        },
+        "expected_result_sha256": "cadf3d0b4431949f4159b936925137899dcab77dc137eb0e928bb276c4682f08"
+      }
+    }
   ]
 }
