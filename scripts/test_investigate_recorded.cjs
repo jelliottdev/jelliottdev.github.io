@@ -8,6 +8,7 @@ const snapshot=C.confirm(C.createDraft({source:{text:'Reverse each row on LP2-15
 const reply=D.compare({snapshot:R.prepare(snapshot).snapshot,documents});assert(reply,'Current published registry needs reviewed execution metadata');
 const checked=I.validateAnswer(reply,documents,snapshot);assert.equal(checked.kind,'recorded-overlap');assert.equal(checked.answer,reply.answer);
 for(const changed of [{...reply,answer:reply.answer.replace('LP2-15','all LP2 pages')},{...reply,kind:'proved'}, {...reply,sources:[...reply.sources].reverse()}, {...reply,sources:reply.sources.map((s,i)=>i? s:{...s,text:s.text+' '})}])assert.throws(()=>I.validateAnswer(changed,documents,snapshot));
+for(const metadata of [undefined,{...reply.sources[0].recordedComparison,executed_pages:['lp2-56']}])assert.throws(()=>I.validateAnswer({...reply,sources:reply.sources.map((s,i)=>i?s:{...s,recordedComparison:metadata})},documents,snapshot));
 const differentlyScoped=C.confirm(C.revise(snapshot,{scope:known({pages:['lp2-56']})}),{id:'different',at});assert.throws(()=>I.validateAnswer(reply,documents,differentlyScoped));
 assert.throws(()=>I.validateAnswer(reply,documents));
 function packetFor(kind,answer=reply.answer){return C.packetSnapshot(snapshot,C.bindResearch(snapshot,{id:'comparison',at,evidence:{snapshotId:'local-published-fixture',records:registry.records.filter(r=>reply.sources.some(s=>s.id===r.id)),documents:reply.sources,...(kind?{comparisonKind:kind}:{})},answer}));}

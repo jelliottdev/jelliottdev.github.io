@@ -47,7 +47,7 @@
   if(!object(doc)||doc.kind!=='experiment'||typeof doc.id!=='string'||!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(doc.id)||doc.href!=='#/experiments/'+doc.id||typeof doc.text!=='string'||doc.text.length>64000)return null;
   let evidence;try{evidence=JSON.parse(doc.text);}catch{return null;}
   if(!object(evidence)||evidence.record_type?.id!=='method'||doc.recordType&&doc.recordType!=='method')return null;
-  const m=evidence.recorded_comparison;
+  const m=doc.recordedComparison;
   if(!keys(m,['version','operation','executed_pages','evaluation','input_description','reuse'])||m.version!==1||!signature(m.operation))return null;
   const executed=pages(m.executed_pages),scope=pages(evidence.scope?.pages);
   if(!executed||!scope||executed.some(p=>!scope.includes(p))||target.some(p=>!executed.includes(p)))return null;

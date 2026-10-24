@@ -5,7 +5,7 @@ const C=require('../claim-specification.js'),H=require('../claim-share.js'),M=re
 const known=value=>C.field('specified',value),at='2026-10-24T12:00:00Z';
 const make=(extra={})=>C.confirm(C.createDraft({source:{text:'Reverse each row on LP2-15'},aim:known({outcomeId:'decipher',detail:'Find readable text'}),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows',sourceText:'Reverse each row on LP2-15'}]}),scope:known({pages:['lp2-15']}),...extra}),{id:'fixture',at});
 const metadata=(extra={})=>({version:1,operation:{action:'reverse',operand:'rune-order',within:'row'},executed_pages:['lp2-15','lp2-17'],evaluation:{kind:'known-opening',description:'The first 12 runes were checked against nine fixed openings.',limitation:'Other beginnings were not tested.'},input_description:'Archived rune rows, including headings, were retained.',reuse:'Complete candidate outputs and their source positions are saved.',...extra});
-const doc=(id='arbitrary-route-record',m=metadata(),extra={})=>({id,title:'An authored record',kind:'experiment',recordType:'method',href:'#/experiments/'+id,text:JSON.stringify({record_type:{id:'method'},scope:{pages:['lp2-15','lp2-17','lp2-50']},recorded_comparison:m}),...extra});
+const doc=(id='arbitrary-route-record',m=metadata(),extra={})=>({id,title:'An authored record',kind:'experiment',recordType:'method',href:'#/experiments/'+id,text:JSON.stringify({record_type:{id:'method'},scope:{pages:['lp2-15','lp2-17','lp2-50']}}),recordedComparison:m,...extra});
 const compare=(snapshot=make(),documents=[doc()])=>R.compare({snapshot,documents});
 let groups=0;function test(name,fn){fn();groups++;console.log('PASS '+name);}
 test('generic authored overlap retains exact source objects and limits, without a goal verdict',()=>{
@@ -22,6 +22,14 @@ test('two evaluation purposes retain citation binding and shared prose without d
  assert.deepEqual(M.citationNumbers(result.answer,2),[1,2]);assert(result.answer.includes(metadata().input_description+' [1, 2]'));
  assert(result.answer.includes(english.evaluation.description+' [2]'));assert(result.answer.includes(metadata().evaluation.description+' [1]'));
  const imported=H.decode(H.encode(make())).draft,shared=C.confirm(imported,{id:'shared',at});assert.equal(compare(shared,[a,b]).answer,result.answer);
+});
+test('separate authored metadata drives direct comparison without changing ordinary evidence text',()=>{
+ const original=doc(),changed={...original,recordedComparison:metadata({reuse:'Inspect the saved complete rune output.'})};
+ assert.equal(changed.text,original.text);assert(!original.text.includes('recorded_comparison'));
+ assert.notEqual(compare(make(),[changed]).answer,compare(make(),[original]).answer);
+ assert.equal(compare(make(),[{...original,recordedComparison:metadata({executed_pages:['lp2-56']})}]),null);
+ const embedded={...original,recordedComparison:undefined,text:JSON.stringify({...JSON.parse(original.text),recorded_comparison:metadata()})};
+ assert.equal(compare(make(),[embedded]),null,'Embedded metadata cannot supply direct-comparison authority');
 });
 test('all requested pages must be executed by each retained source; partial sources are filtered',()=>{
  const snapshot=make({scope:known({pages:['lp2-15','lp2-17']}),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]})});
@@ -57,8 +65,8 @@ test('metadata requires controlled exact fields, valid executed subset and uniqu
  const invalidScope=doc();const evidence=JSON.parse(invalidScope.text);evidence.scope.pages=['lp2-17','lp2-15'];invalidScope.text=JSON.stringify(evidence);assert.equal(compare(make(),[invalidScope]),null);
 });
 test('discovery hints, audits, malformed evidence and mismatched citation destinations never qualify',()=>{
- const d=doc(),e=JSON.parse(d.text);delete e.recorded_comparison;e.discovery={operations:[metadata().operation],evaluation:['known-opening']};
- for(const bad of [{...d,text:JSON.stringify(e)}, {...d,text:'{broken'}, {...d,text:'x'.repeat(64001)}, {...d,kind:'page'},
+ const d=doc(),e=JSON.parse(d.text);e.discovery={operations:[metadata().operation],evaluation:['known-opening']};e.recorded_comparison=metadata();
+ for(const bad of [{...d,recordedComparison:undefined,text:JSON.stringify(e)}, {...d,text:'{broken'}, {...d,text:'x'.repeat(64001)}, {...d,kind:'page'},
   {...d,recordType:'audit'}, {...d,href:'https://example.org'}, {...d,href:'#/experiments/another-id'}, {...d,id:'../../unsafe'},
   {...d,text:JSON.stringify({...JSON.parse(d.text),record_type:{id:'control'}})}])assert.equal(compare(make(),[bad]),null);
  assert.equal(compare(make(),[]),null);assert.equal(R.compare({snapshot:{},documents:[d]}),null);

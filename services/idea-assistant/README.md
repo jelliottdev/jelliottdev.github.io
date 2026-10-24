@@ -159,6 +159,9 @@ with no extra steps, parameters, unresolved constraints or specified rules.
 Its authority comes from validated `recorded_comparison` execution metadata,
 never discovery tags or a record title. Each retained source must cover every
 requested page. Other requests continue through the ordinary comparison path.
+Execution metadata travels separately as `recordedComparison` in direct source
+documents. It does not enlarge or change the model's evidence text or retrieval
+budget. Direct responses bind both this metadata and the ordinary source text.
 
 The row-route record contains 55 executed pages; its English-scoring companion
 contains 53 eligible pages. LP2-50 has no row-route input; LP2-49 and LP2-55 do

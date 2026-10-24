@@ -69,6 +69,7 @@ await test('empty, outside, compound and explicit-condition requests reach the o
   const before=state.models,response=await handle(post(request),env),data=await response.json();assert.equal(response.status,200,JSON.stringify(data));
   assert.notEqual(data.kind,'recorded-overlap');assert.equal(state.models,before+1,'Unsupported direct scope/conditions must not bypass ordinary inference');
   assert.equal(data.claimBinding,await Research.binding(request));assert.equal(state.modelInputs.at(-1).idea,Research.validate(request).confirmedQuery);
+  for(const record of state.modelInputs.at(-1).records){assert.equal(record.recordedComparison,undefined);assert.equal(JSON.parse(record.text).recorded_comparison,undefined,'Direct execution metadata must not consume model context');}
  }
 });
 await test('valid authored overlap works without AI binding while unsupported requests fail configured-model gate',async()=>{

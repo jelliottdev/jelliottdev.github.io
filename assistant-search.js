@@ -17,10 +17,11 @@
       if(r.materials)evidence.materials=r.materials;
       if(r.reader_finding)evidence.reader_finding=r.reader_finding;
       if(r.reader_limit)evidence.reader_limit=r.reader_limit;
-      if(r.recorded_comparison)evidence.recorded_comparison=r.recorded_comparison;
       return {
         id:r.id, title:r.title, kind:'experiment', recordType:r.record_type?.id||'method', href:`#/experiments/${r.id}`,
         text:JSON.stringify(evidence),
+        // Reviewed execution metadata serves direct comparisons, not model context.
+        ...(r.recorded_comparison?{recordedComparison:r.recorded_comparison}:{}),
         // Authored display text and reuse notes support the answer, not technique ranking.
         ...(r.materials||r.reader_finding||r.reader_limit||r.recorded_comparison?{searchText:core}:{}),
         // Retrieval can use prose, but evidence always preserves the complete scope.
