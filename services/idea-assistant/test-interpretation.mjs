@@ -12,6 +12,19 @@ test('exported bounded schema and prompt do not call or confirm anything',()=>{
  assert.equal(JSON_SCHEMA.additionalProperties,false);assert(PROMPT.includes('must review and confirm'));assert(PROMPT.includes('negation'));assert.throws(()=>validateInput(''));assert.throws(()=>validateInput('x'.repeat(1501)));assert.equal(validateInput(' x '),' x ');
  const raw='Use the supplied rule.',result=toDraft(raw,candidate(raw));assert.equal(result.draft.source.text,raw);assert.equal(result.draft.status,'draft');assert.equal(result.draft.confirmation,null);assert.equal(result.draft.execution,'not_run');assert.equal(result.requiresConfirmation,true);assert.equal(result.meaningVerified,false);
 });
+test('numeric key descriptors remain exact method source without invented literal keywords',()=>{
+ for(const declaration of ['key indices [23,10,1,10,9,10,16,26]','key index [1,2,3]','key GP indices [1,2,3]','key alphabet indices [1,2,3]','key [1,2,3]','key=[1,2,3]','key numbers [1,2,3]','key array [1,2,3]','key list [1,2,3]']){
+  const raw='Use Vigenere with '+declaration+' on LP1-03.',p=candidate(raw),before=JSON.stringify(p);
+  assert.deepEqual(keyDeclarations(raw),[],declaration);const result=toDraft(raw,p);assert.equal(result.draft.method.value.operations[0].sourceText,raw);assert(!Object.hasOwn(result.draft.method.value.operations[0],'key'));assert.equal(JSON.stringify(p),before);
+  p.steps[0].parameters.key={value:declaration.split(' ')[1]||'[1',source:at(raw,declaration)};assert.throws(()=>validateCandidate(raw,p),/key/);
+ }
+ for(const value of ['indices','index','array','list','numbers','IF','LP2-15']){
+  for(const declaration of ['key "'+value+'"','key='+value]){
+   const raw='Use cipher with '+declaration+'.',found=keyDeclarations(raw);assert.equal(found.length,1);assert.equal(found[0].value,value);assert.equal(raw.slice(found[0].source.start,found[0].source.start+found[0].source.quote.length),declaration);
+  }
+ }
+ const raw='Use Vigenere with key indices [1,2,3] only if supplied.';assert.deepEqual(keyDeclarations(raw),[]);const p=candidate(raw,[step(raw,'Use Vigenere with key indices [1,2,3]')]);assert.throws(()=>validateCandidate(raw,p),/condition/);
+});
 
 test('unsupported inferred known aim becomes unknown without discarding useful method/scope or asking them again',()=>{
  const raw='Try running the ciphertext through an autokey on all unsolved LP2 pages.',method='running the ciphertext through an autokey',scope='all unsolved LP2 pages';

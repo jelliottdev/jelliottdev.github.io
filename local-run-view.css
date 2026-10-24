@@ -26,3 +26,15 @@
 .run-text-value{white-space:pre-wrap;overflow-wrap:anywhere;tab-size:4;min-width:0;margin:0;padding:1rem;border:1px solid #dfe5eb;border-radius:6px;background:#f7f8fa;color:#2e3742;font:1.2rem/1.9 "Local Runic",Arial,sans-serif}
 .run-text-inspector[data-text-mode=latin] .run-text-value{font:1rem/1.8 Consolas,monospace}
 @media(max-width:640px){.run-text-columns{grid-template-columns:minmax(0,1fr)}.run-text-controls{align-items:start}.run-text-value{padding:.8rem}.run-text-modes button{font-size:1rem}}
+
+/* Prefix checks compare the declared sequence, rather than repeat counts. */
+.run-prefix-total{display:flex;height:1rem;overflow:hidden;border-radius:3px;background:#dce2e8}
+.run-prefix-match{background:#326b91}.run-prefix-other{background:#c4ced8}
+.run-prefix-counts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0 0}.run-prefix-counts dt{font-size:.875rem}.run-prefix-counts dd{font-weight:600;margin:.25rem 0 0}
+.run-prefix-alignment{margin:1rem 0 1.5rem}.run-prefix-alignment h3{font:600 1rem/1.5 Arial,sans-serif;margin:0 0 .5rem}.local-run-result .run-prefix-status{margin-bottom:.5rem}
+.run-prefix-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:.875rem;line-height:1.5;margin:.75rem 0}
+.run-prefix-table th,.run-prefix-table td{text-align:left;padding:.35rem .3rem;border-bottom:1px solid #dfe5eb;overflow-wrap:anywhere;vertical-align:middle}
+.run-prefix-table thead th{font-weight:600;color:#586878}.run-prefix-table tbody th{font-weight:400;font-variant-numeric:tabular-nums}
+.run-prefix-table .run-prefix-symbol{font:400 1.5rem/1.4 "Local Runic",Arial,sans-serif}.run-prefix-table .is-different{background:#edf1f5}.run-prefix-table .is-different th{border-left:3px solid #647586}
+.run-text-inspector[data-text-mode=latin] .run-prefix-table .run-prefix-symbol{font:600 1rem/1.5 Consolas,monospace}
+@media(max-width:440px){.run-prefix-counts{gap:.75rem}.run-prefix-table th,.run-prefix-table td{padding:.35rem .15rem}}

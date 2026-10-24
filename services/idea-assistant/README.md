@@ -9,8 +9,8 @@ text. Task and result storage are separate from proposal review status; neither
 the original idea wording nor private notes appear in task projections.
 
 Storage migrations 0004–0006 were applied on 24 October 2026. Production checks
-verified official-source loading, one source-bound compound plan and replayed
-result storage. Synthetic checks did not create shared research entries. Local
+verified official-source loading, source-bound compound and explicit numeric-key
+plans, and replayed result storage. Synthetic checks did not create shared research entries. Local
 browser fixtures verify the visitor workflow; these checks do not establish the
 quality of arbitrary model interpretations or a scientific finding.
 
@@ -32,10 +32,12 @@ an earlier task. The result inspector displays one page's original and transform
 text at a time, with rune-label transliteration clearly separate from translation.
 
 `/prepare-task` first checks explicit supported operations with the deterministic
-compiler. If method wording needs mapping and an AI binding is available, one
-model request may propose exact source spans for the reviewed primitives: rune
+compiler and complete method phrases using a closed grammar. Exact supported
+phrases do not require a model call. If compound wording needs mapping and an AI
+binding is available, one model request may propose exact source spans for the reviewed primitives: rune
 reversal within a line, word or page; an affine index mapping with explicit
-parameters; or cumulative difference with an explicit reset. A closed local
+parameters; cumulative difference with an explicit reset; or repeating keys and
+plaintext/ciphertext autokeys with explicit GP indices, direction and reset. A closed local
 grammar checks every phrase and accounts for all method wording. The deterministic
 compiler then checks the complete proposed plan. The model cannot supply code,
 invent keys or page selections, discard conditions, or decide the result.

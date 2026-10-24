@@ -2,7 +2,7 @@
 import {validateCard} from './idea-relations.mjs';
 import L from '../../local-experiment.js';
 export const MODEL='@cf/google/gemma-4-26b-a4b-it';
-export const VERSION='source-plan-grammar-v2-keyed';
+export const VERSION='source-plan-grammar-v4-whole-label';
 export const LIMITS=Object.freeze({timeoutMs:20000,concurrency:3,cacheEntries:50,cacheMs:600000,responseBytes:16000});
 const object=(properties,required=Object.keys(properties))=>({type:'object',additionalProperties:false,properties,required});
 const integer={type:'integer',minimum:0,maximum:28};
@@ -21,7 +21,7 @@ function parse(quote){
  if((m=q.match(/^reverse (?:the )?(?:runes|rune order) (?:within|inside|in) (?:each|every) (line|row|word|page)$/i)))return {op:'reverse',unit:['line','row'].includes(m[1].toLowerCase())?'line':m[1].toLowerCase()};
  if((m=q.match(/^(?:apply |use )?affine(?: mapping| substitution)? a\s*=\s*(\d{1,2})\s*,\s*b\s*=\s*(\d{1,2})$/i))&&Number(m[1])<=28&&Number(m[2])<=28)return {op:'affine',a:Number(m[1]),b:Number(m[2])};
  if((m=q.match(/^(?:apply |use )?cumulative[ -]difference(?: with)? reset (?:at |per )?(?:each |every )?(page|line|word)$/i)))return {op:'cumulative-difference',reset:m[1].toLowerCase()};
- if((m=q.match(/^(?:apply |use )?(Vigen[eè]re|repeating[ -]key|plaintext[ -]autokey|ciphertext[ -]autokey) with key indices \[([0-9,\s]+)\], (subtract|add), reset at each (page|line|word)$/i))){
+ if((m=q.match(/^(?:apply |use |using )?(Vigen[eè]re|repeating[ -]key|plaintext[ -]autokey|ciphertext[ -]autokey) with key indices \[([0-9,\s]+)\], (subtract|add), reset at each (page|line|word)$/i))){
   const tokens=m[2].split(',').map(n=>n.trim());if(!tokens.length||tokens.length>256||tokens.some(n=>!/^\d{1,2}$/.test(n)||Number(n)>28))return null;
   const name=m[1].toLowerCase();return {op:'keyed-shift',key:tokens.map(Number),mode:name.startsWith('plaintext')?'plaintext-autokey':name.startsWith('ciphertext')?'ciphertext-autokey':'repeat',direction:m[3].toLowerCase(),reset:m[4].toLowerCase()};
  }
@@ -79,6 +79,13 @@ export function createAIPlanner({AI,compile,now=()=>Date.now(),schedule=setTimeo
   if(card.unresolved.length)return failure('The idea has unresolved conditions.');
   if(Object.values(card.rules).some(rule=>rule.status==='unrestricted'))return failure('An explicitly unrestricted rule cannot be represented by one fixed experiment.');
   if(card.scope.status!=='specified'||!Array.isArray(card.scope.value.pages)||!card.scope.value.pages.length||Object.keys(card.scope.value).some(key=>key!=='pages'))return failure('Exact complete-page scope is required before proposing an execution plan.');
+  // Complete labels need no generated source offsets. The same validator still
+  // checks parameters, conditions, immutable rules and the reviewed compiler.
+  if(card.method.status==='specified'){
+   const operations=card.method.value.operations;
+   const steps=operations.map((operation,operationIndex)=>({source:{operationIndex,start:0,quote:operation.label},step:typeof operation.label==='string'?parse(operation.label):null}));
+   if(steps.length&&steps.length<=8&&steps.every(item=>item.step))return validateCandidate(card,{version:1,steps,unsupported:[]},{compile});
+  }
   const provider=env.AI||AI;if(typeof provider?.run!=='function')return failure('AI-assisted plan mapping is unavailable.');
   const key=VERSION+'|'+MODEL+'|'+L.stable(card),hit=memory.get(key);
   if(hit&&hit.until>now())return clone(hit.value);if(hit)memory.delete(key);

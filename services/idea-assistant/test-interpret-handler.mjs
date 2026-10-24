@@ -108,6 +108,13 @@ await test('key reset/bounds prose is not a literal key declaration',async()=>{
  }
  for(const value of ['at','reset','of']){const text='Use key "'+value+'".',candidate=fromWire(toWire(proposal(text)),text);assert.equal(candidate.steps[0].parameters.key.value,value,'Explicit quoted literal must survive prose guard');}
 });
+await test('numeric GP index lists preserve complete source without descriptor-as-key extraction',async()=>{
+ for(const declaration of ['key indices [23,10,1,10,9,10,16,26]','key GP indices [1,2,3]','key=[1,2,3]']){
+  const text='Use Vigenere with '+declaration+', subtract, reset at each page.',wire=toWire(proposal(text)),before=JSON.stringify(wire);
+  const candidate=fromWire(wire,text);assert.deepEqual(candidate.steps[0].parameters,{});assert.equal(candidate.steps[0].source.quote,text);assert.equal(candidate.steps[0].source.start,0);assert.equal(JSON.stringify(wire),before);
+  const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);const data=await response.json();assert.deepEqual(data.candidate.steps[0].parameters,{});assert.equal(data.candidate.steps[0].source.quote,text);
+ }
+});
 await test('unrelated status words do not promote reset to unrestricted or not applicable',async()=>{
  for(const text of ['Reset every page; the search is unrestricted.','Reset every page; scoring is not applicable.']){
   const wire=toWire(proposal(text));wire.rules=[{name:'reset',source:{start:0,quote:text}}];const candidate=fromWire(wire,text);assert.equal(candidate.rules.reset.status,'specified');assert.equal(candidate.rules.reset.value,text);
@@ -134,7 +141,7 @@ await test('captured synthetic model output aligns unique exact quotes without c
  const original=JSON.stringify(captured),aligned=alignQuotePositions(text,original);
  assert.equal(aligned.steps[0].source.start,4);assert.equal(aligned.scope.source.start,4);assert.equal(aligned.rules.wordBoundaries.source.start,text.indexOf('preserving'));
  const expected=JSON.parse(original);expected.steps[0].source.start=4;expected.scope.source.start=4;expected.rules.wordBoundaries.source.start=text.indexOf('preserving');assert.deepEqual(aligned,expected);assert.equal(JSON.stringify(captured),original);
- let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v9-plural-rows');
+ let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v10-numeric-key-descriptors');
 });
 await test('alignment uses UTF-16 positions and only whitelisted evidence fields',async()=>{
  const text='😀 Use key "ABC" on LP2-15; measure a pattern; reset each word.',candidate=proposal(text);

@@ -44,7 +44,10 @@ function scanKeyDeclarations(text){
   const quoted=match[1]!==undefined||match[2]!==undefined,value=match[1]??match[2]??match[3];
   const end=match.index+match[0].length,valueStart=end-value.length-(quoted?1:0);
   const assigned=/\bkey\b\s*[:=]\s*$/i.test(text.slice(match.index,valueStart-(quoted?1:0)));
-  if(!quoted&&!assigned&&/^(?:at|by|from|for|length|stream|position|index|offset|size|reset|initial|state|each|every|the|a|an|to|with|without|in|on|of|when|if|unless|after|before|only|should|must|will|can|may|starts?|ends?|continues?|changes?|is|are|was|were|be|not|schedule|material|values?|digits?)\b/i.test(value))continue;
+  // Numeric arrays remain exact method prose for the bounded execution mapper;
+  // neither a descriptor nor the first comma-delimited element is a keyword.
+  if(!quoted&&(/^[\[(]/.test(value)||/^(?:GP(?:29)?|alphabet)\s+(?:indices|indexes|index|values?|digits?|numbers?)\b/i.test(text.slice(valueStart))))continue;
+  if(!quoted&&!assigned&&/^(?:at|by|from|for|length|stream|position|index|indices|indexes|offset|size|reset|initial|state|each|every|the|a|an|to|with|without|in|on|of|when|if|unless|after|before|only|should|must|will|can|may|starts?|ends?|continues?|changes?|is|are|was|were|be|not|schedule|material|values?|digits?|numbers?|arrays?|lists?|sequence|symbols?)\b/i.test(value))continue;
   result.push({value,start:match.index,end,valueStart,valueEnd:valueStart+value.length,tokenStart:valueStart-(quoted?1:0),tokenEnd:end,source:{start:match.index,quote:match[0]}});
  }return result;
 }

@@ -6,6 +6,9 @@ import {createPrepareTaskHandler,planCard} from './prepare-task.mjs';
 import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 import L from '../../local-experiment.js';
+import {fromWire} from './interpret-handler.mjs';
+import {SCHEMA,toDraft} from './interpretation.mjs';
+import {validateCandidate as validatePlanCandidate} from './propose-task-plan.mjs';
 const origin='https://jelliottdev.github.io',id='p_'+'a'.repeat(64),parent='b'.repeat(64),at='2026-10-24T12:00:00.000Z';
 const index=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8'));
 const alphabet=index.alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
@@ -23,6 +26,22 @@ function fixture(data=card()){
 const request=(body={proposalId:id,parentTaskId:null},extra={})=>new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json','CF-Connecting-IP':'203.0.113.9',...extra},body:JSON.stringify(body)});
 async function submit(f,body){const response=await f.handle(request(body),f.env);return {response,value:await response.json()};}
 let count=0;async function test(name,fn){await fn();console.log('PASS '+name);count++;}
+await test('hosted Welcome wording maps numeric key and exact reset prose through interpretation to reviewed plan',async()=>{
+ const text='Reproduce the Welcome opening on LP1-03 using Vigenere with key indices [23,10,1,10,9,10,16,26], subtract, reset at each page.';
+ const evidence=quote=>({start:text.indexOf(quote),quote}),phrase=text.slice(text.indexOf('using'));
+ const wire={schema:SCHEMA,outcome:{id:'reproduce',source:evidence('Reproduce the Welcome opening')},steps:[{id:'described_method',familyId:'polyalphabetic',source:evidence(phrase)}],scope:{source:evidence('LP1-03'),passage:null},rules:[{name:'reset',source:evidence('reset at each page')}]};
+ const interpreted=fromWire(wire,text);assert.deepEqual(interpreted.steps[0].parameters,{});assert.equal(interpreted.steps[0].source.quote,phrase);
+ const active=H.cardData(C.confirm(toDraft(text,interpreted).draft,{id:'reviewed-hosted-fixture',at})),before=structuredClone(active);
+ assert.equal(active.rules.reset.value,'reset at each page');assert(!Object.hasOwn(active.method.value.operations[0],'key'));
+ const step={op:'keyed-shift',key:[23,10,1,10,9,10,16,26],mode:'repeat',direction:'subtract',reset:'page'};
+ const mapped=validatePlanCandidate(active,{version:1,steps:[{source:{operationIndex:0,start:0,quote:phrase},step}],unsupported:[]},{compile:planCard});
+ assert(!mapped.reason,mapped.reason);assert.deepEqual(mapped.plan.steps,[step]);assert.deepEqual(mapped.plan.pages,['lp1-03']);assert.equal(mapped.card.rules.reset.value,'reset at each page');assert.equal(mapped.card.outcome.value.outcomeId,'reproduce');assert.deepEqual(active,before);
+ for(const reset of ['page','line','word']){
+  const operation={id:'vigenere',key:[1,2],direction:'subtract',reset},input=card({method:known({operations:[operation]}),rules:{reset:known('reset at each '+reset)}}),snapshot=structuredClone(input);
+  assert.deepEqual(planCard(input).steps,[{op:'keyed-shift',key:[1,2],mode:'repeat',direction:'subtract',reset}]);assert.deepEqual(input,snapshot);
+  for(const unsupported of ['unless supplied, reset at each '+reset,'reset at each '+reset+' except F','reset at each '+(reset==='word'?'page':'word')])assert(planCard(card({method:known({operations:[operation]}),rules:{reset:known(unsupported)}})).reason);
+ }
+});
 await test('supported reversal proposes canonical source-bound task without persistence/inference',async()=>{
  const f=fixture(),{response,value}=await submit(f);assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.equal(value.parentTaskId,null);assert.equal(value.inputVersion,'raw');assert.deepEqual(value.task.alphabet,alphabet);assert.deepEqual(value.task.steps,[{op:'reverse',unit:'line'}]);assert.deepEqual(value.task.pages,[{id:'lp2-15',text:raw}]);await L.checkIdentity(value.task);
  assert(value.notes.some(n=>n.includes('preliminary measurement')));assert(value.notes.some(n=>n.includes('headings')));assert(!JSON.stringify(value).includes('PRIVATE'));assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.rate[0].key,'203.0.113.9');
@@ -100,9 +119,9 @@ await test('missing references and source fetch failures are recoverable, no tas
  assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
 });
 await test('official-source redirects cannot turn a valid AI mapping into an accepted plan',async()=>{
- const f=fixture(card({method:known({operations:[{id:'described_method',label:'reverse every row'}]})}));let calls=0,aiCalls=0;
+ const f=fixture(card({method:known({operations:[{id:'described_method',label:'please reverse every row'}]})}));let calls=0,aiCalls=0;
  const handle=createPrepareTaskHandler({fetcher:async(url,options)=>{calls++;assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');return new Response(null,{status:302,headers:{location:'https://untrusted.example/page.json'}});}});
- const env={...f.env,AI:{run:async()=>{aiCalls++;return {choices:[{message:{content:JSON.stringify({version:1,steps:[{source:{operationIndex:0,start:0,quote:'reverse every row'},step:{op:'reverse',unit:'line'}}],unsupported:[]})}}]};}}};
+ const env={...f.env,AI:{run:async()=>{aiCalls++;return {choices:[{message:{content:JSON.stringify({version:1,steps:[{source:{operationIndex:0,start:7,quote:'reverse every row'},step:{op:'reverse',unit:'line'}}],unsupported:[]})}}]};}}};
  const response=await handle(request(),env),value=await response.json();assert.equal(aiCalls,1);assert.equal(calls,1,'No redirect destination is fetched');assert.equal(response.status,422);assert(!value.task);assert.notEqual(value.state,'plan-ready');assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
 });
 console.log('PASS '+count+' deterministic prepare-task groups; all source fetches mocked, no AI/storage writes/deployment.');

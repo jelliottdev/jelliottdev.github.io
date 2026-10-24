@@ -15,6 +15,7 @@ export function planCard(input){
  if(Object.values(rules).some(rule=>rule.status==='unrestricted'))return fail('An explicitly unrestricted rule cannot be represented by one fixed experiment.');
  let inputVersion='raw',criterion={kind:'measurement'};
  const specified=k=>rules[k].status==='specified';
+ const resetValue=value=>typeof value==='string'?(value.match(/^reset at each (page|line|word)$/i)?.[1].toLowerCase()||value):value;
  if(specified('inputVersion')){
   if(!['raw','reviewed'].includes(rules.inputVersion.value))return fail('The specified input version needs an adapter.');
   inputVersion=rules.inputVersion.value;
@@ -56,14 +57,14 @@ export function planCard(input){
   }else if(operation.id==='cumulative_difference'){
    if(Object.hasOwn(operation,'a')||Object.hasOwn(operation,'b')||!['page','line','word'].includes(operation.reset))return fail('Cumulative difference needs an explicit page, line or word reset.');
    if(rules.reset.status==='not_applicable')return fail('An explicit reset conflicts with reset being marked not applicable.');
-   if(specified('reset')&&rules.reset.value!==operation.reset)return fail('The global reset conflicts with an operation reset.');
+   if(specified('reset')&&resetValue(rules.reset.value)!==operation.reset)return fail('The global reset conflicts with an operation reset.');
    if(rules.initialState.status==='not_applicable')return fail('Cumulative difference requires an initial state, which is marked not applicable.');
    if(specified('initialState')&&rules.initialState.value!==0)return fail('Only initial state zero is supported.');
    cumulative=true;steps.push({op:'cumulative-difference',reset:operation.reset});
   }else if(Object.hasOwn(keyedModes,operation.id)){
    if(['a','b','unit'].some(k=>Object.hasOwn(operation,k))||!Array.isArray(operation.key)||!operation.key.length||operation.key.length>256||operation.key.some(n=>!Number.isInteger(n)||n<0||n>28)||!['subtract','add'].includes(operation.direction)||!['page','line','word'].includes(operation.reset))return fail('A keyed step needs explicit GP indices (0–28), add or subtract, and a page, line or word reset.');
    if(rules.reset.status==='not_applicable')return fail('An explicit reset conflicts with reset being marked not applicable.');
-   if(specified('reset')&&rules.reset.value!==operation.reset)return fail('The global reset conflicts with an operation reset.');
+   if(specified('reset')&&resetValue(rules.reset.value)!==operation.reset)return fail('The global reset conflicts with an operation reset.');
    keyed=true;steps.push({op:'keyed-shift',key:[...operation.key],mode:keyedModes[operation.id],direction:operation.direction,reset:operation.reset});
   }else return fail('This method needs an execution adapter before a faithful local plan can be prepared.');
  }
@@ -107,7 +108,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    const row=await query('SELECT card_json FROM proposals WHERE id=?',body.proposalId);if(!row)return reply({error:'Confirmed idea not found.'},404);
    if(body.parentTaskId&&!await query('SELECT id FROM local_tasks WHERE id=?',body.parentTaskId))return reply({error:'Parent task not found.'},404);
    const card=validateCard(row.card_json);let plan=planCard(card),interpretationNotes=[];
-   if(plan.reason&&env.AI?.run){
+   if(plan.reason){
     const mapped=await proposePlan(card,env);
     if(!mapped.reason){plan=mapped.plan;interpretationNotes=mapped.notes;}
     else return reply({state:'needs-adapter',reason:mapped.reason,proposalId:body.proposalId});
