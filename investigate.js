@@ -603,7 +603,7 @@
       if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
       if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
      }
-     stage='research';error='';message='';prepareCard();saveIntake(confirmed);compare();
+     stage='research';error='';message='';prepareCard();saveIntake(confirmed);compare();focus('#review-title');
     }catch(e){error=e.message;render();}
    });
    doc.getElementById('cancel')?.addEventListener('click',()=>{stop();message='Stopped waiting. Your confirmed idea is kept.';error='';render();});

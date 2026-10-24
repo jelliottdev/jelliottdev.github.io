@@ -35,7 +35,7 @@ function makeDocument(){
  doc.getElementById=id=>{
   if(id==='investigate')return doc.host;if(id==='print-snapshot')return doc.print;
   const live=doc.host.html+[...doc.cache.values()].filter(node=>node.isConnected).map(node=>node.html).join('');
-  const markup=live.match(new RegExp('<([a-z]+)\\b[^>]*\\bid="'+id+'"[^>]*>(?:[\\s\\S]*?<\\/\\1>)?','i'))?.[0];if(!markup)return null;
+  const markup=live.match(new RegExp('<([a-z][a-z0-9]*)\\b[^>]*\\bid="'+id+'"[^>]*>(?:[\\s\\S]*?<\\/\\1>)?','i'))?.[0];if(!markup)return null;
   if(!doc.cache.has(id))doc.cache.set(id,new Element(doc,id,markup));return doc.cache.get(id);
  };
  doc.querySelector=selector=>selector==='.confirmed-card>.confirmed'?doc.details.find(d=>d.className.split(' ').includes('confirmed')):selector.startsWith('#')?doc.getElementById(selector.slice(1)):null;
@@ -50,7 +50,9 @@ async function fixture(){
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   return new Promise((resolve,reject)=>{(url.endsWith('/proposals')?saves:research).push({resolve,options});options.signal.addEventListener('abort',()=>reject(Object.assign(Error('Aborted'),{name:'AbortError'})),{once:true});});
  }});
- await app.ready;doc.getElementById('confirm').fire('click');await turn();return {doc,app,saves,research};
+ await app.ready;doc.getElementById('confirm').focus();doc.getElementById('confirm').fire('click');
+ assert.equal(doc.activeElement,doc.getElementById('review-title'),'Confirmation focuses the research heading before the deferred comparison completes');
+ await turn();return {doc,app,saves,research};
 }
 async function run(kind){
  const {doc,app,saves,research}=await fixture();
@@ -90,11 +92,22 @@ async function focusedAction(){
  const {doc,app,research}=await fixture();doc.details.find(d=>d.summary.textContent==='Your idea').open=true;doc.getElementById('edit').focus();doc.requireVisibleEditFocus=true;
  research[0].resolve(Response.json({answer:null,sources:[],reason:'no-matching-records'}));await turn();await turn();assert.equal(doc.activeElement,doc.getElementById('edit'));assert.deepEqual(doc.activeElement.focusOptions,{preventScroll:true});app.destroy();
 }
+async function comparisonTransitionFocus(){
+ for(const response of [Response.json({answer:null,sources:[],reason:'no-matching-records'}),Response.json({error:'Unavailable'},{status:503})]){
+  const {doc,app,research}=await fixture();
+  assert.equal(app.getSnapshot().busy,true);assert.equal(doc.activeElement.id,'review-title');
+  doc.getElementById('back').focus();
+  research[0].resolve(response);await turn();await turn();
+  assert.equal(app.getSnapshot().busy,false);
+  assert.equal(doc.activeElement,doc.getElementById('back'),'A later answer or error must not pull focus back from the user’s chosen control');
+  app.destroy();
+ }
+}
 (async()=>{
  const before=tree(),states=I.captureDisclosureState(before.host,before.details[0].summary),after=tree();after.details.forEach(detail=>detail.open=!detail.open);I.restoreDisclosureState(after.host,states);
  assert.deepEqual(after.details.map(detail=>detail.open),[true,false,true,false,true],'Nested and repeated-label disclosure paths preserve both open and closed states');assert.equal(after.doc.activeElement,after.details[0].summary);assert.deepEqual(after.doc.activeElement.focusOptions,{preventScroll:true});
  const outside={id:'unrelated-control'};after.doc.activeElement=outside;I.restoreDisclosureState(after.host,I.captureDisclosureState(before.host,outside));assert.equal(after.doc.activeElement,outside,'No focused summary means no focus movement');
- const results=await Promise.allSettled([run('save'),run('research'),selectionAndStage(),focusedAction()]);
+ const results=await Promise.allSettled([run('save'),run('research'),selectionAndStage(),focusedAction(),comparisonTransitionFocus()]);
  const failed=results.filter(r=>r.status==='rejected');if(failed.length)throw Error(failed.map(r=>r.reason.message).join('\n'));
  console.log('PASS incoming save/research: persistent save-status card, exact nested open/closed paths, focused summary without scroll, selected share link, untouched editing textarea/caret, and no state leak across stages.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
