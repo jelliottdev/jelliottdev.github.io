@@ -1,0 +1,237 @@
+{
+  "id": "lp2-shifted-page-pair-english",
+  "status": "published",
+  "title": "Do shifted pages produce English?",
+  "question": "Do any forward page-pair sums or differences at relative shifts with at least 120 overlapping runes score like English under the fixed GP-label quadgram model?",
+  "reader_question": "Do shifted sums or differences of two pages score like English?",
+  "summary": "None of 995,724 shifted arithmetic readings reaches the fixed English-recognition gate. The strongest score is ordinary among the shuffled search maxima.",
+  "finding": "Best score -6.4925927001 is LP2-13 minus LP2-32 at shift 56 across 121 runes; zero streams reach -5.5. 100 of 128 full-search shuffle maxima score at least as highly, giving global plus-one comparison 0.7829457364. All 995,724 observed scores independently match exactly.",
+  "reader_finding": "None passed the fixed English-recognition test. The strongest output, from LP2-13 minus LP2-32, scored like results commonly found in shuffled pages. The known-reading tests recovered the intended text.",
+  "reader_limit": "Forward sum and both subtraction directions with at least 120-rune overlap, using one fixed English model. Other cipher layers and general shared-key encryption remain open.",
+  "limitations": "52 eligible pages from 55 nonempty LP2-00–55 pages; no shorter overlaps, reversal, wrapping, repetition, key skips or other layers. Whole-page shuffles preserve page frequencies but not every overlap histogram. Warning plants validate this direct construction, not every English passage or unrelated plaintexts encrypted with a shared key.",
+  "next_steps": "A broader shared-keystream hypothesis needs a statistic and planted power controls matched to its plaintext relationship; do not treat absent English arithmetic output as general key-reuse exclusion.",
+  "outcome": "not-supported",
+  "tags": [
+    "page-pair arithmetic",
+    "shifted alignment",
+    "English quadgrams",
+    "known-reading control",
+    "B-14",
+    "manuscript grid"
+  ],
+  "related": [
+    "lp2-page-pair-english",
+    "lp2-shifted-page-pair-differences",
+    "lp2-page-pair-alignment"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-shifted-page-pair-english/frozen-plan.json",
+      "experiments/records/lp2-shifted-page-pair-english/pages.json",
+      "experiments/records/lp2-shifted-page-pair-english/english_quadgrams.txt"
+    ],
+    "representation": "Forward GP29 streams including headings from 55 nonempty LP2-00–55 pages; shifted overlaps of at least 120 runes; output scored as canonical GP Latin labels.",
+    "procedure": "Exhaust every eligible unordered pair and relative offset; score A+B, A-B and B-A modulo 29 with unchanged prior English scorer. Compare observed global best with 128 shared whole-page permutation search maxima.",
+    "parameters": "1,326 pairs; 331,908 alignments; 995,724 streams, including 991,746 nonzero-offset streams and 3,978 baseline overlaps; at least 100 Latin quadgrams; fixed recognition gate -5.5; 128 null trials; seed 330120261025.",
+    "exclusions": "Overlap shorter than 120 runes, page reversal, wrapping, repeated or skipped key symbols, other arithmetic, altered transcription, word resets, additional cipher layers, other languages and general shared-key exclusion."
+  },
+  "review": {
+    "kind": "Fresh pre-frozen finite manuscript grid",
+    "reviewer": "Separate prior one-stream scorer with independent all-offset enumeration; all observed scores match exactly; independent control and null-winner checks",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Earlier zero-offset English page-pair test",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-page-pair-english",
+      "note": "Exact scorer/model reused; 3,978 overlapping zero-offset scores verified. The extension adds 991,746 shifted English scores."
+    },
+    {
+      "label": "Pinned all-offset superimposition roadmap",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/AUTO_EVOLUTION.md",
+      "note": "S1 proposes difference-IoC superimposition; this newly bounded English-scoring arithmetic extension is not a historical source campaign replay."
+    }
+  ],
+  "family": {
+    "id": "lp2-page-pair-alignment",
+    "title": "Page-pair arithmetic",
+    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "baseline": "lp2-page-pair-alignment"
+  },
+  "variant": {
+    "label": "All relative offsets with direct English scoring",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/lp2-page-pair-alignment/plan.json",
+          "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
+        ],
+        "after": [
+          "experiments/records/lp2-shifted-page-pair-english/frozen-plan.json",
+          "experiments/records/lp2-shifted-page-pair-english/pages.json",
+          "experiments/records/lp2-shifted-page-pair-english/english_quadgrams.txt"
+        ],
+        "reason": "Bundle the frozen English grid, identical manuscript arrays and exact prior scorer/model."
+      },
+      {
+        "field": "representation",
+        "before": "Full GP29 rune streams including headings from 55 rune-bearing LP2-00–55 pages; for each pair use the first min(page lengths) runes.",
+        "after": "Forward GP29 streams including headings from 55 nonempty LP2-00–55 pages; shifted overlaps of at least 120 runes; output scored as canonical GP Latin labels.",
+        "reason": "Use all forward overlaps of at least 120 runes and score their GP-label output as English."
+      },
+      {
+        "field": "procedure",
+        "before": "For every unordered page pair compute aligned sum and difference modulo29, measure output IoC, and compare the global maximum to 256 seeded shared page shuffles within page-length-delimited bands that preserve every compared-prefix histogram.",
+        "after": "Exhaust every eligible unordered pair and relative offset; score A+B, A-B and B-A modulo 29 with unchanged prior English scorer. Compare observed global best with 128 shared whole-page permutation search maxima.",
+        "reason": "Extend the direct arithmetic family to all eligible relative shifts and English scores with whole-search shuffle maxima."
+      },
+      {
+        "field": "parameters",
+        "before": "1,485 distinct pairs × 2 arithmetic operations = 2,970 outputs; 256 global-max null trials; seed 330129.",
+        "after": "1,326 pairs; 331,908 alignments; 995,724 streams, including 991,746 nonzero-offset streams and 3,978 baseline overlaps; at least 100 Latin quadgrams; fixed recognition gate -5.5; 128 null trials; seed 330120261025.",
+        "reason": "Three operations across 331,908 alignments, with 128 complete null searches and fixed English eligibility/gate."
+      },
+      {
+        "field": "exclusions",
+        "before": "Known-opening cribs, other offsets, page reversals and reorders, repeating or interrupted page keys, later positions beyond the common prefix, alternative arithmetic and language scoring.",
+        "after": "Overlap shorter than 120 runes, page reversal, wrapping, repeated or skipped key symbols, other arithmetic, altered transcription, word resets, additional cipher layers, other languages and general shared-key exclusion.",
+        "reason": "Declare remaining untested transforms and the distinction from general shared-key detection."
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-shifted-page-pair-english/english-shift-max.svg",
+      "caption": "The strongest actual English score is ordinary among shuffled search maxima; known Warning controls score much higher."
+    }
+  ],
+  "reproduction": {
+    "command": "python experiments/records/lp2-shifted-page-pair-english/run.py --check && python experiments/records/lp2-shifted-page-pair-english/check.py && python experiments/records/lp2-shifted-page-pair-english/plot.py --check",
+    "script": "experiments/records/lp2-shifted-page-pair-english/run.py",
+    "script_sha256": "fe52552f8478bf2ba2b37c5b02d8113b146108d35b52abf6bcf7f9aa3171a1b8",
+    "environment": "Python 3 with NumPy and Numba; all inputs and original scorer kernels bundled offline. Single process; a few minutes for all 128 null grids.",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/.gitattributes",
+        "sha256": "42a75304601326787dbd5a9b6aa8c13bd42eb556241cadae323e233652fdf89f"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/article.md",
+        "sha256": "061bbcc9b87c089fccbd9305a46b442505bfdc228e982b7477840a5af9913df3"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/check.py",
+        "sha256": "54beef6b267e74fc5d22f93802cf5beb1e0542f1cc02e2ca143a36057d960bf2"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/labels.json",
+        "sha256": "85d9d00b407adf0813f53d8235edf97efaa68ba93fca0682129ba4aaaf280298"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/pages.json",
+        "sha256": "2145e032a56e0aa70fcded4472b704e66485a97f6bcae98ca64389b28c22963e"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/frozen-plan.json",
+        "sha256": "72f21475ecde961479652b12e662f2b16b03029c339f48fe919fcb2b8fb72fa8"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/plot.py",
+        "sha256": "7f616d72e53cc07f0e8b10b7f8a8764d5a29eb62da86c3395f4c313f35c564f4"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/run.py",
+        "sha256": "fe52552f8478bf2ba2b37c5b02d8113b146108d35b52abf6bcf7f9aa3171a1b8"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/source/prior_check.py",
+        "sha256": "c642e52c5e83fe37001d0d068004ba0b716a8b1ebee8d6ecccdaefc7a3c8b9be"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/source/prior_run.py",
+        "sha256": "e50a7b22e547d847d18bc58f6788cd793baf1c990478bd25edeee74bbdbf6871"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/warning.json",
+        "sha256": "700c54cbd04ff0e247682b1be38f3267947d95911e139f6df36a5b1ff3f1aae4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/cases.npz",
+        "sha256": "6a8d02b12e0c85b89c7d8804597edf7103e45840ece688a900a0321b766c9636"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/english-shift-max.svg",
+        "sha256": "9b3680896d5ae76827d5ab3c127450429c66160568c5baa3c8ce54ad13b31602"
+      },
+      {
+        "path": "experiments/records/lp2-shifted-page-pair-english/results.json",
+        "sha256": "e30ff1e725d8d1d90b1463b7aded27f24aede3e7d784d536ac23d7985457aab8"
+      }
+    ]
+  }
+}

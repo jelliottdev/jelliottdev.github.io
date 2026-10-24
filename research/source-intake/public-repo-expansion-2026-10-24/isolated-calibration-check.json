@@ -1,0 +1,56 @@
+{
+  "isolated_zip": "columnar-calibration-isolated.zip",
+  "zip_sha256": "6cb053a07ebc7b9e1aa604ea6dca7f38917bd5aa4a82cdaaa1012f53f7d59b8f",
+  "declared_members": 78,
+  "extracted_root": "research/source-intake/public-repo-expansion-2026-10-24/isolated-columnar-calibration",
+  "commands": [
+    {
+      "command": [
+        "python",
+        "scripts/verify_bundle.py",
+        "EXPERIMENT-public-keyed-columnar-word-counts-CONTENTS.json"
+      ],
+      "exit_code": 0,
+      "stdout": "78 files match the manifest; 0 problems.\nUnlisted files are not checked. A match does not authenticate the manifest.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "experiments/records/public-keyed-columnar-word-counts/run.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"columnar_controls\": 1125,\n  \"max_raw_hits\": 126,\n  \"outcome\": \"inconclusive\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "experiments/records/public-keyed-columnar-word-counts/calibrate.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"observed_maximum\": 126,\n  \"replicates\": 128,\n  \"null_min\": 116,\n  \"null_max\": 144,\n  \"null_mean\": 127.7890625,\n  \"maxima_at_least_observed\": 90,\n  \"descriptive_add_one_fraction\": 0.7054263565891473\n}\nCalibration elapsed seconds (informational): 11.66\nWarning score controls: 45 of 45 top-ranked; direct hits 30 of 45\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "experiments/records/public-keyed-columnar-word-counts/plot_calibration.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "experiments/records/public-keyed-columnar-word-counts/check_calibration.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"observed_maximum\": 126,\n  \"replicates\": 128,\n  \"null_min\": 116,\n  \"null_max\": 144,\n  \"null_mean\": 127.7890625,\n  \"maxima_at_least_observed\": 90,\n  \"descriptive_add_one_fraction\": 0.7054263565891473\n}\nCalibration elapsed seconds (informational): 11.392\nWarning score controls: 45 of 45 top-ranked; direct hits 30 of 45\nPost-target calibration reproduces;128 complete max searches and45 score/rank controls checked. Original plans/results/cases unchanged.\n",
+      "stderr": ""
+    }
+  ],
+  "all_commands_pass": true,
+  "scope": "Fresh extracted standalone calibration bundle; no parent checkout source imports or dependencies required."
+}

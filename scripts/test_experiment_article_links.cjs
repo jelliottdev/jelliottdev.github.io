@@ -48,6 +48,8 @@ assert(context.experimentArticle(fixture,records).includes('href="experiments/re
 // Three real charts remain visible once in the main findings, with their detailed captions/source links retained.
 const l7=records.find(record=>record.id==='l7-score-recovery-controls');assert(l7&&l7.visuals.length===3);
 const l7Detail=context.experimentArticle(l7,records),l7Files=[l7.article_path,...l7.reproduction.inputs.map(f=>f.path),...l7.reproduction.outputs.map(f=>f.path)];
+assert(l7Detail.includes('<p class="experiment-limit"><strong>Limit:</strong> '+esc(l7.reader_limit||l7.limitations)),'The actual detail labels the unchanged scope caveat as a limit');
+assert(!l7Detail.includes('<strong>Still unknown:</strong>'),'Known test boundaries must not be mislabeled as missing knowledge');
 const l7Static=render(l7.article,l7Files,l7.article_links||{});
 for(const visual of l7.visuals){
  assert.equal(l7Detail.split(`src="${visual.path}"`).length-1,1,'Each declared main chart is embedded exactly once');

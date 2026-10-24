@@ -122,6 +122,7 @@ async function experimentsPage(id, version, query='') {
     bindAffineLagFigure();
     bindBlockBoundaryFigure();
     if(typeof GridStemView!=='undefined')GridStemView.bind(main.querySelector('.grid-stem-view'),{isCurrent:()=>version===renderId});
+    if(typeof UrlMarkerView!=='undefined')UrlMarkerView.bind(main.querySelector('.url-marker-view'),{alphabet:db.alphabet,isCurrent:()=>version===renderId});
     startExperimentSupport();
     return;
   }
@@ -375,6 +376,7 @@ function affineLagWorkedExample(){
  <p class="affine-example-note">This is one matching pair, not proof of a cipher. The full count and shuffled comparison follow.</p></figure>`;
 }
 function experimentVisual(r,v){
+  if(r.id==='url-marker-affine-census'&&v.path==='experiments/records/url-marker-affine-census/marker-census.svg'&&typeof UrlMarkerView!=='undefined'&&['results.json','matches.json'].every(name=>r.reproduction?.outputs?.some(file=>file.path==='experiments/records/url-marker-affine-census/'+name)))return UrlMarkerView.render();
   if(r.id==='grid-stem-uncertainty'&&v.path.endsWith('/stem-map.svg')&&typeof GridStemView!=='undefined')return GridStemView.render();
   if(r.id==='block-boundary-doublets'&&v.path.endsWith('/boundaries.svg')){
     const sizes=Array.from({length:28},(_,index)=>`<option value="${index+2}">${index+2}</option>`).join('');
@@ -516,7 +518,7 @@ function experimentArticle(r,catalog=experimentRecords){
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}${r.id==='parallel-language-blocks'?languageBlockFigure():''}
       ${r.reader_note?`<div class="experiment-meaning"><h3>What it means</h3><p>${esc(r.reader_note)}</p></div>`:''}
       <p id="experiment-scope" class="experiment-checked"><strong>Checked:</strong> ${checked}</p>
-      <p class="experiment-limit"><strong>Still unknown:</strong> ${esc(r.reader_limit||r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
+      <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.reader_limit||r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
     </section>
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Get the files</h2>
       <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download experiment ZIP</a></p>

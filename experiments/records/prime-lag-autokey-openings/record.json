@@ -1,0 +1,408 @@
+{
+  "id": "prime-lag-autokey-openings",
+  "status": "published",
+  "title": "Prime-lag autokey against fixed opening cribs",
+  "question": "Do the declared prime-lag CT/PT autokey rules with one-rune primers recover any of nine fixed 12-rune page-start openings?",
+  "reader_question": "Do any prime-delayed autokey settings produce one of the nine proposed openings?",
+  "summary": "No exact opening matches occur. The 638 settings give 315 distinct 12-rune prefix predictions on 53 pages and 316 on 2 pages; longer lags do not reach feedback inside those prefixes.",
+  "reader_finding": "None of the tested settings produces any of the nine proposed openings on these page starts. Longer known-text controls do recover correctly.",
+  "reader_limit": "Only the fixed one-rune primers, delays and nine opening guesses were tested. Longer primers or different plaintexts could behave differently.",
+  "finding": "Across 35,090 nonempty page/settings and 315,810 exact opening comparisons, zero matches occur. All 638 full 64-rune plant recovers under both dense recurrence and independent direct/closed-form checks. Distinct prefixes/page are 315 on 53 pages and 316 on 2 pages; the 348 lag>=13 states reduce to 29 uniform-shift prefixes.",
+  "outcome": "not-supported",
+  "limitations": "A bounded exact-opening compatibility test, not a general autokey exclusion. Six lag values 13..31 do not reach feedback within 12 target runes, so parameter labels overcount distinct predictions. Single-rune primers repeat until lag; arbitrary primers are untested. Source dense-rule reimplementation is not original C++ runtime parity.",
+  "next_steps": "A longer independently specified plaintext continuation can exercise the larger delays; arbitrary lag-length primers require a separately bounded key rule and matched power controls.",
+  "tags": [
+    "LP2",
+    "autokey",
+    "prime lag",
+    "opening cribs",
+    "source rule",
+    "positive controls"
+  ],
+  "related": [
+    "public-multihistory-feedback",
+    "lp2-known-vigenere-keys"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "Original GP29 rune order; all non-runes removed; first 12 runes on each nonempty page; page-local reset.",
+    "procedure": "One rune repeated for consumed j<lag; afterwards subtract prior cipher at lag or recovered plaintext at lag. No interruptions; reset each page.",
+    "parameters": "11 prime lags 2..31; 2 feedback modes; 29 repeated single-rune primers; 638 settings; 55 nonempty pages; 9 frozen 12-rune cribs; 638 full 64-rune plants.",
+    "exclusions": "Original C++ compilation; variable-length arbitrary primers; interruptions; other lags/openings; general language/solve or significance claims."
+  },
+  "reproduction": {
+    "command": "python experiments/records/prime-lag-autokey-openings/run.py && python experiments/records/prime-lag-autokey-openings/check.py",
+    "environment": "Python 3 standard library, offline.",
+    "script": "experiments/records/prime-lag-autokey-openings/run.py",
+    "script_sha256": "68a7e5252dbc1918380f334c7718966f1e6eda52b0244207f54b90efaad4b128",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
+        "sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/plan-frozen-original.json",
+        "sha256": "41daf3c0a9cf17a890a759d1403733fa48e9b96c2aa338a9ec25d3d81812114f"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/source-variable-delay.hpp",
+        "sha256": "63666fbb8faa0d54ad969c56df62a671b00f5514ec04e1773b9862e7717fd05a"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/LICENSE.source",
+        "sha256": "01b86ef21a7ab0b492204125c33f0406e993b37b5f19493286a40adb1f04d712"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/plan.json",
+        "sha256": "18eedb1adaafff4e9947ccfd28a73577e23b26a62aefea1a2f3cc3062c80e93b"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/run.py",
+        "sha256": "68a7e5252dbc1918380f334c7718966f1e6eda52b0244207f54b90efaad4b128"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/check.py",
+        "sha256": "1c56aa795bef8e03ea7c5cb399fb745c191c07019425826ed5c384f2019c6934"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/article.md",
+        "sha256": "499f7485e6af3af37d546cf0046905a6321699c720fdafd646ec9397ff84d9c0"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/pretarget-clarification.json",
+        "sha256": "8e47f2509e2545e8cc2f237c58bfd9f0f27e5036aeca1d02765de94a28fa3132"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/results.json",
+        "sha256": "30cafa8018d35a20a1f624d9cf809d95bd218e515ce3951ec35e1169f62ad47d"
+      },
+      {
+        "path": "experiments/records/prime-lag-autokey-openings/prime-lag.svg",
+        "sha256": "ca81c42ee06fed72bfdba07c08a3b9bd0ca10d7469cac29faadf601f8449ea90"
+      }
+    ]
+  },
+  "review": {
+    "human_review": "pending",
+    "kind": "Dense source-rule reimplementation and independent closed-form/direct lag checks.",
+    "retested_on": "2026-10-23",
+    "reviewer": "Audited source rules, all-map plants and independently formulated output parity; no original full-campaign closure."
+  },
+  "sources": [
+    {
+      "label": "Pinned primary source include/parcae/transform/variable_delay_autokey_transform.hpp",
+      "url": "https://github.com/ToldByNun/Parcae/blob/75b61c9c713161c12e1604167ffbdf44cbe9a2b6/include/parcae/transform/variable_delay_autokey_transform.hpp"
+    },
+    {
+      "label": "Original MIT source license",
+      "url": "https://github.com/ToldByNun/Parcae/blob/75b61c9c713161c12e1604167ffbdf44cbe9a2b6/LICENSE"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/prime-lag-autokey-openings/prime-lag.svg",
+      "caption": "Feedback starts only after lag p. Longer lags collapse to repeated-primer shift predictions in 12-rune prefixes; 638 labels are not 638 independent prefix predictions."
+    }
+  ],
+  "family": {
+    "id": "prime-lag-autokey-openings",
+    "title": "Prime-delay autokey opening compatibility",
+    "question": "What does the fixed source-rule grid produce under the declared local inputs?",
+    "baseline": "prime-lag-autokey-openings"
+  },
+  "variant": {
+    "label": "Bounded source-rule followup",
+    "changes": []
+  }
+}

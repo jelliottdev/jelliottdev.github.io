@@ -1,0 +1,77 @@
+{
+  "schema": "shifted-page-english-plan-v1",
+  "frozen_before_target_scoring": true,
+  "source_id": "B-14/S1 bounded direct-English extension",
+  "minimum_overlap": 120,
+  "page_count": 55,
+  "eligible_pages": 52,
+  "pair_count": 1326,
+  "alignment_count": 331908,
+  "stream_count": 995724,
+  "operations": [
+    "A+B",
+    "A-B",
+    "B-A"
+  ],
+  "nonzero_lag_alignments": 330582,
+  "new_nonzero_lag_streams": 991746,
+  "existing_zero_offset_streams": 3978,
+  "lag_convention": "start_a=max(lag,0);start_b=max(-lag,0);n=min(len(a)-start_a,len(b)-start_b)",
+  "lag_range": "-(len(b)-120) through len(a)-120 inclusive for unordered distinct pairs",
+  "order": "forward, no wrap or repetition",
+  "model_sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+  "scorer": "Unchanged AST-selected score_pair from prior_run.py; GP labels to pinned base10 quadgram average; unseen0.01 floor; >=100 Latin quadgrams. All>=120-rune streams meet eligibility.",
+  "recognition_gate": -5.5,
+  "recognition_gate_note": "Same fixed English control/readability gate as earlier record; not a multiple-search pvalue or proof of plaintext. Report full-search null comparison separately.",
+  "null_trials": 128,
+  "null_seed": 330120261025,
+  "null": "NumPy default_rng(seed), independently permute complete rune arrays of every page once per trial and reuse same shuffled pages across the complete995724-stream grid. Preserve page counts and lengths, not every overlap histogram.",
+  "decision": "Record global observed best, full output, count clearing-5.5 and all128 global null maxima; plus-one exceedance (1+k)/129. No retuning or language substitution.",
+  "positive_controls": {
+    "reading": "warning.json, known184-rune Warning",
+    "random_key_seed": 330120261026,
+    "operation_lags": [
+      1,
+      37,
+      -53
+    ],
+    "require": "For each of3arms construct padded random-key page pair yielding exact184-rune Warning at declared nonzero lag; complete pair search must recover it as global best and score>-5.5. Shuffled second-page complete search must fall below-5.5."
+  },
+  "independent_check": "Use unchanged one_stream from earlier independent checker in separate shifted-grid wrapper to recompute every observed score/quad count. Recount control plaintext exactly and all128 null-winning slices; full128-null regeneration remains runner --check.",
+  "benchmark": "Synthetic-only preflight,2,438alignments with exactexisting3-arm scorer:0.01069s median; projected wholegrid1.47s and target+128nulls3.17minutes excluding compile.",
+  "inputs": [
+    {
+      "path": "source/prior_run.py",
+      "sha256": "e50a7b22e547d847d18bc58f6788cd793baf1c990478bd25edeee74bbdbf6871",
+      "origin": "experiments/records/lp2-page-pair-english/run.py"
+    },
+    {
+      "path": "source/prior_check.py",
+      "sha256": "c642e52c5e83fe37001d0d068004ba0b716a8b1ebee8d6ecccdaefc7a3c8b9be",
+      "origin": "experiments/records/lp2-page-pair-english/check.py"
+    },
+    {
+      "path": "english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+      "origin": "experiments/records/english-scorer-controls/english_quadgrams.txt"
+    },
+    {
+      "path": "pages.json",
+      "sha256": "2145e032a56e0aa70fcded4472b704e66485a97f6bcae98ca64389b28c22963e",
+      "origin": "experiments/records/lp2-shifted-page-pair-differences/pages.json"
+    },
+    {
+      "path": "labels.json",
+      "sha256": "85d9d00b407adf0813f53d8235edf97efaa68ba93fca0682129ba4aaaf280298"
+    },
+    {
+      "path": "warning.json",
+      "sha256": "700c54cbd04ff0e247682b1be38f3267947d95911e139f6df36a5b1ff3f1aae4"
+    }
+  ],
+  "limits": [
+    "English GP-label score only; no exact source nine-register panel replay.",
+    "Not a universal shared-key test: unrelated plaintexts under shared key need not produce an English arithmetic output.",
+    "No overlap<120,page reversal,wrapping,key skipping,other arithmetic,word resets or additional layers."
+  ]
+}
