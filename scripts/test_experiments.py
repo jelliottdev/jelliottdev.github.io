@@ -91,6 +91,34 @@ class RegistryTests(unittest.TestCase):
             with self.subTest(changed=changed), self.assertRaises(ValueError):
                 self.run_build({**record, 'materials': changed})
 
+    def test_discovery_is_optional_strict_and_preserved_in_checker(self):
+        operation = {'action': 'reverse', 'operand': 'rune-order', 'within': 'row'}
+        hint = {'operations': [operation], 'evaluation': ['known-opening']}
+        self.assertNotIn('discovery', self.run_build()[0])
+        record = {**self.record, 'discovery': hint}
+        self.assertEqual(self.run_build(record)[0]['discovery'], hint)
+        checker = json.loads((self.root / 'data/checker-records.json').read_text())
+        self.assertEqual(checker['records'][0]['discovery'], hint)
+        for operand in ('rune-order', 'word-order'):
+            for within in ('row', 'word', 'page'):
+                valid = {'operations': [{**operation, 'operand': operand, 'within': within}],
+                         'evaluation': ['known-opening', 'english-readability']}
+                self.assertEqual(self.run_build({**record, 'discovery': valid})[0]['discovery'], valid)
+        invalid = [None, {}, {**hint, 'coverage': True},
+                   {**hint, 'operations': []}, {**hint, 'operations': [operation] * 2},
+                   {**hint, 'operations': [operation] * 9},
+                   {**hint, 'operations': [{**operation, 'action': 'rotate'}]},
+                   {**hint, 'operations': [{**operation, 'operand': 'letters'}]},
+                   {**hint, 'operations': [{**operation, 'within': 'column'}]},
+                   {**hint, 'operations': [{**operation, 'extra': True}]},
+                   {**hint, 'operations': ['reverse']},
+                   {**hint, 'evaluation': []}, {**hint, 'evaluation': ['known-opening'] * 2},
+                   {**hint, 'evaluation': ['english']}, {**hint, 'evaluation': 'known-opening'},
+                   {**hint, 'evaluation': [None]}, {**hint, 'evaluation': [[]]}]
+        for changed in invalid:
+            with self.subTest(changed=changed), self.assertRaises(ValueError):
+                self.run_build({**record, 'discovery': changed})
+
     def test_article_link_permissions_are_derived_not_imported(self):
         record = copy.deepcopy(self.record)
         record['article_links'] = {'invented.json': 'research/unreviewed.json'}

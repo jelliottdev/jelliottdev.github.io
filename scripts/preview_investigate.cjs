@@ -24,7 +24,7 @@ const qa=`window.__investigateMockCore=async function(url,options){
  if(mode==='delay')await new Promise((resolve,reject)=>{let t=setTimeout(resolve,10000);options.signal.addEventListener('abort',()=>{clearTimeout(t);reject(new DOMException('Canceled','AbortError'));});});
  const registry=await (await fetch('data/experiments.json')).json();
  const raw=JSON.parse(options.body),request=raw.version===1?ClaimResearch.validate(raw):raw,docs=AssistantSearch.experimentDocs(registry.records);
- const selected=AssistantSearch.select(docs,request.query,request.pages).filter(d=>d.kind==='experiment').slice(0,1);
+ const selected=AssistantSearch.select(docs,request.query,request.pages,request.discovery).filter(d=>d.kind==='experiment');
  if(!selected.length)return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  const record=registry.records.find(r=>r.id===selected[0].id);
  if(mode==='changed')selected[0].text+=' changed';

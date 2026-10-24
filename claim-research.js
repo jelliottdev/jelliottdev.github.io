@@ -48,6 +48,22 @@
   }
   return terms;
  }
+ function discoveryHints(snapshot){
+  const labels=C.reviewRows(snapshot).find(row=>row.label==='Method').tags;
+  const classified=C.classifyMethod(snapshot.method).operations;
+  return {steps:snapshot.method.value.operations.map((op,index)=>{
+   const query=[labels[index]?.text,...parameterTerms({method:{value:{operations:[op]}}})].filter(Boolean).join('. ');
+   // Only a supported, positive canonical operation supplies these hints.
+   // Opaque wording and family labels remain lexical leads, not guessed rules.
+   let operation;
+   if(op.id==='reverse_row_runes'&&classified[index]?.familyId==='transposition'){
+    const boundary=snapshot.rules.boundaryMode;
+    const mode=boundary.status==='specified'?boundary.value:null;
+    operation={action:'reverse',operand:mode==='word_blocks'?'word-order':'rune-order',within:mode==='within_words'?'word':'row'};
+   }
+   return {query,...(operation?{operation}:{})};
+  })};
+ }
  function validate(input){
   if(!input||typeof input!=='object'||Array.isArray(input))failure('invalid-request','Unsupported research request.');
   for(const key of Object.keys(input)){
@@ -80,7 +96,7 @@
   if(!full.query)failure('context-too-long','The complete confirmed idea exceeds 6,000 comparison characters. Shorten the idea before comparing.');
   const confirmedQuery=full.query+'\nUnresolved constraints (not executed rules): '+C.serialize(snapshot.unresolved);
   if(confirmedQuery.length>MAX_CONTEXT)failure('context-too-long','The complete confirmed idea exceeds 6,000 comparison characters. Shorten the idea before comparing.');
-  return {request,snapshot,query,confirmedQuery,pages:full.pages};
+  return {request,snapshot,query,confirmedQuery,pages:full.pages,discovery:discoveryHints(snapshot)};
  }
  function prepare(snapshot){
   const s=C.validateConfirmed(snapshot);

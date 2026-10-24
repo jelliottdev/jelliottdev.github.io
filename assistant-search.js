@@ -23,6 +23,7 @@
         // Retrieval can use prose, but evidence always preserves the complete scope.
         keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
         phrases:r.tags||[],
+        ...(r.discovery?{discovery:r.discovery}:{}),
         retrieval:{question:r.question||'',summary:r.summary||'',tags:r.tags||[],topics:r.method_topics||[]}
       };
     });
@@ -210,7 +211,63 @@
     const selected=second&&first.text.length+second.text.length<=9000?[first,second]:[first];
     return addPageContext(selected,documents,query,pages,selected.reduce((sum,item)=>sum+item.text.length,0));
   }
-  function select(documents,query,pages=[]) {
+  function validOperation(value) {
+    return value&&typeof value==='object'&&!Array.isArray(value)&&
+      Object.keys(value).length===3&&value.action==='reverse'&&
+      ['rune-order','word-order'].includes(value.operand)&&['row','word','page'].includes(value.within);
+  }
+  function discoveryOperations(document) {
+    const d=document.discovery;
+    if(!d||Object.keys(d).some(key=>!['operations','evaluation'].includes(key))||
+      !Array.isArray(d.operations)||!d.operations.length||d.operations.length>8||!d.operations.every(validOperation)||
+      !Array.isArray(d.evaluation)||!d.evaluation.length||d.evaluation.length>4||
+      !d.evaluation.every(value=>['known-opening','english-readability'].includes(value)))return [];
+    return d.operations;
+  }
+  function structuredSelection(documents,query,pages,discovery) {
+    const steps=discovery?.steps;
+    if(!Array.isArray(steps)||!steps.length||steps.length>64||steps.some(step=>
+      !step||typeof step.query!=='string'||!step.query.trim()||step.query.length>1500||
+      Object.keys(step).some(key=>!['query','operation'].includes(key))||
+      (step.operation!==undefined&&!validOperation(step.operation))))return null;
+    const candidates=documents.filter(document=>document.kind==='experiment');
+    const annotated=candidates.map(document=>({document,operations:discoveryOperations(document)})).filter(item=>item.operations.length);
+    const matchesOperation=(item,op)=>item.action===op.action&&item.operand===op.operand;
+    if(!steps.some(step=>step.operation&&annotated.some(item=>item.operations.some(op=>matchesOperation(op,step.operation)))))return null;
+    const lexical=new Map();
+    const groups=steps.map(step=>{
+      const op=step.operation;
+      let matches=op?annotated.filter(item=>item.operations.some(value=>matchesOperation(value,op))).map(item=>item.document):[];
+      if(!matches.length){
+        if(!lexical.has(step.query))lexical.set(step.query,lexicalSelect(candidates,step.query,pages));
+        return lexical.get(step.query);
+      }
+      // Prefer the same operand and extent. A page-wide word-order test can
+      // still be a lead for a row-wise proposal, but retains its actual scope.
+      const sameExtent=matches.filter(document=>discoveryOperations(document).some(item=>
+        item.action===op.action&&item.operand===op.operand&&item.within===op.within));
+      if(sameExtent.length)matches=sameExtent;
+      const ranked=rankedRecords(matches,step.query,pages).map(hit=>hit.document);
+      return [...ranked,...matches.filter(document=>!ranked.includes(document))];
+    });
+    const selected=[];let size=0;
+    // Each ordered step gets its closest lead before a single-step follow-up.
+    // This is discovery of constituent evidence, never proof of a combination.
+    for(const group of groups){
+      const first=group[0];if(!first||selected.some(document=>document.id===first.id))continue;
+      if(!selected.length&&first.text.length>9000)return [];
+      if(selected.length>=4||size+first.text.length>9000)continue;
+      selected.push(first);size+=first.text.length;
+    }
+    if(steps.length===1){
+      const second=groups[0][1];
+      if(second&&size+second.text.length<=9000){selected.push(second);size+=second.text.length;}
+    }
+    return addPageContext(selected,documents,query,pages,size);
+  }
+  function select(documents,query,pages=[],discovery) {
+    const structured=structuredSelection(documents,query,pages,discovery);
+    if(structured!==null)return structured;
     const baseline=lexicalSelect(documents,query,pages);
     const rescue=rescueSelection(documents,query,pages,baseline);
     return rescue===null?baseline:rescue;
@@ -225,10 +282,11 @@
       return {...r,pageOverlap:explicit.some(p=>scope.includes(p))};
     }).sort((a,b)=>b.score-a.score||Number(b.pageOverlap)-Number(a.pageOverlap));
   }
-  function classify(documents,query,pages=[]) {
+  function classify(documents,query,pages=[],discovery) {
     // The visible record lists and Worker evidence must agree about a rescued
     // named method. Do not leave unrelated motif hits atop the local results.
-    const rescue=rescueSelection(documents,query,pages,lexicalSelect(documents,query,pages));
+    const structured=structuredSelection(documents,query,pages,discovery);
+    const rescue=structured!==null?structured:rescueSelection(documents,query,pages,lexicalSelect(documents,query,pages));
     if(rescue!==null){
       const hits=rescue.filter(document=>document.kind==='experiment')
         .map((document,index)=>({document,score:1/(index+1),matched:[],pageOverlap:false}));
@@ -247,11 +305,11 @@
     // A strong diagnostic/source match should not trigger a weak, incidental method hit.
     return {tests:supporting.length&&tests.length&&supporting[0].score>=tests[0].score*1.5?[]:tests,supporting};
   }
-  function experiments(documents,query,pages=[]) {
-    return classify(documents,query,pages).tests;
+  function experiments(documents,query,pages=[],discovery) {
+    return classify(documents,query,pages,discovery).tests;
   }
-  function supporting(documents,query,pages=[]) {
-    return classify(documents,query,pages).supporting;
+  function supporting(documents,query,pages=[],discovery) {
+    return classify(documents,query,pages,discovery).supporting;
   }
   const api={tokens,pageIds,experimentDocs,search,select,experiments,supporting,classify,techniqueQuery};
   if(typeof module!=='undefined')module.exports=api;else root.AssistantSearch=api;

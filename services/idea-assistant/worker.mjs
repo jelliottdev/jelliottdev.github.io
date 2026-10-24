@@ -56,7 +56,7 @@ async function readQuery(request) {
   const data = JSON.parse(new TextDecoder().decode(bytes));
   if (data && Object.prototype.hasOwnProperty.call(data,'version')) {
     const validated=ClaimResearch.validate(data);
-    return {query:validated.query,confirmedQuery:validated.confirmedQuery,pages:validated.pages,
+    return {query:validated.query,confirmedQuery:validated.confirmedQuery,pages:validated.pages,discovery:validated.discovery,
       claimBinding:await ClaimResearch.binding(validated.request)};
   }
   if (typeof data.query !== 'string' || !data.query.trim() || data.query.length > 1500) throw Error('Invalid query');
@@ -91,8 +91,8 @@ export function createHandler(loadRecords = records) {
       'Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type',
       'Access-Control-Max-Age':'86400'}});
     if (request.method !== 'POST') return reply({error:'Use POST'},405);
-    let query,pages,confirmedQuery;
-    try {({query,pages,confirmedQuery,claimBinding} = await readQuery(request));} catch {return reply({error:'The idea could not be read within the comparison limits. Review its wording and try again.'},400);}
+    let query,pages,confirmedQuery,discovery;
+    try {({query,pages,confirmedQuery,claimBinding,discovery} = await readQuery(request));} catch {return reply({error:'The idea could not be read within the comparison limits. Review its wording and try again.'},400);}
     try {
       if (!env.IDEA_LIMIT || !env.AI) return reply({error:'Assistant is not configured.'},503);
       const {success} = await env.IDEA_LIMIT.limit({key:request.headers.get('CF-Connecting-IP') || 'unknown'});
@@ -100,7 +100,7 @@ export function createHandler(loadRecords = records) {
       // Evidence and paths come from the published wiki, never from the visitor.
       const documents=await loadRecords();
       if(pages.some(p=>Number(p.slice(4))>(p.startsWith('lp1')?16:57)))return reply({error:'Choose a published manuscript page.'},400);
-      const selected=AssistantSearch.select(documents,query,pages).map((d,i)=>({
+      const selected=AssistantSearch.select(documents,query,pages,discovery).map((d,i)=>({
         citation:i+1,id:d.id,title:d.title,kind:d.kind,recordType:d.recordType,href:d.href,page:d.page,
         excerpt:d.excerpt,text:d.text
       }));

@@ -15,7 +15,7 @@ const UI_PATHS=new Set([
  'data/assistant.json',
  'scripts/test_home_preview.cjs',
  'scripts/test_assistant.cjs','scripts/test_claim_interpretation.cjs','scripts/test_claim_specification.cjs',
- 'scripts/test_claim_share.cjs','scripts/test_claim_research.cjs','scripts/test_workspace_routes.cjs',
+ 'scripts/test_claim_share.cjs','scripts/test_claim_research.cjs','scripts/test_claim_discovery.cjs','scripts/test_workspace_routes.cjs',
  'scripts/test_manuscript_reader.cjs','scripts/test_reader_continuous.cjs','scripts/test_manuscript_search.cjs',
  'scripts/test_investigate.cjs','scripts/test_investigate_edit_fidelity.cjs','scripts/test_investigate_share.cjs',
  'scripts/test_investigate_intake_focus.cjs','scripts/test_investigate_card_request.cjs','scripts/test_investigate_interpretation.cjs',

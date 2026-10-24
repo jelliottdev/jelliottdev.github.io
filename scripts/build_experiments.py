@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Preserve exact evidence and lexical text; detail/download dependencies stay separate.
 CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
                   'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
-                  'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials')
+                  'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials', 'discovery')
 
 
 def checker_payload(records, registry_bytes):
@@ -30,6 +30,31 @@ def require(value, message):
 
 def text(value, label):
     require(isinstance(value, str) and value.strip(), f'{label}: expected nonempty text')
+
+
+def validate_discovery(discovery):
+    """Authored candidate-search hints, never an assertion of exact coverage."""
+    require(isinstance(discovery, dict) and set(discovery) == {'operations', 'evaluation'},
+            'discovery: expected operations and evaluation only')
+    operations = discovery['operations']
+    require(isinstance(operations, list) and 1 <= len(operations) <= 8,
+            'discovery.operations: expected 1..8 unique operations')
+    seen = set()
+    for operation in operations:
+        require(isinstance(operation, dict) and set(operation) == {'action', 'operand', 'within'},
+                'discovery operation: unexpected fields')
+        require(operation['action'] == 'reverse'
+                and operation['operand'] in ('rune-order', 'word-order')
+                and operation['within'] in ('row', 'word', 'page'),
+                'discovery operation: invalid controlled value')
+        signature = tuple(operation[key] for key in ('action', 'operand', 'within'))
+        require(signature not in seen, 'discovery.operations: duplicate operation')
+        seen.add(signature)
+    evaluation = discovery['evaluation']
+    require(isinstance(evaluation, list) and 1 <= len(evaluation) <= 4
+            and all(value in ('known-opening', 'english-readability') for value in evaluation)
+            and len(set(evaluation)) == len(evaluation),
+            'discovery.evaluation: expected unique controlled evaluations')
 
 
 def local(root, path):
@@ -111,6 +136,8 @@ def validate_batch(root, record):
 def validate_record(root, path, pages):
     """Validate one completed record without publishing it or executing its scripts."""
     d = json.loads(path.read_text(encoding='utf-8'))
+    if 'discovery' in d:
+        validate_discovery(d['discovery'])
     require(d.get('status') in ('draft', 'published'), f'{path}: invalid status')
     identifier = d.get('id', '')
     require(re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)

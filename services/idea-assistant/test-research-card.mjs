@@ -45,4 +45,18 @@ const beforeBad=calls;
 for(const bad of [{...request,query:'OutGuess'},{...request,pages:['lp2-01']},{...request,confirmedQuery:'invented scope'},{...request,version:2},{...request,card:{...request.card,version:2}}])assert.equal((await handle(post(bad),env)).status,400);
 assert.equal(calls,beforeBad,'Invalid cards fail before inference');
 const denied=await handle(post(request),{...env,IDEA_LIMIT:{limit:async()=>({success:false})}});assert.equal(denied.status,429);assert.equal((await denied.json()).claimBinding,binding);
+for(const boundary of [null,'within_words','word_blocks','fixed_spaces']){
+ const snapshot=C.confirm(C.createDraft({source:{text:'A confirmed row reversal with explicit boundaries.'},aim:known('Find readable text'),
+  method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'},
+   ...(boundary==='fixed_spaces'?[{id:'described_method',label:'Apply Vigenere with key ABC',key:'ABC'}]:[])]}),
+  scope:known({pages:['lp2-15','lp2-17']}),rules:boundary?{wordBoundaries:known('preserve'),boundaryMode:known(boundary)}:{}}),{id:'operand-'+boundary,at:'2026-10-24T12:00:00Z'});
+ const prepared=R.prepare(snapshot),result=await (await handle(post(prepared.request),env)).json();
+ assert.equal(result.claimBinding,await R.binding(prepared.request));
+ assert.deepEqual(result.sources.map(s=>s.id),Search.select(docs,prepared.query,prepared.pages,prepared.discovery).map(s=>s.id));
+ assert.equal(seen.at(-1).idea,prepared.confirmedQuery,'Model sees the exact confirmed combination, not discovery hints as execution evidence');
+ assert(result.sources.some(s=>s.id===(boundary==='within_words'?'lp2-word-reversal':boundary==='word_blocks'?'lp2-word-order-reversal':'lp2-row-column-routes')));
+ for(const source of result.sources)assert.equal(source.text,docs.find(d=>d.id===source.id).text);
+ const spoofed=await handle(post({...prepared.request,discovery:{steps:[{query:'OutGuess'}]}}),env);
+ assert.equal(spoofed.status,400,'A visitor cannot override server-derived method hints');
+}
 console.log('PASS exact-card Worker: derived retrieval/context, complete page sets and passage, parameters and unknowns, content-bound cache/no-match, rejected overrides, unchanged quotas. All model calls mocked.');

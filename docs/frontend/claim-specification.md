@@ -392,3 +392,27 @@ with comparison; a successful uncached journey can therefore use two generations
 Interpretation has three provider slots, and a timed-out provider retains its slot
 until it actually settles. These bounds limit work; they are not a global daily
 quota. The frontend waits at most 30 seconds and keeps the original on failure.
+
+
+## Candidate discovery from confirmed operations
+
+`ClaimResearch.prepare` and Worker-side validation derive search hints from the
+active card. Visitors cannot supply a separate discovery override. Supported
+row reversal retains the confirmed boundary choice: rune order within a row,
+rune order within a word, or word order within a row. Opaque, conditional and
+negated wording does not acquire a positive operation merely from a keyword.
+
+Published records may carry reviewed `discovery` operation and evaluation hints.
+These select candidate evidence; they do not establish identical settings or
+executed coverage. Prefer the same operand and extent. A page-wide word-order
+test may be a related lead for a row-wise proposal, but its full scope must
+still explain that difference. Single-step searches can include a second
+evaluation; compound searches select a lead per ordered step before extra
+variants. They keep at most four complete records within the existing 9,000
+character research budget. Unrepresented steps remain unanswered, not tested.
+
+Metadata is currently audited for four reversal/route records. Other operations
+retain lexical retrieval. The shared selection code powers both the Worker's
+evidence and the browser's fallback records; neither source text nor the
+confirmed idea is rewritten. `scripts/test_claim_discovery.cjs` covers operand
+distinctions, full/compact parity, compound selection and refusal boundaries.

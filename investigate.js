@@ -480,7 +480,7 @@
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
    if(result)return '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls+(result.noMatch?'':'<p class="small answer-note">AI comparison based on the linked records.</p>');
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
-   const related=q.query?S.select(documents,q.query,scope.pages||[]).filter(d=>d.kind==='experiment').slice(0,2):[];
+   const related=q.query?S.select(documents,q.query,scope.pages||[],scope.discovery).filter(d=>d.kind==='experiment'):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true})).join(''):'');
   }
   function bind(){
