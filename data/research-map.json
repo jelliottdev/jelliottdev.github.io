@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "b80e6d0965d9fbabca271557a80803483cc9967b4134cd0340d8908fb84b77fa",
+    "current_experiments_sha256": "8216a7d5ffd36ccbed7a316f4abb22d9994010bdae41f32cbb43aaed22f1ff3d",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -33,7 +33,7 @@
       }
     },
     "snapshot_records": 314,
-    "current_records": 328,
+    "current_records": 329,
     "missing_snapshot_ids": [],
     "new_ids": [
       "artifact-stream-skip-grid",
@@ -47,6 +47,7 @@
       "numeric-stream-skip-grid",
       "page-number-prime-skip-grid",
       "payload-phase-skip-grid",
+      "short-text-prefix-extension",
       "turtle-shape-refinement-replay",
       "two-rune-feedback-family",
       "two-rune-primer-extension"
@@ -13049,7 +13050,7 @@
       },
       "outcome": "inconclusive",
       "href": "#/experiments/dukotah-held-corpus-skeleton-replay",
-      "current_sha256": "b555db058271010192da2ca1861d84d50cff2bb9de4fca3f85096e706116d40a",
+      "current_sha256": "aa18fd1623d14d015caab8edf52a468927a2b860c3c235aec59565e403951a05",
       "snapshot_sha256": null,
       "changed_fields": [],
       "classification": "awaiting-classification"
@@ -28736,6 +28737,31 @@
       "changed_fields": [],
       "classification": "draft"
     },
+    "short-text-prefix-extension": {
+      "id": "short-text-prefix-extension",
+      "title": "Word-length prefixes in previously omitted short texts",
+      "question": "Do shorter archived texts match either word-length prefix?",
+      "finding": "Neither shorter prefix matched completely. The best alignments agreed at 87 of 400 and 37 of 120 word-length positions, below the earlier scan’s maxima.",
+      "limitations": "Matching word lengths does not recover words. Only two fixed prefixes and the previously omitted texts from the same 94-file corpus were tested; this is not the historical 224-text scan.",
+      "pages": [],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/short-text-prefix-extension/reproduction/inputs-frozen.json",
+          "experiments/records/short-text-prefix-extension/reproduction/protocol-frozen.json"
+        ],
+        "representation": "Same pinned 94-file corpus and source manuscript parser as the baseline: first 55 percent-separated segments, 2,928 words, with greedy rune encoding and directional F-count intervals. Raw files, normalized arrays, ordering and hashes unchanged; corpus inputs external.",
+        "procedure": "Construct exact original prefix patterns after consuming all four full-length RNG permutations. Run unchanged scanner.scan_corpus separately for the three 400-word patterns on 8 newly eligible texts and the three 120-word patterns on 10, retaining default blocks/FFT and raw strict-maximum/tie selection. Independently integer-count every target alignment.",
+        "parameters": "Seed 3301 and original RNG order. First 400/120 real interval patterns plus two fixed shuffles each; 5,378 starts per 400-word pattern and 8,037 per 120-word pattern, 40,245 total scores. Newly eligible means prefix width <= words < 2,928. No repeated 84-text scan. 37 synthetic controls; 1,371 checked synthetic alignments.",
+        "exclusions": "No new corpus texts, historical 224-text replay, full 2,928-pattern rerun, alternative manuscript windows, changed parser/editions, word/content recovery, language exclusion or calibrated global probability. Corpus texts and normalized corpus arrays are not bundled."
+      },
+      "outcome": "not-supported",
+      "href": "#/experiments/short-text-prefix-extension",
+      "current_sha256": "4b15d66b2465bfcf033ace0d26a7fc920620519ca6e94a9221c0aa740e348892",
+      "snapshot_sha256": null,
+      "changed_fields": [],
+      "classification": "awaiting-classification"
+    },
     "short-window-lag13": {
       "id": "short-window-lag13",
       "title": "Short-window repeated rune patterns at lag 13",
@@ -35074,6 +35100,7 @@
     "numeric-stream-skip-grid",
     "page-number-prime-skip-grid",
     "payload-phase-skip-grid",
+    "short-text-prefix-extension",
     "turtle-shape-refinement-replay",
     "two-rune-feedback-family",
     "two-rune-primer-extension"

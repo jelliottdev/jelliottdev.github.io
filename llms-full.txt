@@ -7732,7 +7732,7 @@ Language, clues and search
 Language and corpus identification
 Compare declared observables with suitable language controls under explicit cipher assumptions.
 
-9 related records
+10 related records
 Could the unsolved text be another language? Eight aligned translations · Manuscript measurement
 
 Language controls with exactly 2,896 tokens per sample · Manuscript measurement
@@ -7750,6 +7750,8 @@ Can one score cutoff judge every decode? · Control
 Does the sieve's pass gate require every register? · Control
 
 Matching manuscript word lengths to archived texts · Method replay
+
+Word-length prefixes in previously omitted short texts · Bounded solving test
 
 
 
@@ -8915,6 +8917,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/round20-sieve-register-gate
 - Matching manuscript word lengths to archived texts
   https://jelliottdev.github.io/#/experiments/dukotah-held-corpus-skeleton-replay
+- Word-length prefixes in previously omitted short texts
+  https://jelliottdev.github.io/#/experiments/short-text-prefix-extension
 - Known plaintext and crib searches
   https://jelliottdev.github.io/reference/articles/method-cribs.html
 - LP2-39: twenty proposed red-header cribs
@@ -24268,9 +24272,26 @@ A left-tail fraction asks how often a reference value is no greater than the obs
 
 Does a passage match the ordered lengths?
 
+
+Different words, identical lengths. An invented example, not manuscript text:
+
+	Position	1	2	3
+
+	Phrase A	RED	FOX	SAT
+
+	Phrase B	BIG	CAT	RAN
+
+	Runes in either	3	3	3
+
+
+All 3 of 3 positions match in length under the source’s rune conversion. None of the words is the same. A length match counts a position, not a decoded word.
+
+
 The archived-text skeleton replay searched contiguous passages in 84 of 94 available texts. No complete pattern matched; the exact rule agreed at best at 593 of 2,928 positions. These are compatible word lengths, not recovered words. Unlike the historical prefix comparison, this tests passage alignment rather than a summary distribution.
 
-The replay retains its source’s 2,928-word parser, separate from the joined count above. Its minimum-length gate omits ten texts even for the first-400 and first-120 prefix checks; other manuscript subwindows were not tested. It is not a replay of the historical 224-text corpus. Four full-pattern shuffles and two per prefix do not establish a calibrated global probability or exclude a language.
+A follow-up checked the shorter texts that the original scan skipped: eight were long enough for the 400-word check, and all ten for the 120-word check. None matched a complete prefix or improved the earlier best partial matches.
+
+Both tests use the source’s 2,928-word parser, separate from the joined count above. They test only the first 400 and 120 words, not every possible manuscript passage. Neither reproduces the historical 224-text corpus. The small number of shuffled comparisons cannot establish a global probability or exclude a language.
 
 Could the plaintext be another language?
 The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
@@ -24509,6 +24530,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 - archived-text skeleton replay
   https://jelliottdev.github.io/#/experiments/dukotah-held-corpus-skeleton-replay
+- follow-up checked the shorter texts
+  https://jelliottdev.github.io/#/experiments/short-text-prefix-extension
 - eight-language parallel-corpus experiment
   https://jelliottdev.github.io/#/experiments/parallel-languages
 - known-LP reading control
@@ -30377,7 +30400,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 328 published reproducible records: 75 bounded solving or extraction tests, 96 proposed-method replay, 82 manuscript measurements, 36 controls, 36 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 329 published reproducible records: 76 bounded solving or extraction tests, 96 proposed-method replay, 82 manuscript measurements, 36 controls, 36 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -51630,7 +51653,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "reader_finding": "None of the tested alignments matched the complete pattern. The best exact-length alignment agreed at 593 of 2,928 word positions.",
   "limitations": "The source admitted 84 of 94 available files and omitted ten texts shorter than 2,928 words, even for the prefix patterns. Only the first 400 and 120 words were tested as shorter windows. Four full-pattern shuffles and two per prefix do not establish a calibrated global probability or statistical equivalence. The source T0 supplied two plant texts and one shuffled control; the preregistered null z gate and degradation floor are not established. This is not the historical 224-text replay or a plaintext/language exclusion.",
   "reader_limit": "Only 84 of 94 available texts passed the unchanged length gate. This is not the historical 224-text corpus, and length matches are not decoded words.",
-  "next_steps": "A separate frozen follow-up would be needed to include short texts in the prefix scans or measure robustness to changed editions and word boundaries.",
+  "next_steps": "The linked short-text follow-up checks the ten omitted files where they are long enough for each fixed prefix. Historical missing corpus bytes, other manuscript passages and robustness to changed editions and word boundaries remain unresolved.",
   "outcome": "inconclusive",
   "tags": [
     "word lengths",
@@ -51902,7 +51925,8 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "related": [
     "corpus-prefix-census",
     "layout-count-streams",
-    "transcription-correction-sensitivity"
+    "transcription-correction-sensitivity",
+    "short-text-prefix-extension"
   ],
   "materials": {
     "summary": "Saved full/prefix maxima, per-text summaries, planted controls and independent witness/audit receipts.",
@@ -51913,6 +51937,16 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/scan_results.json",
       "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-target-audit.json"
     ]
+  },
+  "family": {
+    "id": "archived-word-length-alignment",
+    "title": "Matching word lengths to archived texts",
+    "question": "Do contiguous passages fit the manuscript word-length sequence?",
+    "baseline": "dukotah-held-corpus-skeleton-replay"
+  },
+  "variant": {
+    "label": "Original full-pattern eligibility gate",
+    "changes": []
   },
   "article": "No tested alignment matched the complete manuscript word-length pattern. With the exact-length rule, the best alignment agreed at **593 of 2,928 word positions**. Those positions meet the length rule; this does not recover the manuscript’s words or mean that 593 consecutive word lengths matched.\n\nThe scan used **84 eligible texts from 94 available files**. It is a replay of these exact archived inputs, **not the historical 224-text corpus** reported by the source. It does not establish a plaintext or exclude a language.\n\n![Best full-pattern word-length counts, each out of 2,928 positions.](experiments/records/dukotah-held-corpus-skeleton-replay/length-matches.svg)\n\n## What was compared\n\nThe [pinned source program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/run_scan.py) compares a sequence of manuscript word lengths with every eligible contiguous alignment in each text. The source parser takes its first 55 percent-separated manuscript segments, yielding 2,928 words. It splits words on dashes and periods and treats slash marks as line wraps. Corpus text passes through the source’s fixed Latin-to-rune-length normalization. This retains the archived input convention; it is not a fresh scan of every current page transcription.\n\nThree full-pattern rules were tested: exact length; symmetric tolerance of one rune; and a directional interval from the observed length minus that word’s F-rune count up to the observed length. The latter models F runes that might be nulls. The source also tests the **first 400 and first 120 words** with the interval rule; it does not test every manuscript subwindow.\n\n| Pattern | Best compatible positions | Shuffled-pattern maxima |\n|---|---:|---|\n| Full, exact | 593 / 2,928 | 586, 590, 583, 588 |\n| Full, within one rune | 1,445 / 2,928 | 1,450, 1,445, 1,448, 1,448 |\n| Full, F-count interval | 664 / 2,928 | 656, 662, 650, 659 |\n| First 400, interval | 109 / 400 | 109, 109 |\n| First 120, interval | 47 / 120 | 48, 50 |\n\nEach number is a maximum after searching the same eligible texts and offsets. Four full-pattern shuffles and two shuffles per prefix are too few for a calibrated global probability or a claim that the real pattern is statistically equivalent to shuffled patterns. No such inference is made here.\n\n## Exact coverage and controls\n\nThe unchanged scanner omits every text shorter than **2,928 words**, even when testing the shorter prefixes. Thus ten available files were omitted. The eligible files contain 9,799,472 normalized words and supply 9,553,604 unique full-pattern alignments, 9,765,956 first-400 alignments and 9,789,476 first-120 alignments. Shorter patterns are evaluated more than once near block joins; those repeated evaluations are not extra independent alignments.\n\nBefore the target scan, independent direct counts checked all three matchers at **103,995 synthetic offset values**, including block joins and tail plants. The source’s planted-text control then recovered two available passages at their exact text and offset: KJV and Emerson, each scoring 2,506/2,928 under exact matching and 2,928/2,928 under the interval rule. Only two eligible plant texts were available under its unchanged selection rule. Its single shuffled control does not establish the preregistered null-score gate, and the source’s separate corruption/degradation tests were not replayed. There is no measured bound on tolerance to other editions, insertions, deletions or changed word boundaries.\n\nAll 21 saved target winners were independently recounted with integer comparisons. The full corpus maxima were not independently searched a second time; the saved per-text summaries have membership, bounds and near-integer checks. This replay does not cover reordered or noncontiguous plaintext, other encodings, unavailable corpus texts, or changed input conventions.\n\n## Saved results and reproduction\n\nThe [saved scan](experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/scan_results.json) retains every pattern’s global winner and per-text maximum. The [independent witness audit](experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-target-audit.json) records integer winner counts and omissions. These let readers inspect the reported maxima without repeating the corpus search.\n\nThe reproduction bundle includes exact MIT-licensed source code, frozen plans, input hashes and receipts, but **no corpus texts or derived length arrays**. [Portable reproduction instructions](experiments/records/dukotah-held-corpus-skeleton-replay/PORTABILITY.md) give the exact bundle-root setup, T0 control, manuscript scan and expected-output comparison commands. Every raw and normalized input must match before a full replay can run. Adapter checks confirmed all 94 normalized arrays against the original loader and bit-identical synthetic scanner outputs; they did not rerun the manuscript search.\n\nFor a quick audit without the corpus scans, this separate command validates saved bytes and arithmetic only:\n\n```text\npython experiments/records/dukotah-held-corpus-skeleton-replay/check.py --check\n```\n",
   "article_path": "experiments/records/dukotah-held-corpus-skeleton-replay/article.md",
@@ -114165,6 +114199,287 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "PRNG",
         "seed",
         "generated keystream"
+      ]
+    }
+  ]
+}
+
+---
+
+{
+  "id": "short-text-prefix-extension",
+  "status": "published",
+  "title": "Word-length prefixes in previously omitted short texts",
+  "question": "Do the previously omitted short texts match either fixed manuscript word-length prefix?",
+  "reader_question": "Do shorter archived texts match either word-length prefix?",
+  "summary": "The previously omitted short texts produced no complete prefix match and did not improve the earlier maxima. The best counts were 87/400 and 37/120 compatible word-length positions.",
+  "finding": "Separate unchanged-source calls score 40,245 alignments: three 400-word patterns across 8 newly eligible texts and three 120-word patterns across 10. The real-prefix maxima are 87/400 at koans offset 141 and 37/120 at koans offset 40. Two fixed shuffled-pattern maxima are 89/400 and 93/400, and 38/120 and 39/120. Zero real-prefix alignments match every position. Earlier 84-text maxima 109/400 and 47/120 remain separately published, not rerun here. All target FFT scores are retained with direct integer counts.",
+  "reader_finding": "Neither shorter prefix matched completely. The best alignments agreed at 87 of 400 and 37 of 120 word-length positions, below the earlier scan’s maxima.",
+  "limitations": "No additional corpus files, historical 224-text replay, full 2,928-word rerun, all-subwindow manuscript scan, changed editions or normalization, plaintext recovery or language exclusion. Partial compatible positions need not be consecutive words. Two shuffled patterns per prefix do not calibrate a global probability. Constant integer ties can be separated by microscopic source FFT errors; exact raw source selection is retained. Corpus texts and normalized length arrays remain external.",
+  "reader_limit": "Matching word lengths does not recover words. Only two fixed prefixes and the previously omitted texts from the same 94-file corpus were tested; this is not the historical 224-text scan.",
+  "next_steps": "A concrete complete interval match would still require word/content verification; other manuscript windows or changed text editions require a separately frozen test.",
+  "outcome": "not-supported",
+  "tags": [
+    "word lengths",
+    "word-length prefix",
+    "short texts",
+    "previously omitted texts",
+    "corpus matching",
+    "F rune",
+    "contiguous passages"
+  ],
+  "pages_note": "Same source parser’s first 55 percent-separated manuscript segments; first 400 and 120 words only",
+  "bounds_note": "Same 94-file corpus; eight newly eligible texts for 400 words, ten for 120; 40,245 alignment scores.",
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/short-text-prefix-extension/reproduction/inputs-frozen.json",
+      "experiments/records/short-text-prefix-extension/reproduction/protocol-frozen.json"
+    ],
+    "representation": "Same pinned 94-file corpus and source manuscript parser as the baseline: first 55 percent-separated segments, 2,928 words, with greedy rune encoding and directional F-count intervals. Raw files, normalized arrays, ordering and hashes unchanged; corpus inputs external.",
+    "procedure": "Construct exact original prefix patterns after consuming all four full-length RNG permutations. Run unchanged scanner.scan_corpus separately for the three 400-word patterns on 8 newly eligible texts and the three 120-word patterns on 10, retaining default blocks/FFT and raw strict-maximum/tie selection. Independently integer-count every target alignment.",
+    "parameters": "Seed 3301 and original RNG order. First 400/120 real interval patterns plus two fixed shuffles each; 5,378 starts per 400-word pattern and 8,037 per 120-word pattern, 40,245 total scores. Newly eligible means prefix width <= words < 2,928. No repeated 84-text scan. 37 synthetic controls; 1,371 checked synthetic alignments.",
+    "exclusions": "No new corpus texts, historical 224-text replay, full 2,928-pattern rerun, alternative manuscript windows, changed parser/editions, word/content recovery, language exclusion or calibrated global probability. Corpus texts and normalized corpus arrays are not bundled."
+  },
+  "review": {
+    "kind": "bounded prefix eligibility extension with pre-target synthetic controls and independent all-score validation",
+    "retested_on": "2026-10-24",
+    "reviewer": "Independent source/input/RNG review before target; 37 synthetic cases and 1,371 synthetic scores; all 40,245 target integer counts and raw selection witnesses independently checked.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/short-text-prefix-extension/check.py && python experiments/records/short-text-prefix-extension/replay.py --inputs c01-inputs",
+    "environment": "Python 3.12 and NumPy 2.5.4, installed separately. Exact external 94-text inputs and manuscript prepared as c01-inputs using the bundled unchanged adapter; PORTABILITY.md gives bundle-root commands. Full replay uses temporary output, compares deterministic controls/target arrays, and runs the independent all-score audit. Expected bytes remain untouched. No automatic installation or network.",
+    "script": "experiments/records/short-text-prefix-extension/replay.py",
+    "script_sha256": "60546ed1f99517017d20edfffb66254e24862ef54cfdcbb19c52d841ba8d7642",
+    "inputs": [
+      {
+        "path": "experiments/records/short-text-prefix-extension/article.md",
+        "sha256": "90390f122aa1881e7de5e48984ccdb9c8970f70d7e2301a61076ac6ead44e46f"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/check.py",
+        "sha256": "3516bb179c4e1ab6eeee8235986e0b18bbc02aa701427754d1de2aead74bfbad"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/audit-plan-frozen.json",
+        "sha256": "6b1c839beca6d9bd41f07ee9e948fb42b61f84678b3c5d1a97d056f1ca78d554"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/audit_target.py",
+        "sha256": "023c0e44e1d3ce35009739b313271ccf43b47fced734d2e0e53aecb8288951cb"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/direct.py",
+        "sha256": "eb59d82ed3dee51a4782bfd986905a6a23e31c9b17f540ef95f0dcd046465f4a"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/merge_context.py",
+        "sha256": "c6a695ef3e6ea4874345c31c023035f031042b9d394fc4299e9cdad7da64d947"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/preflight.py",
+        "sha256": "08ad25b821155079fca3a03aa694e2d234c6126a1bdcb7af7089d8e83537e8ad"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/PORTABILITY.md",
+        "sha256": "074b41ba1a881043acb95c870b225fa94142b81cc593266eabd9823160a24a61"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/replay.py",
+        "sha256": "60546ed1f99517017d20edfffb66254e24862ef54cfdcbb19c52d841ba8d7642"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/inputs-frozen.json",
+        "sha256": "e7b3922b158d037b134a21246d0426bcd15d36dbc1d2feeb76c330876ce71100"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/portable.py",
+        "sha256": "95de92577b6783cd3b4d734a87530eb0d0eee2a7664d9fca5321ae15f0768903"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/protocol-frozen.json",
+        "sha256": "e768c43cf090d69a16a2e935f5f748862cec1377f66565d699ad4f87d7c49d2b"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/publication-assessment.json",
+        "sha256": "7b7288e5d6dfc9dcb7d29e3c3119a874a766e54b3bc4ab0bd3efc83906c4d622"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/requirements.txt",
+        "sha256": "738071c1d9633f276433ad6738de256d2bf0d22f66dc4bd3179012bebb63bdd1"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/run.py",
+        "sha256": "db3d13d422f255201504cf9ad3f2d737229bda4c826da23bd06aa0ff819d3091"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/analysis/round10/L4-skeleton/positive_control.py",
+        "sha256": "8fe85799ffd03566fabf551192f6afac1576e0ae8990b41d8b7d97fc01a17516"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+        "sha256": "0021eee0b7cd2f247547af6ba776851b54f62988afa3f46345f12276d165bebd"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+        "sha256": "9270ad69cb53f632d3774147c0c515df6f2471c6c623102aec45c06493783fab"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/analysis/round10/L4-skeleton/run_scan.py",
+        "sha256": "ae4d39c4b66df0d1b2c38566f7b2731e4be68fc7829ffbc28d3da24c27097e5a"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/analysis/round10/L4-skeleton/scanner.py",
+        "sha256": "683ace872739c278ff80cfdfcb3f875ae2b648ae5b95e1caa757c588ab3f8029"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/analysis/round10/L4-skeleton/skel.py",
+        "sha256": "649f7fe62c243a20c2fd09ea56c68d5b07d340d75fd8f8d37250bb992156f567"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/short-text-prefix-extension/alignment-scores.npz",
+        "sha256": "7eb2362f059f10d44d8c523ad53d464bf0c7466f9dc4bec2485ace01b82bc74d"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/merged-context-receipt.json",
+        "sha256": "1eb2c8eccfbd410e3d30bc135c6b18d37b839f7853f6e7a1ef705bcf1c6e8b78"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/preflight-v3-receipt.json",
+        "sha256": "a37eaa9a0bded163319ecff06fbc2e5c115c423c6fc671ca8e1dc6a4b0b84727"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/protocol-review.json",
+        "sha256": "65003e06d01fff1d2745735cc1474ceea2879044f0fef123cdf20b789fe69f37"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/independent/target-receipt.json",
+        "sha256": "dc5eedc24bf951ce963282232085319641a84a5f350b8ee51956efad21285761"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/controls-summary-supplement.json",
+        "sha256": "a1c5233f62189ee9045ea9653c086651a03da77192a103a0b2eb9bc2728f8019"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/reproduction/controls.json",
+        "sha256": "9e47264420ef8e438439acd5cdc62d43fee60f3c62a7ec3dcec4a1849d1f3029"
+      },
+      {
+        "path": "experiments/records/short-text-prefix-extension/results.json",
+        "sha256": "8853767c4a2f5989183e65509c50f0c9558180a68a540f8f75de66ff2242fe50"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned source T1 pattern selection",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/run_scan.py"
+    },
+    {
+      "label": "Pinned parser, normalization and match rules",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/skel.py"
+    },
+    {
+      "label": "Pinned blocked scanner and minimum-text gate",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/scanner.py"
+    },
+    {
+      "label": "Pinned planted-text control",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L4-skeleton/positive_control.py"
+    }
+  ],
+  "related": [
+    "dukotah-held-corpus-skeleton-replay",
+    "corpus-prefix-census"
+  ],
+  "family": {
+    "id": "archived-word-length-alignment",
+    "title": "Matching word lengths to archived texts",
+    "question": "Do contiguous passages fit the manuscript word-length sequence?",
+    "baseline": "dukotah-held-corpus-skeleton-replay"
+  },
+  "variant": {
+    "label": "Short-text prefix eligibility extension",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
+        ],
+        "after": [
+          "experiments/records/short-text-prefix-extension/reproduction/inputs-frozen.json",
+          "experiments/records/short-text-prefix-extension/reproduction/protocol-frozen.json"
+        ],
+        "reason": "Admit only the previously omitted texts eligible for each fixed prefix, preserving source parsing, patterns, RNG and scanner arithmetic."
+      },
+      {
+        "field": "representation",
+        "before": "Exact pinned Dukotah source manuscript parser and available corpus normalization. First 55 percent-separated segments, 2,928 words; split on dash/period, ignore slash line wraps. The 94 available text files contain 9,808,699 normalized words; 84 files contain 9,799,472 words and meet the unchanged 2,928-word minimum.",
+        "after": "Same pinned 94-file corpus and source manuscript parser as the baseline: first 55 percent-separated segments, 2,928 words, with greedy rune encoding and directional F-count intervals. Raw files, normalized arrays, ordering and hashes unchanged; corpus inputs external.",
+        "reason": "Admit only the previously omitted texts eligible for each fixed prefix, preserving source parsing, patterns, RNG and scanner arithmetic."
+      },
+      {
+        "field": "procedure",
+        "before": "Run unchanged Round 10 L4 source T0 first, then frozen T1: exact length, symmetric slack-one and directional F-count interval. Preserve default blocked FFT, shuffled patterns, raw floating maxima and tie behavior. Independently control all three matchers and recount every saved global winning alignment.",
+        "after": "Construct exact original prefix patterns after consuming all four full-length RNG permutations. Run unchanged scanner.scan_corpus separately for the three 400-word patterns on 8 newly eligible texts and the three 120-word patterns on 10, retaining default blocks/FFT and raw strict-maximum/tie selection. Independently integer-count every target alignment.",
+        "reason": "Admit only the previously omitted texts eligible for each fixed prefix, preserving source parsing, patterns, RNG and scanner arithmetic."
+      },
+      {
+        "field": "parameters",
+        "before": "T1: three full real patterns plus four full permutations with three matchers; first 400 and 120 word interval prefixes with two permutations each; 21 patterns total. Unique alignments per full/400/120 pattern: 9,553,604 / 9,765,956 / 9,789,476. T0: two eligible plant texts, four planted matcher cases and two shuffled matcher cases. No extra corpus globs.",
+        "after": "Seed 3301 and original RNG order. First 400/120 real interval patterns plus two fixed shuffles each; 5,378 starts per 400-word pattern and 8,037 per 120-word pattern, 40,245 total scores. Newly eligible means prefix width <= words < 2,928. No repeated 84-text scan. 37 synthetic controls; 1,371 checked synthetic alignments.",
+        "reason": "Admit only the previously omitted texts eligible for each fixed prefix, preserving source parsing, patterns, RNG and scanner arithmetic."
+      },
+      {
+        "field": "exclusions",
+        "before": "Not the historical 224-text / 22,643,594-word replay. Ten available texts shorter than 2,928 are omitted even for shorter patterns. No all-subwindow scan, changed normalization, reordered/noncontiguous plaintext, degradation-floor bound, calibrated global probability, language exclusion or plaintext recovery.",
+        "after": "No new corpus texts, historical 224-text replay, full 2,928-pattern rerun, alternative manuscript windows, changed parser/editions, word/content recovery, language exclusion or calibrated global probability. Corpus texts and normalized corpus arrays are not bundled.",
+        "reason": "Admit only the previously omitted texts eligible for each fixed prefix, preserving source parsing, patterns, RNG and scanner arithmetic."
+      }
+    ]
+  },
+  "materials": {
+    "summary": "All alignment scores, per-text/global winners and ties, frozen protocol/input hashes, synthetic controls and independent audit.",
+    "reuse": "Inspect or check the complete saved short-text score grid without fetching corpus text; replay with exact external inputs.",
+    "limits": "Counts are compatible length positions, not recovered words. Only the two fixed prefixes and newly eligible inputs were executed. Corpus texts and normalized input arrays remain external.",
+    "evidence": [
+      "experiments/records/short-text-prefix-extension/results.json",
+      "experiments/records/short-text-prefix-extension/alignment-scores.npz",
+      "experiments/records/short-text-prefix-extension/reproduction/controls-summary-supplement.json"
+    ]
+  },
+  "scope_summary": "The first 400 word lengths in eight shorter texts, and the first 120 in ten. Same archived corpus and matching rules as the earlier scan.",
+  "article": "The earlier scan skipped ten available texts because they were shorter than the full manuscript pattern. Testing the shorter prefixes in those texts found no complete match: the best alignments agreed at **87 of 400** and **37 of 120** word-length positions.\n\nThese counts describe compatible lengths, not recovered words. A matching position can be separated from the next matching position by many mismatches.\n\n| Prefix | Newly eligible texts | Manuscript pattern | Shuffle 1 | Shuffle 2 |\n|---|---:|---:|---:|---:|\n| First 400 words | 8 | 87/400 | 89/400 | 93/400 |\n| First 120 words | 10 | 37/120 | 38/120 | 39/120 |\n\nEach score is the best alignment within that short-text search. A complete match would be 400/400 or 120/120.\n\n## What changed\n\nThe [earlier archived-text scan](#/experiments/dukotah-held-corpus-skeleton-replay) loaded 94 texts but applied a 2,928-word minimum even to its shorter patterns. This extension uses the same files, parser and fixed first-400/first-120 word patterns. It calls the unchanged scanner separately for each prefix width, admitting eight previously omitted texts for 400 words and ten for 120.\n\nThe manuscript parser uses the first 55 percent-separated source segments. Its word lengths count encoded runes, including the source's multigraph convention. The interval rule accepts a corpus word length between the observed length minus its F-rune count and the observed length. Corpus values remain subject to the source's 1–40 range; pattern groups use observed lengths 1–29.\n\n## Result\n\nBoth real-pattern winners occur in `cicada_koans_and_lp_sections.txt`: the 400-word prefix at zero-based word offset 141, and the 120-word prefix at offset 40. Two fixed shuffled versions reach 89 and 93 of 400, and 38 and 39 of 120. Two shuffles do not establish a global probability.\n\nThe extension scores 5,378 starts per 400-word pattern and 8,037 per 120-word pattern: **40,245 alignment scores** across the real patterns and their four shuffled controls. Counts include the final valid start. All are retained, alongside exact integer recounts, per-text maxima and tie sets. Raw floating-point maxima and the source's selection order are preserved; tiny FFT differences can select among equal integer counts.\n\nThis adds alignments within the existing corpus, not new texts. The earlier 84-text real-prefix maxima were 109/400 and 47/120; those separately published results are higher. After verifying identical pattern arrays, combining that saved evidence with this extension covers 92 eligible texts for 400 words and all 94 for 120, with unchanged maxima. The earlier alignments were not rerun here. This is not the historical 224-text scan, an all-window manuscript search, or a test of other editions and word boundaries.\n\n## Checks and reuse\n\nBefore the target scan, 37 synthetic cases checked first/final planted starts, exact-width and too-short carriers, random arrays, a 250-word carrier for the 120-word prefix, and constant ties. All 1,371 synthetic alignment scores were independently checked. The six fixed prefixes are dependent patterns, not six independent source passages. After the scan, an independent parser and integer counter verified all 40,245 target scores and every reported selection.\n\nSaved outputs can be checked without retrieving the corpus. Recomputing the scan requires the exact external 94-text inputs and manuscript; [reproduction instructions](experiments/records/short-text-prefix-extension/PORTABILITY.md) explain preparation and temporary-output replay. No third-party corpus text or normalized corpus-length array is redistributed here. The original scanner, parser and pattern-construction source remain unchanged under their retained source license.\n",
+  "article_path": "experiments/records/short-text-prefix-extension/article.md",
+  "script_sha256": "60546ed1f99517017d20edfffb66254e24862ef54cfdcbb19c52d841ba8d7642",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "method_topics": [
+    {
+      "id": "language",
+      "title": "Language and corpus identification",
+      "aliases": [
+        "Welsh",
+        "language identification",
+        "corpus",
+        "different language",
+        "another language",
+        "non English",
+        "other languages"
       ]
     }
   ]

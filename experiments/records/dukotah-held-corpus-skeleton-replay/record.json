@@ -9,7 +9,7 @@
   "reader_finding": "None of the tested alignments matched the complete pattern. The best exact-length alignment agreed at 593 of 2,928 word positions.",
   "limitations": "The source admitted 84 of 94 available files and omitted ten texts shorter than 2,928 words, even for the prefix patterns. Only the first 400 and 120 words were tested as shorter windows. Four full-pattern shuffles and two per prefix do not establish a calibrated global probability or statistical equivalence. The source T0 supplied two plant texts and one shuffled control; the preregistered null z gate and degradation floor are not established. This is not the historical 224-text replay or a plaintext/language exclusion.",
   "reader_limit": "Only 84 of 94 available texts passed the unchanged length gate. This is not the historical 224-text corpus, and length matches are not decoded words.",
-  "next_steps": "A separate frozen follow-up would be needed to include short texts in the prefix scans or measure robustness to changed editions and word boundaries.",
+  "next_steps": "The linked short-text follow-up checks the ten omitted files where they are long enough for each fixed prefix. Historical missing corpus bytes, other manuscript passages and robustness to changed editions and word boundaries remain unresolved.",
   "outcome": "inconclusive",
   "tags": [
     "word lengths",
@@ -281,7 +281,8 @@
   "related": [
     "corpus-prefix-census",
     "layout-count-streams",
-    "transcription-correction-sensitivity"
+    "transcription-correction-sensitivity",
+    "short-text-prefix-extension"
   ],
   "materials": {
     "summary": "Saved full/prefix maxima, per-text summaries, planted controls and independent witness/audit receipts.",
@@ -292,5 +293,15 @@
       "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/scan_results.json",
       "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/independent-target-audit.json"
     ]
+  },
+  "family": {
+    "id": "archived-word-length-alignment",
+    "title": "Matching word lengths to archived texts",
+    "question": "Do contiguous passages fit the manuscript word-length sequence?",
+    "baseline": "dukotah-held-corpus-skeleton-replay"
+  },
+  "variant": {
+    "label": "Original full-pattern eligibility gate",
+    "changes": []
   }
 }

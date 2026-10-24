@@ -1,0 +1,29 @@
+{
+  "frozen_at_utc": "2026-10-24T13:10:26.191319+00:00",
+  "target_results_present": false,
+  "files": [
+    {
+      "path": "direct.py",
+      "sha256": "eb59d82ed3dee51a4782bfd986905a6a23e31c9b17f540ef95f0dcd046465f4a"
+    },
+    {
+      "path": "preflight.py",
+      "sha256": "08ad25b821155079fca3a03aa694e2d234c6126a1bdcb7af7089d8e83537e8ad"
+    },
+    {
+      "path": "preflight-v3-receipt.json",
+      "sha256": "a37eaa9a0bded163319ecff06fbc2e5c115c423c6fc671ca8e1dc6a4b0b84727"
+    }
+  ],
+  "scope": "Exactly the six existing source interval-prefix patterns and newly eligible8/10texts:5378/8037starts perpattern,40245totalalignment scores. No other corpus/window/threshold.",
+  "input_and_rng": "Independent byte hashes, normalized int16 hashes, manuscript parser and all six paired pattern hashes retained in preflight-v3-receipt.json; consume original4full permutations before prefix shuffles.",
+  "independent_check": "Reconstruct every integer alignment score; compare every saved float score and integer array; independently derive maxima, all integer tie offsets and chosen source raw-float offsets. Check original sorted-text and strict-greater source selection without forcing earliest integer tie.",
+  "fft_numerical_policy": {
+    "maximum_absolute_count_error": 0.001,
+    "selection": "Raw float np.argmax gives first exact float tie; global source selects first sorted text unless a strictly larger raw float occurs. Numerical allowance validates counts only and never rounds scores or changes a winner.",
+    "report": "Actual maximum FFT-vs-integer error; chosen offset membership in exact integer max set; earliest integer-max offset/tie count separately."
+  },
+  "controls": "Review frozen producer controls and verify independent direct counts of every retained synthetic score array before targets. Include first/final starts, exact-width and shorter-than-width carriers,120..399 carrier, and ties.",
+  "merge": "Old84 receipt may be reused only with same raw input manifest and independently reconstructed exact obs/fcount hashes for each pattern. Reconstruct global strict raw-float comparisons and distinguish reused old rows from new rows.",
+  "interpretation": "Counts are compatible word-length positions, not recovered words; two shuffles perprefix do not calibrate a global probability. This is not historical224corpus or all-subwindow coverage."
+}

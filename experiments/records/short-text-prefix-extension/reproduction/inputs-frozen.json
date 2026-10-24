@@ -1,0 +1,833 @@
+{
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_files": [
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/scanner.py",
+      "bytes": 3831,
+      "sha256": "683ace872739c278ff80cfdfcb3f875ae2b648ae5b95e1caa757c588ab3f8029"
+    },
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/skel.py",
+      "bytes": 9394,
+      "sha256": "649f7fe62c243a20c2fd09ea56c68d5b07d340d75fd8f8d37250bb992156f567"
+    },
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/run_scan.py",
+      "bytes": 3718,
+      "sha256": "ae4d39c4b66df0d1b2c38566f7b2731e4be68fc7829ffbc28d3da24c27097e5a"
+    },
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/positive_control.py",
+      "bytes": 7153,
+      "sha256": "8fe85799ffd03566fabf551192f6afac1576e0ae8990b41d8b7d97fc01a17516"
+    },
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+      "bytes": 6971,
+      "sha256": "0021eee0b7cd2f247547af6ba776851b54f62988afa3f46345f12276d165bebd"
+    },
+    {
+      "path": "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+      "bytes": 7216,
+      "sha256": "9270ad69cb53f632d3774147c0c515df6f2471c6c623102aec45c06493783fab"
+    },
+    {
+      "path": "liber-primus/src/lp/gematria.py",
+      "bytes": 4283,
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+    }
+  ],
+  "corpus": [
+    {
+      "name": "data/kjv.txt",
+      "path": "liber-primus/data/kjv.txt",
+      "bytes": 4436268,
+      "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986",
+      "words": 792161,
+      "lengths_sha256": "8e32986afaaebe9da608d77f3139c10f606e58cd50870107eb2f820fe6c1b744"
+    },
+    {
+      "name": "keys/agrippa_occult_philosophy_book1_1651jf.txt",
+      "path": "liber-primus/data/keys/armada18/agrippa_occult_philosophy_book1_1651jf.txt",
+      "bytes": 374342,
+      "sha256": "ad6cd4735df860b7aaaa7dd68db16b0f58101eb732ec92652e2072241569825f",
+      "words": 64400,
+      "lengths_sha256": "b6fc328594dda8927e0656910478d370db45098e7b1395d41f15410ea54bdced"
+    },
+    {
+      "name": "keys/agrippa_occult_philosophy_book2_1651jf.txt",
+      "path": "liber-primus/data/keys/armada18/agrippa_occult_philosophy_book2_1651jf.txt",
+      "bytes": 293262,
+      "sha256": "e2da2943c708b1aea8bdf96148bd0bb9c8e617b27f9dfe9a619dc81c8fadc89d",
+      "words": 49428,
+      "lengths_sha256": "ee7bf63ce91e345dca41c8ff87908e6f9e0c821aef591c9aaf379be3440d2a56"
+    },
+    {
+      "name": "keys/agrippa_occult_philosophy_book3_1651jf.txt",
+      "path": "liber-primus/data/keys/armada18/agrippa_occult_philosophy_book3_1651jf.txt",
+      "bytes": 488324,
+      "sha256": "cf88a726c1fa762c327b13a9f394bb9b6763d641b9e8ca00c001a1717b6c73cc",
+      "words": 80781,
+      "lengths_sha256": "2a6791d7ee7103da55d3ea2c93c42a9e7b55bf84fc4336bcd11f86c1367a515f"
+    },
+    {
+      "name": "keys/blavatsky_secret_doctrine_v1.txt",
+      "path": "liber-primus/data/keys/armada18/blavatsky_secret_doctrine_v1.txt",
+      "bytes": 2035791,
+      "sha256": "ead855b69477ad8e0a1ff7e47c0fe2769b0514b0c902b2b6d421d455f88b618a",
+      "words": 321109,
+      "lengths_sha256": "14348e319861c50d4b031f8aacd72c62d9eb4c80fee8c046ffc5db40059b574c"
+    },
+    {
+      "name": "keys/cicada_2012_2013_puzzle_texts.txt",
+      "path": "liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+      "bytes": 1644,
+      "sha256": "7acb899b537efdb4d0426041fcbb4a5b42d54fdda40a64e02745b3edc1f6f9c5",
+      "words": 314,
+      "lengths_sha256": "5e9fae93c7bcbb7b1db3b43b6b30e285954aafb7b806506d8e4b3e2b4ca67cae"
+    },
+    {
+      "name": "keys/cicada_koans_and_lp_sections.txt",
+      "path": "liber-primus/data/keys/armada18/cicada_koans_and_lp_sections.txt",
+      "bytes": 4003,
+      "sha256": "fd0169baa6ff302d5e0dd70d8c8f7c8adbab2a3bdae7e78788b36eef07608a4c",
+      "words": 752,
+      "lengths_sha256": "597dda1b2695c2d5fe51b57c3816864476e019c7af97b991ab908d9df3e13aac"
+    },
+    {
+      "name": "keys/cicada_pgp_messages.txt",
+      "path": "liber-primus/data/keys/armada18/cicada_pgp_messages.txt",
+      "bytes": 1803,
+      "sha256": "5c5b2dcd24b26a4b7dda3fd555bf5c3b0966bb4eb74fe39660d2b0af31d26ead",
+      "words": 343,
+      "lengths_sha256": "b990cf7c7c4c3591853408d2a16fabdf74c8c772d8a925a088ba624ab2d3109c"
+    },
+    {
+      "name": "keys/crowley_book_of_lies_clean.txt",
+      "path": "liber-primus/data/keys/armada18/crowley_book_of_lies_clean.txt",
+      "bytes": 61462,
+      "sha256": "9b5b6e8e46689b6ac0426c14bbf828b136d4c7efe040ef7a8a821668687d10b8",
+      "words": 10963,
+      "lengths_sha256": "71c046756ae6c23298c29e36cf56cceb8555646299605b4413e72f479af26aab"
+    },
+    {
+      "name": "keys/crowley_book_of_the_law_hermetic.txt",
+      "path": "liber-primus/data/keys/armada18/crowley_book_of_the_law_hermetic.txt",
+      "bytes": 31009,
+      "sha256": "997dda2c1f5dac4426222705a3fa9f0f738af322e452fdc29387418821336351",
+      "words": 5963,
+      "lengths_sha256": "a1cfe90595872a0774bcbddd084b6123d045190b61b8ae2f85c6c8aceb7bfd6e"
+    },
+    {
+      "name": "keys/crowley_liber777_clean.txt",
+      "path": "liber-primus/data/keys/armada18/crowley_liber777_clean.txt",
+      "bytes": 117451,
+      "sha256": "3b58c26f4ec6c042558f5e03a0017715e9b4861059249fa37475d8d34d7c3ce5",
+      "words": 18894,
+      "lengths_sha256": "128a79f3862fe35e7a45d6413c5511b67afe2eb9dd52edcb629fdc167e6afc52"
+    },
+    {
+      "name": "keys/dante_inferno_cary.txt",
+      "path": "liber-primus/data/keys/armada18/dante_inferno_cary.txt",
+      "bytes": 234507,
+      "sha256": "0345033681d0f88db27843181d891046bad00e09eb4d8d0adfd823bd3b289ffe",
+      "words": 38413,
+      "lengths_sha256": "1c4359ed96282dfbefd0f0d3f582206a0e24d9d7bc50e3612238381cda07b6e5"
+    },
+    {
+      "name": "keys/dante_inferno_longfellow.txt",
+      "path": "liber-primus/data/keys/armada18/dante_inferno_longfellow.txt",
+      "bytes": 709055,
+      "sha256": "c233a7ef9444890cb7f16071ff54d997307a3c60dcd6506cfd415bae2430eac2",
+      "words": 114065,
+      "lengths_sha256": "ecb11b1a16dbb2c00e4cb3f36293c920b59caf622a461ce7cdb54730a69062e7"
+    },
+    {
+      "name": "keys/declaration_of_independence.txt",
+      "path": "liber-primus/data/keys/armada18/declaration_of_independence.txt",
+      "bytes": 30835,
+      "sha256": "8fc7483413518ecf182d982a2e61289894e7fa3ccb1fa3d1db4c1be55debb1f0",
+      "words": 1725,
+      "lengths_sha256": "e0ec150796f27cc5fec5939c34e6df5c8931fb8ac2c7ca67826a761612acdc58"
+    },
+    {
+      "name": "keys/emerson_essays_first_series.txt",
+      "path": "liber-primus/data/keys/armada18/emerson_essays_first_series.txt",
+      "bytes": 412894,
+      "sha256": "0559e94b304079ebbc5d4d8500eb62b3cf88f4981a98f0151f3abd0ec6e1d7b8",
+      "words": 74578,
+      "lengths_sha256": "e7a3a9f4cd91a6a8504f09dacb5901b81abe9f7dc3e1bfe41eca9f479cc167ae"
+    },
+    {
+      "name": "keys/emerson_essays_second_series.txt",
+      "path": "liber-primus/data/keys/armada18/emerson_essays_second_series.txt",
+      "bytes": 327851,
+      "sha256": "93a44328dbd07307e15be8d2a828ce628668aa699651d935961e6a9ea155f47f",
+      "words": 58636,
+      "lengths_sha256": "1b36fa90f2f10e921780cfa01d314f60aa5afa846d7b52a47701c8462d0d4a6b"
+    },
+    {
+      "name": "keys/homer_odyssey_butler.txt",
+      "path": "liber-primus/data/keys/armada18/homer_odyssey_butler.txt",
+      "bytes": 717784,
+      "sha256": "ffbdb29c3dda284b65c11243db1a98167826a70c81bca2ed4b6232f86c905fb9",
+      "words": 129631,
+      "lengths_sha256": "aaacb34b94e16013aaeca07478085022e47e2bb0466330ee0e02e85ff5c9b68f"
+    },
+    {
+      "name": "keys/kjb_ecclesiastes.txt",
+      "path": "liber-primus/data/keys/armada18/kjb_ecclesiastes.txt",
+      "bytes": 29629,
+      "sha256": "50c511028d3f593c07dfeb7e31e1213e99f52aad7b10afd82183b8bfc5346532",
+      "words": 5594,
+      "lengths_sha256": "9e7188390b086b29851e7ed89088cb6e39c11f8eabd60f0ccc24a72b358c3750"
+    },
+    {
+      "name": "keys/kjb_genesis.txt",
+      "path": "liber-primus/data/keys/armada18/kjb_genesis.txt",
+      "bytes": 267291,
+      "sha256": "a7ee2620b80bd832670d57d51f1f2e99d875623245b9f06b308730a508a760bf",
+      "words": 38290,
+      "lengths_sha256": "4315e978e4adf3169ccd04bd2eefa8f0fd0f17a314ec3ce451913c43990b69e4"
+    },
+    {
+      "name": "keys/kjb_gospel_john.txt",
+      "path": "liber-primus/data/keys/armada18/kjb_gospel_john.txt",
+      "bytes": 103518,
+      "sha256": "59e5de1c038c0690cb734e85f6bc4831ed5c2e7b6d5fb0280174227d20669134",
+      "words": 19133,
+      "lengths_sha256": "e70aee7a0fbae435798a719c1d9781df2576fc40dbaab239c25dfb68b2fbeb9f"
+    },
+    {
+      "name": "keys/kjb_psalms.txt",
+      "path": "liber-primus/data/keys/armada18/kjb_psalms.txt",
+      "bytes": 240699,
+      "sha256": "a9342d7c25c9ade3844da3a122a804156881af0c5d38e907503220a7ef366b4d",
+      "words": 42730,
+      "lengths_sha256": "4e5816213740e24d25a1d032855c119b928e71b2b4ad6ab97da32b75afc871a1"
+    },
+    {
+      "name": "keys/kjb_revelation.txt",
+      "path": "liber-primus/data/keys/armada18/kjb_revelation.txt",
+      "bytes": 64527,
+      "sha256": "2f7ae10747568c599dd400a7bbd1ba0c30b9bc31d74207fffe42f65dc7ae0446",
+      "words": 12010,
+      "lengths_sha256": "b92af3e3bc960ecf430daf9f72d4543623622b509e73f074a06cb5fe310ea78b"
+    },
+    {
+      "name": "keys/levi_history_of_magic.txt",
+      "path": "liber-primus/data/keys/armada18/levi_history_of_magic.txt",
+      "bytes": 1120259,
+      "sha256": "170b3fe6be916cae06d3c9dc8394ce3b9b3215c7e78374a1b8c15c116bd14567",
+      "words": 179234,
+      "lengths_sha256": "61afb37a951514dd52187841c7400f00d3a68c18437af1630bacf5f5e046e939"
+    },
+    {
+      "name": "keys/lovecraft_call_of_cthulhu.txt",
+      "path": "liber-primus/data/keys/armada18/lovecraft_call_of_cthulhu.txt",
+      "bytes": 92370,
+      "sha256": "db20dc8b4b2a58af9462c2f66d3deefa843c3bce4390b825f74d31ca231eedca",
+      "words": 11890,
+      "lengths_sha256": "4fadb447cc5753852af6ad99dc1e26e25e5715a9520f138f33bd4c9ee057d785"
+    },
+    {
+      "name": "keys/lovecraft_charles_dexter_ward.txt",
+      "path": "liber-primus/data/keys/armada18/lovecraft_charles_dexter_ward.txt",
+      "bytes": 288644,
+      "sha256": "d8b17042fd89a348abf4025913f2cc750043ed37d7e4f03da0ed77d5cc4227a9",
+      "words": 44549,
+      "lengths_sha256": "5fa6556ea3668f92e80c62b45e60c6920ebc32adf2dc154ada490c025b2d08bd"
+    },
+    {
+      "name": "keys/lovecraft_colour_out_of_space.txt",
+      "path": "liber-primus/data/keys/armada18/lovecraft_colour_out_of_space.txt",
+      "bytes": 91134,
+      "sha256": "d3a4d341403fc98099ded127b6572dc976ae436fddd33eb4b69e733679044bd2",
+      "words": 12373,
+      "lengths_sha256": "9c0757042df10a46b5141b89e1aaf07a9d83747c2a667b7e4b24781f4ed1db26"
+    },
+    {
+      "name": "keys/lovecraft_dunwich_horror.txt",
+      "path": "liber-primus/data/keys/armada18/lovecraft_dunwich_horror.txt",
+      "bytes": 123217,
+      "sha256": "134246cc542e3355d06f5e4e7fe157726ab54de8b1b19dd8c4985cf27384cb02",
+      "words": 17318,
+      "lengths_sha256": "01ad6551b3a6767b827ac0343cc80b5a0c09dd9deb9baff58ef98af17e3cf945"
+    },
+    {
+      "name": "keys/lovecraft_mountains_madness.txt",
+      "path": "liber-primus/data/keys/armada18/lovecraft_mountains_madness.txt",
+      "bytes": 270446,
+      "sha256": "0e458499acb0e9c5915e634dcc5ba96d11cf45e19b9d3e9b2b8af75744ab3b44",
+      "words": 39734,
+      "lengths_sha256": "9d731f01e56ad6c2fb79ac837c0815c767c90b1d89c3435d384a401f1bf6c012"
+    },
+    {
+      "name": "keys/lovecraft_shunned_house.txt",
+      "path": "liber-primus/data/keys/armada18/lovecraft_shunned_house.txt",
+      "bytes": 85033,
+      "sha256": "dc1baba6a1150390ad2e618877f6bee8f967f7c4234581a54ff87efc632289fb",
+      "words": 10784,
+      "lengths_sha256": "c89b1912a15ae2634c84ef0259d03efe17ff0aad32ff50bded5406c756dcbf0f"
+    },
+    {
+      "name": "keys/lp1_english_forward.txt",
+      "path": "liber-primus/data/keys/armada18/lp1_english_forward.txt",
+      "bytes": 3927,
+      "sha256": "bb13afc6b21d597317b9f1ff3ea03034d66f3375ad2d8eed048a83a6d968e2fd",
+      "words": 729,
+      "lengths_sha256": "2cb7ea48aeaece64d82982ff35d7ff615e7556fd37c66bc819b6b8e6e3e4366b"
+    },
+    {
+      "name": "keys/lp1_english_reversed.txt",
+      "path": "liber-primus/data/keys/armada18/lp1_english_reversed.txt",
+      "bytes": 3926,
+      "sha256": "d1ddd5a996b10881603c75ab2888d896e99fab7479e8c941d270643e5f9027d3",
+      "words": 729,
+      "lengths_sha256": "bc7ddcdf184bca658989642b60c43fceeb86ee9d9e392a419d46b06ffc8ee711"
+    },
+    {
+      "name": "keys/mabinogion_vol1_guest_edwards_ed.txt",
+      "path": "liber-primus/data/keys/armada18/mabinogion_vol1_guest_edwards_ed.txt",
+      "bytes": 183694,
+      "sha256": "31bb2124f65422a6fa7e4c7910fc7e2be4c453307a6faf841b77152d07dc1d07",
+      "words": 34338,
+      "lengths_sha256": "6317a66bcce562a1ff55bad3e0ee99f51868dec9f927e7dde657d315536532f0"
+    },
+    {
+      "name": "keys/mabinogion_vol2_guest_edwards_ed.txt",
+      "path": "liber-primus/data/keys/armada18/mabinogion_vol2_guest_edwards_ed.txt",
+      "bytes": 199971,
+      "sha256": "0d126a64878ad992ae104f339b3894b8d11b719ef921f43cbdd042f0a4f4ebcb",
+      "words": 37266,
+      "lengths_sha256": "f6f10ba1acb9f568575d0774fc0c606256bdb0c9e02ad4ef25d86f5394cd2e11"
+    },
+    {
+      "name": "keys/magna_carta.txt",
+      "path": "liber-primus/data/keys/armada18/magna_carta.txt",
+      "bytes": 101742,
+      "sha256": "69785cf312795c562a003ebc7cf90d969df05813a0fd3fb084c524279ce05a33",
+      "words": 14333,
+      "lengths_sha256": "988724a5d8e0d6f319eed793d3bf68af847ed7867371d3fbe3843c6d4e91fd41"
+    },
+    {
+      "name": "keys/manly_hall_initiates_flame.txt",
+      "path": "liber-primus/data/keys/armada18/manly_hall_initiates_flame.txt",
+      "bytes": 98591,
+      "sha256": "3e2e1b3caef3ea7e23d47755051d0b2415199a46fb9b38c3d786481dc2aacf26",
+      "words": 13697,
+      "lengths_sha256": "1ec8935d102729873e3def8abe06a4a128986ff05433c350b0882d613cacaa66"
+    },
+    {
+      "name": "keys/melville_moby_dick.txt",
+      "path": "liber-primus/data/keys/armada18/melville_moby_dick.txt",
+      "bytes": 1276263,
+      "sha256": "9a6844ac0703853720010787c7b6c70b0020f1ab1862dcd74452fa46474d1215",
+      "words": 216482,
+      "lengths_sha256": "9103c6e876fcb8e3027b6b396e8f9b1b6f50cb89d5c1793b9baee0a05c56ec44"
+    },
+    {
+      "name": "keys/plato_republic_jowett.txt",
+      "path": "liber-primus/data/keys/armada18/plato_republic_jowett.txt",
+      "bytes": 1244164,
+      "sha256": "917c1cb469e1a8eba6083808764d7131da8d79140b575b4214c9d02a73ec4528",
+      "words": 217012,
+      "lengths_sha256": "fc298491e871d3483ecd5c522f714454852a44c4c153456ad9236419f98e3794"
+    },
+    {
+      "name": "keys/poe_complete_works.txt",
+      "path": "liber-primus/data/keys/armada18/poe_complete_works.txt",
+      "bytes": 2920913,
+      "sha256": "9a7e8444db96cc02fe3077c4999b3279ea0fa6cea9d1e0603291e15837082a87",
+      "words": 450330,
+      "lengths_sha256": "344c2b4086e5719f62c76dc98d515eaf17e279bb568dc396eda724825a17c9fa"
+    },
+    {
+      "name": "keys/poe_tales_vol2.txt",
+      "path": "liber-primus/data/keys/armada18/poe_tales_vol2.txt",
+      "bytes": 638474,
+      "sha256": "159989d413c3240447627d0964a15ad10e4535ba1d25e0468c02f9ecdab9e12e",
+      "words": 96513,
+      "lengths_sha256": "4712593efb4f24e054b15f09d0cfc7097b241c8792171d73c7b7ccbd85b0db43"
+    },
+    {
+      "name": "keys/shakespeare_hamlet.txt",
+      "path": "liber-primus/data/keys/armada18/shakespeare_hamlet.txt",
+      "bytes": 206895,
+      "sha256": "31584c19795779431b5933499a45b9cecb03e8c246b6ea7e245a2b6d65e8e784",
+      "words": 32867,
+      "lengths_sha256": "6d34ae9a93744b6c784a166c1a6fa18a9ba38f1985924e8c0c458a1d7226b298"
+    },
+    {
+      "name": "keys/shakespeare_tempest.txt",
+      "path": "liber-primus/data/keys/armada18/shakespeare_tempest.txt",
+      "bytes": 174173,
+      "sha256": "d511c4b7ba963b316705b4b097415f59b4fcb03c9964bb65673fbaae4d730219",
+      "words": 23000,
+      "lengths_sha256": "4e6b1a62c3dcf6e82f9e7d42d0bd93b7f347f7c8e4d52f2a91371b8a846780b0"
+    },
+    {
+      "name": "keys/us_constitution.txt",
+      "path": "liber-primus/data/keys/armada18/us_constitution.txt",
+      "bytes": 48326,
+      "sha256": "d177168e3f4898213dced30fbbe60d74ad08e884ed5dd86bff94a1b8836b5982",
+      "words": 4700,
+      "lengths_sha256": "686c25fa5cf05642de0f38eb69ea617bae983eab106ac9015fdcd46c37836274"
+    },
+    {
+      "name": "keys/aesop_fables.txt",
+      "path": "liber-primus/data/keys/armada19/aesop_fables.txt",
+      "bytes": 240947,
+      "sha256": "4cba5987ca80526e66f2a7afbfb51d81133d8dc1b6ef1c8b03f2cd7f3f2e3de2",
+      "words": 44476,
+      "lengths_sha256": "ace60a1dc0336ea6395a22866d49e7229b395c6c9dfdbf6eed8a605144295989"
+    },
+    {
+      "name": "keys/arabian_nights_burton_v1.txt",
+      "path": "liber-primus/data/keys/armada19/arabian_nights_burton_v1.txt",
+      "bytes": 1015251,
+      "sha256": "b9864769cf5b2b9f8adab0b8320b94e0d30bead96659f3f08a3c4a83694b23c3",
+      "words": 180351,
+      "lengths_sha256": "da6404beb5332c6bac5d6f5d14833dac6ca95347b34ea9e18294a2a633befb85"
+    },
+    {
+      "name": "keys/arabian_nights_lane.txt",
+      "path": "liber-primus/data/keys/armada19/arabian_nights_lane.txt",
+      "bytes": 1514114,
+      "sha256": "ecfe1fb1ad6e8880034f0df5f30a754b717ef6f41353924aa7bbba943982be0e",
+      "words": 269652,
+      "lengths_sha256": "90a8ba5ce4c5ac252165eb4a3aff28055c4076750c4328d93ad6274bdcce39a5"
+    },
+    {
+      "name": "keys/aristotle_nicomachean_ethics.txt",
+      "path": "liber-primus/data/keys/armada19/aristotle_nicomachean_ethics.txt",
+      "bytes": 670794,
+      "sha256": "ac7a63142ccbca8cbe3b55720838ce07574a7c6ca9f6641a4d9a7529d21303d9",
+      "words": 116055,
+      "lengths_sha256": "487b2a12632224282aafa41f7e72b84e5f6912467453df2e4c1bed74e2234ae1"
+    },
+    {
+      "name": "keys/bacon_novum_organum.txt",
+      "path": "liber-primus/data/keys/armada19/bacon_novum_organum.txt",
+      "bytes": 567451,
+      "sha256": "d9702201725c5c6390e2bbdd8e910fd8ccffeeb64b3bb08aaa51ab4a72330193",
+      "words": 94371,
+      "lengths_sha256": "bbdecce8e9ce78f31a872522c0a0968626d1b2d43fde3b35027e83d61600fe7d"
+    },
+    {
+      "name": "keys/bhagavad_gita_arnold.txt",
+      "path": "liber-primus/data/keys/armada19/bhagavad_gita_arnold.txt",
+      "bytes": 140995,
+      "sha256": "a8f82856d9e6e9228c841febc4e31a349642c5d4008f14bec64973eec1f93fcf",
+      "words": 23265,
+      "lengths_sha256": "a0839ec878c05c9a2ee455ab15defd676dd5a9367f79ad894e5b9cfa36783ca1"
+    },
+    {
+      "name": "keys/bible_douay_rheims.txt",
+      "path": "liber-primus/data/keys/armada19/bible_douay_rheims.txt",
+      "bytes": 5649319,
+      "sha256": "2640a9a58999c624884f335b33a080a7f87dd1245cb9a882a333d6f2758a2eca",
+      "words": 992059,
+      "lengths_sha256": "030eefb1108f8430afe4b62271022f29d4b8ce51b507093770aa0341f8c44bbe"
+    },
+    {
+      "name": "keys/blavatsky_secret_doctrine_v2.txt",
+      "path": "liber-primus/data/keys/armada19/blavatsky_secret_doctrine_v2.txt",
+      "bytes": 2391727,
+      "sha256": "c3a7347e4e648476d61ccbf56d96639ed33fec61e0c3374e7dc3b09929826477",
+      "words": 388314,
+      "lengths_sha256": "8540940e0ccebd881662f2b39bb01c75b0ec5871edd4d203b09de83b3fc80b03"
+    },
+    {
+      "name": "keys/bunyan_pilgrims_progress.txt",
+      "path": "liber-primus/data/keys/armada19/bunyan_pilgrims_progress.txt",
+      "bytes": 330405,
+      "sha256": "88c518f75577bdaebb77cfdb61212a45c63db5f36d8dcc05972cf65dd6d19ef7",
+      "words": 60220,
+      "lengths_sha256": "91ac7603ff0da95b795b275ad8dd0a580b94748b892862afc9f96634b876de50"
+    },
+    {
+      "name": "keys/carroll_sylvie_and_bruno.txt",
+      "path": "liber-primus/data/keys/armada19/carroll_sylvie_and_bruno.txt",
+      "bytes": 400846,
+      "sha256": "a896ec45bcea727fb8045a68bb6a62ae09aeebd68bd11276ad1d6f22b6d210a0",
+      "words": 67896,
+      "lengths_sha256": "325547d3ceb95fdb2bc22628797ee2da84430b09fc8012d1cbdff71f682c6c0c"
+    },
+    {
+      "name": "keys/cervantes_don_quixote_ormsby.txt",
+      "path": "liber-primus/data/keys/armada19/cervantes_don_quixote_ormsby.txt",
+      "bytes": 2390102,
+      "sha256": "e609e74fca9d59f358b3358bb310179cf3d553fe2f3afa1a4de05080cd9c5e36",
+      "words": 434544,
+      "lengths_sha256": "e370c607b8c676c3c5cb1fdc4841e0073bd9e8e3d273a134f820f967f3c847a2"
+    },
+    {
+      "name": "keys/cicero_tusculan_disputations.txt",
+      "path": "liber-primus/data/keys/armada19/cicero_tusculan_disputations.txt",
+      "bytes": 1061414,
+      "sha256": "f137d7b80d8ba30ed7482b8885d631ea10a889a45e5281da3415bcaa3115bc84",
+      "words": 183987,
+      "lengths_sha256": "8828f4088d12c889e16f8d0ba20fd00d2bbd627591a4712dd9cdca7a228ade08"
+    },
+    {
+      "name": "keys/dequincey_opium_eater.txt",
+      "path": "liber-primus/data/keys/armada19/dequincey_opium_eater.txt",
+      "bytes": 241958,
+      "sha256": "1a00776ecbb4e44b0eab1032362ef93209ddfca908952a90e3a3f628aa69a063",
+      "words": 41665,
+      "lengths_sha256": "f7931d3be0af7d9004c1ee10162fe5e04180e3266f623299d6364912f75dba59"
+    },
+    {
+      "name": "keys/gibbon_decline_fall_v1.txt",
+      "path": "liber-primus/data/keys/armada19/gibbon_decline_fall_v1.txt",
+      "bytes": 1134107,
+      "sha256": "f3bf75aaa27e8347e7e08672a8639d94974b6170202de8e723d399f465e71a94",
+      "words": 184773,
+      "lengths_sha256": "2baf1ecbc3fcb74c3eb474cbe41d08620e59a9748c3aded32bfb65393c1b9124"
+    },
+    {
+      "name": "keys/goethe_faust_taylor.txt",
+      "path": "liber-primus/data/keys/armada19/goethe_faust_taylor.txt",
+      "bytes": 252773,
+      "sha256": "5e85275f048403ffccc970c3cd8f6e1785f1ba09ceff1a5bad49218f9168e93b",
+      "words": 41996,
+      "lengths_sha256": "637ffaca5d0a80bf0a153dd9ccc704a930f4996c9df26712065e0da134972228"
+    },
+    {
+      "name": "keys/gospel_of_buddha_carus.txt",
+      "path": "liber-primus/data/keys/armada19/gospel_of_buddha_carus.txt",
+      "bytes": 531648,
+      "sha256": "b0f39b634c44d686812c57b0040eeca0632286e23b9a6958b33730d07b388cd0",
+      "words": 89563,
+      "lengths_sha256": "af499173088ace251fdf22df058215af9dc3613c749e81bfa6156c5d2edeaa91"
+    },
+    {
+      "name": "keys/grimm_fairy_tales.txt",
+      "path": "liber-primus/data/keys/armada19/grimm_fairy_tales.txt",
+      "bytes": 558848,
+      "sha256": "e3eb04a68aab5b9703308f1dab00fc68666be4e28e0a31b9e270ee8d4b0d0c82",
+      "words": 104622,
+      "lengths_sha256": "e315f15d60eafb0a876fbe21fc0f48996788aef8089a3d1de3e5e1a502f69823"
+    },
+    {
+      "name": "keys/herodotus_histories.txt",
+      "path": "liber-primus/data/keys/armada19/herodotus_histories.txt",
+      "bytes": 223988,
+      "sha256": "6bf95a875cc7b13cb98b37b75ffac7ab6b2b895e38fb46320ed5b61f34e48e7f",
+      "words": 40662,
+      "lengths_sha256": "026a528eadf91995c20427b000eaaf7c721368071d8344317a7969cb5a70ba60"
+    },
+    {
+      "name": "keys/hesiod_theogony_works.txt",
+      "path": "liber-primus/data/keys/armada19/hesiod_theogony_works.txt",
+      "bytes": 547174,
+      "sha256": "8cbd5b6d45a0f8d165593498b9932613bc72759754be6ba78134dc04d6633f15",
+      "words": 92352,
+      "lengths_sha256": "d48870cd61d193691e19ca04990242a0556bd17f5e59c1b39784b82c17481e37"
+    },
+    {
+      "name": "keys/homer_iliad.txt",
+      "path": "liber-primus/data/keys/armada19/homer_iliad.txt",
+      "bytes": 849103,
+      "sha256": "34b03401ddfd10133f03ab1424fd6f8b7f36896b2b9f92ec6af0ebe5b779a364",
+      "words": 156706,
+      "lengths_sha256": "6160a7d9d417f10cc13653b02647d0546c03d160a23c0d615f6826ecc7953426"
+    },
+    {
+      "name": "keys/kant_critique_pure_reason.txt",
+      "path": "liber-primus/data/keys/armada19/kant_critique_pure_reason.txt",
+      "bytes": 1311822,
+      "sha256": "092125c51b5871f44faf632f2f84fe99f2ebe4290ac4b0f2131fcf14c11fc2a1",
+      "words": 212437,
+      "lengths_sha256": "d7f1f41b7aef05e1ec2ec8b169ec5f05dacb60fb1f5d471cd40a7e4632cac605"
+    },
+    {
+      "name": "keys/kjb_ezekiel.txt",
+      "path": "liber-primus/data/keys/armada19/kjb_ezekiel.txt",
+      "bytes": 245520,
+      "sha256": "59660d25f1b6ceeb11cfec8a99986c7e56fb892cf814946320cff56225de53f6",
+      "words": 42475,
+      "lengths_sha256": "3c97d3462743996516b91053307bf12b05712097d1a347c89ae773cee1135dbb"
+    },
+    {
+      "name": "keys/kjb_isaiah.txt",
+      "path": "liber-primus/data/keys/armada19/kjb_isaiah.txt",
+      "bytes": 234338,
+      "sha256": "37378d7f2b276ad9f8689583e86ea0870583f49df55d5995cc8509c0f39a7fe7",
+      "words": 40112,
+      "lengths_sha256": "49e781409adf8555b50aaacbc8b4f1e818d443e67667be17e5444d4db6be9752"
+    },
+    {
+      "name": "keys/kjb_job.txt",
+      "path": "liber-primus/data/keys/armada19/kjb_job.txt",
+      "bytes": 130020,
+      "sha256": "2a046b44cfa61fa55fa3305cb45beddddd81ba5f57d2cd92d97350f9a2e82062",
+      "words": 21172,
+      "lengths_sha256": "80946955e87300e0347f499c0fd5f2ccab0461906ff9241c22ab595a2d4cf4f7"
+    },
+    {
+      "name": "keys/leibniz_theodicy.txt",
+      "path": "liber-primus/data/keys/armada19/leibniz_theodicy.txt",
+      "bytes": 1115461,
+      "sha256": "1646a782bb66990106bdb69751a43b9285a81f067409023116adb24c1190ab2b",
+      "words": 189951,
+      "lengths_sha256": "0db4c5784c1880c3fe1c8458ca39c0ae8e0e533c74bab72dd5a32230317df468"
+    },
+    {
+      "name": "keys/lucretius_nature_things.txt",
+      "path": "liber-primus/data/keys/armada19/lucretius_nature_things.txt",
+      "bytes": 445228,
+      "sha256": "836b511bd8f3e6d6959afc9fbc46f8a7f23a1f0c6c3d8e13a639adb156cde0a8",
+      "words": 76902,
+      "lengths_sha256": "64fe437d2facb81309a45221d283eab3efca4e46f929b558e230f86ea456fccc"
+    },
+    {
+      "name": "keys/mahabharata_v1_ganguli.txt",
+      "path": "liber-primus/data/keys/armada19/mahabharata_v1_ganguli.txt",
+      "bytes": 911799,
+      "sha256": "8706676eb4d9697f6cc3680ded0a4ae4e35f6e2feae4e1733b7bb99f0c08550f",
+      "words": 154913,
+      "lengths_sha256": "3f78286bb691835c74ebc5de65865303126713a5b6f4f487db1952171449d0f4"
+    },
+    {
+      "name": "keys/mill_on_liberty.txt",
+      "path": "liber-primus/data/keys/armada19/mill_on_liberty.txt",
+      "bytes": 330616,
+      "sha256": "396295e9f30d4a73a90fad41125ce7f7634612a585c5f9bc1bb217aa62737e06",
+      "words": 55056,
+      "lengths_sha256": "2b5aa3caa034fbf133f1df8ded87e0e88ea842f2de84839681c5da3e0e5efa58"
+    },
+    {
+      "name": "keys/milton_paradise_regained.txt",
+      "path": "liber-primus/data/keys/armada19/milton_paradise_regained.txt",
+      "bytes": 111938,
+      "sha256": "f036ba61e680f93fd77ad367ad7503405597dffa6c9451bea3239ca29d3d36e5",
+      "words": 18887,
+      "lengths_sha256": "a804a218dd2a0216e4fcfd910ee8357cfdcbdecbe3aa7a298b940c9247caee74"
+    },
+    {
+      "name": "keys/nietzsche_twilight_idols.txt",
+      "path": "liber-primus/data/keys/armada19/nietzsche_twilight_idols.txt",
+      "bytes": 453627,
+      "sha256": "8b79dea06a066ed2d760003ac943a735d29ef3031b28cd8f63257cd7dd0bc9a6",
+      "words": 74446,
+      "lengths_sha256": "ff09933e47168ca6555f0f4a0e9a9d94510d99bcdf6ff2ecc409767c05b2788b"
+    },
+    {
+      "name": "keys/ovid_metamorphoses.txt",
+      "path": "liber-primus/data/keys/armada19/ovid_metamorphoses.txt",
+      "bytes": 762619,
+      "sha256": "c28c0eed7a513ecde7a300ca8c5f050d8fa3abef9dbe37ca7d376c780fb7e14c",
+      "words": 128012,
+      "lengths_sha256": "efc0a53f99ce903bfba626154cbae9fe62ee3ed4534decbf3e775c9945b00409"
+    },
+    {
+      "name": "keys/ovid_metamorphoses_viii_xv.txt",
+      "path": "liber-primus/data/keys/armada19/ovid_metamorphoses_viii_xv.txt",
+      "bytes": 836707,
+      "sha256": "d699e1b22f945fe0530f75f4ba8274ea55cb0d57cee056e0b3bba640a1a34dae",
+      "words": 142363,
+      "lengths_sha256": "ab7be27b3c92f2a98c92ce80f62cd2810069dfd94ded0ab948ecd288548a882b"
+    },
+    {
+      "name": "keys/paine_age_of_reason.txt",
+      "path": "liber-primus/data/keys/armada19/paine_age_of_reason.txt",
+      "bytes": 432403,
+      "sha256": "2b874da663200184cecd6ba0786441b923f118ac3391d08a5b87348c7a38e619",
+      "words": 75421,
+      "lengths_sha256": "fff7b0d3a629158b7437640b8ce3508ad9d34bed9c39fc9e936ed08db0927d91"
+    },
+    {
+      "name": "keys/paine_common_sense.txt",
+      "path": "liber-primus/data/keys/armada19/paine_common_sense.txt",
+      "bytes": 133023,
+      "sha256": "bcabb8e816786ba530b869e8fe3646ce5941bbec915874b0087f6fe2880f81f1",
+      "words": 22482,
+      "lengths_sha256": "c1095a7a3856e21da52cb94a23778b40bba8f58a874fe2822b88d3d92b676bbf"
+    },
+    {
+      "name": "keys/plato_symposium.txt",
+      "path": "liber-primus/data/keys/armada19/plato_symposium.txt",
+      "bytes": 200602,
+      "sha256": "fe8311e7f465202941d76d8cae837c066b6b7a8d9da45ab1ec9d83a647d265f7",
+      "words": 35637,
+      "lengths_sha256": "3379091b4e358ae4f4472ac414038033df6b07ad1229542cb2da97a263f37de5"
+    },
+    {
+      "name": "keys/plato_timaeus.txt",
+      "path": "liber-primus/data/keys/armada19/plato_timaeus.txt",
+      "bytes": 435696,
+      "sha256": "dc6a9f37d99917e4720a37c72deba30131ff35a1921e523d9a81080b0df51e36",
+      "words": 75828,
+      "lengths_sha256": "2f7fd0e5049ad4a1090d08e4f4df090f274afc669dbb5ea62c270e3d2381ca73"
+    },
+    {
+      "name": "keys/schopenhauer_world_will.txt",
+      "path": "liber-primus/data/keys/armada19/schopenhauer_world_will.txt",
+      "bytes": 1154653,
+      "sha256": "80eca5e6a80774895005aee12e92d10648271b7a55e32c15f312bf614abf332e",
+      "words": 193154,
+      "lengths_sha256": "7c8752c2224262ed3ee15821e43bc7758d0f28930c7f4be2da17406dc91370ff"
+    },
+    {
+      "name": "keys/shelley_frankenstein.txt",
+      "path": "liber-primus/data/keys/armada19/shelley_frankenstein.txt",
+      "bytes": 447867,
+      "sha256": "2612d60290957687ca39ee46b8e56f7ac19a607ea9193d02a01d47b9fb0f3814",
+      "words": 78174,
+      "lengths_sha256": "497a51f9ddc99f3a787bd4b6bd0c8db21d30f64274c3d26ac5d281555ff423c8"
+    },
+    {
+      "name": "keys/stoker_dracula.txt",
+      "path": "liber-primus/data/keys/armada19/stoker_dracula.txt",
+      "bytes": 884807,
+      "sha256": "860a7693a5d2f8d586e825286f7f15af1d4b483b489632e47cd2641ab6d99620",
+      "words": 164857,
+      "lengths_sha256": "7726edf4571055da07f8b209f7bfe611a7e7ea626b9210cbf3de9a2d4d896158"
+    },
+    {
+      "name": "keys/suetonius_twelve_caesars.txt",
+      "path": "liber-primus/data/keys/armada19/suetonius_twelve_caesars.txt",
+      "bytes": 1405545,
+      "sha256": "ac2fae92ce34d6502fbfc80cfa9e0956ea4879f55eeafa86f28598c1f3cce9e4",
+      "words": 232869,
+      "lengths_sha256": "9d5cf00be40fc5f2647cc3f2d9d427f18ac1063cb69c44d6abb2fc99d53096fc"
+    },
+    {
+      "name": "keys/tao_te_ching_legge.txt",
+      "path": "liber-primus/data/keys/armada19/tao_te_ching_legge.txt",
+      "bytes": 79258,
+      "sha256": "fd8bf5fb00f667eb35d56dfc2527865a8548d789f75de07c1265dc3131c6c057",
+      "words": 13414,
+      "lengths_sha256": "0d38cb7eca2bd31f437a9bf8b8b6c4871ed16dca24096933e22b035299715252"
+    },
+    {
+      "name": "keys/thucydides_peloponnesian_war.txt",
+      "path": "liber-primus/data/keys/armada19/thucydides_peloponnesian_war.txt",
+      "bytes": 1216842,
+      "sha256": "7fa9ab76cc2c39ecf49cff991f0f4f2b74cc7f6c5b7a5bdb3337a6be9bd39063",
+      "words": 208087,
+      "lengths_sha256": "deecab165ef5a1408313465b7508a4e8cf9b045357e93c46dd54b6866351333a"
+    },
+    {
+      "name": "keys/tyndale_new_testament.txt",
+      "path": "liber-primus/data/keys/armada19/tyndale_new_testament.txt",
+      "bytes": 1864269,
+      "sha256": "4b67701352ba519903a73970f7119baa77e70775a23fb11aae527818e054bf69",
+      "words": 349363,
+      "lengths_sha256": "253536d488a446bf1003292dbe47e01ec46c92464d4516cc747b6673713f12fc"
+    },
+    {
+      "name": "keys/upanishads_hume.txt",
+      "path": "liber-primus/data/keys/armada19/upanishads_hume.txt",
+      "bytes": 124006,
+      "sha256": "1a0a6070ca127c427af8dd7b26cc658785e0f022be43d9dd4f85060773192a29",
+      "words": 20668,
+      "lengths_sha256": "aa967292f5664eaf461d3ee624d5b7052021b7d03bac6b6aaa8f2b84c060e1ca"
+    },
+    {
+      "name": "keys/virgil_aeneid_dryden.txt",
+      "path": "liber-primus/data/keys/armada19/virgil_aeneid_dryden.txt",
+      "bytes": 663305,
+      "sha256": "b3a5dfe9d7aef7d9c38058e62db0ccc81599551c56d9b05d04f2ba0b8b83ee60",
+      "words": 116505,
+      "lengths_sha256": "cc1d10d9019e292da0d1b92a50376b142945448072d421d4f4146ff338a9884e"
+    },
+    {
+      "name": "keys/virgil_aeneid_latin.txt",
+      "path": "liber-primus/data/keys/armada19/virgil_aeneid_latin.txt",
+      "bytes": 474698,
+      "sha256": "adcda89e39c7429cbee028dbe3c246c3eab99b416c8a7a8ade71876446a141ca",
+      "words": 66772,
+      "lengths_sha256": "9119a4b4f4df8e6b1a33c4a7c383459f047ee833e8909b918a02fce5de94244e"
+    },
+    {
+      "name": "keys/voltaire_candide.txt",
+      "path": "liber-primus/data/keys/armada19/voltaire_candide.txt",
+      "bytes": 226515,
+      "sha256": "75e6a5a4b7130b9406881e23cab0788ba4ce792edc46acebe739d2254fb2d665",
+      "words": 38647,
+      "lengths_sha256": "12e1f78bd1d2eb3129e5f02c2bc4ecf7d2953784b1f12d28c8849c38980f52ec"
+    },
+    {
+      "name": "keys/runepoem_oe.txt",
+      "path": "liber-primus/data/keys/runepoem_oe.txt",
+      "bytes": 3382,
+      "sha256": "e418d496af6ebf34281c60d98ab487a969b766101046bde40631007ed46c095c",
+      "words": 617,
+      "lengths_sha256": "4c6137b3d38bc6da440420ad39f9c044db9592e4955da2e28b6fd0dd8e70f1cb"
+    },
+    {
+      "name": "keys/runepoem_translit.txt",
+      "path": "liber-primus/data/keys/runepoem_translit.txt",
+      "bytes": 3382,
+      "sha256": "847a996333e8b491493028a1404c252cb6d50197c3dc51879141df3fd07b5971",
+      "words": 546,
+      "lengths_sha256": "3cd2c19b5054eb1bca465e052fb4af62f8686b65bd0cae49334f4115d06f231d"
+    },
+    {
+      "name": "keys/self_reliance.txt",
+      "path": "liber-primus/data/keys/self_reliance.txt",
+      "bytes": 56483,
+      "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0",
+      "words": 10140,
+      "lengths_sha256": "7c8c7508e39dfc5985632fa14989c0cadfd2a2abc7c65a3fab515009ecfe4341"
+    },
+    {
+      "name": "keys/solved_plaintext.txt",
+      "path": "liber-primus/data/keys/solved_plaintext.txt",
+      "bytes": 17388,
+      "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473",
+      "words": 2905,
+      "lengths_sha256": "8deed4f9e26632e58538cdf4f18bbac6f45671b880d3ba9c1418291598f0ab90"
+    },
+    {
+      "name": "keys/words_expanded.txt",
+      "path": "liber-primus/data/keys/words_expanded.txt",
+      "bytes": 4719,
+      "sha256": "9b924d9d37f9b4ef5a49e2fc7f008c9ee48edbb77df9ea0edcd9a6faaa76269f",
+      "words": 567,
+      "lengths_sha256": "b711c944e4d89282844a5fe020f65f92cf1a829f29cc04cee1e9b2061fdc521d"
+    }
+  ],
+  "excluded_below_300": [
+    {
+      "path": "liber-primus/data/keys/armada18/lp1_runes_as_key.txt",
+      "words": 0,
+      "sha256": "c8d2bf4d246d8360154ce81cd543b92f5daa91b64ad70f35533f41bbfcfc5cad"
+    },
+    {
+      "path": "liber-primus/data/keys/thematic.txt",
+      "words": 41,
+      "sha256": "f9db06ae01ed8437b98eeedaafe002fabab1665752b3be55c2ce5e25ba205d7f"
+    }
+  ],
+  "corpus_words": 9808699,
+  "manuscript": {
+    "path": "liber-primus/data/krisyotam_runes.txt",
+    "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "segments": "first 55 percent-separated source segments",
+    "words": 2928,
+    "lengths_sha256": "c99806bc264448eaf84bf13814d4dd0399abaa546619f895f88dd4cdc278811f",
+    "fcounts_sha256": "863d09d97d916786c3538f6e9fe30de6562732d55069825840feaf8b742d41c8"
+  },
+  "prior_controls": [
+    {
+      "path": "research/source-intake/hint-scope-cohort-2026-10-23/scanner-plan-frozen.json",
+      "sha256": "58c3246a96bbc6a3557dcb561f01a720f1ae212437716e06cbc2e6daf0fee638"
+    },
+    {
+      "path": "research/source-intake/hint-scope-cohort-2026-10-23/scanner-results.json",
+      "sha256": "9905f0b34768cfeca5123b44470d6d3f4cc5917aab1b753af962f55962e02690"
+    },
+    {
+      "path": "research/source-intake/hint-scope-cohort-2026-10-23/scanner-control.py",
+      "sha256": "f132da0a55452e70e1470987e867e5c18d7658e5483f036e86cfa8af306f9060"
+    },
+    {
+      "path": "research/source-intake/hint-scope-cohort-2026-10-23/check-scanner.py",
+      "sha256": "d29c99d009a1bb4697be137fdbc2deed2dc7e1faa8d112ad428b7f41cf655ed6"
+    }
+  ]
+}

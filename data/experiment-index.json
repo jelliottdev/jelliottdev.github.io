@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 328,
+    "records": 329,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -6961,8 +6961,13 @@
           ]
         }
       ],
-      "family": null,
-      "variant_label": null,
+      "family": {
+        "id": "archived-word-length-alignment",
+        "title": "Matching word lengths to archived texts",
+        "question": "Do contiguous passages fit the manuscript word-length sequence?",
+        "baseline": "dukotah-held-corpus-skeleton-replay"
+      },
+      "variant_label": "Original full-pattern eligibility gate",
       "pages": [],
       "artifacts": [
         "experiments/records/dukotah-held-corpus-skeleton-replay/reproduction/inputs-frozen.json"
@@ -31665,6 +31670,72 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/semantic-seed-screen-gate-audit.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/semantic-seed-screen-gate-audit/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/semantic-seed-screen-gate-audit.zip"
+    },
+    {
+      "id": "short-text-prefix-extension",
+      "title": "Word-length prefixes in previously omitted short texts",
+      "question": "Do the previously omitted short texts match either fixed manuscript word-length prefix?",
+      "summary": "The previously omitted short texts produced no complete prefix match and did not improve the earlier maxima. The best counts were 87/400 and 37/120 compatible word-length positions.",
+      "tags": [
+        "word lengths",
+        "word-length prefix",
+        "short texts",
+        "previously omitted texts",
+        "corpus matching",
+        "F rune",
+        "contiguous passages"
+      ],
+      "finding": "Neither shorter prefix matched completely. The best alignments agreed at 87 of 400 and 37 of 120 word-length positions, below the earlier scan’s maxima.",
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/short-text-prefix-extension/reproduction/inputs-frozen.json",
+          "experiments/records/short-text-prefix-extension/reproduction/protocol-frozen.json"
+        ],
+        "representation": "Same pinned 94-file corpus and source manuscript parser as the baseline: first 55 percent-separated segments, 2,928 words, with greedy rune encoding and directional F-count intervals. Raw files, normalized arrays, ordering and hashes unchanged; corpus inputs external.",
+        "procedure": "Construct exact original prefix patterns after consuming all four full-length RNG permutations. Run unchanged scanner.scan_corpus separately for the three 400-word patterns on 8 newly eligible texts and the three 120-word patterns on 10, retaining default blocks/FFT and raw strict-maximum/tie selection. Independently integer-count every target alignment.",
+        "parameters": "Seed 3301 and original RNG order. First 400/120 real interval patterns plus two fixed shuffles each; 5,378 starts per 400-word pattern and 8,037 per 120-word pattern, 40,245 total scores. Newly eligible means prefix width <= words < 2,928. No repeated 84-text scan. 37 synthetic controls; 1,371 checked synthetic alignments.",
+        "exclusions": "No new corpus texts, historical 224-text replay, full 2,928-pattern rerun, alternative manuscript windows, changed parser/editions, word/content recovery, language exclusion or calibrated global probability. Corpus texts and normalized corpus arrays are not bundled."
+      },
+      "limitations": "No additional corpus files, historical 224-text replay, full 2,928-word rerun, all-subwindow manuscript scan, changed editions or normalization, plaintext recovery or language exclusion. Partial compatible positions need not be consecutive words. Two shuffled patterns per prefix do not calibrate a global probability. Constant integer ties can be separated by microscopic source FFT errors; exact raw source selection is retained. Corpus texts and normalized length arrays remain external.",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      },
+      "method_topics": [
+        {
+          "id": "language",
+          "title": "Language and corpus identification",
+          "aliases": [
+            "Welsh",
+            "language identification",
+            "corpus",
+            "different language",
+            "another language",
+            "non English",
+            "other languages"
+          ]
+        }
+      ],
+      "family": {
+        "id": "archived-word-length-alignment",
+        "title": "Matching word lengths to archived texts",
+        "question": "Do contiguous passages fit the manuscript word-length sequence?",
+        "baseline": "dukotah-held-corpus-skeleton-replay"
+      },
+      "variant_label": "Short-text prefix eligibility extension",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/short-text-prefix-extension/reproduction/inputs-frozen.json",
+        "experiments/records/short-text-prefix-extension/reproduction/protocol-frozen.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-24",
+      "url": "https://jelliottdev.github.io/#/experiments/short-text-prefix-extension",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/short-text-prefix-extension.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/short-text-prefix-extension/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/short-text-prefix-extension.zip"
     },
     {
       "id": "short-window-lag13",

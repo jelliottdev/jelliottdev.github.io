@@ -283,6 +283,18 @@ for(const query of ['matching word lengths to books','C-01 skeleton scan']){
 }
 console.log('PASS: homophonic controls and bounded corpus replays retain their distinct evidence roles.');
 
+for(const query of ['word-length prefix in short texts','previously omitted texts']){
+ const hit=Search.experiments(liveDocs,query)[0];
+ assert.equal(hit?.document.id,'short-text-prefix-extension',query);
+ assert.equal(Search.select(liveDocs,query)[0]?.id,hit.document.id,
+  'The complete short-text scope must fit in the comparison context');
+ assert(hit.document.text.includes('87/400')&&hit.document.text.includes('37/120'),
+  'Matching-length counts remain in the retrieved finding');
+ assert(hit.document.text.includes('224-text')&&hit.document.text.includes('two fixed prefixes'),
+  'Retrieval must preserve the historical corpus and fixed-prefix limitations');
+}
+console.log('PASS: short-text prefix queries reach their bounded extension with findings and limits.');
+
 for(const query of ['unequal starting values plaintext feedback','all two-rune starting keys','two-rune primer']){
  const hit=Search.experiments(liveDocs,query)[0];
  assert.equal(hit?.document.id,'two-rune-primer-extension',query);

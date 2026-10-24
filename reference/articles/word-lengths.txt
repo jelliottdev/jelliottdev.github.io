@@ -215,9 +215,26 @@ A left-tail fraction asks how often a reference value is no greater than the obs
 
 Does a passage match the ordered lengths?
 
+
+Different words, identical lengths. An invented example, not manuscript text:
+
+	Position	1	2	3
+
+	Phrase A	RED	FOX	SAT
+
+	Phrase B	BIG	CAT	RAN
+
+	Runes in either	3	3	3
+
+
+All 3 of 3 positions match in length under the source’s rune conversion. None of the words is the same. A length match counts a position, not a decoded word.
+
+
 The archived-text skeleton replay searched contiguous passages in 84 of 94 available texts. No complete pattern matched; the exact rule agreed at best at 593 of 2,928 positions. These are compatible word lengths, not recovered words. Unlike the historical prefix comparison, this tests passage alignment rather than a summary distribution.
 
-The replay retains its source’s 2,928-word parser, separate from the joined count above. Its minimum-length gate omits ten texts even for the first-400 and first-120 prefix checks; other manuscript subwindows were not tested. It is not a replay of the historical 224-text corpus. Four full-pattern shuffles and two per prefix do not establish a calibrated global probability or exclude a language.
+A follow-up checked the shorter texts that the original scan skipped: eight were long enough for the 400-word check, and all ten for the 120-word check. None matched a complete prefix or improved the earlier best partial matches.
+
+Both tests use the source’s 2,928-word parser, separate from the joined count above. They test only the first 400 and 120 words, not every possible manuscript passage. Neither reproduces the historical 224-text corpus. The small number of shuffled comparisons cannot establish a global probability or exclude a language.
 
 Could the plaintext be another language?
 The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
@@ -456,6 +473,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 - archived-text skeleton replay
   https://jelliottdev.github.io/#/experiments/dukotah-held-corpus-skeleton-replay
+- follow-up checked the shorter texts
+  https://jelliottdev.github.io/#/experiments/short-text-prefix-extension
 - eight-language parallel-corpus experiment
   https://jelliottdev.github.io/#/experiments/parallel-languages
 - known-LP reading control
