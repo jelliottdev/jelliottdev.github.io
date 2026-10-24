@@ -23,3 +23,16 @@ vm.createContext(context);vm.runInContext(slice,context);
  assert.match(context.main.innerHTML,/Home/);
  console.log('PASS: legacy deep links preserve query/record routes; stale map fetch cannot replace a later destination.');
 })().catch(e=>{console.error(e);process.exitCode=1});
+
+// Validate actual entry markup, not only the JS modules used by the VM tests.
+const checkerHTML=fs.readFileSync(require.resolve('../investigate.html'),'utf8');
+const checkerScripts=[...checkerHTML.matchAll(/<script\b([^>]*)>/g)].map(([,attributes])=>{
+ const src=attributes.match(/\bsrc="([^"<>\r\n]+)"/);
+ assert(src,'Each checker script needs a closed, quoted source attribute: '+attributes);
+ assert(!/[<>]/.test(attributes),'A malformed attribute must not consume the next script');
+ const filename=src[1].split('?')[0];
+ assert(fs.existsSync(require.resolve('../'+filename)),'Entry dependency exists: '+filename);
+ return filename;
+});
+assert.deepEqual(checkerScripts,['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','investigate.js'],'The formatter and all dependencies must load before the checker');
+console.log('PASS: checker entry script attributes, dependency paths and load order.');
