@@ -104,7 +104,9 @@
   if(!idea.value.trim()){idea.setCustomValidity('Describe an idea first.');idea.reportValidity();return}
   goToChecker(idea.value);
  });
- $('review-idea').addEventListener('input',()=>$('review-idea').setCustomValidity(''));
+ $('review-idea').addEventListener('input',()=>{
+  $('review-idea').setCustomValidity('');idea.value=$('review-idea').value;rememberText();validate();
+ });
  $('review-form').addEventListener('submit',event=>{
   event.preventDefault();const field=$('review-idea'),text=field.value;
   field.setCustomValidity(!text.trim()?'Describe the idea to compare.':text.length>limit?'The current text checker accepts up to 1,500 characters. Keep the original file and describe its idea here.':'');

@@ -1,6 +1,6 @@
 # Manual proposal review
 
-The **original confirmed standardized idea is the intake**. Users should not re-enter it in a separate proposal or “Suggest a test” form. This document covers reusable internal storage/review scaffolding only; live intake activation is paused. Automatically saving that original card and reconciling its genuinely new parts into a work queue is a separate integration step, not something this CLI implements or certifies.
+The **original confirmed standardized idea is the intake**. Users should not re-enter it in a separate proposal or “Suggest a test” form. This document covers internal storage/review tooling; live intake activation is paused. The offline reconciliation command below prepares saved cards for owner comparison with published research. It does not determine genuinely new parts automatically.
 
 The current schema preserves an exact standardized card and associated submission notes/source links. Exact-card identity is not semantic novelty: differently worded cards may overlap, and an unchanged method can have untested scope. The tool does not automatically identify new parts, infer coverage, create an experiment, run code, call a model, add a method category, or publish a finding. Acceptance records a maintainer decision for further consideration or planning, not proof that the proposal is new. A later reproducible experiment still needs its own fixed inputs, protocol, controls, outputs and publication review.
 
@@ -50,6 +50,28 @@ Limits are 100 cards, 1,000 submission notes and 8 MiB of serialized output. An 
 
 `show` includes the latest 100 review transitions by default. Use `--history-limit N` and `--before-review N` with its `next_before_review` cursor for earlier history. Metadata, notes and history are separate bounded reads, not a transactional snapshot of an actively changing queue.
 
+## Prepare private owner comparison offline
+
+The pending cards already hold incoming ideas. Reconciliation makes that saved material reviewable alongside existing research; it does not create a second intake form or decide which parts are new.
+
+```text
+node services/idea-assistant/reconcile-ideas.mjs --input ../qa-temp/review-pending.json --out ../qa-temp/owner-review-NEW
+```
+
+`--input` is an explicit `review-proposals.mjs export` file. `--out` is a **new directory outside this public repository**, with an existing parent directory. Existing outputs and repository-contained paths, including paths redirected through a symlink/junction, are refused. The output consists of `queue-review.json` and `queue-review.md`. Keep both private. Optional `--registry FILE` selects another saved published registry; the default is local `data/experiments.json`. There is no database access, model call, URL fetch or package installation.
+
+Use a complete selected-card export: `notes_complete_for_selection` must be true, `next_after_note` must be empty, and every card's `submission_count` must match its preserved contribution rows. For large ledgers, request fewer cards or export one card with enough note capacity; a partial note page cannot be reconciled silently. A card cursor (`next_after`) is allowed and prominently retained: the report covers that selected page, not the entire queue. Export reads may span concurrent changes; they are not a transactional database snapshot.
+
+Validation requires the export schema, read timestamps, matching/selected counts, and complete `cards`/`submissions` arrays. Each card needs its full `id`, `card_hash`, canonical `card_json`, parsed `card`, matching share `fragment`, valid review status and `submission_count`. Every contribution needs its unique UUID `request_id`, selected `proposal_id`, `original_idea` (empty is allowed), `note`, `source_url`, UTC `received_at` and matching `received_day`. Original wording is required even when empty, so an older export cannot silently lose it. Hash/ID disagreement, noncanonical or mismatched active cards/fragments, orphan or repeated contributions, missing notes and stale linked published-record IDs fail before any output directory is created.
+
+The report retains original wording and every contribution/source separately from the exact standardized card. Exact card identity groups contributions without turning multiple notes into additional ideas or results. `compareCards` enumerates relationships between incoming cards, including directional page additions/removals; parameter, ordered-operation, rule-state and qualified-passage differences remain explicit. It does not equate broad and narrow scopes or infer semantic novelty.
+
+Published candidates come from the existing `AssistantSearch.select` method gates and bounded selection. Ranking uses the standardized ordered method, parameters and rule terms; original wording, outcome text and scope prose do not rank records. Pages are passed separately for overlap tie-breaking. An unspecified/ambiguous method requires clarification, an overlong method query requires shortening, and no selected candidate means **needs comparison**, never “new”. Compound methods still require human comparison of every operation and limit. The report includes each candidate's entire published registry record, citation, scope/exclusions, findings and limitations, without converting related results into exact coverage. Input/registry byte hashes and local code hashes identify the snapshot.
+
+The readable report places supplied wording, notes, URLs, cards and registry prose in escaped inert text blocks; it creates no remote embeds. Only validated experiment IDs on the fixed published wiki origin become clickable citations, usable from a local report. Counts distinguish saved incoming cards and contributions from maintainer review status; newly created tasks and executed experiments are always zero. An owner can then make an explicit review decision and, when warranted, plan a separate reproducible experiment with fixed inputs and controls.
+
+Inputs are limited to 8 MiB, 100 cards and 1,000 contributions; the registry is limited to 64 MiB and the combined report to 32 MiB. Oversized output fails rather than dropping scopes, contributions or relationship differences.
+
 ## Record one explicit review decision
 
 First inspect the exact card, all relevant notes and existing evidence. Then use an explicit ID, decision, expected current status and reason:
@@ -70,6 +92,9 @@ Use `--remote` only when deliberately reviewing the production queue with author
 ```text
 node services/idea-assistant/test-review-proposals.mjs
 node services/idea-assistant/test-proposals.mjs
+node services/idea-assistant/test-reconcile-ideas.mjs
 ```
 
 Tests use actual `node:sqlite` in-memory tables with all three migrations and injected CLI I/O. They cover explicit modes/IDs, bounds and cursors, exact cards/original wording, distinct counts, later notes, full review transitions, SQL quoting of adversarial reasons, safe process arguments, real published-record links, stale-status conflicts and immutable card/submission bytes. They do not execute Wrangler, access a remote database or call a model.
+
+Reconciliation tests use valid active-card fixtures and the actual saved published registry. Temporary input/report files stay outside the repository and are removed after verification. They cover complete contribution preservation, method-only ranking, page deltas, complete candidate evidence, integrity failures, private output boundaries, escaping and byte snapshots. They do not write synthetic review output into public data.

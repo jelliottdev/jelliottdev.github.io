@@ -224,6 +224,22 @@
    (docs.length?'<h2>Sources</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,true)).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
+ function disclosureNodes(host){
+  const nodes=[],keys=new Map(),counts=new Map();
+  for(const detail of host.querySelectorAll?.('details')||[]){
+   const summary=detail.querySelector(':scope > summary');if(!summary)continue;
+   const parent=detail.parentElement?.closest('details'),prefix=keys.get(parent)||'';
+   const base=prefix+'/'+encodeURIComponent(summary.textContent.trim()),ordinal=counts.get(base)||0;counts.set(base,ordinal+1);
+   const key=base+'#'+ordinal;keys.set(detail,key);nodes.push({key,detail,summary});
+  }
+  return nodes;
+ }
+ function captureDisclosureState(host,active){return disclosureNodes(host).map(({key,detail,summary})=>({key,open:detail.open,focused:summary===active}));}
+ function restoreDisclosureState(host,states){
+  const saved=new Map(states.map(state=>[state.key,state]));let target=null;
+  for(const {key,detail,summary}of disclosureNodes(host)){const state=saved.get(key);if(state){detail.open=state.open;if(state.focused)target=summary;}}
+  target?.focus({preventScroll:true});
+ }
  function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout,sharer=H.share,renderCard=H.renderPNG}={}){
   const host=doc.getElementById('investigate'),printHost=doc.getElementById('print-snapshot');
   let stage='input',draft=null,confirmed=null,result=null,packet=null,editing=false,editingBackup=null,raw='',records=[],documents=[],endpoint=null,loaded=false,loadError='',message='',error='',busy=false,controller=null,generation=0,registryId='';
@@ -232,6 +248,7 @@
   let legacyScope=null;
   let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
   let intakeEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
+  let renderedResearchCard=null;
   const fragment=doc.defaultView?.location?.hash||'';
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
@@ -244,6 +261,9 @@
   function stopIntake(clear=false){intakeVersion++;intakeController?.abort();intakeController=null;if(intake)intake.busy=false;if(clear)intake=null;}
   function render(){
    const prior=doc.activeElement?.id;
+   const sameResearch=stage==='research'&&confirmed&&renderedResearchCard===confirmed;
+   const disclosures=sameResearch?captureDisclosureState(host,doc.activeElement):[];
+   const selection=sameResearch&&prior&&Number.isInteger(doc.activeElement.selectionStart)&&Number.isInteger(doc.activeElement.selectionEnd)?{value:doc.activeElement.value,start:doc.activeElement.selectionStart,end:doc.activeElement.selectionEnd}:null;
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    if(stage==='input'){
     host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="1500" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
@@ -259,11 +279,19 @@
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
    bind();
-   if(prior&&doc.getElementById(prior))focus('#'+prior);
+   if(sameResearch)restoreDisclosureState(host,disclosures);
+   if(prior&&doc.getElementById(prior))doc.getElementById(prior).focus({preventScroll:true});
+   if(selection){const field=doc.getElementById(prior);if(field?.value===selection.value&&field.setSelectionRange)field.setSelectionRange(selection.start,selection.end);}
+   renderedResearchCard=stage==='research'?confirmed:null;
   }
   function intakeHTML(){
    if(!intakeEndpoint||!intake||intake.snapshot!==confirmed)return '';
-   return '<div class="idea-save"><span id="idea-save-status" class="small" role="status">'+(intake.busy?'Saving idea…':intake.saved?'Saved.':intake.error?"Couldn’t save this idea.":'')+'</span>'+(intake.error?'<button id="retry-save" type="button">Retry saving</button>':'')+'</div>';
+   return '<div class="idea-save" id="idea-save"><span id="idea-save-status" class="small" role="status" tabindex="-1">'+intakeStatus()+'</span><button id="retry-save" type="button"'+(intake.error?'':' hidden')+'>Retry saving</button></div>';
+  }
+  function intakeStatus(){return intake.busy?'Saving idea…':intake.saved?'Saved.':intake.error?"Couldn’t save this idea.":'';}
+  function updateIntake(){
+   const status=doc.getElementById('idea-save-status'),retry=doc.getElementById('retry-save');if(!status||!retry||intake?.snapshot!==confirmed)return false;
+   status.textContent=intakeStatus();const held=doc.activeElement===retry;retry.hidden=!intake.error;if(held&&retry.hidden)status.focus({preventScroll:true});return true;
   }
   async function saveIntake(snapshot=confirmed){
    if(!intakeEndpoint||!snapshot||snapshot!==confirmed)return;
@@ -274,7 +302,7 @@
     catch{intake.error=true;render();return;}
    }
    const current=intake;if(current.busy||current.saved||!current.body)return;
-   const token=++intakeVersion,requestController=new AbortController();intakeController=requestController;current.busy=true;current.error=false;render();
+   const token=++intakeVersion,requestController=new AbortController();intakeController=requestController;current.busy=true;current.error=false;if(!updateIntake())render();
    const timer=schedule(()=>requestController.abort(),30000);
    try{
     const response=await fetcher(intakeEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(current.body),signal:requestController.signal});
@@ -284,7 +312,7 @@
     if(!response.ok||!/^p_[a-f0-9]{64}$/.test(data.id)||!['received','already_received'].includes(data.status)||!Number.isFinite(Date.parse(data.receivedAt)))throw Error('Save unavailable');
     current.saved=true;
    }catch{if(token===intakeVersion&&intake===current&&confirmed===snapshot)current.error=true;}
-   finally{unschedule(timer);if(token===intakeVersion&&intake===current&&confirmed===snapshot){current.busy=false;intakeController=null;render();}}
+   finally{unschedule(timer);if(token===intakeVersion&&intake===current&&confirmed===snapshot){current.busy=false;intakeController=null;updateIntake();}}
   }
   function prepareCard(){
    const snapshot=confirmed;preparedFor=snapshot;preparedCard=null;shareNotice='';shareFallback=null;
@@ -479,7 +507,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy}),destroy:()=>{stopIntake(true);stop();}};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

@@ -62,17 +62,17 @@ const turns=async()=>{await turn();await turn();};
  const imported=H.decode(body.fragment).draft;assert.equal(imported.method.value.operations[0].label,body.originalIdea);assert.deepEqual(imported.scope.value.pages,['lp2-15']);
  research[0].resolve(Response.json({answer:null,sources:[],reason:'no-matching-records'}));for(let i=0;i<4;i++)await turn();assert.equal(requests.length,1,'Research completion does not save again');
  for(const code of [400,409,429,503]){
-  requests.at(-1).resolve(Response.json({error:'Unavailable'},{status:code}));await turns();assert(doc.host.html.includes('Couldn’t save this idea.'));assert(doc.getElementById('retry-save'));
+  requests.at(-1).resolve(Response.json({error:'Unavailable'},{status:code}));await turns();assert(doc.getElementById('idea-save-status')?.textContent==='Couldn’t save this idea.');assert(doc.getElementById('retry-save'));
   doc.getElementById('retry-save').fire('click');await turn();assert.deepEqual(JSON.parse(requests.at(-1).options.body),body,'Retries preserve the exact card, source wording and ID');
  }
- requests.at(-1).resolve(Response.json(receipt('already_received')));await turns();assert(doc.host.html.includes('Saved.'));assert.equal(doc.getElementById('retry-save'),null);
+ requests.at(-1).resolve(Response.json(receipt('already_received')));await turns();assert(doc.getElementById('idea-save-status')?.textContent==='Saved.');assert.equal(doc.getElementById('retry-save').hidden,true);
  assert(!/queued|new idea/i.test(doc.host.html),'A save receipt is not a novelty or queue classification');
  app.destroy();
  const shared=await setup();assert.equal(shared.requests.length,1);const sharedBody=JSON.parse(shared.requests[0].options.body);assert.deepEqual(Object.keys(sharedBody).sort(),['fragment','requestId']);assert(!JSON.stringify(sharedBody).includes('PRIVATE ORIGINAL'));
  const pending=shared.requests[0];shared.doc.getElementById('edit').fire('click');assert(pending.options.signal.aborted);pending.resolve(Response.json(receipt('received')));await turns();assert.equal(shared.doc.getElementById('idea-save-status'),null,'An older card cannot show a receipt while editing');
- shared.doc.getElementById('cancel-edit').fire('click');assert(!shared.doc.host.html.includes('Saved.'));shared.app.destroy();
- const timed=await setup();const timeoutBody=JSON.parse(timed.requests[0].options.body);timed.timers[0]();assert(timed.requests[0].options.signal.aborted);timed.requests[0].resolve(Response.json(receipt('received')));await turns();assert(timed.doc.host.html.includes('Couldn’t save this idea.'));
- timed.doc.getElementById('retry-save').fire('click');await turn();assert.deepEqual(JSON.parse(timed.requests[1].options.body),timeoutBody);timed.requests[1].resolve(Response.json(receipt('received')));await turns();assert(timed.doc.host.html.includes('Saved.'));timed.app.destroy();
+ shared.doc.getElementById('cancel-edit').fire('click');assert.notEqual(shared.doc.getElementById('idea-save-status')?.textContent,'Saved.');shared.app.destroy();
+ const timed=await setup();const timeoutBody=JSON.parse(timed.requests[0].options.body);timed.timers[0]();assert(timed.requests[0].options.signal.aborted);timed.requests[0].resolve(Response.json(receipt('received')));await turns();assert(timed.doc.getElementById('idea-save-status')?.textContent==='Couldn’t save this idea.');
+ timed.doc.getElementById('retry-save').fire('click');await turn();assert.deepEqual(JSON.parse(timed.requests[1].options.body),timeoutBody);timed.requests[1].resolve(Response.json(receipt('received')));await turns();assert(timed.doc.getElementById('idea-save-status')?.textContent==='Saved.');timed.app.destroy();
  const back=await setup();back.doc.getElementById('back').fire('click');assert(back.requests[0].options.signal.aborted);back.requests[0].resolve(Response.json(receipt('received')));await turns();assert.equal(back.app.getSnapshot().stage,'input');assert.equal(back.doc.getElementById('idea-save-status'),null);back.app.destroy();
  console.log('PASS confirmed-idea intake UI: explicit check only; no contribution form; exact active card + original human wording; imported summaries excluded; no AI results/history; endpoint-missing hidden; idempotent retries; saved-only receipt; error/timeout/edit/back races.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
