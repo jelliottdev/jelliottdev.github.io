@@ -2,7 +2,7 @@
 (() => {
  const $=id=>document.getElementById(id);
  const idea=$('idea'),form=$('check-idea'),picker=$('file-input'),review=$('file-review');
- const draftKey='liberpedia-home-refined-draft-v1',limit=1500,maxFiles=5,maxBytes=10*1024*1024;
+ const draftKey='liberpedia-home-refined-draft-v1',limit=IdeaInput.MAX_LENGTH,maxFiles=5,maxBytes=10*1024*1024;
  let files=[],filesTouched=false,saveQueue=Promise.resolve(),saveVersion=0,previewVersion=0;
  const urls=new Map();
  const closeIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>';
@@ -97,7 +97,7 @@
  }
  $('close-review').onclick=()=>review.close();
  review.addEventListener('close',()=>{idea.value=$('review-idea').value;rememberText();validate()});
- function goToChecker(text){location.assign('investigate.html?q='+encodeURIComponent(text))}
+ function goToChecker(text){location.assign(IdeaInput.href(text))}
  form.addEventListener('submit',event=>{
   event.preventDefault();rememberText();if(files.length){showReview();return}
   if(!validate()){status(idea.validationMessage);idea.reportValidity();return}

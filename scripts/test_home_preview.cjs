@@ -2,29 +2,30 @@
 // Production home handlers in an isolated DOM fixture; no browser, network or real files.
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const source=fs.readFileSync(require.resolve('../home.js'),'utf8');
+const Input=require('../idea-input.js');
 const turn=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 class Element{
  constructor(id=''){this.id=id;this.children=[];this.value='';this.listeners={};this.dataset={};this.classList={add(){},remove(){}};this.files=[];}
  addEventListener(type,handler){this.listeners[type]=handler;}
- setCustomValidity(){}replaceChildren(){this.children=[];}append(...items){this.children.push(...items);}
+ setCustomValidity(message){this.validationMessage=message;}replaceChildren(){this.children=[];}append(...items){this.children.push(...items);}
  setAttribute(name,value){this[name]=value;}showModal(){this.open=true;}focus(){}
  get innerHTML(){return this.markup||'';}set innerHTML(value){this.markup=value;}
- reportValidity(){return true;}
+ reportValidity(){return !this.validationMessage;}
 }
-function fixture(){
+function fixture({attachments=true}={}){
  const ids=new Map(),get=id=>{if(!ids.has(id))ids.set(id,new Element(id));return ids.get(id);};
- const reads=[],windowEvents={},revoked=[];
+ const reads=[],windowEvents={},revoked=[],navigations=[];
  const text={name:'synthetic-example.js',type:'text/javascript',size:48,lastModified:1,slice(){const read=deferred();reads.push(read);return {text:()=>read.promise};}};
  const image={name:'synthetic-image.png',type:'image/png',size:64,lastModified:1};
- const env={document:{getElementById:get,createElement:tag=>Object.assign(new Element(),{tagName:tag.toUpperCase()})},
+ const env={IdeaInput:require('../idea-input.js'),document:{getElementById:get,createElement:tag=>Object.assign(new Element(),{tagName:tag.toUpperCase()})},
   window:{indexedDB:{open:()=>({})},addEventListener(type,handler){windowEvents[type]=handler;}},sessionStorage:{getItem:()=>'',setItem(){}},crypto,Blob,
-  URL:{createObjectURL:()=> 'blob:synthetic-local-image',revokeObjectURL(url){revoked.push(url);}},location:{assign(){assert.fail('Preview cannot navigate or submit');}},console};
+  URL:{createObjectURL:()=> 'blob:synthetic-local-image',revokeObjectURL(url){revoked.push(url);}},location:{assign(url){navigations.push(url);}},console};
  vm.runInNewContext(source,env,{filename:'home.js'});
- get('file-input').files=[text,image];get('file-input').onchange();
+ if(attachments){get('file-input').files=[text,image];get('file-input').onchange();
  // Open through the actual first attachment action, then use its real dialog buttons.
- get('attachments').children[0].children[0].onclick();
- return {get,reads,revoked,pagehide:persisted=>windowEvents.pagehide({persisted}),select:index=>get('review-tabs').children[index].onclick(),preview:()=>get('file-preview').children};
+ get('attachments').children[0].children[0].onclick();}
+ return {get,reads,revoked,navigations,pagehide:persisted=>windowEvents.pagehide({persisted}),select:index=>get('review-tabs').children[index].onclick(),preview:()=>get('file-preview').children};
 }
 async function switchedRead(kind){
  const f=fixture();assert.equal(f.reads.length,1);f.select(1);
@@ -52,4 +53,23 @@ function cachedNavigation(){
  f.pagehide(false);assert.deepEqual(f.revoked,['blob:synthetic-local-image'],'Discarding the page releases image URLs');
  f.pagehide(false);assert.equal(f.revoked.length,1,'Released URLs are cleared');
 }
-(async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();cachedNavigation();console.log('PASS production home preview: stale reads ignored, current errors and exact-code retry preserved, Back-cache URLs retained and discarded-page URLs released; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});
+function exactTextHandoff(){
+ for(const text of ['ᚠ'.repeat(1500),'😀'.repeat(750),'  code("<&+#%?");\n\treturn "ᚠ 字";\n  ']){
+  for(const attachments of [false,true]){
+   const f=fixture({attachments}),field=f.get(attachments?'review-idea':'idea');field.value=text;
+   f.get(attachments?'review-form':'check-idea').listeners.submit({preventDefault(){}});
+   assert.equal(f.navigations.length,1);const link=new URL(f.navigations[0],'https://example.org/');
+   assert.equal(link.pathname,'/investigate.html');assert.equal(link.search,'?v=20261024-input','Only a fixed checker-version marker belongs in the HTTP request target');
+   assert.equal(Input.read(link).text,text,'The real home handler must preserve all text through the shared checker decoder');
+   assert.equal(f.navigations[0],Input.href(text));
+  }
+ }
+ const invalid=fixture({attachments:false});invalid.get('idea').value='ᚠ'.repeat(1501);invalid.get('check-idea').listeners.submit({preventDefault(){}});
+ assert.equal(invalid.navigations.length,0);assert.equal(invalid.get('idea').value.length,1501,'Overlong drafts stay editable without truncation');
+ assert.equal(Input.read({search:'?q=old+link%20%26%20%E1%9A%A0'}).text,'old link & ᚠ');
+ assert(Input.read({hash:'#input=%E1'}).error);assert.equal(Input.read({hash:'#input=%E1',search:'?q=other'}).text,'','Broken fragments must not silently compare a different query');
+ assert.throws(()=>Input.href(' '));assert.throws(()=>Input.href('x'.repeat(1501)));
+ const home=fs.readFileSync(require.resolve('../home.html'),'utf8');assert(home.indexOf('src="idea-input.js')<home.indexOf('src="home.js'),'Shared contract loads before home handlers');
+ console.log('PASS home handoff: exact Unicode/emoji/code at the limit, text-only and file-review routes, no text in HTTP query, legacy links and malformed-link recovery.');
+}
+(async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();cachedNavigation();exactTextHandoff();console.log('PASS production home preview: stale reads ignored, current errors and exact-code retry preserved, Back-cache URLs retained and discarded-page URLs released; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});

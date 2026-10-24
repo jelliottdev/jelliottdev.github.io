@@ -1,8 +1,10 @@
 """Data invariants for the optional maps; no browser or build dependencies."""
 import importlib.util
 import json
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('builder', ROOT / 'scripts/build_research_map.py')
@@ -59,6 +61,29 @@ class ResearchMapTests(unittest.TestCase):
         expected=(json.dumps(self.data, ensure_ascii=False, indent=2)+'\n').encode('utf-8')
         self.assertEqual((ROOT / 'data/research-map.json').read_bytes(), expected)
         self.assertEqual(builder.canonical(builder.build()), builder.canonical(self.data))
+
+    def test_registry_comparison_metadata_refreshes_provenance_without_changing_hierarchy(self):
+        registry = builder.load(ROOT / 'data/experiments.json')
+        record = next(r for r in registry['records'] if r.get('recorded_comparison'))
+        rid = record['id']
+        record['recorded_comparison']['input_description'] += ' Isolated test fixture.'
+        with tempfile.TemporaryDirectory(prefix='research-map-registry-') as temporary:
+            root = Path(temporary)
+            (root / 'data').mkdir()
+            raw = (json.dumps(registry, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+            (root / 'data/experiments.json').write_bytes(raw)
+            # Keep the original pinned handoff; only the current registry changes.
+            with patch.object(builder, 'ROOT', root):
+                updated = builder.build()
+        self.assertEqual(updated['provenance']['current_experiments_sha256'], builder.sha(raw))
+        self.assertNotEqual(updated['provenance']['current_experiments_sha256'],
+                            self.data['provenance']['current_experiments_sha256'])
+        self.assertEqual(updated['records'][rid]['current_sha256'], builder.sha(builder.canonical(record)))
+        self.assertNotEqual(updated['records'][rid]['current_sha256'], self.data['records'][rid]['current_sha256'])
+        self.assertIn('recorded_comparison', updated['records'][rid]['changed_fields'])
+        self.assertEqual(updated['views'], self.data['views'])
+        self.assertEqual(updated['awaiting_classification'], self.data['awaiting_classification'])
+        self.assertEqual(updated['outside_selected_views'], self.data['outside_selected_views'])
 
 
 if __name__ == '__main__':

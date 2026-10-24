@@ -59,6 +59,14 @@ function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('b
 }
 async function confirm(f){assert(f.doc.getElementById('confirm'));f.doc.getElementById('confirm').fire('click');await turn();await turn();}
 async function main(){
+ for(const value of ['ᚠ'.repeat(1500),'  example("<&+#%?");\n\treturn "字";\n ']){
+  const hash=new URL(require('../idea-input.js').href(value),'https://example.org/').hash,backend=server(),f=await fixture(storage(),backend,{hash});
+  assert.equal(f.doc.getElementById('idea').value,value);assert.equal(f.app.getSnapshot().stage,'input');assert.equal(backend.posts.length,0,'Opening the input does not submit the idea');f.app.destroy();
+ }
+ const malformed=await fixture(storage(),server(),{hash:'#input=%E1'});assert(malformed.doc.host.html.includes('This idea link could not be read'));assert.equal(malformed.app.getSnapshot().stage,'input');malformed.app.destroy();
+ const longText='ᚠ'.repeat(1501),over=await fixture(storage(),server(),{hash:'#input='+encodeURIComponent(longText)});
+ over.doc.getElementById('intake').fire('submit');assert.equal(over.app.getSnapshot().stage,'input');assert.equal(over.doc.getElementById('idea').value,longText);assert(over.doc.host.html.includes('1,500 characters'));over.app.destroy();
+ console.log('PASS fragment entry: exact input, no automatic submission, malformed-link recovery and editable over-limit text.');
  const text='  Use Vigenere with key ABC on LP2-15.\nKeep this original wording: \u16a0.  ';
  const session=storage(),backend=server();backend.defer=true;
  let f=await fixture(session,backend);submit(f,text);await confirm(f);

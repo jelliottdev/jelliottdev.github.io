@@ -8,6 +8,7 @@
  const R=typeof module!=='undefined'?require('./claim-research.js'):root.ClaimResearch;
  const P=typeof module!=='undefined'?require('./claim-interpretation.js'):root.ClaimInterpretation;
  const D=typeof module!=='undefined'?require('./recorded-comparison.js'):root.RecordedComparison;
+ const Input=typeof module!=='undefined'?require('./idea-input.js'):root.IdeaInput;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -331,7 +332,7 @@
   const host=doc.getElementById('investigate'),printHost=doc.getElementById('print-snapshot');
   let stage='input',draft=null,confirmed=null,result=null,packet=null,editing=false,editingBackup=null,raw='',records=[],documents=[],endpoint=null,loaded=false,loadError='',message='',error='',busy=false,controller=null,generation=0,registryId='';
   const incoming=new URLSearchParams(doc.defaultView?.location?.search||'');
-  raw=incoming.get('q')||'';
+  const entry=Input.read(doc.defaultView?.location);raw=entry.text;error=entry.error;
   let legacyScope=null;
   let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
   let intakeEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
@@ -397,7 +398,7 @@
    const selection=sameResearch&&prior&&Number.isInteger(doc.activeElement.selectionStart)&&Number.isInteger(doc.activeElement.selectionEnd)?{value:doc.activeElement.value,start:doc.activeElement.selectionStart,end:doc.activeElement.selectionEnd}:null;
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    if(stage==='input'){
-    host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="1500" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
+    host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
    }else if(stage==='interpreting'){
     host.innerHTML='<button class="back" id="cancel-interpretation" type="button">Back to idea</button><h1 id="interpret-title" tabindex="-1">Review your idea</h1>'+
      '<p role="status">'+esc(interpreting?'Preparing the method and scope for your review…':interpretError||'Continue with your original wording.')+'</p>'+
@@ -552,7 +553,7 @@
    for(const name of Object.keys(recoveryFields()))if(name!=='choice'&&!name.startsWith('edit-method'))for(const type of ['input','change'])doc.getElementById(name)?.addEventListener(type,saveRecovery);
    for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.addEventListener('change',saveRecovery);
    doc.getElementById('intake')?.addEventListener('submit',event=>{
-    event.preventDefault();raw=doc.getElementById('idea').value;if(!raw.trim())return;
+    event.preventDefault();raw=doc.getElementById('idea').value;const inputError=Input.issue(raw);if(inputError){error=inputError;render();focus('#idea');return;}
     stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
     if(configResolved&&!interpretationEndpoint)acceptDraft(initialDraft(raw));else interpret();
    });
