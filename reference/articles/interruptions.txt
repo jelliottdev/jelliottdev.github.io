@@ -26,6 +26,8 @@ Consider the artificial input indices 10, 0, 10, 10, the repeating key 1, 2, 3, 
 
 Replacing a shift with zero while consuming its key position behaves like the second row, not the first. A proposal that says “use zero on F” must therefore specify whether the original key position is consumed. The 301 sequence discussion encounters exactly this ambiguity.
 
+The literal-F-mask replay tests the first copy rule with ten fixed keyword assignments on LP2-04–13. None of its allowed masks passes every one-rune-word check; the source instead selects masks by a fallback frequency score. That fallback is not a reading, and the result does not reject other keys or interruption rules.
+
 Follow both counters
 
 Here is the first rule step by step. “Key position” is a count of consumed shifts; it is reduced modulo the key length only when selecting a key value.
@@ -70,6 +72,8 @@ Discarding a key value is a different rule
 A cipher can advance its key without writing a ciphertext rune. One proposed reason is to avoid repeating the previous ciphertext rune: discard a key value and retry the same plaintext rune. That differs from copying an F rune and pausing the key.
 
 The worked key-alignment example follows both counters. The numeric-key search and artifact-key followup test a particular conditional-skip decoder, with a stated limit on rejected key values.
+
+A separate two-clock test pauses either the key alone or both key and alphabet switching at ciphertext F. It still decodes F rather than copying it. Neither policy produces any of nine fixed openings with the two documented keys; other keys and beginnings remain untested by that comparison.
 
 A page boundary is not automatically a restart
 
@@ -144,6 +148,8 @@ Interruptions can also change a cipher’s feedback state rather than a repeatin
 
 Both have their largest observed periodic IoC at period 13 with no interruptions selected. Neither maximum is unusual under its stated shuffle model (p = 0.544 and 0.558 respectively). The records explain the recurrences, show a small reversible example, and provide scripts, charts and exact bounds. These findings concern those particular tests, not a general rejection of interruptions or autokey.
 
+The saved autokey and mirror/alternating-group databases have also been checked. Their scores reproduce, but their controls supply the interruption positions; the original search for those positions was not repeated on matched controls. A separate key-fitting replay finds that thirteen LP2 fits pass the source's score limit while all six comparable planted messages fail complete recovery. Neither saved high scores nor failed fits establish a reading or exclude interruptions.
+
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
@@ -155,12 +161,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - 301 sequence discussion
   https://jelliottdev.github.io/reference/articles/prime-indices.html#digits
+- literal-F-mask replay
+  https://jelliottdev.github.io/#/experiments/wulfic-p21-literal-f-masks
 - worked key-alignment example
   https://jelliottdev.github.io/reference/articles/key-alignment.html#skip-example
 - numeric-key search
   https://jelliottdev.github.io/#/experiments/numeric-stream-skip-grid
 - artifact-key followup
   https://jelliottdev.github.io/#/experiments/artifact-stream-skip-grid
+- two-clock test
+  https://jelliottdev.github.io/#/experiments/alternating-alphabet-interruption-clocks
 - Welcome counter diagram and walkthrough
   https://jelliottdev.github.io/reference/articles/vigenere.html#alignment-diagram
 - rune indices; Gematria Primus prime value
@@ -195,6 +205,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - retain it across the interruption
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- autokey
+  https://jelliottdev.github.io/#/experiments/relikd-autokey-interrupt-database
+- mirror/alternating-group databases
+  https://jelliottdev.github.io/#/experiments/relikd-interrupt-pattern-database
+- separate key-fitting replay
+  https://jelliottdev.github.io/#/experiments/relikd-interrupt-db-keyfit
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 - null symbols, deletion and padding

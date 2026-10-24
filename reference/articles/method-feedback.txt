@@ -23,6 +23,10 @@ These are demonstrations, not manuscript readings. The third rule uses prime val
 
 The feedback opening test found none of nine fixed 12-rune openings under its scalar-seed rules. The prime-valued plaintext test tried two prime-value update rules, including the running-sum example above, on complete LP2 pages; 144 of 199 matched shuffled searches scored at least as high as its best output. The seed-family test covers other explicit plaintext and ciphertext rules. Each finding applies to its written equation and bounds.
 
+The weighted ciphertext-feedback test and its remaining-page extension cover all 55 rune-bearing LP2 pages under specified one-to-three-rune history rules and constant seeds 0 or 1. No output clears the source’s English-score bar. The coefficient choices are bounded, and constant-seed controls do not establish recovery when a varying key skips positions.
+
+The multi-rune history replay shows why a known-seed demonstration is not enough: its restricted seed search misses the source’s planted plaintext-history and mixed-history messages, even though supplying the correct seed recovers them. That search cannot exclude those broader feedback models.
+
 A changing alphabet is another way to store state. See moving disks, rotors and evolving alphabets for a worked example.
 
 An interruption needs a complete state rule
@@ -56,6 +60,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/gp-prime-plaintext-feedback
 - seed-family test
   https://jelliottdev.github.io/#/experiments/wulfic-autokey-seed-families
+- weighted ciphertext-feedback test
+  https://jelliottdev.github.io/#/experiments/dukotah-ciphertext-feedback-coefficients
+- remaining-page extension
+  https://jelliottdev.github.io/#/experiments/d04-remaining-page-feedback
+- multi-rune history replay
+  https://jelliottdev.github.io/#/experiments/public-multihistory-feedback
 - moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
 - LP2-54–55 case study

@@ -10362,8 +10362,6 @@ Count the possibilities, define what was tested, and make claims that match the 
 
 “We tried this cipher” can mean one key, a million chosen keys, or every key in a precisely defined range. Those are different amounts of evidence. A useful experiment tells the reader which possibilities it covered and what would have counted as success.
 
-A large or speculative idea is not automatically a bad idea. The problem comes when the conclusion reaches beyond the work: a failed search becomes “impossible,” or the best-looking fragment becomes “solved.” Search space and bounds help keep the question, the calculation and the claim aligned.
-
 
 Sometimes arithmetic rules out a proposed search before any candidates are generated. The rune-sum length bounds show why a 3299-sum entry needs at least 31 runes, and why 809 needs nine even though the simplest bound suggests eight.
 
@@ -10475,7 +10473,7 @@ The 464-word column-balance experiment illustrates a different boundary: its low
 The planted alignment controls distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.
 
 
-Before interpreting a completed negative search, follow the planted-control walkthrough: check that an answer is included, representable by the decoder, recognizable by the scorer, and tested against the same complete selection process. Exact coverage of a dictionary and the ability to recognize its correct member are separate requirements.
+A complete search also needs a working detector. The planted-control walkthrough checks that a known answer is included, allowed by the decoder and recognized under the same final acceptance rule. Checking every key does not help if the correct output would be rejected.
 
 Write the claim at the same scale as the evidence
 
@@ -10490,7 +10488,7 @@ Write the claim at the same scale as the evidence
 
 Before starting, finish this sentence: “On these exact inputs, I will test these choices, accept a candidate by this rule, and stop under these conditions.” Afterward, report completed and distinct counts, the result under that rule, and what remains outside the search. This makes even a negative result useful: the next person can reuse the work and identify a genuinely different test.
 
-Continue with documenting a reproducible attempt, or reproduce a published experiment before planning your own. The arithmetic above is explanatory; the linked experiment records contain the measured results, scripts and exact bounds.
+For a practical starting point, reproduce a published experiment or follow the guide to documenting your own attempt.
 
 
 Some exclusions cover infinitely many parameter values through a mathematical obstruction rather than enumeration. See proof versus search for the direct-polynomial example, contrasted with a completed warning-prefix search. Neither result transfers to a different cipher model just because it shares the same keyword.
@@ -10526,12 +10524,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - planted alignment controls
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
-- the planted-control walkthrough
+- planted-control walkthrough
   https://jelliottdev.github.io/reference/articles/first-experiment.html#search-controls
-- documenting a reproducible attempt
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
 - reproduce a published experiment
   https://jelliottdev.github.io/reference/articles/first-experiment.html
+- documenting your own attempt
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
 - proof versus search
   https://jelliottdev.github.io/reference/articles/first-experiment.html#proof-versus-search
 - bounded key-search maximum experiment
@@ -11432,6 +11430,8 @@ Consider the artificial input indices 10, 0, 10, 10, the repeating key 1, 2, 3, 
 
 Replacing a shift with zero while consuming its key position behaves like the second row, not the first. A proposal that says “use zero on F” must therefore specify whether the original key position is consumed. The 301 sequence discussion encounters exactly this ambiguity.
 
+The literal-F-mask replay tests the first copy rule with ten fixed keyword assignments on LP2-04–13. None of its allowed masks passes every one-rune-word check; the source instead selects masks by a fallback frequency score. That fallback is not a reading, and the result does not reject other keys or interruption rules.
+
 Follow both counters
 
 Here is the first rule step by step. “Key position” is a count of consumed shifts; it is reduced modulo the key length only when selecting a key value.
@@ -11476,6 +11476,8 @@ Discarding a key value is a different rule
 A cipher can advance its key without writing a ciphertext rune. One proposed reason is to avoid repeating the previous ciphertext rune: discard a key value and retry the same plaintext rune. That differs from copying an F rune and pausing the key.
 
 The worked key-alignment example follows both counters. The numeric-key search and artifact-key followup test a particular conditional-skip decoder, with a stated limit on rejected key values.
+
+A separate two-clock test pauses either the key alone or both key and alphabet switching at ciphertext F. It still decodes F rather than copying it. Neither policy produces any of nine fixed openings with the two documented keys; other keys and beginnings remain untested by that comparison.
 
 A page boundary is not automatically a restart
 
@@ -11550,6 +11552,8 @@ Interruptions can also change a cipher’s feedback state rather than a repeatin
 
 Both have their largest observed periodic IoC at period 13 with no interruptions selected. Neither maximum is unusual under its stated shuffle model (p = 0.544 and 0.558 respectively). The records explain the recurrences, show a small reversible example, and provide scripts, charts and exact bounds. These findings concern those particular tests, not a general rejection of interruptions or autokey.
 
+The saved autokey and mirror/alternating-group databases have also been checked. Their scores reproduce, but their controls supply the interruption positions; the original search for those positions was not repeated on matched controls. A separate key-fitting replay finds that thirteen LP2 fits pass the source's score limit while all six comparable planted messages fail complete recovery. Neither saved high scores nor failed fits establish a reading or exclude interruptions.
+
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
@@ -11561,12 +11565,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - 301 sequence discussion
   https://jelliottdev.github.io/reference/articles/prime-indices.html#digits
+- literal-F-mask replay
+  https://jelliottdev.github.io/#/experiments/wulfic-p21-literal-f-masks
 - worked key-alignment example
   https://jelliottdev.github.io/reference/articles/key-alignment.html#skip-example
 - numeric-key search
   https://jelliottdev.github.io/#/experiments/numeric-stream-skip-grid
 - artifact-key followup
   https://jelliottdev.github.io/#/experiments/artifact-stream-skip-grid
+- two-clock test
+  https://jelliottdev.github.io/#/experiments/alternating-alphabet-interruption-clocks
 - Welcome counter diagram and walkthrough
   https://jelliottdev.github.io/reference/articles/vigenere.html#alignment-diagram
 - rune indices; Gematria Primus prime value
@@ -11601,6 +11609,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - retain it across the interruption
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- autokey
+  https://jelliottdev.github.io/#/experiments/relikd-autokey-interrupt-database
+- mirror/alternating-group databases
+  https://jelliottdev.github.io/#/experiments/relikd-interrupt-pattern-database
+- separate key-fitting replay
+  https://jelliottdev.github.io/#/experiments/relikd-interrupt-db-keyfit
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 - null symbols, deletion and padding
@@ -17001,7 +17015,7 @@ Index of coincidence: a reproducible rune baseline
 
 Matching-pair counts for every archived page, exact inputs, scaling, invariants and interpretation limits.
 
-The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. This guide provides a reproducible whole-page baseline for the archived Liber Primus runes.
+The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. The page measurements below count archived Liber Primus runes, including headings.
 
 Count matching pairs
 
@@ -17016,6 +17030,23 @@ There are N × (N − 1) ordered choices of two distinct positions. A rune occur
 For the three-symbol sequence F F U, only the two F positions match. The numerator is 2 and the denominator is 6, so IoC is 1/3. For F U it is 0; for F F it is 1. With zero or one symbol there is no pair to draw, so IoC is undefined. The JSON uses null in that case.
 
 Reordering F F U as U F F leaves the two F symbols and the IoC unchanged. Replacing every F with one new symbol and every U with another also leaves the count unchanged. IoC can help compare frequency concentration, but it cannot tell which arrangement was read or which fixed one-to-one alphabet mapping was used.
+
+Examples from the archived streams
+
+	Page	Runes	Unscaled IoC
+
+	LP1-00	0	Undefined
+
+	LP1-01	184	0.06402946
+
+	LP2-31	269	0.03295789
+
+	LP2-57	95	0.06270997
+
+
+These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
+
+LP2-57's value is higher than LP2-31's because its measured rune counts produce a larger fraction of matching pairs. That is the direct observation. It does not mean LP2-57 is “more English,” easier to solve, or encrypted by a particular method. The pages also have different lengths, so comparing how unusual either value is needs a declared reference process at each length.
 
 Why the two positions must be different
 
@@ -17070,7 +17101,7 @@ python scripts/rune_ioc.py --check
 python scripts/rune_ioc.py --output my-rune-ioc.json
 python scripts/test_rune_ioc.py
 
-Run from the repository or the extracted reference-data ZIP with Python 3; no extra packages, network access or AI are required. See script setup. The first command prints a single-page report. The second recomputes all 75 records and compares them with the published baseline. The third writes a complete report and refuses to overwrite an existing file. The fourth checks short controls, invariants and an independent enumeration of matching pairs.
+Run from the repository or the extracted reference-data ZIP with Python 3; no extra packages are required. See script setup. The first command prints a single-page report. The second recomputes all 75 records and compares them with the published baseline. The third writes a complete report and refuses to overwrite an existing file. The fourth checks short controls, invariants and an independent enumeration of matching pairs.
 
 Download the calculation script · Download all page results and input hashes. The reference-data ZIP includes the script and its inputs; downloading the script alone does not include the manuscript transcriptions.
 
@@ -17083,23 +17114,6 @@ Columns count_0 through count_28 follow the rune alphabet’s zero-based indices
 python scripts/rune_ioc.py --format csv --output my-ioc.csv
 
 This recomputes the CSV from the archived transcriptions and refuses to overwrite an existing output. Add an exact page ID to export just that page. The downloadable CSV is a rendering of the published JSON baseline; the command above recalculates it from inputs. Sorting by IoC can help inspect the data, but a high or low rank is not a cipher classification or a probability that a page is unusual.
-
-Examples from the archived streams
-
-	Page	Runes	Unscaled IoC
-
-	LP1-00	0	Undefined
-
-	LP1-01	184	0.06402946
-
-	LP2-31	269	0.03295789
-
-	LP2-57	95	0.06270997
-
-
-These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
-
-LP2-57's value is higher than LP2-31's because its measured rune counts produce a larger fraction of matching pairs. That is the direct observation. It does not mean LP2-57 is “more English,” easier to solve, or encrypted by a particular method. The pages also have different lengths, so comparing how unusual either value is needs a declared reference process at each length.
 
 See the distributions behind the numbers
 
@@ -17227,6 +17241,14 @@ Frequency analysis begins with the same per-symbol counts used here. Single-rune
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- LP1-00
+  https://jelliottdev.github.io/reference/lp1-00.html
+- LP1-01
+  https://jelliottdev.github.io/reference/lp1-01.html
+- LP2-31
+  https://jelliottdev.github.io/reference/lp2-31.html
+- LP2-57
+  https://jelliottdev.github.io/reference/lp2-57.html
 - O/A/AE sensitivity check
   https://jelliottdev.github.io/#/experiments/oae-uniform-remapping
 - rune alphabet; rune alphabet’s zero-based indices; alphabet reference
@@ -17241,14 +17263,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/rune-ioc.json
 - Download the whole-page CSV
   https://jelliottdev.github.io/exports/rune-ioc.csv
-- LP1-00
-  https://jelliottdev.github.io/reference/lp1-00.html
-- LP1-01
-  https://jelliottdev.github.io/reference/lp1-01.html
-- LP2-31
-  https://jelliottdev.github.io/reference/lp2-31.html
-- LP2-57
-  https://jelliottdev.github.io/reference/lp2-57.html
 - Two frequency bar charts on identical axes. LP2-31 has 5 to 13 occurrences per rune across 269 symbols. LP2-57 has zero to 15 across 95 symbols, with a larger concentration at rune index 18.; Open or save the full-size SVG
   https://jelliottdev.github.io/exports/figures/rune-frequencies.svg
 - plotting script
@@ -18162,8 +18176,6 @@ An invariant is something an operation leaves unchanged. In cipher analysis, inv
 
 First fix what counts as a symbol
 
-Statistical resemblance also differs from identifying a cipher. See one-time pads and short seeds for a worked example of what uniform symbols can still reveal.
-
 For the examples here, one symbol is one of the 29 runes, represented by its zero-based index. A label such as TH or NG still represents one rune. Keep the same input boundaries throughout a comparison: removing a heading or dropping punctuation is a preprocessing decision, not part of the substitution or rearrangement itself. See rune indices and prime values and transcription layers.
 
 What each operation preserves
@@ -18186,37 +18198,6 @@ What each operation preserves
 “Not guaranteed” does not mean “must change.” A particular input can happen to give the same result. A fixed one-to-one substitution uses the same reversible alphabet mapping at every position; ordinary Atbash and a uniform shift are examples. A repeating Vigenère key can instead apply different shifts to different positions.
 
 A necessary condition can constrain a model without rejecting it. For the specific nonzero-key rule Cᵢ − Cᵢ₋₁ = Kᵢ(Pᵢ − 28) mod 29, a doublet is equivalent to plaintext EA. The EA running-sum explanation proves the condition, checks all finite transitions and shows where it fails if assumptions change. The observed 86 doublets require 86 EA events at the measured within-page transitions; no plaintext distribution is inferred.
-
-Repeating substitutions preserve equality within each phase
-
-A phase is a position in a repeating key schedule. With period two and an ordinal starting at zero, positions 0, 2, 4 share one phase; positions 1, 3, 5 share the other. If each phase uses its own fixed one-to-one symbol map, equal symbols remain equal within that phase and unequal symbols remain unequal. Different phases may rename the same symbol differently.
-
-For an affine map, write yᵢ = aᵣxᵢ + bᵣ mod m, with r = i mod t and gcd(aᵣ,m) = 1. For two positions in the same phase, subtraction cancels bᵣ: yᵢ − yⱼ = aᵣ(xᵢ − xⱼ) mod m. Multiplying by the inverse of aᵣ proves that outputs are equal exactly when inputs are equal. This argument covers every integer modulus for which that inverse exists.
-
-Same column counts, different whole-stream IoC
-
-Start with indices 0 0 1 0 1. Leave phase 0 unchanged and add 1 modulo 29 in phase 1. The output is 0 1 1 1 1. Follow the columns separately:
-
-	Positions	Before → after	Matching unordered pairs
-
-	Phase 0: 0, 2, 4	0 1 1 → 0 1 1	1 → 1
-
-	Phase 1: 1, 3	0 0 → 1 1	1 → 1
-
-	Whole stream	0 0 1 0 1 → 0 1 1 1 1	4 → 6
-
-
-Each column keeps its matching-pair count and denominator, so its IoC stays fixed. An ordinary mean or pooled pair rate computed from these same columns also stays fixed. Whole-stream IoC rises from 2/5 to 3/5 because it includes pairs drawn from different phases. See column IoC and its denominators.
-
-Which searches can this save?
-
-For a fixed period, phase clock and input, searching reversible affine keys cannot improve within-phase IoC: every key gives the same score. Calculate it once. Changing the period changes the groups being compared. Skipped key slots, resets or a changing map inside a phase require their own analysis.
-
-Modulo 29, every nonzero multiplier is invertible. Modulo 28, nonzero is not enough: 2 × 0 = 2 × 14 = 0 mod 28 merges distinct inputs. Modulus 28 is an arithmetic counterexample here, not a proposed replacement for the 29-rune alphabet.
-
-This invariant does not exclude periodic substitution of unknown plaintext. It specifies which plaintext and ciphertext equality patterns must agree; rejecting a model requires an additional plaintext constraint that contradicts them. No manuscript period sweep or formal proof-assistant build is claimed.
-
-The finite-control report checks all 336 invertible affine maps modulo 28 and all 812 modulo 29, every ordered input pair, inverse recovery, the worked example and the noninvertible counterexample. The general proof is the algebra above. Extract the reference-data ZIP and run python scripts/check_phase_invariant.py --output my-phase-check.json. Only Python 3’s standard library is needed; no manuscript search or random simulation runs.
 
 A five-rune example
 
@@ -18274,9 +18255,40 @@ The IoC formula uses the counts, not the names attached to them. A reversible su
 
 This also holds for any statistic calculated only from the multiset of counts, such as empirical symbol entropy. It does not hold for a score that compares named rune frequencies against a particular expected distribution: that score depends on which count belongs to which rune. Nor does it automatically hold for measurements made on selected positions or separate columns, because a rearrangement can move runes across those boundaries.
 
+Repeating substitutions preserve equality within each phase
+
+A phase is a position in a repeating key schedule. With period two and an ordinal starting at zero, positions 0, 2, 4 share one phase; positions 1, 3, 5 share the other. If each phase uses its own fixed one-to-one symbol map, equal symbols remain equal within that phase and unequal symbols remain unequal. Different phases may rename the same symbol differently.
+
+For an affine map, write yᵢ = aᵣxᵢ + bᵣ mod m, with r = i mod t and gcd(aᵣ,m) = 1. For two positions in the same phase, subtraction cancels bᵣ: yᵢ − yⱼ = aᵣ(xᵢ − xⱼ) mod m. Multiplying by the inverse of aᵣ proves that outputs are equal exactly when inputs are equal. This argument covers every integer modulus for which that inverse exists.
+
+Same column counts, different whole-stream IoC
+
+Start with indices 0 0 1 0 1. Leave phase 0 unchanged and add 1 modulo 29 in phase 1. The output is 0 1 1 1 1. Follow the columns separately:
+
+	Positions	Before → after	Matching unordered pairs
+
+	Phase 0: 0, 2, 4	0 1 1 → 0 1 1	1 → 1
+
+	Phase 1: 1, 3	0 0 → 1 1	1 → 1
+
+	Whole stream	0 0 1 0 1 → 0 1 1 1 1	4 → 6
+
+
+Each column keeps its matching-pair count and denominator, so its IoC stays fixed. An ordinary mean or pooled pair rate computed from these same columns also stays fixed. Whole-stream IoC rises from 2/5 to 3/5 because it includes pairs drawn from different phases. See column IoC and its denominators.
+
+Which searches can this save?
+
+For a fixed period, phase clock and input, searching reversible affine keys cannot improve within-phase IoC: every key gives the same score. Calculate it once. Changing the period changes the groups being compared. Skipped key slots, resets or a changing map inside a phase require their own analysis.
+
+Modulo 29, every nonzero multiplier is invertible. Modulo 28, nonzero is not enough: 2 × 0 = 2 × 14 = 0 mod 28 merges distinct inputs. Modulus 28 is an arithmetic counterexample here, not a proposed replacement for the 29-rune alphabet.
+
+This invariant does not exclude periodic substitution of unknown plaintext. It specifies which plaintext and ciphertext equality patterns must agree; rejecting a model requires an additional plaintext constraint that contradicts them.
+
+The finite-control report checks all 336 invertible affine maps modulo 28 and all 812 modulo 29, every ordered input pair, inverse recovery, the worked example and the noninvertible counterexample. The general proof is the algebra above. Extract the reference-data ZIP and run python scripts/check_phase_invariant.py --output my-phase-check.json. Only Python 3’s standard library is needed; no manuscript search or random simulation runs.
+
 Reproduce the example
 
-Run this with Python 3. It uses exact fractions and the standard library; no data files, network, or AI calls are needed.
+This Python 3 example uses exact fractions and needs no input files or extra packages.
 
 from collections import Counter
 from fractions import Fraction
@@ -18418,8 +18430,6 @@ This conclusion depends on preserving the whole 29-prime alphabet one-to-one. On
 Also distinguish a fixed substitution from a key sequence. Applying one quadratic directly to each prime value is the tested substitution. Calculating a quadratic from position i and combining its output with unknown plaintext is a different model. The latter is not excluded by either the affine or quadratic palette result, nor by the direct-stream test without its additional assumptions. The search-space guide explains how to state these boundaries before claiming that a technique has been ruled out.
 
 Sources, related references, and files
-- one-time pads and short seeds
-  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - rune indices and prime values
   https://jelliottdev.github.io/reference/articles/rune-values.html
 - transcription layers
@@ -18430,16 +18440,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/vigenere.html
 - EA running-sum explanation
   https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
+- Download the SVG version
+  https://jelliottdev.github.io/exports/figures/cipher-invariants.svg
+- IoC formula; IoC guide
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - column IoC and its denominators
   https://jelliottdev.github.io/reference/articles/periodic-ioc.html#columns
 - finite-control report
   https://jelliottdev.github.io/exports/phase-invariant.json
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
-- Download the SVG version
-  https://jelliottdev.github.io/exports/figures/cipher-invariants.svg
-- IoC formula; IoC guide
-  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - LP2-42
   https://jelliottdev.github.io/reference/lp2-42.html
 - LP2-42 token E IA E IA TH has equality pattern 0 1 0 1 2. F U F U TH is compatible. F U F TH O is inconsistent because IA would map to two symbols. F F F F U merges E and IA and fails one-to-one mapping.; Download diagram (SVG)
@@ -21559,7 +21569,7 @@ The Earls Barton photograph and LP2-55
 A specific photograph provides a useful source comparison for the pale tree: DeadTree.jpg on Wikimedia Commons. Its file description credits R. Neil Marshman (Brookie) and identifies a partly dead oak near Earls Barton, Northamptonshire. The record gives an EXIF capture date of 11 October 2005 and an upload date of 9 November 2005. Those are different dates; neither dates the manuscript artwork.
 
 [Image: Marshman's photograph: a bare oak with a low branch extending left, a central fork and a complex crown.]
-Photograph, original orientation. R. Neil Marshman / Brookie, Wikimedia Commons, CC BY-SA 3.0. Unmodified, displayed smaller; loaded from Wikimedia.
+Photograph, original orientation. R. Neil Marshman / Brookie, Wikimedia Commons, CC BY-SA 3.0. Unmodified, displayed smaller. Download the preserved photograph.
 
 [Image: LP2-55 pale tree detail: the low sideways limb extends right, opposite the photograph.]
 LP2-55 detail, rectangle [650, 1400, 1100, 1100]. Complete sheet · Original manuscript JPEG. Display crop only.
@@ -21568,13 +21578,11 @@ Comparison: horizontal reflection brings the broad branch arrangement into corre
 
 The photograph retains ground, distant vegetation, bark texture and fine twigs. LP2-55 isolates a pale outline with much less detail. The photograph is the source comparison for the shared tree, including the processed version on LP2-32 and the 2016 message. A bounded alignment experiment now compares the credited Commons original with LP2-55 in both orientations. The reflected crop fits more closely under its declared grayscale, scale and translation rule; it does not reconstruct the tracing or exact filter sequence.
 
-How to test the source comparison
+What the alignment test found
 
-Preserve the photograph's original bytes and its file-page revision alongside the manuscript JPEG. Record the crop and horizontal reflection, then fit translation and scale using a small, stated set of major forks. Check additional branches that were not used to fit the alignment. If rotation, stretching or a more flexible warp is introduced, report it: more adjustable parameters make an apparent match easier to obtain.
+The alignment test compared the photograph in both orientations, allowing it to move and change size. The horizontally flipped version fitted LP2-55 more closely. Fitting the upper branches and then checking the lower branches at the same position gave the same result. The images and crops had already been chosen by inspection, so this is supporting evidence for the source comparison, not a blind identification test.
 
-Compare the aligned images before trying edge detection or thresholding. Record every processing setting and show the original beside each derivative. Similarity after one chosen filter would support that reconstruction; it would not show that the puzzle's author used that software or those exact settings. See recording image regions and search bounds.
-
-The photograph's stated location identifies its subject. It does not establish where the puzzle authors lived, worked or obtained the file. For the file description used here, see the archived Commons revision.
+The test does not recover the exact tracing or editing steps. The photograph’s stated location identifies its subject, not where the puzzle authors lived or worked. The Commons file description supplies the attribution and location.
 
 
 The shared tree in Liber Primus and the 2016 message
@@ -21696,7 +21704,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-55.html
 - LP2-55: pale, outlined drawing in an unenhanced original-image detail.; LP2-55 pale tree detail: the low sideways limb extends right, opposite the photograph.; Original manuscript JPEG
   https://jelliottdev.github.io/images/lp2-55.jpg
-- image-region guide; recording image regions
+- image-region guide
   https://jelliottdev.github.io/reference/articles/image-regions.html
 - philosophical themes in the known readings
   https://jelliottdev.github.io/reference/articles/philosophical-themes.html
@@ -21728,17 +21736,15 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-52.html
 - DeadTree.jpg on Wikimedia Commons; Marshman's photograph: a bare oak with a low branch extending left, a central fork and a complex crown.; Wikimedia Commons
   https://commons.wikimedia.org/wiki/File:DeadTree.jpg
-- Marshman's photograph: a bare oak with a low branch extending left, a central fork and a complex crown.
-  https://upload.wikimedia.org/wikipedia/commons/7/7e/DeadTree.jpg
+- Marshman's photograph: a bare oak with a low branch extending left, a central fork and a complex crown.; Download the preserved photograph
+  https://jelliottdev.github.io/exports/sources/commons/DeadTree.jpg
 - CC BY-SA 3.0
   https://creativecommons.org/licenses/by-sa/3.0/
 - processed version on LP2-32
   https://jelliottdev.github.io/reference/articles/wing-and-tree.html#soft-edges
-- bounded alignment experiment; LP2-55 alignment
+- bounded alignment experiment; alignment test; LP2-55 alignment
   https://jelliottdev.github.io/#/experiments/dead-tree-alignment
-- search bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- the archived Commons revision
+- Commons file description
   https://commons.wikimedia.org/w/index.php?title=File:DeadTree.jpg&oldid=1198132170
 - 2016 message
   https://jelliottdev.github.io/reference/articles/later-messages.html
@@ -24033,6 +24039,8 @@ Joining pages matters. Parsing every page separately with the same within-page r
 
 The two-transcription sensitivity audit asks a separate question: do the 33 non-rune differences between archived seventh-onion and wiki text on LP2-00–55 move any of these token starts? Under this exact tokenizer, none does; both complete sources also yield the same ordered token lengths. This does not settle the page joins above or any punctuation-driven key-reset rule.
 
+The boundary choice also affects later pattern tests. The lag-six page-join comparison finds 77 formula matches among 1,267 eligible within-word pairs with pages separated, versus 80 among 1,290 with rune-to-rune page edges joined. It measures that sensitivity without deciding the intended word divisions or transferring the earlier shuffle result to the changed parser.
+
 LP2-21 example: the 11–11–10 token chain
 LP2-21: three consecutive lengths of 11, 11 and 10
 
@@ -24252,6 +24260,8 @@ What does a length difference imply?
 
 If a transformation emits exactly one rune for every input rune and leaves the boundaries fixed, it preserves token lengths. A substitution can change which runes occur without changing this histogram. But a mismatch with one prose corpus does not uniquely identify a length-changing cipher. Conversion choices, style, headings, number labels and boundary conventions may also affect the comparison. See cipher invariants.
 
+Reading the lengths themselves as symbols is another proposal. The direct count-stream test tried eight fixed readings of line and word counts; its best English score was commonly matched by shuffled-count searches. This uses its own 2,776 hyphen-delimited word slots, not the 2,896 tokens above. It tests those direct GP-index mappings, leaving other encodings, keys and boundary rules open.
+
 The 464-word column-balance experiment concerns a different population and statistic: four solved LP1 sections arranged in sixteen columns. It does not establish an English baseline for the unsolved pages. Its within-section shuffle variant preserves each section’s length distribution; the section-order variant also searches every arrangement in both the observed data and the controls. They address different choices in the same LP1 comparison, rather than supplying three independent confirmations.
 
 Reproduce the 2,896-token count and download the token ledger
@@ -24395,6 +24405,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/unsolved-word-tokens.json
 - two-transcription sensitivity audit
   https://jelliottdev.github.io/#/experiments/cross-source-word-boundaries
+- lag-six page-join comparison
+  https://jelliottdev.github.io/#/experiments/lp2-page-join-lag-six-sensitivity
 - LP2-21
   https://jelliottdev.github.io/reference/lp2-21.html
 - pinned historical summary
@@ -24463,6 +24475,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_corpus_pipeline.py
 - cipher invariants
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- direct count-stream test
+  https://jelliottdev.github.io/#/experiments/layout-count-streams
 - 464-word column-balance experiment
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - within-section shuffle variant; section-preserving variant
@@ -24705,6 +24719,8 @@ An expectation is not a p-value. This audit has not computed a tail probability,
 
 The short-lag profile asks whether the deficit extends beyond adjacent runes. Under fixed-count shuffles within pages, lag one has 86 matches against 439.17 expected, while lags two through five have 435, 434, 451 and 463 matches, each within its seeded shuffle reference band. That distinction is useful for evaluating a proposed mechanism: a model that suppresses all nearby repeats makes a different prediction from one that acts only on immediate neighbors.
 
+The matched-filter comparison goes further by comparing simulated streams with the same low doublet rate. LP2 resembles the tested continuous, lag-one-only filter more than the tested recency-avoidance or line-reset rules. This distinguishes those specified generators; it cannot identify a cipher, prove an OTP, or distinguish a person from software applying the same rule.
+
 Why ciphertext autokey comes up
 
 For the specific additive rule Cᵢ = Pᵢ + Cᵢ₋₁ (mod 29), subtract the previous ciphertext value: Pᵢ = Cᵢ − Cᵢ₋₁. At every ordinary feedback step, Cᵢ = Cᵢ₋₁ exactly when Pᵢ = 0. Thus the number of internal ciphertext doublets equals the number of zero-valued recovered symbols at those steps.
@@ -24745,6 +24761,8 @@ The assumptions matter. Allowing a zero key permits a repeat with any plaintext.
 The downloadable doublet report checks all 23,548 combinations of previous state, plaintext and nonzero key modulo 29. The independent checker uses modular inverses and verifies both counterexamples. This is an elementary algebraic argument with a complete finite check, not a claim that the external formal-proof archive was rerun.
 
 The EA frequency control now uses actual decoded GP indices from solved pages rather than guessing rune boundaries from ordinary English letters. Solved LP1 has 20 EA runes at 2,782 within-page transition positions (0.719%); the unsolved doublet rate is 86/12,901 (0.667%). These close rates meet a necessary frequency plausibility check, but do not validate this equation or a key schedule. That record also shows how erasing word boundaries creates eleven false EA labels and examines the difference IoC under a separate conditional model.
+
+Frequency is only one constraint. A repeat-marker source test compares both counts and word positions under a fixed solved-text proxy. NG, IA and EA survive its count screen, but none passes its word-position rule. This is evidence against that proxy-based marker model, not an algebraic contradiction of the equation above: it assumes the solved sample represents the unknown plaintext and uses section-joined rather than page-only transitions.
 
 The solved-text rate rests on only 20 events. A conventional 95% Wilson interval would be 0.466–1.108% if the positions were independent samples with one shared EA probability; that assumption does not hold for ordinary prose or establish that LP1 and unsolved LP2 share a distribution. The full comparison also gives a page-resampling range. The observed closeness is a useful constraint on the proposed equation, not a likelihood that it is true.
 
@@ -24791,7 +24809,7 @@ The expectation above holds the multiset of 86 extracted event symbols fixed and
 
 If symbol a appears c(a) times among N events, the probability that two consecutive shuffled positions contain a then b is c(a) × (c(b) − [a = b]) / (N(N − 1)). Multiply each such probability by the circular distance and sum over all a,b. Every adjacent position pair has this expectation, so it is also the expected mean. The script checks the result independently by enumerating all ordered pairs of distinct event positions.
 
-An observed mean above this expectation is a descriptive comparison, not a significance test. A permutation p-value needs the full distribution and a stated tail. If several lags, distance groups or boundary rules were tried before selecting the reported pattern, a confirmatory test must account for those choices. In particular, resetting event comparisons at page boundaries would remove 41 of the 85 comparisons and define a different measurement.
+The completed event-shuffle comparison supplies that distribution. The observed distance sum is rare when all event symbols are shuffled together, but ordinary when each page keeps its own event inventory. The selected lag-three +4 bin remains unusual under narrow controls; allowing each control to choose its strongest bin across lags one through three makes the comparison much weaker. These are new conditional calculations, not a reproduction of the original report's probabilities or a cipher finding. Resetting comparisons at page boundaries would remove 41 of the 85 pairs and define another measurement.
 
 Inspect every comparison
 
@@ -24834,6 +24852,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - short-lag profile
   https://jelliottdev.github.io/#/experiments/doublet-lag-profile
+- matched-filter comparison
+  https://jelliottdev.github.io/#/experiments/lp2-filter-fingerprint-models
 - F-reset
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - F-skip
@@ -24844,6 +24864,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
 - EA frequency control; full comparison
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
+- repeat-marker source test
+  https://jelliottdev.github.io/#/experiments/wulfic-letter-encoding-bounds
 - conditional difference test; nonzero-difference check
   https://jelliottdev.github.io/#/experiments/ea-difference-independence
 - doublet-context control
@@ -24854,6 +24876,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/rune_doublets.py
 - Independent checks
   https://jelliottdev.github.io/scripts/test_rune_doublets.py
+- completed event-shuffle comparison
+  https://jelliottdev.github.io/#/experiments/doublet-event-shuffle
 - script
   https://jelliottdev.github.io/scripts/doublet_distances.py
 - complete JSON ledger
@@ -27658,8 +27682,6 @@ Documented experiments
 These records cover particular variants, not this entire family.
 LP2-00–55: fixed alphabet transforms against the warning opening
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - modular arithmetic
   https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
@@ -27679,14 +27701,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-constraints.html#example
 - LP2-00–55: fixed alphabet transforms against the warning opening
   https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
 
@@ -27768,21 +27782,11 @@ Documented experiments
 
 A fixed homophone-model test assigned 29 ciphertext symbols to the 26 plaintext rune types found in solved readings, with equal use of each rune’s alternatives. Even its best allocation predicted much more uneven rune frequencies than the manuscript has. That model does not fit; the result depends on the solved readings representing the unknown plaintext and does not cover unequal choices, context-dependent mappings or extra cipher layers.
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - doublet measurements
   https://jelliottdev.github.io/reference/articles/doublets.html
 - fixed homophone-model test
   https://jelliottdev.github.io/#/experiments/wulfic-letter-encoding-bounds
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-homophonic.html
 
@@ -27836,8 +27840,6 @@ An ADFGVX-style fractionation replay tried 14 fixed keywords on six source-selec
 
 The few outputs passing the vocabulary-score gate in either run contain invalid grid cells, which the source drops before scoring words. Another check required a repetition measure to exceed 1.3 even though its maximum is 1, so no output could pass it. These defects prevent a broad negative conclusion. The replay covers only its declared keywords, page streams, splits, widths and coordinate shifts; other fractionation rules remain open.
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - FACE becomes row coordinates 1 0 0 1 and column coordinates 2 0 2 1. Joining them and regrouping produces pairs 10, 01, 20, 21, which map to DBGH in the illustrated square.; Download figure
   https://jelliottdev.github.io/exports/figures/fractionation-example.svg
@@ -27847,14 +27849,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/fractionation-example.json
 - ADFGVX-style fractionation replay
   https://jelliottdev.github.io/#/experiments/wulfic-adfgvx-fractionation
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-fractionation.html
 
@@ -27924,8 +27918,6 @@ The direct Hill-key test found no invertible two- or three-rune matrix that turn
 
 A replay of six book-derived matrices also found no output above its English-score flag. That record distinguishes the source's miscopied LP2-15 number-panel cell from a separately tested correction. It covers fixed four- and five-rune operators at block origin zero, dropping incomplete final blocks; it does not exclude other matrix keys or block ciphers.
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - Download script
   https://jelliottdev.github.io/scripts/matrix_crib_example.py
@@ -27939,14 +27931,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/direct-hill-key-feasibility
 - replay of six book-derived matrices
   https://jelliottdev.github.io/#/experiments/dukotah-book-matrix-hill
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-blocks.html
 
@@ -28027,9 +28011,9 @@ Use an encoder with a known source passage as a positive control and unrelated t
 
 Documented experiments
 
-The Emerson running-key test searches every offset of one preserved source under a fixed A–Z-to-residue mapping and subtractive modulo-29 rule. It uses three LP2 page openings, a held-out continuation, eight fully searched shuffled-source controls and a planted LP1 recovery. The planted offset is recovered, but the LP2 scores do not support this exact variant. Other texts, rune conversions and key clocks remain open.
+The Emerson running-key test searches every offset of one preserved source under a fixed A–Z-to-residue mapping and subtractive modulo-29 rule. It recovers planted known text, but the LP2 scores do not support that variant. Tests also cover two Cypherpunk Manifesto conversions on three pages and solved manuscript readings as a key on all 55 rune-bearing pages. Neither provides independently confirmed LP2 plaintext. These results cover their declared sources, conversions and alignment rules.
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+A long-key test allowing skipped positions exposes another limit: all its planted skip cases pass the English-score bar, but none returns the exact known reading. A score-only result therefore cannot establish correct recovery or exclude other skipped-key rules.
 
 Sources, related references, and files
 - book-code reproduction
@@ -28040,14 +28024,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - Emerson running-key test
   https://jelliottdev.github.io/#/experiments/emerson-running-key
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
+- two Cypherpunk Manifesto conversions on three pages
+  https://jelliottdev.github.io/#/experiments/cypherpunk-manifesto-running-key
+- solved manuscript readings as a key on all 55 rune-bearing pages
+  https://jelliottdev.github.io/#/experiments/solved-reading-running-key
+- long-key test allowing skipped positions
+  https://jelliottdev.github.io/#/experiments/dukotah-longkey-skip-beam
 
 Article: https://jelliottdev.github.io/reference/articles/method-running-key.html
 
@@ -28103,9 +28085,6 @@ These records cover particular variants, not this entire family.
 LP2-00–55: simple row and column reading routes
 LP2-00–02: 27 × 27 totient-map route replay
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
-
 For proposals combining or changing operations, see cipher composition and ordered pipelines.
 
 Sources, related references, and files
@@ -28127,14 +28106,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
 - LP2-00–02: 27 × 27 totient-map route replay
   https://jelliottdev.github.io/#/experiments/totient-map-route
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 - cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
 
@@ -28192,8 +28163,6 @@ Two replayed searches of already-decoded text tried 3,508 positional selections 
 
 A separate LP2 line-initial study found that first runes looked unusual against random manuscript positions, but ordinary when shuffled text was wrapped into lines using estimated rune widths. Its six fixed English-reading searches also found no message. This tests those readings and that approximate layout model, rather than every possible acrostic.
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - transcription checking
   https://jelliottdev.github.io/reference/articles/transcription-checking.html
@@ -28207,14 +28176,6 @@ Sources, related references, and files
   https://github.com/jelliottdev/jelliottdev.github.io/blob/main/research/dukotah-r23-a2-source-audit-2026-10-22.md
 - LP2 line-initial study
   https://jelliottdev.github.io/#/experiments/line-initial-layout-control
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-acrostics.html
 
@@ -28284,8 +28245,6 @@ Documented experiments
 These records cover particular variants, not this entire family.
 LP2-00–55: emirp row sums with the same page shuffles
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - Download the script
   https://jelliottdev.github.io/scripts/expression_example.py
@@ -28301,14 +28260,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-representations.html
 - LP2-00–55: emirp row sums with the same page shuffles
   https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-expressions.html
 
@@ -28379,8 +28330,6 @@ Crib-difference stream search derives three-rune key fragments from seventeen el
 
 The web-marker census tests four literal markers at every page position under fixed affine rune maps. Its single HTTPS window is a short fit, not a verified address; the HTTP match is the same prefix.
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - repeating-key decoding
   https://jelliottdev.github.io/reference/articles/vigenere.html
@@ -28396,14 +28345,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/crib-difference-stream-search
 - web-marker census
   https://jelliottdev.github.io/#/experiments/url-marker-affine-census
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-cribs.html
 
@@ -28472,8 +28413,6 @@ These records cover particular variants, not this entire family.
 How does trying more keys change the best score?
 Would an English scorer accept other languages?
 
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
 Sources, related references, and files
 - Constraint solving, SAT and SMT
   https://jelliottdev.github.io/reference/articles/method-constraints.html
@@ -28489,14 +28428,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - adaptive choices
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-automatic-search.html
 
@@ -28561,9 +28492,7 @@ Apply the mapping consistently to all eligible features and retain invalid outpu
 
 Documented experiments
 
-No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
-
-All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+A layout-count experiment converted line and word lengths into GP symbols. None of its eight direct English readings stood out from matched shuffled-count searches. This tests those count mappings, not a Morse, Braille, musical or keyboard encoding.
 
 Sources, related references, and files
 - five-dot groups on LP2-07, LP2-23 and LP2-56
@@ -28576,14 +28505,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-geometry.html
 - source audits
   https://jelliottdev.github.io/reference/articles/method-source-audits.html
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Documenting a test
-  https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
+- layout-count experiment
+  https://jelliottdev.github.io/#/experiments/layout-count-streams
 
 Article: https://jelliottdev.github.io/reference/articles/method-symbol-systems.html
 
@@ -28643,8 +28566,6 @@ Use blinded known-answer and shuffled-input controls with objective scoring. Ver
 Documented experiments
 No completed AI-reading evaluation is currently linked here. This documents an approach, not a result or a claim that nobody has tried it.
 
-All solving-method families · Search space and bounds · Have we tried it?
-
 Sources, related references, and files
 - crib testing
   https://jelliottdev.github.io/reference/articles/method-cribs.html
@@ -28658,12 +28579,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - candidate scoring
   https://jelliottdev.github.io/reference/articles/method-automatic-search.html
-- All solving-method families
-  https://jelliottdev.github.io/reference/articles/solving-methods.html
-- Search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-ai-readings.html
 
@@ -29228,6 +29143,10 @@ These are demonstrations, not manuscript readings. The third rule uses prime val
 
 The feedback opening test found none of nine fixed 12-rune openings under its scalar-seed rules. The prime-valued plaintext test tried two prime-value update rules, including the running-sum example above, on complete LP2 pages; 144 of 199 matched shuffled searches scored at least as high as its best output. The seed-family test covers other explicit plaintext and ciphertext rules. Each finding applies to its written equation and bounds.
 
+The weighted ciphertext-feedback test and its remaining-page extension cover all 55 rune-bearing LP2 pages under specified one-to-three-rune history rules and constant seeds 0 or 1. No output clears the source’s English-score bar. The coefficient choices are bounded, and constant-seed controls do not establish recovery when a varying key skips positions.
+
+The multi-rune history replay shows why a known-seed demonstration is not enough: its restricted seed search misses the source’s planted plaintext-history and mixed-history messages, even though supplying the correct seed recovers them. That search cannot exclude those broader feedback models.
+
 A changing alphabet is another way to store state. See moving disks, rotors and evolving alphabets for a worked example.
 
 An interruption needs a complete state rule
@@ -29261,6 +29180,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/gp-prime-plaintext-feedback
 - seed-family test
   https://jelliottdev.github.io/#/experiments/wulfic-autokey-seed-families
+- weighted ciphertext-feedback test
+  https://jelliottdev.github.io/#/experiments/dukotah-ciphertext-feedback-coefficients
+- remaining-page extension
+  https://jelliottdev.github.io/#/experiments/d04-remaining-page-feedback
+- multi-rune history replay
+  https://jelliottdev.github.io/#/experiments/public-multihistory-feedback
 - moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
 - LP2-54–55 case study

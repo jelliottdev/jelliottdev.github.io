@@ -2,7 +2,7 @@ Index of coincidence: a reproducible rune baseline
 
 Matching-pair counts for every archived page, exact inputs, scaling, invariants and interpretation limits.
 
-The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. This guide provides a reproducible whole-page baseline for the archived Liber Primus runes.
+The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. The page measurements below count archived Liber Primus runes, including headings.
 
 Count matching pairs
 
@@ -17,6 +17,23 @@ There are N × (N − 1) ordered choices of two distinct positions. A rune occur
 For the three-symbol sequence F F U, only the two F positions match. The numerator is 2 and the denominator is 6, so IoC is 1/3. For F U it is 0; for F F it is 1. With zero or one symbol there is no pair to draw, so IoC is undefined. The JSON uses null in that case.
 
 Reordering F F U as U F F leaves the two F symbols and the IoC unchanged. Replacing every F with one new symbol and every U with another also leaves the count unchanged. IoC can help compare frequency concentration, but it cannot tell which arrangement was read or which fixed one-to-one alphabet mapping was used.
+
+Examples from the archived streams
+
+	Page	Runes	Unscaled IoC
+
+	LP1-00	0	Undefined
+
+	LP1-01	184	0.06402946
+
+	LP2-31	269	0.03295789
+
+	LP2-57	95	0.06270997
+
+
+These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
+
+LP2-57's value is higher than LP2-31's because its measured rune counts produce a larger fraction of matching pairs. That is the direct observation. It does not mean LP2-57 is “more English,” easier to solve, or encrypted by a particular method. The pages also have different lengths, so comparing how unusual either value is needs a declared reference process at each length.
 
 Why the two positions must be different
 
@@ -71,7 +88,7 @@ python scripts/rune_ioc.py --check
 python scripts/rune_ioc.py --output my-rune-ioc.json
 python scripts/test_rune_ioc.py
 
-Run from the repository or the extracted reference-data ZIP with Python 3; no extra packages, network access or AI are required. See script setup. The first command prints a single-page report. The second recomputes all 75 records and compares them with the published baseline. The third writes a complete report and refuses to overwrite an existing file. The fourth checks short controls, invariants and an independent enumeration of matching pairs.
+Run from the repository or the extracted reference-data ZIP with Python 3; no extra packages are required. See script setup. The first command prints a single-page report. The second recomputes all 75 records and compares them with the published baseline. The third writes a complete report and refuses to overwrite an existing file. The fourth checks short controls, invariants and an independent enumeration of matching pairs.
 
 Download the calculation script · Download all page results and input hashes. The reference-data ZIP includes the script and its inputs; downloading the script alone does not include the manuscript transcriptions.
 
@@ -84,23 +101,6 @@ Columns count_0 through count_28 follow the rune alphabet’s zero-based indices
 python scripts/rune_ioc.py --format csv --output my-ioc.csv
 
 This recomputes the CSV from the archived transcriptions and refuses to overwrite an existing output. Add an exact page ID to export just that page. The downloadable CSV is a rendering of the published JSON baseline; the command above recalculates it from inputs. Sorting by IoC can help inspect the data, but a high or low rank is not a cipher classification or a probability that a page is unusual.
-
-Examples from the archived streams
-
-	Page	Runes	Unscaled IoC
-
-	LP1-00	0	Undefined
-
-	LP1-01	184	0.06402946
-
-	LP2-31	269	0.03295789
-
-	LP2-57	95	0.06270997
-
-
-These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
-
-LP2-57's value is higher than LP2-31's because its measured rune counts produce a larger fraction of matching pairs. That is the direct observation. It does not mean LP2-57 is “more English,” easier to solve, or encrypted by a particular method. The pages also have different lengths, so comparing how unusual either value is needs a declared reference process at each length.
 
 See the distributions behind the numbers
 
@@ -228,6 +228,14 @@ Frequency analysis begins with the same per-symbol counts used here. Single-rune
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- LP1-00
+  https://jelliottdev.github.io/reference/lp1-00.html
+- LP1-01
+  https://jelliottdev.github.io/reference/lp1-01.html
+- LP2-31
+  https://jelliottdev.github.io/reference/lp2-31.html
+- LP2-57
+  https://jelliottdev.github.io/reference/lp2-57.html
 - O/A/AE sensitivity check
   https://jelliottdev.github.io/#/experiments/oae-uniform-remapping
 - rune alphabet; rune alphabet’s zero-based indices; alphabet reference
@@ -242,14 +250,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/rune-ioc.json
 - Download the whole-page CSV
   https://jelliottdev.github.io/exports/rune-ioc.csv
-- LP1-00
-  https://jelliottdev.github.io/reference/lp1-00.html
-- LP1-01
-  https://jelliottdev.github.io/reference/lp1-01.html
-- LP2-31
-  https://jelliottdev.github.io/reference/lp2-31.html
-- LP2-57
-  https://jelliottdev.github.io/reference/lp2-57.html
 - Two frequency bar charts on identical axes. LP2-31 has 5 to 13 occurrences per rune across 269 symbols. LP2-57 has zero to 15 across 95 symbols, with a larger concentration at rune index 18.; Open or save the full-size SVG
   https://jelliottdev.github.io/exports/figures/rune-frequencies.svg
 - plotting script

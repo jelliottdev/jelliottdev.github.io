@@ -10,3 +10,5 @@ Liberpedia is a reference work and research archive. The first decision on each 
 - Use native HTML/CSS for symbolic mappings, small diagrams, sequences, comparisons, and tables so they reflow and remain selectable. Use source images for manuscript evidence, artwork, archival captures, and geometry that cannot be faithfully represented as code. A downloadable SVG may supplement an inline explanation.
 - Every figure must remain understandable without color. Put the variables, bounds, and conclusion beside the visual; place provenance and reproduction details after the finding or in a disclosure.
 - Check the rendered page at 320, 390, 768, and at least one wide desktop width. Verify focus, disclosure states, no sideways scrolling, image loading, and direct links to hidden sections.
+
+- Wiki articles end with their authored content. Use relevant links in context; do not append the same tools, related-links, process or provenance panels to every article. Keep full methods and reproduction files on the linked research records.

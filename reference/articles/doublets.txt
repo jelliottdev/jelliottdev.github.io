@@ -64,6 +64,8 @@ An expectation is not a p-value. This audit has not computed a tail probability,
 
 The short-lag profile asks whether the deficit extends beyond adjacent runes. Under fixed-count shuffles within pages, lag one has 86 matches against 439.17 expected, while lags two through five have 435, 434, 451 and 463 matches, each within its seeded shuffle reference band. That distinction is useful for evaluating a proposed mechanism: a model that suppresses all nearby repeats makes a different prediction from one that acts only on immediate neighbors.
 
+The matched-filter comparison goes further by comparing simulated streams with the same low doublet rate. LP2 resembles the tested continuous, lag-one-only filter more than the tested recency-avoidance or line-reset rules. This distinguishes those specified generators; it cannot identify a cipher, prove an OTP, or distinguish a person from software applying the same rule.
+
 Why ciphertext autokey comes up
 
 For the specific additive rule Cᵢ = Pᵢ + Cᵢ₋₁ (mod 29), subtract the previous ciphertext value: Pᵢ = Cᵢ − Cᵢ₋₁. At every ordinary feedback step, Cᵢ = Cᵢ₋₁ exactly when Pᵢ = 0. Thus the number of internal ciphertext doublets equals the number of zero-valued recovered symbols at those steps.
@@ -104,6 +106,8 @@ The assumptions matter. Allowing a zero key permits a repeat with any plaintext.
 The downloadable doublet report checks all 23,548 combinations of previous state, plaintext and nonzero key modulo 29. The independent checker uses modular inverses and verifies both counterexamples. This is an elementary algebraic argument with a complete finite check, not a claim that the external formal-proof archive was rerun.
 
 The EA frequency control now uses actual decoded GP indices from solved pages rather than guessing rune boundaries from ordinary English letters. Solved LP1 has 20 EA runes at 2,782 within-page transition positions (0.719%); the unsolved doublet rate is 86/12,901 (0.667%). These close rates meet a necessary frequency plausibility check, but do not validate this equation or a key schedule. That record also shows how erasing word boundaries creates eleven false EA labels and examines the difference IoC under a separate conditional model.
+
+Frequency is only one constraint. A repeat-marker source test compares both counts and word positions under a fixed solved-text proxy. NG, IA and EA survive its count screen, but none passes its word-position rule. This is evidence against that proxy-based marker model, not an algebraic contradiction of the equation above: it assumes the solved sample represents the unknown plaintext and uses section-joined rather than page-only transitions.
 
 The solved-text rate rests on only 20 events. A conventional 95% Wilson interval would be 0.466–1.108% if the positions were independent samples with one shared EA probability; that assumption does not hold for ordinary prose or establish that LP1 and unsolved LP2 share a distribution. The full comparison also gives a page-resampling range. The observed closeness is a useful constraint on the proposed equation, not a likelihood that it is true.
 
@@ -150,7 +154,7 @@ The expectation above holds the multiset of 86 extracted event symbols fixed and
 
 If symbol a appears c(a) times among N events, the probability that two consecutive shuffled positions contain a then b is c(a) × (c(b) − [a = b]) / (N(N − 1)). Multiply each such probability by the circular distance and sum over all a,b. Every adjacent position pair has this expectation, so it is also the expected mean. The script checks the result independently by enumerating all ordered pairs of distinct event positions.
 
-An observed mean above this expectation is a descriptive comparison, not a significance test. A permutation p-value needs the full distribution and a stated tail. If several lags, distance groups or boundary rules were tried before selecting the reported pattern, a confirmatory test must account for those choices. In particular, resetting event comparisons at page boundaries would remove 41 of the 85 comparisons and define a different measurement.
+The completed event-shuffle comparison supplies that distribution. The observed distance sum is rare when all event symbols are shuffled together, but ordinary when each page keeps its own event inventory. The selected lag-three +4 bin remains unusual under narrow controls; allowing each control to choose its strongest bin across lags one through three makes the comparison much weaker. These are new conditional calculations, not a reproduction of the original report's probabilities or a cipher finding. Resetting comparisons at page boundaries would remove 41 of the 85 pairs and define another measurement.
 
 Inspect every comparison
 
@@ -193,6 +197,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - short-lag profile
   https://jelliottdev.github.io/#/experiments/doublet-lag-profile
+- matched-filter comparison
+  https://jelliottdev.github.io/#/experiments/lp2-filter-fingerprint-models
 - F-reset
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - F-skip
@@ -203,6 +209,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
 - EA frequency control; full comparison
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
+- repeat-marker source test
+  https://jelliottdev.github.io/#/experiments/wulfic-letter-encoding-bounds
 - conditional difference test; nonzero-difference check
   https://jelliottdev.github.io/#/experiments/ea-difference-independence
 - doublet-context control
@@ -213,6 +221,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/rune_doublets.py
 - Independent checks
   https://jelliottdev.github.io/scripts/test_rune_doublets.py
+- completed event-shuffle comparison
+  https://jelliottdev.github.io/#/experiments/doublet-event-shuffle
 - script
   https://jelliottdev.github.io/scripts/doublet_distances.py
 - complete JSON ledger

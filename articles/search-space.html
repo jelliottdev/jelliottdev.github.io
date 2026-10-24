@@ -1,5 +1,4 @@
 <p>“We tried this cipher” can mean one key, a million chosen keys, or every key in a precisely defined range. Those are different amounts of evidence. A useful experiment tells the reader which possibilities it covered and what would have counted as success.</p>
-<p>A large or speculative idea is not automatically a bad idea. The problem comes when the conclusion reaches beyond the work: a failed search becomes “impossible,” or the best-looking fragment becomes “solved.” Search space and bounds help keep the question, the calculation and the claim aligned.</p>
 
 <p>Sometimes arithmetic rules out a proposed search before any candidates are generated. The <a href="#/wiki/prime-sums?section=length-bounds">rune-sum length bounds</a> show why a 3299-sum entry needs at least 31 runes, and why 809 needs nine even though the simplest bound suggests eight.</p>
 <h2 id="definitions">What is a search space?</h2>
@@ -65,7 +64,7 @@
 
 <p>The <a href="#/experiments/decoder-skip-controls">planted alignment controls</a> distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.</p>
 
-<p>Before interpreting a completed negative search, follow <a href="#/wiki/first-experiment?section=search-controls">the planted-control walkthrough</a>: check that an answer is included, representable by the decoder, recognizable by the scorer, and tested against the same complete selection process. Exact coverage of a dictionary and the ability to recognize its correct member are separate requirements.</p>
+<p>A complete search also needs a working detector. The <a href="#/wiki/first-experiment?section=search-controls">planted-control walkthrough</a> checks that a known answer is included, allowed by the decoder and recognized under the same final acceptance rule. Checking every key does not help if the correct output would be rejected.</p>
 <h2 id="claim">Write the claim at the same scale as the evidence</h2>
 <div class="table-wrap"><table><thead><tr><th>Too broad</th><th>A checkable claim</th></tr></thead><tbody>
 <tr><td>“We ruled out shifts.”</td><td>“All 58 specified order-and-shift cases completed. None matched the declared prefix at the declared position.” Only use this after performing that comparison.</td></tr>
@@ -73,7 +72,7 @@
 <tr><td>“The program found nothing.”</td><td>“These configurations completed without meeting the criterion; these others failed or remain untested.”</td></tr>
 </tbody></table></div>
 <p>Before starting, finish this sentence: <strong>“On these exact inputs, I will test these choices, accept a candidate by this rule, and stop under these conditions.”</strong> Afterward, report completed and distinct counts, the result under that rule, and what remains outside the search. This makes even a negative result useful: the next person can reuse the work and identify a genuinely different test.</p>
-<p>Continue with <a href="#/wiki/reproducibility">documenting a reproducible attempt</a>, or <a href="#/wiki/first-experiment">reproduce a published experiment</a> before planning your own. The arithmetic above is explanatory; the linked experiment records contain the measured results, scripts and exact bounds.</p>
+<p>For a practical starting point, <a href="#/wiki/first-experiment">reproduce a published experiment</a> or follow the guide to <a href="#/wiki/reproducibility">documenting your own attempt</a>.</p>
 
 <p>Some exclusions cover infinitely many parameter values through a mathematical obstruction rather than enumeration. See <a href="#/wiki/first-experiment?section=proof-versus-search">proof versus search</a> for the direct-polynomial example, contrasted with a completed warning-prefix search. Neither result transfers to a different cipher model just because it shares the same keyword.</p>
 

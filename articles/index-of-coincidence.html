@@ -1,4 +1,4 @@
-<p>The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. This guide provides a reproducible whole-page baseline for the archived Liber Primus runes.</p>
+<p>The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. The page measurements below count archived Liber Primus runes, including headings.</p>
 <h2 id="formula">Count matching pairs</h2>
 <p>Before using this number to compare candidate decodings, read <a href="#/wiki/cipher-invariants">what cipher operations preserve</a>. A rearrangement or fixed reversible alphabet substitution cannot change whole-stream IoC.</p>
 <p>Let <code>N</code> be the number of runes and <code>nᵢ</code> the count of rune <code>i</code>. The unscaled convention used here is:</p>
@@ -6,6 +6,15 @@
 <p>There are <code>N × (N − 1)</code> ordered choices of two distinct positions. A rune occurring <code>nᵢ</code> times contributes <code>nᵢ × (nᵢ − 1)</code> matching choices. Dividing gives the probability of a match when sampling positions without replacement. Counting unordered pairs instead divides both quantities by two and produces the same result.</p>
 <p>For the three-symbol sequence F F U, only the two F positions match. The numerator is 2 and the denominator is 6, so IoC is 1/3. For F U it is 0; for F F it is 1. With zero or one symbol there is no pair to draw, so IoC is undefined. The JSON uses <code>null</code> in that case.</p>
 <p>Reordering F F U as U F F leaves the two F symbols and the IoC unchanged. Replacing every F with one new symbol and every U with another also leaves the count unchanged. IoC can help compare frequency concentration, but it cannot tell which arrangement was read or which fixed one-to-one alphabet mapping was used.</p>
+<h2 id="examples">Examples from the archived streams</h2>
+<div class="table-wrap"><table><thead><tr><th>Page</th><th>Runes</th><th>Unscaled IoC</th></tr></thead><tbody>
+<tr><td><a href="#/page/lp1-00">LP1-00</a></td><td>0</td><td>Undefined</td></tr>
+<tr><td><a href="#/page/lp1-01">LP1-01</a></td><td>184</td><td>0.06402946</td></tr>
+<tr><td><a href="#/page/lp2-31">LP2-31</a></td><td>269</td><td>0.03295789</td></tr>
+<tr><td><a href="#/page/lp2-57">LP2-57</a></td><td>95</td><td>0.06270997</td></tr>
+</tbody></table></div>
+<p>These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.</p>
+<p>LP2-57's value is higher than LP2-31's because its measured rune counts produce a larger fraction of matching pairs. That is the direct observation. It does not mean LP2-57 is “more English,” easier to solve, or encrypted by a particular method. The pages also have different lengths, so comparing how unusual either value is needs a declared reference process at each length.</p>
 <h2 id="replacement">Why the two positions must be different</h2>
 <p>Label the positions in <code>F F U</code> as 0, 1 and 2. Without replacement, the six ordered pairs are <code>(0,1), (0,2), (1,0), (1,2), (2,0), (2,1)</code>. Only <code>(0,1)</code> and <code>(1,0)</code> match, giving <code>2/6 = 1/3</code>.</p>
 <p>If the second position can equal the first, three more pairs appear: <code>(0,0), (1,1), (2,2)</code>. All three necessarily match. The result becomes <code>5/9</code>, not 1/3. The text has not changed; the sampling rule has.</p>
@@ -39,22 +48,13 @@ print("Same position allowed:", match_fraction(pairs))</code></pre>
 python scripts/rune_ioc.py --check
 python scripts/rune_ioc.py --output my-rune-ioc.json
 python scripts/test_rune_ioc.py</code></pre>
-<p>Run from the repository or the extracted <a href="downloads/reference-data.zip">reference-data ZIP</a> with Python 3; no extra packages, network access or AI are required. See <a href="#/wiki/running-scripts">script setup</a>. The first command prints a single-page report. The second recomputes all 75 records and compares them with the published baseline. The third writes a complete report and refuses to overwrite an existing file. The fourth checks short controls, invariants and an independent enumeration of matching pairs.</p>
+<p>Run from the repository or the extracted <a href="downloads/reference-data.zip">reference-data ZIP</a> with Python 3; no extra packages are required. See <a href="#/wiki/running-scripts">script setup</a>. The first command prints a single-page report. The second recomputes all 75 records and compares them with the published baseline. The third writes a complete report and refuses to overwrite an existing file. The fourth checks short controls, invariants and an independent enumeration of matching pairs.</p>
 <p><a href="scripts/rune_ioc.py">Download the calculation script</a> · <a href="data/evidence/rune-ioc.json">Download all page results and input hashes</a>. The reference-data ZIP includes the script and its inputs; downloading the script alone does not include the manuscript transcriptions.</p>
 <h3 id="spreadsheet">Compare pages in a spreadsheet</h3>
 <p><a href="exports/rune-ioc.csv" download>Download the whole-page CSV</a> for one row per manuscript page. It includes the input filename and SHA-256, alphabet hash, rune count, exact matching-pair numerator and denominator, ordinary and scaled IoC, and all 29 rune frequencies. The counting scope is repeated in each row so a filtered extract retains that context.</p>
 <p>Columns <code>count_0</code> through <code>count_28</code> follow the <a href="#/alphabet">rune alphabet’s zero-based indices</a>. Blank IoC cells mean undefined, not zero: the title pages do not have enough archived runes for a pair calculation. Import the comma-delimited file with its header row, keep the hash columns as text, and sort entire rows rather than one column alone.</p>
 <pre><code>python scripts/rune_ioc.py --format csv --output my-ioc.csv</code></pre>
 <p>This recomputes the CSV from the archived transcriptions and refuses to overwrite an existing output. Add an exact page ID to export just that page. The downloadable CSV is a rendering of the published JSON baseline; the command above recalculates it from inputs. Sorting by IoC can help inspect the data, but a high or low rank is not a cipher classification or a probability that a page is unusual.</p>
-<h2 id="examples">Examples from the archived streams</h2>
-<div class="table-wrap"><table><thead><tr><th>Page</th><th>Runes</th><th>Unscaled IoC</th></tr></thead><tbody>
-<tr><td><a href="#/page/lp1-00">LP1-00</a></td><td>0</td><td>Undefined</td></tr>
-<tr><td><a href="#/page/lp1-01">LP1-01</a></td><td>184</td><td>0.06402946</td></tr>
-<tr><td><a href="#/page/lp2-31">LP2-31</a></td><td>269</td><td>0.03295789</td></tr>
-<tr><td><a href="#/page/lp2-57">LP2-57</a></td><td>95</td><td>0.06270997</td></tr>
-</tbody></table></div>
-<p>These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.</p>
-<p>LP2-57's value is higher than LP2-31's because its measured rune counts produce a larger fraction of matching pairs. That is the direct observation. It does not mean LP2-57 is “more English,” easier to solve, or encrypted by a particular method. The pages also have different lengths, so comparing how unusual either value is needs a declared reference process at each length.</p>
 <h2 id="frequencies">See the distributions behind the numbers</h2>
 <figure class="evidence-figure"><a href="exports/figures/rune-frequencies.svg"><img src="exports/figures/rune-frequencies.svg" loading="lazy" alt="Two frequency bar charts on identical axes. LP2-31 has 5 to 13 occurrences per rune across 269 symbols. LP2-57 has zero to 15 across 95 symbols, with a larger concentration at rune index 18."></a><figcaption>Archived-stream frequencies for LP2-31 and LP2-57. Bars show the proportion of each rune, not raw counts. <a href="exports/figures/rune-frequencies.svg">Open or save the full-size SVG</a>; use the <a href="#/alphabet">alphabet reference</a> to look up an index.</figcaption></figure>
 <p>LP2-31’s counts range from 5 to 13 per rune. LP2-57 has seven runes with no occurrences and one rune, index 18, with 15 occurrences. Concentration matters because a count contributes <code>nᵢ(nᵢ − 1)</code> matching pairs: a count of 15 supplies 210, while a count of 5 supplies only 20. Large counts therefore contribute disproportionately to IoC.</p>
