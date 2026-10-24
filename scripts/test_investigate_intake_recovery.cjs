@@ -66,7 +66,7 @@ async function confirm(f){assert(f.doc.getElementById('confirm'));f.doc.getEleme
 async function main(){
  const communityBackend=server(),community=await fixture(storage(),communityBackend,{community:true,communityFailure:true});
  await submit(community,'Use Vigenere on LP2-15');
- assert(community.doc.host.html.includes('Your confirmed card becomes public.'));
+ assert(community.doc.host.html.includes('Your confirmed card becomes a shared research entry.'));
  assert.equal(community.entries.length,0,'An unconfirmed draft cannot publish an entry');
  await confirm(community);for(let i=0;i<4;i++)await turn();
  assert.equal(community.entries.length,1);assert.deepEqual(Object.keys(community.entries[0]),['proposalId']);

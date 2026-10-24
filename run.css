@@ -8,3 +8,10 @@
 .experiment-details summary{cursor:pointer;min-height:44px;align-content:center;color:var(--blue)}
 .experiment-details .plan-summary{margin:8px 0 0;border:0;padding:8px 0}
 .run-actions{margin-top:16px}
+
+/* Native disclosures share one quiet chevron and retain keyboard behavior. */
+#task-workspace details>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;list-style:none}
+#task-workspace details>summary::-webkit-details-marker{display:none}
+#task-workspace details>summary::marker{content:""}
+#task-workspace details>summary::after{content:"";width:8px;height:8px;flex:0 0 8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 4px 4px 0}
+#task-workspace details[open]>summary::after{transform:rotate(225deg);margin-top:6px}

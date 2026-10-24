@@ -77,6 +77,26 @@ site's authorized text version before calling a task manuscript evidence.
 
 ## Service and publication boundary
 
+There is one shared research-entry type, with no visitor visibility settings.
+Unfinished intake is not a private-idea category. A confirmed card is the entry;
+its original pasted wording is supporting intake rather than public page copy.
+
+### Extending a test
+
+The task workspace offers a system-defined scope extension to the remaining
+unsolved LP2 pages (00–55), excluding pages in that task and its compatible
+same-method ancestor tasks. It proposes a
+separate child computation with the same ordered method, alphabet, input version
+and criterion. The page list is reviewed before creation; no extension runs or
+submits itself. The original card and earlier result stay unchanged. This is an
+explicit expansion beyond the original request's pages, not a claim that those
+pages were previously covered. Existing identical computations are reused.
+
+`POST /tasks/:id/extensions` prepares this scope without writing a task, fetching
+only fixed official page sources. The ordinary task and result routes create and
+verify the reviewed computation. Missing or redirected source data cannot produce
+an accepted plan. Unsupported methods are not approximated by the extension.
+
 Persistent entries, task plans and replayed results use their own storage and
 API, linked to the existing proposal identity. A result is local until the
 submission receives a valid saved receipt. Do not present a browser-only run

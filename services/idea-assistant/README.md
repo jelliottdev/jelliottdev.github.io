@@ -8,11 +8,11 @@ handler verifies bundled page text against the site's selected raw or reviewed
 text. Task and result storage are separate from proposal review status; neither
 the original idea wording nor private notes appear in task projections.
 
-Migrations `0004_local_tasks.sql` and `0005_research_ideas.sql` were applied on
-24 October 2026. Worker version `af93049b-103d-430c-8092-24db4773a07b` serves the
-community entry, preparation, task and result routes. Read-only/invalid-request
-production smoke checks verified dispatch and CORS without creating test entries
-or calling a model. Offline real-SQLite and browser fixtures verify persistence.
+Storage migrations 0004–0006 were applied on 24 October 2026. Production checks
+verified official-source loading, one source-bound compound plan and replayed
+result storage. Synthetic checks did not create shared research entries. Local
+browser fixtures verify the visitor workflow; these checks do not establish the
+quality of arbitrary model interpretations or a scientific finding.
 
 The checker publishes only a newly confirmed active card through `/ideas`, then
 links to `run.html#idea=…`. The original submission text remains in private intake.
@@ -24,6 +24,12 @@ The run workspace reviews a proposed plan, creates a task, runs it on the visito
 CPU in a cancellable Web Worker and submits replay-checked results. Downloads and
 file uploads are optional reproduction paths. The result and dynamic chart lead;
 exact plan details remain available after a run.
+
+`POST /tasks/:id/extensions` proposes the same computation on remaining unsolved
+LP2 pages. Compatible ancestor scopes are retained so a child does not offer its
+parent's pages again. Review and task creation are explicit; neither overwrites
+an earlier task. The result inspector displays one page's original and transformed
+text at a time, with rune-label transliteration clearly separate from translation.
 
 `/prepare-task` first checks explicit supported operations with the deterministic
 compiler. If method wording needs mapping and an AI binding is available, one
