@@ -12,10 +12,12 @@ from rune_lag_matches import report as lag_report
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
- f=root/p;f.parent.mkdir(parents=True,exist_ok=True);f.write_text(s,encoding='utf-8',newline='\n')
-index=read('data/index.json'); files=[]; documents=[]
+ f=root/p;f.parent.mkdir(parents=True,exist_ok=True);data=s.encode('utf-8')
+ if not f.exists() or f.read_bytes()!=data:f.write_bytes(data)
+index=read('data/index.json'); files=[]; registered_paths=set(); documents=[]
 payloads=read('data/evidence/embedded-payloads.json')
 articles=read('data/articles.json')
+experiments=read('data/experiments.json')['records']
 def register(path,role,page=None):
  f=root/path;data=f.read_bytes();row={'path':path,'url':base+path,'role':role,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
  if page:row.update(page=page['id'],release=page['release'])
@@ -32,7 +34,7 @@ def register(path,role,page=None):
   row.update(title='Illustrated cover RSA reproduction',aliases=['1033','compasses','OAEP'],guide='cover-rsa')
  elif 'emerson' in path:
   row.update(title='Emerson Self-Reliance book cipher',aliases=['Self Reliance','Dartmouth','book cipher'],guide='emerson-self-reliance')
- files.append(row)
+ files.append(row);registered_paths.add(path)
 register('images/message-2016.jpg','Historical later-message image')
 register('data/evidence/later-messages.json','Historical later-message provenance')
 register('images/second-chance-2012.jpg','Historical second-chance image')
@@ -480,7 +482,7 @@ register('data/experiment-index.json','Experiment discovery index')
 register('data/checker-records.json','Idea checker retrieval evidence')
 register('data/assistant-index.json','Assistant source excerpts')
 register('experiments/README.md','Experiment contribution guide')
-for experiment in read('data/experiments.json')['records']:
+for experiment in experiments:
  register('reference/experiments/'+experiment['id']+'.json','Structured experiment record')
  files[-1].update(title=experiment['title'],experiment=experiment['id'],pages=experiment['scope']['pages'],
                   aliases=experiment.get('tags',[]),
@@ -790,10 +792,10 @@ The complete repository is available from the GitHub Code download menu.
 ''')
 register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Register experiment dependencies after normal exports, preserving their canonical roles.
-for experiment in read('data/experiments.json')['records']:
+for experiment in experiments:
  # A set removes repeated dependencies, but hash order must not reach catalogs or ZIPs.
  for path in sorted({experiment['article_path'],experiment['reproduction']['script'],*[f['path'] for f in experiment['reproduction']['inputs']],*[f['path'] for f in experiment['reproduction']['outputs']]}):
-  if not any(f['path']==path for f in files):register(path,'Experiment file')
+  if path not in registered_paths:register(path,'Experiment file')
 
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Historical later-message image','Original JPEG','Page-only JPEG','Historical page copy','Archived seventh-onion JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide'})]:
@@ -828,7 +830,7 @@ for name,roles in [('original-images',{'Historical later-message image','Origina
    for f in selected:assert hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256']
  register(path,'ZIP bundle');files[-1]['members']=len(selected)
 experiment_bundle_count=0
-for experiment in read('data/experiments.json')['records']:
+for experiment in experiments:
  path,members,omitted_images=build_experiment_bundle(root,experiment)
  register(path,'Experiment ZIP')
  files[-1].update(title=experiment['title']+' — reproduction files',experiment=experiment['id'],

@@ -228,6 +228,12 @@ assert.equal(Search.experiments(liveDocs,'one LP2 page as another page key')[0].
 assert.equal(Search.supporting(liveDocs,'simple substitution guessed opening')[0].document.id,
  'monoalphabetic-crib-capacity','Crib compatibility is supporting evidence, not a decryption');
 assert.equal(Search.experiments(liveDocs,'simple substitution guessed opening').length,0);
+const egalitarianismClaim='EGALITARIANISM crib on LP2-43';
+assert.equal(Search.supporting(liveDocs,egalitarianismClaim)[0].document.id,
+ 'lp2-43-egalitarianism-compatibility','Fixed-alphabet crib compatibility belongs with supporting evidence');
+assert(!Search.experiments(liveDocs,egalitarianismClaim).some(hit=>
+ hit.document.id==='lp2-43-egalitarianism-compatibility'),
+ 'A compatibility check must not be presented as an executed decryption of the historical proposal');
 console.log('PASS: method and exclusions remain available in details; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
 for(const query of ['Have we tried checking if its a different language than English?',
  'another language','could it be German','different languages on LP2-31']){
