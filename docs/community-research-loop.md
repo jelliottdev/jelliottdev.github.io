@@ -1,9 +1,9 @@
 # Community research loop
 
 This is the implementation contract for the contribution workflow requested on
-24 October 2026. It supersedes the earlier rule that all new ideas remain only
-in a private maintainer queue. It does not change the status of existing ideas
-or publish their original wording.
+24 October 2026. All confirmed ideas use the same research-entry type. Input
+that has not been confirmed is a draft, not a separate category of idea.
+Original source wording is supporting material, not research-page copy.
 
 ## What a visitor does
 
@@ -26,7 +26,7 @@ or publish their original wording.
 An idea, a plan and a run are different objects. Keep the existing immutable
 idea card and contributions; do not overload proposal review status.
 
-- **Idea:** canonical active card, retained original wording privately, candidate
+- **Idea:** canonical active card, supporting original wording, candidate
   links to related records. Exact-card deduplication is not semantic novelty.
 - **Plan:** immutable method, exact input text/alphabet, criterion and bounds.
   Its content digest changes when any of these changes. An extension references
@@ -57,9 +57,21 @@ steps. `taskId` is SHA-256 of canonical sorted compact UTF-8 JSON, excluding
 - An explicit affine map on rune indices modulo29.
 - Cumulative difference `P[k] = C[k] − sum(P[0..k−1]) mod29`, with a declared
   page, line or word reset and zero initial state.
+- Keyed shifts with an explicit seed of 1–256 GP indices (0–28), add/subtract
+  decoding direction, and page, line or word reset. The key can repeat, extend
+  from decoded runes (plaintext autokey), or extend from input runes (ciphertext
+  autokey). Non-rune characters do not advance the key. Every page starts fresh;
+  a request to carry state across pages is not represented by this operation.
+
+Autokey uses the seed first, then the rune one seed-length earlier in that step's
+decoded or input stream. `add` means `P = C + K`, not an alternative encryption
+API. A compound method uses each step's own input and output, not the untouched
+manuscript. The independent Python runner and browser engine share these exact
+semantics. Legacy task identities and results retain their original meaning.
 
 These are execution primitives, not a claim that all earlier experiments or
-arbitrary new methods are supported. Prime values, alternate alphabets, skipped
+arbitrary new methods are supported. Keyword-to-rune encoding, prime values,
+alternate alphabets, skipped
 runes, language models and other operations need explicit versioned adapters.
 Never silently approximate an unsupported instruction. Preserve it in planning.
 
@@ -75,11 +87,12 @@ The displayed summary and chart data derive from the verified result. A result
 must remain bound to its input text; browser/Worker code must fetch and pin the
 site's authorized text version before calling a task manuscript evidence.
 
-## Service and publication boundary
+## Research entries and supporting material
 
-There is one shared research-entry type, with no visitor visibility settings.
-Unfinished intake is not a private-idea category. A confirmed card is the entry;
-its original pasted wording is supporting intake rather than public page copy.
+There is one research-entry type, with no visibility settings or private/public
+categories. Confirming a card adds the entry to the shared research collection.
+Before confirmation, the input is a draft. Original pasted wording remains
+supporting intake rather than page copy.
 
 ### Extending a test
 

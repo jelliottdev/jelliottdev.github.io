@@ -20,6 +20,20 @@ await test('simple described line, word and affine methods now compile with exac
   for(const key of C.RULES.filter(k=>k!=='boundaryMode'))assert.deepEqual(out.card.rules[key],original.rules[key]);assert(out.notes.some(n=>n.includes(text)));assert(out.notes.every(n=>!n.includes('{')&&!n.includes('\"op\"')));assert(out.plan.notes.some(n=>n.includes('preliminary measurement')));
  }
 });
+await test('fully explicit keyed phrases use closed source grammar without inferred key or reset',async()=>{
+ for(const [name,mode]of [['Vigenere','repeat'],['repeating key','repeat'],['plaintext autokey','plaintext-autokey'],['ciphertext-autokey','ciphertext-autokey']]){
+  const text=name+' with key indices [1, 0, 28], subtract, reset at each page',step={op:'keyed-shift',key:[1,0,28],mode,direction:'subtract',reset:'page'},input=card(text),before=structuredClone(input),out=validateCandidate(input,candidate(text,[text],[step]),{compile:planCard});assert(!out.reason,out.reason);assert.deepEqual(out.steps,[step]);assert.deepEqual(out.plan.steps,[step]);assert.deepEqual(input,before);assert.deepEqual(out.card.scope,input.scope);assert.deepEqual(out.card.rules,input.rules);assert.deepEqual(out.card.outcome,input.outcome);assert(out.notes.some(n=>n.includes('GP indices [1,0,28]')));
+  const wrong=candidate(text,[text],[{...step,key:[1,0,27]}]);assert(validateCandidate(input,wrong,{compile:planCard}).reason);
+ }
+ const text='Use Vigenere with key indices [1,2,3], add, reset at each word',step={op:'keyed-shift',key:[1,2,3],mode:'repeat',direction:'add',reset:'word'};assert(!validateCandidate(card(text),candidate(text,[text],[step]),{compile:planCard}).reason);
+ const phrase='Vigenere with key indices [1,2,3], subtract, reset at each page',repeat={op:'keyed-shift',key:[1,2,3],mode:'repeat',direction:'subtract',reset:'page'};
+ for(const text of [phrase+' except F','Do not '+phrase,phrase+' then skip one rune',phrase+' carrying state between pages','Use key "'+phrase+'"','Vigenere with key ABC, subtract, reset at each page','Vigenere with key indices [1,2,3], reset at each page','Vigenere with key indices [1,2,3], subtract','Vigenere with key indices [29], subtract, reset at each page','Vigenere with key indices [1,,2], subtract, reset at each page']){
+  const quote=text.includes(phrase)?phrase:text;assert(validateCandidate(card(text),candidate(text,[quote],[repeat]),{compile:planCard}).reason,text);
+ }
+ assert(validateCandidate(card(phrase,{rules:{reset:known('word')}}),candidate(phrase,[phrase],[repeat]),{compile:planCard}).reason);
+ const fabricated=card(phrase);fabricated.method.value.operations[0]={id:'vigenere',label:phrase,key:[1,2,3],direction:'subtract',reset:'page'};assert(validateCandidate(fabricated,candidate(phrase,[phrase],[repeat]),{compile:planCard}).reason,'Canonical keyed labels cannot hide extra prose or be repaired through AI');
+ const explicit=card(phrase);explicit.method.value.operations[0]={id:'plaintext_autokey',label:phrase,key:[1,2,3],direction:'subtract',reset:'page'};assert(validateCandidate(explicit,candidate(phrase,[phrase],[repeat]),{compile:planCard}).reason,'Explicit autokey cannot become repeat');
+});
 await test('ordered compounds preserve every operation; exact parameters cannot be invented',async()=>{
  const text='Please reverse each line, then apply affine a=7,b=7.',out=validateCandidate(card(text),candidate(text,['reverse each line','apply affine a=7,b=7'],[{op:'reverse',unit:'line'},{op:'affine',a:7,b:7}]),{compile:planCard});assert(!out.reason,out.reason);assert.deepEqual(out.plan.steps,[{op:'reverse',unit:'line'},{op:'affine',a:7,b:7}]);
  const malformed=candidate(text,['reverse each line','apply affine a=7,b=7'],[{op:'reverse',unit:'line'},{op:'affine',a:8,b:7}]);assert(validateCandidate(card(text),malformed,{compile:planCard}).reason);
@@ -50,6 +64,13 @@ await test('missing exact scope and unresolved conditions cannot spend a model c
  let calls=0;const propose=createAIPlanner({compile:planCard,AI:{run:async()=>{calls++;throw Error();}}});
  assert((await propose(card('reverse each line',{scope:C.field()}))).reason);
  assert((await propose(card('reverse each line',{unresolved:[{kind:'unknown',text:'Needs a key'}]}))).reason);assert.equal(calls,0);
+});
+await test('unrestricted rules fail before provider while irrelevant inapplicable fields survive',async()=>{
+ let calls=0;const text='cumulative difference reset at each page',step={op:'cumulative-difference',reset:'page'},mapping=candidate(text,[text],[step]),propose=createAIPlanner({compile:planCard,AI:{run:async()=>{calls++;return value(mapping);}}});
+ for(const key of C.RULES){const input=card(text,{rules:{[key]:C.field('unrestricted')}}),before=structuredClone(input);assert((await propose(input)).reason,key);assert(validateCandidate(input,mapping,{compile:planCard}).reason);assert.deepEqual(input,before);}assert.equal(calls,0,'No provider call is made for any explicitly unrestricted rule');
+ for(const key of ['reset','initialState'])assert(validateCandidate(card(text,{rules:{[key]:C.field('not_applicable')}}),mapping,{compile:planCard}).reason);
+ const keyedText='Vigenere with key indices [1], subtract, reset at each page',keyed={op:'keyed-shift',key:[1],mode:'repeat',direction:'subtract',reset:'page'};assert(validateCandidate(card(keyedText,{rules:{reset:C.field('not_applicable')}}),candidate(keyedText,[keyedText],[keyed]),{compile:planCard}).reason);
+ const input=card(text,{rules:{exceptionalCases:C.field('not_applicable'),searchBounds:C.field('not_applicable')}}),before=structuredClone(input),out=await propose(input);assert(!out.reason,out.reason);assert.equal(calls,1);assert.deepEqual(input,before);assert.deepEqual(out.card.rules,input.rules);assert.equal(out.plan.inputVersion,'raw');assert.deepEqual(out.plan.criterion,{kind:'measurement'});
 });
 await test('provider malformed/unsupported responses fail without repair or retry',async()=>{
  for(const response of [value('not JSON'),value(' '.repeat(16001)),value({version:1,steps:[],unsupported:[]}),value({version:1,steps:[],unsupported:['Vigenere']})]){

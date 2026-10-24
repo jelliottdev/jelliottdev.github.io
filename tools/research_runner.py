@@ -80,6 +80,13 @@ def validate(task):
         elif step.get('op') == 'affine':
             fields(step, ('op', 'a', 'b'), 'Affine step')
             require(integer(step['a'], 0, 28) and integer(step['b'], 0, 28), 'Invalid affine coefficients')
+        elif step.get('op') == 'keyed-shift':
+            fields(step, ('op', 'key', 'mode', 'direction', 'reset'), 'Keyed-shift step')
+            require(isinstance(step['key'], list) and 1 <= len(step['key']) <= 256
+                    and all(integer(value, 0, 28) for value in step['key']), 'Invalid key indices')
+            require(step['mode'] in ('repeat', 'plaintext-autokey', 'ciphertext-autokey'), 'Invalid key mode')
+            require(step['direction'] in ('subtract', 'add'), 'Invalid key direction')
+            require(step['reset'] in ('page', 'line', 'word'), 'Invalid key reset')
         elif step.get('op') == 'cumulative-difference':
             fields(step, ('op', 'reset'), 'Cumulative step')
             require(step['reset'] in ('page', 'line', 'word'), 'Invalid cumulative reset')
@@ -120,6 +127,32 @@ def transform(text, step, runes, indices):
             elif ch in indices:
                 positions.append(i)
         flush()
+    elif step['op'] == 'keyed-shift':
+        # Histories belong to this step's current reset segment, not to the
+        # original program input or a preceding page. Separators never consume.
+        ciphertext, plaintext = [], []
+        key, mode = step['key'], step['mode']
+        sign = -1 if step['direction'] == 'subtract' else 1
+        for i, character in enumerate(chars):
+            if character not in indices:
+                if boundary(character, step['reset'], indices):
+                    ciphertext.clear()
+                    plaintext.clear()
+                continue
+            value = indices[character]
+            position = len(ciphertext)
+            if mode == 'repeat':
+                amount = key[position % len(key)]
+            elif position < len(key):
+                amount = key[position]
+            elif mode == 'plaintext-autokey':
+                amount = plaintext[position - len(key)]
+            else:
+                amount = ciphertext[position - len(key)]
+            decoded = (value + sign * amount) % 29
+            ciphertext.append(value)
+            plaintext.append(decoded)
+            chars[i] = runes[decoded]
     else:
         total = 0
         for i, ch in enumerate(chars):

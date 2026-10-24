@@ -12,6 +12,7 @@ export function planCard(input){
  if(card.method.status!=='specified'||!card.method.value.operations.length)return fail('An explicit supported method is needed.');
  if(card.scope.status!=='specified'||!Array.isArray(card.scope.value.pages)||!card.scope.value.pages.length||Object.keys(card.scope.value).some(k=>k!=='pages'))return fail('Select exact complete pages; passages and descriptive scope need an adapter.');
  const rules=card.rules,operations=card.method.value.operations,notes=[];
+ if(Object.values(rules).some(rule=>rule.status==='unrestricted'))return fail('An explicitly unrestricted rule cannot be represented by one fixed experiment.');
  let inputVersion='raw',criterion={kind:'measurement'};
  const specified=k=>rules[k].status==='specified';
  if(specified('inputVersion')){
@@ -29,11 +30,13 @@ export function planCard(input){
   else return fail('The requested evaluation needs an adapter.');
  }else notes.push('Proposed evaluation: measure rune frequencies and adjacent repeats; no readability decision.');
  for(const key of ['searchBounds','searchProtocol','exceptionalCases'])if(specified(key))return fail('The specified '+key+' condition needs an adapter.');
- const steps=[];let reverse=false,cumulative=false;
+ const steps=[];let reverse=false,cumulative=false,keyed=false;
+ const keyedModes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};
  for(const operation of operations){
-  const labels={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference']};
+  const labels={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference'],vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey']};
   if(Object.hasOwn(operation,'label')&&(!labels[operation.id]||!labels[operation.id].includes(operation.label)))return fail('The operation wording contains details that need an execution adapter.');
-  if(Object.keys(operation).some(k=>!['id','label','a','b','reset','unit','declaredFamilyId'].includes(k)))return fail('An operation contains parameters the runner cannot represent.');
+  if(Object.keys(operation).some(k=>!['id','label','a','b','reset','unit','declaredFamilyId','key','direction'].includes(k)))return fail('An operation contains parameters the runner cannot represent.');
+  if(!Object.hasOwn(keyedModes,operation.id)&&['key','direction'].some(k=>Object.hasOwn(operation,k)))return fail('This operation does not accept key parameters.');
   if(operation.id!=='reverse_runes'&&Object.hasOwn(operation,'unit'))return fail('This operation does not accept a reversal unit.');
   if(operation.id==='reverse_row_runes'){
    if(Object.keys(operation).some(k=>['a','b','reset'].includes(k)))return fail('The reversal has unsupported parameters.');
@@ -52,14 +55,23 @@ export function planCard(input){
    steps.push({op:'affine',a:operation.a,b:operation.b});
   }else if(operation.id==='cumulative_difference'){
    if(Object.hasOwn(operation,'a')||Object.hasOwn(operation,'b')||!['page','line','word'].includes(operation.reset))return fail('Cumulative difference needs an explicit page, line or word reset.');
+   if(rules.reset.status==='not_applicable')return fail('An explicit reset conflicts with reset being marked not applicable.');
    if(specified('reset')&&rules.reset.value!==operation.reset)return fail('The global reset conflicts with an operation reset.');
+   if(rules.initialState.status==='not_applicable')return fail('Cumulative difference requires an initial state, which is marked not applicable.');
    if(specified('initialState')&&rules.initialState.value!==0)return fail('Only initial state zero is supported.');
    cumulative=true;steps.push({op:'cumulative-difference',reset:operation.reset});
+  }else if(Object.hasOwn(keyedModes,operation.id)){
+   if(['a','b','unit'].some(k=>Object.hasOwn(operation,k))||!Array.isArray(operation.key)||!operation.key.length||operation.key.length>256||operation.key.some(n=>!Number.isInteger(n)||n<0||n>28)||!['subtract','add'].includes(operation.direction)||!['page','line','word'].includes(operation.reset))return fail('A keyed step needs explicit GP indices (0–28), add or subtract, and a page, line or word reset.');
+   if(rules.reset.status==='not_applicable')return fail('An explicit reset conflicts with reset being marked not applicable.');
+   if(specified('reset')&&rules.reset.value!==operation.reset)return fail('The global reset conflicts with an operation reset.');
+   keyed=true;steps.push({op:'keyed-shift',key:[...operation.key],mode:keyedModes[operation.id],direction:operation.direction,reset:operation.reset});
   }else return fail('This method needs an execution adapter before a faithful local plan can be prepared.');
  }
  if(specified('boundaryMode')&&!reverse)return fail('The boundary-mode condition is not represented by these steps.');
- if((specified('reset')||specified('initialState'))&&!cumulative)return fail('The reset or initial-state condition is not represented by these steps.');
+ if(specified('initialState')&&!cumulative)return fail('The initial-state condition is not represented by these steps.');
+ if(specified('reset')&&!cumulative&&!keyed)return fail('The reset or initial-state condition is not represented by these steps.');
  if(steps.some(s=>s.op==='reverse'))notes.push('Reversal changes rune positions only, leaving separators in place; a word ends at any non-rune character.');
+ if(keyed)notes.push('Key values are explicit GP alphabet indices, not prime values or guessed letters; non-rune characters do not consume the key. Each specified boundary restarts the key and autokey history.');
  if(cumulative)notes.push('Cumulative difference starts at zero at each specified boundary; pages never share state.');
  notes.push('Each page is processed separately, in the stated method-step order; headings are included.');
  if(card.outcome.status==='specified'&&card.outcome.value.outcomeId==='decipher')notes.push('This is a preliminary measurement for the deciphering idea, not a test of whether the output is readable.');
@@ -106,7 +118,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
     const worker=async()=>{try{while(next<plan.pages.length){if(controller.signal.aborted)throw Error();const index=next++,id=plan.pages[index];const response=await fetcher('https://jelliottdev.github.io/data/pages/'+id+'.json',{redirect:'manual',signal:controller.signal});if(!response.ok)throw Error();const page=await jsonBody(response,512*1024),text=plan.inputVersion==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string')throw Error();totalBytes+=new TextEncoder().encode(text).length;if(totalBytes>2000000)throw Error();pages[index]={id,text};}}catch(error){controller.abort();throw error;}};
     await Promise.all(Array.from({length:Math.min(4,pages.length)},()=>worker()));
    }catch(error){console.warn('prepare-task: official manuscript source unavailable',error?.name||'Error',error?.message||'');return reply({error:'The selected manuscript text could not be loaded.'},422);}finally{clearTimeout(timer);}
-   const title=plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
+   const title=plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':s.op==='keyed-shift'?(s.mode==='repeat'?'Repeating-key':s.mode==='plaintext-autokey'?'Plaintext autokey':'Ciphertext autokey')+' '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune '+(s.mode==='repeat'?'key':'seed')+' · '+s.reset+' resets':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
    let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch{return reply({state:'needs-adapter',reason:'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
    return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
   }catch{return reply({error:'Plan preparation is temporarily unavailable.'},503);}

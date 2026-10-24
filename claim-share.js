@@ -160,6 +160,6 @@
   if(!png)try{png=await renderPNG(spec,{document:doc});}catch(failure){imageError=failure.message;}
   return {status,url:complete,png,...(error?{error}:{}),imageError};
  }
- const api={VERSION,MAX_BYTES,MAX_URL,cardData,encode,decode,link,renderPNG,prepare:renderPNG,share};
+ const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),encode,decode,link,renderPNG,prepare:renderPNG,share};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimShare=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

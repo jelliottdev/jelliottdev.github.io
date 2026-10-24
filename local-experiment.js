@@ -45,6 +45,12 @@
    if(step?.op==='reverse'){object(step,['op','unit']);if(!['line','word','page'].includes(step.unit))throw Error('Choose a reversal boundary.');}
    else if(step?.op==='affine'){object(step,['op','a','b']);integer(step.a,0,28);integer(step.b,0,28);}
    else if(step?.op==='cumulative-difference'){object(step,['op','reset']);if(!['page','line','word'].includes(step.reset))throw Error('Choose a feedback reset.');}
+   else if(step?.op==='keyed-shift'){
+    object(step,['op','key','mode','direction','reset']);
+    if(!Array.isArray(step.key)||!step.key.length||step.key.length>256)throw Error('Give one to 256 key indices.');
+    for(const value of step.key)integer(value,0,28);
+    if(!['repeat','plaintext-autokey','ciphertext-autokey'].includes(step.mode)||!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the key mode, arithmetic direction and reset.');
+   }
    else throw Error('This method needs an execution adapter before it can run.');
   }
   if(task.criterion?.kind==='measurement')object(task.criterion,['kind']);
@@ -78,11 +84,19 @@
      else if(step.unit==='word'||step.unit==='line'&&/[\r\n]/.test(chars[i]))flush();
     }flush();
    }else if(step.op==='affine')chars=chars.map(ch=>index.has(ch)?alphabet[mod(step.a*index.get(ch)+step.b)].rune:ch);
-   else{
+   else if(step.op==='cumulative-difference'){
     let sum=0;
     chars=chars.map(ch=>{
      if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))sum=0;return ch;}
      const p=mod(index.get(ch)-sum);sum=mod(sum+p);return alphabet[p].rune;
+    });
+   }else if(step.op==='keyed-shift'){
+    let input=[],output=[];
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch)){input=[];output=[];}return ch;}
+     const c=index.get(ch),j=input.length,m=step.key.length;
+     const k=j<m?step.key[j]:step.mode==='repeat'?step.key[j%m]:step.mode==='plaintext-autokey'?output[j-m]:input[j-m];
+     const p=mod(c+(step.direction==='add'?k:-k));input.push(c);output.push(p);return alphabet[p].rune;
     });
    }
   }

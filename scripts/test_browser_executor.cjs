@@ -4,10 +4,10 @@ const E=require('../local-experiment.js'),{createExecutor}=require('../local-run
 const root=path.resolve(__dirname,'..'),engine=fs.readFileSync(path.join(root,'local-experiment.js'),'utf8'),workerSource=fs.readFileSync(path.join(root,'local-run-worker.js'),'utf8');
 const workers=[];
 class WorkerFixture{
- constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-browser-run');this.stopped=false;workers.push(this);
+ constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-keyed-run');this.stopped=false;workers.push(this);
   const self={postMessage:data=>{if(!this.stopped)this.onmessage?.({data:structuredClone(data)});}};
   const context=vm.createContext({self,crypto:webcrypto,TextEncoder,structuredClone});
-  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-browser-run');vm.runInContext(engine,context);};
+  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-keyed-run');vm.runInContext(engine,context);};
   vm.runInContext(workerSource,context);this.receive=self.onmessage;
  }
  postMessage(data){this.message=structuredClone(data);queueMicrotask(()=>{if(!this.stopped)Promise.resolve(this.receive({data:this.message})).catch(()=>this.onerror?.({preventDefault(){}}));});}
@@ -22,6 +22,13 @@ let groups=0;async function test(name,fn){await fn();console.log('PASS '+name);g
   const result=await executor.start(input,{onProgress:p=>progress.push(p)}).promise;
   await E.verify(input,result,webcrypto);assert.deepEqual(progress.map(p=>[p.phase,p.completed,p.total]),[['checking',0,2],['running',1,2],['running',2,2]]);
   assert(workers.at(-1).stopped);assert.equal(input.pages[0].text,'ABC A');
+ });
+ await test('fixed worker accepts all keyed modes and returns the exact declared computation',async()=>{
+  for(const mode of ['repeat','plaintext-autokey','ciphertext-autokey'])for(const direction of ['subtract','add']){
+   const input=await E.prepare({...await task(),steps:[{op:'keyed-shift',key:[1,2],mode,direction,reset:'page'}]},webcrypto);
+   const output=await createExecutor({WorkerClass:WorkerFixture}).start(input).promise;
+   assert.deepEqual(await E.verify(input,output,webcrypto),E.run(input));assert(workers.at(-1).stopped);
+  }
  });
  await test('stop terminates the worker and rejects without accepting late output',async()=>{
   const executor=createExecutor({WorkerClass:WorkerFixture}),run=executor.start(await task());

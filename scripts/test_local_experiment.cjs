@@ -46,6 +46,56 @@ async function main(){
    {pages:[{id:'lp1-17',text:'ᚠ'}]},{pages:[{id:'lp2-15',text:'ᚠ'.repeat(20001)}]},
    {title:'\ud800'},{criterion:{kind:'exact-prefix',values:Array(257).fill(0)}}])await assert.rejects(prepared(patch));
  });
+ await test('keyed shifts match hand-computed repeat/plaintext/ciphertext histories in both directions',async()=>{
+  const vectors={subtract:{repeat:[0,0,2,2,4,4],'plaintext-autokey':[0,0,3,4,2,2],'ciphertext-autokey':[0,0,2,2,2,2]},
+   add:{repeat:[2,4,4,6,6,8],'plaintext-autokey':[2,4,5,8,10,14],'ciphertext-autokey':[2,4,4,6,8,10]}};
+  for(const [direction,modes]of Object.entries(vectors))for(const [mode,expected]of Object.entries(modes)){
+   const task=await prepared({pages:[{id:'lp2-15',text:[1,2,3,4,5,6].map(i=>runes[i]).join('')}],steps:[{op:'keyed-shift',key:[1,2],mode,direction,reset:'page'}]});
+   const result=E.run(task);assert.deepEqual(Array.from(result.transformed[0].text,c=>runes.indexOf(c)),expected,direction+'/'+mode);await E.verify(task,result,webcrypto);
+   const forged=structuredClone(result);forged.transformed[0].text=runes[28]+forged.transformed[0].text.slice(1);await assert.rejects(E.verify(task,forged,webcrypto));
+  }
+ });
+ await test('key history skips separators, respects every reset and never carries across pages',async()=>{
+  const text=runes[1]+runes[2]+' / '+runes[3]+runes[4]+runes[5]+'\r\n'+runes[6]+runes[7];
+  const vectors={subtract:{
+   page:{repeat:[0,0,2,2,4,4,6],'plaintext-autokey':[0,0,3,4,2,2,5],'ciphertext-autokey':[0,0,2,2,2,2,2]},
+   line:{repeat:[0,0,2,2,4,5,5],'plaintext-autokey':[0,0,3,4,2,5,5],'ciphertext-autokey':[0,0,2,2,2,5,5]},
+   word:{repeat:[0,0,2,2,4,5,5],'plaintext-autokey':[0,0,2,2,3,5,5],'ciphertext-autokey':[0,0,2,2,2,5,5]}},add:{
+   page:{repeat:[2,4,4,6,6,8,8],'plaintext-autokey':[2,4,5,8,10,14,17],'ciphertext-autokey':[2,4,4,6,8,10,12]},
+   line:{repeat:[2,4,4,6,6,7,9],'plaintext-autokey':[2,4,5,8,10,7,9],'ciphertext-autokey':[2,4,4,6,8,7,9]},
+   word:{repeat:[2,4,4,6,6,7,9],'plaintext-autokey':[2,4,4,6,9,7,9],'ciphertext-autokey':[2,4,4,6,8,7,9]}}};
+  for(const [direction,resets]of Object.entries(vectors))for(const [reset,modes]of Object.entries(resets))for(const [mode,expected]of Object.entries(modes)){
+   const task=await prepared({pages:[{id:'lp2-15',text},{id:'lp2-16',text:runes[1]+runes[2]}],steps:[{op:'keyed-shift',key:[1,2],mode,direction,reset}]});
+   const result=E.run(task),actual=result.transformed[0].text;
+   assert.deepEqual(Array.from(actual).filter(c=>runes.includes(c)).map(c=>runes.indexOf(c)),expected,direction+'/'+reset+'/'+mode);
+   assert.deepEqual(Array.from(actual).map((c,i)=>[c,i]).filter(([c])=>!runes.includes(c)),Array.from(text).map((c,i)=>[c,i]).filter(([c])=>!runes.includes(c)));
+   assert.equal(result.transformed[1].text,(direction==='subtract'?[0,0]:[2,4]).map(i=>runes[i]).join(''));
+  }
+ });
+ await test('key bounds, modulo edges, long seeds and step-local ciphertext history are exact',async()=>{
+  const base={op:'keyed-shift',key:[0,28],mode:'repeat',direction:'subtract',reset:'page'};
+  for(const mode of ['repeat','plaintext-autokey','ciphertext-autokey']){
+   const task=await prepared({pages:[{id:'lp2-15',text:runes[0]+runes[28]}],steps:[{...base,mode,key:Array(256).fill(28)}]});
+   assert.equal(E.run(task).transformed[0].text,runes[1]+runes[0]);
+  }
+  const edges=await prepared({pages:[{id:'lp2-15',text:runes[0]+runes[28]+runes[0]+runes[28]}],steps:[base]});assert.equal(E.run(edges).transformed[0].text,runes[0].repeat(4));
+  const pipeline=await prepared({pages:[{id:'lp2-15',text:[1,2,3,4].map(i=>runes[i]).join('')}],steps:[{op:'affine',a:2,b:1},{...base,key:[1],mode:'ciphertext-autokey'}]});
+  assert.equal(E.run(pipeline).transformed[0].text,[2,2,2,2].map(i=>runes[i]).join(''),'Ciphertext history reads input after earlier steps, not whole-program original text');
+  for(const patch of [{key:[]},{key:[true]},{key:[-1]},{key:[29]},{key:[1.5]},{key:Array(257).fill(0)},{key:'KEY'},{mode:'unknown'},{direction:'decode'},{reset:'none'},{phase:0},{skip:[]}])await assert.rejects(prepared({steps:[{...base,...patch}]}));
+ });
+ await test('Welcome known-reading control is exactly the first48 runes before its first interruption',async()=>{
+  const methods=JSON.parse(fs.readFileSync(path.join(root,'data/evidence/reading-methods.json'),'utf8')).controls;
+  const control=methods.find(c=>c.id==='welcome'),page=JSON.parse(fs.readFileSync(path.join(root,'data/pages/lp1-03.json'),'utf8'));
+  const index=JSON.parse(fs.readFileSync(path.join(root,'data/index.json'),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
+  const known=JSON.parse(fs.readFileSync(path.join(root,'data/evidence/known-readings.json'),'utf8')).controls.find(c=>c.id==='welcome').decoded_pages.find(p=>p.page==='lp1-03');
+  assert.equal(control.skip[0],48);assert.equal(control.start,0);assert.equal(control.shift,0);
+  const symbols=new Set(index.map(r=>r.rune));let count=0,prefix='';for(const ch of page.raw){if(symbols.has(ch)&&count===48)break;prefix+=ch;if(symbols.has(ch))count++;}
+  assert.equal(count,48);const expected=known.rune_indices.slice(0,48);
+  const task=await prepared({title:'Welcome prefix before first interruption',alphabet:index,pages:[{id:page.id,text:prefix}],steps:[{op:'keyed-shift',key:control.key,mode:'repeat',direction:'subtract',reset:'page'}],criterion:{kind:'exact-prefix',values:expected}});
+  const result=await E.verify(task,E.run(task),webcrypto),positions=new Map(index.map((r,i)=>[r.rune,i]));
+  assert.deepEqual(Array.from(result.transformed[0].text).filter(c=>positions.has(c)).map(c=>positions.get(c)),expected);assert.deepEqual(result.matches,[{page:'lp1-03',matched:true}]);
+  const latin=Array.from(result.transformed[0].text,c=>positions.has(c)?index[positions.get(c)].latin:c).join('');assert(page.reading.literal.startsWith(latin),'Preserved separators and multi-letter GP labels match archived literal reading before skip48');
+ });
  await test('dynamic result view derives numbers from verified data and rejects arbitrary output',async()=>{
   const task=await prepared({title:'<script>not markup</script>',steps:[{op:'affine',a:0,b:0}]}),result=await E.verify(task,E.run(task),webcrypto),html=V.render(task,result);
   assert(html.includes('After the method: 6 of 6 pairs'));assert(html.includes('Original text: 0 of 6 pairs'));

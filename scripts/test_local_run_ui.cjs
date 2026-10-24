@@ -12,18 +12,25 @@ async function makeTask(title='Fixture <safe>'){return E.prepare({title,alphabet
 function card(){const f=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});return H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic idea'},aim:f('Find readable text'),method:f({operations:[{id:'reverse_row_runes',label:'Reverse rows'}]}),scope:f({pages:['lp2-15']})}),{id:'fixture',at}));}
 async function receipt(result){return{id:Buffer.from(await webcrypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(result)))).toString('hex'),createdAt:at,result};}
 function projection(task,latestRun){return{id:task.taskId,proposalId,card:card(),title:task.title,plan:task,inputVersion:'raw',parentTaskId:null,createdAt:at,state:latestRun?'results-verified':'not-run',...(latestRun?{latestRun}:{})};}
-async function fixture({task,hash,config={},get,post,prepare}={}){
+async function fixture({task,hash,config={},get,post,prepare,ideaCard}={}){
  task=task||await makeTask();
  const doc=documentFixture(hash||'#task='+task.taskId),requests=[],executions=[],packages=[],downloads=[];
  const settings={endpoint:'https://mock.example/ask',localTaskEndpoint:endpoint,researchIdeaEndpoint:ideaEndpoint,taskPreparationEndpoint:prepareEndpoint,...config};
  const app=UI.createApp(doc,{crypto:webcrypto,executor:{start(plan,options){const d=deferred();executions.push({plan,options,...d,cancel(){this.cancelled=true;}});const e=executions.at(-1);return{promise:d.promise,cancel:()=>e.cancel()};}},package:{async build(...args){packages.push(args);return Uint8Array.of(80,75,3,4)}},download:(...args)=>downloads.push(args),fetcher:async(url,options={})=>{
   requests.push({url,options});if(url==='data/assistant.json')return Response.json(settings);if(url==='tools/research_runner.py')return new Response('fixed runner');
   if(options.method==='POST'){if(url===prepareEndpoint)return Response.json(await prepare?.(JSON.parse(options.body))||{state:'needs-adapter',proposalId,reason:'No supported adapter.'});return post?post(url,options):Response.json({taskId:task.taskId,state:'results-verified',latestRun:await receipt(JSON.parse(options.body).result)});}
-  if(url===ideaEndpoint+'/'+proposalId)return Response.json({id:proposalId,card:card(),createdAt:at,tasks:[],tasksTruncated:true});
+  if(url===ideaEndpoint+'/'+proposalId)return Response.json({id:proposalId,card:ideaCard||card(),createdAt:at,tasks:[],tasksTruncated:true});
   return get?get(url,options):Response.json(projection(task));
  }});await app.ready;return{doc,app,task,requests,executions,packages,downloads,click:id=>doc.getElementById(id).onclick(),upload:async(result,extra={})=>{const input=doc.getElementById('result-file');input.files=[{name:'results.json',size:10,text:async()=>JSON.stringify(result),...extra}];return input.onchange();}};
 }
 (async()=>{
+ for(const mode of ['repeat','plaintext-autokey','ciphertext-autokey']){
+  const text=UI.stepText({op:'keyed-shift',key:[1,2,3],mode,direction:'subtract',reset:'word'});
+  assert(text.includes('[1, 2, 3]')&&text.includes('subtract')&&text.includes('word'));
+  assert(!text.includes('Cumulative difference'));
+  if(mode!=='repeat')assert(text.includes(mode==='plaintext-autokey'?'earlier decoded':'earlier input'));
+ }
+ assert.throws(()=>UI.stepText({op:'future-operation'}),/faithfully/);
  const f=await fixture();try{
   assert(f.doc.host.innerHTML.includes('Run in browser'));assert(f.doc.host.innerHTML.includes('href="run.html#idea='+proposalId+'">Back to idea</a>'),'Task returns to its persistent idea/task list');assert(!f.doc.host.innerHTML.includes('Related idea'));assert(f.doc.host.innerHTML.includes('Fixture &lt;safe&gt;'));assert.equal(f.requests.filter(r=>r.options.method==='POST').length,0);assert.equal(f.executions.length,0);assert(f.doc.getElementById('submit-results').hidden);
   const markup=f.doc.host.innerHTML,resultAt=markup.indexOf('id="verified-result"'),submitAt=markup.indexOf('id="submit-results"'),planAt=markup.indexOf('id="experiment-details"');assert(resultAt<submitAt&&submitAt<planAt);assert(f.doc.getElementById('experiment-details').open,'The plan starts available before a first run');const preservedInput=f.doc.getElementById('result-file');f.doc.activeElement=preservedInput;
@@ -47,6 +54,10 @@ async function fixture({task,hash,config={},get,post,prepare}={}){
  const savedTask=await makeTask('Stored');const saved=await fixture({task:savedTask,get:async()=>Response.json(projection(savedTask,await receipt(E.run(savedTask))))});try{assert(saved.app.getState().saved);assert.equal(saved.doc.getElementById('save-status').textContent,'Saved to this research entry.');assert.equal(saved.doc.getElementById('experiment-details').open,false,'Saved verified result starts ahead of collapsed plan');assert(saved.doc.getElementById('verified-result').innerHTML.includes('What this run found'));}finally{saved.app.destroy();}
  const malformed=await fixture({get:async()=>Response.json({id:'0'.repeat(64)})});try{assert(malformed.doc.host.innerHTML.includes('unavailable'));assert(!malformed.app.getState().task);}finally{malformed.app.destroy();}
  const unavailable=await fixture({config:{localTaskEndpoint:null}});try{assert(unavailable.doc.host.innerHTML.includes('not available'));assert(unavailable.doc.getElementById('retry-task'));}finally{unavailable.app.destroy();}
+ const preciseCard=card();preciseCard.method.value.operations=[{id:'vigenere',label:'Vigenere',key:[23,10,1],direction:'subtract',reset:'page',note:'<script>bad</script>'}];preciseCard.outcome.value.detail='Recover only the first 48 runes';
+ const precise=await fixture({hash:'#idea='+proposalId,ideaCard:preciseCard});try{
+  const html=precise.doc.host.innerHTML;for(const expected of ['Key: [23,10,1]','Direction: subtract','Reset: page','Recover only the first 48 runes','&lt;script&gt;bad&lt;/script&gt;'])assert(html.includes(expected),expected);assert(!html.includes('<script>bad</script>'));assert.equal(precise.requests.filter(r=>r.options.method==='POST').length,0);
+ }finally{precise.app.destroy();}
  const plan=await makeTask('Prepared');let creations=0;const idea=await fixture({hash:'#idea='+proposalId,prepare:async body=>{assert.deepEqual(body,{proposalId,parentTaskId:null});return{state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',task:plan,notes:['Exact archived input'],purpose:'Measure this method.'};},post:async(url,options)=>{creations++;assert.deepEqual(JSON.parse(options.body).task,plan);return Response.json(projection(plan));}});try{
   assert(idea.app.getState().idea);assert(idea.doc.host.innerHTML.includes('<dt>Outcome</dt>'));assert(idea.doc.host.innerHTML.includes('Decipher the text'));assert(idea.doc.host.innerHTML.includes('most recent'));assert.equal(idea.requests.filter(r=>r.options.method==='POST').length,0);
   await idea.click('prepare-experiment');assert(idea.app.getState().prepared);assert.equal(creations,0);assert(idea.doc.getElementById('prepared-plan').innerHTML.includes('does not run'));

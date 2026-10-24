@@ -3,6 +3,8 @@ import copy
 import hashlib
 import importlib.util
 import json
+import itertools
+import random
 from pathlib import Path
 import subprocess
 import sys
@@ -175,6 +177,73 @@ class RunnerTests(unittest.TestCase):
         result = self.execute(signed(task))
         self.assertEqual(result['metrics']['runes'], 0)
         self.assertEqual(result['transformed'][0]['text'], task['pages'][0]['text'])
+
+    def test_keyed_shift_independent_hand_vectors(self):
+        expected = {
+            ('repeat', 'subtract'): [0, 0, 2, 2, 4, 4],
+            ('plaintext-autokey', 'subtract'): [0, 0, 3, 4, 2, 2],
+            ('ciphertext-autokey', 'subtract'): [0, 0, 2, 2, 2, 2],
+            ('repeat', 'add'): [2, 4, 4, 6, 6, 8],
+            ('plaintext-autokey', 'add'): [2, 4, 5, 8, 10, 14],
+            ('ciphertext-autokey', 'add'): [2, 4, 4, 6, 8, 10],
+        }
+        for (mode, direction), values in expected.items():
+            with self.subTest(mode=mode, direction=direction):
+                task = fixture((1, 2, 3, 4, 5, 6), steps=[{'op': 'keyed-shift', 'key': [1, 2],
+                                'mode': mode, 'direction': direction, 'reset': 'page'}])
+                self.assertEqual(self.values(self.execute(task, mode + direction + '.json')), [values])
+
+    def test_keyed_shift_separators_resets_pages_and_current_step_input(self):
+        task = fixture()
+        original = RUNES[2] + RUNES[5] + ' / ' + RUNES[9] + RUNES[10] + '\r\n' + RUNES[7]
+        task['pages'] = [{'id': 'lp2-15', 'text': original},
+                         {'id': 'lp2-16', 'text': RUNES[3] + RUNES[6]}]
+        for reset, expected in [('page', [1, 4, 5, 5, 2]), ('line', [1, 4, 5, 5, 6]),
+                                ('word', [1, 4, 8, 2, 6])]:
+            task['steps'] = [{'op': 'keyed-shift', 'key': [1], 'mode': 'plaintext-autokey',
+                              'direction': 'subtract', 'reset': reset}]
+            result = self.execute(signed(task), 'keyed-' + reset + '.json')
+            self.assertEqual(self.values(result), [expected, [2, 4]])
+            self.assertEqual([(i, ch) for i, ch in enumerate(result['transformed'][0]['text']) if ch not in RUNES],
+                             [(i, ch) for i, ch in enumerate(original) if ch not in RUNES])
+        # After affine, the input C to this step is [3,5,7], so C-C(previous)=[2,2,2].
+        task = fixture((1, 2, 3), steps=[{'op': 'affine', 'a': 2, 'b': 1},
+                       {'op': 'keyed-shift', 'key': [1], 'mode': 'ciphertext-autokey',
+                        'direction': 'subtract', 'reset': 'page'}])
+        self.assertEqual(self.values(self.execute(task, 'pipeline.json')), [[2, 2, 2]])
+
+    def test_keyed_shift_rejects_unknown_fields_bool_keys_and_invalid_bounds(self):
+        base = {'op': 'keyed-shift', 'key': [1], 'mode': 'repeat',
+                'direction': 'subtract', 'reset': 'page'}
+        invalid = [{'key': []}, {'key': [1] * 257}, {'key': [True]}, {'key': [False]},
+                   {'key': [-1]}, {'key': [29]}, {'key': 'ABC'}, {'key': [1.5]},
+                   {'mode': 'autokey'}, {'direction': 'both'}, {'reset': 'book'},
+                   {'phase': 1}, {'code': 'print(1)'}, {'key': [None]}]
+        for i, patch in enumerate(invalid):
+            with self.subTest(patch=patch):
+                self.execute(fixture(steps=[{**base, **patch}]), 'bad-key-' + str(i) + '.json', success=False)
+
+    def test_keyed_shift_all_modes_directions_resets_cross_runtime_complete_results(self):
+        rng = random.Random(33012410)
+        long_run = ''.join(RUNES[rng.randrange(29)] for _ in range(600))
+        text = long_run + ' / ' + RUNES[3] + RUNES[4] + '\r\n' + RUNES[8] + '\t' + RUNES[2]
+        tasks = []
+        for mode, direction, reset, size in itertools.product(
+                ('repeat', 'plaintext-autokey', 'ciphertext-autokey'),
+                ('subtract', 'add'), ('page', 'line', 'word'), (1, 2, 256)):
+            task = fixture(steps=[{'op': 'keyed-shift', 'key': [(7 * i + 3) % 29 for i in range(size)],
+                                   'mode': mode, 'direction': direction, 'reset': reset}])
+            task['pages'] = [{'id': 'lp2-15', 'text': text}, {'id': 'lp2-16', 'text': RUNES[4] * 3},
+                             {'id': 'lp2-17', 'text': ' /\r\n'}]
+            tasks.append(signed(task))
+        code = "const E=require(process.argv[1]);const fs=require('node:fs');const tasks=JSON.parse(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(tasks.map(t=>E.run(t))));"
+        output = subprocess.run(['node', '-e', code, str(RUNNER.parents[1] / 'local-experiment.js')],
+                                input=json.dumps(tasks, ensure_ascii=False), capture_output=True,
+                                text=True, encoding='utf-8', timeout=30)
+        self.assertEqual(output.returncode, 0, output.stderr)
+        js = json.loads(output.stdout)
+        self.assertEqual(len(js), 54)
+        self.assertEqual(js, [runner.run(task) for task in tasks])
 
     def test_shared_javascript_and_python_runtime_parity(self):
         root = RUNNER.parents[1]

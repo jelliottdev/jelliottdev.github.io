@@ -32,6 +32,31 @@ await test('ordered explicit affine/feedback/boundary rules and reviewed text re
  const f=fixture(card({method:known({operations:[{id:'affine',a:28,b:3},{id:'cumulative_difference',reset:'word'},{id:'reverse_row_runes'}]}),rules:{boundaryMode:known('within_words'),wordBoundaries:known('preserve'),inputVersion:known('reviewed'),representation:known('GP29'),unmapped:known('preserve'),reset:known('word'),initialState:known(0),evaluation:known({kind:'exact-prefix',values:[1,2]})}}));
  const {value}=await submit(f);assert.equal(value.state,'plan-ready');assert.deepEqual(value.task.steps,[{op:'affine',a:28,b:3},{op:'cumulative-difference',reset:'word'},{op:'reverse',unit:'word'}]);assert.deepEqual(value.task.criterion,{kind:'exact-prefix',values:[1,2]});assert.equal(value.task.pages[0].text,reviewed);assert.equal(value.inputVersion,'reviewed');
 });
+await test('explicit keyed operations preserve GP indices, direction, resets, evaluation and source version',async()=>{
+ for(const [op,label,mode]of [['vigenere','Vigenere','repeat'],['repeating_key','Repeating key','repeat'],['plaintext_autokey','Plaintext autokey','plaintext-autokey'],['ciphertext_autokey','Ciphertext autokey','ciphertext-autokey']]){
+  for(const direction of ['subtract','add'])for(const reset of ['page','line','word']){
+   const operation={id:op,label,key:[0,1,28],direction,reset},input=card({method:known({operations:[operation]}),rules:{reset:known(reset),inputVersion:known('reviewed'),evaluation:known({kind:'exact-prefix',values:[0,1]})}}),before=structuredClone(input),plan=planCard(input);
+   assert(!plan.reason,plan.reason);assert.deepEqual(plan.steps,[{op:'keyed-shift',key:[0,1,28],mode,direction,reset}]);assert.equal(plan.inputVersion,'reviewed');assert.deepEqual(plan.criterion,{kind:'exact-prefix',values:[0,1]});assert.deepEqual(input,before);
+  }
+ }
+ const f=fixture(card({method:known({operations:[{id:'vigenere',label:'Vigenere',key:[1,2,3],direction:'subtract',reset:'page'}]})})),{value}=await submit(f);assert.equal(value.state,'plan-ready');assert(value.task.title.includes('Repeating-key subtraction · 3-rune key · page resets'));assert(!value.task.title.includes('Cumulative'));await L.checkIdentity(value.task);assert.deepEqual(value.task.steps,[{op:'keyed-shift',key:[1,2,3],mode:'repeat',direction:'subtract',reset:'page'}]);assert.equal(f.calls,1);
+});
+await test('keyed plans reject omitted, guessed and unsupported parameters without source fetch',async()=>{
+ const base={id:'vigenere',label:'Vigenere',key:[1,2,3],direction:'subtract',reset:'page'};
+ const variants=[...['key','direction','reset'].map(key=>{const o={...base};delete o[key];return o;}),...[[],[29],[-1],[1.5],Array(257).fill(1),'ABC'].map(key=>({...base,key})),...['skip','phase','carry','mode'].map(key=>({...base,[key]:1})),{...base,label:'Vigenere except F'},{...base,a:1}];
+ for(const operation of variants){const f=fixture(card({method:known({operations:[operation]})})),{value}=await submit(f);assert.equal(value.state,'needs-adapter');assert.equal(f.calls,0);}
+ for(const rules of [{reset:known('word')},{initialState:known(0)},{exceptionalCases:known('Skip F')},{searchProtocol:known('Carry between pages')}])assert(planCard(card({method:known({operations:[base]}),rules})).reason);
+ assert(planCard(card({method:known({operations:[{id:'reverse_row_runes',key:[1]}]})})).reason);
+});
+await test('explicit unrestricted choices and inapplicable consumed state never become a fixed plan',async()=>{
+ for(const key of C.RULES){const input=card({rules:{[key]:C.field('unrestricted')}}),before=structuredClone(input);assert(planCard(input).reason,key);assert.deepEqual(input,before);const f=fixture(input),{value}=await submit(f);assert.equal(value.state,'needs-adapter',key);assert.equal(f.calls,0);}
+ for(const operation of [{id:'cumulative_difference',reset:'page'},{id:'vigenere',key:[1],direction:'subtract',reset:'page'}]){
+  const input=card({method:known({operations:[operation]}),rules:{reset:C.field('not_applicable')}});assert(planCard(input).reason);assert.equal((await submit(fixture(input))).value.state,'needs-adapter');
+ }
+ assert(planCard(card({method:known({operations:[{id:'cumulative_difference',reset:'page'}]}),rules:{initialState:C.field('not_applicable')}})).reason);
+ const ordinary=card({rules:{exceptionalCases:C.field('not_applicable'),searchBounds:C.field('not_applicable'),reset:C.field('not_applicable'),initialState:C.field('not_applicable')}}),before=structuredClone(ordinary),planned=planCard(ordinary);assert(!planned.reason,planned.reason);assert.deepEqual(ordinary,before);assert.equal(planned.inputVersion,'raw');assert.deepEqual(planned.criterion,{kind:'measurement'});
+ const unknown=card({method:known({operations:[{id:'cumulative_difference',reset:'page'}]})});assert(!planCard(unknown).reason,'Unspecified reset and initial state can retain explicit proposed defaults');
+});
 await test('opaque, incomplete, passage and unhandled consequential rules require adapter before fetching',async()=>{
  const inputs=[
   card({method:known({operations:[{id:'vigenere',key:'FOO'}]})}),
