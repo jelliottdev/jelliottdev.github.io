@@ -8,10 +8,24 @@ handler verifies bundled page text against the site's selected raw or reviewed
 text. Task and result storage are separate from proposal review status; neither
 the original idea wording nor private notes appear in task projections.
 
-Migration `0004_local_tasks.sql` is required before enabling these routes in a
-deployed Worker. This source change alone does not apply a migration or deploy
-the service. The browser preparation/download/submission journey and AI plan
-adapter are not yet connected; do not describe the contribution loop as live.
+Migrations `0004_local_tasks.sql` and `0005_research_ideas.sql` were applied on
+24 October 2026. Worker version `af93049b-103d-430c-8092-24db4773a07b` serves the
+community entry, preparation, task and result routes. Read-only/invalid-request
+production smoke checks verified dispatch and CORS without creating test entries
+or calling a model. Offline real-SQLite and browser fixtures verify persistence.
+
+The checker publishes only a newly confirmed active card through `/ideas`, then
+links to `run.html#idea=…`. The original submission text remains in private intake.
+The run workspace reviews a proposed plan, creates a task, runs it on the visitor's
+CPU in a cancellable Web Worker and submits replay-checked results. Downloads and
+file uploads are optional reproduction paths. The result and dynamic chart lead;
+exact plan details remain available after a run.
+
+`/prepare-task` currently uses deterministic adapters for explicit supported
+methods, rather than generated executable code. Unsupported or ambiguous cards
+remain saved with `needs-adapter`. AI planning for additional methods and placing
+community entries in the global Research map still need implementation; do not
+describe this initial workflow as general experiment automation.
 
 `local-experiment.js` and `tools/research_runner.py` share the execution contract.
 `local-run-view.js` renders its result and chart directly from verified data.

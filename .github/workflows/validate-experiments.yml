@@ -31,6 +31,10 @@ jobs:
       - run: node scripts/test_claim_interpretation.cjs
       - run: node --experimental-sqlite services/idea-assistant/test-proposals.mjs
       - run: node --experimental-sqlite services/idea-assistant/test-local-tasks.mjs
+      - run: node --experimental-sqlite services/idea-assistant/test-community-ideas.mjs
+      - run: node services/idea-assistant/test-prepare-task.mjs
+      - run: node scripts/test_browser_executor.cjs
+      - run: node scripts/test_local_run_ui.cjs
       - run: node services/idea-assistant/test-review-proposals.mjs
       - run: node services/idea-assistant/test-idea-relations.mjs
       - run: node services/idea-assistant/test-reconcile-ideas.mjs

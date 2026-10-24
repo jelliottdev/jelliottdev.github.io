@@ -336,7 +336,7 @@
   const entry=Input.read(doc.defaultView?.location);raw=entry.text;error=entry.error;
   let legacyScope=null;
   let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
-  let intakeEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
+  let intakeEndpoint=null,ideaEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
   let renderedResearchCard=null;
   let cardContract=false;
   let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='';
@@ -407,7 +407,7 @@
      '')+(editing?editorHTML():questionsHTML())+
      (stage==='review'&&!pending?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="research.html#mode=list">Browse research</a> for approaches.</p>':'')+
-     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(ideaEndpoint?'Your confirmed card becomes public. Keep private details out of the card.':intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
@@ -422,12 +422,13 @@
   }
   function intakeHTML(){
    if(!intakeEndpoint||!intake||intake.snapshot!==confirmed)return '';
-   return '<div class="idea-save" id="idea-save"><span id="idea-save-status" class="small" role="status" tabindex="-1">'+intakeStatus()+'</span><button id="retry-save" type="button"'+(intake.error?'':' hidden')+'>Retry saving</button></div>';
+   return '<div class="idea-save" id="idea-save"><span id="idea-save-status" class="small" role="status" tabindex="-1">'+intakeStatus()+'</span><button id="retry-save" type="button"'+(intake.error||intake.entryError?'':' hidden')+'>'+(intake.entryError?'Retry creating entry':'Retry saving')+'</button><a id="open-research-entry"'+(intake.entrySaved?' href="run.html#idea='+esc(intake.receipt.id)+'"':' hidden')+'>Open research entry</a></div>';
   }
-  function intakeStatus(){return intake.busy?'Saving idea…':intake.saved?'Saved.':intake.error?"Couldn’t save this idea.":'';}
+  function intakeStatus(){return intake.busy?(intake.saved&&ideaEndpoint?'Creating research entry…':'Saving idea…'):intake.entrySaved?'Research entry saved.':intake.entryError?'Idea saved. The research entry could not be created.':intake.saved?'Saved.':intake.error?"Couldn’t save this idea.":'';}
   function updateIntake(){
    const status=doc.getElementById('idea-save-status'),retry=doc.getElementById('retry-save');if(!status||!retry||intake?.snapshot!==confirmed)return false;
-   status.textContent=intakeStatus();const held=doc.activeElement===retry;retry.hidden=!intake.error;if(held&&retry.hidden)status.focus({preventScroll:true});return true;
+   status.textContent=intakeStatus();const held=doc.activeElement===retry;retry.hidden=!intake.error&&!intake.entryError;retry.textContent=intake.entryError?'Retry creating entry':'Retry saving';if(held&&retry.hidden)status.focus({preventScroll:true});
+   const link=doc.getElementById('open-research-entry');if(link){link.hidden=!intake.entrySaved;if(intake.entrySaved)link.href='run.html#idea='+intake.receipt.id;}return true;
   }
   async function saveIntake(snapshot=confirmed){
    if(!intakeEndpoint||!snapshot||snapshot!==confirmed)return;
@@ -447,16 +448,28 @@
     }
     catch{intake.error=true;render();return;}
    }
-   const current=intake;if(current.busy||current.saved||!current.body)return;
+   const current=intake;if(current.busy||current.saved&&(!ideaEndpoint||current.entrySaved)||!current.body)return;
    const token=++intakeVersion,requestController=new AbortController();intakeController=requestController;current.busy=true;current.error=false;if(!updateIntake())render();
    const timer=schedule(()=>requestController.abort(),30000);
    try{
-    const response=await fetcher(intakeEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(current.body),signal:requestController.signal});
-    const data=await response.json();
-    if(requestController.signal.aborted)throw Error('Save interrupted');
-    if(token!==intakeVersion||intake!==current||confirmed!==snapshot)return;
-    if(!response.ok||!/^p_[a-f0-9]{64}$/.test(data.id)||!['received','already_received'].includes(data.status)||!Number.isFinite(Date.parse(data.receivedAt)))throw Error('Save unavailable');
-    current.receipt={id:data.id,status:data.status,receivedAt:data.receivedAt};current.saved=true;persistIntake(current);
+    if(!current.saved){
+     const response=await fetcher(intakeEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(current.body),signal:requestController.signal});
+     const data=await response.json();
+     if(requestController.signal.aborted)throw Error('Save interrupted');
+     if(token!==intakeVersion||intake!==current||confirmed!==snapshot)return;
+     if(!response.ok||!/^p_[a-f0-9]{64}$/.test(data.id)||!['received','already_received'].includes(data.status)||!Number.isFinite(Date.parse(data.receivedAt)))throw Error('Save unavailable');
+     current.receipt={id:data.id,status:data.status,receivedAt:data.receivedAt};current.saved=true;persistIntake(current);
+    }
+    if(ideaEndpoint){
+     current.entryError=false;updateIntake();
+     try{
+      const response=await fetcher(ideaEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({proposalId:current.receipt.id}),signal:requestController.signal}),entry=await response.json();
+      if(requestController.signal.aborted)throw Error('Save interrupted');
+      if(token!==intakeVersion||intake!==current||confirmed!==snapshot)return;
+      if(!response.ok||entry.id!==current.receipt.id||C.serialize(entry.card)!==C.serialize(H.cardData(snapshot)))throw Error('Entry mismatch');
+      current.entrySaved=true;
+     }catch{if(token===intakeVersion&&intake===current&&confirmed===snapshot)current.entryError=true;}
+    }
    }catch{if(token===intakeVersion&&intake===current&&confirmed===snapshot)current.error=true;}
    finally{unschedule(timer);if(token===intakeVersion&&intake===current&&confirmed===snapshot){current.busy=false;intakeController=null;updateIntake();}}
   }
@@ -657,7 +670,7 @@
    if(status)status.textContent=message||(!loaded&&!loadError?'Loading research records…':'');
    if(notice)notice.textContent=error||loadError;
    if(confirm)confirm.disabled=!loaded;
-   const collection=doc.getElementById('collection-notice');if(collection){collection.hidden=!intakeEndpoint;collection.textContent=intakeEndpoint?'Confirmed ideas are saved for research review.':'';}
+   const collection=doc.getElementById('collection-notice');if(collection){collection.hidden=!intakeEndpoint;collection.textContent=ideaEndpoint?'Your confirmed card becomes public. Keep private details out of the card.':intakeEndpoint?'Confirmed ideas are saved for research review.':'';}
    const privacy=doc.querySelector('.privacy');if(privacy)privacy.textContent=endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'';
    const retry=doc.getElementById('reload');
    if(loaded)retry?.remove();
@@ -675,9 +688,10 @@
     cardContract=config.researchContract==='card-v1';
     interpretationEndpoint=typeof config.interpretationEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/interpret$/.test(config.interpretationEndpoint)?config.interpretationEndpoint:null;
     intakeEndpoint=typeof config.proposalEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/proposals$/.test(config.proposalEndpoint)?config.proposalEndpoint:null;
+    ideaEndpoint=typeof config.researchIdeaEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ideas$/.test(config.researchIdeaEndpoint)&&intakeEndpoint&&new URL(config.researchIdeaEndpoint).origin===new URL(intakeEndpoint).origin?config.researchIdeaEndpoint:null;
     configValid=true;configResolved=true;availability();
    }).catch(e=>{
-    if(!destroyed){endpoint=null;interpretationEndpoint=null;intakeEndpoint=null;cardContract=false;configValid=false;configResolved=true;availability();}
+    if(!destroyed){endpoint=null;interpretationEndpoint=null;intakeEndpoint=null;ideaEndpoint=null;cardContract=false;configValid=false;configResolved=true;availability();}
     throw e;
    });
    configReady=configAttempt.catch(()=>{});

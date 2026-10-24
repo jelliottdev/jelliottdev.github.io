@@ -183,6 +183,12 @@ class RunnerTests(unittest.TestCase):
                                 encoding='utf-8', timeout=60)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_optional_reproduction_package(self):
+        result = subprocess.run(['node', 'scripts/test_local_run_package.cjs'],
+                                cwd=RUNNER.parents[1], capture_output=True, text=True,
+                                encoding='utf-8', timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

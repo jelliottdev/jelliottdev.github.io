@@ -1,0 +1,100 @@
+/* Source-bound deterministic proposed plans. No inference or persistence. */
+import L from '../../local-experiment.js';
+import {validateCard} from './idea-relations.mjs';
+// Exact ordered GP table from data/index.json; RUNES/LATIN agree with scripts/reproduce_reading.py.
+const ALPHABET=[{"rune":"ᚠ","latin":"F","prime":2},{"rune":"ᚢ","latin":"U","prime":3},{"rune":"ᚦ","latin":"TH","prime":5},{"rune":"ᚩ","latin":"O","prime":7},{"rune":"ᚱ","latin":"R","prime":11},{"rune":"ᚳ","latin":"C","prime":13},{"rune":"ᚷ","latin":"G","prime":17},{"rune":"ᚹ","latin":"W","prime":19},{"rune":"ᚻ","latin":"H","prime":23},{"rune":"ᚾ","latin":"N","prime":29},{"rune":"ᛁ","latin":"I","prime":31},{"rune":"ᛄ","latin":"J","prime":37},{"rune":"ᛇ","latin":"EO","prime":41},{"rune":"ᛈ","latin":"P","prime":43},{"rune":"ᛉ","latin":"X","prime":47},{"rune":"ᛋ","latin":"S","prime":53},{"rune":"ᛏ","latin":"T","prime":59},{"rune":"ᛒ","latin":"B","prime":61},{"rune":"ᛖ","latin":"E","prime":67},{"rune":"ᛗ","latin":"M","prime":71},{"rune":"ᛚ","latin":"L","prime":73},{"rune":"ᛝ","latin":"NG","prime":79},{"rune":"ᛟ","latin":"OE","prime":83},{"rune":"ᛞ","latin":"D","prime":89},{"rune":"ᚪ","latin":"A","prime":97},{"rune":"ᚫ","latin":"AE","prime":101},{"rune":"ᚣ","latin":"Y","prime":103},{"rune":"ᛡ","latin":"IA","prime":107},{"rune":"ᛠ","latin":"EA","prime":109}];
+const PURPOSE='A proposed bounded computation, not a confirmed cipher rule or a decryption verdict.';
+const fail=reason=>({reason});
+export function planCard(input){
+ const card=validateCard(input);
+ if(card.unresolved.length)return fail('The idea still has unresolved conditions.');
+ if(card.method.status!=='specified'||!card.method.value.operations.length)return fail('An explicit supported method is needed.');
+ if(card.scope.status!=='specified'||!Array.isArray(card.scope.value.pages)||!card.scope.value.pages.length||Object.keys(card.scope.value).some(k=>k!=='pages'))return fail('Select exact complete pages; passages and descriptive scope need an adapter.');
+ const rules=card.rules,operations=card.method.value.operations,notes=[];
+ let inputVersion='raw',criterion={kind:'measurement'};
+ const specified=k=>rules[k].status==='specified';
+ if(specified('inputVersion')){
+  if(!['raw','reviewed'].includes(rules.inputVersion.value))return fail('The specified input version needs an adapter.');
+  inputVersion=rules.inputVersion.value;
+ }else notes.push('Proposed input: the archived raw transcription.');
+ if(specified('representation')&&rules.representation.value!=='GP29')return fail('The specified representation needs an adapter.');
+ notes.push('Use the canonical ordered 29-rune GP alphabet; preserve non-rune characters.');
+ if(specified('unmapped')&&rules.unmapped.value!=='preserve')return fail('The rule for non-rune characters needs an adapter.');
+ if(specified('wordBoundaries')&&rules.wordBoundaries.value!=='preserve')return fail('The word-boundary rule needs an adapter.');
+ if(specified('evaluation')){
+  const value=rules.evaluation.value;
+  if(value==='measurement')criterion={kind:'measurement'};
+  else if(value&&typeof value==='object'&&value.kind==='exact-prefix'&&Object.keys(value).length===2&&Object.hasOwn(value,'values'))criterion={kind:value.kind,values:value.values};
+  else return fail('The requested evaluation needs an adapter.');
+ }else notes.push('Proposed evaluation: measure rune frequencies and adjacent repeats; no readability decision.');
+ for(const key of ['searchBounds','searchProtocol','exceptionalCases'])if(specified(key))return fail('The specified '+key+' condition needs an adapter.');
+ const steps=[];let reverse=false,cumulative=false;
+ for(const operation of operations){
+  const labels={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference']};
+  if(Object.hasOwn(operation,'label')&&(!labels[operation.id]||!labels[operation.id].includes(operation.label)))return fail('The operation wording contains details that need an execution adapter.');
+  if(Object.keys(operation).some(k=>!['id','label','a','b','reset','declaredFamilyId'].includes(k)))return fail('An operation contains parameters the runner cannot represent.');
+  if(operation.id==='reverse_row_runes'){
+   if(Object.keys(operation).some(k=>['a','b','reset'].includes(k)))return fail('The reversal has unsupported parameters.');
+   reverse=true;
+   if(specified('boundaryMode')&&!['fixed_spaces','within_words'].includes(rules.boundaryMode.value))return fail('This word-order rule needs a different reversal adapter.');
+   if(specified('wordBoundaries')&&!specified('boundaryMode'))return fail('Choose how the reversal handles the preserved word boundaries.');
+   steps.push({op:'reverse',unit:specified('boundaryMode')&&rules.boundaryMode.value==='within_words'?'word':'line'});
+  }else if(operation.id==='affine'){
+   if(Object.hasOwn(operation,'reset')||!Number.isInteger(operation.a)||operation.a<0||operation.a>28||!Number.isInteger(operation.b)||operation.b<0||operation.b>28)return fail('An affine step needs explicit a and b indices from 0 to 28.');
+   steps.push({op:'affine',a:operation.a,b:operation.b});
+  }else if(operation.id==='cumulative_difference'){
+   if(Object.hasOwn(operation,'a')||Object.hasOwn(operation,'b')||!['page','line','word'].includes(operation.reset))return fail('Cumulative difference needs an explicit page, line or word reset.');
+   if(specified('reset')&&rules.reset.value!==operation.reset)return fail('The global reset conflicts with an operation reset.');
+   if(specified('initialState')&&rules.initialState.value!==0)return fail('Only initial state zero is supported.');
+   cumulative=true;steps.push({op:'cumulative-difference',reset:operation.reset});
+  }else return fail('This method needs an execution adapter before a faithful local plan can be prepared.');
+ }
+ if(specified('boundaryMode')&&!reverse)return fail('The boundary-mode condition is not represented by these steps.');
+ if((specified('reset')||specified('initialState'))&&!cumulative)return fail('The reset or initial-state condition is not represented by these steps.');
+ if(steps.some(s=>s.op==='reverse'))notes.push('Reversal changes rune positions only, leaving separators in place; a word ends at any non-rune character.');
+ if(cumulative)notes.push('Cumulative difference starts at zero at each specified boundary; pages never share state.');
+ notes.push('Each page is processed separately, in the stated method-step order; headings are included.');
+ if(card.outcome.status==='specified'&&card.outcome.value.outcomeId==='decipher')notes.push('This is a preliminary measurement for the deciphering idea, not a test of whether the output is readable.');
+ return {pages:card.scope.value.pages,steps,inputVersion,criterion,notes};
+}
+async function jsonBody(message,max){
+ if(!/^application\/json(?:\s*;|$)/i.test(message.headers.get('content-type')||''))throw Error();
+ const declared=message.headers.get('content-length');if(declared!==null&&(!/^\d+$/.test(declared)||Number(declared)>max))throw Error();
+ const reader=message.body?.getReader();if(!reader)throw Error();const chunks=[];let size=0;
+ while(true){const r=await reader.read();if(r.done)break;size+=r.value.length;if(size>max){await reader.cancel();throw Error();}chunks.push(r.value);}
+ const bytes=new Uint8Array(size);let i=0;for(const chunk of chunks){bytes.set(chunk,i);i+=chunk.length;}return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+}
+export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new Date()}={}){
+ return async function handle(request,env){
+  const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
+  let allowed=false;try{allowed=typeof env?.SITE_ORIGIN==='string'&&new URL(env.SITE_ORIGIN).origin===env.SITE_ORIGIN&&['http:','https:'].includes(new URL(env.SITE_ORIGIN).protocol);}catch{}
+  if(!allowed)return reply({error:'Plan preparation is unavailable.'},503);
+  if(request.headers.get('origin')!==env.SITE_ORIGIN)return reply({error:'Request is not allowed.'},403);
+  headers['Access-Control-Allow-Origin']=env.SITE_ORIGIN;
+  if(new URL(request.url).pathname!=='/prepare-task')return reply({error:'Not found.'},404);
+  if(request.method==='OPTIONS'){
+   const fields=(request.headers.get('access-control-request-headers')||'').split(',').map(v=>v.trim().toLowerCase()).filter(Boolean);
+   if(request.headers.get('access-control-request-method')!=='POST'||fields.some(v=>v!=='content-type'))return reply({error:'Request is not allowed.'},403);
+   return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
+  }
+  if(request.method!=='POST')return reply({error:'Method is not allowed.'},405);
+  if(!env.PROPOSALS?.prepare||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Plan preparation is unavailable.'},503);
+  let body;try{body=await jsonBody(request,32000);if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length!==2||!Object.hasOwn(body,'proposalId')||!Object.hasOwn(body,'parentTaskId')||!/^p_[a-f0-9]{64}$/.test(body.proposalId)||(body.parentTaskId!==null&&!/^[a-f0-9]{64}$/.test(body.parentTaskId)))throw Error();}catch{return reply({error:'The plan request could not be read.'},400);}
+  try{
+   if(!(await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);
+   const query=(sql,...args)=>env.PROPOSALS.prepare(sql).bind(...args).first();
+   const row=await query('SELECT card_json FROM proposals WHERE id=?',body.proposalId);if(!row)return reply({error:'Confirmed idea not found.'},404);
+   if(body.parentTaskId&&!await query('SELECT id FROM local_tasks WHERE id=?',body.parentTaskId))return reply({error:'Parent task not found.'},404);
+   const card=validateCard(row.card_json),plan=planCard(card);
+   if(plan.reason)return reply({state:'needs-adapter',reason:plan.reason,proposalId:body.proposalId});
+   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);const pages=Array(plan.pages.length);let next=0,totalBytes=0;
+   try{
+    const worker=async()=>{try{while(next<plan.pages.length){if(controller.signal.aborted)throw Error();const index=next++,id=plan.pages[index];const response=await fetcher('https://jelliottdev.github.io/data/pages/'+id+'.json',{redirect:'error',signal:controller.signal});if(!response.ok)throw Error();const page=await jsonBody(response,512*1024),text=plan.inputVersion==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string')throw Error();totalBytes+=new TextEncoder().encode(text).length;if(totalBytes>2000000)throw Error();pages[index]={id,text};}}catch(error){controller.abort();throw error;}};
+    await Promise.all(Array.from({length:Math.min(4,pages.length)},()=>worker()));
+   }catch{return reply({error:'The selected manuscript text could not be loaded.'},422);}finally{clearTimeout(timer);}
+   const title='Local test: '+card.method.value.operations.map(o=>({reverse_row_runes:'rune reversal',affine:'affine mapping',cumulative_difference:'cumulative difference'})[o.id]).join(', then ');
+   let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch{return reply({state:'needs-adapter',reason:'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
+   return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,notes:plan.notes,purpose:PURPOSE});
+  }catch{return reply({error:'Plan preparation is temporarily unavailable.'},503);}
+ };
+}

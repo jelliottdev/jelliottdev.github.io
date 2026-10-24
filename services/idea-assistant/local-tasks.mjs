@@ -41,7 +41,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':method+', OPTIONS','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'600'}});
   }
   if(request.method!==method){headers.Allow=method+', OPTIONS';return reply({error:'Method is not allowed.'},405);}
-  if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!env.PROPOSAL_LIMIT?.limit)return reply({error:'Local experiments are unavailable.'},503);
+  if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Local experiments are unavailable.'},503);
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
   const view=async row=>{
    const task=await storedTask(row),latest=await query('SELECT * FROM local_task_results WHERE task_id=? ORDER BY created_at DESC,id DESC LIMIT 1',row.id).first();let run=null;
@@ -52,7 +52,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    let body;
    if(method==='POST'){
     try{body=await boundedJSON(request);}catch{return reply({error:'The experiment file could not be read.'},400);}
-    const limit=await env.PROPOSAL_LIMIT.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'});
+    const limit=await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'});
     if(!limit?.success)return reply({error:'Please wait before trying again.'},429);
    }
    const at=now().toISOString(),day=at.slice(0,10);

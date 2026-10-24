@@ -11,11 +11,12 @@ or publish their original wording.
 2. Compare related work. A missing match is an archive gap, not proof of novelty.
 3. Open the idea's research entry. See what is known, what remains untested, and
    which exact bounds can be extended. No second “suggest a test” form.
-4. Review a prepared plan, then download its runner and fixed inputs. The plan
+4. Review a prepared plan, then run it in the browser on the visitor's hardware. The plan
    states the method, scope, criterion, resource bounds and controls before the
    target run. AI may propose a plan; it cannot invent an executed result.
-5. Run locally, then return the results file. Failure leaves both the entry and
-   the local output recoverable.
+5. Inspect the local result, then submit it from the same page. A background
+   Web Worker keeps the interface responsive and provides progress and Stop.
+   Downloads and results-file uploads are optional reproduction tools.
 6. The service checks the exact plan and independently verifies the results.
    The entry updates from the accepted data. Charts and counts use those data;
    nobody hand-edits a chart or writes a scientific outcome in advance.
@@ -42,8 +43,10 @@ not that the cipher was solved. Incomplete runs cannot close an entire scope.
 ## First execution contract
 
 `local-experiment.js` is the shared, deterministic validator/evaluator.
-`tools/research_runner.py` runs the same task without network access or extra
-Python packages. Neither executes generated code or text as instructions.
+`local-run-worker.js` runs the site-owned engine in a browser Web Worker;
+`local-run-executor.js` manages its progress, cancellation and deadline.
+`tools/research_runner.py` optionally reproduces the same task without network
+access or extra Python packages. None executes visitor code or text as instructions.
 
 The `liberpedia-local-task-v1` format contains the complete inputs and ordered
 steps. `taskId` is SHA-256 of canonical sorted compact UTF-8 JSON, excluding
@@ -74,9 +77,10 @@ site's authorized text version before calling a task manuscript evidence.
 
 ## Service and publication boundary
 
-Persistent tasks, plans, runs and verification receipts still need their own
-storage and API, linked to the existing proposal identity. Do not present a
-browser-only download or local file verification as a stored/public contribution.
+Persistent entries, task plans and replayed results use their own storage and
+API, linked to the existing proposal identity. A result is local until the
+submission receives a valid saved receipt. Do not present a browser-only run
+or local file verification as a stored/public contribution.
 Do not expose private source wording when projecting an idea to a public entry.
 
 Prepare plans from reviewed execution adapters. AI selects and fills supported
@@ -92,9 +96,10 @@ counts, charts and the limited outcome.
 ## Required end-to-end proof
 
 Before calling the loop complete, demonstrate a new confirmed idea creating a
-persistent entry; a fixed plan downloaded and run in an isolated folder; honest
+persistent entry; a fixed plan run in a real browser Web Worker; honest
 output accepted and tampered output rejected; a reload retrieving the receipt
 and chart; a changed scope creating an extension without overwriting the earlier
 result; repeat submission deduplicated; failures preserving inputs; and mobile
-navigation between the checker, task and research map. Use local fixtures before
+navigation between the checker, task and research map; and the optional downloaded
+package independently reproducing the same computation. Use local fixtures before
 any hosted generation. The runner foundation alone does not complete this loop.

@@ -54,6 +54,12 @@ is proposed work, and an accepted computation is not a cipher solution. Until
 the persistent entry/download/return journey is implemented and verified, do not
 replace the existing saved receipt with a claim that this loop is available.
 
+Browser execution is the primary path: review a plan, Run in browser, inspect
+the result and submit it from the same entry. Run the site's engine in a
+cancellable background worker; never require a download or Python installation.
+Downloads and results-file uploads belong to optional reproduction. Put a
+completed finding and its save state above plan details, not below a long form.
+
 Show authored findings before comparison prose. A direct comparison backed by
 reviewed execution metadata should use those recorded conditions and limits
 without a model rewrite or an AI label. It still describes only the matched

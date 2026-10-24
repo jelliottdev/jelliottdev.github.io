@@ -88,7 +88,7 @@
   }
   return chars.join('');
  }
- function run(task){
+ function run(task,{onProgress}={}){
   validateTask(task);
   const index=new Map(task.alphabet.map((r,i)=>[r.rune,i])),frequencies=Array(29).fill(0);
   let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[];
@@ -98,6 +98,7 @@
    for(let i=1;i<values.length;i++)if(values[i]===values[i-1])equalAdjacentPairs++;
    transformed.push({page:page.id,text});
    if(task.criterion.kind==='exact-prefix')matches.push({page:page.id,matched:task.criterion.values.every((v,i)=>values[i]===v)});
+   if(onProgress)onProgress({phase:'running',completed:transformed.length,total:task.pages.length});
   }
   return {schema:RESULT,taskId:task.taskId,engine:ENGINE,runnerVersion:'1',
    metrics:{pages:task.pages.length,runes,adjacentPairs,equalAdjacentPairs,ioc:runes>1?frequencies.reduce((s,n)=>s+n*(n-1),0)/(runes*(runes-1)):0},matches,transformed};
@@ -122,11 +123,13 @@
   const baseline=run({...task,steps:[],criterion:{kind:'measurement'}}).metrics;
   const matched=result.matches.filter(v=>v.matched).length;
   return {finding:task.criterion.kind==='measurement'
-   ?'Measured '+result.metrics.runes.toLocaleString('en-US')+' runes across '+result.metrics.pages+' '+(result.metrics.pages===1?'page':'pages')+'. This run measures the transformation; it does not decide whether the text is readable.'
+   ?(baseline.equalAdjacentPairs===result.metrics.equalAdjacentPairs
+    ?'The method left neighbouring rune repeats unchanged: '+result.metrics.equalAdjacentPairs+' across '+result.metrics.adjacentPairs.toLocaleString('en-US')+' pairs.'
+    :'The method changed neighbouring rune repeats from '+baseline.equalAdjacentPairs+' to '+result.metrics.equalAdjacentPairs+' across '+result.metrics.adjacentPairs.toLocaleString('en-US')+' pairs.')
    :matched+' of '+result.metrics.pages+' pages begin with the exact rune sequence specified before the run. A prefix match alone does not establish a decryption.',
-   comparison:[{label:'Original adjacent repeats',value:baseline.equalAdjacentPairs,total:baseline.adjacentPairs},
+   comparison:[{label:'Original text',value:baseline.equalAdjacentPairs,total:baseline.adjacentPairs},
     {label:'After the method',value:result.metrics.equalAdjacentPairs,total:result.metrics.adjacentPairs}],
-   limit:'These results cover only the bundled text, ordered steps and stated criterion. They do not exclude other keys, scopes or methods.'};
+   limit:task.criterion.kind==='measurement'?'This run measures repeat patterns. It does not test readability or identify a cipher.':'The result covers only the specified starting sequence, pages and method.'};
  }
  const api={TASK,RESULT,ENGINE,stable,validateTask,identity,prepare,checkIdentity,run,verify,summary};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalExperiment=api;

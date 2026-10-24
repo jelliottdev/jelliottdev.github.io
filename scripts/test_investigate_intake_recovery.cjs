@@ -44,14 +44,16 @@ function server(){return {ledger:new Map(),posts:[],defer:false,fetch(body){
 }};}
 async function fixture(session,backend,options={}){
  const doc=documentFixture(session,options.search||'',options.hash||'');
+ const entries=[];
  const app=I.createApp(doc,{now:()=>options.at||AT,schedule:()=>0,unschedule:()=>{},renderCard:()=>Promise.reject(),fetcher:async(url,request)=>{
   if(url==='data/experiments.json')return Response.json(registry);
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
-  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals',interpretationEndpoint:'https://mock.example/interpret'});
+  if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals',interpretationEndpoint:'https://mock.example/interpret',...(options.community?{researchIdeaEndpoint:'https://mock.example/ideas'}:{})});
   if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(request);
   if(url.endsWith('/proposals'))return backend.fetch(JSON.parse(request.body));
+  if(url.endsWith('/ideas')){entries.push(JSON.parse(request.body));if(options.communityFailure&&entries.length===1)return Response.json({error:'Temporary failure'},{status:503});return Response.json({id:entries.at(-1).proposalId,card:H.cardData(app.getSnapshot().confirmed)});}
   return Response.json({answer:null,sources:[],reason:'no-matching-records'});
- }});await app.ready;return {doc,app};
+ }});await app.ready;return {doc,app,entries};
 }
 async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('intake').fire('submit');
  await require('./mock_interpretation_response.cjs').waitForReview(f.app);
@@ -62,6 +64,19 @@ async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementB
 }
 async function confirm(f){assert(f.doc.getElementById('confirm'));f.doc.getElementById('confirm').fire('click');await turn();await turn();}
 async function main(){
+ const communityBackend=server(),community=await fixture(storage(),communityBackend,{community:true,communityFailure:true});
+ await submit(community,'Use Vigenere on LP2-15');
+ assert(community.doc.host.html.includes('Your confirmed card becomes public.'));
+ assert.equal(community.entries.length,0,'An unconfirmed draft cannot publish an entry');
+ await confirm(community);for(let i=0;i<4;i++)await turn();
+ assert.equal(community.entries.length,1);assert.deepEqual(Object.keys(community.entries[0]),['proposalId']);
+ assert(community.doc.getElementById('idea-save-status').textContent.includes('Idea saved.'));
+ community.doc.getElementById('retry-save').fire('click');for(let i=0;i<4;i++)await turn();
+ assert.equal(communityBackend.posts.length,1,'Entry retry does not resubmit the original contribution');
+ assert.equal(community.entries.length,2);assert.equal(community.doc.getElementById('open-research-entry').hidden,false);
+ assert.equal(community.doc.getElementById('open-research-entry').href,'run.html#idea='+community.entries[0].proposalId);
+ community.app.destroy();
+ console.log('PASS public entry: explicit confirmation, private source omitted, separate retry and confirmed-card link.');
  for(const value of ['ᚠ'.repeat(1500),'  example("<&+#%?");\n\treturn "字";\n ']){
   const hash=new URL(require('../idea-input.js').href(value),'https://example.org/').hash,backend=server(),f=await fixture(storage(),backend,{hash});
   assert.equal(f.doc.getElementById('idea').value,value);assert.equal(f.app.getSnapshot().stage,'input');assert.equal(backend.posts.length,0,'Opening the input does not submit the idea');f.app.destroy();

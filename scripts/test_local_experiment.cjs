@@ -25,7 +25,8 @@ async function main(){
  });
  await test('prefix checks are exact; measurement has no invented pass/fail',async()=>{
   const measurement=await prepared(),result=await E.verify(measurement,E.run(measurement),webcrypto);assert.deepEqual(result.matches,[]);
-  assert.match(E.summary(measurement,result).finding,/does not decide/);
+  assert.match(E.summary(measurement,result).finding,/left neighbouring rune repeats unchanged/);
+  assert.match(E.summary(measurement,result).limit,/does not test readability/);
   const task=await prepared({criterion:{kind:'exact-prefix',values:[0,1,2]}});
   assert.deepEqual(E.run(task).matches,[{page:'lp2-15',matched:true}]);
   assert.match(E.summary(task,await E.verify(task,E.run(task),webcrypto)).finding,/does not establish a decryption/);
@@ -47,8 +48,9 @@ async function main(){
  });
  await test('dynamic result view derives numbers from verified data and rejects arbitrary output',async()=>{
   const task=await prepared({title:'<script>not markup</script>',steps:[{op:'affine',a:0,b:0}]}),result=await E.verify(task,E.run(task),webcrypto),html=V.render(task,result);
-  assert(html.includes('After the method: 6 of 6 pairs'));assert(html.includes('Original adjacent repeats: 0 of 6 pairs'));
-  assert(html.includes('Computation verified'));assert(html.includes('does not decide whether the text is readable'));
+  assert(html.includes('After the method: 6 of 6 pairs'));assert(html.includes('Original text: 0 of 6 pairs'));
+  assert(html.includes('Computation verified'));assert(html.includes('does not test readability'));
+  assert(html.includes('changed neighbouring rune repeats from 0 to 6'));
   assert(!html.includes('<script>'));assert(!html.includes('NaN'));assert(!html.includes('Infinity'));
   assert.throws(()=>V.render(task,{...result,solved:true}));
   assert.throws(()=>V.render(task,E.run(task)),/verified/);
