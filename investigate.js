@@ -6,6 +6,7 @@
  const S=typeof module!=='undefined'?require('./assistant-search.js'):root.AssistantSearch;
  const H=typeof module!=='undefined'?require('./claim-share.js'):root.ClaimShare;
  const R=typeof module!=='undefined'?require('./claim-research.js'):root.ClaimResearch;
+ const P=typeof module!=='undefined'?require('./claim-interpretation.js'):root.ClaimInterpretation;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -258,6 +259,7 @@
   let intakeEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
   let renderedResearchCard=null;
   let cardContract=false;
+  let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='';
   const fragment=doc.defaultView?.location?.hash||'';
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
@@ -267,6 +269,7 @@
   if(pageHint){try{legacyScope=parseScope(pageHint,{kind:'supplied',refs:['URL page hint']});}catch{message='The linked page selection could not be read. You can enter exact pages when reviewing the idea.';}}
   const focus=selector=>doc.querySelector(selector)?.focus();
   function stop(){generation++;controller?.abort();controller=null;busy=false;}
+  function stopInterpretation(){interpretVersion++;interpretController?.abort();interpretController=null;interpreting=false;}
   function stopIntake(clear=false){intakeVersion++;intakeController?.abort();intakeController=null;if(intake)intake.busy=false;if(clear)intake=null;}
   function render(){
    const prior=doc.activeElement?.id;
@@ -276,6 +279,10 @@
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    if(stage==='input'){
     host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="1500" rows="6" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><div class="actions"><button class="primary" type="submit">Review idea</button></div></form>';
+   }else if(stage==='interpreting'){
+    host.innerHTML='<button class="back" id="cancel-interpretation" type="button">Back to idea</button><h1 id="interpret-title" tabindex="-1">Review your idea</h1>'+
+     '<p role="status">'+esc(interpreting?'Preparing the method and scope for your review…':interpretError||'Continue with your original wording.')+'</p>'+
+     '<details><summary>Original idea</summary><pre>'+esc(raw)+'</pre></details><div class="actions"><button id="use-original" type="button">Use my original wording</button>'+(!interpreting?'<button class="primary" id="retry-interpretation" type="button">Try again</button>':'')+'</div>';
    }else{
     host.innerHTML='<button class="back" id="back" type="button">Back to idea</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+
      (pending?'':(stage==='research'?'<section class="confirmed-card"><button id="share-idea" class="share-icon" type="button" aria-label="Share confirmed idea" title="Share idea"'+(shareBusy?' disabled':'')+'><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-4 4 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/></svg></button><details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
@@ -401,6 +408,9 @@
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records)).join(''):'');
   }
   function bind(){
+   doc.getElementById('cancel-interpretation')?.addEventListener('click',()=>{stopInterpretation();stage='input';error='';message='';render();focus('#idea');});
+   doc.getElementById('use-original')?.addEventListener('click',()=>{stopInterpretation();acceptDraft(initialDraft(raw),'Using your original wording. Review the method and scope below.');});
+   doc.getElementById('retry-interpretation')?.addEventListener('click',()=>interpret());
    doc.getElementById('retry-save')?.addEventListener('click',()=>saveIntake());
    doc.getElementById('share-idea')?.addEventListener('click',shareIdea);
    if(stage==='research')updateShare();
@@ -409,7 +419,8 @@
    doc.getElementById('idea')?.addEventListener('input',event=>{raw=event.target.value;});
    doc.getElementById('intake')?.addEventListener('submit',event=>{
     event.preventDefault();raw=doc.getElementById('idea').value;if(!raw.trim())return;
-    stopIntake(true);stop();draft=initialDraft(raw);if(legacyScope){draft=C.revise(draft,{scope:legacyScope});legacyScope=null;message='The linked page selection is included in the scope below; the original wording is unchanged.';}else message='';confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;stage='review';error='';render();focus('#review-title');
+    stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
+    if(loaded&&!interpretationEndpoint)acceptDraft(initialDraft(raw));else interpret();
    });
    doc.getElementById('back')?.addEventListener('click',()=>{stopIntake(true);stop();stage='input';editing=false;confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#idea');});
    doc.getElementById('edit')?.addEventListener('click',()=>{stopIntake(true);stop();editingBackup={stage,draft,confirmed,result,packet,message,error};editing=true;stage='review';draft=C.revise(draft,{});confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#edit-method');});
@@ -462,6 +473,40 @@
    doc.getElementById('print')?.addEventListener('click',()=>{if(packet){printHost.innerHTML=packetHTML(packet);printer();}});
   }
   async function json(url,options){const response=await fetcher(url,options);if(!response.ok)throw Error('Research is temporarily unavailable. Try again or read the related records.');return response.json();}
+  function acceptDraft(value,notice=''){
+   draft=value;
+   if(legacyScope){draft=C.revise(draft,{scope:legacyScope});legacyScope=null;notice='The linked page selection is included below; the original wording is unchanged.';}
+   stage='review';editing=false;error='';message=notice;render();focus('#review-title');
+  }
+  async function interpret(){
+   stopInterpretation();const token=interpretVersion,text=raw;
+   stage='interpreting';interpreting=true;interpretError='';error='';message='';render();focus('#interpret-title');
+   try{
+    if(!loaded)await ready;
+    if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
+    if(!loaded)throw Error('Interpretation is unavailable. You can continue with your original wording.');
+    if(!interpretationEndpoint){interpreting=false;acceptDraft(initialDraft(text));return;}
+    P.validateInput(text);
+    const requestController=new AbortController();interpretController=requestController;
+    const timer=schedule(()=>requestController.abort(),30000);
+    try{
+     const response=await fetcher(interpretationEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text}),signal:requestController.signal});
+     if(!response.ok)throw Error('Interpretation is unavailable. You can continue with your original wording.');
+     const data=await response.json();
+     const digest=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+     const expected=[...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('');
+     if(requestController.signal.aborted)throw Error('Interpretation timed out. Your original wording is kept.');
+     if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
+     if(data.sourceBinding!==expected)throw Error('The interpretation did not match your wording. You can continue with the original.');
+     const proposed=P.toDraft(text,data.candidate);
+     interpreting=false;acceptDraft(proposed.draft);
+    }finally{unschedule(timer);}
+   }catch(e){
+    if(token===interpretVersion&&stage==='interpreting'){
+     interpreting=false;interpretError=e.name==='AbortError'?'Interpretation timed out. Your original wording is kept.':'The idea could not be interpreted reliably. You can continue with your original wording.';render();focus('#use-original');
+    }
+   }finally{if(token===interpretVersion){interpreting=false;interpretController=null;}}
+  }
   function availability(){
    const status=doc.getElementById('status'),notice=doc.getElementById('error'),confirm=doc.getElementById('confirm');
    if(status)status.textContent=message||(!loaded&&!loadError?'Loading research records…':'');
@@ -482,6 +527,7 @@
     if(!records.length)throw Error('No published research records are available.');
     endpoint=typeof config.endpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ask$/.test(config.endpoint)?config.endpoint:null;
     cardContract=config.researchContract==='card-v1';
+    interpretationEndpoint=typeof config.interpretationEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/interpret$/.test(config.interpretationEndpoint)?config.interpretationEndpoint:null;
     intakeEndpoint=typeof config.proposalEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/proposals$/.test(config.proposalEndpoint)?config.proposalEndpoint:null;
     const hash=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(registry)));
     registryId='sha256-json:'+Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
@@ -525,7 +571,7 @@
    finally{unschedule(timer);if(token===generation){busy=false;controller=null;render();}}
   }
   render();const ready=load();
-  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy}),destroy:()=>{stopIntake(true);stop();}};
+  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{stopInterpretation();stopIntake(true);stop();}};
  }
  const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,createApp};
  if(typeof module!=='undefined')module.exports=api;

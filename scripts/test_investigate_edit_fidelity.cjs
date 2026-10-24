@@ -45,7 +45,7 @@ async function appFor(text){
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   throw Error('No inference or external fetch is allowed');
  }});
- await new Promise(resolve=>setTimeout(resolve,10));
+ await app.ready;
  doc.getElementById('idea').value=text;doc.getElementById('intake').fire('submit');
  return {doc,app};
 }

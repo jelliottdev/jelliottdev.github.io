@@ -1,5 +1,35 @@
 # Hosted idea comparison
 
+## Optional interpretation endpoint
+
+The `/interpret` route is deployed but remains disabled in the public frontend:
+`data/assistant.json` deliberately omits `interpretationEndpoint`. The existing
+local clarification and confirmation flow remains the default.
+
+The endpoint proposes a source-bound draft using a strict model wire schema,
+then validates the converted candidate with the same browser/Worker code. It
+never confirms an idea, executes a test, or saves a proposal. Unique exact quotes
+can have their character positions corrected; their wording and meaning fields
+cannot be repaired. Explicit nulls preserve missing keys and aims, while an empty
+rules array preserves missing rules. Invalid output returns a recoverable error.
+
+24 October 2026: Worker version `e0b51f51-fbe4-4a02-8427-b5a4b166c8f8`
+retains the existing bindings and comparison endpoint. The final wire format
+passed one live simple reversal request with the remote AI binding, but a
+deployed two-step reversal/Vigenere request failed validation. This is not ready
+to enable. The 16 handler groups, 11 shared-validator groups, browser parity and
+UI cancellation/fallback tests use mocked inference and pass offline. Further
+quality work should reuse captured synthetic failures before another live probe.
+
+One uncached interpretation makes one generation, with no automatic repair or
+retry. A 20-second response deadline, three active provider slots per isolate,
+the existing rate-limit binding, exact-input cache and singleflight bound work.
+A timed-out generation retains its slot until the provider settles. These are
+not a global daily quota. See `docs/frontend/claim-specification.md` for the
+review contract and `test-interpret-handler.mjs` for offline verification.
+
+## Comparison endpoint
+
 This replaces the browser model download. Visitors submit the same idea-search form; the page shows retrieved records immediately and adds a short cited comparison when the service is available. There are no model controls, visitor accounts or API-key fields.
 
 Production endpoint: `https://liberpedia-ideas.josephelliott127.workers.dev/ask`. Workers Free was verified in the dashboard before deployment.

@@ -315,13 +315,45 @@ page array. An unrelated interpretation edit preserves a custom passage scope.
 Additional tests cover no-match findings/packet/printing and edit restoration,
 and ensure generic aim wording does not derail strong technique retrieval.
 
-### Proposed interpretation foundation
+### Proposed interpretation before review
 
-`services/idea-assistant/interpretation.mjs` defines an offline validator and draft
-adapter for proposed interpretations. It is not connected to a model endpoint or
-the public interface yet. Each extracted field cites an exact source substring;
-controlled categories, ordered operations and literal keys are checked before a
-draft can be proposed. Missing values remain unknown and uncovered wording stays
-visible. Negated or conditional instructions cannot be reduced to positive
-operations. These checks establish provenance and structural consistency, not
-semantic correctness; every returned draft still requires user confirmation.
+Release status (24 October): disabled in the public configuration. A simple
+row-reversal request passed a live check; a compound reversal/Vigenere request
+failed validation. Keep the existing local clarification flow until representative
+live inputs pass. Offline contract tests do not establish generation reliability.
+
+`claim-interpretation.js` is the shared browser/Worker validator and draft adapter;
+`services/idea-assistant/interpretation.mjs` preserves its ESM interface. The
+`/interpret` endpoint proposes a candidate only after an explicit idea submission.
+The frontend enables it through `interpretationEndpoint` in `data/assistant.json`.
+Imported cards and interpretation edits never trigger it. Research comparison and
+saving still require the separate confirmation action.
+
+Each extracted field cites an exact source substring. The handler locates a
+uniquely occurring quote directly in the original; repeated quotes still need a
+correct supplied offset. It never changes quoted wording, steps or parameters.
+The shared validator checks controlled categories, operation order, literal keys,
+scope and consequential ambiguity before constructing a draft. Missing values
+remain unknown; uncovered wording stays visible. These checks establish source
+provenance and structural consistency, not semantic correctness. The user still
+reviews and confirms the interpretation.
+
+The model uses a separate strict wire schema: each step has a nullable key, and
+only explicitly supplied rules appear in an array. The adapter rejects duplicate
+rules and invalid state/value combinations before converting to the shared
+canonical candidate. This prevents optional schema fields from becoming required
+invented settings; it does not make generated interpretations automatically correct.
+
+The response carries the SHA-256 of the exact original text; the browser checks it
+and independently validates the candidate. Cancel, fallback, new input and leaving
+the flow invalidate outstanding replies. A failure offers retry or continuing with
+the original wording, without inventing a successful interpretation. The model
+never supplies the saved original text.
+
+One uncached interpretation makes at most one model call, with a 20-second response
+deadline and no automatic repair or retry. Exact inputs share pending work and a
+bounded 10-minute cache. The existing six-requests-per-minute binding is shared
+with comparison; a successful uncached journey can therefore use two generations.
+Interpretation has three provider slots, and a timed-out provider retains its slot
+until it actually settles. These bounds limit work; they are not a global daily
+quota. The frontend waits at most 30 seconds and keeps the original on failure.

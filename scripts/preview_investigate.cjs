@@ -5,7 +5,15 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const qa=`window.__investigateMockCore=async function(url,options){
  const proposalMode=new URLSearchParams(location.search).get('qa');
- if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',researchContract:'card-v1',proposalEndpoint:proposalMode?.startsWith('intake-')?'https://mock.example/proposals':null});
+ if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',researchContract:'card-v1',interpretationEndpoint:proposalMode?.startsWith('interpret')?'https://mock.example/interpret':null,proposalEndpoint:proposalMode?.startsWith('intake-')?'https://mock.example/proposals':null});
+ if(url==='https://mock.example/interpret'){
+  if(proposalMode==='interpret-error')return Response.json({error:'Mock interpretation outage'},{status:503});
+  const text=JSON.parse(options.body).text,source=quote=>({start:text.indexOf(quote),quote});
+  const known=text==='Try reversing rune order within each row on LP2-15, preserving word boundaries.';
+  const candidate={schema:ClaimInterpretation.SCHEMA,outcome:null,steps:[{id:known?'reverse_row_runes':'described_method',familyId:known?'transposition':null,source:source(text),parameters:{}}],scope:known?{pages:['lp2-15'],passage:null,source:source('LP2-15')}:null,rules:known?{wordBoundaries:{status:'specified',value:'preserve',source:source('preserving word boundaries')}}:{}};
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+  return Response.json({candidate,sourceBinding:[...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('')});
+ }
  if(url==='https://mock.example/proposals'&&proposalMode==='intake-error')return Response.json({error:'Mock-only save unavailable'},{status:503});
  if(url==='https://mock.example/proposals')return Response.json({id:'p_'+'c'.repeat(64),status:'received',receivedAt:new Date().toISOString()});
  if(!String(url).startsWith('https://'))return fetch(url,options);

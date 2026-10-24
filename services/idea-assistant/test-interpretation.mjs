@@ -28,11 +28,23 @@ test('compound order and opaque tails survive, reordered/overlapping quote claim
  const raw='Reverse each row then apply the supplied cipher with key "A B".',first='Reverse each row',tail='apply the supplied cipher with key "A B".';
  const p=candidate(raw,[step(raw,first,'reverse_row_runes'),step(raw,tail)]);p.steps[1].parameters.key={value:'A B',source:at(raw,'key "A B"')};
  const before=JSON.stringify(p),result=toDraft(raw,p),ops=result.draft.method.value.operations;
- assert.deepEqual(ops.map(o=>o.sourceText),[first,tail]);assert.equal(ops[1].key,'A B');assert.equal(JSON.parse(ops[1].keyProvenance.refs[0]).quote,'key "A B"');assert(result.draft.rules.exceptionalCases.value.includes('then'));assert.equal(JSON.stringify(p),before);
+ assert.deepEqual(ops.map(o=>o.sourceText),[first,tail]);assert.equal(ops[1].key,'A B');assert(ops[1].provenance.refs.some(ref=>JSON.parse(ref).quote==='key "A B"'));assert(!Object.hasOwn(ops[1],'keyProvenance'));assert.equal(result.draft.rules.exceptionalCases.status,'unspecified');assert.equal(JSON.stringify(p),before);
  const reordered=copy(p);reordered.steps.reverse();assert.throws(()=>validateCandidate(raw,reordered),/source order/);
  const overlap=copy(p);overlap.steps[0]=step(raw,raw);assert.throws(()=>validateCandidate(raw,overlap),/overlap/);
  const allKnown=copy(p);allKnown.steps=[step(raw,raw,'reverse_row_runes')];assert.throws(()=>validateCandidate(raw,allKnown),/unsupported known-operation/);
 });
+test('only isolated finite grammar spans are omitted; meaningful residuals and original source stay exact',()=>{
+ const raw='Try reverse each row then use Vigenere on LP2-15.',first='reverse each row',second='use Vigenere';
+ const p=candidate(raw,[step(raw,first,'reverse_row_runes'),step(raw,second)]);p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};
+ const result=toDraft(raw,p);assert.deepEqual(result.uninterpreted,[]);assert.equal(result.draft.rules.exceptionalCases.status,'unspecified');assert.equal(result.draft.source.text,raw);assert.deepEqual(result.draft.method.value.operations.map(o=>o.sourceText),[first,second]);
+ for(const connector of ['please','try','and','then','on','PLEASE try and then on','  (then)  ']){
+  const text='Use cipher; '+connector,r=toDraft(text,candidate(text,[step(text,'Use cipher')]));assert.deepEqual(r.uninterpreted,[],connector);assert.equal(r.draft.source.text,text);
+ }
+ for(const meaningful of ['not','if','after','only','but','unless','except','before','then apply an omitted transform','try again','on condition','please 2','only then','then, try']){
+  const text='Use cipher; '+meaningful,r=toDraft(text,candidate(text,[step(text,'Use cipher')]));assert(r.uninterpreted.some(s=>s.quote.includes(meaningful)),meaningful);assert(r.draft.rules.exceptionalCases.value.includes(meaningful));assert.equal(r.draft.source.text,text);
+ }
+});
+
 test('negation and conditional context cannot be discarded into a positive operation',()=>{
  for(const raw of ['Do not reverse each row.','Reverse each row only if the key is supplied.','Unless it changes word order, reverse each row.','Never reverse each row; use another method.']){
   const quote=raw.match(/reverse each row/i)[0];assert.throws(()=>validateCandidate(raw,candidate(raw,[step(raw,quote,'reverse_row_runes')])),/negated\/conditional/);

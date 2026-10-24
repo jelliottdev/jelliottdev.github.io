@@ -214,7 +214,7 @@ function answerInDOM(doc,choice,text=''){
   return optional;
  },now:()=>at,id:()=> 'test-id'});
  assert(doc.host.html.includes('Fibonacci keys'));assert.equal(app.getSnapshot().stage,'input');
- await new Promise(resolve=>setTimeout(resolve,15));
+ await app.ready;
  doc.getElementById('idea').value='Fibonacci keys';doc.getElementById('intake').fire('submit');
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15','lp2-17']);
  assert(doc.host.html.includes('class="question-title"'));assert(!doc.host.html.includes('id="confirm"'));
@@ -234,7 +234,7 @@ function answerInDOM(doc,choice,text=''){
   if(url==='data/assistant-index.json')return Response.json({documents:[]});
   return new Promise(resolve=>requests.push({resolve,options}));
  },now:()=>at,id:()=> 'test-'+(++serial),printer:()=>{prints++;},schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{}});
- await new Promise(resolve=>setTimeout(resolve,15));
+ await application.ready;
  journey.getElementById('idea').value='Fibonacci keys on LP2-15';journey.getElementById('intake').fire('submit');
  answerInDOM(journey,'undecided');
  journey.getElementById('confirm').fire('click');
@@ -296,7 +296,7 @@ function answerInDOM(doc,choice,text=''){
 
 (async()=>{
  const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async url=>Response.json(url==='data/experiments.json'?registry:url==='data/assistant.json'?{endpoint:'https://mock.example/ask'}:{documents:[]})});
- await new Promise(resolve=>setTimeout(resolve,15));
+ await app.ready;
  const source='Reverse each row on LP2-15, then apply Vigenere with key FIRFUMFERENFE';
  doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');answerInDOM(doc,'decipher');
  const original=app.getSnapshot().draft;
