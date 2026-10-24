@@ -23,7 +23,7 @@ def main():
              'aria-labelledby="title desc">',
              '<title id="title">The archived and pinned signature corpora overlap</title>',
              '<desc id="desc">105 archived-only paths, 123 shared paths, 10 pinned-only paths. '
-             'Every shared path has the same signature verdict and timestamp.</desc>',
+             'Every shared path has the same source-program verdict and extracted timestamp.</desc>',
              '<rect width="320" height="226" fill="#f7f9fa"/>',
              '<text x="16" y="27" font-family="Arial,sans-serif" font-size="17" '
              'font-weight="700" fill="#1d2c35">Two snapshots, one shared core</text>']
@@ -37,7 +37,7 @@ def main():
             f'font-size="15" font-weight="700" fill="#1d2c35">{n}</text>',
         ])
     parts.append('<text x="16" y="216" font-family="Arial,sans-serif" font-size="13" '
-                 'fill="#43535e">Shared: same verdict and signature time</text>')
+                 'fill="#43535e">Shared: same source result and time</text>')
     parts.append('</svg>')
     svg = "\n".join(parts) + "\n"
     path = HERE / "corpus-overlap.svg"

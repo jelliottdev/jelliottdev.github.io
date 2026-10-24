@@ -1,12 +1,15 @@
-"""Package the pinned G-02 signature corpus and measured receipts.
+"""Historical initial packager for the pinned G-02 source corpus.
 
-Run only while the record remains a draft; publication metadata is edited separately.
+Its first-pass independent verifier missed embedded PGP MESSAGE signatures.
+The corrected reproducible path is check.py --replay and repair.py; never run
+this initial packager accidentally over the corrected published record.
 """
 
 import hashlib
 import json
 import shutil
 import zipfile
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -26,6 +29,8 @@ def write_json(path, obj):
 
 
 def main():
+    if "--historical-initial-pack" not in sys.argv:
+        raise SystemExit("Historical initial packager is disabled; use check.py --replay and repair.py")
     plan = json.loads((INTERNAL / "plan-frozen.json").read_text(encoding="utf-8"))
     measured = json.loads((INTERNAL / "check-results.json").read_text(encoding="utf-8"))
     assert measured["independent_verdict_counts"] == {"PASS": 114, "KEY": 11, "NO-SIG": 7, "FAIL": 1}
@@ -101,8 +106,9 @@ def main():
         "title": "Which archived Cicada signatures verify?",
         "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
         "reader_question": "Which archived messages have a valid Cicada signature?",
-        "summary": "All 133 pinned files were checked offline. Their 123 shared paths agree with the older source table; the difference in total file count comes from different corpus snapshots.",
-        "finding": "A fresh pinned-corpus scan finds 114 valid signatures, 11 key files, 7 unsigned files and 1 bad signature. A separate GnuPG keyring agrees on every verdict. All 123 paths shared with the older 228-file table have the same verdict and signature time; their raw SHA differences are entirely LF-versus-CRLF line endings.",
+        "summary": "The pinned source scan reports 114 signatures; an all-armor GnuPG pass corrects one embedded-signature miss to 115.",
+        "reader_finding": "Of 133 archived files, GnuPG verifies 115 under the specified Cicada key. The source program counted 114 because it skipped a signed PGP MESSAGE.",
+        "finding": "The unchanged source scan reports 114 PASS, 11 KEY, 7 NO-SIG and 1 FAIL. Its armor-header condition skips an embedded signature in tcp-server.asc; an independent GnuPG pass reports 115 PASS, 11 KEY, 6 NO-SIG and 1 FAIL. The 123 shared paths retain the same source-program verdict and timestamp in both source snapshots.",
         "limitations": "The pinned Git corpus contains 133 source-visible .asc files; the older table used 228 working-tree files, including 105 paths missing from this commit. Signature validity is relative to the specified public key and does not itself prove historical authorship or cover all messages. This is not a Liber Primus decryption test.",
         "next_steps": "Preserve additional original signed files with their exact bytes and provenance, then rerun the same verification and compare normalized bodies and packet timestamps.",
         "outcome": "supported",
@@ -136,6 +142,8 @@ def main():
         "related": ["pgp-packet-keys"],
     }
     write_json(HERE / "record.json", record)
+    from repair import main as apply_independent_correction
+    apply_independent_correction()
     print({"paths": len(aliases), "unique_blobs": len(unique),
            "compressed_bytes": (sources / "asc-blobs.zip").stat().st_size})
 

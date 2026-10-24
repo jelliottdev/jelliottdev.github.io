@@ -1,0 +1,54 @@
+LP2: 13122 crops, 875 distinct bitmaps (839 single-width, 36 merge candidates)
+  (loaded cached labelling: 839 bitmaps, aligned 13002/13136 = 98.9799%)
+   loo 256/839
+   loo 512/839
+   loo 768/839
+   loo 839/839
+
+P-3 leave-one-bitmap-out, crop-weighted: 13037/13039 = 99.9847%
+P-3 bitmap-weighted: 837/839 = 99.7616%
+
+per-class recall (crop-weighted):
+   F   n=  463 recall 100.0000%  
+   U   n=  455 recall  99.7802%  MISCALLS {'B': 1}
+   TH  n=  461 recall 100.0000%  
+   O   n=  464 recall 100.0000%  
+   R   n=  434 recall 100.0000%  
+   C   n=  399 recall 100.0000%  
+   G   n=  449 recall 100.0000%  
+   W   n=  405 recall 100.0000%  
+   H   n=  412 recall 100.0000%  
+   N   n=  466 recall 100.0000%  
+   I   n=  478 recall 100.0000%  
+   J   n=  453 recall 100.0000%  
+   EO  n=  407 recall 100.0000%  
+   P   n=  443 recall 100.0000%  
+   X   n=  456 recall 100.0000%  
+   S   n=  442 recall 100.0000%  
+   T   n=  448 recall 100.0000%  
+   B   n=  439 recall  99.7722%  MISCALLS {'U': 1}
+   E   n=  447 recall 100.0000%  
+   M   n=  440 recall 100.0000%  
+   L   n=  469 recall 100.0000%  
+   NG  n=  457 recall 100.0000%  
+   OE  n=  488 recall 100.0000%  
+   D   n=  443 recall 100.0000%  
+   A   n=  482 recall 100.0000%  
+   AE  n=  458 recall 100.0000%  
+   Y   n=  448 recall 100.0000%  
+   IA  n=  471 recall 100.0000%  
+   EA  n=  462 recall 100.0000%  
+
+=== G-OAE : the {O, A, AE} triple at full corpus power
+                O        A       AE      recall
+   O         464        0        0   100.0000%
+   A           0      482        0   100.0000%
+   AE          0        0      458   100.0000%
+   family size: 1404 crops = 10.77% of the corpus
+
+  separation, within-class vs between-class nearest-exemplar distance:
+   O   bitmaps= 30  d(same) max   3568 p99   2544 | d(other) MIN    189 p1    189  -> separated at every bitmap: True
+   A   bitmaps= 24  d(same) max     38 p99     37 | d(other) MIN    189 p1    189  -> separated at every bitmap: True
+   AE  bitmaps= 30  d(same) max    110 p99     98 | d(other) MIN    244 p1    244  -> separated at every bitmap: True
+  every bitmap in the WHOLE book closer to its own class than to any other: False
+-> out_loo.json

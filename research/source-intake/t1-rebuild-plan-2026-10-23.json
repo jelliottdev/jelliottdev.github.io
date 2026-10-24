@@ -1,0 +1,21 @@
+{
+  "schema": "internal-t1-rebuild-plan-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_manifest_sha256": "14a4a895c93232c1f0e4728faf60a80de34e07cf14625aceb8dfde74e46003a5",
+  "claimed_source_ids": [
+    "T1-01",
+    "T1-02",
+    "T1-03",
+    "T1-04",
+    "T1-05"
+  ],
+  "pretarget_gate": "All 58 LP2 and 17 LP1 source-image SHA256 values match the preserved site images byte-for-byte. Rebuild source crops and bank using unmodified T1 code and pinned canon. Compare published source image hashes, crop counts, fixed 29-cluster plateau, solved-page G-READ 180/180, leave-one-out O/A/AE, and adjudication positions. Treat any divergence as a fresh reconstruction rather than historical source parity.",
+  "sequence": [
+    "Run t1_extract.py in isolated source copy with 75 hardlinked exact images.",
+    "Run source test_t1.py and needed bank/align pipeline before source g_read.py.",
+    "Compare generated full JSON and metrics to original pinned outputs; independently check numeric summaries from fresh rows.",
+    "Only then consider T1-02/04/05 impact on transcription facts."
+  ],
+  "limits": "No LP2 cipher search and no independent human glyph reading. Canon-derived labels and source page layout may make this an internal consistency check; solved pages control only tests the reader against known transcription. Missing original generated NPZ hashes prevent asserting binary identity of historical templates."
+}

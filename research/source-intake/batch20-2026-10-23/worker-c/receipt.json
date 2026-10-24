@@ -1,0 +1,204 @@
+{
+  "schema": "liberpedia-source-batch-worker-receipt-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "worker": "worker-c",
+  "frozen_plan_sha256": "5223440545da07608fef6c6d1a9de675b234421f02fd45e61b257b470bec334f",
+  "note": "Interim receipt while the whole-corpus source producer is still running. Source-equivalent results are conditioned on its canon-derived labels; this does not independently verify manuscript transcription.",
+  "entries": [
+    {
+      "source_id": "T1-01",
+      "state": "replayed",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_gread_lp2.json",
+          "sha256": "232f4ec2782016b37ec283f9c5b5891c827dca23f7cf1b4fbaf1e285568aa5ea"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_gread_lp1.json",
+          "sha256": "0932a548336d40f85662add342fe5c5450242d7aad91bce9c71bf8afeab7d6d5"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/gread-verified.log",
+          "sha256": "158b9b3824459bc959433cf17b2a98814b36223123f02c9a93f7f5f731404572"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/greadlp1-verified.log",
+          "sha256": "188c46dde33ae8c433ba7b461170212b010d7e4065dc1c3ace71bdce32d264e3"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python g_read.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_gread_lp2.json"
+        },
+        {
+          "command": "python g_read_lp1.py (after restoring committed scream314_lp.md)",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_gread_lp1.json"
+        }
+      ],
+      "covered_subclaim": "Pinned source reader returns 85/85 and 95/95 on two solved LP2-typeface controls; LP1 combined control reproduces the source failure. Final page votes are excluded, but source global alignment labels used all page canons.",
+      "remaining": [
+        "A strict page-held-out global label-bank rebuild has not been run.",
+        "This is source-method parity, not independent manuscript transcription."
+      ]
+    },
+    {
+      "source_id": "T1-02",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/ycomp.log",
+          "sha256": "1fe3208aed0c242e85556bfb50fe6735596952a6c98e411184a65573f252bdbf"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python d9_ycomp.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/ycomp.log"
+        }
+      ],
+      "covered_subclaim": "On the six pages the pinned script samples, 55/55 Y glyphs have one detached inner component; 0/1398 sampled other glyphs do. Median inner height is 58 pixels.",
+      "remaining": [
+        "Pinned RESULTS prose reports 54/55 Y and 0/1087 others, inconsistent with fresh pinned script output.",
+        "Not a measurement of every Y or every historical height-filtering pipeline."
+      ]
+    },
+    {
+      "source_id": "T1-03",
+      "state": "replayed",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_loo.json",
+          "sha256": "d3bbdcc928ad37e33f50ae80712a19fb5cad3e996b5489f9e1c435750f22daa0"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/ploo-verified.log",
+          "sha256": "5fe0e506127ffe6b313ce7b4ac36908d2dc6400c1f20e5f5280019c64c237e0a"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python p_loo.py (prior output moved aside)",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_loo.json"
+        }
+      ],
+      "covered_subclaim": "Fresh result JSON semantically matches source: zero ordered O/A/AE misclassifications across 1404 crop-weighted glyphs in a leave-one-bitmap-out nearest-exemplar test.",
+      "remaining": [
+        "Global source label bootstrap used canonical manuscript labels, and other bitmaps from same pages/font remain in bank.",
+        "This does not constitute independently checked transcription."
+      ]
+    },
+    {
+      "source_id": "T1-04",
+      "state": "replayed",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/adjudication.json",
+          "sha256": "091037fc350d33545bd044d174aa015dc96a8f21ab34bda000cef3c556fe79cf"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/adjudication-verified.log",
+          "sha256": "30874514f7c16b2ac785b7ae9b1dc07a192304157840f115b2dcd0fc89eacdc5"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_corpus_lp2.json",
+          "sha256": "63c7a4f76b39b5af25c7fa3d5d8d43011cf4f65e90674ded6c0f3e82cb3ceaeb"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/corpus_lp2.npz",
+          "sha256": "31deca32918dc9bbabf7888939d91c87073154954055edcd05dc9efb07e4546a"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/corpus.log",
+          "sha256": "0d06a03fc3ccc8f6dce54dc019c4d09b56a7cb8ec37a361dc56eded1d9361a34"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python t1_corpus.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_corpus_lp2.json"
+        },
+        {
+          "command": "python j2_adjudicate.py (prior adjudication JSON moved aside)",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/adjudication.json"
+        }
+      ],
+      "covered_subclaim": "Fresh source pipeline locates and scores all 450 pre-existing O/A/AE discrepancy positions; the original control-defined margin cut is 5 and all 450 current-reader calls agree with the canon. Fresh JSON is semantically identical to pinned source.",
+      "remaining": [
+        "Canon-derived global labels make this agreement conditional on the source transcription and not an independent human adjudication.",
+        "The 450 disagreement locations were supplied by an earlier source pipeline; this replay does not recreate that pipeline."
+      ]
+    },
+    {
+      "source_id": "T1-05",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_segcheck.json",
+          "sha256": "7e799f96d240d654e520f796be8cce503f9fa3de7ce57625b44071b85ccc7ec8"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/g0segcheck.log",
+          "sha256": "6ea7bad0fe8900a61faa31483cd668cd5ae010dfd363464c62a185b9f1a230e8"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_corpus_lp2.json",
+          "sha256": "63c7a4f76b39b5af25c7fa3d5d8d43011cf4f65e90674ded6c0f3e82cb3ceaeb"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/corpus_lp2.npz",
+          "sha256": "31deca32918dc9bbabf7888939d91c87073154954055edcd05dc9efb07e4546a"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/corpus.log",
+          "sha256": "0d06a03fc3ccc8f6dce54dc019c4d09b56a7cb8ec37a361dc56eded1d9361a34"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_density.json",
+          "sha256": "b414ecc73e6091b7d26d3ce7fa779cb8fceb811a217fcbf41fea51268eafc3fd"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/density.log",
+          "sha256": "5d3c0364527446021285a0370f4f037e4588413744de903a39c8981545f6c658"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python g0_segcheck.py (prior output moved aside)",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_segcheck.json"
+        },
+        {
+          "command": "python t1_corpus.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_corpus_lp2.json"
+        },
+        {
+          "command": "python d_density.py (prior output moved aside)",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-c/evidence/out_density.json"
+        }
+      ],
+      "covered_subclaim": "Fresh source reader returns 13088/13136 = 99.6346% canonical-rune agreement over all 58 LP2 images; 17 aligned substitutions, 31 canon positions without glyph and 82 emitted glyphs without canon. Segmentation and density outputs semantically match the source.",
+      "remaining": [
+        "Global canonical labels were trained using all pages; this is source consistency, not independent transcription accuracy.",
+        "The inherited T3 IoC and delta-spectrum channel impact was not independently recomputed from the fresh 17 substitutions."
+      ]
+    }
+  ],
+  "outstanding_producers": [],
+  "open_investigations": [
+    "An uncached rebuild of the global canon-derived label bank has not yet been executed; the source committed align_LP2.json was reused by G-READ/LOO/corpus.",
+    "Strictly held-out solved-page training would require rebuilding labels without p56/p57 canonical votes, which is a new validation beyond the pinned source method.",
+    "The source RESULTS prose Y 54/55 and 0/1087 others disagrees with fresh pinned d9_ycomp.py output Y 55/55 and 0/1398 others on pages 0\u20135.",
+    "T1-05 T3 stability figures remain an inherited source argument, not replayed by this T1 batch."
+  ],
+  "dependency_amendment": "research/source-intake/t1-rebuild-2026-10-23/dependency-amendment.json",
+  "independent_checker": "research/source-intake/batch20-2026-10-23/worker-c/check.py"
+}

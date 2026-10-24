@@ -3509,7 +3509,7 @@
       "id": "dukotah-g02-signature-corpus",
       "title": "Which archived Cicada signatures verify?",
       "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
-      "summary": "Of 133 pinned files, 114 verify. The lone bad copy is a malformed version of the signed 2013 opening message; its repaired and JPEG-extracted copies verify. The older source table covers a different corpus snapshot.",
+      "summary": "GnuPG verifies 115 signatures in the pinned 133-file corpus. The source program reported 114 because it missed one signature embedded in a PGP MESSAGE; its older and newer tables still agree on their 123 shared paths.",
       "tags": [
         "Cicada 3301",
         "PGP",
@@ -3517,7 +3517,7 @@
         "provenance",
         "source replay"
       ],
-      "finding": "Of 133 archived files, 114 verify under the specified Cicada public key. The one bad file is missing a blank line in its signed-message header. Its repaired copy and the original JPEG extraction verify; the source scan counts remain unchanged.",
+      "finding": "Of 133 archived files, GnuPG verifies 115 under the specified Cicada key. The source program counted 114 because it skipped a signed PGP MESSAGE. One separate malformed copy fails; its repaired copy and the original JPEG extraction verify.",
       "record_type": {
         "id": "audit",
         "label": "Source or input audit",

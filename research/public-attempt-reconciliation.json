@@ -11,21 +11,26 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 81,
-    "reproduced_subclaim": 3,
-    "partial": 44,
+    "source_entries_reviewed": 101,
+    "reproduced_subclaim": 6,
+    "partial": 57,
     "unsupported_source_verdict": 20,
-    "blocked_exact_replay": 7,
+    "blocked_exact_replay": 11,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
     "source_entries_with_published_record_link": 55,
-    "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
       "complete-executed-grid": 23,
       "partial-execution": 14,
       "replayed-with-invalid-gate": 6
+    },
+    "batch20_dispositions": {
+      "replayed_source_subclaim": 3,
+      "partial": 12,
+      "blocked": 4,
+      "duplicate": 1
     }
   },
   "entries": [
@@ -2221,6 +2226,326 @@
         "Link the two related records as narrower/different scope only. Preserve source report as reported, not independently replayed; 99.94% of word space unexamined."
       ],
       "audit_note": "Pinned source files and execution prerequisites reviewed. No new generator control or LP2 target was executed by this review; existing related records are not exact replay evidence.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I1-03",
+      "source_claim": "Permissiveness lifts the wrong-key null by 0.58-0.92 and therefore invalidates the -5.5 floor for permissive-mode sweeps, but does NOT lift it into the English band at lam >= 8",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Published round19-decoder-null-bars replayed all 26 source fits from 34,000 saved score rows; this audit recounts the saved means, maxima and line crossings for all I1 FP arrays.",
+      "unresolved_parts": [
+        "Original 34,000 wrong-key beam decodes not rerun; far-tail extrapolation not empirically validated."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I1-06",
+      "source_claim": "An UNPENALISED drift-tolerant beam (lam=0) is a catastrophic instrument that looks like a success: it scores -4.4 to -4.9 (above the bar) while recovering only 12-51% of runes, and it lifts EVERY wrong key to -4.88",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Published G-BASE replays 336 known-key decoder controls; null-bars independently recounts 500/500 wrong-key line crossings in permissive lambda=0 saved scores.",
+      "unresolved_parts": [
+        "Original FP beam decoding not freshly replayed; score over a line is not recovery."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I1-09",
+      "source_claim": "RECOMMENDATION to Phase 2: baseline channel = keyskip1 with adaptive max_skip (free strict improvement, unchanged null); drift channel = permissive max_free=2 lam=12 start_slack=2, adjudicated against mu=-6.602 beta=0.0648, NEVER against the -5.5 floor",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Known-key source gates and decoder-specific wrong-key score behavior have partial published control coverage; this entry is a recommended handoff policy, not an LP2 key test.",
+      "unresolved_parts": [
+        "Adaptive max_skip policy plus its own wrong-key null and I3 mu/beta handoff not independently replayed together."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-R1-A",
+      "source_claim": "Permissiveness frontier of a drift-tolerant beam (I1's premise)",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Saved R1 frontier arithmetic checked, including 16 + 6 configurations; related decoder mechanics covered by published controls but this independent source frontier has not been rerun.",
+      "unresolved_parts": [
+        "Exact source corpus king_in_yellow.txt is absent from pinned Git and not recovered; source R1 A beam/null grids remain unrun."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-R1-B",
+      "source_claim": "Multi-register panel: effective tests, false-positive inflation, selection-correction power, and the I1xI2 interaction",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Saved eigenvalue effective-test estimator arithmetic checked; no exact model/control replay.",
+      "unresolved_parts": [
+        "R1 register builder needs missing king_in_yellow.txt and Welsh mabinogion bytes; full B-i through B-iv panel and beam tests blocked."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-I3-NULLS",
+      "source_claim": "Extended null calibration: per-register, per-decoder-mode and panel-max thresholds for the Round-19 instrument",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Source calibration objects, summaries and I3 test implementation pinned; null score generation not replayed.",
+      "unresolved_parts": [
+        "Nine-register I2 model unavailable; 9.6 million wrong-key decodes and far-tail calibration not independently replayed."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I2-MULTI-REGISTER-ADJUDICATOR",
+      "source_claim": "round18/L7-A measured that the repository's adjudicator (lp.score.Quadgram.score_norm against a fixed -5.5 English band) discards the CORRECT key for Latin, Old English, German, Welsh and abbreviated English even though the beam recovers 100 % of the runes, and that doctrine R3's four language-agnostic statistics had 0/15 compliance.  I2 asserts that a nine-register rune-space language-model panel plus those four statistics, behind one adjudicate() call and one SWEEPROW schema, restores power >= 0.90 for every register without raising the false-positive rate at matched trial count.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-a/receipt.json"
+      ],
+      "verified_subclaim": "Nine-model source inputs and saved gate reports pinned; English-only and other published scorer controls are different instruments.",
+      "unresolved_parts": [
+        "Gitignored models/panel.npz and models/testhalves.npz absent; exact Welsh corpus hash in out_build not recovered; source nine-register scores and gates cannot be replayed from saved results alone."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "G-01",
+      "source_claim": "PROVENANCE track never ran. FRESH-ANGLES proposed five parallel tracks; Round 8 executed SEED, GEOMETRY, PAYLOAD, POINTERS, SKELETON. Track 5 (source PDF + rune-font identification: Ghostscript build fingerprint from DQT+ICC+geometry, hunt circulating PDFs with a real text layer, re-read the on-disk archived `onion7_index.html` for non-`.jpg` assets, match glyph outlines against stock runic faces) was never executed and appears in no results doc.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Exact pinned JPEG extractor passes6/6 planted quality controls and fingerprints56 available source-hash-matched LP2 images. Existing image-regions JPEG article and r18-jpeg-fingerprint replay receipt cover58 metadata classes, not the full provenance track.",
+      "unresolved_parts": [
+        "Historical Ghostscript/render/re-encode chain and candidate-version comparison not rerun.",
+        "Original typeset source PDF/PostScript and original onion-index non-JPEG asset search not independently recovered.",
+        "Original observed glyph specimens and candidate font bank absent; no full face identification."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-11",
+      "source_claim": "Source PDF + rune-font identification (FRESH-ANGLES track 5)",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Pinned source code and summary bytes inspected. Source11-face font verdict does not identify a face; savedPDF summary reports493 distinct scanned files, but that scan is not replayed here. This is attribution provenance, not a cipher search.",
+      "unresolved_parts": [
+        "Exact candidate font bank and extracted runes_observed.png absent from pinned tree/current checkout.",
+        "font_match_sheet.png and original pdf_hunt.jsonl absent; source493-PDF specimen scan and controls not regenerated.",
+        "Recover verified specimen files before comparing font shape or promoting attribution."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "G4-ALLRUNES-NC5",
+      "source_claim": "round18/L1 NC-5: 'the allrunes Type-1 faces are custom-encoded (not Unicode-mapped), so matching them requires an unordered glyph-slot search rather than a codepoint lookup.'",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Executed exact source least-squares fit on a planted0.7 scale with zero residual; verified code dictionary and saved comparison enumerate26 unique named runes. This algebra control does not verify actual Type1 glyph charstrings or face ranking.",
+      "unresolved_parts": [
+        "Allrunes .pfb specimens and observed glyph bitmaps absent; cannot replay72-face ranking or200-permutation screen.",
+        "Source prose says218faces/146skips but JSON says72+144=216; reconcile bank snapshot before replay.",
+        "Even source permutation screen distinguishes real rune proportions from shuffled assignments, not Allrunes from every other correct runic face."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L1-F6-CORRECTION",
+      "source_claim": "The denominator and the window are both wrong. That directory holds 56 PASSing files with 54 distinct signature timestamps spanning 2012-01-05 to 2017-04-04, not 46 files ending in 2014. Its signature-armor Version headers are 53 x 'GnuPG v1.4.11 (GNU/Linux)', 2 x 'GnuPG v1', 1 x 'CicadaPG v.3301'. ",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Independently GPG-verified all57 pinned message files against expected public key.56 clear-signed files carry53v1.4.11,2v1,1CicadaPG headers and54 distinct signature timestamps through2017-04-04. Extra tcp-server.asc contains a valid embedded signedPGP MESSAGE:57valid files/55timestamps overall. Source C3 NO-SIG entry and published G02 delimiter-only check miss that container.",
+      "unresolved_parts": [
+        "Source56/54 totals must be explicitly scoped to clear-signed armor rather than all cryptographically signed containers.",
+        "Cryptographic validity is relative to public key, not independent historical authorship.",
+        "Parent-owned G02 record correction pending; do not call current source table universally accurate."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "L1-PRIOR-PROPAGATION",
+      "source_claim": "AUDIT / prior-propagation (Round 20 Lane C-prop, doctrine R6): propagate to the source-of-record the three L1-prior corrections no Round-19 lane had write scope for. (i) F6/F7 counts: 'ibotpeaches/messages/' holds 56 PASSing files / 54 distinct signed messages running to 2017-04-04, NOT 46/2012-2014; armor headers 53 x 'GnuPG v1.4.11 (GNU/Linux)', 2 x 'GnuPG v1', 1 x 'CicadaPG v.3301' -- the toolchain changed TWICE, not once. (ii) The distro bracket 'Ubuntu 11.04-12.04' is LOOSER than published: GnuPG 1.4.11 shipped across >=6 OS generations incl. Ubuntu 12.10 (two independent lanes: R19/R1 render side + R19/C3 corpus side). (iii) G2's Perl prior should be re-sourced OFF the distro inference ONTO the signed, dated Crypt::RSA fact (2012-01-15 + 2014-01-06 PASSing messages, Data::Dumper of a live Crypt::RSA::Key::Public object, Version 1.99 / Scheme Crypt::RSA::ES::OAEP armor).",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Pinned L1 source-of-record contains dated propagation block with56/54 and53/2/1 corrections, looser Ubuntu bracket, and Crypt::RSA justification. Two exact signed files independently verify and contain Crypt::RSA references (2012 this-message... and2014 welcome). Counts are qualified by newly found embedded-signature case. This is source-correction bookkeeping, not a new cipher idea.",
+      "unresolved_parts": [
+        "External historical distro-package availability claims not independently checked in this batch.",
+        "No inference from published signing/render tools to actual keystream generator is established.",
+        "Source GnuPG armor-form changes alone do not prove different installed GnuPG versions or physical machines."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-R1-C",
+      "source_claim": "Audit of the L1 toolchain prior (round18/L1 section 6), which Round 19 Phase 1 rests on",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Actual Pillow color keep/optimized and explicitgrayq92 re-encodes preserve sourceobserved quantization/ICC/Huffman/sampling-class fields, providing limited nonuniqueencoder counterexample; exact source shift_audit runs and source11 multiplier rows have no calibrated likelihood derivation. Independent signature cohort supports correctedcount/Perl statements with embedded-signature qualification.",
+      "unresolved_parts": [
+        "No Ghostscriptfirst-stage synthetic render reproduced; historical ImageMagick/Pillow attribution not identified.",
+        "Historical distribution/package table not independently re-researched.",
+        "Source table multipliers are asserted search-order heuristics, not measured probabilities; no pad-generator constraint follows."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-R1-D",
+      "source_claim": "Round 19's own arithmetic: enumeration cost, the prefilter dilemma, S2's reach, and Phase 3's premise",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Recomputed all5 seedspace costs from exactsaved rate5.329005612decodes/s/core and8axes. Exact source s2_reach executes on113 pinned input reads:1,252retained rows, not saved1,312; all B04/R16subdetails match and discrepancy is60R17rows not retained in snapshot. Source arithmetic1,312/17,058,157,809=7.6913e-8 checks, but exactsnapshot fraction is1,252/17,058,157,809=7.3396e-8.",
+      "unresolved_parts": [
+        "Per-register rigidprefilter survival MonteCarlo and decoder throughput timings not rerun.",
+        "60sourceworking-tree survivor rows missing; original1,312recount not reproduced.",
+        "Campaign Phase3 document-state assertions are time-specific source commentary, not new cipher exclusions."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-R1-VERDICT",
+      "source_claim": "Is Round 19 correctly aimed?",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-b/receipt.json"
+      ],
+      "verified_subclaim": "Documentary synthesis of R1A-D: redirect instrument/campaign budget; no independent LP2 solving method or scored search. Its toolchain/count and enumeration claims are already assessed under R19-R1-C/D and L1 correction entries in this same receipt.",
+      "unresolved_parts": [
+        "A/Bdecoder/permissiveness and language-panel evidence are separate subclaims, not independently repeated by this synthesis.",
+        "Do not count this campaign recommendation as an extra failed decryption experiment."
+      ],
+      "audit_note": "Batch source/control audit; read the receipt for executed subclaims and remaining scope. No whole-method exclusion is inferred.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T1-01",
+      "source_claim": "Per-rune reader: G-READ-LP2 passes at 100% (180/180) on the solved LP2-typeface control pages",
+      "status": "reproduced-subclaim",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "Pinned source reader returns 85/85 and 95/95 on two solved LP2-typeface controls; LP1 combined control reproduces the source failure. Final page votes are excluded, but source global alignment labels used all page canons.",
+      "unresolved_parts": [
+        "A strict page-held-out global label-bank rebuild has not been run.",
+        "This is source-method parity, not independent manuscript transcription."
+      ],
+      "audit_note": "Fresh source execution; exact scope and the global training-data limitation are preserved in the receipt. Reproducibility is not independent validation of the canonical transcription.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T1-02",
+      "source_claim": "FOUND-ERROR in every height-filtered component segmentation in this repo: the rune Y is drawn as TWO components and collapses to U",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "On the six pages the pinned script samples, 55/55 Y glyphs have one detached inner component; 0/1398 sampled other glyphs do. Median inner height is 58 pixels.",
+      "unresolved_parts": [
+        "Pinned RESULTS prose reports 54/55 Y and 0/1087 others, inconsistent with fresh pinned script output.",
+        "Not a measurement of every Y or every historical height-filtering pipeline."
+      ],
+      "audit_note": "Fresh source execution; exact scope and the global training-data limitation are preserved in the receipt. Reproducibility is not independent validation of the canonical transcription.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T1-03",
+      "source_claim": "G-OAE PASSES: zero O/A/AE confusion in all six ordered directions over 1,404 family glyphs",
+      "status": "reproduced-subclaim",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "Fresh result JSON semantically matches source: zero ordered O/A/AE misclassifications across 1404 crop-weighted glyphs in a leave-one-bitmap-out nearest-exemplar test.",
+      "unresolved_parts": [
+        "Global source label bootstrap used canonical manuscript labels, and other bitmaps from same pages/font remain in bank.",
+        "This does not constitute independently checked transcription."
+      ],
+      "audit_note": "Fresh source execution; exact scope and the global training-data limitation are preserved in the receipt. Reproducibility is not independent validation of the canonical transcription.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T1-04",
+      "source_claim": "The 450 located O/A/AE disagreements are adjudicated: canon holds at 450/450",
+      "status": "reproduced-subclaim",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "Fresh source pipeline locates and scores all 450 pre-existing O/A/AE discrepancy positions; the original control-defined margin cut is 5 and all 450 current-reader calls agree with the canon. Fresh JSON is semantically identical to pinned source.",
+      "unresolved_parts": [
+        "Canon-derived global labels make this agreement conditional on the source transcription and not an independent human adjudication.",
+        "The 450 disagreement locations were supplied by an earlier source pipeline; this replay does not recreate that pipeline."
+      ],
+      "audit_note": "Fresh source execution; exact scope and the global training-data limitation are preserved in the receipt. Reproducibility is not independent validation of the canonical transcription.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "T1-05",
+      "source_claim": "The LP2 transcription reads at 99.6346% corpus-wide; T3's IoC and delta-spectrum channels do not move",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "research/source-intake/batch20-2026-10-23/worker-c/receipt.json"
+      ],
+      "verified_subclaim": "Fresh source reader returns 13088/13136 = 99.6346% canonical-rune agreement over all 58 LP2 images; 17 aligned substitutions, 31 canon positions without glyph and 82 emitted glyphs without canon. Segmentation and density outputs semantically match the source.",
+      "unresolved_parts": [
+        "Global canonical labels were trained using all pages; this is source consistency, not independent transcription accuracy.",
+        "The inherited T3 IoC and delta-spectrum channel impact was not independently recomputed from the fresh 17 substitutions."
+      ],
+      "audit_note": "Fresh source execution; exact scope and the global training-data limitation are preserved in the receipt. Reproducibility is not independent validation of the canonical transcription.",
       "whole_entry_coverage_verified": false
     }
   ],

@@ -1,0 +1,370 @@
+{
+  "schema": "liberpedia-source-intake-worker-v1",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "worker": "b",
+  "entries": [
+    {
+      "source_id": "G-01",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/c804112e33e39a52f196e99aa7cb0bad2caf4c62.txt",
+          "sha256": "e588fb1038f594fd2d34a01df5b6502f76f957139cdd54f19da202316f28520e",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/PREREG.md",
+          "git_object": "c804112e33e39a52f196e99aa7cb0bad2caf4c62"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/a0d053c38be9162e36141e6f04d9a1f9569e7c4d.txt",
+          "sha256": "d79fcb42ef857bdb18b0ff01e6a806be43f763ed65d61e043cbed16ea34a1840",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+          "git_object": "a0d053c38be9162e36141e6f04d9a1f9569e7c4d"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/e5e7d0782fee29a1b40c9f32c905731371d8366d.txt",
+          "sha256": "9a8cc7fb4ccfc4fa3dd23733eb5063714014312e69c1b58dd278b74d62a15268",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/pages_summary.json",
+          "git_object": "e5e7d0782fee29a1b40c9f32c905731371d8366d"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/audit-results.json",
+          "sha256": "15f64c39f082cbddc04947f6d9287674db6e9cdfad188722e3bb60464907b096"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/jpeg-selftest.log",
+          "sha256": "a74c5d6383f9ac8fab8f454f1cf481a31ebd6cced6ea9a8ad51ded675ffe5c1f"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/audit.log"
+        },
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/sources/9f075696edb1af11994f575bbe07da637090feee.txt --selftest",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/jpeg-selftest.log"
+        }
+      ],
+      "covered_subclaim": "Exact pinned JPEG extractor passes6/6 planted quality controls and fingerprints56 available source-hash-matched LP2 images. Existing image-regions JPEG article and r18-jpeg-fingerprint replay receipt cover58 metadata classes, not the full provenance track.",
+      "existing_coverage": [
+        {
+          "path": "research/source-intake/r18-jpeg-fingerprint-replay-2026-10-23.json",
+          "scope": "58 hosted-page metadata class comparison;56 source hashes verified."
+        },
+        {
+          "path": "articles/image-regions.html#jpeg-fingerprint",
+          "scope": "Published explanatory metadata audit, not a unique producer identification."
+        }
+      ],
+      "remaining": [
+        "Historical Ghostscript/render/re-encode chain and candidate-version comparison not rerun.",
+        "Original typeset source PDF/PostScript and original onion-index non-JPEG asset search not independently recovered.",
+        "Original observed glyph specimens and candidate font bank absent; no full face identification."
+      ]
+    },
+    {
+      "source_id": "B-11",
+      "state": "blocked",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/3691c6c7179d0d85b8f29b2dcf10ec0cb628ea8e.txt",
+          "sha256": "76be21d27a2d5dfac7305ddc1189fb8bf5e4ed7ff29537d6aeea20a0808768a5",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/font_match.py",
+          "git_object": "3691c6c7179d0d85b8f29b2dcf10ec0cb628ea8e"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/d24c99596694b95df63e3f31691a39d7f62f09b1.txt",
+          "sha256": "d445f672e0919f05f63b7a16ac9bec171cec81cc1533e06c1e328da25958524f",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/font_verdict.json",
+          "git_object": "d24c99596694b95df63e3f31691a39d7f62f09b1"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/7d40cedb6bcafcd4e53766e33f1b5cd5bd960740.txt",
+          "sha256": "69aa46aa0d40f886377f7ebf1306eff72529f5e4a7de8ae48d5bee4a347fda9e",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/pdf_hunt_summary.json",
+          "git_object": "7d40cedb6bcafcd4e53766e33f1b5cd5bd960740"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/ed9a4667689d84a80df20b2a4f024cf97ff7cfca.txt",
+          "sha256": "ee8be082152e663c2f4e7ff16381b563c2c8d398e254a3559423b470864d4675",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/runes_observed_meta.json",
+          "git_object": "ed9a4667689d84a80df20b2a4f024cf97ff7cfca"
+        }
+      ],
+      "executions": [],
+      "covered_subclaim": "Pinned source code and summary bytes inspected. Source11-face font verdict does not identify a face; savedPDF summary reports493 distinct scanned files, but that scan is not replayed here. This is attribution provenance, not a cipher search.",
+      "remaining": [
+        "Exact candidate font bank and extracted runes_observed.png absent from pinned tree/current checkout.",
+        "font_match_sheet.png and original pdf_hunt.jsonl absent; source493-PDF specimen scan and controls not regenerated.",
+        "Recover verified specimen files before comparing font shape or promoting attribution."
+      ]
+    },
+    {
+      "source_id": "G4-ALLRUNES-NC5",
+      "state": "blocked",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/ea12d87a158a15e80b43346272319392a8336c2f.txt",
+          "sha256": "d5d3eb27970b15bc239342504137c701b8c08f5a81fd41ef7c3d090a37fb2b55",
+          "source_path": "liber-primus/analysis/round19/G4/RESULTS.md",
+          "git_object": "ea12d87a158a15e80b43346272319392a8336c2f"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/ca5aa898b7fa0c48b97ffaf12cd23dd4f25e55fe.txt",
+          "sha256": "d3f17783eaa297c7032a414c1dff48abe13704e33da35fc3a9a5e647e8d0a067",
+          "source_path": "liber-primus/analysis/round19/G4/allrunes_probe.py",
+          "git_object": "ca5aa898b7fa0c48b97ffaf12cd23dd4f25e55fe"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/16bdeaa9218d1eef8e367b95e50f59045f300ab6.txt",
+          "sha256": "a67b1a34a49dc46ba69957f554381e8313d0d7fe6e18ba8a2d8d3775b17c698a",
+          "source_path": "liber-primus/analysis/round19/G4/allrunes_probe.json",
+          "git_object": "16bdeaa9218d1eef8e367b95e50f59045f300ab6"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/audit-results.json",
+          "sha256": "15f64c39f082cbddc04947f6d9287674db6e9cdfad188722e3bb60464907b096"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/audit.log"
+        }
+      ],
+      "covered_subclaim": "Executed exact source least-squares fit on a planted0.7 scale with zero residual; verified code dictionary and saved comparison enumerate26 unique named runes. This algebra control does not verify actual Type1 glyph charstrings or face ranking.",
+      "remaining": [
+        "Allrunes .pfb specimens and observed glyph bitmaps absent; cannot replay72-face ranking or200-permutation screen.",
+        "Source prose says218faces/146skips but JSON says72+144=216; reconcile bank snapshot before replay.",
+        "Even source permutation screen distinguishes real rune proportions from shuffled assignments, not Allrunes from every other correct runic face."
+      ]
+    },
+    {
+      "source_id": "L1-F6-CORRECTION",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/f2924d4ff1b33bce52fff455f65bac3b18eb36a9.txt",
+          "sha256": "6e3538b25292402aad056e8e20b5fe57d351d5e2b986b30828d447d0d1033609",
+          "source_path": "liber-primus/analysis/round19/C3/l8/crosscheck.json",
+          "git_object": "f2924d4ff1b33bce52fff455f65bac3b18eb36a9"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/71572811a5536998cf53273f2bf3b29b6a265d84.txt",
+          "sha256": "ce4838763fc2a237ee68b3ddacd62254b4a2a8a754ed167c697b632189706d35",
+          "source_path": "liber-primus/analysis/round19/C3/PGP-VERIFICATION-TABLE.json",
+          "git_object": "71572811a5536998cf53273f2bf3b29b6a265d84"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/signature-results.json",
+          "sha256": "23fa2bcdf087b4ce94c61c3c72aeb504a8c2e53a61b67eb16be045a5076fcd5b"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/audit-results.json",
+          "sha256": "15f64c39f082cbddc04947f6d9287674db6e9cdfad188722e3bb60464907b096"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/audit.log"
+        }
+      ],
+      "covered_subclaim": "Independently GPG-verified all57 pinned message files against expected public key.56 clear-signed files carry53v1.4.11,2v1,1CicadaPG headers and54 distinct signature timestamps through2017-04-04. Extra tcp-server.asc contains a valid embedded signedPGP MESSAGE:57valid files/55timestamps overall. Source C3 NO-SIG entry and published G02 delimiter-only check miss that container.",
+      "existing_coverage": [
+        {
+          "record_id": "dukotah-g02-signature-corpus",
+          "scope": "Same57 message paths present among133files, but current parser skips embeddedPGP MESSAGE signature; repair assigned separately."
+        }
+      ],
+      "remaining": [
+        "Source56/54 totals must be explicitly scoped to clear-signed armor rather than all cryptographically signed containers.",
+        "Cryptographic validity is relative to public key, not independent historical authorship.",
+        "Parent-owned G02 record correction pending; do not call current source table universally accurate."
+      ]
+    },
+    {
+      "source_id": "L1-PRIOR-PROPAGATION",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/0197ad3ad933f4687ee9dab004af38c571686c60.txt",
+          "sha256": "a6ccadabce0b63f5ad856e74bb7cc33c04a37ac0a2f325d1e75f497719a7093a",
+          "source_path": "liber-primus/analysis/round20/C/RESULTS.md",
+          "git_object": "0197ad3ad933f4687ee9dab004af38c571686c60"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/a0d053c38be9162e36141e6f04d9a1f9569e7c4d.txt",
+          "sha256": "d79fcb42ef857bdb18b0ff01e6a806be43f763ed65d61e043cbed16ea34a1840",
+          "source_path": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+          "git_object": "a0d053c38be9162e36141e6f04d9a1f9569e7c4d"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/6ee84bea77098b8230e2da0030f9228358e23c75.txt",
+          "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+          "source_path": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/audit-results.json",
+          "sha256": "15f64c39f082cbddc04947f6d9287674db6e9cdfad188722e3bb60464907b096"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/audit.log"
+        }
+      ],
+      "covered_subclaim": "Pinned L1 source-of-record contains dated propagation block with56/54 and53/2/1 corrections, looser Ubuntu bracket, and Crypt::RSA justification. Two exact signed files independently verify and contain Crypt::RSA references (2012 this-message... and2014 welcome). Counts are qualified by newly found embedded-signature case. This is source-correction bookkeeping, not a new cipher idea.",
+      "remaining": [
+        "External historical distro-package availability claims not independently checked in this batch.",
+        "No inference from published signing/render tools to actual keystream generator is established.",
+        "Source GnuPG armor-form changes alone do not prove different installed GnuPG versions or physical machines."
+      ]
+    },
+    {
+      "source_id": "R19-R1-C",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/0dbb0f947aec66854b3d2cd9b3b304c2e4252496.txt",
+          "sha256": "5af8a3c5f7e769deb116a2522f2761e5feb1ff48d8c7c110c0b076030431057f",
+          "source_path": "liber-primus/analysis/round19/R1/c_prior.py",
+          "git_object": "0dbb0f947aec66854b3d2cd9b3b304c2e4252496"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/4ebd9700beac60d6adb46a9b70c2ea40acc8cd11.txt",
+          "sha256": "4747fda2a93a7ddde8dfda46c1ebf0453431df1e64d91889d697a1dca28dbb89",
+          "source_path": "liber-primus/analysis/round19/R1/out_c.json",
+          "git_object": "4ebd9700beac60d6adb46a9b70c2ea40acc8cd11"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/6ee84bea77098b8230e2da0030f9228358e23c75.txt",
+          "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+          "source_path": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/audit-results.json",
+          "sha256": "15f64c39f082cbddc04947f6d9287674db6e9cdfad188722e3bb60464907b096"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/finite-checks-results.json",
+          "sha256": "d657667e7845e55e6b5cd507fc82fd5f2ab5516c8c277cf344698660d4338c36"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/audit.log"
+        },
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/finite_checks.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/finite-checks.log"
+        }
+      ],
+      "covered_subclaim": "Actual Pillow color keep/optimized and explicitgrayq92 re-encodes preserve sourceobserved quantization/ICC/Huffman/sampling-class fields, providing limited nonuniqueencoder counterexample; exact source shift_audit runs and source11 multiplier rows have no calibrated likelihood derivation. Independent signature cohort supports correctedcount/Perl statements with embedded-signature qualification.",
+      "remaining": [
+        "No Ghostscriptfirst-stage synthetic render reproduced; historical ImageMagick/Pillow attribution not identified.",
+        "Historical distribution/package table not independently re-researched.",
+        "Source table multipliers are asserted search-order heuristics, not measured probabilities; no pad-generator constraint follows."
+      ]
+    },
+    {
+      "source_id": "R19-R1-D",
+      "state": "partial",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/eb3c246aab4699de2f8204b24af995a3aae1a8ba.txt",
+          "sha256": "fd9ee2cd112e8e710b22a985ff46827acebabd3e5ec7220c87006d4c45baf67a",
+          "source_path": "liber-primus/analysis/round19/R1/d_budget.py",
+          "git_object": "eb3c246aab4699de2f8204b24af995a3aae1a8ba"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/d59cec4fc1764df582036ae949e9b282d9e65788.txt",
+          "sha256": "933c7ee868ab40760b71343d460e44d472cdc6cc99d6381151744b888b94d4c9",
+          "source_path": "liber-primus/analysis/round19/R1/out_d.json",
+          "git_object": "d59cec4fc1764df582036ae949e9b282d9e65788"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/6ee84bea77098b8230e2da0030f9228358e23c75.txt",
+          "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+          "source_path": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/audit-results.json",
+          "sha256": "15f64c39f082cbddc04947f6d9287674db6e9cdfad188722e3bb60464907b096"
+        },
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/finite-checks-results.json",
+          "sha256": "d657667e7845e55e6b5cd507fc82fd5f2ab5516c8c277cf344698660d4338c36"
+        }
+      ],
+      "executions": [
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/audit.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/audit.log"
+        },
+        {
+          "command": "python research/source-intake/batch20-2026-10-23/worker-b/finite_checks.py",
+          "exit_code": 0,
+          "output_path": "research/source-intake/batch20-2026-10-23/worker-b/finite-checks.log"
+        }
+      ],
+      "covered_subclaim": "Recomputed all5 seedspace costs from exactsaved rate5.329005612decodes/s/core and8axes. Exact source s2_reach executes on113 pinned input reads:1,252retained rows, not saved1,312; all B04/R16subdetails match and discrepancy is60R17rows not retained in snapshot. Source arithmetic1,312/17,058,157,809=7.6913e-8 checks, but exactsnapshot fraction is1,252/17,058,157,809=7.3396e-8.",
+      "remaining": [
+        "Per-register rigidprefilter survival MonteCarlo and decoder throughput timings not rerun.",
+        "60sourceworking-tree survivor rows missing; original1,312recount not reproduced.",
+        "Campaign Phase3 document-state assertions are time-specific source commentary, not new cipher exclusions."
+      ]
+    },
+    {
+      "source_id": "R19-R1-VERDICT",
+      "state": "duplicate",
+      "evidence": [
+        {
+          "path": "research/source-intake/batch20-2026-10-23/worker-b/sources/6ee84bea77098b8230e2da0030f9228358e23c75.txt",
+          "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+          "source_path": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75"
+        }
+      ],
+      "executions": [],
+      "covered_subclaim": "Documentary synthesis of R1A-D: redirect instrument/campaign budget; no independent LP2 solving method or scored search. Its toolchain/count and enumeration claims are already assessed under R19-R1-C/D and L1 correction entries in this same receipt.",
+      "duplicate_of": [
+        "R19-R1-C",
+        "R19-R1-D",
+        "L1-F6-CORRECTION",
+        "L1-PRIOR-PROPAGATION"
+      ],
+      "remaining": [
+        "A/Bdecoder/permissiveness and language-panel evidence are separate subclaims, not independently repeated by this synthesis.",
+        "Do not count this campaign recommendation as an extra failed decryption experiment."
+      ]
+    }
+  ],
+  "outstanding_entries": [],
+  "counts": {
+    "entries_reviewed": 8,
+    "replayed": 0,
+    "partial": 5,
+    "blocked": 2,
+    "duplicate": 1
+  },
+  "important_qualification": "Processed8 source entries, not8 new cipher experiments. Partial/blocked scopes remain outstanding. No shared inventory metadata changed.",
+  "material_findings": [
+    "Embedded signedPGP MESSAGE tcp-server.asc passes actualGPG but delimiter-only source/published independentchecker saysNO-SIG; parent owns repair.",
+    "Source s2_reach returns1252retainedrows from pinnedcheckout instead of saved1312.",
+    "G4 prose218faces/146skips versus JSON216total72+144 is an unverified bank-snapshot discrepancy."
+  ],
+  "scratch_notice": "gnupg/ and Pillow JPEGs are execution scratch; stage receipts/scripts/manifests selectively. Original source snapshots include13.5MBdata-blob.asc already represented in existingG02 content-addressed bundle."
+}

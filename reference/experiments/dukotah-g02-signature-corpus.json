@@ -1,17 +1,19 @@
 {
-  "finding": "A fresh pinned-corpus scan finds 114 valid signatures, 11 key files, 7 unsigned files and 1 bad signature. A separate GnuPG keyring agrees on every verdict. All 123 paths shared with the older 228-file table have the same verdict and signature time; their raw SHA differences are entirely LF-versus-CRLF line endings. The sole bad file is missing the OpenPGP header/body blank line; an exact one-line repair and the preserved 2013 JPEG extraction both verify with the identical signature packet.",
+  "finding": "The unchanged source program reports 114 PASS, 11 KEY, 7 NO-SIG and 1 FAIL. An independent GnuPG pass over every file finds 115 PASS, 11 KEY, 6 NO-SIG and 1 FAIL. The sole difference is tcp-server.asc, whose PGP MESSAGE contains a valid embedded signature. The two source-program snapshots agree on all 123 shared paths, with only LF/CRLF byte differences.",
   "id": "dukotah-g02-signature-corpus",
-  "limitations": "The pinned Git corpus contains 133 source-visible .asc files; the older table used 228 working-tree files, including 105 paths missing from this commit. Signature validity is relative to the specified public key and does not itself prove historical authorship or cover all messages. This is not a Liber Primus decryption test.",
+  "limitations": "The pinned Git corpus contains 133 source-visible .asc files; the older table used 228 working-tree files, including 105 paths missing from this commit. The source program's armor-header heuristic misses embedded signatures, so its 114/7 counts are not the corrected GnuPG verdicts. Validity under the specified public key does not prove historical authorship or cover all messages; this is not an LP2 decryption test.",
   "next_steps": "Preserve additional original signed files with their exact bytes and provenance, then rerun the same verification and compare normalized bodies and packet timestamps.",
   "outcome": "supported",
   "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
+  "reader_finding": "Of 133 archived files, GnuPG verifies 115 under the specified Cicada key. The source program counted 114 because it skipped a signed PGP MESSAGE. One separate malformed copy fails; its repaired copy and the original JPEG extraction verify.",
+  "reader_limit": "This checks preserved bytes against a specified public key. The bad copy cannot be treated as a validly parsed signed message until its header is repaired. The check does not prove who owned the key or cover all historical files.",
   "reader_question": "Which archived messages have a valid Cicada signature?",
   "related": [
     "pgp-packet-keys"
   ],
   "reproduction": {
     "command": "python experiments/records/dukotah-g02-signature-corpus/check.py --replay",
-    "environment": "Python 3 standard library and GnuPG 2.5.21 for complete offline replay; --check does not require GnuPG.",
+    "environment": "Python 3 standard library and GnuPG for full offline replay; --check validates the saved all-armor receipt without GnuPG.",
     "inputs": [
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/plan-frozen.json",
@@ -51,23 +53,27 @@
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/check.py",
-        "sha256": "2f7b33d6f3c99a13f152404aada95db96b371f735e6e0dc2b836076203e7d0fb"
+        "sha256": "27e7d84ff78378cd2ea3a680a0eceaa6218c9180931a29950852d378e5dc57fe"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/plot.py",
-        "sha256": "2d7602c2471365299653153b38992a43cfd2795d802beebe566f1eba72324c9e"
+        "sha256": "b4a04e0362af1c0fd5da295ce5b0cb94d7c6e1a60b9dbc984fad6dfd7bbeebcb"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/make_record.py",
-        "sha256": "402515ac3d19e5f3d1228915b29e0626f30a465aaa49b153cbc083df9bc80f09"
+        "sha256": "ad0d2f83b38214b7e49958d7287cf746e1292bdc4eea96eeda7e02cfc3ebb4a7"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/article.md",
-        "sha256": "367d1d54ed49a14c36e22fcda4a01abf70a70e7d1a3a5070c7f209872c1b173b"
+        "sha256": "b027fedbb6e36a03c0b05f83059103ba56a571e0dc6c72b58b6f764341ae6d20"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc",
         "sha256": "0dc4218d36e5bdfc453d7955b3297e4efdc518b2d15fa2df65fbb0476618659a"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/repair.py",
+        "sha256": "77e37d01df0be15ef331a5fc2b2a487c587a582bacd17fc30d155b706e75f9e9"
       }
     ],
     "outputs": [
@@ -77,23 +83,27 @@
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/independent-check.json",
-        "sha256": "b04bf15f150d980160b9e02a5da24753f1899c74218f2f064dbe30a394ce2070"
+        "sha256": "ccfc933c3d727e35d6ec7dbf0ca7a40e49f69f448721464821df00a51155103e"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/results.json",
-        "sha256": "b3033db8e832484b4285543fc29cfc922a9b70b4c4a2929a77815afa2cb8b8c5"
+        "sha256": "6f86e0e365cba678f0841ea30f01583b68083e2b8fa9addf7c609803ffe16700"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg",
-        "sha256": "a3f834dd5d9733c801e221df8efa019d1119823902b3016bb089bcbe25783e0f"
+        "sha256": "0f9dca433143b979a5e59d8d64c792c655312df41529c234bd5f078f8f602e2d"
       },
       {
         "path": "experiments/records/dukotah-g02-signature-corpus/opening-crosscheck.json",
         "sha256": "4d995519134d7087e17a2e325198e53fbc6521626a9fb50b4a8907355b6126ca"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/independent-verification.json",
+        "sha256": "08b15e02d59fff7dbf11aa554b0d66d8be46c798f5380140a58b590e26727c26"
       }
     ],
     "script": "experiments/records/dukotah-g02-signature-corpus/check.py",
-    "script_sha256": "2f7b33d6f3c99a13f152404aada95db96b371f735e6e0dc2b836076203e7d0fb"
+    "script_sha256": "27e7d84ff78378cd2ea3a680a0eceaa6218c9180931a29950852d378e5dc57fe"
   },
   "review": {
     "human_review": "pending",
@@ -110,7 +120,7 @@
     "exclusions": "Files outside this pinned revision, unarchived signed messages, authorship beyond the public key, and any LP2 decryption hypothesis.",
     "pages": [],
     "parameters": "135 committed .asc paths, 2 source-scratch exclusions, 133 cases; canonical key fingerprint 6D854CD7933322A601C3286D181F01E57A35090F; source controls C1-C4. Supplemental 2013 opening comparison: four files, one exact header-line repair, and identical signature packets.",
-    "procedure": "Run the pinned source verifier in an isolated corpus and GnuPG home; independently verify every path with another isolated keyring; compare the saved table and source archive by path, raw SHA, signature verdict and packet time. A supplemental byte-level comparison checks malformed, repaired, other corpus copy and preserved JPEG extraction; isolated GnuPG verifies the latter three and reports BADSIG for the malformed one.",
+    "procedure": "Run the pinned source verifier unchanged in an isolated corpus. Separately submit all 133 exact files to GnuPG under a fresh canonical-key-only home, including armored PGP MESSAGE packets; compare source versus independent verdicts and the two source snapshots by path and bytes.",
     "representation": "Every .asc Git blob at pinned revision f08b20b, excluding the source verifier's own two work/ control files; exact raw bytes reconstructed from 89 content-addressed blobs at 133 paths. A 1,459-byte extraction from the separately preserved 2013 JPEG is a supplemental comparator, not a 134th source-scan case."
   },
   "sources": [
@@ -128,7 +138,7 @@
     }
   ],
   "status": "published",
-  "summary": "Of 133 pinned files, 114 verify. The lone bad copy is a malformed version of the signed 2013 opening message; its repaired and JPEG-extracted copies verify. The older source table covers a different corpus snapshot.",
+  "summary": "GnuPG verifies 115 signatures in the pinned 133-file corpus. The source program reported 114 because it missed one signature embedded in a PGP MESSAGE; its older and newer tables still agree on their 123 shared paths.",
   "tags": [
     "Cicada 3301",
     "PGP",
@@ -139,15 +149,13 @@
   "title": "Which archived Cicada signatures verify?",
   "visuals": [
     {
-      "caption": "The archived table and pinned Git corpus share 123 paths. Every shared path has the same signature result and packet time.",
+      "caption": "The archived table and pinned Git corpus share 123 paths. Their source-program verdicts and extracted times agree; the independent GnuPG pass corrects one shared-path verdict.",
       "path": "experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg"
     }
   ],
-  "reader_finding": "Of 133 archived files, 114 verify under the specified Cicada public key. The one bad file is missing a blank line in its signed-message header. Its repaired copy and the original JPEG extraction verify; the source scan counts remain unchanged.",
-  "reader_limit": "This checks preserved bytes against a specified public key. The bad copy cannot be treated as a validly parsed signed message until its header is repaired. The check does not prove who owned the key or cover all historical files.",
-  "article": "## Finding\n\nIn the pinned public corpus, **114 of 133** source-visible `.asc` files verify against the isolated Cicada public key. Eleven are key files, seven have no recognized signature block, and one produces a bad signature. A second verifier, using its own isolated keyring, agrees on every file. The source program's four checks also pass: a known signature verifies, editing its text breaks it, a foreign key does not impersonate the Cicada key, and the packet timestamp survives the edit.\n\nThe source's older table lists **228 files** because it was made from a different working-tree snapshot. The two snapshots share **123 paths**. Every shared path has the same signature result and packet time; each difference in its raw-file hash is explained exactly by LF line endings in the pinned Git blob versus CRLF in the source's working copy. The pinned snapshot has 10 paths absent from that table, and the table has 105 paths absent from pinned Git.\n\n![Archived-only 105 paths, shared 123, pinned-only 10. The shared paths have identical verification outcomes and signature times.](experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg)\n\nThe one **BADSIG** is a malformed copy of the [2013 opening message](#/wiki/2013-opening): `ky_2013-01-opening-book-code.asc` is missing the blank line after `Hash: SHA1`. Inserting that one line produces the corpus's repaired copy, which **verifies**. Another corpus copy and the [payload freshly extracted from the preserved 2013 JPEG](experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc) also verify under the same key. All four contain identical signature-packet bytes. The JPEG payload differs from the repaired copy only by one trailing space in the riddle and a final newline; the three passing copies have the same signed text after OpenPGP's trailing-whitespace handling. The bad armor has no validly parsed signed body until its header separator is restored.\n\nThe source's “no passing twin” label came from its body extractor: it split the malformed file at the first blank line, thereby dropping “Welcome again.” and assigning it a different fingerprint. The source's **55 body fingerprints** include that artifact; **54** occur among verified files. We preserve the original bad bytes and source verdict rather than replacing them with the repaired version. A valid signature confirms the message relative to this public key, not the key holder's real-world identity.\n\n## What the check covers\n\nThe source script scans all `.asc` files it finds in its repository, except its own `work/` control files. The pinned revision contains 135 `.asc` Git blobs; two are those excluded control files, leaving 133. We rebuilt those 133 exact path/byte pairs from Git objects, ran the pinned source script, then verified every file again through a separate GnuPG keyring. The key's full fingerprint is `6D854CD7933322A601C3286D181F01E57A35090F`; the result is about signatures under that key, not a claim that every historical Cicada message has been collected.\n\n| Pinned file result | Files | Meaning |\n|---|---:|---|\n| Verified signature | 114 | GnuPG validates the signature under the specified key. |\n| Public-key file | 11 | Key material, not a signed message. |\n| No recognized signature | 7 | No signature block recognized by this source scan. |\n| Bad signature | 1 | This exact file's signed body does not verify. |\n\nThe source extractor reports 55 body fingerprints and 54 verified packet timestamps in both snapshots. The malformed opening copy accounts for one fingerprint that is absent from all verified files. These are corpus properties, not extra solved manuscript pages.\n\n## Reproduce\n\nThe [source program](experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py), [frozen source table](experiments/records/dukotah-g02-signature-corpus/source-archived-table.json), [pinned case manifest](experiments/records/dukotah-g02-signature-corpus/plan-frozen.json), and [new result](experiments/records/dukotah-g02-signature-corpus/fresh-table.json) are included. The 133 original file paths are preserved offline in one [content-addressed archive](experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip) and [path map](experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json). Duplicate files, including the two 13.5 MB interconnectedness hex copies, occupy one blob each. Rebuilding checks each file's length and SHA-256 before GnuPG runs. The separately preserved [JPEG extraction](experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc) and [opening-copy receipt](experiments/records/dukotah-g02-signature-corpus/opening-crosscheck.json) document the one-line repair, canonical text and isolated GPG verdicts without changing the 133-case source scan.\n\nFrom the extracted experiment bundle, run `python experiments/records/dukotah-g02-signature-corpus/check.py --replay` with GnuPG installed. It rebuilds the corpus in a temporary directory, reruns the unchanged source verifier, and independently checks all signatures and the four opening variants in isolated keyrings. The quicker `--check` mode verifies the saved bytes, controls, opening-copy relationships and snapshot comparison without invoking GnuPG. Neither mode needs the upstream repository or network.\n\nThe source code and archived table are pinned to [Dukotah/cicada3301 at `f08b20b`](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance). This is a provenance check, not a Liber Primus decryption test.\n",
+  "article": "## Finding\n\nGnuPG verifies **115 of the 133** `.asc` files in the pinned corpus against the Cicada public key. The original source program reported **114**. It missed one valid signature inside `tcp-server.asc` because it only sent files containing the literal `BEGIN PGP SIGNATURE` header to GnuPG. This file is an armored **PGP MESSAGE** with an embedded signature packet; GnuPG reports `VALIDSIG` for the canonical fingerprint. Our independent pass sent all 133 files to GnuPG, including the 11 public-key files. The remaining classifications are 11 key files, six without a verified signature, and one bad signature.\n\nThe source program's four controls still pass: a known signature verifies, editing its text breaks it, a foreign key does not impersonate the Cicada key, and the packet timestamp survives the edit. They did not include an embedded-signature PGP MESSAGE. We preserve the source's **114 verified / 7 unsigned** result in its original table and report the corrected **115 / 6** separately.\n\nThe source's older table lists **228 files** because it was made from a different working-tree snapshot. The two snapshots share **123 paths**. Every shared path has the same *source-program* verdict and extracted packet time; the old table shares the same blind spot for `tcp-server.asc`. Each difference in a shared path's raw-file hash is explained exactly by LF line endings in the pinned Git blob versus CRLF in the source's working copy. The pinned snapshot has 10 paths absent from that table, and the table has 105 paths absent from pinned Git.\n\n![Archived-only 105 paths, shared 123, pinned-only 10. The shared paths have identical source-program verdicts and extracted times.](experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg)\n\nThe one **BADSIG** is a malformed copy of the [2013 opening message](#/wiki/2013-opening): `ky_2013-01-opening-book-code.asc` is missing the blank line after `Hash: SHA1`. Inserting that one line produces the corpus's repaired copy, which **verifies**. Another corpus copy and the [payload freshly extracted from the preserved 2013 JPEG](experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc) also verify under the same key. All four contain identical signature-packet bytes. The JPEG payload differs from the repaired copy only by one trailing space in the riddle and a final newline; the three passing copies have the same signed text after OpenPGP's trailing-whitespace handling. The bad armor has no validly parsed signed body until its header separator is restored.\n\nThe source's “no passing twin” label came from its body extractor: it split the malformed file at the first blank line, thereby dropping “Welcome again.” and assigning it a different fingerprint. The source's **55 body fingerprints** include that artifact; **54** occur among files its parser verified. GnuPG independently finds **55 distinct valid signature times** in the pinned files after including the embedded signature. We preserve the original bad bytes and source verdict rather than replacing them with the repaired version. A valid signature confirms the message relative to this public key, not the key holder's real-world identity.\n\n## What the check covers\n\nThe source script scans all `.asc` files it finds in its repository, except its own `work/` control files. The pinned revision contains 135 `.asc` Git blobs; two are those excluded control files, leaving 133. We rebuilt those 133 exact path/byte pairs from Git objects and reran the pinned source script unchanged. The independent checker then asked GnuPG to verify **all 133**, instead of deciding from armor text which files to send. The key's full fingerprint is `6D854CD7933322A601C3286D181F01E57A35090F`; the result is about signatures under that key, not a claim that every historical Cicada message has been collected.\n\n| Independent GnuPG result | Files | Meaning |\n|---|---:|---|\n| Verified signature | 115 | GnuPG validates the signature under the specified key, including the embedded signature. |\n| Public-key file | 11 | Key material, not a signed message. |\n| No verified signature | 6 | No valid signature under this key was found. |\n| Bad signature | 1 | This exact file's signed body does not verify. |\n\nThe [per-file independent receipt](experiments/records/dukotah-g02-signature-corpus/independent-verification.json) records both verdicts and the GnuPG status for the one disagreement. These are corpus properties, not extra solved manuscript pages.\n\n## Reproduce\n\nThe [source program](experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py), [frozen source table](experiments/records/dukotah-g02-signature-corpus/source-archived-table.json), [pinned case manifest](experiments/records/dukotah-g02-signature-corpus/plan-frozen.json), and [new result](experiments/records/dukotah-g02-signature-corpus/fresh-table.json) are included. The 133 original file paths are preserved offline in one [content-addressed archive](experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip) and [path map](experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json). Duplicate files, including the two 13.5 MB interconnectedness hex copies, occupy one blob each. Rebuilding checks each file's length and SHA-256 before GnuPG runs. The separately preserved [JPEG extraction](experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc) and [opening-copy receipt](experiments/records/dukotah-g02-signature-corpus/opening-crosscheck.json) document the one-line repair, canonical text and isolated GPG verdicts without changing the 133-case source scan.\n\nFrom the extracted experiment bundle, run `python experiments/records/dukotah-g02-signature-corpus/check.py --replay` with GnuPG installed. It rebuilds the corpus in a temporary directory, reruns the unchanged source verifier, and independently asks GnuPG about all 133 files and the four opening variants in isolated keyrings. The quicker `--check` mode verifies the saved bytes, both sets of verdicts, controls, opening-copy relationships and snapshot comparison without invoking GnuPG. Neither mode needs the upstream repository or network.\n\nThe source code and archived table are pinned to [Dukotah/cicada3301 at `f08b20b`](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance). This is a provenance check, not a Liber Primus decryption test.\n",
   "article_path": "experiments/records/dukotah-g02-signature-corpus/article.md",
-  "script_sha256": "2f7b33d6f3c99a13f152404aada95db96b371f735e6e0dc2b836076203e7d0fb",
+  "script_sha256": "27e7d84ff78378cd2ea3a680a0eceaa6218c9180931a29950852d378e5dc57fe",
   "record_type": {
     "id": "audit",
     "label": "Source or input audit",
