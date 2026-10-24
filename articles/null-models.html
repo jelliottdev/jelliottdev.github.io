@@ -37,7 +37,17 @@
 <p>Imagine looking for either a large number of equal neighbors or a large number of unequal neighbors, then reporting whichever count is larger. The score is now <code>max(equal, unequal)</code>. For AABB it is still 2, but the comparison procedure has changed.</p>
 <p>Applying that same choice to every row above gives scores <code>2, 3, 2, 2, 3, 2</code>. All six are at least 2, so the exact upper-tail probability becomes <code>6/6 = 1</code>. With three boundaries, one of the two counts must be at least two. The selection rule guarantees the apparent pattern.</p>
 <p>This deliberately small example makes every choice visible. A manuscript search may select among many window lengths, offsets, keys or regions. If you report the best score from that search, compare it with the best score produced by the <em>same search</em> on each simulated input. Testing only the winning setting afterward omits the opportunities that helped it win. Record any earlier, informal exploration too; a model of two choices does not account for fifty choices you actually inspected.</p>
-<h2 id="reproduce">Reproduce both calculations</h2>
+<h2 id="held-out">Can a learned pattern predict another page?</h2>
+<p>Learn how often rune patterns occur on A and C, then keep those counts fixed while checking B and D. Earlier runes on a checked page may supply context; they do not update the model. Swap the groups for the second pass.</p>
+<figure class="heldout-example">
+<figcaption>A–D are illustrative retained pages, not LP2 page numbers.</figcaption>
+<ol aria-label="Two learning and checking passes">
+<li><span class="sr-only">Pass 1: </span><span class="heldout-pages"><b>Learn from</b><span>A, C</span></span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><span class="heldout-pages"><b>Check on</b><span>B, D</span></span></li>
+<li><span class="sr-only">Pass 2: </span><span class="heldout-pages"><b>Learn from</b><span>B, D</span></span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg><span class="heldout-pages"><b>Check on</b><span>A, C</span></span></li>
+</ol></figure>
+<p>This <b>held-out prediction</b> check asks whether learned patterns transfer between pages. <b>Whole-stream compression</b> instead measures compressed file size. <b>Frequency drift</b> compares symbol counts across ordered chunks; neither uses this learn/check split.</p>
+<p>The <a href="#/experiments/heldout-rune-prediction">LP2 prediction experiment</a> applies this split to 16 fixed predictors and compares them with 1,000 simulated texts that suppress immediate repeats. None crosses the chosen threshold. Two show tiny gains over uniform guessing, but comparable gains also occur in the simulations. This does not establish that LP2 is random.</p>
+<h2 id="reproduce">Reproduce the six-arrangement example</h2>
 <p>Download <a href="scripts/reproduce_null_example.py" download>the standalone reproduction script</a>, or extract the <a href="downloads/reference-data.zip">reference-data bundle</a> and run the commands below from its folder. Only Python 3 is needed; the script reads no manuscript files and makes no network requests.</p>
 <pre><code>python scripts/reproduce_null_example.py
 python scripts/reproduce_null_example.py --json</code></pre>

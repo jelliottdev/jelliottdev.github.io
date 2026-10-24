@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "stage": "Frozen before controlbank; target prohibited until controls and independent review pass and root explicitly resumes",
+  "source": "Full mandatoryD02model/compression/provenance arms, optionaltransformer excluded; selected operationalchoices not historicalreplay",
+  "source_inputs_sha256": "aea2a7cf65325e56d05d8243b65c4b46200c376e65f5efbcc2ba69a847e2b0f8",
+  "input_shape_sha256": "4965606a810a6d15e38bbfe67f4b7450e8a74303837286bb94f2913e24fcc268",
+  "design_sha256": "82decad02df7f1f0377e8ccd8761ce15d0fc041fc246faa0ed132e767199f6fc",
+  "controls_plan_sha256": "2f276d40e5991950bf916a3752a7396fc545f16369ba8c3cf88f94487b98f058",
+  "pins": {
+    "engine.py": "f264e3042d8b773c629930242a7b3bfb760a47e8cf5f50c8ffff24b1266c2863",
+    "provenance.py": "9bf14e0e545152d866ebd10e8064b27c21466cac4aff877c498ef95ab89f3f60",
+    "calibration.py": "9ce38afbba76f58a892c7d607853519bbdca72ecd7f5c041445ab4f1deaf1af3",
+    "controls.py": "57ec04ed7555c37aee3391f30da043c95fd500b3063b4a037c014738aed09957",
+    "input-shape.json": "4965606a810a6d15e38bbfe67f4b7450e8a74303837286bb94f2913e24fcc268"
+  },
+  "target_control_seeds": {
+    "start": 3301241024000,
+    "count": 1000,
+    "stop_inclusive": 3301241024999
+  },
+  "generator": "Exactly continuousXIsoft_pad zeros/one conditionalresample0.83; random.Random independent perseed; slice55source lengths aftergeneration. Expectations not exact86/unigrammatching.",
+  "context": "All8 KT Dirichlet1/2 and8PPM-C fullcount-exclusion maxorders; static traincounts;2pageordinalparity folds; contextresetwithinpage; train allvalid ordertransitions; scorecommonoffset>=8; aggregatebits byscoredrune denominators;12516scored targetpositions. ClosedalphabetPPM removes impossibleescape.",
+  "compression": "Whole continuous stream source raw1 and minimal-big-endian-base29 packing; lzma.compress preset9|PRESET_EXTREME defaultXZ/CRC64. Separate compressionarm, not frozen-model heldoutlikelihood. No transformer.",
+  "provenance": "Five meanrollingPearson count-dispersion widths29,58,116,232,464 stride1 lower;4bin/8bin pooledmonogram Pearsonindependence and8bin lineartrend upper. Rootcopied pinnedmodule.",
+  "calibration": "Each synthetic candidate compared with same199 independently seeded reference streams by symmetric maxZ acrossall26 metrics; all200 rows normalize; constantcolumns exactly all-equal->0; inclusive>= ties; jointfraction<.01 plus at leastone strict oriented99th percentile marginal. Same formula for finaltarget but1000reference controls.",
+  "selection": "Exactly26 metrics in stableorder kt1..8,ppm1..8,lzma_raw1,lzma_packed,provenance.METRICS. Symmetricall1001 normalization; jointmaxZ conditionalreference fraction=(1+#nullS>=S_target)/1001. No permodel bestscope selection, suppressionfit or metricomission aftertargets.",
+  "storage": "Observed16model/page/fold losses;18model/compression+8provenance metrics for each1000control;allseeds/streamhashes/repeatcounts;target and controlaggregatebytes/hash;compact selectedtails/controls. No allcontext tables needed.",
+  "limits": "Selectedfinite models and fixed0.83conditional reference only. No proof of incompressibility/randomness/OTP, plaintextabsence or generator/cipherfamily exclusion. WholeLZMAarm is not heldoutprediction. Page-reset predictors miss exclusivelycross-page structure."
+}

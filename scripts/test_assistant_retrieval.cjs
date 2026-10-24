@@ -58,6 +58,8 @@ assert.deepEqual(lagEvidence.supporting.map(hit=>hit.document.id),
 // New source records must be reachable through ordinary descriptions. A leading
 // measurement/control/audit keeps that type; it must not become a cipher result.
 for(const [query,id,type] of [
+ ['Can other pages help predict the next rune?','heldout-rune-prediction','measurement'],
+ ['Have we tried held-out PPM context models with repeat-suppressed controls?','heldout-rune-prediction','measurement'],
  ['Could confusing O A AE rune readings explain low doublets?','oae-uniform-remapping','measurement'],
  ['Do the archived signed messages retain trailing spaces and tabs?','dukotah-h02-raw-whitespace-census','audit'],
  ['Have we tried skipping two key draws when repeated runes collide?','c2-extension-generator-controls','control'],

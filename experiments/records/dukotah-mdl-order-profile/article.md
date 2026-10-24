@@ -20,7 +20,9 @@ The source also tried compressors and phrase counts; their outputs replay exactl
 
 ## What this covers
 
-The source joins its **55 nonempty LP2 text segments** into one GP29 index stream, including transitions across segment boundaries. We used those same bytes and source alphabet. The new control matches stream length, alphabet size, and total adjacent-repeat count. It does **not** match each page, unigram frequency, word boundaries, or other structure. We designed it *after* seeing the source's first-order anomaly, so it is a diagnostic of that anomaly, not a new discovery test. The suggested larger filtered-control and held-out PPM campaigns remain open.
+The source joins its **55 nonempty LP2 text segments** into one GP29 index stream, including transitions across segment boundaries. We used those same bytes and source alphabet. The new control matches stream length, alphabet size, and total adjacent-repeat count. It does **not** match each page, unigram frequency, word boundaries, or other structure. We designed it *after* seeing the source's first-order anomaly, so it is a diagnostic of that anomaly, not a new discovery test.
+
+The [held-out prediction follow-up](#/experiments/heldout-rune-prediction) now asks whether learned patterns transfer to other pages. It tests 16 fixed predictors, compression, local balance and frequency drift against 1,000 source-filtered controls. None of its 26 measurements crosses the predeclared threshold. That comparison uses a different control rule: repeats are suppressed in expectation, not fixed at exactly 86. It does not identify the cipher or establish randomness.
 
 ## Reproduce
 

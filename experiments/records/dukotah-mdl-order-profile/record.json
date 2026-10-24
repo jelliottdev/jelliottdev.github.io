@@ -7,7 +7,7 @@
   "summary": "The published 40-control entropy anomaly reproduces exactly, but it lies inside a new 1,000-stream control range after matching LP2's 86 adjacent repeats.",
   "finding": "Published order-one entropy is 4.7854 versus 4.8125 for 40 independent controls (z -14.6). Among 1,000 post-observation controls with exactly 86 adjacent repeats, the mean is 4.7871 and 207 are at or below LP2. The prominent dip is not exceptional under that matched model.",
   "limitations": "The new controls were chosen after the anomaly and match only total adjacent repeats, not page structure, exact unigram counts, or word boundaries. In-sample high-order empirical entropy is not a held-out entropy-rate estimate; no key or plaintext is identified.",
-  "next_steps": "Predeclare a predictive model and compare it on held-out rune sequences against controls preserving the relevant observed structure.",
+  "next_steps": "The linked held-out rune-prediction follow-up tests fixed KT and PPM models against 1,000 repeat-suppressed controls. Other predictors, keys and word-boundary models remain outside both records.",
   "outcome": "inconclusive",
   "tags": [
     "entropy",
@@ -160,12 +160,23 @@
   ],
   "related": [
     "r18-entropy-budget-replay",
-    "doublet-placement"
+    "doublet-placement",
+    "heldout-rune-prediction"
   ],
   "visuals": [
     {
       "path": "experiments/records/dukotah-mdl-order-profile/order-one-controls.svg",
       "caption": "The independent random comparison shows a large dip; repeat-matched controls place LP2 inside their central range."
     }
-  ]
+  ],
+  "family": {
+    "id": "rune-order-predictability",
+    "title": "Predictability of rune sequences",
+    "question": "Do rune-order models reveal structure beyond scarce adjacent repeats?",
+    "baseline": "dukotah-mdl-order-profile"
+  },
+  "variant": {
+    "label": "In-sample MDL with independent and repeat-matched controls",
+    "changes": []
+  }
 }

@@ -134,6 +134,7 @@ async function experimentsPage(id, version, query='') {
     if(typeof UrlMarkerView!=='undefined')UrlMarkerView.bind(main.querySelector('.url-marker-view'),{alphabet:db.alphabet,isCurrent:()=>version===renderId});
     if(typeof PrimeLagView!=='undefined')PrimeLagView.bind(main.querySelector('.prime-lag-view'),{isCurrent:()=>version===renderId});
     if(typeof NumericSkipView!=='undefined')NumericSkipView.bind(main.querySelector('.numeric-skip-view'),{isCurrent:()=>version===renderId});
+    if(typeof HeldoutPredictionView!=='undefined')HeldoutPredictionView.bind(main.querySelector('.heldout-results'),{isCurrent:()=>version===renderId});
     startExperimentSupport();
     return;
   }
@@ -390,6 +391,7 @@ function affineLagWorkedExample(){
  <p class="affine-example-note">This is one matching pair, not proof of a cipher. The full count and shuffled comparison follow.</p></figure>`;
 }
 function experimentVisual(r,v){
+  if(typeof HeldoutPredictionView!=='undefined'&&HeldoutPredictionView.canRender(r,v))return HeldoutPredictionView.render();
   if(typeof NumericSkipView!=='undefined'&&NumericSkipView.canRender(r,v))return NumericSkipView.render(r.id);
   if(r.id==='prime-lag-autokey-openings'&&v.path==='experiments/records/prime-lag-autokey-openings/prime-lag.svg'&&typeof PrimeLagView!=='undefined'&&r.reproduction?.inputs?.some(file=>file.path==='experiments/records/prime-lag-autokey-openings/plan-frozen-original.json')&&r.reproduction?.outputs?.some(file=>file.path==='experiments/records/prime-lag-autokey-openings/results.json'))return PrimeLagView.render();
   if(r.id==='url-marker-affine-census'&&v.path==='experiments/records/url-marker-affine-census/marker-census.svg'&&typeof UrlMarkerView!=='undefined'&&['results.json','matches.json'].every(name=>r.reproduction?.outputs?.some(file=>file.path==='experiments/records/url-marker-affine-census/'+name)))return UrlMarkerView.render();

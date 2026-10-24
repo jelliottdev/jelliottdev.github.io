@@ -77,7 +77,24 @@ Applying that same choice to every row above gives scores 2, 3, 2, 2, 3, 2. All 
 
 This deliberately small example makes every choice visible. A manuscript search may select among many window lengths, offsets, keys or regions. If you report the best score from that search, compare it with the best score produced by the same search on each simulated input. Testing only the winning setting afterward omits the opportunities that helped it win. Record any earlier, informal exploration too; a model of two choices does not account for fifty choices you actually inspected.
 
-Reproduce both calculations
+Can a learned pattern predict another page?
+
+Learn how often rune patterns occur on A and C, then keep those counts fixed while checking B and D. Earlier runes on a checked page may supply context; they do not update the model. Swap the groups for the second pass.
+
+
+A–D are illustrative retained pages, not LP2 page numbers.
+
+
+Pass 1: Learn fromA, CCheck onB, D
+
+Pass 2: Learn fromB, DCheck onA, C
+
+
+This held-out prediction check asks whether learned patterns transfer between pages. Whole-stream compression instead measures compressed file size. Frequency drift compares symbol counts across ordered chunks; neither uses this learn/check split.
+
+The LP2 prediction experiment applies this split to 16 fixed predictors and compares them with 1,000 simulated texts that suppress immediate repeats. None crosses the chosen threshold. Two show tiny gains over uniform guessing, but comparable gains also occur in the simulations. This does not establish that LP2 is random.
+
+Reproduce the six-arrangement example
 
 Download the standalone reproduction script, or extract the reference-data bundle and run the commands below from its folder. Only Python 3 is needed; the script reads no manuscript files and makes no network requests.
 
@@ -147,6 +164,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus
 - corpus inventory
   https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus-inventory
+- LP2 prediction experiment
+  https://jelliottdev.github.io/#/experiments/heldout-rune-prediction
 - the standalone reproduction script
   https://jelliottdev.github.io/scripts/reproduce_null_example.py
 - reference-data bundle
