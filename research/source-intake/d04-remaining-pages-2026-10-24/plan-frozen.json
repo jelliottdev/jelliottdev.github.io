@@ -1,0 +1,232 @@
+{
+  "schema": "d04-remaining-page-plan-v1",
+  "source_commit": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "frozen_before_target": true,
+  "source_id": "D-04",
+  "targets": [
+    "lp2-01",
+    "lp2-02",
+    "lp2-03",
+    "lp2-04",
+    "lp2-06",
+    "lp2-07",
+    "lp2-08",
+    "lp2-09",
+    "lp2-10",
+    "lp2-11",
+    "lp2-12",
+    "lp2-13",
+    "lp2-14",
+    "lp2-15",
+    "lp2-16",
+    "lp2-17",
+    "lp2-18",
+    "lp2-19",
+    "lp2-21",
+    "lp2-22",
+    "lp2-23",
+    "lp2-24",
+    "lp2-25",
+    "lp2-26",
+    "lp2-27",
+    "lp2-28",
+    "lp2-29",
+    "lp2-30",
+    "lp2-31",
+    "lp2-32",
+    "lp2-33",
+    "lp2-34",
+    "lp2-35",
+    "lp2-36",
+    "lp2-37",
+    "lp2-38",
+    "lp2-39",
+    "lp2-40",
+    "lp2-41",
+    "lp2-42",
+    "lp2-43",
+    "lp2-44",
+    "lp2-45",
+    "lp2-46",
+    "lp2-47",
+    "lp2-48",
+    "lp2-49",
+    "lp2-51",
+    "lp2-52",
+    "lp2-53",
+    "lp2-54",
+    "lp2-55"
+  ],
+  "baseline_excluded_pages": [
+    "lp2-00",
+    "lp2-05",
+    "lp2-20"
+  ],
+  "history_depths": [
+    1,
+    2,
+    3
+  ],
+  "coefficient_vectors": {
+    "k1": "all nonzero a1 in1..28",
+    "k2": "all a1,a2 in0..28 except allzero",
+    "k3": "all a1,a2 in0..28 and a3 in[0,1,28,2,27] except allzero"
+  },
+  "vector_counts": [
+    28,
+    840,
+    4204
+  ],
+  "seed_constants": [
+    0,
+    1
+  ],
+  "signs": [
+    -1,
+    1
+  ],
+  "offset": 0,
+  "source_beam_width": 250,
+  "source_max_skip": 3,
+  "feedback_start": "f_i=0 for i<k, exactly source; otherwise sum(a_t*C[i-t])mod29",
+  "target_settings": 1054976,
+  "score_gate": -5.2,
+  "acceleration": "All seed key entries equal c0. Every admitted source path gives identical p_i=(C_i+sign*(c0+f_i))mod29. Preserve initial-k zeros and source GP-label quadgram normalization, with no minimum-length eligibility cutoff. No evidence of skip recovery follows from constant-seed plants.",
+  "preflight": {
+    "parity_seed": 330120261027,
+    "random_cases": 48,
+    "repeat_cases": 4,
+    "synthetic_length": 184,
+    "require": "Exact source plaintext path and abs source/accelerated score delta<=2e-12 for52 cases, plus exact source coefficient-grid identity; source known-reading encryption parity.",
+    "benchmark": "Warm compiled scorer on synthetic data for complete5072x4settings; stop/report before target if projected full52page+32nulls exceeds10minutes."
+  },
+  "positive_controls": {
+    "reading": "184-rune Warning",
+    "plants": [
+      {
+        "seed_constant": 0,
+        "a1": 7,
+        "sign": -1
+      },
+      {
+        "seed_constant": 1,
+        "a1": 7,
+        "sign": -1
+      }
+    ],
+    "require": "Complete5072x4 source-domain search must recover exact known text and place true rule at rank1 (ties allowed), with score>-5.2. Wrong unit coefficient must score below-5.5."
+  },
+  "null_trials": 32,
+  "null_seed": 330120261028,
+  "null": "Independently permute every target page once per trial, preserving its counts/length. Repeat complete52page coefficient/seed/sign search. Compare global observed best to32 global maxima using plus-one exceedance.",
+  "independent_check": "Separate direct vector arithmetic and rolling-quadgram scorer checks all1054976 observed scores; source parity validates acceleration; check all32 null-winning cases independently.",
+  "inputs": [
+    {
+      "path": "source/liber-primus/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59",
+      "source_path": "LICENSE"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/armada/numeric_skip.py",
+      "sha256": "082e6f24a6ddc29fa9ea88c68e71d4a45d3de3d816e8ab2230d864cf64bee2de",
+      "source_path": "analysis/campaign18_skip/armada/numeric_skip.py"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/armada2/selfref_skip.py",
+      "sha256": "60e2db5782d8c26e36435eada3f698bc0c14bf4c3926e1f429e8c677176cb87d",
+      "source_path": "analysis/campaign18_skip/armada2/selfref_skip.py"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/ctfeedback_coeffs.py",
+      "sha256": "b64396dd3777d6078fca241943c8b743e5e255249e80a90ca6613e23167088a0",
+      "source_path": "analysis/campaign18_skip/ctfeedback_coeffs.py"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+      "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+      "source_path": "analysis/campaign18_skip/skipdecode.py"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/sweep.py",
+      "sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80",
+      "source_path": "analysis/campaign18_skip/sweep.py"
+    },
+    {
+      "path": "source/liber-primus/analysis/run_stats.py",
+      "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0",
+      "source_path": "analysis/run_stats.py"
+    },
+    {
+      "path": "source/liber-primus/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+      "source_path": "data/english_quadgrams.txt"
+    },
+    {
+      "path": "source/liber-primus/data/keys/self_reliance.txt",
+      "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0",
+      "source_path": "data/keys/self_reliance.txt"
+    },
+    {
+      "path": "source/liber-primus/data/keys/solved_plaintext.txt",
+      "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473",
+      "source_path": "data/keys/solved_plaintext.txt"
+    },
+    {
+      "path": "source/liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+      "source_path": "data/krisyotam_runes.txt"
+    },
+    {
+      "path": "source/liber-primus/src/lp/autokey.py",
+      "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125",
+      "source_path": "src/lp/autokey.py"
+    },
+    {
+      "path": "source/liber-primus/src/lp/ciphers.py",
+      "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f",
+      "source_path": "src/lp/ciphers.py"
+    },
+    {
+      "path": "source/liber-primus/src/lp/corpus.py",
+      "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68",
+      "source_path": "src/lp/corpus.py"
+    },
+    {
+      "path": "source/liber-primus/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+      "source_path": "src/lp/gematria.py"
+    },
+    {
+      "path": "source/liber-primus/src/lp/score.py",
+      "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+      "source_path": "src/lp/score.py"
+    },
+    {
+      "path": "source/liber-primus/src/lp/solve.py",
+      "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3",
+      "source_path": "src/lp/solve.py"
+    },
+    {
+      "path": "source/liber-primus/src/lp/stats.py",
+      "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2",
+      "source_path": "src/lp/stats.py"
+    },
+    {
+      "path": "pages.json",
+      "sha256": "a07834a406a6f12394b85e844b1225d948785d36cec5b3df4e2235a6ee34ca61"
+    },
+    {
+      "path": "labels.json",
+      "sha256": "85d9d00b407adf0813f53d8235edf97efaa68ba93fca0682129ba4aaaf280298"
+    },
+    {
+      "path": "warning.json",
+      "sha256": "cf951f3a433c845356ca89569c475655635db0a668364a106f8d6b98475f4791"
+    }
+  ],
+  "limits": [
+    "This extends the three-page source search to its remaining52pages; one family variant, not a claim that each setting is a solving idea.",
+    "Constant seeds only; no external-reference key, other offsets, broader lag3 coefficients, plaintext feedback or language-panel substitution.",
+    "No general feedback-cipher exclusion."
+  ]
+}

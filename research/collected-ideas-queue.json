@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 39,
+    "published_followup_records": 44,
     "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
@@ -481,8 +481,11 @@
         "experiments/records/feedback-opening-census/record.json",
         "experiments/records/cumulative-autokey-literal/record.json"
       ],
-      "coverage_note": "Scalar-primed plaintext feedback lags 1–16 and a distinct cumulative rule are tested; arbitrary seed vectors and key layer are not.",
-      "queue_id": null
+      "coverage_note": "Scalar-primed plaintext feedback lags 1–16 and a distinct cumulative rule are tested; arbitrary seed vectors and key layer are not. Additional source-rule followup tests repeated one-rune primers and 11 fixed prime delays through 31 against nine 12-rune opening guesses; longer delays do not enter feedback in those prefixes.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "prime-lag-autokey-openings"
+      ]
     },
     {
       "source_id": "4.2",
@@ -496,8 +499,12 @@
         "experiments/records/feedback-opening-census/record.json",
         "experiments/records/linear-ciphertext-feedback/record.json"
       ],
-      "coverage_note": "Scalar-primed ciphertext feedback lags 1–16 are checked at fixed page openings; larger primers, other positions and key layers remain.",
-      "queue_id": null
+      "coverage_note": "Scalar-primed ciphertext feedback lags 1–16 are checked at fixed page openings; larger primers, other positions and key layers remain. Additional source-rule followup tests repeated one-rune primers and 11 fixed prime delays through 31 against nine 12-rune opening guesses; longer delays do not enter feedback in those prefixes. A separate weighted-ciphertext followup covers all 52 pages omitted by its three-page source baseline, under the original constant-seed coefficient grid; varying-key skips remain open.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "prime-lag-autokey-openings",
+        "d04-remaining-page-feedback"
+      ]
     },
     {
       "source_id": "4.3",
@@ -1230,10 +1237,11 @@
         "experiments/records/lp2-row-column-routes/record.json",
         "data/method-families.json#routes"
       ],
-      "coverage_note": "Column/diagonal route family is already documented; the current sixteen routes do not test arbitrary grid widths or column permutations.",
+      "coverage_note": "Column/diagonal route family is already documented; the current sixteen routes do not test arbitrary grid widths or column permutations. Additional public-source keyword followup tests 45 labels /43 effective column orders with dictionary counts, known-reading controls and an explicitly post-target shared-page shuffle comparison; arbitrary permutations remain open.",
       "queue_id": null,
       "subsequent_record_ids": [
-        "lp2-row-column-english"
+        "lp2-row-column-english",
+        "public-keyed-columnar-word-counts"
       ]
     },
     {
@@ -1342,8 +1350,12 @@
         "experiments/records/page-margin-row-alignment/record.json",
         "data/method-families.json#image-processing"
       ],
-      "coverage_note": "Image overlays and alignment are known leads. A shared artwork match is not a text-mask decoder; specify page pair, registration and readout.",
-      "queue_id": null
+      "coverage_note": "Image overlays and alignment are known leads. A shared artwork match is not a text-mask decoder; specify page pair, registration and readout. Separate arithmetic followups align rune streams at forward relative shifts with at least 120-rune overlap, using difference IoC and fixed English-scored sums/differences. These do not test image masking or registered pixel overlays.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "lp2-shifted-page-pair-differences",
+        "lp2-shifted-page-pair-english"
+      ]
     },
     {
       "source_id": "9.10",

@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
-    "record_count": 314
+    "sha256": "8353dca7856f412c38fc5bd19dce4ae911eab3ce164424a973d57b25434a3763",
+    "record_count": 316
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -33,8 +33,8 @@
     "pending_review_with_candidate_match": 0,
     "pending_review_without_candidate_match": 0,
     "execution_replay_states": {
-      "partial-execution": 22,
-      "complete-executed-grid": 23,
+      "partial-execution": 21,
+      "complete-executed-grid": 24,
       "replayed-with-invalid-gate": 6
     },
     "verified_coverage": 0
@@ -1303,10 +1303,14 @@
           {
             "record_id": "dukotah-ciphertext-feedback-coefficients",
             "covered_subclaim": "All 60,864 executable default grid decodes across source pages 0,5,20, two signs and constant seeds 0/1. Added same-domain planted controls recover the specified one-tap coefficient; the original gate uses out-of-domain seed 5."
+          },
+          {
+            "record_id": "d04-remaining-page-feedback",
+            "covered_subclaim": "Extends the same5,072 source coefficient vectors, constant0/1 seeds, signs and initial-history rule to all52 remaining nonempty source pages:1,054,976 full-page scores. Accelerated constant-seed decoding has native-source parity and full-grid known-message recovery;32 complete shuffled searches are exploratory reference controls, not variable-key skip tests."
           }
         ],
         "unresolved_parts": [
-          "Three-tap coefficients remain restricted, not all 29 values. Source prose maxima differ from executable output. Other pages, nonconstant seeds, explicit reference-corpus runs and skip schedules are outside this grid."
+          "Three-tap coefficients remain restricted, not all29 values. Source prose maxima differ from the original executable output. Nonconstant seeds, other constants, explicit reference-corpus keys and varying-key skip recovery remain outside these linked grids."
         ],
         "rejected_candidates": [],
         "audit_note": null
@@ -1314,9 +1318,10 @@
       "execution_replay": {
         "state": "complete-executed-grid",
         "record_ids": [
-          "dukotah-ciphertext-feedback-coefficients"
+          "dukotah-ciphertext-feedback-coefficients",
+          "d04-remaining-page-feedback"
         ],
-        "scope": "All 60,864 executable default grid decodes across source pages 0,5,20, two signs and constant seeds 0/1. Added same-domain planted controls recover the specified one-tap coefficient; the original gate uses out-of-domain seed 5.",
+        "scope": "All 60,864 executable default grid decodes across source pages 0,5,20, two signs and constant seeds 0/1. Added same-domain planted controls recover the specified one-tap coefficient; the original gate uses out-of-domain seed 5. The linked extension adds all 52 other nonempty source pages under the identical constant-seed rule, totaling 55 pages across both records; broader varying-key proposals remain open.",
         "wider_method_excluded": false
       }
     },
@@ -4844,6 +4849,19 @@
               ]
             }
           ]
+        },
+        {
+          "record_id": "turtle-shape-refinement-replay",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json",
+                "liber-primus/analysis/round22/B-turtle-spatial-render/sweep.py",
+                "liber-primus/analysis/round22/B-turtle-spatial-render/turtle_engine.py"
+              ]
+            }
+          ]
         }
       ],
       "coverage_verified": false,
@@ -4856,10 +4874,14 @@
           {
             "record_id": "dukotah-g3-pointer-framings",
             "covered_subclaim": "Complete implemented G3 grid: three number streams, five measurements and 200 seeded shuffles per measurement. Source metrics match; an independent checker verifies all 600 repeated-symbol controls. Base32 counts are length-only, the digit-only latitude/longitude parser cannot fire, and coordinate pair rate is not a flag. No broader pointer exclusion."
+          },
+          {
+            "record_id": "turtle-shape-refinement-replay",
+            "covered_subclaim": "Replays all six selected2,000-shuffle refinements using four shared source-seeded path series:8,000 actual null walks. All six archived empirical tail counts and flags agree. Four Gaussian tail estimates differ slightly; archived numerical parity is not claimed."
           }
         ],
         "unresolved_parts": [
-          "The source's 2,000-sample-plus-normal-tail refinements were inspected in its ledger, not independently regenerated. Its closure and caging statistics duplicate the same ratio; floating-point ties and a sampled crossing produce small source/replay differences.",
+          "The six selected refinements now reproduce all archived empirical tails and source flags. Four Gaussian estimates are not numerically identical (maximum absolute difference2.38e-5); the source Gaussian model and its multiple-selection probability are not independently validated.",
           "The 12,956-rune source path includes Liberpedia LP2-55 because blank LP2-50 is omitted by source segment numbering.",
           "Additional mod-M and ASCII-coordinate framings in the written preregistration are not implemented by the source G3 program and are not covered by this replay."
         ],
@@ -4867,12 +4889,13 @@
         "audit_note": null
       },
       "execution_replay": {
-        "state": "partial-execution",
+        "state": "complete-executed-grid",
         "record_ids": [
           "lp2-turtle-spatial-replay",
+          "turtle-shape-refinement-replay",
           "dukotah-g3-pointer-framings"
         ],
-        "scope": "G1 72-path initial screen and full implemented G3 pointer-screen grid; later G1 tail refinements and unimplemented written pointer proposals remain separate.",
+        "scope": "G1 executable72-rule initial screen and all six saved selected2,000-shuffle refinements, plus the previously replayed full implemented G3 pointer grid. Some saved initial/Gaussian numerical values differ as disclosed; written additional geometry framings and unvalidated inference remain outside these replays.",
         "wider_method_excluded": false
       }
     },

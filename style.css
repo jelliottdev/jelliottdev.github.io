@@ -891,3 +891,16 @@ main:has(>.experiment-article)>.article-top,main:has(>.experiment-article)>.brea
 .url-marker-counts td{text-align:right;font-variant-numeric:tabular-nums}
 .url-marker-view [data-url-retry],.url-marker-view p>a{display:inline-flex;align-items:center;min-height:44px}
 .url-marker-view [data-url-retry][hidden]{display:none}
+
+/* A dependency timeline stays legible without twelve tiny columns. */
+.prime-lag-view{max-width:36rem}
+.prime-lag-view p{font-size:15px;line-height:1.55;margin:12px 0;overflow-wrap:anywhere}
+.prime-lag-label{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:14px 0;font-size:15px;font-weight:600}
+.prime-lag-label select{min-height:44px;max-width:100%;font-size:16px}
+.prime-lag-positions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;list-style:none;padding:0;margin:12px 0}
+.prime-lag-positions li{min-width:0;padding:8px 5px;border:1px solid var(--line);background:#fff;overflow-wrap:anywhere}
+.prime-lag-positions .prime-lag-feedback{background:#e4edf2;border-color:#9eafba}
+.prime-lag-position{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.prime-lag-positions strong{display:block;font-size:13px;line-height:1.4}
+.prime-lag-view [data-prime-retry],.prime-lag-view p>a{display:inline-flex;align-items:center;min-height:44px}
+.prime-lag-view [data-prime-retry][hidden]{display:none}

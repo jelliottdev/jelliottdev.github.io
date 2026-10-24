@@ -1,0 +1,18 @@
+"""Illustrate one fixed selected path beside its first fixed-seed shuffle, at one scale."""
+import ast,hashlib,json,math,random
+from pathlib import Path
+import numpy as np
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
+plan=json.loads((HERE/'plan.json').read_bytes());r=json.loads((HERE/'results.json').read_bytes())
+for row in plan['inputs']:assert hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest()==row['sha256']
+a=json.loads((ROOT/'data/index.json').read_bytes())['alphabet'];lookup={row['rune']:row['prime'] for row in a};pages=[f'lp2-{i:02d}' for i in list(range(50))+list(range(51,56))];values=[lookup[c] for p in pages for c in (ROOT/f'text/{p}.txt').read_text(encoding='utf8') if c in lookup]
+ns={'np':np};tree=ast.parse((HERE/'source-turtle_engine.py').read_text(encoding='utf8'));exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='walk'],type_ignores=[]),'source-walk','exec'),ns)
+shuffled=list(values);random.Random(103301).shuffle(shuffled);paths=[ns['walk'](v,8,'relative','value') for v in [values,shuffled]]
+minx=min(float(x.min()) for x,y in paths);maxx=max(float(x.max()) for x,y in paths);miny=min(float(y.min()) for x,y in paths);maxy=max(float(y.max()) for x,y in paths);scale=224/max(maxx-minx,maxy-miny)
+parts=['<svg xmlns="http://www.w3.org/2000/svg" width="580" height="665" viewBox="0 0 580 665" role="img" aria-label="One selected ordered LP2 turtle path beside the first fixed shuffle at the same drawing scale. Six selected diagnostics share four path rules; none passes both source checks. Empirical zero is not probability zero, and Gaussian tails are assumptions."><rect width="580" height="665" fill="white"/><g font-family="Arial,sans-serif" fill="#17212b"><text x="24" y="35" font-size="24">An LP2 path and its shuffled comparison</text><text x="24" y="74" font-size="20">Same rule and common drawing scale</text><text x="24" y="110" font-size="20">Ordered LP2 runes</text><text x="306" y="110" font-size="20">First fixed shuffle</text>']
+for left,(x,y) in zip([24,306],paths):
+ parts.append(f'<rect x="{left}" y="125" width="250" height="250" fill="#f0f2f4"/>')
+ points=' '.join(f'{left+13+(float(xx)-minx)*scale:.2f},{362-(float(yy)-miny)*scale:.2f}' for xx,yy in zip(x,y));parts.append(f'<polyline points="{points}" fill="none" stroke="#536575" stroke-width="0.48"/>')
+parts += ['<text x="24" y="408" font-size="20">Prime values · M8 relative turns · value steps</text>','<text x="24" y="447" font-size="22">No measure passes both source checks.</text>','<text x="24" y="480" font-size="20">Six selected measures share four path rules.</text>','<text x="24" y="514" font-size="20">Zero tail hits in 2,000 samples is not zero probability.</text>','<text x="24" y="547" font-size="20">The tiny-tail check assumes Gaussian behavior.</text>','<text x="24" y="580" font-size="20">Source correction accounts for 72 × 6 measures.</text>','<line x1="24" y1="600" x2="556" y2="600" stroke="#bac4cd"/>','<text x="24" y="633" font-size="20">Illustration only: no glyph or plaintext is certified.</text>','</g></svg>']
+(HERE/'refinement-gates.svg').write_text(''.join(parts)+'\n',encoding='utf8')
+(HERE/'figure-receipt.json').write_text(json.dumps({'combo':'value_M8_relative_value','shuffle_seed':103301,'selection':'First predeclared refinement seed, not chosen by visual/statistical ranking.','shared_world_bounds':[minx,maxx,miny,maxy],'same_scale':True,'points_per_path':len(values)+1,'interpretation':'Illustrative path comparison, not an additional diagnostic or visual glyph adjudication.'},indent=2)+'\n',encoding='utf8')
