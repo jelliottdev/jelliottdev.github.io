@@ -332,6 +332,14 @@ The frontend enables it through `interpretationEndpoint` in `data/assistant.json
 Imported cards and interpretation edits never trigger it. Research comparison and
 saving still require the separate confirmation action.
 
+Interpretation waits for endpoint configuration, not for the experiment registry.
+A slow or failed registry must not prevent clarification or editing. The research
+confirmation action remains disabled until valid published records and their
+snapshot identity are available. Registry retries update availability without
+replacing the active form, changing the original wording or requesting another
+interpretation. A configuration failure offers the original-wording path.
+
+
 Each extracted field cites an exact source substring. The handler locates a
 uniquely occurring quote directly in the original; repeated quotes still need a
 correct supplied offset. It never changes quoted wording, steps or parameters.

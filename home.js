@@ -88,7 +88,7 @@
    try{const text=await file.blob.slice(0,200000).text();if(version!==previewVersion)return;
     const pre=document.createElement('pre');pre.textContent=text;target.append(pre);
     if(file.size>200000){const note=document.createElement('p');note.textContent='Showing the first 200 KB. The complete file is kept locally.';target.append(note)}
-   }catch{const note=document.createElement('p');note.textContent='The file could not be previewed. It is still attached.';target.append(note)}
+   }catch{if(version!==previewVersion)return;const note=document.createElement('p');note.textContent='The file could not be previewed. It is still attached.';target.append(note)}
   }else{const note=document.createElement('p');note.textContent=`${file.name} is attached. A preview for this file type isn’t available.`;target.append(note)}
  }
  function showReview(index=0){

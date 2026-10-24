@@ -260,6 +260,7 @@
   let renderedResearchCard=null;
   let cardContract=false;
   let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='';
+  let configResolved=false,configValid=false,configReady=null,configAttempt=null,loadVersion=0,destroyed=false;
   const fragment=doc.defaultView?.location?.hash||'';
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
@@ -290,7 +291,7 @@
      '')+(editing?editorHTML():questionsHTML())+(pending?'<button id="edit" type="button">Edit interpretation</button>':'')+
      (stage==='review'?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="index.html#/research">Browse the research index</a> for approaches.</p>':'')+
-     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p>'+'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
@@ -420,7 +421,7 @@
    doc.getElementById('intake')?.addEventListener('submit',event=>{
     event.preventDefault();raw=doc.getElementById('idea').value;if(!raw.trim())return;
     stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
-    if(loaded&&!interpretationEndpoint)acceptDraft(initialDraft(raw));else interpret();
+    if(configResolved&&!interpretationEndpoint)acceptDraft(initialDraft(raw));else interpret();
    });
    doc.getElementById('back')?.addEventListener('click',()=>{stopIntake(true);stop();stage='input';editing=false;confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#idea');});
    doc.getElementById('edit')?.addEventListener('click',()=>{stopIntake(true);stop();editingBackup={stage,draft,confirmed,result,packet,message,error};editing=true;stage='review';draft=C.revise(draft,{});confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#edit-method');});
@@ -460,6 +461,7 @@
     error='';render();focus(editing?'#edit-method':'#review-title');
    });
    doc.getElementById('confirm')?.addEventListener('click',()=>{
+    if(!loaded)return;
     try{if(draft.method.status!=='specified')throw Error('Choose a method before comparing prior tests.');if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
      if(cardContract)R.prepare(confirmed);
      else{
@@ -484,9 +486,11 @@
    stopInterpretation();const token=interpretVersion,text=raw;
    stage='interpreting';interpreting=true;interpretError='';error='';message='';render();focus('#interpret-title');
    try{
-    if(!loaded)await ready;
+    while(!configResolved){
+     await configReady;
+     if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
+    }
     if(token!==interpretVersion||stage!=='interpreting'||text!==raw)return;
-    if(!loaded)throw Error('Interpretation is unavailable. You can continue with your original wording.');
     if(!interpretationEndpoint){interpreting=false;acceptDraft(initialDraft(text));return;}
     P.validateInput(text);
     const requestController=new AbortController();interpretController=requestController;
@@ -520,26 +524,47 @@
    if(loaded)retry?.remove();
    else if(loadError&&!retry){host.insertAdjacentHTML('beforeend','<button id="reload" type="button">Retry loading research</button>');doc.getElementById('reload')?.addEventListener('click',()=>load());}
   }
-  async function load(){
-   loadError='';availability();
-   try{
-    const [registry,config]=await Promise.all([json('data/experiments.json',{signal:AbortSignal.timeout(8000)}),json('data/assistant.json',{signal:AbortSignal.timeout(8000)})]);
-    if(!Array.isArray(registry.records))throw Error('Research records could not be read.');
-    records=registry.records.filter(r=>r.status==='published');documents=S.experimentDocs(records);
-    if(!records.length)throw Error('No published research records are available.');
+  function loadConfig(){
+   if(configValid||configAttempt&&!configResolved)return configAttempt;
+   configResolved=false;
+   // Interpretation needs configuration only. Settle that readiness separately
+   // from registry download/validation/hash, without replacing any editor DOM.
+   configAttempt=json('data/assistant.json',{signal:AbortSignal.timeout(8000)}).then(config=>{
+    if(destroyed)return;
+    if(!config||typeof config!=='object'||Array.isArray(config))throw Error('Research configuration could not be read.');
     endpoint=typeof config.endpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ask$/.test(config.endpoint)?config.endpoint:null;
     cardContract=config.researchContract==='card-v1';
     interpretationEndpoint=typeof config.interpretationEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/interpret$/.test(config.interpretationEndpoint)?config.interpretationEndpoint:null;
     intakeEndpoint=typeof config.proposalEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/proposals$/.test(config.proposalEndpoint)?config.proposalEndpoint:null;
+    configValid=true;configResolved=true;availability();
+   }).catch(e=>{
+    if(!destroyed){endpoint=null;interpretationEndpoint=null;intakeEndpoint=null;cardContract=false;configValid=false;configResolved=true;availability();}
+    throw e;
+   });
+   configReady=configAttempt.catch(()=>{});
+   return configAttempt;
+  }
+  async function load(){
+   const token=++loadVersion;loadError='';loaded=false;availability();
+   const configured=loadConfig();
+   try{
+    const [registry]=await Promise.all([json('data/experiments.json',{signal:AbortSignal.timeout(8000)}),configured]);
+    if(token!==loadVersion)return;
+    if(!Array.isArray(registry.records))throw Error('Research records could not be read.');
+    const published=registry.records.filter(r=>r.status==='published');
+    if(!published.length)throw Error('No published research records are available.');
     const hash=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(registry)));
+    if(token!==loadVersion)return;
+    records=published;documents=S.experimentDocs(records);
     registryId='sha256-json:'+Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
     loaded=true;
     availability();
     // Optional context cannot delay confirmation or rerender an editor/input.
     json('data/assistant-index.json',{signal:AbortSignal.timeout(5000)}).then(index=>{
+     if(token!==loadVersion)return;
      documents.push(...(index.documents||[]).filter(d=>typeof d.id==='string'&&M.safe(d.href)));
     }).catch(()=>{});
-   }catch(e){loadError=e.message;loaded=false;}
+   }catch(e){if(token!==loadVersion)return;loadError=e.message;loaded=false;}
    availability();
   }
   async function compare(){
@@ -573,7 +598,7 @@
    finally{unschedule(timer);if(token===generation){busy=false;controller=null;render();}}
   }
   render();const ready=load();
-  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{stopInterpretation();stopIntake(true);stop();}};
+  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
  const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,createApp};
  if(typeof module!=='undefined')module.exports=api;
