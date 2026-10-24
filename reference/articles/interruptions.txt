@@ -65,6 +65,12 @@ print(consumed)  # [9, 0, 7, 9]
 assert paused == [9, 0, 8, 7]
 assert consumed == [9, 0, 7, 9]
 
+Discarding a key value is a different rule
+
+A cipher can advance its key without writing a ciphertext rune. One proposed reason is to avoid repeating the previous ciphertext rune: discard a key value and retry the same plaintext rune. That differs from copying an F rune and pausing the key.
+
+The worked key-alignment example follows both counters. The numeric-key search and artifact-key followup test a particular conditional-skip decoder, with a stated limit on rejected key values.
+
 A page boundary is not automatically a restart
 
 The Welcome control carries its section ordinal across LP1-03 and LP1-04. LP1-03 contributes 251 runes, so LP1-04’s first rune has page ordinal 0 but section ordinal 251. An interruption list defined for the whole section must use the latter counter. Restarting at zero on the second page would apply the list to different runes.
@@ -149,6 +155,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - 301 sequence discussion
   https://jelliottdev.github.io/reference/articles/prime-indices.html#digits
+- worked key-alignment example
+  https://jelliottdev.github.io/reference/articles/key-alignment.html#skip-example
+- numeric-key search
+  https://jelliottdev.github.io/#/experiments/numeric-stream-skip-grid
+- artifact-key followup
+  https://jelliottdev.github.io/#/experiments/artifact-stream-skip-grid
 - Welcome counter diagram and walkthrough
   https://jelliottdev.github.io/reference/articles/vigenere.html#alignment-diagram
 - rune indices; Gematria Primus prime value

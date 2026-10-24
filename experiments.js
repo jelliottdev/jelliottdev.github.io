@@ -124,6 +124,7 @@ async function experimentsPage(id, version, query='') {
     if(typeof GridStemView!=='undefined')GridStemView.bind(main.querySelector('.grid-stem-view'),{isCurrent:()=>version===renderId});
     if(typeof UrlMarkerView!=='undefined')UrlMarkerView.bind(main.querySelector('.url-marker-view'),{alphabet:db.alphabet,isCurrent:()=>version===renderId});
     if(typeof PrimeLagView!=='undefined')PrimeLagView.bind(main.querySelector('.prime-lag-view'),{isCurrent:()=>version===renderId});
+    if(typeof NumericSkipView!=='undefined')NumericSkipView.bind(main.querySelector('.numeric-skip-view'),{isCurrent:()=>version===renderId});
     startExperimentSupport();
     return;
   }
@@ -254,7 +255,9 @@ function experimentScopeLinks(r){
 function experimentDetailedTargets(r){
   if(r.scope.pages.length<=8)return experimentScopeLinks(r);
   const first=r.scope.pages[0],last=r.scope.pages[r.scope.pages.length-1];
-  return `<a href="#/page/${first}">${esc(first.toUpperCase())}</a>–<a href="#/page/${last}">${esc(last.slice(4))}</a> · ${r.scope.pages.length} pages. <a href="reference/experiments/${esc(r.id)}.json">Exact page list and record</a>.`;
+  const consecutive=r.scope.pages.every((page,index)=>page.slice(0,3)===first.slice(0,3)&&Number(page.slice(4))===Number(first.slice(4))+index);
+  const label=consecutive?`<a href="#/page/${first}">${esc(first.toUpperCase())}</a>–<a href="#/page/${last}">${esc(last.slice(4))}</a> · ${r.scope.pages.length} pages`:`${r.scope.pages.length} manuscript pages`;
+  return `${label}. <a href="reference/experiments/${esc(r.id)}.json">Exact page list and record</a>.`;
 }
 function experimentTargetSummary(r){
   const pages=r.scope.pages||[];
@@ -377,6 +380,7 @@ function affineLagWorkedExample(){
  <p class="affine-example-note">This is one matching pair, not proof of a cipher. The full count and shuffled comparison follow.</p></figure>`;
 }
 function experimentVisual(r,v){
+  if(typeof NumericSkipView!=='undefined'&&NumericSkipView.canRender(r,v))return NumericSkipView.render(r.id);
   if(r.id==='prime-lag-autokey-openings'&&v.path==='experiments/records/prime-lag-autokey-openings/prime-lag.svg'&&typeof PrimeLagView!=='undefined'&&r.reproduction?.inputs?.some(file=>file.path==='experiments/records/prime-lag-autokey-openings/plan-frozen-original.json')&&r.reproduction?.outputs?.some(file=>file.path==='experiments/records/prime-lag-autokey-openings/results.json'))return PrimeLagView.render();
   if(r.id==='url-marker-affine-census'&&v.path==='experiments/records/url-marker-affine-census/marker-census.svg'&&typeof UrlMarkerView!=='undefined'&&['results.json','matches.json'].every(name=>r.reproduction?.outputs?.some(file=>file.path==='experiments/records/url-marker-affine-census/'+name)))return UrlMarkerView.render();
   if(r.id==='grid-stem-uncertainty'&&v.path.endsWith('/stem-map.svg')&&typeof GridStemView!=='undefined')return GridStemView.render();
@@ -546,7 +550,7 @@ function experimentArticle(r,catalog=experimentRecords){
 // Authored experiment Markdown: escaped text, links, headings, lists, simple tables and code; no embedded HTML.
 function renderExperimentMarkdown(markdown,files=[],articleLinks={},shownVisuals=[]){
   const safeLink=href=>/^https:\/\/[^\s<>"']+$/.test(href)||
-    /^#\/(?:wiki\/[a-z0-9-]+|page\/lp[12]-\d{2}|reader\/lp[12]-\d{2}|experiments\/[a-z0-9-]+)(?:\?[a-zA-Z0-9_%=&.-]+)?$/.test(href)||
+    /^#\/(?:pages|wiki\/[a-z0-9-]+|page\/lp[12]-\d{2}|reader\/lp[12]-\d{2}|experiments\/[a-z0-9-]+)(?:\?[a-zA-Z0-9_%=&.-]+)?$/.test(href)||
     (files.includes(href)&&/^[a-zA-Z0-9_./-]+$/.test(href)&&!href.startsWith('/')&&!href.split('/').includes('..'));
 
   const canonicalLocal=href=>typeof href==='string'&&/^[a-zA-Z0-9_./-]+$/.test(href)&&

@@ -1,0 +1,252 @@
+{
+  "schema": "numeric-skip-target-v1",
+  "frozen_before": "local manuscript target execution",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_branch": "analysis/campaign18_skip/armada/numeric_skip.py --no-fib --full",
+  "grid": {
+    "streams": [
+      "primes",
+      "prime_gaps",
+      "totient_n",
+      "iter_totient_d2",
+      "iter_totient_d3",
+      "pi_digits",
+      "pi_pairs",
+      "e_digits",
+      "e_pairs",
+      "phi_digits",
+      "phi_pairs",
+      "sqrt2_digits",
+      "sqrt2_pairs",
+      "ln2_digits",
+      "ln2_pairs",
+      "lcg_3301",
+      "bbs_3301",
+      "mt_3301",
+      "lcg_1595277641",
+      "bbs_1595277641",
+      "mt_1595277641",
+      "lcg_761",
+      "bbs_761",
+      "mt_761",
+      "lcg_509",
+      "bbs_509",
+      "mt_509",
+      "lcg_503",
+      "bbs_503",
+      "mt_503",
+      "lcg_311",
+      "bbs_311",
+      "mt_311"
+    ],
+    "key_length": 1176,
+    "page_ids": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "signs": [
+      -1,
+      1
+    ],
+    "atbash": [
+      0,
+      1
+    ],
+    "offsets": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "screen_count": 36300,
+    "screen_length": 50,
+    "screen_width": 60,
+    "screen_strict_threshold": -6.5,
+    "confirmation": "Every screen with score > -6.5, complete page, unchanged source beam200; strict full score > -5.5. No confirmation of rejected screens.",
+    "max_skip": 3
+  },
+  "control_receipt": "controls/CONTROL-RECEIPT.md; full1080outcomes preserved,540 underlying transformed sign/key/offset/reading cases before phase aliases; numeric1subset660cells. Score gate is not exact recovery.",
+  "execution": "Source sweep_keystream unchanged; wrap its imported beam to record every screen output and every full survivor; no prefilter, BG/M unused. Source optional Walden excluded and absent.",
+  "checks": "Independent Latin scorer re-scores every saved output. Independent scalar beam reconstructs every full survivor and the maximum screen. All source and site page arrays match before target. No global null significance inferred.",
+  "quirks": "Historical BBS-labelled constructor includes noncoprime seeds503/311. e uses finite299term source approximation, not exact e beyond digit612. Preserve every labelled phase, not independent hypotheses.",
+  "inputs": [
+    {
+      "path": "controls/CONTROL-RECEIPT.md",
+      "sha256": "be96ced24d9196489a08d000739b49f23469f9f9ef2386c1e84ad1a6431b22de"
+    },
+    {
+      "path": "controls/control-results.json",
+      "sha256": "9c51c78de3e99968bdd3f936e006319eb0360d4700022733a9ea2291189cb839"
+    },
+    {
+      "path": "controls/diagnose.py",
+      "sha256": "69509a764e0b6606e18671852782da32a8f7308f2aa1c1187053f70b65f8224e"
+    },
+    {
+      "path": "controls/failure-diagnosis.json",
+      "sha256": "c62d1ba4d678a3f708ac3a55ddbe5b8bee5a4226647fc6be70d069853773e737"
+    },
+    {
+      "path": "controls/known-readings.json",
+      "sha256": "de66e85c0cc475b5cd40c80367a38e751fe8273904057347b32f89368e081a86"
+    },
+    {
+      "path": "controls/plan-frozen.json",
+      "sha256": "525b7e46b7fa3a0eb72167b44db01f4407f8934287b622db76d1cd1940d83d89"
+    },
+    {
+      "path": "controls/probe.py",
+      "sha256": "2c6cf7743d96d52dd06a031bb51f2cde0ad9153d46df0b785b22e00d9ea78ed5"
+    },
+    {
+      "path": "controls/receipt-hashes.json",
+      "sha256": "3fe73ca55ad5710d9e6b55d10ea9d5870cacabe570af912e59b9d96f3dd96f04"
+    },
+    {
+      "path": "controls/streams.json",
+      "sha256": "7a3a46f5dd7023449c792abad95c77813017f018e1b4af46cb9a1dbfcf8c7a01"
+    },
+    {
+      "path": "controls/summarize.py",
+      "sha256": "3de42a6003a97e6f6c872c3312b96785e615cd67e00e79677c41d699ea145548"
+    },
+    {
+      "path": "controls/summary.json",
+      "sha256": "18d9e3af9ded1943afc7763f7624b1e6baf620a48de2f34a6fa70d12e9ed0535"
+    },
+    {
+      "path": "labels.json",
+      "sha256": "97f6c985dbf9de8287dd41ed81fdf9ac141568cc4199d083efc3f6ea957ad638"
+    },
+    {
+      "path": "pages.json",
+      "sha256": "66ea49e3c4c7095d6e9c61ffd7bbb81b07f8aec9ba11e721223fbc3ff4267c3d"
+    },
+    {
+      "path": "run.py",
+      "sha256": "a8ec9f79fb8b3c77ab6ff3ac90b4d5cc096511285764d2a9c4fa838779e5d671"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/armada/numeric_skip.py",
+      "sha256": "082e6f24a6ddc29fa9ea88c68e71d4a45d3de3d816e8ab2230d864cf64bee2de"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+      "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+    },
+    {
+      "path": "source/liber-primus/analysis/campaign18_skip/sweep.py",
+      "sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80"
+    },
+    {
+      "path": "source/liber-primus/analysis/run_stats.py",
+      "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+    },
+    {
+      "path": "source/liber-primus/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+    },
+    {
+      "path": "source/liber-primus/data/keys/self_reliance.txt",
+      "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+    },
+    {
+      "path": "source/liber-primus/data/keys/solved_plaintext.txt",
+      "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473"
+    },
+    {
+      "path": "source/liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+    },
+    {
+      "path": "source/liber-primus/src/lp/autokey.py",
+      "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+    },
+    {
+      "path": "source/liber-primus/src/lp/ciphers.py",
+      "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+    },
+    {
+      "path": "source/liber-primus/src/lp/corpus.py",
+      "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+    },
+    {
+      "path": "source/liber-primus/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+    },
+    {
+      "path": "source/liber-primus/src/lp/score.py",
+      "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+    },
+    {
+      "path": "source/liber-primus/src/lp/solve.py",
+      "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+    },
+    {
+      "path": "source/liber-primus/src/lp/stats.py",
+      "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+    },
+    {
+      "path": "source/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "streams.json",
+      "sha256": "4e7c87c1260925d48b7d2e917709c2fdba8e4ff1cdec9fd3e2bd5a5cb3d1048f"
+    }
+  ]
+}

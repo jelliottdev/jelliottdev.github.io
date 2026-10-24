@@ -18,8 +18,21 @@ A single rejected key slot changes what follows
 
 Take plaintext indices [24, 7, 16] and key slots [5, 22, 1, 3]. In this example only, always reject a key slot when it would repeat the previous ciphertext rune. Rejection consumes the key slot but keeps the same plaintext rune for another attempt.
 
-[Image: Three plaintext runes consume four key slots. The second slot is rejected because 7 plus 22 repeats ciphertext zero; retrying with key value one emits eight. The final ciphertext is zero, eight, nineteen.]
-Constructed modulo-29 example. Slot numbers start at zero. The rejected slot changes which key value applies to later runes.
+
+Three plaintext runes consume four key slots
+	Plaintext	Key slot → value	Action
+
+	24	0 → 5	Write 0: 24 + 5 = 0 modulo 29.
+
+	7	1 → 22	Reject: 7 + 22 = 0 modulo 29 would repeat the previous ciphertext rune.
+
+	2 → 1	Retry the same plaintext rune. Write 8.
+
+	16	3 → 3	Write 19.
+
+
+Slot numbers start at zero. Ciphertext written: [0, 8, 19]. The rejected slot changes which key value applies to later runes. Download the diagram.
+
 
 	Decode [0, 8, 19] using	Key values	Recovered indices
 	Correct accepted slots 0, 2, 3	5, 1, 3	24, 7, 16
@@ -62,6 +75,9 @@ Four different outcomes to record
 These distinctions require known truth, so a planted control records exact rune recovery and the encoder's accepted slots. In a real unsolved-page search, those answers are unavailable. A high score alone cannot tell you which explanation applies. Also distinguish exact plaintext from exact slot alignment: different paths can sometimes produce the same plaintext, or different plaintexts can share a ciphertext under a lossy rule.
 
 
+The numeric-key and artifact-key controls produced cases where the intended reading survived but a different output won. Those incorrect outputs still passed the score test. The records preserve exact-recovery counts separately from score acceptance.
+
+
 Use the controls before interpreting a failure
 
 First verify ordinary addition with a known key. Then introduce the particular skip, rewrite or reset rule you want to investigate and keep its parameters fixed. Test wrong keys too. Save the complete output, every alignment choice, the selection rule and exact-recovery measurements. The decoder experiment supplies all these traces for four artificial encoders.
@@ -73,8 +89,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
 - rune indices and prime values
   https://jelliottdev.github.io/reference/articles/rune-values.html
-- Three plaintext runes consume four key slots. The second slot is rejected because 7 plus 22 repeats ciphertext zero; retrying with key value one emits eight. The final ciphertext is zero, eight, nineteen.
+- Download the diagram
   https://jelliottdev.github.io/exports/figures/key-alignment-example.svg
+- numeric-key
+  https://jelliottdev.github.io/#/experiments/numeric-stream-skip-grid
+- artifact-key
+  https://jelliottdev.github.io/#/experiments/artifact-stream-skip-grid
 - scorer controls
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
 - search-maximum controls

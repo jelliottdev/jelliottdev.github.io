@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 44,
+    "published_followup_records": 47,
     "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
@@ -647,8 +647,11 @@
         "experiments/records/lp2-prime-openings/record.json",
         "experiments/records/lp2-prime-minus-one-openings/record.json"
       ],
-      "coverage_note": "Consecutive prime and prime-minus-one opening grids cover fixed start/offset choices; nonunit stride, reverse direction and section restarts are a new bounded extension.",
-      "queue_id": null
+      "coverage_note": "Consecutive prime and prime-minus-one opening grids cover fixed start/offset choices; nonunit stride, reverse direction and section restarts are a new bounded extension. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "numeric-stream-skip-grid"
+      ]
     },
     {
       "source_id": "5.2",
@@ -662,8 +665,11 @@
         "experiments/records/lp2-totient-openings/record.json",
         "experiments/records/lp2-15-totient-gap-audit/record.json"
       ],
-      "coverage_note": "Consecutive phi(n) openings and panel arithmetic are tested; phi(prime), iterated and running-sum inputs need separate exact streams.",
-      "queue_id": null
+      "coverage_note": "Consecutive phi(n) openings and panel arithmetic are tested; phi(prime), iterated and running-sum inputs need separate exact streams. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "numeric-stream-skip-grid"
+      ]
     },
     {
       "source_id": "5.3",
@@ -690,8 +696,11 @@
       "existing_evidence": [
         "experiments/records/lp2-prime-openings/record.json"
       ],
-      "coverage_note": "Prime-value sequence tests do not use prime gaps or indices. Specify zero/one-based indexing, start/stride and reductions.",
-      "queue_id": null
+      "coverage_note": "Prime-value sequence tests do not use prime gaps or indices. Specify zero/one-based indexing, start/stride and reductions. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "numeric-stream-skip-grid"
+      ]
     },
     {
       "source_id": "5.5",
@@ -703,8 +712,11 @@
       "existing_evidence": [
         "experiments/records/lp2-fibonacci-openings/record.json"
       ],
-      "coverage_note": "A fixed uninterrupted Fibonacci opening search exists; Lucas recurrence and broader initial seeds/reset points are outside it.",
-      "queue_id": null
+      "coverage_note": "A fixed uninterrupted Fibonacci opening search exists; Lucas recurrence and broader initial seeds/reset points are outside it. The fixed all-seed modulo-29 Fibonacci catalog now has a conditional-key-skip followup: exact sign/phase aliases reduce 925,100 source labels to 92,510 canonical 50-rune screens, with complete-page decoding only for screen survivors. Other Fibonacci constructions and alignment rules remain open.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "fibonacci-stream-skip-grid"
+      ]
     },
     {
       "source_id": "5.6",
@@ -733,8 +745,11 @@
       "existing_evidence": [
         "experiments/records/lp2-known-vigenere-keys/record.json"
       ],
-      "coverage_note": "No pinned digits-of-constants stream test. Freeze decimal expansion/source digits, digit grouping, offset, sign and length.",
-      "queue_id": null
+      "coverage_note": "No pinned digits-of-constants stream test. Freeze decimal expansion/source digits, digit grouping, offset, sign and length. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "numeric-stream-skip-grid"
+      ]
     },
     {
       "source_id": "5.8",
@@ -789,8 +804,11 @@
         "experiments/records/public-prng-seed-sweep/record.json",
         "experiments/records/typed-seed-random-opening-cribs/record.json"
       ],
-      "coverage_note": "Seven source-defined PRNGs and typed seed variants have bounded tests; LFSR/Geffe or other named generators need tap and seed conventions before queueing.",
-      "queue_id": null
+      "coverage_note": "Seven source-defined PRNGs and typed seed variants have bounded tests; LFSR/Geffe or other named generators need tap and seed conventions before queueing. A source-derived followup now tests the named numeric streams with conditional key skips, page-local phases 0–4, both signs and Atbash states. Its 50-rune screen selects only some settings for full-page confirmation; see the record for the exact stream subset and limits.",
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "numeric-stream-skip-grid"
+      ]
     },
     {
       "source_id": "5.12",
@@ -2723,9 +2741,10 @@
       ],
       "result": {
         "record_ids": [
-          "historical-prime-and-ps-keys"
+          "historical-prime-and-ps-keys",
+          "artifact-stream-skip-grid"
         ],
-        "scope": "See each published record; no whole-family exclusion.",
+        "scope": "See each published record; no whole-family exclusion. The artifact-stream followup additionally screens 21 source-defined puzzle/number key arrays under conditional key skips; only screen survivors receive complete-page confirmation. This does not cover arbitrary artifact-derived keys.",
         "remaining_scope": "Only the exact published B3 nine-stream grid was replayed; cookie hashes, packet bytes and other derivations remain untested."
       },
       "has_been_run": true,

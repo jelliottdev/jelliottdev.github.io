@@ -247,6 +247,9 @@ def article_link_aliases(root, record, published_ids):
     declared.update(item['path'] for group in ('inputs', 'outputs')
                     for item in record['reproduction'][group])
     for href in authored_link_targets(record['article']):
+        require(not re.match(r'^#/pages/lp[12]-\d{2}(?:[/?#]|$)', href, re.I),
+                'Article page detail must use #/page/ or #/reader/, not #/pages/: '
+                + record['id'] + ': ' + href)
         if href in declared or href.startswith(('https://', '#/')):
             continue
         # Unsafe examples stay escaped. Never decode or guess URL/path syntax.

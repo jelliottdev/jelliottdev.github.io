@@ -1,0 +1,319 @@
+{
+  "id": "numeric-stream-skip-grid",
+  "status": "published",
+  "title": "Numeric keys with conditional skips",
+  "question": "Do the source no-Fibonacci numeric streams produce complete LP2 outputs above their original English score gate when conditional key skips are permitted?",
+  "reader_question": "Can these numeric keys decode pages when key positions may be skipped?",
+  "summary": "The 33 fixed numeric streams received 36,300 short screens. Of 322 selected complete-page decodes, none cleared the source \u22125.5 score bar. Known-text controls expose imperfect exact recovery despite passing score gates.",
+  "finding": "Unchanged source no-Fibonacci sweep: 36,300 screens at length 50 and beam 60; 322 complete-page confirmations at beam 200; none above \u22125.5. Best complete score \u22126.412430009764881 on LP2-49, \u03c6 digits, subtraction, Atbash and offset 1. All 36,622 scores independently checked; all 322 full paths plus best screen independently reconstructed. Separately labelled post-target audit scores all 56,273 retained terminal candidates; none above \u22125.5, best normalized candidate \u22126.3721459414573545 at the same setting. Original source selections preserved.",
+  "reader_finding": "None of the 322 complete-page outputs selected by this numeric-key search cleared its English-score bar. The strongest complete output was on LP2-49.",
+  "reader_limit": "Only the listed 33 streams, five key phases, conditional-skip rule and English screen. Rejected short screens were not decoded as complete pages; a high score alone does not establish a reading.",
+  "limitations": "The source beam can prefer an alternative over the exact planted reading: 634 of 660 numeric controls recover exactly although all 660 pass both score gates. The full 1,080-cell control receipt includes Atbash duplicates and periodic phase aliases. No complete-search null calibration or general numeric-family exclusion; finite e approximation and historical BBS constructors retained. Cumulative beam ranking differs from normalized gate scoring; the separately labelled terminal-candidate audit preserves that distinction.",
+  "next_steps": "Any proposed new key or phase requires frozen input values,matched complete-reading controls and independent verification of a predicted reading.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "numeric key",
+    "conditional skips",
+    "source replay",
+    "English scorer",
+    "finite grid"
+  ],
+  "related": [
+    "dukotah-fixed-numeric-keys",
+    "typed-seed-random-opening-cribs",
+    "dukotah-ciphertext-feedback-coefficients"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/numeric-stream-skip-grid/frozen-plan.json",
+      "experiments/records/numeric-stream-skip-grid/streams.json",
+      "experiments/records/numeric-stream-skip-grid/pages.json"
+    ],
+    "representation": "55 exact source GP29 page arrays, LP2-00\u201349 and LP2-51\u201355; canonical GP Latin labels scored with the pinned source English quadgrams.",
+    "procedure": "Unchanged source numeric sweep_keystream; source beam records all 50-rune screens and confirms only strict screen survivors on complete pages. Independent scalar reconstruction of every full survivor and maximum screen; independent rescore of all outputs.",
+    "parameters": "33 labelled numeric streams at exact length1176 \u00d7 55 pages \u00d7 signs \u22121/+1 \u00d7 Atbash off/on \u00d7 offsets0\u20134 =36,300 screens. Screen50/beam60/strict>\u22126.5; survivor full beam200/strict>\u22125.5; max3 conditional key skips.",
+    "exclusions": "841 Fibonacci seed pairs; other numeric catalogs, offsets, clocks, languages and joined pages; no full decoding of rejected screens, full-search null calibration, general key-family exclusion or proof of plaintext."
+  },
+  "review": {
+    "kind": "Frozen finite source-grid replay",
+    "reviewer": "Source byte-preserving replay; independent scalar scorer for every output and independent beam for every full survivor plus best screen; full pretarget controls retained",
+    "retested_on": "2026-10-23",
+    "human_review": "pending"
+  },
+  "family": {
+    "id": "numeric-stream-skip-grid",
+    "title": "Numeric keys with conditional skips",
+    "question": "Can these numeric keys decode pages when key positions may be skipped?",
+    "baseline": "numeric-stream-skip-grid"
+  },
+  "variant": {
+    "label": "33 numeric streams",
+    "changes": []
+  },
+  "sources": [
+    {
+      "label": "Pinned numeric source catalog and sweep",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada/numeric_skip.py",
+      "note": "Exact MIT code and inputs bundled; no-Fibonacci branch only."
+    },
+    {
+      "label": "Pinned skip beam",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/sweep.py",
+      "note": "Original score ranking, path ordering and admissibility retained."
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/numeric-stream-skip-grid/numeric-skip.svg",
+      "caption": "36,300 short screens select 322 full checks; none clears the source score bar. The strongest complete output is on LP2-49."
+    }
+  ],
+  "reproduction": {
+    "command": "python experiments/records/numeric-stream-skip-grid/run.py --check && python experiments/records/numeric-stream-skip-grid/check.py && python experiments/records/numeric-stream-skip-grid/terminal_audit.py && python experiments/records/numeric-stream-skip-grid/plot.py --check && python scripts/replay_numeric_skip_controls.py --record experiments/records/numeric-stream-skip-grid",
+    "script": "experiments/records/numeric-stream-skip-grid/run.py",
+    "script_sha256": "a8ec9f79fb8b3c77ab6ff3ac90b4d5cc096511285764d2a9c4fa838779e5d671",
+    "environment": "Python 3 with NumPy; offline source, models, keys, manuscript arrays and MIT license bundled. Single process; --check regenerates all deterministic rows without overwriting expected outputs. Original target 33.110 seconds; timings stored separately. The separately labelled post-target audit compares all retained terminal candidates.",
+    "inputs": [
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/.gitattributes",
+        "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/article.md",
+        "sha256": "44373d8538b977b7a5340443b8711c5b76d377bcb7d7f02beb883ed62ff5a406"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/check.py",
+        "sha256": "2207129f6b612d97c5c31e6085733f8ff388df60f17ae2524b62d0a13a3cc118"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/CONTROL-RECEIPT.md",
+        "sha256": "be96ced24d9196489a08d000739b49f23469f9f9ef2386c1e84ad1a6431b22de"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/control-results.json",
+        "sha256": "9c51c78de3e99968bdd3f936e006319eb0360d4700022733a9ea2291189cb839"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/diagnose.py",
+        "sha256": "69509a764e0b6606e18671852782da32a8f7308f2aa1c1187053f70b65f8224e"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/failure-diagnosis.json",
+        "sha256": "c62d1ba4d678a3f708ac3a55ddbe5b8bee5a4226647fc6be70d069853773e737"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/known-readings.json",
+        "sha256": "de66e85c0cc475b5cd40c80367a38e751fe8273904057347b32f89368e081a86"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/plan-frozen.json",
+        "sha256": "525b7e46b7fa3a0eb72167b44db01f4407f8934287b622db76d1cd1940d83d89"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/probe.py",
+        "sha256": "2c6cf7743d96d52dd06a031bb51f2cde0ad9153d46df0b785b22e00d9ea78ed5"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/receipt-hashes.json",
+        "sha256": "3fe73ca55ad5710d9e6b55d10ea9d5870cacabe570af912e59b9d96f3dd96f04"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/streams.json",
+        "sha256": "7a3a46f5dd7023449c792abad95c77813017f018e1b4af46cb9a1dbfcf8c7a01"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/summarize.py",
+        "sha256": "3de42a6003a97e6f6c872c3312b96785e615cd67e00e79677c41d699ea145548"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/controls/summary.json",
+        "sha256": "18d9e3af9ded1943afc7763f7624b1e6baf620a48de2f34a6fa70d12e9ed0535"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/frozen-plan.json",
+        "sha256": "25ee72e146d491b9b4ff452aa5ebbd4e9ca51ac3de453045596d92f03fa7c322"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/labels.json",
+        "sha256": "97f6c985dbf9de8287dd41ed81fdf9ac141568cc4199d083efc3f6ea957ad638"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/pages.json",
+        "sha256": "66ea49e3c4c7095d6e9c61ffd7bbb81b07f8aec9ba11e721223fbc3ff4267c3d"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/plot.py",
+        "sha256": "26cbfdc86347febe7e2b481ae3ac41f11343f333792ed52493aae33f900b44c8"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/run.py",
+        "sha256": "a8ec9f79fb8b3c77ab6ff3ac90b4d5cc096511285764d2a9c4fa838779e5d671"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/scope.json",
+        "sha256": "634af05e127bde163acb5cb668c477a1ddb872f18f661c7ebee0981aa66ba867"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/analysis/campaign18_skip/armada/numeric_skip.py",
+        "sha256": "082e6f24a6ddc29fa9ea88c68e71d4a45d3de3d816e8ab2230d864cf64bee2de"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/analysis/campaign18_skip/sweep.py",
+        "sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/data/keys/solved_plaintext.txt",
+        "sha256": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/autokey.py",
+        "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/solve.py",
+        "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/streams.json",
+        "sha256": "4e7c87c1260925d48b7d2e917709c2fdba8e4ff1cdec9fd3e2bd5a5cb3d1048f"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/terminal-audit-plan.json",
+        "sha256": "59b1c4a11e278c7d8968c0ba7e17fe558eb763daa1b6c5d32c7ded91d31f1114"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/terminal_audit.py",
+        "sha256": "60f9175445364e229dcb25f12cb678221fafddaaa5a9952ca4e39fa980f423b8"
+      },
+      {
+        "path": "scripts/replay_numeric_skip_controls.py",
+        "sha256": "7b248115d9b70f8f431a383da8ee3f2bb99a5243e8f92ecb189a57db66bec49d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/numeric-skip.svg",
+        "sha256": "f3aa1de55b9e4e0e9c7b17df26484ca4c0626e6ab64711e97e2c723e6130c743"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/outputs.jsonl",
+        "sha256": "e50d485f859afcffe5ca2d1f1bd9e3ff7cac81625c147faddbd9e014157f4846"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/results.json",
+        "sha256": "b43a2d8af11984cabed8417c9dbd2da71085d450af0205fd242cf9563bdc8f93"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/terminal-audit.json",
+        "sha256": "ee08a0193d008230237383776f47ac0817695bf1fc343bb0562936c8ef1494fb"
+      },
+      {
+        "path": "experiments/records/numeric-stream-skip-grid/timing.json",
+        "sha256": "4970dd9c3651fd7b7424ff9daf91ee2506460c14cc9c312d84a5d045c84a70b1"
+      }
+    ]
+  }
+}

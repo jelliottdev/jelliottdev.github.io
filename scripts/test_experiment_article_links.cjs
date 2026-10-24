@@ -25,6 +25,8 @@ assert(!render('[Inherited](results.json)',[],Object.create(aliases)).includes('
 for(const invalid of [null,[],{ 'results.json':{} }])assert(!render('[Invalid](results.json)',[],invalid).includes('<a'));
 assert(render('[Existing](https://example.com/source)').includes('<a href="https://example.com/source">'));
 assert(render('[Guide](#/wiki/search-space?section=bounds)').includes('<a href="#/wiki/search-space?section=bounds">'));
+for(const href of ['#/pages','#/pages?release=LP2'])assert(render(`[Catalog](${href})`).includes(`href="${href}"`),'The plural catalogue route is valid');
+for(const href of ['#/pages/lp2-49','#/pages/lp2-12?section=text'])assert(!render(`[Bad detail](${href})`).includes('<a'),'Plural detail routes stay unlinked');
 assert(render('[Declared](data/result.json)',['data/result.json']).includes('<a href="data/result.json">'));
 assert(!render('![Not a declared image](images/lp2-27.jpg)',[],aliases).includes('<img'),'Hyperlink aliases do not authorize image embedding');
 assert(render('![Declared image](images/lp2-27.jpg)',['images/lp2-27.jpg'],aliases).includes('<img'));
@@ -34,6 +36,17 @@ assert(render('[<result>](results.json)',[],aliases).includes('&lt;result&gt;'),
 // Follow generated aliases through the actual full-detail callsite whenever available.
 const records=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json'))).records;
 context.records=records;vm.runInContext('experimentRecords=records',context);
+const packing=records.find(record=>record.id==='rune-direct-byte-packing');
+assert(context.experimentArticle(packing,records).includes('<a href="#/pages">'),'The actual authored catalogue link now renders in the byte-packing detail');
+const mixedScope=records.find(record=>record.id==='outguess-default-key');assert.equal(mixedScope.scope.pages.length,75);
+const mixedTargets=context.experimentDetailedTargets(mixedScope);
+assert(mixedTargets.includes('75 manuscript pages'),'A mixed-release scope must not invent an LP1-00–57 interval');
+assert(!mixedTargets.includes('href="#/page/lp1-00"'));
+assert(mixedTargets.includes('reference/experiments/outguess-default-key.json'),'The exact source list stays available');
+const gapped={id:'gapped',scope:{pages:['lp2-00',...Array.from({length:9},(_,i)=>'lp2-'+String(i+2).padStart(2,'0'))]}};
+assert(context.experimentDetailedTargets(gapped).startsWith('10 manuscript pages.'),'Gaps must not silently acquire untested pages');
+const contiguous={id:'contiguous',scope:{pages:Array.from({length:10},(_,i)=>'lp2-'+String(i).padStart(2,'0'))}};
+assert(context.experimentDetailedTargets(contiguous).includes('LP2-00</a>–<a href="#/page/lp2-09">09</a> · 10 pages'),'True consecutive ranges retain compact linked endpoints');
 let aliasCount=0,recordCount=0;
 for(const record of records){
  const entries=Object.entries(record.article_links||{});if(!entries.length)continue;recordCount++;

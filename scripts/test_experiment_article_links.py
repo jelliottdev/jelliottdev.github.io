@@ -58,6 +58,17 @@ class ArticleLinkTests(unittest.TestCase):
         self.assertEqual(list(authored_link_targets(code)), ['results.json'])
         self.assertEqual(self.aliases(code), {'results.json': 'experiments/records/current/results.json'})
 
+    def test_plural_catalog_cannot_masquerade_as_page_detail(self):
+        for href in ['#/pages/lp2-49', '#/pages/lp2-12?section=text', '#/pages/LP1-01']:
+            with self.subTest(href=href), self.assertRaisesRegex(ValueError, 'page detail must use'):
+                self.aliases(f'[Page]({href})')
+        for href in ['#/pages', '#/pages?release=LP2', '#/page/lp2-49', '#/reader/lp2-12']:
+            with self.subTest(href=href):
+                self.assertEqual(self.aliases(f'[Valid route]({href})'), {})
+        self.assertEqual(self.aliases('`[Example](#/pages/lp2-49)`\n```text\n'
+                                     '[Example](#/pages/lp2-12)\n```'), {},
+                         'Literal code examples are not publication links')
+
     def test_unsafe_syntax_cannot_authorize_navigation(self):
         unsafe = ['../note.md', './results.json', '/research/note.md', '//evil.example/x',
                   'research//note.md', 'research/./note.md', 'research/../note.md',

@@ -1,0 +1,22 @@
+{
+  "schema": "fibonacci-finite-alias-proof-v1",
+  "generator_source_sha256": "082e6f24a6ddc29fa9ea88c68e71d4a45d3de3d816e8ab2230d864cf64bee2de",
+  "beam_source_sha256": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80",
+  "formula": "G[j]=s*F[j+o] mod29; canonical(A,B)=(s*F[o],s*F[o+1]) mod29; sign+1,offset0; Atbash unchanged.",
+  "algebra": "T=[[0,1],[1,1]], det(T)=-1 mod29; multiplication by sign is invertible. Each fixed(sign,offset) permutes all841seedpairs.",
+  "generator_equalities_checked": 8410,
+  "minimum_complete_aligned_prefix_symbols": 1172,
+  "canonical_pairs": 841,
+  "preimages_per_pair": 10,
+  "canonical_needed_slots_max": 1105,
+  "largest_original_consumed_pointer": 1108,
+  "largest_source_padding_need": 1120,
+  "available_key_slots": 1176,
+  "boundary_proof": "Start o<=4; each of L-1 transitions advances1+d<=4; L<=277. Largest original pointer o+4*(L-1)<=1108. Source padding guard o+4*L+8<=1120<1176; no bounds or zero-padding divergence.",
+  "tie_order_proof": "Map every pointer j to j-o. Plaintext, rejected-key equality, score/text/path and hypothesis enumeration order agree. Source sorts stably only by cumulative score, with no absolute-pointer or skip-count penalty. Ordered terminal beams agree after pointer translation; first maximum remains the same path.",
+  "label_ordinal_formula": "(((((a*29+b)*2+sign_order)*2+atbash)*55+page_ordinal)*5+offset); sign_order0for-1,1for+1. Re-expand original aliases or minimize this ordinal to preserve tied best-label selection.",
+  "source_labeled_screens": 925100,
+  "canonical_screens": 92510,
+  "aliases_sha256": "8d777f328084613545f694582f3e64c7d4c8d2fb74da11d1951eec01b33fbc4f",
+  "scope_limit": "Exact declared recurrence, source widths and length<=277 only. Does not remove Atbash, change candidate rules or count841ideas."
+}

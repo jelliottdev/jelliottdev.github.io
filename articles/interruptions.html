@@ -40,6 +40,9 @@ print(paused)    # [9, 0, 8, 7]
 print(consumed)  # [9, 0, 7, 9]
 assert paused == [9, 0, 8, 7]
 assert consumed == [9, 0, 7, 9]</code></pre>
+<h2 id="conditional-key-skips">Discarding a key value is a different rule</h2>
+<p>A cipher can advance its key <em>without writing a ciphertext rune</em>. One proposed reason is to avoid repeating the previous ciphertext rune: discard a key value and retry the same plaintext rune. That differs from copying an F rune and pausing the key.</p>
+<p>The <a href="#/wiki/key-alignment?section=skip-example">worked key-alignment example</a> follows both counters. The <a href="#/experiments/numeric-stream-skip-grid">numeric-key search</a> and <a href="#/experiments/artifact-stream-skip-grid">artifact-key followup</a> test a particular conditional-skip decoder, with a stated limit on rejected key values.</p>
 <h2 id="boundaries">A page boundary is not automatically a restart</h2>
 <p>The Welcome control carries its section ordinal across LP1-03 and LP1-04. LP1-03 contributes 251 runes, so LP1-04’s first rune has page ordinal 0 but section ordinal 251. An interruption list defined for the whole section must use the latter counter. Restarting at zero on the second page would apply the list to different runes.</p>
 <p>In the recorded trace, Welcome ordinal 47 is an F rune transformed with shift 26 to output index 3 (O). Ordinal 48 is another F, but is explicitly copied; ordinal 49 then uses shift 23. This is evidence for a specified position list, not a rule that every F is copied. See the <a href="#/wiki/vigenere?section=alignment-diagram">Welcome counter diagram and walkthrough</a>.</p>
