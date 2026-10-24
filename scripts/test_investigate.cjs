@@ -131,20 +131,20 @@ test('explicit page passage qualifier remains in confirmed scope instead of impl
 test('aim options/custom and exact custom scope preserve method, boundaries, source and independent fields',()=>{
  let d=I.initialDraft('Read each row backwards, keeping word boundaries.');d=C.clarify(d,'word-boundary','fixed_spaces');
  const oldMethod=C.serialize(d.method),source=d.source.text;
- d=I.answerIntake(d,'aim','other','Check a visual symmetry');
+ d=I.answerIntake(d,'aim','unclassified','Check a visual symmetry');
  d=I.answerIntake(d,'scope','specific','LP2-43, lines 2–3');
- assert.equal(d.aim.value,'Check a visual symmetry');assert.equal(d.aim.provenance.kind,'user_clarification');
+ assert.equal(d.aim.value.detail,'Check a visual symmetry');assert.equal(d.aim.outcome.id,'unclassified');assert.equal(d.aim.provenance.kind,'user_clarification');
  assert.deepEqual(d.scope.value,{description:'LP2-43, lines 2–3'});assert.equal(C.serialize(d.method),oldMethod);
  assert(I.rowsHTML(d).includes('LP2-43, lines 2–3'));assert(!I.rowsHTML(d).includes('description:'));
  assert.equal(d.rules.boundaryMode.value,'fixed_spaces');assert.equal(d.source.text,source);
  const changed=C.revise(d,{aim:C.field('specified','Measure alignment',{kind:'user_clarification',refs:[]})});assert.deepEqual(changed.scope,d.scope);
- let exact=I.answerIntake(I.answerIntake(I.initialDraft('Try this'),'aim','readable'),'scope','specific','LP2-15, LP2-17');
+ let exact=I.answerIntake(I.answerIntake(I.initialDraft('Try this'),'aim','decipher'),'scope','specific','LP2-15, LP2-17');
  assert.deepEqual(exact.scope.value.pages,['lp2-15','lp2-17']);
  assert.throws(()=>I.answerIntake(I.initialDraft('Try this'),'scope','specific','LP2-99'));
- assert.throws(()=>I.answerIntake(I.initialDraft('Try this'),'aim','other',''));
+ assert.throws(()=>I.answerIntake(I.initialDraft('Try this'),'aim','unclassified',''));
 });
 test('bounded unsolved selection renders ranges without expanding holes or mutating confirmed scope',()=>{
- let d=I.answerIntake(I.answerIntake(I.initialDraft('Try this'),'aim','statistical'),'scope','unsolved-lp2');
+ let d=I.answerIntake(I.answerIntake(I.initialDraft('Try this'),'aim','measure'),'scope','unsolved-lp2');
  assert.equal(d.scope.value.pages.length,56);const before=C.serialize(d.scope);
  const html=I.rowsHTML(d);assert(html.includes('LP2-00–55'));assert.equal((html.match(/scope-range/g)||[]).length,0);
  assert.equal(C.serialize(d.scope),before);
@@ -153,11 +153,32 @@ test('bounded unsolved selection renders ranges without expanding holes or mutat
 });
 test('aim choices do not derail strong actual-record technique retrieval',()=>{
  for(const [text,id] of [['Fibonacci keys on LP2-15','fibonacci-stream-skip-grid'],['Test fixed invertible Hill matrix keys in two-rune blocks on LP2-15','direct-hill-key-feasibility']]){
-  for(const aim of ['readable','statistical','reproduce']){
+  for(const aim of ['decipher','measure','reproduce']){
    const c=C.confirm(I.answerIntake(I.initialDraft(text),'aim',aim),{id:'qa',at});
    assert.equal(S.select(docs,C.retrievalQuery(c).query)[0].id,id);
   }
  }
+});
+test('canonical outcomes retain exact wording and do not create visitor categories',()=>{
+ const ids=Object.keys(C.OUTCOMES),solve=I.initialDraft('solve LP2'),readable=I.initialDraft('Find readable text');
+ assert.equal(solve.aim.outcome.id,'decipher');assert.equal(readable.aim.outcome.id,'decipher');
+ for(const d of [solve,readable]){const html=I.rowsHTML(d);assert(html.includes('Outcome'));assert(html.includes('Decipher the text'));assert.equal(d.source.text,d.aim.value.wording);}
+ let custom=I.answerIntake(I.initialDraft('Try a keyed spiral'),'aim','unclassified','Check the moth geometry');
+ assert.equal(custom.aim.outcome.id,'unclassified');assert(!I.rowsHTML(custom).includes('class="tag">Check the moth geometry'));
+ assert(I.rowsHTML(custom).includes('objective-detail'));assert.deepEqual(Object.keys(C.OUTCOMES),ids);
+ const alias=I.answerIntake(I.initialDraft('Try a keyed spiral'),'aim','unclassified','solve LP2');assert.equal(alias.aim.outcome.id,'decipher');assert.equal(alias.aim.value.wording,'solve LP2');
+});
+test('outcome-only inputs never invent a method or retrieve arbitrary attempts',()=>{
+ for(const text of ['Find readable text','solve LP2','Decipher LP2','Decrypt LP2',...Object.values(C.OUTCOMES)]){
+  let d=I.initialDraft(text);assert.equal(d.method.status,'unspecified',text);assert(I.intakeQuestions(d).some(q=>q.id==='method'));
+  d=I.answerIntake(d,'method','undecided');d=I.answerIntake(d,'scope','undecided');
+  assert.equal(C.retrievalQuery(C.confirm(d,{id:'outcome-only',at})).query,null,text);
+ }
+ const full=I.initialDraft('solve LP2 using Vigenere with key FIRFUMFERENFE');assert.equal(full.method.status,'specified');assert(full.method.value.operations[0].label.includes('FIRFUMFERENFE'));
+ let described=I.answerIntake(I.initialDraft('solve LP2'),'method','describe','Reverse each row, then apply key ABC');
+ assert.equal(described.method.value.operations[0].label,'Reverse each row, then apply key ABC');
+ assert.equal(described.source.text,'solve LP2');
+ const family=I.answerIntake(I.initialDraft('solve LP2'),'method','family:feedback');assert.deepEqual(C.classifyMethod(family.method).familyIds,['feedback']);assert.equal(family.method.value.operations[0].id,'family_selection');assert.equal(family.rules.reset.status,'unspecified');
 });
 console.log('PASS '+count+' investigate helper/retrieval tests; all research uses actual registry records and no inference.');
 
@@ -231,7 +252,7 @@ function answerInDOM(doc,choice,text=''){
  assert.equal(C.serialize(application.getSnapshot().packet),frozen);assert.equal(C.binding(application.getSnapshot().confirmed),confirmedBinding);
  // Retry while preserving an old answer is not exposed; edit then reconfirm.
  journey.getElementById('edit').fire('click');
- journey.getElementById('edit-aim').value='';journey.getElementById('edit-method').value='Fibonacci stream keys';journey.getElementById('edit-scope').value='LP2-15';journey.getElementById('edit-rules').value='';
+ journey.getElementById('edit-aim').value='';journey.getElementById('edit-objective').value='';journey.getElementById('edit-method').value='Fibonacci stream keys';journey.getElementById('edit-scope').value='LP2-15';journey.getElementById('edit-rules').value='';
  journey.getElementById('editor').fire('submit');journey.getElementById('confirm').fire('click');
  assert.equal(requests.length,2);const old=requests[1];
  journey.getElementById('cancel').fire('click');assert.equal(old.options.signal.aborted,true);assert.equal(application.getSnapshot().busy,false);
@@ -246,7 +267,7 @@ function answerInDOM(doc,choice,text=''){
  journey.getElementById('back').fire('click');assert.equal(application.getSnapshot().stage,'input');assert.equal(application.getSnapshot().packet,null);
  assert.equal(saved.research.answer,'The published Fibonacci stream test is bounded [1].','Old frozen packet remains unchanged after leaving');
  journey.getElementById('idea').value='Unmatched careful idea';journey.getElementById('intake').fire('submit');
- answerInDOM(journey,'other','Check the visual alignment');answerInDOM(journey,'specific','LP2-43, lines 2–3');
+ answerInDOM(journey,'unclassified','Check the visual alignment');answerInDOM(journey,'specific','LP2-43, lines 2–3');
  journey.getElementById('confirm').fire('click');
  assert.equal(requests.length,4);
  const noMatchConfirmed=application.getSnapshot().confirmed;
@@ -256,9 +277,19 @@ function answerInDOM(doc,choice,text=''){
  assert(journey.getElementById('print'));assert(!journey.getElementById('retry'));
  journey.getElementById('edit').fire('click');assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');journey.getElementById('cancel-edit').fire('click');assert.equal(application.getSnapshot().result.noMatch,true);
  journey.getElementById('edit').fire('click');assert(journey.host.html.includes('LP2-43, lines 2–3'));
- journey.getElementById('edit-aim').value='Check a different alignment';journey.getElementById('edit-method').value='Unmatched careful idea';journey.getElementById('edit-scope').value='LP2-43, lines 2–3';journey.getElementById('edit-rules').value='';
+ journey.getElementById('edit-aim').value='unclassified';journey.getElementById('edit-objective').value='Check a different alignment';journey.getElementById('edit-method').value='Unmatched careful idea';journey.getElementById('edit-scope').value='LP2-43, lines 2–3';journey.getElementById('edit-rules').value='';
  journey.getElementById('editor').fire('submit');
  assert.deepEqual(application.getSnapshot().draft.scope.value,{description:'LP2-43, lines 2–3'},'Custom passage survives an unrelated aim edit');
  assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');
+ // Controlled editor category/detail round trips never mint categories or erase source.
+ for(const [category,detail,expected] of [['measure','Find plaintext in the comparison','measure'],['unclassified','Estimate publication date','unclassified'],['unclassified','Find plaintext','decipher']]){
+  journey.getElementById('edit').fire('click');journey.getElementById('edit-aim').value=category;journey.getElementById('edit-objective').value=detail;
+  journey.getElementById('edit-method').value='Unmatched careful idea';journey.getElementById('edit-scope').value='LP2-43, lines 2–3';journey.getElementById('edit-rules').value='';journey.getElementById('editor').fire('submit');
+  assert.equal(application.getSnapshot().draft.aim.outcome.id,expected);assert.equal(application.getSnapshot().draft.aim.value.detail,detail);
+  assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');
+ }
+ const beforeGoalOnly=requests.length;journey.getElementById('back').fire('click');journey.getElementById('idea').value='solve LP2';journey.getElementById('intake').fire('submit');
+ assert(journey.host.html.includes('What method do you want to check?'));answerInDOM(journey,'undecided');answerInDOM(journey,'undecided');
+ assert.equal(journey.getElementById('confirm'),null);assert(journey.host.html.includes('Browse the research index'));assert.equal(requests.length,beforeGoalOnly,'A goal without method sends no research request');
  application.destroy();console.log('PASS mocked full journey: success, exact print packet, edit/cancel restoration, new confirmation, cancel/retry, stale response guard and request-local timeout.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

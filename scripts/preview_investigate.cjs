@@ -24,7 +24,7 @@ http.createServer((req,res)=>{
  if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}
  try{
   let bytes=fs.readFileSync(file);
-  if(url.pathname==='/investigate.html')bytes=Buffer.from(bytes.toString().replace('<script src="investigate.js">','<script src="/__qa.js"></script><script src="investigate.js">'));
+  if(url.pathname==='/investigate.html')bytes=Buffer.from(bytes.toString().replace(/<script src="investigate\.js(?:\?[^"]*)?">/,tag=>'<script src="/__qa.js"></script>'+tag));
   if(url.pathname==='/investigate.js')bytes=Buffer.from(bytes.toString().replace('createApp(root.document);',"createApp(root.document,{fetcher:root.__investigateMock||(()=>Promise.reject(Error('QA mock unavailable; network disabled')))});"));
   const types={'.html':'text/html','.js':'text/javascript','.json':'application/json','.css':'text/css'};
   res.setHeader('Content-Type',(types[path.extname(file)]||'application/octet-stream')+'; charset=utf-8');res.end(bytes);

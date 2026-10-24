@@ -20,3 +20,9 @@ The supplied implementation handoff sets the direction for dedicated manuscript 
 Idea checking follows input, clarification when necessary, confirmation, and comparison with actual research. Keep original wording separate from the confirmed interpretation. Missing parameters remain unknown, never automatic wildcards. Show findings and meaningful differences before supporting detail. A saved or printed comparison must use the same confirmed idea and evidence snapshot. Do not import prototype example findings as research or advertise attachment interpretation that is not implemented.
 
 The research index remains separate. Optional research maps help discover related approaches; their editorial groupings do not establish that procedures are equivalent or covered. Use current record content even when a map began from an older archive snapshot.
+
+### Shared specification vocabulary
+
+Organize an idea as outcome, ordered methods, scope, and bounds or rules. Reuse the small maintained outcome and method-family vocabularies; spelling or phrasing changes do not create categories. Keep the exact objective and output-changing settings alongside the shared labels. A readable passage and a complete solution can share a deciphering outcome without sharing a success criterion.
+
+Free text can clarify an existing category or remain unclassified. It cannot add categories automatically. Expand the maintained vocabulary only when an existing category cannot describe the distinction. Scope and parameter changes belong in the specification, not in new method names. A broad method label helps find related work; it never establishes that an exact configuration was executed. An outcome alone is not a method and must not retrieve arbitrary experiments.

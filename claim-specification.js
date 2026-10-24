@@ -13,6 +13,23 @@
   };
   const OPERATIONS={reverse_row_runes:'Reverse rune order within rows',
     reverse_value_digits:'Reverse decimal digits of each value'};
+  // Intent categories, never success criteria or findings. Expand by editing
+  // this registry deliberately; visitor wording cannot mint another category.
+  const OUTCOMES=Object.freeze({decipher:'Decipher the text',measure:'Test a pattern',
+    reproduce:'Reproduce a result',explain:'Explain a feature',verify_source:'Verify source material'});
+  const OUTCOME_ALIASES=Object.freeze({
+    decipher:['decipher','decipher the text','decipher lp2','decrypt','decrypt the text','decrypt lp2','solve lp2','solving lp2','solving','solve liber primus','find readable text','find plaintext','recover plaintext','produce readable text','find readable plaintext'],
+    measure:['measure','test a pattern','test a statistical effect','test statistical effect','measure a pattern','test a statistical pattern'],
+    reproduce:['reproduce','reproduce a result','reproduce an existing result','replicate a result','rerun a result'],
+    explain:['explain','explain a feature','explain a manuscript feature'],
+    verify_source:['verify source material','verify the source','check source material','verify a transcription','check a transcription']
+  });
+  const METHOD_FAMILIES=Object.freeze({
+    'fixed-substitution':'Fixed alphabet substitutions',polyalphabetic:'Repeating-key and polyalphabetic ciphers',
+    feedback:'Autokey and ciphertext feedback',transposition:'Transposition and permutations',
+    'prime-indices':'Prime indexing and value transforms','number-streams':'Arithmetic keystreams',
+    'book-codes':'Book ciphers and coordinate lookups'
+  });
   const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
   function copy(value) {
     if(value===null||typeof value==='string'||typeof value==='boolean')return value;
@@ -44,6 +61,70 @@
   function checkedField(value){
     if(!value||typeof value!=='object')throw Error('Expected a stateful field');
     return field(value.status,value.value,value.provenance);
+  }
+  function normalizeOutcome(value){
+    if(value&&typeof value==='object'&&own(value,'status'))value=value.status==='specified'?value.value:undefined;
+    let wording='',detail='',explicit;
+    if(typeof value==='string')wording=detail=value;
+    else if(value&&typeof value==='object'&&!Array.isArray(value)){
+      explicit=value.outcomeId;
+      wording=typeof value.wording==='string'?value.wording:typeof value.detail==='string'?value.detail:'';
+      detail=typeof value.detail==='string'?value.detail:wording;
+    }
+    let id='unclassified';
+    if(typeof explicit==='string'&&own(OUTCOMES,explicit))id=explicit;
+    else if(explicit===undefined||explicit==='unclassified'){
+      // A custom choice cannot mint a second category for an exact alias.
+      // Its edited detail is authoritative over preserved original wording.
+      const current=explicit==='unclassified'&&typeof value.detail==='string'?detail:wording;
+      const alias=current.trim().toLowerCase().replace(/[.!?]$/,'').trim();
+      for(const [candidate,aliases] of Object.entries(OUTCOME_ALIASES))if(aliases.includes(alias)||OUTCOMES[candidate].toLowerCase()===alias){id=candidate;break;}
+    }
+    return {id,label:own(OUTCOMES,id)?OUTCOMES[id]:'Aim not classified',wording,detail};
+  }
+  function normalizeAim(value){
+    const f=checkedField(value);
+    // Recompute derived metadata; supplied .outcome is never authoritative.
+    if(f.status==='specified')f.outcome=normalizeOutcome(f.value);
+    return f;
+  }
+  function outcomeLabel(value){
+    if(typeof value==='string'&&own(OUTCOMES,value))return OUTCOMES[value];
+    if(value&&typeof value==='object'&&own(value,'status')&&value.status!=='specified')return display(value,'Aim');
+    return normalizeOutcome(value).label;
+  }
+  function classifyMethod(value){
+    const f=normalizeMethod(value);
+    if(f.status!=='specified')return {familyIds:[],complete:false,operations:[]};
+    const ids={caesar:'fixed-substitution',caesar_shift:'fixed-substitution',atbash:'fixed-substitution',
+      affine_substitution:'fixed-substitution',vigenere:'polyalphabetic',vigenere_cipher:'polyalphabetic',
+      repeating_key:'polyalphabetic',autokey:'feedback',ciphertext_autokey:'feedback',plaintext_autokey:'feedback',
+      transposition:'transposition',reverse_row_runes:'transposition',reverse_word_order:'transposition',reverse_runes:'transposition',
+      prime_value_mapping:'prime-indices',prime_mapping:'prime-indices',prime_index:'prime-indices',reverse_prime_digits:'prime-indices',
+      prime_keystream:'number-streams',numeric_keystream:'number-streams',book_cipher:'book-codes',book_code:'book-codes'};
+    const rows=f.value.operations.map((operation,index)=>{
+      const text=typeof operation.label==='string'?operation.label:typeof operation.sourceText==='string'?operation.sourceText:'';
+      const evidence=[operation.label,operation.sourceText].filter(t=>typeof t==='string'&&
+        !(operation.id==='family_selection'&&t===METHOD_FAMILIES[operation.familyId])).join('\n ');
+      const unsafe=/\b(?:not|never|unless|except|excluding|if|when|without|only|instead|otherwise|but|then|after|before|and)\b|\bdon['’]t\b|[`{}]|=>|\b(?:const|function|return|def)\b/i.test(evidence)||[operation.label,operation.sourceText].some(t=>typeof t==='string'&&t.includes('\n'));
+      let familyId='unclassified',basis='unclassified';
+      if(!unsafe){
+        if(operation.id==='family_selection'&&own(METHOD_FAMILIES,operation.familyId)){familyId=operation.familyId;basis='explicit_family';}
+        else if(own(ids,operation.id)){familyId=ids[operation.id];basis='operation_id';}
+        else{
+          const name=text.trim().replace(/[.]$/,'');
+          if(/^(?:apply |use )?(?:Caesar(?: cipher| shift)?|shift cipher)(?: with (?:shift|key) [+-]?\d+)?$/i.test(name))familyId='fixed-substitution';
+          else if(/^(?:apply |use )?Vigen[eè]re(?: cipher)?(?: with (?:the )?key (?:[\w-]+|"[^"\n]+"|'[^'\n]+'))?$/i.test(name))familyId='polyalphabetic';
+          else if(/^(?:apply |use )?(?:(?:plaintext|ciphertext) )?autokey(?: cipher)?$/i.test(name))familyId='feedback';
+          else if(/^(?:apply |use )?(?:transposition|reverse rune order within rows|reverse each row)$/i.test(name))familyId='transposition';
+          else if(/^(?:apply |use )?(?:prime index mapping|prime value mapping|reverse (?:the )?(?:decimal )?digits of each prime value)$/i.test(name))familyId='prime-indices';
+          else if(/^(?:apply |use )?(?:book cipher|book code)$/i.test(name))familyId='book-codes';
+          if(familyId!=='unclassified')basis='anchored_name';
+        }
+      }
+      return {index,familyId,label:own(METHOD_FAMILIES,familyId)?METHOD_FAMILIES[familyId]:'Method not classified',basis,operation:copy(operation)};
+    });
+    return {familyIds:[...new Set(rows.filter(r=>r.familyId!=='unclassified').map(r=>r.familyId))],complete:rows.every(r=>r.familyId!=='unclassified'),operations:rows};
   }
   function pages(values){
     if(!Array.isArray(values)||values.some(p=>typeof p!=='string'||!/^lp[12]-\d{2}$/.test(p)||Number(p.slice(4))>(p.startsWith('lp1')?16:57)))throw Error('Invalid exact page set');
@@ -77,7 +158,7 @@
     for(const key of Object.keys(rules))if(!RULES.includes(key))throw Error('Preserve unknown rules in unresolved constraints');
     if(!Array.isArray(unresolved))throw Error('Unresolved constraints must be a list');
     return {schema:SCHEMA,revision:1,status:'draft',execution:'not_run',
-      source:{...copy(source),materials:material},aim:checkedField(aim),method:normalizeMethod(method),scope:normalizeScope(scope),
+      source:{...copy(source),materials:material},aim:normalizeAim(aim),method:normalizeMethod(method),scope:normalizeScope(scope),
       rules:knownRules,unresolved:copy(unresolved),clarifications:[],confirmation:null};
   }
   // Arbitrary prose/code is preserved, never interpreted through fictional fixtures.
@@ -105,7 +186,8 @@
     const allowed=['aim','method','scope','rules','appendUnresolved'];
     if(!patch||Object.keys(patch).some(k=>!allowed.includes(k)))throw Error('Unsupported patch');
     const next=copy(draft);next.status='draft';next.execution='not_run';next.confirmation=null;next.revision++;
-    if(own(patch,'aim'))next.aim=checkedField(patch.aim);
+    if(own(patch,'aim'))next.aim=normalizeAim(patch.aim);
+    else next.aim=normalizeAim(next.aim);
     if(own(patch,'scope'))next.scope=normalizeScope(patch.scope);
     if(own(patch,'method'))next.method=normalizeMethod(patch.method);
     if(own(patch,'rules'))for(const [key,value] of Object.entries(patch.rules)){
@@ -195,7 +277,7 @@
       if(!scopeTags.length)scopeTags.push({id:'scope:empty',text:'Explicit empty selection',unknown:false});
     }else scopeTags.push({id:'scope:'+spec.scope.status,text:display(spec.scope,'Scope'),unknown:spec.scope.status==='unspecified'});
     return [
-      {label:'Aim',tags:[{id:'aim',text:display(spec.aim,'Aim'),unknown:spec.aim.status==='unspecified'}]},
+      {label:'Aim',tags:[{id:'aim:'+normalizeOutcome(spec.aim).id,text:outcomeLabel(spec.aim),unknown:spec.aim.status==='unspecified'||(spec.aim.status==='specified'&&normalizeOutcome(spec.aim).id==='unclassified')}]},
       {label:'Method',tags:methodTags.length?methodTags:[{id:'method:unknown',text:display(spec.method,'Method'),unknown:spec.method.status==='unspecified'}]},
       {label:'Scope',tags:scopeTags},
       {label:'Rules',tags:RULES.filter(key=>spec.rules[key].status==='specified'||spec.rules[key].status==='unrestricted'||
@@ -218,6 +300,7 @@
     if(!value||value.schema!==SCHEMA||!Number.isInteger(value.revision)||value.revision<1||
       !['confirmed_incomplete','confirmed_specified'].includes(value.status)||value.execution!=='not_run'||!value.confirmation)throw Error('Expected a confirmed interpretation');
     const rebuilt=createDraft({source:value.source,...meaning(value)});
+    if(stable(value.aim)!==stable(rebuilt.aim))throw Error('Inconsistent aim category metadata');
     const expected=confirm(rebuilt,value.confirmation);
     if(value.status!==expected.status||value.canonical!==expected.canonical)throw Error('Inconsistent confirmation snapshot');
     return freeze(copy(value));
@@ -227,7 +310,7 @@
     const snapshot=validateConfirmed(confirmed);
     if(!Number.isInteger(maxLength)||maxLength<1)throw Error('Invalid query limit');
     if(!completeness(snapshot).researchReady)return {query:null,needsClarification:true,needsShorter:false};
-    const compact=f=>f.status==='specified'?{status:f.status,value:f.value}:{status:f.status};
+    const compact=f=>f.status==='specified'?{status:f.status,value:f.value,...(f.outcome?{outcomeId:f.outcome.id}:{})}:{status:f.status};
     const rules=Object.fromEntries(RULES.map(k=>[k,compact(snapshot.rules[k])]));
     const query=['Confirmed interpretation; not an executed experiment.',
       'Aim: '+stable(compact(snapshot.aim)),
@@ -243,14 +326,21 @@
   function retrievalQuery(confirmed,{maxLength=1500}={}){
     const s=validateConfirmed(confirmed);
     if(!Number.isInteger(maxLength)||maxLength<1)throw Error('Invalid query limit');
+    if(!completeness(s).researchReady)return {query:null,needsClarification:true,needsShorter:false};
     const parts=[];
-    if(s.aim.status==='specified')parts.push(display(s.aim,'Aim'));
     parts.push(...reviewRows(s).find(r=>r.label==='Method').tags.map(t=>t.text));
     if(s.scope.status==='specified'){
       parts.push(...(s.scope.value.pages||[]).map(p=>p.toUpperCase()));
       for(const [key,value] of Object.entries(s.scope.value))if(key!=='pages')parts.push(key+': '+stable(value));
     }
     parts.push(...reviewRows(s).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text));
+    if(s.aim.status==='specified'){
+      const aim=normalizeOutcome(s.aim);
+      // Generic intent labels are not method-search terms. Keep only specific
+      // unmatched authored wording/detail; full intent remains in confirmedQuery.
+      if(aim.wording&&normalizeOutcome(aim.wording).id==='unclassified')parts.push(aim.wording);
+      if(aim.detail&&aim.detail!==aim.wording&&normalizeOutcome(aim.detail).id==='unclassified')parts.push(aim.detail);
+    }
     const query=parts.join('. ');
     return {query:query.length<=maxLength?query:null,needsShorter:query.length>maxLength,length:query.length,maxLength};
   }
@@ -270,7 +360,7 @@
     if(!result||result.schema!=='liberpedia-claim-research-v1'||result.claimBinding!==binding(snapshot)||binding(result.confirmed)!==binding(snapshot))throw Error('Research belongs to another confirmed revision');
     return freeze({schema:'liberpedia-claim-packet-v1',confirmed:snapshot,research:copy(result)});
   }
-  const api={SCHEMA,STATES,RULES,BOUNDARIES,field,pages,createDraft,fromText,revise,clarify,questions,
+  const api={SCHEMA,STATES,RULES,BOUNDARIES,OUTCOMES,METHOD_FAMILIES,METHODS:METHOD_FAMILIES,normalizeOutcome,normalizeAim,outcomeLabel,classifyMethod,field,pages,createDraft,fromText,revise,clarify,questions,
     completeness,reviewRows,summary,confirm,validateConfirmed,binding,queryForResearch,retrievalQuery,bindResearch,packetSnapshot,serialize:stable};
   if(typeof module!=='undefined')module.exports=api;else root.ClaimSpecification=api;
 })(globalThis);

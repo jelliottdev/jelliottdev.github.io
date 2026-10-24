@@ -74,21 +74,29 @@
   if(!opaque){
    const explicit=text.match(/\b(?:my\s+)?(?:aim|goal)\s*(?:is|:)\s*([^.!?\n]+)/i);
    if(explicit)aim=known(explicit[1].trim());
-   else if(/^(?:I (?:want|would like) to\s+)?(?:find|recover|produce) (?:readable (?:text|plaintext)|plaintext)\b/i.test(text.trim()))aim=known('Find readable text');
-   else if(/^(?:I (?:want|would like) to\s+)?(?:test|measure|check) (?:a |the )?statistical (?:effect|pattern|difference)\b/i.test(text.trim()))aim=known('Test a statistical effect');
-   else if(/^(?:I (?:want|would like) to\s+)?(?:reproduce|replicate|rerun)\b/i.test(text.trim()))aim=known('Reproduce an existing result');
+   else if(/^(?:I (?:want|would like) to\s+)?(?:solve|decipher|decrypt)\s+(?:LP2|Liber Primus|the (?:text|manuscript))\b/i.test(text.trim()))aim=known({outcomeId:'decipher',wording:text.trim(),detail:text.trim()});
+   else if(/^(?:I (?:want|would like) to\s+)?(?:find|recover|produce) (?:readable (?:text|plaintext)|plaintext)\b/i.test(text.trim()))aim=known({outcomeId:'decipher',wording:text.trim(),detail:text.trim()});
+   else if(/^(?:I (?:want|would like) to\s+)?(?:test|measure|check) (?:a |the )?statistical (?:effect|pattern|difference)\b/i.test(text.trim()))aim=known({outcomeId:'measure',wording:text.trim(),detail:text.trim()});
+   else if(/^(?:I (?:want|would like) to\s+)?(?:reproduce|replicate|rerun)\b/i.test(text.trim()))aim=known({outcomeId:'reproduce',wording:text.trim(),detail:text.trim()});
   }
-  return C.createDraft({source:{text},aim,method:known({operations}),scope,rules,unresolved});
+  let goalOnly=text.trim().replace(/[.!?]$/,'').replace(/^(?:I (?:want|would like) to\s+|(?:my\s+)?(?:aim|goal)\s*(?:is|:)\s*)/i,'');
+  const goalScope=goalOnly.match(/\s+on\s+(.+)$/i);
+  if(goalScope){try{if(!/^all (?:the )?unsolved LP2(?: pages)?$/i.test(goalScope[1]))parseScope(goalScope[1]);goalOnly=goalOnly.slice(0,goalScope.index);}catch{/* A method tail is not a scope suffix. */}}
+  const goalCategory=C.normalizeOutcome(goalOnly),outcomeOnly=!opaque&&goalCategory.id!=='unclassified';
+  if(outcomeOnly)aim=known({outcomeId:goalCategory.id,wording:text.trim(),detail:text.trim()});
+  return C.createDraft({source:{text},aim,method:outcomeOnly?C.field():known({operations}),scope,rules,unresolved});
  }
  function intakeQuestions(draft){
   const result=C.questions(draft);
   const acknowledged=name=>draft.clarifications.some(c=>c.question===name&&c.choice==='undecided');
-  if(draft.aim.status==='unspecified'&&!acknowledged('aim'))result.push({id:'aim',prompt:'What do you want to find out?',choices:[
-   {id:'readable',label:'Find readable text'},
-   {id:'statistical',label:'Test a statistical effect'},
-   {id:'reproduce',label:'Reproduce an existing result'},
-   {id:'other',label:'Another aim',requiresText:true,fieldLabel:'Describe your aim'},
-   {id:'undecided',label:'Leave the aim undecided'}]});
+  if(draft.aim.status==='unspecified'&&!acknowledged('aim'))result.push({id:'aim',prompt:'What outcome are you looking for?',choices:[
+   ...Object.entries(C.OUTCOMES).map(([id,label])=>({id,label})),
+   {id:'unclassified',label:'None of these fits',requiresText:true,fieldLabel:'Describe the outcome you want'},
+   {id:'undecided',label:'Leave the outcome undecided'}]});
+  if(draft.method.status==='unspecified'&&!acknowledged('method'))result.push({id:'method',prompt:'What method do you want to check?',choices:[
+   ...Object.entries(C.METHOD_FAMILIES).map(([id,label])=>({id:'family:'+id,label})),
+   {id:'describe',label:'Describe the method',requiresText:true,fieldLabel:'Describe the rule or steps you want to test'},
+   {id:'undecided',label:'I haven’t chosen a method'}]});
   if(draft.scope.status==='unspecified'&&!acknowledged('scope'))result.push({id:'scope',prompt:'Which material should this apply to?',choices:[
    {id:'unsolved-lp2',label:'The unsolved LP2 pages',example:'LP2-00–55'},
    {id:'specific',label:'Specific pages or a passage',requiresText:true,fieldLabel:'Name the pages or passage',placeholder:'LP2-15, LP2-17; or LP2-43, lines 2–3'},
@@ -104,12 +112,14 @@
   }
  }
  function answerIntake(draft,id,choice,text=''){
-  if(!['aim','scope'].includes(id))return C.clarify(draft,id,choice,text);
+  if(!['aim','method','scope'].includes(id))return C.clarify(draft,id,choice,text);
   const question=intakeQuestions(draft).find(q=>q.id===id),option=question?.choices.find(c=>c.id===choice);
   if(!option)throw Error('Choose an available answer.');
   if(option.requiresText&&!text.trim())throw Error(option.fieldLabel+'.');
   let value=C.field();
-  if(id==='aim'&&choice!=='undecided')value=clarified(choice==='other'?text.trim():option.label);
+  if(id==='aim'&&choice!=='undecided'){const wording=choice==='unclassified'?text.trim():option.label;value=clarified({outcomeId:choice==='unclassified'?C.normalizeOutcome(wording).id:choice,wording,detail:choice==='unclassified'?wording:''});}
+  if(id==='method'&&choice.startsWith('family:'))value=clarified({operations:[{id:'family_selection',familyId:choice.slice(7),label:option.label}]});
+  if(id==='method'&&choice==='describe')value=clarified({operations:[{id:'described_method',label:text.trim(),sourceText:text.trim()}]});
   if(id==='scope'&&choice==='specific')value=chosenScope(text);
   if(id==='scope'&&choice==='unsolved-lp2')value=clarified({pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0'))});
   const next=C.revise(draft,{[id]:value});
@@ -141,7 +151,18 @@
  function rowsHTML(spec){return '<dl>'+C.reviewRows(spec).filter(r=>r.label!=='Unresolved'&&(r.tags||[]).length).map(r=>{
   const originalTags=r.label==='Scope'&&spec.scope.status==='specified'?r.tags.map(t=>t.id==='scope:description'?{...t,text:spec.scope.value.description}:t):r.tags;
   const tags=r.label==='Scope'&&spec.scope.status==='specified'&&spec.scope.value.pages?[...compactPages(spec.scope.value.pages),...originalTags.filter(t=>!/^lp[12]-\d{2}$/.test(t.id))]:originalTags;
-  return '<div class="tag-row"><dt>'+esc(r.label)+'</dt><dd>'+tags.map(t=>'<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(t.text)+'</span>').join('')+'</dd></div>';
+  const label=r.label==='Aim'?'Outcome':r.label==='Rules'?'Bounds & rules':r.label;
+  let content;
+  if(r.label==='Method')content=tags.length>1?'<ol class="method-steps">'+tags.map(t=>'<li>'+esc(t.text)+'</li>').join('')+'</ol>':'<p class="method-wording">'+esc(tags[0].text)+'</p>';
+  else content=tags.map(t=>'<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(t.text)+'</span>').join('');
+  if(r.label==='Aim'&&spec.aim.status==='specified'){
+   const outcome=C.normalizeOutcome(spec.aim.value),detail=outcome.detail||outcome.wording;
+   if(outcome.id==='unclassified')content='<span class="tag unknown">Outcome not classified</span>';
+   if(detail&&detail!==outcome.label&&(outcome.id==='unclassified'||C.normalizeOutcome(detail).id!==outcome.id))content+='<p class="objective-detail">'+esc(detail)+'</p>';
+  }
+  if(r.label==='Aim'&&spec.aim.status!=='specified')content='<span class="tag unknown">Outcome undecided</span>';
+  if(r.label==='Method'){const families=C.classifyMethod(spec.method).familyIds;if(tags.length===1&&families.some(id=>C.METHOD_FAMILIES[id]===tags[0].text))content='';content=families.map(id=>'<span class="tag">'+esc(C.METHOD_FAMILIES[id])+'</span>').join('')+content;}
+  return '<div class="tag-row"><dt>'+esc(label)+'</dt><dd>'+content+'</dd></div>';
  }).join('')+'</dl>';}
  function methodText(spec){return C.reviewRows(spec).find(r=>r.label==='Method').tags.map(t=>t.text).join('; then ');}
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
@@ -178,7 +199,8 @@
      '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>':'</section>')+
      '')+(editing?editorHTML():questionsHTML())+(pending?'<button id="edit" type="button">Edit interpretation</button>':'')+
      (stage==='review'?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
-     (stage==='review'&&!editing&&!intakeQuestions(draft).length?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p><div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="index.html#/research">Browse the research index</a> for approaches.</p>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p><div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
@@ -189,7 +211,8 @@
    const scope=draft.scope.status==='specified'?(draft.scope.value.description||(draft.scope.value.pages||[]).map(p=>p.toUpperCase()).join(', ')):'';
    const method=draft.method.status==='specified'?methodText(draft):'';
    const rule=C.reviewRows(draft).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text).join('\n');
-   return '<form class="editor" id="editor"><label for="edit-aim">Aim <span class="small">(optional)</span></label><input type="text" id="edit-aim" maxlength="240" value="'+esc(draft.aim.status==='specified'?draft.aim.value:'')+'"><label for="edit-method">Method</label><textarea id="edit-method" required maxlength="1200">'+esc(method)+'</textarea><label for="edit-scope">Pages or passage <span class="small">(optional)</span></label><input type="text" id="edit-scope" value="'+esc(scope)+'" placeholder="LP2-15, LP2-17"><label for="edit-rules">Additional rules <span class="small">(optional)</span></label><textarea id="edit-rules" maxlength="600">'+esc(rule)+'</textarea><div class="actions"><button id="cancel-edit" type="button">Cancel</button><button class="primary" type="submit">Review changes</button></div></form>';
+   const outcome=draft.aim.status==='specified'?C.normalizeOutcome(draft.aim.value):{id:'',wording:'',detail:''};
+   return '<form class="editor" id="editor"><label for="edit-aim">Outcome</label><select id="edit-aim"><option value="">Undecided</option>'+Object.entries(C.OUTCOMES).map(([id,label])=>'<option value="'+esc(id)+'"'+(outcome.id===id?' selected':'')+'>'+esc(label)+'</option>').join('')+'<option value="unclassified"'+(outcome.id==='unclassified'?' selected':'')+'>None of these fits</option></select><label for="edit-objective">Objective detail <span class="small">(optional)</span></label><textarea id="edit-objective" maxlength="600">'+esc(outcome.detail||outcome.wording)+'</textarea><label for="edit-method">Method</label><textarea id="edit-method" required maxlength="1200">'+esc(method)+'</textarea><label for="edit-scope">Pages or passage <span class="small">(optional)</span></label><input type="text" id="edit-scope" value="'+esc(scope)+'" placeholder="LP2-15, LP2-17"><label for="edit-rules">Bounds and rules <span class="small">(optional)</span></label><textarea id="edit-rules" maxlength="600">'+esc(rule)+'</textarea><div class="actions"><button id="cancel-edit" type="button">Cancel</button><button class="primary" type="submit">Review changes</button></div></form>';
   }
   function questionsHTML(){
    if(stage!=='review')return '';
@@ -218,7 +241,10 @@
      const ruleText=doc.getElementById('edit-rules').value.trim();
      const previousRules=C.reviewRows(draft).find(r=>r.label==='Rules').tags.filter(t=>!t.unknown).map(t=>t.text).join('\n');
      const scopeText=doc.getElementById('edit-scope').value.trim();
-     const patch={aim:doc.getElementById('edit-aim').value.trim()?clarified(doc.getElementById('edit-aim').value.trim()):C.field(),scope:scopeText?chosenScope(scopeText):C.field()};
+     const outcomeId=doc.getElementById('edit-aim').value,objective=doc.getElementById('edit-objective').value.trim();
+     const priorOutcome=draft.aim.status==='specified'?C.normalizeOutcome(draft.aim.value):{id:'',wording:'',detail:''};
+     const patch={scope:scopeText?chosenScope(scopeText):C.field()};
+     if(outcomeId!==priorOutcome.id||objective!==(priorOutcome.detail||priorOutcome.wording))patch.aim=outcomeId?clarified({outcomeId:outcomeId==='unclassified'?C.normalizeOutcome(objective).id:outcomeId,wording:outcomeId==='unclassified'?objective:priorOutcome.wording||objective,detail:objective}):objective?clarified({outcomeId:'unclassified',wording:objective,detail:objective}):C.field();
      if(ruleText!==previousRules){patch.rules=Object.fromEntries(C.RULES.map(k=>[k,C.field()]));patch.rules.exceptionalCases=ruleText?clarified(ruleText):C.field();}
      if(wording!==current)patch.method=clarified({operations:[{id:'described_method',label:wording}]});
      draft=C.revise(draft,patch);
@@ -233,7 +259,7 @@
    doc.getElementById('clarification')?.addEventListener('submit',event=>{
     event.preventDefault();const choice=doc.querySelector('input[name=choice]:checked')?.value;if(!choice)return;
     const q=intakeQuestions(draft)[0];
-    if(['aim','scope'].includes(q.id)){
+    if(['aim','method','scope'].includes(q.id)){
      try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
     }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;
@@ -242,7 +268,7 @@
     error='';render();focus(editing?'#edit-method':'#review-title');
    });
    doc.getElementById('confirm')?.addEventListener('click',()=>{
-    try{if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
+    try{if(draft.method.status!=='specified')throw Error('Choose a method before comparing prior tests.');if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
      if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
      if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
      stage='research';error='';message='';compare();

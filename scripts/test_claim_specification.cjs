@@ -33,6 +33,75 @@ test('four field states are distinct, with values only for specified fields',()=
  assert.throws(()=>C.field('specified','x',{kind:'inferred_truth',refs:[]}));
  assert.equal(known('maybe').provenance.kind,'supplied');
 });
+test('finite intent vocabulary unifies exact aliases while preserving wording and full meaning',()=>{
+ const aims=['solve LP2','solving','solving LP2','decipher LP2','decrypt','find readable text'];
+ const snapshots=aims.map(value=>confirmed(draft({aim:known(value)})));
+ assert.deepEqual(Object.keys(C.OUTCOMES),['decipher','measure','reproduce','explain','verify_source']);
+ assert(Object.isFrozen(C.OUTCOMES));
+ for(let i=0;i<aims.length;i++){
+  assert.equal(snapshots[i].aim.value,aims[i]);assert.equal(snapshots[i].aim.outcome.id,'decipher');
+  assert.equal(C.outcomeLabel(snapshots[i].aim),'Decipher the text');
+  assert.equal(C.reviewRows(snapshots[i])[0].tags[0].text,'Decipher the text');
+ }
+ assert.equal(new Set(snapshots.map(C.binding)).size,aims.length,'Canonical category is not exact meaning identity');
+ const changed=C.revise(snapshots[0],{aim:known('Test a statistical effect')});
+ assert.equal(changed.aim.outcome.id,'measure');assert.equal(changed.aim.value,'Test a statistical effect');
+});
+test('unknown, negative and partial wording cannot mint a category or promise full success',()=>{
+ const before=C.serialize(C.OUTCOMES);
+ for(const wording of ['Invent a moonlight category','Do not decrypt','Maybe solve LP2','Find partial readable output','def solve(x): return x']){
+  const aim=C.normalizeAim(known(wording));assert.equal(aim.outcome.id,'unclassified');assert.equal(aim.outcome.detail,wording);assert.equal(aim.value,wording);
+ }
+ assert.equal(C.serialize(C.OUTCOMES),before);
+ const aim=known({outcomeId:'decipher',wording:'Recover a partial opening',detail:'Only the first twelve runes; no full-page success claim'});
+ const s=confirmed(draft({aim}));assert.equal(s.aim.outcome.id,'decipher');
+ assert.deepEqual(s.aim.value,aim.value);assert(s.aim.outcome.detail.includes('no full-page success'));
+ assert.equal(s.rules.evaluation.status,'unspecified');assert.equal(s.execution,'not_run');
+ assert.equal(C.normalizeOutcome({outcomeId:'new_category',detail:'Keep the detail'}).id,'unclassified');
+ for(const [id,label] of Object.entries(C.OUTCOMES))assert.equal(C.normalizeOutcome({outcomeId:'unclassified',wording:label,detail:label}).id,id);
+ assert.equal(C.normalizeOutcome({outcomeId:'unclassified',wording:'Decipher the text',detail:'Estimate publication date'}).id,'unclassified');
+ assert.equal(C.normalizeOutcome({outcomeId:'unclassified',wording:'Old wording',detail:'find readable text'}).id,'decipher');
+ assert.equal(C.normalizeOutcome({outcomeId:'measure',wording:'Test a pattern',detail:'find readable text'}).id,'measure');
+});
+test('derived intent metadata is recomputed on create/revise and verified on deserialize',()=>{
+ const forged={...known('solve LP2'),outcome:{id:'measure',label:'Wrong',detail:'discarded'}};
+ const d=draft({aim:forged});assert.equal(d.aim.outcome.id,'decipher');
+ const updated=C.revise(d,{scope:known({pages:['lp2-16']})});assert.equal(updated.aim.outcome.id,'decipher');
+ const snapshot=JSON.parse(JSON.stringify(confirmed(d)));snapshot.aim.outcome.id='measure';
+ assert.throws(()=>C.validateConfirmed(snapshot),/category metadata/);
+});
+test('intent retrieval preserves targeted wording without serializing category bookkeeping',()=>{
+ const s=confirmed(draft({aim:known({outcomeId:'explain',wording:'Explain the line-six gap',detail:'Compare line6 with line7'})}));
+ const q=C.retrievalQuery(s).query;assert(q.includes('line-six gap'));assert(q.includes('line6 with line7'));
+ assert(!q.includes('outcomeId'));assert(!q.includes('"label"'));assert(!q.includes('[object Object]'));
+ assert(C.queryForResearch(s,{maxLength:6000}).query.includes('Compare line6 with line7'));
+ assert.equal(C.completeness(C.fromText('solve LP2')).researchReady,false,'Outcome text alone is not a method');
+ const outcomeOnly=confirmed(C.fromText('solve LP2'));
+ assert.deepEqual(C.retrievalQuery(outcomeOnly),{query:null,needsClarification:true,needsShorter:false});
+ for(const outcomeId of Object.keys(C.OUTCOMES)){
+  const standard=confirmed(draft({aim:known({outcomeId,wording:C.OUTCOMES[outcomeId],detail:C.OUTCOMES[outcomeId]})}));
+  assert(!C.retrievalQuery(standard).query.includes(C.OUTCOMES[outcomeId]));
+ }
+});
+test('method families use existing fixed IDs and preserve every ordered operation and parameter',()=>{
+ const input=known({operations:[{id:'reverse_row_runes',reset:'page',offset:3},{id:'described_method',label:'Apply Vigenere with key FOO',key:'FOO'},{id:'prime_value_mapping',table:{status:'unspecified'}}]});
+ const before=C.serialize(input),classified=C.classifyMethod(input);
+ assert.deepEqual(classified.familyIds,['transposition','polyalphabetic','prime-indices']);
+ assert.equal(classified.complete,true);assert.deepEqual(classified.operations.map(r=>r.operation),input.value.operations);
+ assert.equal(C.serialize(input),before);
+ const actual=JSON.parse(fs.readFileSync(require.resolve('../data/method-families.json'),'utf8')).families.map(f=>f.id);
+ assert(Object.keys(C.METHOD_FAMILIES).every(id=>actual.includes(id)));
+ assert.equal(C.classifyMethod(known({operations:[{id:'family_selection',familyId:'book-codes',label:C.METHODS['book-codes']}]})).operations[0].basis,'explicit_family');
+ assert.deepEqual(C.classifyMethod(C.field()).familyIds,[]);
+});
+test('method classification does not infer from negative/code/compound snippets or generic value tables',()=>{
+ for(const label of ['Do not use Caesar','Vigenere then Atbash','if (Caesar) { return key; }','Avoid Caesar','A note mentions Vigenere','Reverse decimal digits of each value']){
+  assert.equal(C.classifyMethod(known({operations:[{id:'described_method',label}]})).operations[0].familyId,'unclassified',label);
+ }
+ assert.equal(C.classifyMethod(known({operations:[{id:'caesar_shift',label:'Caesar',sourceText:'Do not use Caesar'}]})).complete,false);
+ assert.equal(C.classifyMethod(known({operations:[{id:'reverse_value_digits',label:'Reverse decimal digits of each prime value'}]})).operations[0].familyId,'prime-indices');
+ assert.equal(C.classifyMethod(known({operations:[{id:'described_method',label:'Caesar with shift 3'}]})).operations[0].familyId,'fixed-substitution');
+});
 test('exact scope normalizes harmless order/duplicates but keeps holes and explicit empty sets',()=>{
  assert.deepEqual(draft().scope.value.pages,['lp2-15','lp2-17']);
  assert.deepEqual(C.pages(['lp2-57','lp1-16']),['lp1-16','lp2-57']);
@@ -133,7 +202,7 @@ test('research query preserves source, exact scope, order/rules and never trunca
  assert(small.length>20);
  const huge=confirmed(draft({source:{text:'x'.repeat(1500)}}));assert.equal(C.queryForResearch(huge).query,null);
 });
-test('actual321 published records remain full evidence, never synthetic coverage or family identity',()=>{
+test('actual published records remain full evidence, never synthetic coverage or family identity',()=>{
  const records=JSON.parse(fs.readFileSync(require.resolve('../data/experiments.json'),'utf8')).records.filter(r=>r.status==='published');
  assert(records.length>=321);
  const selected=records.filter(r=>['direct-hill-key-feasibility','relikd-autokey-interrupt-database'].includes(r.id));

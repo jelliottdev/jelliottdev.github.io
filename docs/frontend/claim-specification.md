@@ -51,6 +51,43 @@ empty, while unknown scope remains unknown. Other scope properties such as a
 position selection or artifact identity are retained. Page membership alone
 does not imply a whole-page run or continuous state equivalence.
 
+## Stable outcome and method vocabulary
+
+`OUTCOMES` is the frozen registry: `decipher` (Decipher the text), `measure`
+(Test a pattern), `reproduce` (Reproduce a result), `explain` (Explain a feature),
+and `verify_source` (Verify source material). `normalizeOutcome(value)` returns
+`{id,label,wording,detail}`. Exact aliases such as “solve LP2”, “decipher LP2”
+and “find readable text” share `decipher`; their exact wording remains distinct.
+The category states an intended outcome, not a full-solve acceptance criterion.
+Negative, quoted, compound and otherwise unmatched wording is `unclassified`;
+visitors cannot create new registry categories.
+
+Existing string `aim.value` remains supported. Controlled selection can supply
+`{outcomeId,wording,detail}`. A valid selected category is authoritative even when
+details change. For `unclassified`, the current detail is checked for an exact
+alias before falling back to wording when detail is absent. This prevents both
+duplicate aliases and stale original wording overriding a custom edit.
+`normalizeAim(field)` preserves the exact value and recomputes derived `outcome`;
+create/revise use it, and `validateConfirmed` rejects inconsistent derived data.
+`outcomeLabel(fieldOrId)` supplies the stable display label. Category equality
+does not imply exact meaning, scope, protocol or coverage equality.
+
+`METHOD_FAMILIES` (also `METHODS`) contains existing research family IDs:
+`fixed-substitution`, `polyalphabetic`, `feedback`, `transposition`,
+`prime-indices`, `number-streams`, `book-codes`. Explicit broad selection is
+`{id:'family_selection',familyId,label}`. It does not supply execution rules.
+`classifyMethod(methodField)` returns `familyIds`, `complete`, and ordered
+`operations` rows containing index, familyId, label, basis and the exact copied
+operation. Classification recognizes inspected operation IDs and anchored small
+names; negative/code/compound wording is left unclassified. No operation,
+parameter or original wording is rewritten. Families are browsing vocabulary,
+not evidence of equivalent methods or a coverage verdict.
+
+Both query helpers return a null query with `needsClarification:true` when a
+meaningful method is absent. Compact retrieval puts method/scope/rules first,
+omits generic outcome labels, and retains unmatched specific aim wording. Full
+confirmed context still includes all exact intent, source and protocol fields.
+
 ## Interpretation and clarification boundary
 
 `fromText(text,materials)` only creates an uninterpreted draft. It is deliberately
@@ -183,7 +220,7 @@ tabs to preserve the working result. Response ID/href and **full source text**
 must match loaded evidence; changed-source responses are rejected instead of
 printing a different version. Safe Markdown rendering escapes untrusted content.
 
-`node scripts/test_investigate.cjs` passes fifteen helper/retrieval groups and two
+`node scripts/test_investigate.cjs` passes helper/retrieval groups and two
 mocked event-DOM journeys, including success→packet→print→edit/cancel, cancel/
 retry, stale responses, request-local timeout, source binding and optional-context
 races. All model responses are mocked; evidence is from the actual registry.
@@ -219,8 +256,8 @@ retrieval result from silently answering a compound proposal.
 ### Conditional aim and scope questions
 
 The standalone flow now asks missing aim and scope before confirmation, after
-any consequential operation/boundary ambiguity. Aim offers readable text,
-statistical effect, reproduction, custom wording and undecided; scope offers
+any consequential operation/boundary ambiguity. Outcome choices come from the
+shared registry, with an unclassified explanation or undecided answer; scope offers
 the bounded unsolved LP2 set, exact pages/passage and undecided. Nothing is
 preselected. A custom passage remains exact prose rather than pretending to be
 a whole-page selection. The unsolved choice explicitly selects LP2-00–55;
