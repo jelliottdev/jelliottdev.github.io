@@ -5,7 +5,8 @@ import {DatabaseSync} from 'node:sqlite';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
-import {parseArgs,listSQL,notesSQL,decisionSQL,invocation,run} from './review-proposals.mjs';
+import {fileURLToPath} from 'node:url';
+import {parseArgs,listSQL,notesSQL,decisionSQL,invocation,remoteExecutor,run} from './review-proposals.mjs';
 
 const db=new DatabaseSync(':memory:');
 db.exec(readFileSync(new URL('./migrations/0001_proposals.sql',import.meta.url),'utf8'));
@@ -44,9 +45,26 @@ for(const args of [
 ])assert.throws(()=>parseArgs(args),undefined,args.join(' '));
 assert.equal(parseArgs(['list','--local']).database,'liberpedia-proposals-local');
 assert.equal(parseArgs(['list','--remote']).database,'liberpedia-proposals');
-const call=invocation(join(tmpdir(),'installed wrangler.js'),join(tmpdir(),'quote; $(not-a-shell).sql'),'liberpedia-proposals-local',{local:true,'persist-to':join(tmpdir(),'state')});
+const argvSQL="SELECT 'O''Brien; $(not-a-shell) `literal`' AS value;\nSELECT 2;";
+const call=invocation(join(tmpdir(),'installed wrangler.js'),argvSQL,'liberpedia-proposals-local',{local:true,'persist-to':join(tmpdir(),'state')});
 assert.equal(call.shell,false);assert.equal(call.command,process.execPath);assert(call.args.includes('--local'));assert(!call.args.includes('--remote'));
-assert(call.args.includes(join(tmpdir(),'quote; $(not-a-shell).sql')));
+assert.equal(call.args[call.args.indexOf('--command')+1],argvSQL);assert(!call.args.includes('--file'));
+assert.throws(()=>invocation(join(tmpdir(),'installed wrangler.js'),'SELECT\0 1;','liberpedia-proposals',{remote:true}),/NUL/);
+for(const mode of ['local','remote']){
+ const options=parseArgs(['show','--'+mode,'--id',id,'--wrangler',fileURLToPath(import.meta.url)]);
+ let captured;
+ const executor=remoteExecutor(options,{spawn:(command,args,settings)=>{
+  captured={command,args,settings};return {status:0,stdout:JSON.stringify([{success:true,results:[{value:"O'Brien; $(not-a-shell) `literal`"}]},{success:true,results:[{value:2}]}])};
+ }});
+ assert.deepEqual(executor(argvSQL),[[{value:"O'Brien; $(not-a-shell) `literal`"}],[{value:2}]]);
+ assert.equal(captured.command,process.execPath);assert.equal(captured.settings.shell,false);
+ assert(captured.args.includes('--'+mode));assert(!captured.args.includes('--file'));
+ assert.equal(captured.args[captured.args.indexOf('--command')+1],argvSQL,'Whole multi-statement SQL is one literal argv value');
+ assert.equal(captured.settings.env.WRANGLER_SEND_METRICS,'false');assert.equal(captured.settings.timeout,60000);
+ for(const result of [{status:0,stdout:'Import progress\n[]'},{status:0,stdout:'[{"success":false,"results":[]}]'},{status:1,stdout:'[]'},{error:Error('timeout')}]){
+  assert.throws(()=>remoteExecutor(options,{spawn:()=>result})(argvSQL));
+ }
+}
 
 const originalCard=db.prepare('SELECT card_json,fragment FROM proposals WHERE id=?').get(id);
 const originalNotes=json(db.prepare('SELECT * FROM proposal_submissions ORDER BY request_id').all());

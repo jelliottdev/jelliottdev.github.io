@@ -27,8 +27,8 @@ without an aim. The last now asks for an aim instead of assuming deciphering.
 Verification includes 24 mocked handler groups, 20 shared-validator groups,
 26 synthetic candidate cases, six browser parity groups and UI journey tests.
 These do not establish complete extraction accuracy. Unsupported aim wording
-stays undecided; original wording remains visible for review. Saving and queue
-intake remain unconfigured (`proposalEndpoint: null`).
+stays undecided; original wording remains visible for review. Confirmed ideas
+use the separate storage endpoint described below.
 
 One uncached interpretation makes one generation, with no automatic repair or
 retry. A 20-second response deadline, three active provider slots per isolate,
@@ -36,6 +36,30 @@ the existing rate-limit binding, exact-input cache and singleflight bound work.
 A timed-out generation retains its slot until the provider settles. These are
 not a global daily quota. See `docs/frontend/claim-specification.md` for the
 review contract and `test-interpret-handler.mjs` for offline verification.
+
+## Confirmed idea storage
+
+The `/proposals` endpoint stores the confirmed standardized card and its original
+wording in a private D1 review queue. Confirmation is the only visitor action
+needed; there is no separate test-submission form. A receipt means the idea was
+received, not that its novelty was established or an experiment was published.
+Maintainers compare overlap and decide what needs testing using
+[`REVIEW-PROPOSALS.md`](REVIEW-PROPOSALS.md).
+
+Worker version `7921b397-10f7-4510-bbc3-3ee5896a6e61` binds `PROPOSALS` and a
+separate three-per-minute intake rate limit. All three schema migrations were
+applied. On 24 October 2026 two identical synthetic requests returned `received`
+then `already_received`, with the same receipt; the database contained one card
+and one submission with the original wording intact. The synthetic card was
+declined with an audit reason so it is not queued as research. These checks used
+no model generation.
+
+The browser retains one bounded intake body in session storage for up to 24
+hours. After a refresh, explicit reconfirmation retries its original request ID
+when the wording and card are unchanged. Stored receipts are rechecked with the
+server. Nothing is submitted just by restoring a draft or opening a shared link.
+Edited wording or a changed card creates a new request. Exact-card deduplication
+is storage behavior, not semantic novelty detection.
 
 ## Comparison endpoint
 
@@ -56,11 +80,11 @@ The configured model is `@cf/google/gemma-4-26b-a4b-it`, currently available on 
 
 ## Behavior and limits
 
-The Worker retrieves the public experiment registry and a compact supporting-page index, cached for five minutes. It ranks **techniques first**, after removing page references from the query. A page match alone never triggers inference. At most two complete experiment scopes and two relevant excerpts from explicitly named pages are sent to the model. Page evidence is supporting context, not evidence of a test. Retrieval is lexical, not an exhaustive semantic or novelty check.
+The Worker retrieves the public experiment registry and a compact supporting-page index, cached for five minutes. It ranks **techniques first**, after removing page references from the query. A page match alone never triggers inference. Selection retains complete experiment scopes and up to two relevant excerpts from explicitly named pages. Confirmed compound methods can select up to four experiment records within the same evidence budget. Page evidence is supporting context, not evidence of a test. Retrieval is lexical, not an exhaustive semantic or novelty check.
 
 Concurrent cold requests share one index load. A failed or malformed optional supporting-page index leaves the experiment records usable; a failed experiment registry still stops comparison rather than substituting page context for evidence. The next load after the five-minute expiry picks up published record changes. Loader tests simulate refreshes, failures and recovery without network access.
 
-Only published experiment records are eligible. Empty registries, page-only requests and unmatched techniques do not spend inference. Experiment scope is never silently truncated to fit a prompt. The strongest match must fit the 9,000-character experiment allowance; a second match is included only if both fit. If the second cannot fit, the first remains usable and the ordinary result list still exposes the other records. An oversized strongest match stops inference rather than substituting a weaker match. Total context is bounded to 11,000 characters and output to 700 tokens (requested prose limit: 220 words). Thinking is disabled. Citations are checked for valid source numbers, which does not prove factual entailment. Markdown rendering escapes HTML and only links to evidence-owned wiki routes.
+Only published experiment records are eligible. Empty registries, page-only requests and unmatched techniques do not spend inference. Experiment scope is never silently truncated to fit a prompt. The strongest match must fit the 9,000-character experiment allowance; a second match is included only if both fit. If the second cannot fit, the first remains usable and the ordinary result list still exposes the other records. An oversized strongest match stops inference rather than substituting a weaker match. Total context is bounded to 11,000 characters and output to 700 tokens (requested prose: normally 60–120 words, at most 180 for compound methods). Thinking is disabled. Citations are checked for valid source numbers, which does not prove factual entailment. Markdown rendering escapes HTML and only links to evidence-owned wiki routes.
 
 Repeated requests reuse answers in three ways: a bounded browser-memory cache (20 entries, one hour), bounded Worker memory (100 entries, one hour), and the Cloudflare Cache API (up to 24 hours). Cache keys hash the exact whitespace-normalized question, selected pages, evidence contents, model and prompt version; case is preserved for cryptographic questions. Changed evidence invalidates an answer. Edge cache entries are local to a Cloudflare data center and may be evicted; this is not a global or guaranteed hit rate. Equal concurrent requests share one inference within an isolate. Three concurrent generations per isolate and a 60-second outage cooldown reduce retry storms; these are not account-wide limits.
 
@@ -103,3 +127,26 @@ The comparison uses the confirmed aim as well as the procedure and scope. The re
 24 October 2026: deployed this response guidance as Worker version `ef98e2a1-b9c9-46ee-9b78-acd7a66f44fd`, with cache version `research-v9-decision-value`. Mocked inference tests pass; deployment retained the existing AI and rate-limit bindings. No hosted generation was used, so this is not a live model-quality evaluation.
 
 24 October 2026: shared outcome and method-family vocabulary is grouping metadata, not experiment identity. The comparison must retain exact scope, settings and success criteria, including the difference between a readable passage and a complete solution. Unknown wording does not create a category. Deployed as Worker version `5cce2941-34ce-4823-a383-3b584529aca2` with cache version `research-v10-shared-outcomes`; mocked tests pass and no hosted generation was used.
+
+
+## Findings and comparison are separate
+
+The standalone checker displays each selected experiment’s authored finding and
+limit before the AI explanation. These come from the exact validated evidence
+text, including optional `reader_finding` and `reader_limit` fields; they are not
+regenerated or replaced by current local summaries when a saved packet is read.
+The supporting details retain method, inputs, bounds, exclusions and saved
+materials. Screen and print use the same source snapshot. No-match responses
+are labeled search results, not AI interpretations or evidence of novelty.
+
+Worker version `4fe938f2-437b-44bc-82de-b078b832a6ef` uses cache version
+`research-v15-source-findings` and asks for a short explanation of overlap and
+differences without repeating the authored findings. One live check on
+24 October 2026 recognized the executed LP2-15 row reversal and correctly left
+readable English unestablished. It still described the target set too broadly
+as all LP2 pages and paraphrased the inconclusive score comparison as a
+non-significant difference without a declared threshold. The answer is therefore
+not a fully accepted scientific comparison. Prompt guidance, citations and exact
+source binding do not validate every inference. Further work must preserve the
+difference between matching known openings, scoring outputs and demonstrating
+readable text; a generic outcome label cannot substitute for that distinction.

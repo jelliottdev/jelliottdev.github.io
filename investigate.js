@@ -273,6 +273,25 @@
   target?.focus({preventScroll:true});
  }
  const RECOVERY_KEY='liberpedia-idea-draft-v1',RECOVERY_LIMIT=160000,RECOVERY_AGE=86400000;
+ const INTAKE_KEY='liberpedia-idea-intake-v1',INTAKE_LIMIT=40000;
+ const intakeUUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+ function readIntake(serialized,at){
+  try{
+   if(typeof serialized!=='string'||serialized.length>INTAKE_LIMIT)return null;
+   const value=JSON.parse(serialized),age=at-value.at;
+   if(!value||Object.keys(value).sort().join(',')!=='at,body,receipt,version'||value.version!==1||!Number.isFinite(value.at)||!Number.isFinite(age)||age<0||age>RECOVERY_AGE)return null;
+   const body=value.body;
+   if(!body||Array.isArray(body)||Object.keys(body).some(k=>!['requestId','fragment','originalIdea'].includes(k))||!intakeUUID.test(body.requestId)||typeof body.fragment!=='string')return null;
+   if(Object.hasOwn(body,'originalIdea')&&(typeof body.originalIdea!=='string'||body.originalIdea.length>8000))return null;
+   const imported=H.decode(body.fragment);
+   if(imported.draft.method.status!=='specified'||!imported.draft.method.value.operations.length)return null;
+   if(H.encode(C.confirm(imported.draft,{id:'intake-validation',at:'2000-01-01T00:00:00.000Z'}))!==body.fragment)return null;
+   if(new TextEncoder().encode(JSON.stringify(body)).length>32000)return null;
+   const receipt=value.receipt;
+   if(receipt!==null&&(!receipt||Object.keys(receipt).sort().join(',')!=='id,receivedAt,status'||!/^p_[a-f0-9]{64}$/.test(receipt.id)||!['received','already_received'].includes(receipt.status)||typeof receipt.receivedAt!=='string'||!Number.isFinite(Date.parse(receipt.receivedAt))))return null;
+   return value;
+  }catch{return null;}
+ }
  function recoveryDraft(value){
   if(!value||value.schema!==C.SCHEMA||typeof value.source?.text!=='string'||value.source.text.length>32000)throw Error('Invalid saved draft');
   const draft=C.createDraft(value);
@@ -314,6 +333,11 @@
   const fragment=doc.defaultView?.location?.hash||'';
   const recoveryEntry=JSON.stringify({search:doc.defaultView?.location?.search||'',fragment});
   let session=null;try{session=doc.defaultView?.sessionStorage;}catch{}
+  let savedIntake=null;try{savedIntake=readIntake(session?.getItem(INTAKE_KEY),Date.parse(now()));}catch{}
+  function persistIntake(current){
+   savedIntake={version:1,at:current.at,body:current.body,receipt:current.receipt||null};
+   try{const serialized=JSON.stringify(savedIntake);if(serialized.length<=INTAKE_LIMIT)session?.setItem(INTAKE_KEY,serialized);}catch{}
+  }
   let restoringOverlay=null;
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
@@ -402,7 +426,17 @@
    if(!intake||intake.snapshot!==snapshot){
     stopIntake(true);
     intake={snapshot,requestId:id(),busy:false,saved:false,error:false};
-    try{intake.body={requestId:intake.requestId,fragment:H.encode(snapshot),...(snapshot.source.origin==='shared_link'?{}:{originalIdea:snapshot.source.text})};}
+    try{
+     const identity={fragment:H.encode(snapshot),...(snapshot.source.origin==='shared_link'?{}:{originalIdea:snapshot.source.text})};
+     const prior=readIntake(JSON.stringify(savedIntake),Date.parse(now()));
+     const matches=prior&&prior.body.fragment===identity.fragment&&Object.hasOwn(prior.body,'originalIdea')===Object.hasOwn(identity,'originalIdea')&&prior.body.originalIdea===identity.originalIdea;
+     intake.body=matches?prior.body:{requestId:intake.requestId,...identity};
+     intake.requestId=intake.body.requestId;intake.at=matches?prior.at:Date.parse(now());
+     // A local receipt is only a hint. Reconfirm using the same UUID so a
+     // corrupt/misbound stored receipt cannot suppress the server check.
+     intake.receipt=matches?prior.receipt:null;intake.saved=false;
+     persistIntake(intake);
+    }
     catch{intake.error=true;render();return;}
    }
    const current=intake;if(current.busy||current.saved||!current.body)return;
@@ -414,7 +448,7 @@
     if(requestController.signal.aborted)throw Error('Save interrupted');
     if(token!==intakeVersion||intake!==current||confirmed!==snapshot)return;
     if(!response.ok||!/^p_[a-f0-9]{64}$/.test(data.id)||!['received','already_received'].includes(data.status)||!Number.isFinite(Date.parse(data.receivedAt)))throw Error('Save unavailable');
-    current.saved=true;
+    current.receipt={id:data.id,status:data.status,receivedAt:data.receivedAt};current.saved=true;persistIntake(current);
    }catch{if(token===intakeVersion&&intake===current&&confirmed===snapshot)current.error=true;}
    finally{unschedule(timer);if(token===intakeVersion&&intake===current&&confirmed===snapshot){current.busy=false;intakeController=null;updateIntake();}}
   }
@@ -675,7 +709,7 @@
     if(token!==generation||confirmed!==snapshot)return;
     if(expectedBinding&&data.claimBinding!==expectedBinding)throw Error('This response does not match your confirmed idea. Try the comparison again.');
     if(!data.answer&&data.reason==='no-matching-records'){
-     const answer='No close research record was returned for this confirmed idea. The search covered the published research index; it does not establish that nobody has tried the idea.\n\nYou can edit the method wording or inspect the research index. Without a closer record, this comparison cannot judge what has already been tested or whether another run would add useful evidence.';
+     const answer='No close match was found in the published research index. This does not establish whether the idea has been tried elsewhere.';
      const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:[],documents:[],search:{query:compact.query,reason:data.reason}},answer});
      packet=C.packetSnapshot(snapshot,research);result=Object.freeze({answer,sources:[],noMatch:true});printHost.innerHTML=packetHTML(packet);return;
     }
@@ -690,7 +724,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,readIntake,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

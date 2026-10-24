@@ -253,9 +253,16 @@ The current tab keeps a bounded draft in session storage for refresh recovery.
 It is matched to the exact entry URL, so a different incoming idea or shared link
 takes precedence. Original text, clarification choices and unsubmitted editor
 values remain separate. Restoring a card always returns it to unconfirmed review;
-results, confirmation receipts and in-flight requests are not resumed. Disabled
+results and in-flight requests are not resumed. Disabled
 storage leaves the normal flow usable, and corrupt, oversized or expired saved
 drafts are ignored. Recovery sends no interpretation, research or save request.
+
+A separate, bounded 24-hour session entry retains the exact confirmed intake
+body and request ID. After refresh, explicit reconfirmation retries that same ID
+only when both the standardized card and original wording are unchanged. A
+changed card or original receives a new ID. Stored receipts are hints, not proof
+of saving: the server must acknowledge the retry before the UI reports Saved.
+Restoring, editing or opening a shared card never submits it automatically.
 
 The real registry and endpoint configuration load in parallel. Optional manuscript
 context times out separately and does not gate confirmation or rerender an input

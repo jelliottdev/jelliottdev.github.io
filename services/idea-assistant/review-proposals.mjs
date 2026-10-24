@@ -2,8 +2,7 @@
 /* Manual maintainer review. No inference, installation, deployment or publication. */
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
-import {existsSync,readFileSync,writeFileSync,mkdtempSync,unlinkSync,rmdirSync} from 'node:fs';
-import {tmpdir} from 'node:os';
+import {existsSync,readFileSync,writeFileSync} from 'node:fs';
 import {dirname,resolve,join,isAbsolute,extname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 
@@ -128,7 +127,7 @@ export function decisionSQL(options,publishedIds,at=new Date().toISOString()){
  if(!Number.isFinite(Date.parse(at)))throw Error('Invalid review timestamp.');
  if(options.record&&!publishedIds.has(options.record))throw Error('Related record is not in the local published registry: '+options.record);
  // Only these metadata columns may change. SQL quoting is literal SQLite
- // quoting; the process never invokes a shell or interpolates these into argv.
+ // quoting; the complete SQL is one argv value and never passes through a shell.
  const changes=['status='+sqlString(options.status),'reviewed_at='+sqlString(at),'review_reason='+sqlString(options.reason.trim()),
   ...(options.record?['record_id='+sqlString(options.record)]:[])];
  return `UPDATE proposals SET ${changes.join(',')}
@@ -146,12 +145,15 @@ SELECT id,proposal_id,changed_at,old_status,new_status,old_reviewed_at,new_revie
   (before!==undefined?' AND id < '+before:'')+` ORDER BY id DESC LIMIT ${limit+1};\n`;
 }
 
-export function invocation(wrangler,sqlFile,database,options={}){
+export function invocation(wrangler,sql,database,options={}){
  if(!isAbsolute(wrangler)||!['.js','.mjs','.cjs'].includes(extname(wrangler).toLowerCase()))throw Error('--wrangler must name an absolute installed Wrangler JavaScript entry point.');
  if(!/^[a-zA-Z][a-zA-Z0-9_-]{0,63}$/.test(database))throw Error('Invalid database name.');
  if(!options.local&&!options.remote)throw Error('Choose explicit --local or --remote.');
+ if(typeof sql!=='string'||!sql.trim()||sql.includes('\0'))throw Error('Expected nonempty SQL without NUL.');
  const config=options.config?resolve(options.config):join(HERE,options.local?'wrangler.proposals-local.jsonc':'wrangler.jsonc');
- return {command:process.execPath,args:[wrangler,'d1','execute',database,options.local?'--local':'--remote','--json','--file',sqlFile,'--config',config,
+ // Remote --file invokes D1 bulk import, whose output is not query rows.
+ // --command uses the query API in both modes and preserves SELECT/RETURNING.
+ return {command:process.execPath,args:[wrangler,'d1','execute',database,options.local?'--local':'--remote','--json','--command',sql,'--config',config,
   ...(options['persist-to']?['--persist-to',resolve(options['persist-to'])]:[])],shell:false};
 }
 export function resolveWrangler(options,env=process.env){
@@ -159,29 +161,22 @@ export function resolveWrangler(options,env=process.env){
  const candidates=configured?[configured]:[join(HERE,'node_modules/wrangler/bin/wrangler.js'),resolve(HERE,'../../node_modules/wrangler/bin/wrangler.js')];
  const path=candidates.find(candidate=>isAbsolute(candidate)&&existsSync(candidate));
  if(!path)throw Error('Installed Wrangler not found. Set --wrangler or LIBERPEDIA_WRANGLER to its absolute JS entry; no installer is run.');
- invocation(path,'unused.sql',options.database,options);return path;
+ invocation(path,'SELECT 1;',options.database,options);return path;
 }
 function d1Results(stdout){
  let data;try{data=JSON.parse(stdout);}catch{throw Error('Wrangler did not return JSON. Inspect the CLI configuration and authentication.');}
  if(!Array.isArray(data)||data.some(part=>part.success!==true||!Array.isArray(part.results)))throw Error('D1 returned an unsuccessful or unrecognized result.');
  return data.map(part=>part.results);
 }
-export function remoteExecutor(options){
+export function remoteExecutor(options,{spawn=spawnSync}={}){
  const wrangler=resolveWrangler(options);
  return sql=>{
-  const temporary=mkdtempSync(join(tmpdir(),'liberpedia-proposal-review-')),file=join(temporary,'review.sql');
-  try{
-   writeFileSync(file,sql,{encoding:'utf8',mode:0o600,flag:'wx'});
-   const call=invocation(wrangler,file,options.database,options),result=spawnSync(call.command,call.args,{
-    cwd:HERE,encoding:'utf8',shell:false,timeout:60000,maxBuffer:16*1024*1024,
-    env:{...process.env,WRANGLER_SEND_METRICS:'false',CI:'true'}});
-   if(result.error)throw Error('Wrangler could not complete: '+result.error.message);
-   if(result.status!==0)throw Error('Wrangler exited '+result.status+'. No success is claimed; inspect scoped D1 access and retry with the expected status.');
-   return d1Results(result.stdout);
-  }finally{
-   // Remove only the exact file/directory created above; no recursive deletion.
-   try{unlinkSync(file);}catch{}try{rmdirSync(temporary);}catch{}
-  }
+  const call=invocation(wrangler,sql,options.database,options),result=spawn(call.command,call.args,{
+   cwd:HERE,encoding:'utf8',shell:false,timeout:60000,maxBuffer:16*1024*1024,
+   env:{...process.env,WRANGLER_SEND_METRICS:'false',CI:'true'}});
+  if(result.error)throw Error('Wrangler could not complete: '+result.error.message);
+  if(result.status!==0)throw Error('Wrangler exited '+result.status+'. No success is claimed; inspect scoped D1 access and retry with the expected status.');
+  return d1Results(result.stdout);
  };
 }
 function cardRow(row){

@@ -1,10 +1,14 @@
 # Manual proposal review
 
-The **original confirmed standardized idea is the intake**. Users should not re-enter it in a separate proposal or “Suggest a test” form. This document covers internal storage/review tooling; live intake activation is paused. The offline reconciliation command below prepares saved cards for owner comparison with published research. It does not determine genuinely new parts automatically.
+The **original confirmed standardized idea is the intake**. Users should not re-enter it in a separate proposal or “Suggest a test” form. The live intake stores confirmed cards and original wording in the private D1 review queue. The offline reconciliation command below prepares saved cards for owner comparison with published research. It does not determine genuinely new parts automatically.
 
 The current schema preserves an exact standardized card and associated submission notes/source links. Exact-card identity is not semantic novelty: differently worded cards may overlap, and an unchanged method can have untested scope. The tool does not automatically identify new parts, infer coverage, create an experiment, run code, call a model, add a method category, or publish a finding. Acceptance records a maintainer decision for further consideration or planning, not proof that the proposal is new. A later reproducible experiment still needs its own fixed inputs, protocol, controls, outputs and publication review.
 
 `review-proposals.mjs` is a small maintainer CLI. There is no public administration page. It uses an already installed Wrangler JavaScript entry through `process.execPath`, with an argument vector and `shell:false`. It does not install packages, log in, request broader permissions, deploy, follow submitted URLs, or call AI.
+
+Queries use Wrangler's `--command` argument. Remote `--file` invokes bulk import
+and does not return the rows required by this review tool. SQL is passed as one
+literal argument, never interpolated into shell code.
 
 ## Setup and explicit database mode
 
