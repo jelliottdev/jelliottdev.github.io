@@ -97,8 +97,11 @@ supporting intake rather than page copy.
 ### Extending a test
 
 The task workspace offers a system-defined scope extension to the remaining
-unsolved LP2 pages (00–55), excluding pages in that task and its compatible
-same-method ancestor tasks. It proposes a
+unsolved LP2 pages (00–55). Planned page scope and saved result coverage are
+separate. An unfinished current or compatible ancestor experiment is linked for
+completion before proposing more pages. A local-only result does not advance
+saved coverage. Redundant pending work is suppressed only when a saved compatible
+run covers the same page IDs and exact input text. It proposes a
 separate child computation with the same ordered method, alphabet, input version
 and criterion. The page list is reviewed before creation; no extension runs or
 submits itself. The original card and earlier result stay unchanged. This is an
@@ -136,3 +139,12 @@ result; repeat submission deduplicated; failures preserving inputs; and mobile
 navigation between the checker, task and research map; and the optional downloaded
 package independently reproducing the same computation. Use local fixtures before
 any hosted generation. The runner foundation alone does not complete this loop.
+
+## Remaining requirements
+
+The map is not yet an execution interface for every node. Published records and
+method branches still need structured tested bounds, explicit open variants and
+links to prepared runnable plans. Narrative exclusions alone do not define an
+exhaustive complement, and a browser measurement does not test an arbitrary
+solving hypothesis. Evaluation adapters with declared success criteria and
+positive/negative controls remain required for that broader workflow.

@@ -40,7 +40,8 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
   try{
    if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);
    const query=(sql,...args)=>env.PROPOSALS.prepare(sql).bind(...args).first();
-   const row=await query(`SELECT t.id,t.task_json,t.task_hash,links.proposal_id,links.input_version,links.parent_task_id,p.card_json,p.card_hash
+   const row=await query(`SELECT t.id,t.task_json,t.task_hash,links.proposal_id,links.input_version,links.parent_task_id,p.card_json,p.card_hash,
+    EXISTS(SELECT 1 FROM local_task_results r WHERE r.task_id=t.id) AS has_results
     FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id
     JOIN research_ideas public ON public.proposal_id=links.proposal_id JOIN proposals p ON p.id=links.proposal_id
     WHERE t.id=? ORDER BY CASE WHEN links.proposal_id=t.proposal_id THEN 0 ELSE 1 END,links.created_at,links.proposal_id LIMIT 1`,match[1]);
@@ -49,25 +50,40 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
    if(parent.taskId!==row.id||await digest(L.stable(parent))!==row.task_hash||!['raw','reviewed'].includes(row.input_version))throw Error('Stored task mismatch');
    const card=validateCard(row.card_json),cardHash=await digest(C.serialize(card));
    if(row.card_hash!==cardHash||row.proposal_id!=='p_'+cardHash)throw Error('Stored public card mismatch');
-   const covered=new Set(),addCoverage=task=>task.pages.forEach(page=>{if(UNSOLVED.includes(page.id))covered.add(page.id);});
+   const planned=new Set(),verified=new Set(),verifiedAllPages=new Set(),pendingCandidates=[];
+   const addEvidence=async(task,hasResults)=>{
+    if(![0,1].includes(hasResults))throw Error('Invalid stored result state');
+    const inputs=[];
+    for(const page of task.pages){
+     // A raw/reviewed label is not a frozen transcription snapshot. Suppress
+     // redundant work only when both page ID and exact saved text agree.
+     const identity=page.id+':'+await digest(page.text);inputs.push(identity);
+     if(hasResults)verifiedAllPages.add(identity);
+     if(UNSOLVED.includes(page.id)){planned.add(page.id);if(hasResults)verified.add(page.id);}
+    }
+    if(!hasResults)pendingCandidates.push({metadata:{id:task.taskId,pages:task.pages.map(page=>page.id)},inputs});
+   };
    const protocol=task=>L.stable({alphabet:task.alphabet,steps:task.steps,criterion:task.criterion});
-   addCoverage(parent);const signature=protocol(parent),seen=new Set([parent.taskId]);let ancestorId=row.parent_task_id,historyStopped=false;
+   await addEvidence(parent,row.has_results);const signature=protocol(parent),seen=new Set([parent.taskId]);let ancestorId=row.parent_task_id,historyStopped=false;
    while(ancestorId!==null){
     if(typeof ancestorId!=='string'||!/^[a-f0-9]{64}$/.test(ancestorId)||seen.has(ancestorId)||seen.size>=75)throw Error('Invalid or excessive coverage history');
     seen.add(ancestorId);
     // Follow only this public idea's own edge, never a foreign private context.
-    const ancestor=await query(`SELECT t.id,t.task_json,t.task_hash,links.input_version,links.parent_task_id
+    const ancestor=await query(`SELECT t.id,t.task_json,t.task_hash,links.input_version,links.parent_task_id,
+     EXISTS(SELECT 1 FROM local_task_results r WHERE r.task_id=t.id) AS has_results
      FROM local_task_ideas links JOIN local_tasks t ON t.id=links.task_id
      WHERE links.task_id=? AND links.proposal_id=?`,ancestorId,row.proposal_id);
     if(!ancestor){historyStopped=true;break;}
     const task=JSON.parse(ancestor.task_json);await L.checkIdentity(task);
     if(task.taskId!==ancestor.id||ancestor.id!==ancestorId||await digest(L.stable(task))!==ancestor.task_hash)throw Error('Stored ancestor mismatch');
     if(ancestor.input_version!==row.input_version||protocol(task)!==signature){historyStopped=true;break;}
-    addCoverage(task);ancestorId=ancestor.parent_task_id;
+    await addEvidence(task,ancestor.has_results);ancestorId=ancestor.parent_task_id;
    }
-   const coveredPages=UNSOLVED.filter(id=>covered.has(id)),ids=UNSOLVED.filter(id=>!covered.has(id));
-   const context={proposalId:row.proposal_id,parentTaskId:parent.taskId,coveredPages};
-   if(!ids.length)return reply({state:'scope-covered',...context,reason:'The linked tasks already include all 56 unsolved LP2 pages. No additional pages were added.'});
+   const pendingTasks=pendingCandidates.filter(candidate=>candidate.inputs.some(identity=>!verifiedAllPages.has(identity))).map(candidate=>candidate.metadata);
+   const coveredPages=UNSOLVED.filter(id=>verified.has(id)),plannedPages=UNSOLVED.filter(id=>planned.has(id)),ids=UNSOLVED.filter(id=>!verified.has(id));
+   const context={proposalId:row.proposal_id,parentTaskId:parent.taskId,coveredPages,plannedPages};
+   if(pendingTasks.length)return reply({state:'runs-pending',...context,pendingTasks,reason:'These linked experiments still need saved results.'});
+   if(!ids.length)return reply({state:'scope-covered',...context,reason:'Saved runs cover all 56 LP2 pages for this method and these inputs.'});
    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
    const aborted=new Promise((_,reject)=>controller.signal.addEventListener('abort',()=>reject(Error('Source batch aborted')),{once:true}));
    const pages=new Array(ids.length);let next=0,total=0;

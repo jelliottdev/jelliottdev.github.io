@@ -29,13 +29,18 @@ async function proposal(f,name='public',published=true){
  f.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at)VALUES(?,?,?,?,?)').run(p.id,p.cardHash,p.cardJson,p.fragment,at);
  if(published)f.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(p.id,at,at.slice(0,10));return p;
 }
-async function parent(f,p,{pages=[{id:'lp2-15',text:'ᚠᚢ\r\nᚦ'}],title='Parent experiment',version='reviewed'}={}){
+async function parent(f,p,{pages=[{id:'lp2-15',text:'ᚠᚢ\r\nᚦ'}],title='Parent experiment',version='reviewed',verified=true}={}){
  const task=await L.prepare({title,pages,alphabet,steps:[{op:'reverse',unit:'word'},{op:'affine',a:2,b:7},{op:'cumulative-difference',reset:'line'}],criterion:{kind:'exact-prefix',values:[1,2,3]}});
- await insertTask(f,p,task,{version});return task;
+ await insertTask(f,p,task,{version,verified});return task;
 }
-async function insertTask(f,p,task,{version='reviewed',parentTaskId=null}={}){
+async function insertTask(f,p,task,{version='reviewed',parentTaskId=null,verified=true}={}){
  const text=L.stable(task);f.sqlite.prepare('INSERT INTO local_tasks VALUES(?,?,?,?,?,?,?,?,?,?)').run(task.taskId,await digest(text),'0'.repeat(64),p.id,p.cardJson,text,version,parentTaskId,at,at.slice(0,10));
  f.sqlite.prepare('INSERT INTO local_task_ideas VALUES(?,?,?,?,?,?)').run(task.taskId,p.id,version,parentTaskId,at,at.slice(0,10));
+ if(verified)await submitFixture(f,task);
+}
+async function submitFixture(f,task){
+ const result=await L.verify(task,L.run(task)),text=L.stable(result);
+ f.sqlite.prepare('INSERT OR IGNORE INTO local_task_results VALUES(?,?,?,?,?)').run(await digest(text),task.taskId,text,at,at.slice(0,10));
 }
 function req(id,{scope='remaining-lp2'}={},options={}){return new Request('https://worker.example'+(options.path||'/tasks/'+id+'/extensions'),{method:options.method||'POST',headers:{origin,'content-type':'application/json',...options.headers},...((options.method||'POST')==='POST'?{body:JSON.stringify({scope})}:{})});}
 async function ready(f,t){const response=await f.handle(req(t.taskId),f.env);assert.equal(response.status,200,await response.clone().text());return response.json();}
@@ -60,7 +65,7 @@ await test('public association selected instead of private original, retaining i
 });
 await test('covered scope returns exact parent/idea context without fetching or saving; title bounded in codepoints',async()=>{
  const f=fixture(),p=await proposal(f),pages=Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:''})),t=await parent(f,p,{pages});
- const output=await ready(f,t);assert.deepEqual(Object.keys(output).sort(),['coveredPages','parentTaskId','proposalId','reason','state']);assert.equal(output.state,'scope-covered');assert.equal(output.proposalId,p.id);assert.equal(output.parentTaskId,t.taskId);assert.equal(f.calls.length,0);assert.deepEqual(output.coveredPages,pages.map(p=>p.id));
+ const output=await ready(f,t);assert.deepEqual(Object.keys(output).sort(),['coveredPages','parentTaskId','plannedPages','proposalId','reason','state']);assert.equal(output.state,'scope-covered');assert.equal(output.proposalId,p.id);assert.equal(output.parentTaskId,t.taskId);assert.equal(f.calls.length,0);assert.deepEqual(output.coveredPages,pages.map(p=>p.id));
  const g=fixture(),q=await proposal(g),long=await parent(g,q,{title:'🧪'.repeat(300)});const plan=await ready(g,long);assert(Array.from(plan.task.title).length<=300);assert(plan.task.title.endsWith(' · remaining LP2 pages'));await L.checkIdentity(plan.task);
 });
 await test('source batch max4 concurrent workers, shared abort, redirect rejection and actual deadline',async()=>{
@@ -81,7 +86,7 @@ await test('source and final runner bounds fail closed without altering parent o
 await test('already-associated exact child opens existing task without relabeling old parent edge',async()=>{
  const f=fixture(),p=await proposal(f),t=await parent(f,p),planned=await ready(f,t),oldParent=await parent(f,p,{title:'Earlier different parent'});
  await insertTask(f,p,planned.task,{version:'reviewed',parentTaskId:oldParent.taskId});const before=f.sqlite.prepare('SELECT * FROM local_task_ideas WHERE task_id=?').get(planned.task.taskId);
- const existing=await ready(f,t);assert.deepEqual(Object.keys(existing).sort(),['coveredPages','parentTaskId','proposalId','reason','state','taskId']);assert.equal(existing.state,'existing-task');assert.deepEqual(existing.coveredPages,['lp2-15']);assert.equal(existing.parentTaskId,t.taskId);assert.equal(existing.taskId,planned.task.taskId);assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_task_ideas WHERE task_id=?').get(planned.task.taskId),before);
+ const existing=await ready(f,t);assert.deepEqual(Object.keys(existing).sort(),['coveredPages','parentTaskId','plannedPages','proposalId','reason','state','taskId']);assert.equal(existing.state,'existing-task');assert.deepEqual(existing.coveredPages,['lp2-15']);assert.equal(existing.parentTaskId,t.taskId);assert.equal(existing.taskId,planned.task.taskId);assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_task_ideas WHERE task_id=?').get(planned.task.taskId),before);
  f.sqlite.prepare('UPDATE local_task_ideas SET input_version=? WHERE task_id=?').run('raw',planned.task.taskId);assert.equal((await f.handle(req(t.taskId),f.env)).status,409);
 });
 await test('single-page parent plus remaining-only child covers history once without alternating new tasks',async()=>{
@@ -89,6 +94,43 @@ await test('single-page parent plus remaining-only child covers history once wit
  assert.equal(first.task.pages.length,55);await insertTask(f,p,first.task,{parentTaskId:t.taskId});f.calls.length=0;
  const before=f.sqlite.prepare('SELECT total_changes() n').get().n,second=await ready(f,first.task);
  assert.equal(second.state,'scope-covered');assert.equal(second.parentTaskId,first.task.taskId);assert.equal(second.coveredPages.length,56);assert.deepEqual(second.coveredPages,Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')));assert.equal(f.calls.length,0);assert(!Object.hasOwn(second,'task'));assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+});
+await test('unsubmitted current run is pending, not covered, even if every LP2 page is planned',async()=>{
+ const f=fixture(),p=await proposal(f),pages=Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:''})),t=await parent(f,p,{pages,verified:false});
+ const before=f.sqlite.prepare('SELECT total_changes() n').get().n,out=await ready(f,t);
+ assert.equal(out.state,'runs-pending');assert.deepEqual(out.coveredPages,[]);assert.deepEqual(out.plannedPages,pages.map(p=>p.id));assert.deepEqual(out.pendingTasks,[{id:t.taskId,pages:pages.map(p=>p.id)}]);assert(!Object.hasOwn(out,'task'));assert.equal(f.calls.length,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ // A local computation alone is not a saved receipt.
+ await L.verify(t,L.run(t));assert.equal((await ready(f,t)).state,'runs-pending');
+ await submitFixture(f,t);const saved=await ready(f,t);assert.equal(saved.state,'scope-covered');assert.deepEqual(saved.coveredPages,pages.map(p=>p.id));assert.deepEqual(saved.plannedPages,saved.coveredPages);
+});
+await test('verified child with unsubmitted compatible ancestor directs that existing run then closes after receipt',async()=>{
+ const f=fixture(),p=await proposal(f),t=await parent(f,p,{verified:false});
+ const remaining=Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:'ᚠ'})).filter(page=>page.id!=='lp2-15');
+ const child=await L.prepare({...t,title:'Verified remaining pages',pages:remaining});await insertTask(f,p,child,{parentTaskId:t.taskId});
+ const before=f.sqlite.prepare('SELECT total_changes() n').get().n,out=await ready(f,child);
+ assert.equal(out.state,'runs-pending');assert.deepEqual(out.coveredPages,remaining.map(p=>p.id));assert.equal(out.plannedPages.length,56);assert.deepEqual(out.pendingTasks,[{id:t.taskId,pages:['lp2-15']}]);assert.equal(f.calls.length,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ await submitFixture(f,t);const after=await ready(f,child);assert.equal(after.state,'scope-covered');assert.equal(after.coveredPages.length,56);assert(!Object.hasOwn(after,'pendingTasks'));
+});
+await test('verified overlapping exact inputs suppress redundant pending tasks, but different bytes and LP1 remain pending',async()=>{
+ for(const mode of ['identical','changed-text','unverified-lp1']){
+  const f=fixture(),p=await proposal(f),oldPages=[{id:'lp2-15',text:'ᚠᚢ'}];if(mode==='unverified-lp1')oldPages.unshift({id:'lp1-00',text:'ᚦ'});
+  const old=await parent(f,p,{pages:oldPages,verified:false});
+  const pages=Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:i===15?(mode==='changed-text'?'ᚠᚦ':'ᚠᚢ'):'ᚠ'}));
+  const child=await L.prepare({...old,title:'Full verified overlap '+mode,pages});await insertTask(f,p,child,{parentTaskId:old.taskId});
+  const before=f.sqlite.prepare('SELECT total_changes() n').get().n,out=await ready(f,child);
+  assert.equal(out.coveredPages.length,56);assert.equal(out.plannedPages.length,56);assert.equal(f.calls.length,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+  if(mode==='identical'){assert.equal(out.state,'scope-covered');assert(!Object.hasOwn(out,'pendingTasks'));}
+  else{assert.equal(out.state,'runs-pending');assert.deepEqual(out.pendingTasks,[{id:old.taskId,pages:oldPages.map(page=>page.id)}]);}
+ }
+});
+await test('pending lineage uses exact public-compatible scopes and does not expose foreign or changed ancestors',async()=>{
+ for(const change of ['steps','inputVersion','foreign']){
+  const f=fixture(),p=await proposal(f),other=change==='foreign'?await proposal(f,'private',false):p;
+  const old=await parent(f,other,{verified:false}),body={...old,title:'New independent pending',pages:[{id:'lp1-00',text:'ᚠ'},{id:'lp2-00',text:'ᚦ'},{id:'lp2-56',text:'ᚢ'}]};
+  if(change==='steps')body.steps=[{op:'affine',a:1,b:0}];
+  const child=await L.prepare(body);await insertTask(f,p,child,{verified:false,parentTaskId:old.taskId,version:change==='inputVersion'?'raw':'reviewed'});
+  const out=await ready(f,child);assert.equal(out.state,'runs-pending');assert.deepEqual(out.plannedPages,['lp2-00']);assert.deepEqual(out.coveredPages,[]);assert.deepEqual(out.pendingTasks,[{id:child.taskId,pages:['lp1-00','lp2-00','lp2-56']}]);assert(!JSON.stringify(out).includes(old.taskId));assert.equal(f.calls.length,0);
+ }
 });
 await test('changed protocol or input version stops history without excluding older pages',async()=>{
  for(const change of ['steps','alphabet','criterion','inputVersion']){
