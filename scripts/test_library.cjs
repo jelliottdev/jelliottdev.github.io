@@ -89,3 +89,9 @@ test('combined search passes the complete query rather than a shortened research
  for(const script of ['search-engine.js','research-index.js'])assert.equal([...html.matchAll(/src="([^"]+)"/g)].filter(m=>m[1].split('?')[0]===script).length,1);
 });
 console.log('Library checks:',groups,'groups PASS');
+
+test('visitor limits strip only the trailing editorial review suffix',()=>{
+ for(const tail of [' Human review pending.',' Human review is pending','; human review pending.','; Human review is pending.'])assert.equal(L.readerLimit('Not independently checked; language uncertain.'+tail),'Not independently checked; language uncertain.');
+ for(const caveat of ['Not independently checked.','The reading remains uncertain.','Human review pending. This is an authored quotation.','No complete recovery; review still needed.'])assert.equal(L.readerLimit(caveat),caveat);
+ assert.equal(L.readerLimit('Human review pending.'),'');
+});

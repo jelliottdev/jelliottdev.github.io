@@ -66,6 +66,26 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
   const rate=env.TASK_LIMIT||env.PROPOSAL_LIMIT;if(!rate?.limit)return reply({error:'Reviewed plans are unavailable.'},503);
   try{if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);}catch{return reply({error:'Reviewed plans are unavailable.'},503);}
   let body;try{body=(await readJSON(request,1024)).value;if(!exact(body,['recordId','followupId'])||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
-  try{const {snapshot,...plan}=await loadRecordPlan(body,{fetcher,timeoutMs});return reply(plan);}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
+  let loaded;try{loaded=await loadRecordPlan(body,{fetcher,timeoutMs});}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
+  const {snapshot,...plan}=loaded;
+  if(env.PROPOSALS?.prepare){
+   try{
+    // The task and recipe must be identical; an unrelated parent-record edit
+    // may change recordSha256 without invalidating an immutable saved origin.
+    const row=await env.PROPOSALS.prepare(`SELECT t.id,o.origin_json,
+     CASE WHEN EXISTS(SELECT 1 FROM local_task_results r WHERE r.task_id=t.id) THEN 'results-verified' ELSE 'not-run' END AS state
+     FROM local_tasks t JOIN local_task_origins o ON o.task_id=t.id
+     JOIN local_task_ideas links ON links.task_id=o.task_id AND links.proposal_id=o.proposal_id
+     JOIN research_ideas public ON public.proposal_id=links.proposal_id
+     WHERE t.id=? AND t.task_hash=? AND t.task_json=? AND links.input_version=?
+     AND json_extract(o.origin_json,'$.recordId')=? AND json_extract(o.origin_json,'$.followupId')=?
+     AND json_extract(o.origin_json,'$.protocolSha256')=? AND o.snapshot_json=?
+     ORDER BY links.created_at,links.proposal_id,o.origin_id LIMIT 1`)
+     .bind(plan.task.taskId,await recordPlanDigest(L.stable(plan.task)),L.stable(plan.task),plan.inputVersion,
+      plan.origin.recordId,plan.origin.followupId,plan.origin.protocolSha256,L.stable(snapshot)).first();
+    if(row){const savedOrigin=JSON.parse(row.origin_json);if(row.id!==plan.task.taskId||!['not-run','results-verified'].includes(row.state)||!validOrigin(savedOrigin)||savedOrigin.recordId!==plan.origin.recordId||savedOrigin.followupId!==plan.origin.followupId||savedOrigin.protocolSha256!==plan.origin.protocolSha256)throw Error('Saved origin mismatch');plan.existingTask={id:row.id,state:row.state};}
+   }catch{return reply({error:'Existing research entries could not be checked. Please retry.'},503);}
+  }
+  return reply(plan);
  };
 }

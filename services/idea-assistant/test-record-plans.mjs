@@ -1,6 +1,6 @@
 /* Offline official-source fixtures and real SQLite. No AI or target execution. */
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
 import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
@@ -53,12 +53,24 @@ await test('source redirects, malformed/oversized streams and shared deadline fa
  let signal;const handle=createRecordPlanHandler({timeoutMs:5,fetcher:async(_,options)=>{signal=options.signal;return new Promise(()=>{});}});const response=await handle(request(args),env);assert.equal(response.status,422);assert.equal(signal.aborted,true);
 });
 await test('actual authored recipe compiles and verifies its control using pinned published files only',async()=>{
- const path='lp2-known-vigenere-keys',record=JSON.parse(readFileSync(new URL('../../experiments/records/'+path+'/record.json',import.meta.url),'utf8'));
- const recipe=record.browser_followups?.[0];assert(recipe,'Authored recipe exists');
+ const path='wulfic-autokey-seed-families',record=JSON.parse(readFileSync(new URL('../../experiments/records/'+path+'/record.json',import.meta.url),'utf8'));
+ const recipe=record.browser_followups?.find(item=>item.id==='deor-plaintext-subtract-warning');assert(recipe,'Exact large-scope DEOR declaration exists');
  let subrequests=0;const fetcher=async(url,options)=>{assert(++subrequests<=50,'Worker subrequest budget must not be exceeded');assert.equal(options.redirect,'manual');const pathname=new URL(url).pathname;assert(!pathname.startsWith('/data/pages/'),'Large scopes must not issue individual page requests');return new Response(readFileSync(new URL('../..'+pathname,import.meta.url)),{headers:{'content-type':'application/json'}});};
- const plan=await loadRecordPlan({recordId:path,followupId:recipe.id},{fetcher});assert.equal(subrequests,3,'One record, one index and one aggregate leave ample budget for task persistence');assert.equal(plan.task.pages.length,55);assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.card,recipe.card);assert(plan.control.task.pages.every(p=>p.id!=='lp2-50'));
+ const plan=await loadRecordPlan({recordId:path,followupId:recipe.id},{fetcher});assert.equal(subrequests,3,'One record, one index and one aggregate leave ample budget for task persistence');assert.equal(plan.task.pages.length,45);assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.card,recipe.card);assert(plan.control.task.pages.every(p=>p.id!=='lp2-50'));
  const db=database(),pid='p_'+'d'.repeat(64);db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(pid,pid.slice(2),L.stable(plan.card),'unused',at);db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(pid,at,at.slice(0,10));let storageRequests=0;const prepare=db.prepare.bind(db),batch=db.batch.bind(db);db.prepare=sql=>{const statement=prepare(sql);return {bind(...args){const bound=statement.bind(...args);return {...bound,first:async()=>{storageRequests++;return bound.first();}};}};};db.batch=async statements=>{storageRequests++;return batch(statements);};subrequests=0;
  const response=await createLocalTaskHandler({fetcher,now:()=>new Date(at)})(new Request('https://worker.example/tasks',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId:pid,task:plan.task,inputVersion:plan.inputVersion,parentTaskId:null,origin:plan.origin})}),{...env,PROPOSALS:db});assert.equal(response.status,200);assert.equal(subrequests,3);assert(subrequests+storageRequests<=50,'Combined HTTP and storage subrequests fit Worker limit');assert.deepEqual((await response.json()).origins[0].origin,plan.origin);db.sqlite.close();
+});
+await test('every published authored declaration loads exact pins, task identity and matching control without target execution',async()=>{
+ const recordsRoot=new URL('../../experiments/records/',import.meta.url);let declarations=0;
+ for(const entry of readdirSync(recordsRoot,{withFileTypes:true}).filter(item=>item.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))){
+  let bytes;try{bytes=readFileSync(new URL(entry.name+'/record.json',recordsRoot));}catch(error){if(error.code==='ENOENT')continue;throw error;}const record=JSON.parse(bytes.toString('utf8'));if(record.status!=='published'||!record.browser_followups?.length)continue;
+  for(const recipe of record.browser_followups){let requests=0;
+   const fetcher=async(url,options)=>{assert.equal(new URL(url).origin,origin);assert.equal(options.redirect,'manual');const path=new URL(url).pathname;assert(/^(?:\/experiments\/records\/[a-z0-9]+(?:-[a-z0-9]+)*\/record\.json|\/data\/(?:index|local-run-inputs)\.json|\/data\/pages\/lp[12]-\d{2}\.json)$/.test(path),'Only fixed local canonical source fixtures are readable');assert(++requests<=50);return new Response(readFileSync(new URL('../..'+path,import.meta.url)),{headers:{'content-type':'application/json'}});};
+   const plan=await loadRecordPlan({recordId:record.id,followupId:recipe.id},{fetcher});await L.checkIdentity(plan.task);assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.control,recipe.control);assert.equal(plan.inputVersion,recipe.inputs.version);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.deepEqual(plan.task.pages.map(page=>page.id),recipe.inputs.pages.map(page=>page.id));assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.task.alphabet,recipe.control.task.alphabet);assert.deepEqual(plan.task.criterion,recipe.control.task.criterion);
+   for(let i=0;i<plan.task.pages.length;i++)assert.equal(await sha(plan.task.pages[i].text),recipe.inputs.pages[i].text_sha256);declarations++;
+  }
+ }
+ assert(declarations>=13,'The complete current authored catalog is exercised, including the six source modes');
 });
 await test('large scopes require exact bounded aggregate, reject corruption and never fall back to page fetches',async()=>{
  async function large(){const f=await fixture(),text=f.files.get('/data/pages/lp2-15.json').raw,ids=Array.from({length:41},(_,i)=>'lp2-'+String(i).padStart(2,'0'));f.card.scope.value.pages=ids;f.recipe.inputs.pages=await Promise.all(ids.map(async id=>({id,text_sha256:await sha(text)})));const pages=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))].map(id=>({id,raw:text,reviewed_text:null}));f.aggregate={schema:'liberpedia-local-inputs-v1',alphabet,pages};f.files.set('/data/local-run-inputs.json',f.aggregate);return f;}
@@ -69,6 +81,28 @@ await test('large scopes require exact bounded aggregate, reject corruption and 
  const reviewed=await large();reviewed.recipe.inputs.version='reviewed';reviewed.card.rules.inputVersion.value='reviewed';await assert.rejects(()=>loadRecordPlan(args,{fetcher:reviewed.fetcher}),/pinned manuscript input/);
 });
 function database(){const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));return {sqlite,prepare(sql){return {bind(...args){return {sql,args,first:async()=>sqlite.prepare(sql).get(...args)||null};}};},async batch(statements){sqlite.exec('BEGIN IMMEDIATE');try{const result=statements.map(s=>({meta:{changes:Number(sqlite.prepare(s.sql).run(...s.args).changes)}}));sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};}
+await test('existing public task lookup is read-only, origin-bound, private-safe and survives unrelated record edits',async()=>{
+ const f=await fixture(),plan=await loadRecordPlan(args,{fetcher:f.fetcher}),db=database(),pid='p_'+'e'.repeat(64),privateId='p_'+'f'.repeat(64);
+ for(const id of [pid,privateId])db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,id.slice(2),L.stable(plan.card),'private-fragment',at);
+ const taskEnv={...env,PROPOSALS:db},tasks=createLocalTaskHandler({fetcher:f.fetcher,now:()=>new Date(at)}),lookup=createRecordPlanHandler({fetcher:f.fetcher});
+ const post=async(body)=>tasks(new Request('https://worker.example/tasks',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(body)}),taskEnv);
+ const body={proposalId:privateId,task:plan.task,inputVersion:'raw',parentTaskId:null,origin:plan.origin};assert.equal((await post(body)).status,200);
+ const check=async()=>{const response=await lookup(request(args),taskEnv);assert.equal(response.status,200);return response.json();};
+ assert(!('existingTask'in await check()),'A private-only origin is never disclosed');
+ db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(pid,at,at.slice(0,10));
+ assert.equal((await post({...body,proposalId:pid,origin:undefined})).status,200);assert(!('existingTask'in await check()),'Public task without this public origin is insufficient');
+ assert.equal((await post({...body,proposalId:pid})).status,200);
+ const prepare=db.prepare.bind(db),sql=[];db.prepare=query=>{assert(query.startsWith('SELECT'),'Plan lookup never mutates storage');assert(!query.includes('result_json'),'Plan lookup never loads result payload');sql.push(query);return prepare(query);};
+ let value=await check();assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'not-run'});assert(!JSON.stringify(value).includes(privateId));assert.equal(sql.length,1);
+ const result=L.run(plan.task);db.sqlite.prepare('INSERT INTO local_task_results VALUES(?,?,?,?,?)').run(await sha(L.stable(result)),plan.task.taskId,L.stable(result),at,at.slice(0,10));
+ value=await check();assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'results-verified'});assert(!('latestRun'in value));assert(!('result'in value.existingTask));
+ const snapshots=db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all();f.record.summary='An unrelated parent record clarification';value=await check();assert.notEqual(value.origin.recordSha256,plan.origin.recordSha256);assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'results-verified'});assert.deepEqual(db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all(),snapshots,'Old origin snapshot is not rebound');
+ f.recipe.limitation+=' A revised protocol.';assert(!('existingTask'in await check()),'Changed protocol cannot reuse even identical computation');f.recipe.limitation=plan.limitation;
+ const oldHash=await sha(L.stable(plan.task));db.sqlite.prepare('UPDATE local_tasks SET task_hash=?').run('0'.repeat(64));assert(!('existingTask'in await check()),'Task identity/hash must match exactly');db.sqlite.prepare('UPDATE local_tasks SET task_hash=?').run(oldHash);
+ f.recipe.inputs.pages[0].text_sha256='0'.repeat(64);const before=sql.length;assert.equal((await lookup(request(args),taskEnv)).status,422);assert.equal(sql.length,before,'Changed input pins fail before lookup');
+ const broken=await fixture(),failed=await createRecordPlanHandler({fetcher:broken.fetcher})(request(args),{...env,PROPOSALS:{prepare(){throw Error('Storage offline');}}});assert.equal(failed.status,503);
+ db.sqlite.close();
+});
 await test('origins bind exact card/task, persist immutable snapshots and project public associations only',async()=>{
  const f=await fixture(),plan=await loadRecordPlan(args,{fetcher:f.fetcher}),db=database(),id='p_'+'a'.repeat(64),privateId='p_'+'b'.repeat(64),handler=createLocalTaskHandler({fetcher:f.fetcher,now:()=>new Date(at)}),taskEnv={...env,PROPOSALS:db};
  for(const pid of [id,privateId])db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(pid,pid.slice(2),L.stable(f.card),'private-fragment',at);

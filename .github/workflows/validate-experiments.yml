@@ -174,6 +174,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_local_run_inputs.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_wulfic_browser_followups.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_browser_followups.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_research_runner.py

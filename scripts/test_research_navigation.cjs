@@ -51,13 +51,13 @@ resize.state.mode='list';const lastCamera={...resize.camera};size={width:0,heigh
 // exact authored finding/limit/link remain attached to the selected record.
 const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 let panelHTML='',backButton,recordLink;Object.defineProperty(panel,'innerHTML',{set(html){panelHTML=html;backButton=element('preview-back');recordLink=element('record-open');heading.isConnected=true},get(){return panelHTML}});
-panel.querySelector=selector=>selector==='h2'?heading:selector.includes('record-open')?recordLink:backButton;
+panel.querySelector=selector=>selector==='h2'?heading:selector.includes('record-open')?recordLink:selector==='.preview-back'?backButton:null;
 c.esc=escapeHTML;c.arrow='';c.previewExpanded=false;c.innerWidth=390;
-vm.runInContext(production('updatePreviewMode')+'\n'+production('pageRanges')+'\n'+production('previewScopeHTML')+'\n'+production('previewFollowupsHTML')+'\n'+production('showInspector'),c);
+vm.runInContext(production('updatePreviewMode')+'\n'+production('pageRanges')+'\n'+production('readerLimit')+'\n'+production('previewScopeHTML')+'\n'+production('followupRecipes')+'\n'+production('previewFollowupsHTML')+'\n'+production('bindPreviewFollowups')+'\n'+production('showInspector'),c);
 requested.q='';requested.mode='graph';requested.record=parent.members[0];c.render();const record=data.records[requested.record];
 assert.equal((panelHTML.match(/<button\b/g)||[]).length,1,'Record workspace has one Back control, not expand and close affordances');
 assert(/>[^<]*Back\b|aria-label="Back\b/.test(panelHTML),'The single control explains its return action');
-assert(panelHTML.includes(escapeHTML(record.reader_finding||record.finding)));assert(panelHTML.includes(escapeHTML(record.reader_limit||record.limitations)));assert(panelHTML.includes('href="'+escapeHTML(record.href)+'"'));
+assert(panelHTML.includes(escapeHTML(record.reader_finding||record.finding)));assert(panelHTML.includes(escapeHTML(c.readerLimit(record.reader_limit||record.limitations))));assert(panelHTML.includes('href="'+escapeHTML(record.href)+'"'));
 assert(panelHTML.includes(escapeHTML(c.pageRanges(record.pages))),'Tested material stays bound to the selected record pages');
 assert.equal(map.inert,true,'Mobile full-workspace record view blocks graph keyboard targets');assert.equal(container.inert,true,'Underlying List controls are also unavailable while the mobile record is shown');assert.equal(doc.activeElement,heading);
 backButton.onclick();assert.equal(requested.record,'');assert.equal(panel.hidden,true);assert.equal(map.inert,false);assert.equal(container.inert,false);assert.equal(doc.activeElement,map,'Back returns keyboard focus to the same graph workspace');assert.equal(requested.branch,parent.id);
@@ -70,6 +70,8 @@ assert(panelHTML.includes('Prepared follow-up'));assert(panelHTML.includes('A &l
 const href=panelHTML.match(/href="(run\.html#record=[^"]+)"/)[1].replace(/&amp;/g,'&'),followupURL=new URL(href,'https://example.org/');
 assert.equal(followupURL.pathname,'/run.html');assert.equal(followupURL.search,'');assert.deepEqual(require('../record-followups.js').reference(followupURL.hash),{kind:'record',recordId:selectedId,followupId:'fixed-scope-control',id:selectedId+'/fixed-scope-control'});
 assert.equal(requested.record,selectedId,'Rendering an explicit follow-up link does not navigate or create a task');
+data.records[selectedId].browser_followups.push({id:'another-control',title:'Another setting',scope_change:'Different declared page bounds.'});
+const setting={value:'fixed-scope-control'},selectedScope={textContent:''},selectedLink={href:'run.html#record='+selectedId+'&followup=fixed-scope-control'},priorQuery=panel.querySelector;panel.querySelector=selector=>({'[data-prepared-setting]':setting,'[data-prepared-scope]':selectedScope,'[data-prepared-link]':selectedLink}[selector]||priorQuery(selector));c.showInspector();assert(panelHTML.includes('data-prepared-setting'));assert.equal((panelHTML.match(/Review this follow-up/g)||[]).length,1);setting.value='another-control';setting.onchange();assert.equal(selectedScope.textContent,'Different declared page bounds.');assert.equal(require('../record-followups.js').reference(new URL(selectedLink.href,'https://example.org/').hash).followupId,'another-control');assert.equal(requested.record,selectedId);panel.querySelector=priorQuery;
 data.records[selectedId]={...originalRecord};delete data.records[selectedId].browser_followups;c.showInspector();assert(!panelHTML.includes('Run a follow-up'),'No authored recipe means no generic runnable action');data.records[selectedId]=originalRecord;
 
 console.log('PASS research navigation: Sort restores replacement focus; Graph/List preserves camera; legacy List links open exact records; mobile preview is source-bound, inert and returns focus via Back/Escape; resize retains world centre and zoom.');

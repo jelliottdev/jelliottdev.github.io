@@ -27,7 +27,11 @@ method executable.
 fixed canonical record URL and official alphabet/page sources. It checks the
 published record, recipe, input hashes and control before returning a plan.
 The response is `{state:'plan-ready', origin, card, task, inputVersion, control,
-question, scopeChange, limitation}`. No writes or target execution occur here.
+question, scopeChange, limitation, existingTask?}`. No writes or target execution occur here.
+An exact registered task can be returned as `existingTask:{id,state}` so the
+visitor continues an unfinished experiment or opens its saved computation.
+The lookup requires the exact task and immutable recipe, not a similar title;
+unregistered contexts and revised protocols are not exposed.
 
 `origin` has `{recordId,followupId,recordSha256,protocolSha256}`; hashes pin the
 exact fetched record bytes and stable complete follow-up object. The client
@@ -58,3 +62,17 @@ archived pages and the ordered alphabet; CI checks it against the original
 page JSON files. Authored follow-ups still verify every selected text hash and
 the alphabet pin. Invalid or missing bundles fail without per-page fallback.
 This bounds external requests on the free Worker plan.
+
+## Authoring and controls
+
+`scripts/browser_followups.py:construct_followup` builds the card, exact source
+pins and full synthetic recovery control from one explicit ordered program.
+It independently inverses the supported primitives, then checks the complete
+known Warning text with the Python runner; JavaScript parity is tested. It
+never decodes manuscript targets while preparing a recipe. Noninvertible or
+incomplete methods are rejected. Existing-record exclusions and prior results
+must be checked before calling a setting new or open. A longer prefix cannot
+rescue a setting already rejected on the same initial positions.
+
+Multiple settings stay grouped under their originating record. The map uses
+one accessible selector and review action instead of repeating full cards.

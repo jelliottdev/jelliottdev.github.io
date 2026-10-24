@@ -110,6 +110,7 @@ def compile_card(card):
     for op in operations:
         require(isinstance(op, dict), 'operation must be object')
         identifier = op.get('id')
+        require(isinstance(identifier, str), 'operation needs a known string id')
         if identifier in modes:
             require(set(op) in ({'id', 'key', 'direction', 'reset'}, {'id', 'label', 'key', 'direction', 'reset'}), 'keyed operation fields')
             require('label' not in op or op['label'] in labels[identifier], 'unsupported operation wording')
@@ -121,11 +122,17 @@ def compile_card(card):
                     and op['label'] == 'Reverse rune order within each ' + op['unit'], 'reverse wording')
             steps.append({'op': 'reverse', 'unit': op['unit']})
         elif identifier == 'affine':
-            fields(op, ('id', 'a', 'b'), 'affine operation')
+            require(set(op) in ({'id', 'a', 'b'}, {'id', 'label', 'a', 'b'})
+                    and ('label' not in op or op['label'] in ('Affine', 'Affine substitution')), 'affine operation fields/wording')
             steps.append({'op': 'affine', 'a': op['a'], 'b': op['b']})
         elif identifier == 'cumulative_difference':
-            fields(op, ('id', 'reset'), 'cumulative operation')
+            require(set(op) in ({'id', 'reset'}, {'id', 'label', 'reset'})
+                    and ('label' not in op or op['label'] == 'Cumulative difference'), 'cumulative operation fields/wording')
             steps.append({'op': 'cumulative-difference', 'reset': op['reset']})
+        elif identifier == 'reverse_row_runes':
+            require(set(op) in ({'id'}, {'id', 'label'}) and ('label' not in op or op['label'] in
+                    ('Reverse rune order within rows', 'Reverse rune order within each row')), 'row reversal fields/wording')
+            steps.append({'op': 'reverse', 'unit': 'word' if values['boundaryMode'] == 'within_words' else 'line'})
         else:
             raise ValueError('browser_followups: unsupported operation')
     for step in steps:
@@ -161,7 +168,7 @@ def validate_followups(value, root, known_pages=None):
                 and len(identifier) <= 100 and identifier not in seen, 'invalid or duplicate id')
         seen.add(identifier)
         for name in ('title', 'question', 'scope_change', 'limitation'):
-            prose(recipe[name], name)
+            prose(recipe[name], name, 300 if name == 'title' else 1200)
         plan = compile_card(recipe['card'])
         pins = recipe['inputs']
         fields(pins, ('version', 'alphabet_sha256', 'pages'), 'inputs')
@@ -176,7 +183,7 @@ def validate_followups(value, root, known_pages=None):
             require(page.get('id') == page_id and isinstance(text, str) and text_hash(text) == pin['text_sha256'], 'page text pin mismatch: ' + page_id)
         control = recipe['control']
         fields(control, ('label', 'task', 'expected_result_sha256'), 'control')
-        prose(control['label'], 'control label')
+        prose(control['label'], 'control label', 300)
         require('synthetic' in control['label'].lower() and 'synthetic' in control['task'].get('title', '').lower(), 'control must be labeled synthetic')
         task = control['task']
         runner.validate(task)
@@ -188,11 +195,10 @@ def validate_followups(value, root, known_pages=None):
     return value
 
 
-def construct_second_koan_word_reset(root):
-    """Author the fixed recipe; called explicitly, never by the export builder."""
+def warning_plaintext(root, ordered_alphabet):
+    """Independently join the full documented Warning with its exact separators."""
     root = Path(root)
-    a = alphabet(root)
-    runes = [row['rune'] for row in a]
+    runes = [row['rune'] for row in ordered_alphabet]
     indices = {r: i for i, r in enumerate(runes)}
     # Warning's complete known plaintext, with original separators unchanged.
     raw = json.loads((root / 'data/pages/lp1-01.json').read_text(encoding='utf-8'))['raw']
@@ -201,39 +207,155 @@ def construct_second_koan_word_reset(root):
     expected = [int(row['output_index']) for row in trace]
     require(all(row['page'] == 'lp1-01' and int(row['page_rune_ordinal']) == n for n, row in enumerate(trace)), 'Warning trace ordinal mismatch')
     require([indices[ch] for ch in plaintext if ch in indices] == expected and expected[:12] == WARNING12, 'Warning plaintext/trace mismatch')
-    encoded, position = [], 0
-    for ch in plaintext:
-        if ch in indices:
-            encoded.append(runes[(indices[ch] + KEY[position % len(KEY)]) % 29])
-            position += 1
-        else:
-            encoded.append(ch)
-            position = 0
-    steps = [{'op': 'keyed-shift', 'key': KEY[:], 'mode': 'repeat', 'direction': 'subtract', 'reset': 'word'}]
-    criterion = {'kind': 'exact-prefix', 'values': WARNING12[:]}
-    task = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE,
-            'title': 'Synthetic Warning control: second-koan key with word resets',
-            'pages': [{'id': 'lp1-01', 'text': ''.join(encoded)}], 'alphabet': a,
-            'steps': steps, 'criterion': criterion}
-    task['taskId'] = runner.task_identity(task)
-    result = runner.run(task)
-    require(result['transformed'][0]['text'] == plaintext, 'complete Warning control recovery failed')
-    pages = ['lp2-' + str(n).zfill(2) for n in range(56) if n != 50]
+    return plaintext, expected
+
+
+def inverse_step(plaintext, step, ordered_alphabet):
+    """Construct a synthetic step input from its desired complete output.
+
+    This is an independent encoder, not a decoder-direction toggle: ciphertext
+    autokey depends on newly constructed ciphertext, plaintext autokey on the
+    supplied step output. Histories reset only at the declared boundary.
+    """
+    runes = [entry['rune'] for entry in ordered_alphabet]
+    indices = {ch: i for i, ch in enumerate(runes)}
+    output = list(plaintext)
+    if step['op'] == 'reverse':
+        positions = []
+        def flush():
+            values = [plaintext[i] for i in positions][::-1]
+            for position, value in zip(positions, values):
+                output[position] = value
+            positions.clear()
+        for i, ch in enumerate(plaintext):
+            if ch in indices:
+                positions.append(i)
+            elif step['unit'] == 'word' or step['unit'] == 'line' and ch in '\r\n':
+                flush()
+        flush()
+    elif step['op'] == 'affine':
+        require(step['a'] != 0, 'noninvertible affine coefficient a=0 cannot encode a full control')
+        inverse = pow(step['a'], -1, 29)
+        output = [runes[((indices[ch] - step['b']) * inverse) % 29] if ch in indices else ch for ch in plaintext]
+    else:
+        ciphertext, known_plaintext = [], []
+        cumulative = 0
+        for i, ch in enumerate(plaintext):
+            if ch not in indices:
+                if step['reset'] == 'word' or step['reset'] == 'line' and ch in '\r\n':
+                    ciphertext.clear()
+                    known_plaintext.clear()
+                    cumulative = 0
+                continue
+            value = indices[ch]
+            if step['op'] == 'cumulative-difference':
+                cumulative = (cumulative + value) % 29
+                encoded = cumulative
+            else:
+                key, mode, position = step['key'], step['mode'], len(ciphertext)
+                if mode == 'repeat':
+                    amount = key[position % len(key)]
+                elif position < len(key):
+                    amount = key[position]
+                else:
+                    history = known_plaintext if mode == 'plaintext-autokey' else ciphertext
+                    amount = history[position - len(key)]
+                encoded = (value + (amount if step['direction'] == 'subtract' else -amount)) % 29
+            output[i] = runes[encoded]
+            ciphertext.append(encoded)
+            known_plaintext.append(value)
+    return ''.join(output)
+
+
+def _construct_followup(root, *, identifier, title, question, scope_change, limitation,
+                        operations, pages, input_version='raw', prefix=WARNING12,
+                        control_title=None, outcome_detail=None):
+    root = Path(root)
+    a = alphabet(root)
+    plaintext, expected = warning_plaintext(root, a)
+    require(isinstance(prefix, list) and 1 <= len(prefix) <= len(expected)
+            and all(type(n) is int and 0 <= n <= 28 for n in prefix)
+            and prefix == expected[:len(prefix)], 'prefix must be an exact initial slice of the documented Warning reading')
+    require(isinstance(pages, (list, tuple)) and all(isinstance(p, str) for p in pages)
+            and len(set(pages)) == len(pages), 'pages must be an explicit unique list')
+    pages = sorted(pages)
+    operations = copy.deepcopy(operations)
+    criterion = {'kind': 'exact-prefix', 'values': prefix[:]}
     specified = lambda value: {'status': 'specified', 'value': value}
     rules = {name: {'status': 'unspecified'} for name in RULES}
     rules.update({name: specified(value) for name, value in {
-        'inputVersion': 'raw', 'representation': 'GP29', 'unmapped': 'preserve',
-        'wordBoundaries': 'preserve', 'reset': 'word', 'evaluation': criterion}.items()})
-    return {
-        'id': 'second-koan-word-reset-warning',
-        'title': 'Restart the second-koan key at each word',
-        'question': 'Does repeating the second-koan key from its first rune at every transcription word recover the fixed 12-rune Warning opening at a page start?',
-        'scope_change': 'A newly specified word-reset variant of the known-key test: one key, subtraction, phase zero, and one fixed opening on 55 rune-bearing LP2-00–55 pages. This is not the original nine-opening, all-phase search.',
-        'limitation': 'A match establishes only compatibility with this 12-rune beginning, not a complete reading. Every non-rune ends a transcription word; headings remain included. No skips, later offsets, alternative phases or other openings are tested. LP2-50 contributes no runes and is omitted.',
-        'card': {'version': 1, 'outcome': specified({'outcomeId': 'decipher', 'detail': 'Test only the fixed 12-rune Warning opening under the declared second-koan word-reset hypothesis; a match is not a complete decipherment.'}),
-                 'method': specified({'operations': [{'id': 'repeating_key', 'label': 'Repeating key', 'key': KEY[:], 'direction': 'subtract', 'reset': 'word'}]}),
-                 'scope': specified({'pages': pages}), 'rules': rules, 'unresolved': []},
-        'inputs': {'version': 'raw', 'alphabet_sha256': digest(a), 'pages': [
-            {'id': p, 'text_sha256': text_hash(json.loads((root / 'data/pages' / (p + '.json')).read_text(encoding='utf-8'))['raw'])} for p in pages]},
+        'inputVersion': input_version, 'representation': 'GP29', 'unmapped': 'preserve',
+        'wordBoundaries': 'preserve', 'evaluation': criterion}.items()})
+    require(isinstance(operations, list) and all(isinstance(op, dict) for op in operations), 'operations must be an explicit list')
+    resets = [op.get('reset') for op in operations if op.get('id') in
+              ('repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey', 'cumulative_difference')]
+    if resets and all(reset == resets[0] for reset in resets):
+        rules['reset'] = specified(resets[0])
+    if any(op.get('id') == 'cumulative_difference' for op in operations):
+        rules['initialState'] = specified(0)
+    if any(op.get('id') == 'reverse_row_runes' for op in operations):
+        require(not any(op.get('id') == 'reverse_runes' and op.get('unit') != 'line' for op in operations),
+                'use explicit reverse_runes units for mixed row/word/page reversal steps')
+        rules['boundaryMode'] = specified('fixed_spaces')
+    card = {'version': 1, 'outcome': specified({'outcomeId': 'decipher', 'detail': outcome_detail or
+            'Test only the fixed ' + str(len(prefix)) + '-rune Warning opening under the declared hypothesis; a match is not a complete decipherment.'}),
+            'method': specified({'operations': operations}), 'scope': specified({'pages': pages}),
+            'rules': rules, 'unresolved': []}
+    plan = compile_card(card)
+    task = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE,
+            'title': control_title or 'Synthetic Warning control: ' + identifier,
+            'pages': [{'id': 'lp1-01', 'text': plaintext}], 'alphabet': a,
+            'steps': plan['steps'], 'criterion': criterion}
+    task['taskId'] = runner.task_identity(task)
+    runner.validate(task)  # Reject incomplete/boolean/out-of-range parameters before encoding.
+    encoded = plaintext
+    for step in reversed(plan['steps']):
+        encoded = inverse_step(encoded, step, a)
+    task['pages'][0]['text'] = encoded
+    task['taskId'] = runner.task_identity(task)
+    result = runner.run(task)
+    require(result['transformed'][0]['text'] == plaintext, 'complete Warning control recovery failed')
+    pins = []
+    for page_id in pages:
+        source = json.loads((root / 'data/pages' / (page_id + '.json')).read_text(encoding='utf-8'))
+        text = source.get('raw' if input_version == 'raw' else 'reviewed_text')
+        require(isinstance(text, str), 'requested exact source text unavailable: ' + page_id)
+        pins.append({'id': page_id, 'text_sha256': text_hash(text)})
+    recipe = {
+        'id': identifier, 'title': title, 'question': question, 'scope_change': scope_change,
+        'limitation': limitation, 'card': card,
+        'inputs': {'version': input_version, 'alphabet_sha256': digest(a), 'pages': pins},
         'control': {'label': 'Recover the known Warning text from synthetic ciphertext',
                     'task': task, 'expected_result_sha256': digest(result)}}
+    validate_followups([recipe], root)
+    return recipe
+
+
+def construct_followup(root, *, identifier, title, question, scope_change, limitation,
+                       operations, pages, input_version='raw', prefix=WARNING12):
+    """Return one authored declaration without writing files or decoding targets.
+
+    operations are explicit canonical planCard operations, not runner IR or prose.
+    pages become canonical sorted exact IDs. prefix must be a known Warning
+    initial slice (default 12; up to its complete 184 runes). Mixed step resets
+    remain per-step; no conflicting global reset is invented. Controls are
+    synthetic inverse encodings, never claimed historical manuscript inputs.
+    """
+    return _construct_followup(root, identifier=identifier, title=title, question=question,
+                               scope_change=scope_change, limitation=limitation,
+                               operations=operations, pages=pages,
+                               input_version=input_version, prefix=prefix)
+
+
+def construct_second_koan_word_reset(root):
+    """Preserve the original authored declaration exactly through the shared constructor."""
+    return _construct_followup(
+        root, identifier='second-koan-word-reset-warning',
+        title='Restart the second-koan key at each word',
+        question='Does repeating the second-koan key from its first rune at every transcription word recover the fixed 12-rune Warning opening at a page start?',
+        scope_change='Only LP2-54 remains eligible: on the other 54 rune pages, the saved page-reset output already disagrees with the Warning opening before a word reset could change anything. This checks the remaining page with one key, subtraction and phase zero.',
+        limitation='A match establishes only compatibility with this 12-rune beginning, not a complete reading. Every non-rune ends a transcription word; headings remain included. No skips, later offsets, alternative phases or other openings are tested. Surviving the prefix check does not mean LP2-54 is a match.',
+        operations=[{'id': 'repeating_key', 'label': 'Repeating key', 'key': KEY[:], 'direction': 'subtract', 'reset': 'word'}],
+        pages=['lp2-54'],
+        control_title='Synthetic Warning control: second-koan key with word resets',
+        outcome_detail='Test only the fixed 12-rune Warning opening under the declared second-koan word-reset hypothesis; a match is not a complete decipherment.')
