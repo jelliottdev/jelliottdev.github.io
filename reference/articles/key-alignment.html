@@ -26,6 +26,7 @@
 
 <h2 id="beam">What beam width controls</h2>
 <p>A <strong>beam search</strong> keeps several candidate prefixes as it reads the ciphertext. It extends each retained prefix using the permitted transitions, scores the extensions, and keeps only a fixed number. That number is the <strong>beam width</strong>. Pruning means discarding a candidate to stay within the width.</p>
+<p>Before widening a search, check that the decoder can express the intended reading at all. In the <a href="../../index.html#/experiments/autokey-skip-family">autokey-with-skips controls</a>, 247 known readings are impossible because the encoder and decoder use different future-key rules. The other 113 recover exactly. Keeping more candidates would not repair those incompatible rules.</p>
 <p>A width of 64 does not mean 64 complete keys or 64 total trials. Up to 64 prefixes can survive each step, and each may have several allowed extensions. The complete set of attempted extensions depends on the earlier pruning decisions.</p>
 <p>A wider beam can retain a promising path that a narrower one discarded. It cannot fix a prohibited transition, and it does not guarantee that the final highest-scoring output is the true plaintext. In our declared implementation, the score ranks cumulative quadgram totals, with a deterministic tie rule. The separately reported normalized score has a different denominator when rune labels contain different numbers of letters.</p>
 

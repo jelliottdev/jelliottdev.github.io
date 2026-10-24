@@ -524,12 +524,35 @@ function experimentFindingText(text,pages){
   ).join('');
 }
 
+function experimentReaderSections(markdown,titles){
+  if(titles===undefined)return {selected:[],remaining:markdown};
+  if(!Array.isArray(titles)||titles.length>3||titles.some(title=>typeof title!=='string'||!title.trim()||/[\r\n]/.test(title))||new Set(titles).size!==titles.length)throw Error('Invalid reader_sections');
+  const lines=markdown.split('\n'),headings=[];let fence=null;
+  for(let i=0;i<lines.length;i++){
+    const marker=lines[i].match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+    if(fence){if(marker&&marker[1][0]===fence[0]&&marker[1].length>=fence.length&&!marker[2].trim())fence=null;continue;}
+    if(marker){fence=marker[1];continue;}
+    const heading=lines[i].match(/^ {0,3}(#{1,2})[\t ]+(.+?)\r?$/);
+    if(heading)headings.push({index:i,level:heading[1].length,title:heading[2]});
+  }
+  const removed=new Set(),selected=titles.map(title=>{
+    const matches=headings.filter(heading=>heading.level===2&&heading.title===title);
+    if(matches.length!==1)throw Error('reader_sections must name exactly one authored H2: '+title);
+    const heading=matches[0],end=headings.find(next=>next.index>heading.index)?.index??lines.length;
+    for(let i=heading.index;i<end;i++)removed.add(i);
+    return {title,body:lines.slice(heading.index+1,end).join('\n')};
+  });
+  return {selected,remaining:lines.filter((_,index)=>!removed.has(index)).join('\n')};
+}
+
 function experimentArticle(r,catalog=experimentRecords){
   const needsImages=r.reproduction.inputs.some(f=>/^(?:images\/.*\.(?:jpe?g|png)|exports\/sources\/cicada-2014-seventh-onion\/\d+\.jpg)$/i.test(f.path));
   const sections=[['experiment-finding','Finding'],['experiment-reproduce','Files'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   const accountFiles=[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)];
   const findingHTML=`<p>${experimentFindingText(r.reader_finding||r.finding,r.scope.pages)}</p>`;
+  const readerSections=experimentReaderSections(r.article,r.reader_sections);
+  const shownVisuals=(r.visuals||[]).map(visual=>visual.path);
   const checked=esc(r.scope_summary||`${experimentTargetSummary(r)}. ${r.bounds_note||r.scope.parameters}`);
   return head(r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.reader_question||r.question)}</p>
@@ -539,6 +562,7 @@ function experimentArticle(r,catalog=experimentRecords){
       ${r.reader_note?`<div class="experiment-meaning"><h3>What it means</h3><p>${esc(r.reader_note)}</p></div>`:''}
       <p id="experiment-scope" class="experiment-checked"><strong>Checked:</strong> ${checked}</p>
       <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.reader_limit||r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
+      ${readerSections.selected.map(section=>`<section class="experiment-prose"><h3>${esc(section.title)}</h3>${renderExperimentMarkdown(section.body,accountFiles,r.article_links||{},shownVisuals)}</section>`).join('')}
     </section>
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Get the files</h2>
       <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download experiment ZIP</a></p>
@@ -554,7 +578,7 @@ function experimentArticle(r,catalog=experimentRecords){
     </details>
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
       <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt id="experiment-input">Input</dt><dd>${esc(r.scope.representation)}</dd><dt id="experiment-procedure">Method</dt><dd>${esc(r.scope.procedure)}</dd><dt id="experiment-bounds">Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt id="experiment-exclusions">Not tested</dt><dd>${esc(r.scope.exclusions)}</dd><dt id="experiment-limitations">Limitations</dt><dd>${esc(r.limitations)}</dd></dl>
-      <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles,r.article_links||{},(r.visuals||[]).map(visual=>visual.path))}</div>
+      <div class="experiment-prose">${renderExperimentMarkdown(readerSections.remaining,accountFiles,r.article_links||{},shownVisuals)}</div>
       <div id="experiment-method-guides">${experimentMethodGuidesContent(r)}</div>
       <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
     </details>
@@ -614,7 +638,8 @@ function renderExperimentMarkdown(markdown,files=[],articleLinks={},shownVisuals
         rows.push('<tr>'+headers.map((_,column)=>'<td>'+inline(values[column]||'')+'</td>').join('')+'</tr>');
       }
       if(!valid){html.push('<p class="small muted">Table shown as text because its column counts differ.</p>'+codeBlock(raw));continue;}
-      html.push('<p class="table-scroll-hint">Scroll table sideways for all columns →</p><div class="table-wrap" role="region" aria-label="Scrollable experiment data table" tabindex="0"><table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
+      const compact=headers.length<=2;
+      html.push((compact?'<div class="table-wrap experiment-compact-table">':'<p class="table-scroll-hint">Scroll table sideways for all columns →</p><div class="table-wrap" role="region" aria-label="Scrollable experiment data table" tabindex="0">')+'<table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
       continue;
     }
     const item=line.match(/^(?:([-*])|\d+\.) (.+)$/);

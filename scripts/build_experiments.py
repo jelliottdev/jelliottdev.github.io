@@ -33,6 +33,33 @@ def text(value, label):
     require(isinstance(value, str) and value.strip(), f'{label}: expected nonempty text')
 
 
+def validate_reader_sections(markdown, titles):
+    """Selected visible H2 sections must be exact and unambiguous outside fences."""
+    require(isinstance(titles, list) and len(titles) <= 3
+            and all(isinstance(title, str) and title.strip()
+                    and not re.search(r'[\r\n]', title) for title in titles),
+            'reader_sections: expected up to three nonempty H2 titles')
+    require(len(set(titles)) == len(titles), 'reader_sections: duplicate titles')
+    headings = []
+    fence = None
+    for line in markdown.split('\n'):
+        marker = re.match(r'^ {0,3}(`{3,}|~{3,})(.*)$', line)
+        if fence:
+            if (marker and marker[1][0] == fence[0]
+                    and len(marker[1]) >= len(fence) and not marker[2].strip()):
+                fence = None
+            continue
+        if marker:
+            fence = marker[1]
+            continue
+        heading = re.match(r'^ {0,3}##[\t ]+(.+?)\r?$', line)
+        if heading:
+            headings.append(heading[1])
+    for title in titles:
+        require(headings.count(title) == 1,
+                'reader_sections must name exactly one authored H2: ' + title)
+
+
 def validate_discovery(discovery):
     """Authored candidate-search hints, never an assertion of exact coverage."""
     require(isinstance(discovery, dict) and set(discovery) == {'operations', 'evaluation'},
@@ -272,6 +299,8 @@ def validate_record(root, path, pages):
         require(isinstance(source.get('url'), str) and source['url'].startswith('https://'),
                 'Source must use HTTPS')
     article = local(root, f'experiments/records/{identifier}/article.md').read_text(encoding='utf-8')
+    if 'reader_sections' in d:
+        validate_reader_sections(article, d['reader_sections'])
     require(len(article.strip()) >= 200 and 'State one testable question.' not in article,
             'Replace the article template with a full account')
     d['article'] = article

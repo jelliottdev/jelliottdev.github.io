@@ -51,6 +51,10 @@ Check the state trace, then the reading
 
 Save the source position, input, state before decoding, output and state afterward. For an intended reversible cipher, verify that the corresponding encoder recovers the full input. A round trip checks the implementation; it does not prove that the cipher was used in Liber Primus.
 
+The autokey-with-skips replay shows why both sides must use the same rule. Its encoder sometimes asks for a future plaintext rune that the decoder has not yet recovered. In its ciphertext mode, the encoder substitutes zero for a future rune while the decoder uses the observed rune. In 247 of 360 known-message checks, the correct reading is therefore impossible under the decoder's rules. All 113 compatible examples recover completely.
+
+The complete 9,900-case manuscript search produces no candidate above its English-score threshold. That records the outcome of this particular program; it does not rule out autokey. A larger beam cannot make the two conflicting rules agree. Even a passing score needs checking: 40 incorrect outputs from the known-message ciphertext controls pass that same score threshold.
+
 Choose the rule on one segment and apply it unchanged to a continuation. Any seed, reset or correction added after inspecting that continuation becomes another fitted choice. Compare the complete search with controls, including its selection of the best-looking output. See null models, differential decoding and all method families.
 
 For proposals combining or changing operations, see switching rules and adaptive decoding.
@@ -88,6 +92,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
 - solved-text control
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
+- autokey-with-skips replay
+  https://jelliottdev.github.io/#/experiments/autokey-skip-family
 - null models
   https://jelliottdev.github.io/reference/articles/null-models.html
 - differential decoding

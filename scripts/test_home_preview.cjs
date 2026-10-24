@@ -2,6 +2,9 @@
 // Production home handlers in an isolated DOM fixture; no browser, network or real files.
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const source=fs.readFileSync(require.resolve('../home.js'),'utf8');
+const markup=fs.readFileSync(require.resolve('../home.html'),'utf8'),previewTag=markup.match(/<div\b[^>]*id="file-preview"[^>]*>/)?.[0];
+assert(previewTag&&/tabindex="0"/.test(previewTag)&&/role="region"/.test(previewTag)&&/aria-label="File preview"/.test(previewTag),'Long local previews have a named keyboard-focusable scroll region');
+assert(/\.file-preview:focus-visible\{[^}]*outline:2px solid/.test(fs.readFileSync(require.resolve('../home-intake.css'),'utf8')),'Keyboard focus remains visible on the preview region');
 const Input=require('../idea-input.js');
 const turn=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
