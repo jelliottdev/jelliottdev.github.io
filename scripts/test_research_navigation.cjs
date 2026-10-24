@@ -53,7 +53,7 @@ const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','
 let panelHTML='',backButton,recordLink;Object.defineProperty(panel,'innerHTML',{set(html){panelHTML=html;backButton=element('preview-back');recordLink=element('record-open');heading.isConnected=true},get(){return panelHTML}});
 panel.querySelector=selector=>selector==='h2'?heading:selector.includes('record-open')?recordLink:backButton;
 c.esc=escapeHTML;c.arrow='';c.previewExpanded=false;c.innerWidth=390;
-vm.runInContext(production('updatePreviewMode')+'\n'+production('pageRanges')+'\n'+production('showInspector'),c);
+vm.runInContext(production('updatePreviewMode')+'\n'+production('pageRanges')+'\n'+production('previewScopeHTML')+'\n'+production('previewFollowupsHTML')+'\n'+production('showInspector'),c);
 requested.q='';requested.mode='graph';requested.record=parent.members[0];c.render();const record=data.records[requested.record];
 assert.equal((panelHTML.match(/<button\b/g)||[]).length,1,'Record workspace has one Back control, not expand and close affordances');
 assert(/>[^<]*Back\b|aria-label="Back\b/.test(panelHTML),'The single control explains its return action');
@@ -63,4 +63,13 @@ assert.equal(map.inert,true,'Mobile full-workspace record view blocks graph keyb
 backButton.onclick();assert.equal(requested.record,'');assert.equal(panel.hidden,true);assert.equal(map.inert,false);assert.equal(container.inert,false);assert.equal(doc.activeElement,map,'Back returns keyboard focus to the same graph workspace');assert.equal(requested.branch,parent.id);
 requested.record=parent.members[0];c.render();let escaped=false;panel.onkeydown({key:'Escape',preventDefault(){escaped=true}});assert(escaped);assert.equal(requested.record,'');assert.equal(doc.activeElement,map);assert.equal(map.inert,false);
 requested.record=parent.members[0];c.innerWidth=1200;c.render();assert.equal(map.inert,false,'Desktop side pane leaves the graph available');assert.equal(container.inert,false);
+// Follow-up actions use the actual inspector helpers and the destination parser.
+const selectedId=requested.record,originalRecord=data.records[selectedId];
+data.records[selectedId]={...originalRecord,browser_followups:[{id:'fixed-scope-control',title:'A <fixed> continuation',scope_change:'Only the declared page scope.'}]};c.showInspector();
+assert(panelHTML.includes('Prepared follow-up'));assert(panelHTML.includes('A &lt;fixed&gt; continuation'));assert(panelHTML.includes('Only the declared page scope.'));
+const href=panelHTML.match(/href="(run\.html#record=[^"]+)"/)[1].replace(/&amp;/g,'&'),followupURL=new URL(href,'https://example.org/');
+assert.equal(followupURL.pathname,'/run.html');assert.equal(followupURL.search,'');assert.deepEqual(require('../record-followups.js').reference(followupURL.hash),{kind:'record',recordId:selectedId,followupId:'fixed-scope-control',id:selectedId+'/fixed-scope-control'});
+assert.equal(requested.record,selectedId,'Rendering an explicit follow-up link does not navigate or create a task');
+data.records[selectedId]={...originalRecord};delete data.records[selectedId].browser_followups;c.showInspector();assert(!panelHTML.includes('Run a follow-up'),'No authored recipe means no generic runnable action');data.records[selectedId]=originalRecord;
+
 console.log('PASS research navigation: Sort restores replacement focus; Graph/List preserves camera; legacy List links open exact records; mobile preview is source-bound, inert and returns focus via Back/Escape; resize retains world centre and zoom.');
