@@ -2,6 +2,7 @@ name: Validate experiment registry
 on:
   push:
   pull_request:
+  workflow_dispatch:
 concurrency:
   group: validate-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -12,24 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
-          cache-dependency-path: scripts/requirements-line-gap-measurements.txt
-      - run: python -m pip install -r scripts/requirements-line-gap-measurements.txt
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: python scripts/check_download_catalog.py
-      - run: python scripts/test_download_catalog.py
-      - run: python scripts/test_staged_catalog.py
-      - run: python scripts/test_export_reproducibility.py
-      - run: python scripts/test_experiment_bundles.py
-      - run: python tests/test_experiment_bundle_selection.py
-      - run: python tests/test_prior_work.py
-      - run: python tests/test_source_batches.py
-      - run: python tests/test_pending_source_selection.py
+      - name: Select conservative validation scope
+        id: scope
+        run: node scripts/ci_validation_scope.cjs
+      - run: node scripts/test_ci_validation_scope.cjs
       - run: node services/idea-assistant/test-worker.mjs
       - run: node services/idea-assistant/test-research-card.mjs
       - run: node services/idea-assistant/test-interpretation.mjs
@@ -53,12 +45,11 @@ jobs:
       - run: node scripts/test_investigate_edit_fidelity.cjs
       - run: node scripts/test_investigate_share.cjs
       - run: node scripts/test_investigate_intake_focus.cjs
+      - run: node scripts/test_investigate_recovery.cjs
       - run: node scripts/test_investigate_card_request.cjs
       - run: node scripts/test_investigate_interpretation.cjs
       - run: node scripts/test_proposal_ui.cjs
       - run: node scripts/test_research_map.cjs
-      - run: python scripts/test_research_map.py
-      - run: python scripts/build_research_map.py --check
       - run: node scripts/test_assistant_retrieval.cjs
       - run: node scripts/test_research_index.cjs
       - run: node scripts/test_download_pagination.cjs
@@ -85,44 +76,110 @@ jobs:
       - run: node scripts/test_prime_lag_view.cjs
       - run: node scripts/test_numeric_skip_view.cjs
       - run: node scripts/test_line_gap_view.cjs
-      - run: python scripts/test_line_gap_measurements.py
-      - run: python scripts/build_line_gap_measurements.py --data-only --check
       - run: node scripts/test_search.cjs
       - run: node scripts/test_page_links.cjs
       - run: node scripts/test_guide_index.cjs
       - run: node scripts/test_article_loading.cjs
+      - uses: actions/setup-python@v5
+        if: steps.scope.outputs.science == 'true'
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements-line-gap-measurements.txt
+      - run: python -m pip install -r scripts/requirements-line-gap-measurements.txt
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/check_download_catalog.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_download_catalog.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_staged_catalog.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_export_reproducibility.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_experiment_bundles.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python tests/test_experiment_bundle_selection.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python tests/test_prior_work.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python tests/test_source_batches.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python tests/test_pending_source_selection.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_research_map.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/build_research_map.py --check
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_line_gap_measurements.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/build_line_gap_measurements.py --data-only --check
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_corpus_comparison_render.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_corpus_pipeline.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_decoder_skip_controls.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_search_maximum_controls.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_article_links.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_public_attempt_inventory.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_suite_registry.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_new_experiment.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_experiments.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_page_notes.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_page_notes.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_assistant.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_reading_guides.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_articles.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/check_article_links.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_article_links.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_article_exports.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_reading_concordance.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_reference_bundle.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/reproduce_reading.py --check-all
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/reproduce_cover_chain.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/check_number_examples.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/reproduce_prime_sums.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_rune_entropy.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_rune_lag_matches.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_rune_ngrams.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_rune_ioc.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/rune_ioc.py --check
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/inspect_visual_records.py
+        if: steps.scope.outputs.science == 'true'
       - run: python research/source-intake/audit-r18-jpeg-fingerprints.py --check
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_visual_report.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_measure_region.py
+        if: steps.scope.outputs.science == 'true'
       - name: Check that published exports match reviewed records
+        if: steps.scope.outputs.science == 'true'
         run: git diff --exit-code -- data/index.json data/pages data/experiments.json data/experiment-index.json data/checker-records.json reference/experiments reference/experiments.html data/assistant-index.json data/articles.json data/article-search.json reference/articles articles/readings

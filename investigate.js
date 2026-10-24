@@ -249,6 +249,33 @@
   for(const {key,detail,summary}of disclosureNodes(host)){const state=saved.get(key);if(state){detail.open=state.open;if(state.focused)target=summary;}}
   target?.focus({preventScroll:true});
  }
+ const RECOVERY_KEY='liberpedia-idea-draft-v1',RECOVERY_LIMIT=160000,RECOVERY_AGE=86400000;
+ function recoveryDraft(value){
+  if(!value||value.schema!==C.SCHEMA||typeof value.source?.text!=='string'||value.source.text.length>32000)throw Error('Invalid saved draft');
+  const draft=C.createDraft(value);
+  if(!Number.isInteger(value.revision)||value.revision<1||value.revision>100000)throw Error('Invalid saved revision');
+  if(!Array.isArray(value.clarifications)||value.clarifications.length>128)throw Error('Invalid saved answers');
+  for(const answer of value.clarifications)if(!answer||typeof answer.question!=='string'||typeof answer.choice!=='string'||!Number.isInteger(answer.revision)||answer.revision<1||answer.revision>value.revision||(answer.text!==undefined&&typeof answer.text!=='string'))throw Error('Invalid saved answer');
+  draft.revision=value.revision;draft.clarifications=JSON.parse(JSON.stringify(value.clarifications));return draft;
+ }
+ function readRecovery(serialized,entry,at){
+  try{
+   if(typeof serialized!=='string'||serialized.length>RECOVERY_LIMIT)return null;
+   const value=JSON.parse(serialized),age=at-value.at;
+   if(value.version!==1||value.entry!==entry||!Number.isFinite(age)||age<0||age>RECOVERY_AGE||typeof value.raw!=='string'||value.raw.length>32000||typeof value.editing!=='boolean'||!['input','review','interpreting','research'].includes(value.stage))return null;
+   const draft=['review','research'].includes(value.stage)?recoveryDraft(value.draft):null;
+   if(value.editing&&!draft)return null;
+   if(draft&&draft.source.text!==value.raw)return null;
+   const baseline=value.editing?recoveryDraft(value.baseline):null;
+   if(baseline&&baseline.source.text!==value.raw)return null;
+   const overlay=value.overlay;
+   if(overlay!==null&&overlay!==undefined){
+    if(!overlay||typeof overlay!=='object'||Array.isArray(overlay))return null;
+    for(const [key,field]of Object.entries(overlay))if(!/^(edit-(aim|objective|scope|rules|method(?:-\d+)?|method-family-\d+)|remove-rule-[A-Za-z]+|other-detail|choice)$/.test(key)||!['string','boolean'].includes(typeof field)||(typeof field==='string'&&field.length>32000))return null;
+   }
+   return {raw:value.raw,stage:draft?'review':'input',draft,editing:!!baseline,baseline,overlay:overlay||{}};
+  }catch{return null;}
+ }
  function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout,sharer=H.share,renderCard=H.renderPNG}={}){
   const host=doc.getElementById('investigate'),printHost=doc.getElementById('print-snapshot');
   let stage='input',draft=null,confirmed=null,result=null,packet=null,editing=false,editingBackup=null,raw='',records=[],documents=[],endpoint=null,loaded=false,loadError='',message='',error='',busy=false,controller=null,generation=0,registryId='';
@@ -262,12 +289,47 @@
   let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='';
   let configResolved=false,configValid=false,configReady=null,configAttempt=null,loadVersion=0,destroyed=false;
   const fragment=doc.defaultView?.location?.hash||'';
+  const recoveryEntry=JSON.stringify({search:doc.defaultView?.location?.search||'',fragment});
+  let session=null;try{session=doc.defaultView?.sessionStorage;}catch{}
+  let restoringOverlay=null;
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
    catch{error='This shared idea link could not be read. Ask for a new link or enter the idea below.';}
   }
   const pageHint=incoming.getAll('pages').join(',');
   if(pageHint){try{legacyScope=parseScope(pageHint,{kind:'supplied',refs:['URL page hint']});}catch{message='The linked page selection could not be read. You can enter exact pages when reviewing the idea.';}}
+  let recovered=null;try{recovered=readRecovery(session?.getItem(RECOVERY_KEY),recoveryEntry,Date.parse(now()));}catch{}
+  if(recovered){
+   ({raw,stage,draft,editing}=recovered);restoringOverlay=recovered.overlay;if(stage==='review')legacyScope=null;
+   if(editing)editingBackup={stage:'review',draft:recovered.baseline,confirmed:null,result:null,packet:null,message:'',error:''};
+   message='Draft restored.';
+  }
+  function recoveryFields(){
+   const fields={};
+   for(const name of ['edit-aim','edit-objective','edit-scope','edit-rules','other-detail',...C.RULES.map(k=>'remove-rule-'+k),...(draft?.method.status==='specified'?draft.method.value.operations:[]).flatMap((_,i)=>[i?'edit-method-'+i:'edit-method','edit-method-family-'+i])]){
+    const field=doc.getElementById(name);if(field)fields[name]=name.startsWith('remove-rule-')?!!field.checked:field.value;
+   }
+   const choice=doc.querySelector('input[name=choice]:checked');if(choice)fields.choice=choice.value;
+   return fields;
+  }
+  function saveRecovery(){
+   if(!session||destroyed)return;
+   try{
+    const value=JSON.stringify({version:1,entry:recoveryEntry,at:Date.parse(now()),raw,stage,draft:stage==='review'||stage==='research'?draft:null,editing,baseline:editing?editingBackup?.draft:null,overlay:recoveryFields()});
+    if(value.length<=RECOVERY_LIMIT)session.setItem(RECOVERY_KEY,value);
+    else session.removeItem(RECOVERY_KEY);
+   }catch{}
+  }
+  function restoreFields(fields){
+   for(const [name,value]of Object.entries(fields)){
+    if(name==='choice')continue;const field=doc.getElementById(name);if(field){if(name.startsWith('remove-rule-'))field.checked=value;else field.value=value;}
+   }
+   if(fields.choice){
+    const radio=[...(doc.querySelectorAll?.('input[name=choice]')||[])].find(r=>r.value===fields.choice);
+    if(radio){radio.checked=true;const option=intakeQuestions(draft)[0]?.choices.find(c=>c.id===fields.choice),other=!!option?.requiresText;
+     const detail=doc.getElementById('other-detail'),label=doc.getElementById('other-label');if(detail){detail.hidden=!other;detail.required=other;}if(label){label.hidden=!other;label.textContent=option?.fieldLabel||'Describe what you mean';}}
+   }
+  }
   const focus=selector=>doc.querySelector(selector)?.focus();
   function stop(){generation++;controller?.abort();controller=null;busy=false;}
   function stopInterpretation(){interpretVersion++;interpretController?.abort();interpretController=null;interpreting=false;}
@@ -296,10 +358,12 @@
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
    bind();
+   if(restoringOverlay){restoreFields(restoringOverlay);restoringOverlay=null;}
    if(sameResearch)restoreDisclosureState(host,disclosures);
    if(prior&&doc.getElementById(prior))doc.getElementById(prior).focus({preventScroll:true});
    if(selection){const field=doc.getElementById(prior);if(field?.value===selection.value&&field.setSelectionRange)field.setSelectionRange(selection.start,selection.end);}
    renderedResearchCard=stage==='research'?confirmed:null;
+   saveRecovery();
   }
   function intakeHTML(){
    if(!intakeEndpoint||!intake||intake.snapshot!==confirmed)return '';
@@ -380,11 +444,12 @@
    if(list){const html=methodStepsHTML();list.innerHTML=html.slice(html.indexOf('>')+1,html.lastIndexOf('</ol>'));bindMethodSteps();focus(target);}
   }
   function editMethodStep(edit,target){
-   try{flushMethodSteps();draft=C.applyMethodEdit(draft,edit);error='';doc.getElementById('error').textContent='';refreshMethodSteps(target);}
+   try{flushMethodSteps();draft=C.applyMethodEdit(draft,edit);error='';doc.getElementById('error').textContent='';refreshMethodSteps(target);saveRecovery();}
    catch(e){error=e.message;doc.getElementById('error').textContent=error;}
   }
   function bindMethodSteps(){
    methodOperations().forEach((operation,index)=>{
+    for(const name of [index?'edit-method-'+index:'edit-method','edit-method-family-'+index])for(const type of ['input','change'])doc.getElementById(name)?.addEventListener(type,saveRecovery);
     doc.getElementById('method-up-'+index)?.addEventListener('click',()=>editMethodStep({type:'move',index,toIndex:index-1},'#'+(index===1?'edit-method':'edit-method-'+(index-1))));
     doc.getElementById('method-down-'+index)?.addEventListener('click',()=>editMethodStep({type:'move',index,toIndex:index+1},'#edit-method-'+(index+1)));
     doc.getElementById('method-remove-'+index)?.addEventListener('click',()=>editMethodStep({type:'remove',index},methodOperations().length===1?'#method-add':'#'+(index===0?'edit-method':'edit-method-'+(index-1))));
@@ -417,7 +482,9 @@
    if(stage==='research')updateShare();
    bindMethodSteps();
    doc.getElementById('method-add')?.addEventListener('click',()=>editMethodStep({type:'add',index:methodOperations().length,operation:{id:'described_method',label:''}},'#'+(methodOperations().length?'edit-method-'+methodOperations().length:'edit-method')));
-   doc.getElementById('idea')?.addEventListener('input',event=>{raw=event.target.value;});
+   doc.getElementById('idea')?.addEventListener('input',event=>{raw=event.target.value;saveRecovery();});
+   for(const name of Object.keys(recoveryFields()))if(name!=='choice'&&!name.startsWith('edit-method'))for(const type of ['input','change'])doc.getElementById(name)?.addEventListener(type,saveRecovery);
+   for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.addEventListener('change',saveRecovery);
    doc.getElementById('intake')?.addEventListener('submit',event=>{
     event.preventDefault();raw=doc.getElementById('idea').value;if(!raw.trim())return;
     stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
@@ -600,7 +667,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,createApp};
+ const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

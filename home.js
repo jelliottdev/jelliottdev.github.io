@@ -72,7 +72,7 @@
  });
  $('attach').onclick=()=>picker.click();
  picker.onchange=()=>{addFiles([...picker.files]);picker.value=''};
- window.addEventListener('pagehide',()=>{for(const url of urls.values())URL.revokeObjectURL(url);urls.clear()});
+ window.addEventListener('pagehide',event=>{if(event.persisted)return;for(const url of urls.values())URL.revokeObjectURL(url);urls.clear()});
  let dragDepth=0;
  form.addEventListener('dragenter',event=>{if([...event.dataTransfer.types].includes('Files')){event.preventDefault();dragDepth++;form.classList.add('dragging')}});
  form.addEventListener('dragover',event=>{if([...event.dataTransfer.types].includes('Files')){event.preventDefault();event.dataTransfer.dropEffect='copy'}});

@@ -249,6 +249,14 @@ provenance separately from original text. File/image extraction is not offered.
 Legacy `?q=` is prefilled without submission; valid repeated/comma-separated
 `pages` hints enter scope explicitly without changing the original wording.
 
+The current tab keeps a bounded draft in session storage for refresh recovery.
+It is matched to the exact entry URL, so a different incoming idea or shared link
+takes precedence. Original text, clarification choices and unsubmitted editor
+values remain separate. Restoring a card always returns it to unconfirmed review;
+results, confirmation receipts and in-flight requests are not resumed. Disabled
+storage leaves the normal flow usable, and corrupt, oversized or expired saved
+drafts are ignored. Recovery sends no interpretation, research or save request.
+
 The real registry and endpoint configuration load in parallel. Optional manuscript
 context times out separately and does not gate confirmation or rerender an input
 or editor. Request-local controllers and revision guards prevent canceled/late

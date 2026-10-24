@@ -1,0 +1,62 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{execFileSync}=require('node:child_process');
+const {parseNameStatus,classifyChanges,scopeForCheckout,UI_PATHS}=require('./ci_validation_scope.cjs');
+const registry=()=>({schema:'liberpedia-experiments-v1',records:[]}),catalog=()=>({schema:'liber-primus-file-catalog-v1',files:[]});
+const entry=(name,status='M')=>({status,paths:[name]});let count=0;
+function test(name,fn){fn();count++;console.log('PASS '+name);}
+test('only exact reviewed UI paths bypass science; all mixed/unknown paths remain full',()=>{
+ for(const p of ['app.js','investigate.js','style.css','data/assistant.json','scripts/test_investigate.cjs'])assert.equal(classifyChanges([entry(p)],registry(),catalog()).science,false,p);
+ for(const p of ['articles/method-feedback.html','scripts/build_articles.py','scripts/test_experiments.py','experiments/records/x/record.json','data/pages/lp2-15.json','data/experiments.json','images/lp2-15.jpg','text/lp2-15.txt','exports/x.json','research/x.md','reference/x.html','downloads/x.zip','.gitattributes','.github/workflows/validate-experiments.yml','scripts/ci_validation_scope.cjs','scripts/test_ci_validation_scope.cjs','unknown.js','services/idea-assistant/worker.mjs'])assert.equal(classifyChanges([entry('app.js'),entry(p)],registry(),catalog()).science,true,p);
+ assert.equal(classifyChanges([],registry(),catalog()).science,true);assert.equal(classifyChanges([entry('app.js','A')],registry(),catalog()).science,false);
+});
+test('deletions, copies, renames and type changes always preserve full validation',()=>{
+ for(const status of ['D','T','U','X','B'])assert.equal(classifyChanges([entry('app.js',status)],registry(),catalog()).science,true);
+ for(const status of ['R100','C100'])assert.equal(classifyChanges([{status,paths:['app.js','home.js']}],registry(),catalog()).science,true);
+});
+test('registry scripts, inputs, outputs, artifacts and catalog dependencies override UI allowlist',()=>{
+ for(const make of [()=>({reproduction:{script:'app.js'}}),()=>({reproduction:{inputs:[{path:'app.js'}]}}),()=>({reproduction:{outputs:[{path:'app.js'}]}}),()=>({scope:{artifacts:['app.js']}}),()=>({article_path:'app.js'})]){const r=registry();r.records.push(make());assert.equal(classifyChanges([entry('app.js')],r,catalog()).science,true);}
+ const c=catalog();c.files.push({path:'style.css'});assert.equal(classifyChanges([entry('style.css')],registry(),c).science,true);
+ for(const [r,c]of [[{},catalog()],[registry(),{}],[{schema:registry().schema,records:[{reproduction:{inputs:[{}]}}]},catalog()]])assert.equal(classifyChanges([entry('app.js')],r,c).science,true);
+});
+test('declared aliases, Windows separators/case and directories cannot bypass dependency guards',()=>{
+ for(const alias of ['./home.js','.\\home.js','HOME.JS','././home.js']){const r=registry();r.records.push({scope:{artifacts:[alias]}});assert.equal(classifyChanges([entry('home.js')],r,catalog()).science,true,alias);}
+ for(const directory of ['scripts','scripts/','./scripts/','.\\scripts\\']){const r=registry();r.records.push({scope:{artifacts:[directory]}});assert.equal(classifyChanges([entry('scripts/test_home_preview.cjs')],r,catalog()).science,true,directory);}
+ for(const declaration of ['.','./','/home.js','C:\\home.js','https://example.org/home.js','../home.js']){const r=registry();r.records.push({scope:{artifacts:[declaration]}});assert.equal(classifyChanges([entry('home.js')],r,catalog()).science,true,declaration);}
+ const c=catalog();c.files.push({path:'.\\home.js'});assert.equal(classifyChanges([entry('home.js')],registry(),c).science,true);
+});
+test('NUL parsing preserves tabs/newlines/spaces/unicode and both rename paths',()=>{
+ const bytes=Buffer.from('M\0odd name\tline\nλ.js\0R100\0app.js\0new\nname.js\0A\0-leading-dash.js\0');const parsed=parseNameStatus(bytes);
+ assert.equal(parsed[0].paths[0],'odd name\tline\nλ.js');assert.deepEqual(parsed[1],{status:'R100',paths:['app.js','new\nname.js']});assert.equal(parsed[2].paths[0],'-leading-dash.js');assert.equal(classifyChanges(parsed,registry(),catalog()).science,true);
+ for(const value of ['M\0app.js','M\0','R100\0app.js\0','Q\0app.js\0'])assert.throws(()=>parseNameStatus(Buffer.from(value)));
+ assert.throws(()=>parseNameStatus(Buffer.from([0xff])));assert.deepEqual(parseNameStatus(Buffer.alloc(0)),[]);
+});
+test('manual, unknown event, missing/invalid/unavailable baseline fall back without unsafe shell interpolation',()=>{
+ for(const eventName of ['workflow_dispatch','schedule','unknown',undefined])assert.equal(scopeForCheckout({eventName,git(){throw Error('Must not run');}}).science,true);
+ for(const before of [undefined,'0'.repeat(40),'--bad; command','f'.repeat(39)])assert.equal(scopeForCheckout({eventName:'push',event:{before},git(){throw Error('Must not run');}}).science,true);
+ assert.equal(scopeForCheckout({eventName:'push',event:{before:'a'.repeat(40)},git(){throw Error('Shallow checkout lacks parent');}}).science,true);
+});
+test('actual Git baseline and NUL diff choose UI-only, mixed/deleted files choose full',()=>{
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'liberpedia-ci-scope-'));
+ const git=args=>execFileSync('git',args,{cwd:tmp,encoding:null,shell:false,stdio:['ignore','pipe','pipe']});
+ try{
+  git(['init','-q']);git(['config','user.name','Offline CI scope test']);git(['config','user.email','ci-scope@example.invalid']);git(['config','core.autocrlf','false']);fs.mkdirSync(path.join(tmp,'data'));
+  fs.writeFileSync(path.join(tmp,'data/experiments.json'),JSON.stringify(registry()));fs.writeFileSync(path.join(tmp,'data/catalog.json'),JSON.stringify(catalog()));fs.writeFileSync(path.join(tmp,'app.js'),'base\n');git(['add','.']);git(['commit','-qm','base']);const base=git(['rev-parse','HEAD']).toString().trim();
+  fs.writeFileSync(path.join(tmp,'app.js'),'changed\n');git(['add','.']);git(['commit','-qm','UI']);
+  for(const event of [{eventName:'push',event:{before:base}},{eventName:'pull_request',event:{pull_request:{base:{sha:base}}}}])assert.equal(scopeForCheckout({root:tmp,...event}).science,false);
+  const ui=git(['rev-parse','HEAD']).toString().trim();fs.writeFileSync(path.join(tmp,'odd name λ.js'),'unknown\n');git(['add','.']);git(['commit','-qm','unknown path']);assert.equal(scopeForCheckout({root:tmp,eventName:'push',event:{before:ui}}).science,true);
+  const unknown=git(['rev-parse','HEAD']).toString().trim();git(['rm','-q','app.js']);git(['commit','-qm','delete UI']);assert.equal(scopeForCheckout({root:tmp,eventName:'push',event:{before:unknown}}).science,true);
+  fs.writeFileSync(path.join(tmp,'data/catalog.json'),'{bad');assert.equal(scopeForCheckout({root:tmp,eventName:'push',event:{before:base}}).science,true);
+ }finally{
+  const actual=fs.realpathSync(tmp),parent=fs.realpathSync(os.tmpdir());assert(actual.startsWith(parent+path.sep)&&path.basename(actual).startsWith('liberpedia-ci-scope-'));fs.rmSync(actual,{recursive:true,force:true});
+ }
+});
+test('current reviewed allowlist does not silently include arbitrary future filenames',()=>{assert(!UI_PATHS.has('new-ui.js'));assert(!UI_PATHS.has('scripts/test_new_science.cjs'));assert(!UI_PATHS.has('.github/workflows/validate-experiments.yml'));});
+test('actual checked-in registry/catalog allow app-only changes and workflow retains gated science checks',()=>{
+ const root=path.resolve(__dirname,'..'),r=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json'),'utf8')),c=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8'));
+ assert.equal(classifyChanges([entry('app.js')],r,c).science,false);assert.equal(classifyChanges([entry('home.js'),entry('scripts/test_home_preview.cjs')],r,c).science,false);
+ const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');assert(workflow.includes('  workflow_dispatch:\n'));assert(workflow.includes('  validate:\n'));
+ const blocks=workflow.split('    steps:\n')[1].split(/(?=^      - )/m).filter(s=>s.startsWith('      - '));
+ const python=blocks.findIndex(s=>s.includes('actions/setup-python@'));assert(python>0);for(const [i,b]of blocks.entries()){if(/run: node\b/.test(b))assert(i<python,'Node check delayed behind science setup');if(/run: python\b|uses: actions\/setup-python@|git diff --exit-code/.test(b))assert(b.includes("if: steps.scope.outputs.science == 'true'"),'Science gate removed: '+b.split('\n')[0]);}
+ for(const command of ['python scripts/test_export_reproducibility.py','python scripts/test_experiment_bundles.py','python scripts/build_experiments.py','python scripts/reproduce_reading.py --check-all','git diff --exit-code --'])assert(workflow.includes(command),'Existing scientific gate missing');
+});
+console.log('PASS '+count+' conservative CI scope groups; no scientific rebuilds or hosted calls');

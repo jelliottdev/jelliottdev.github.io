@@ -14,17 +14,17 @@ class Element{
 }
 function fixture(){
  const ids=new Map(),get=id=>{if(!ids.has(id))ids.set(id,new Element(id));return ids.get(id);};
- const reads=[];
+ const reads=[],windowEvents={},revoked=[];
  const text={name:'synthetic-example.js',type:'text/javascript',size:48,lastModified:1,slice(){const read=deferred();reads.push(read);return {text:()=>read.promise};}};
  const image={name:'synthetic-image.png',type:'image/png',size:64,lastModified:1};
  const env={document:{getElementById:get,createElement:tag=>Object.assign(new Element(),{tagName:tag.toUpperCase()})},
-  window:{indexedDB:{open:()=>({})},addEventListener(){}},sessionStorage:{getItem:()=>'',setItem(){}},crypto,Blob,
-  URL:{createObjectURL:()=> 'blob:synthetic-local-image',revokeObjectURL(){}},location:{assign(){assert.fail('Preview cannot navigate or submit');}},console};
+  window:{indexedDB:{open:()=>({})},addEventListener(type,handler){windowEvents[type]=handler;}},sessionStorage:{getItem:()=>'',setItem(){}},crypto,Blob,
+  URL:{createObjectURL:()=> 'blob:synthetic-local-image',revokeObjectURL(url){revoked.push(url);}},location:{assign(){assert.fail('Preview cannot navigate or submit');}},console};
  vm.runInNewContext(source,env,{filename:'home.js'});
  get('file-input').files=[text,image];get('file-input').onchange();
  // Open through the actual first attachment action, then use its real dialog buttons.
  get('attachments').children[0].children[0].onclick();
- return {get,reads,select:index=>get('review-tabs').children[index].onclick(),preview:()=>get('file-preview').children};
+ return {get,reads,revoked,pagehide:persisted=>windowEvents.pagehide({persisted}),select:index=>get('review-tabs').children[index].onclick(),preview:()=>get('file-preview').children};
 }
 async function switchedRead(kind){
  const f=fixture();assert.equal(f.reads.length,1);f.select(1);
@@ -45,4 +45,11 @@ async function overlappingSameFile(){
  const f=fixture();f.select(0);assert.equal(f.reads.length,2);f.reads[1].resolve('NEWEST READ');await turn();const newest=f.preview()[0];
  f.reads[0].reject(Error('Older same-file failure'));await turn();assert.equal(f.preview().length,1);assert.equal(f.preview()[0],newest);assert.equal(newest.textContent,'NEWEST READ','Older same-file attempts cannot corrupt a successful retry');
 }
-(async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();console.log('PASS production home preview: switched-file delayed success/failure ignored, current error retained, exact-code retry recovery, overlapping same-file reads guarded; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});
+function cachedNavigation(){
+ const f=fixture();f.select(1);const image=f.preview()[0];
+ f.pagehide(true);assert.deepEqual(f.revoked,[],'A page kept for Back navigation retains its live image URLs');
+ assert.equal(f.preview()[0],image);f.select(1);assert.equal(f.preview()[0].src,image.src);
+ f.pagehide(false);assert.deepEqual(f.revoked,['blob:synthetic-local-image'],'Discarding the page releases image URLs');
+ f.pagehide(false);assert.equal(f.revoked.length,1,'Released URLs are cleared');
+}
+(async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();cachedNavigation();console.log('PASS production home preview: stale reads ignored, current errors and exact-code retry preserved, Back-cache URLs retained and discarded-page URLs released; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});

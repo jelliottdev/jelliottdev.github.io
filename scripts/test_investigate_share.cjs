@@ -21,6 +21,7 @@ function documentFor(hash){
  },querySelector(s){return s.startsWith('#')?this.getElementById(s.slice(1)):null;}};
 }
 const tick=()=>new Promise(r=>setTimeout(r,10));
+async function until(predicate){const end=Date.now()+5000;while(Date.now()<end){if(predicate())return;await tick();}assert.fail('Share fixture did not reach the expected state');}
 (async()=>{
  let source=I.initialDraft('Fibonacci keys on LP2-15');
  source=I.answerIntake(source,'aim','undecided');
@@ -32,11 +33,11 @@ const tick=()=>new Promise(r=>setTimeout(r,10));
   if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.invalid/ask'});
   return Response.json({documents:[]});
  },sharer:(snapshot,url)=>{shares++;assert.equal(snapshot,app.getSnapshot().confirmed);assert.equal(url,'https://jelliottdev.github.io/investigate.html');return shareResponse||new Promise(r=>releaseShare=r);}});
- await tick();assert.equal(posts,0);assert.equal(app.getSnapshot().stage,'review');
+ await app.ready;assert.equal(posts,0);assert.equal(app.getSnapshot().stage,'review');
  assert.equal(app.getSnapshot().confirmed,null);assert(!doc.getElementById('share-idea'));
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15']);
  assert(doc.getElementById('confirm'),'unknown outcome remains acknowledged');
- doc.getElementById('confirm').fire('click');await tick();assert.equal(posts,1);
+ doc.getElementById('confirm').fire('click');await until(()=>posts===1&&!app.getSnapshot().busy);assert.equal(posts,1);
  assert(doc.getElementById('share-idea'));assert(doc.host.html.includes('aria-label="Share confirmed idea"'));
  const pending=doc.getElementById('share-idea').fire('click');assert.equal(shares,1);
  doc.getElementById('share-idea').fire('click');assert.equal(shares,1,'double tap cannot share twice');
