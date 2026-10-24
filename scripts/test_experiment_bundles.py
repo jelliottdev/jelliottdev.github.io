@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import posixpath
 import subprocess
 import sys
 import tempfile
@@ -21,9 +22,14 @@ GENERATED_RELEASE_OUTPUTS = {
     'data/article-search.json',
     'data/guide-index.json',
     'data/method-families.json',
+    'data/research-map.json',
     'downloads/SHA256SUMS.txt',
     'downloads/reference-data.zip',
 }
+
+# This browser retrieval regression neither builds nor verifies archive members.
+# If a record declares it as an input, the dependency lookup below still wins.
+UNRELATED_CHECKS = {'scripts/test_assistant.cjs'}
 
 
 def _git(root, *args):
@@ -62,23 +68,35 @@ def select_records(root, records, ref):
     for registry in (base, records):
         for record in registry:
             script = record.get('reproduction', {}).get('script')
-            if script:
-                dependencies.setdefault(script, set()).add(record['id'])
-            for item in record.get('reproduction', {}).get('inputs', []) + record.get('reproduction', {}).get('outputs', []):
-                dependencies.setdefault(item['path'], set()).add(record['id'])
-            for item in record.get('scope', {}).get('artifacts', []):
-                dependencies.setdefault(item, set()).add(record['id'])
+            paths = ([script] if script else [])
+            paths += [item['path'] for item in record.get('reproduction', {}).get('inputs', [])
+                      + record.get('reproduction', {}).get('outputs', [])]
+            paths += record.get('scope', {}).get('artifacts', [])
+            for value in paths:
+                if not isinstance(value, str):
+                    return all_ids, 'full fallback: unrecognized dependency path'
+                key = posixpath.normpath(value.replace('\\', '/'))
+                if key.startswith(('/', '../')) or key in ('.', '..') or ':' in key:
+                    return all_ids, 'full fallback: dependency outside a repository path'
+                dependencies.setdefault(key, set()).add(record['id'])
 
     for name in changed:
-        if name == 'data/experiments.json':
-            continue  # Each record is compared with the baseline registry above.
-        if name.startswith('scripts/') or name.startswith(('experiments/engines/', 'experiments/suites/')):
+        if ((name.startswith('scripts/') and name not in UNRELATED_CHECKS)
+                or name.startswith(('experiments/engines/', 'experiments/suites/'))):
             return all_ids, f'full fallback: shared validator or engine changed ({name})'
         if name == 'downloads/original-images.zip':
             return all_ids, 'full fallback: shared original-image archive changed'
-        matched = dependencies.get(name)
+        # Scope artifacts may name a directory. A child change still affects
+        # its consumers, including when the child is a generated output.
+        matched = set()
+        for ancestor in (name, *[str(p).replace('\\', '/') for p in Path(name).parents if str(p) != '.']):
+            matched.update(dependencies.get(ancestor, ()))
         if matched:
             selected.update(matched & all_ids)
+        if name == 'data/experiments.json':
+            # Compare individual records, while retaining any declared consumer
+            # of the registry itself or its containing directory.
+            continue
         parts = name.split('/')
         if len(parts) >= 4 and parts[:2] == ['experiments', 'records']:
             if parts[2] in all_ids:
@@ -89,7 +107,7 @@ def select_records(root, records, ref):
             if identifier in all_ids:
                 selected.add(identifier)
             continue
-        if matched or name in GENERATED_RELEASE_OUTPUTS:
+        if matched or name in GENERATED_RELEASE_OUTPUTS or name in UNRELATED_CHECKS:
             continue
         elif name.startswith(('data/', 'downloads/', 'experiments/')):
             return all_ids, f'full fallback: unclassified shared input changed ({name})'
@@ -104,10 +122,10 @@ def main(argv=None):
     if args.changed_from:
         selected, reason = select_records(ROOT, records, args.changed_from)
     else:
-        selected, reason = {record['id'] for record in records}, 'full validation (default/CI)'
+        selected, reason = {record['id'] for record in records}, 'full validation (default/manual)'
     print(f'Experiment bundles: selected {len(selected)}/{len(records)} ({reason})', flush=True)
     if not selected:
-        print('PASS: no experiment bundles changed; default/CI still validates all bundles.')
+        print('PASS: no experiment bundles changed; default/manual invocation validates all bundles.')
         return
     with zipfile.ZipFile(ROOT / 'downloads/original-images.zip') as original_archive:
         shared_originals = {item['path']: item for item in

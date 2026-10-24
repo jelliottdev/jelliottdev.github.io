@@ -293,6 +293,18 @@ for(const query of ['unequal starting values plaintext feedback','all two-rune s
 }
 console.log('PASS: everyday starting-key wording reaches the complete two-value feedback test.');
 
+for(const query of ['two-rune gematria feedback','seven feedback rules with all starting pairs',
+ 'plaintext and mixed history with every starting key']){
+ const hit=Search.experiments(liveDocs,query)[0];
+ assert.equal(hit?.document.id,'two-rune-feedback-family',query);
+ assert.equal(Search.select(liveDocs,query)[0]?.id,hit.document.id,
+  'Full family bounds and failed identification controls must fit without truncation');
+ assert(hit.document.text.includes('35/49')&&hit.document.text.includes('32')&&
+  hit.document.text.includes('inconclusive')&&hit.document.text.includes('sampled'),
+  'Keep the matched null comparison, failed ranking controls and independent audit limits');
+}
+console.log('PASS: broader two-rune feedback queries retain complete scope and identification failures.');
+
 for(const query of ['LP2 as a key for the 256-byte payload','using the manuscript as a running key for the payload','F-01 missing target']){
  const hit=Search.experiments(liveDocs,query)[0];
  assert.equal(hit?.document.id,'lp2-pad-payload-target',query);

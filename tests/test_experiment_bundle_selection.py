@@ -113,7 +113,7 @@ class BundleSelectionTest(unittest.TestCase):
         self.write('downloads/experiments/gamma.zip', 'new archive\n')
         for path in ('data/catalog.json', 'data/experiment-index.json', 'data/checker-records.json',
                      'data/articles.json', 'data/article-search.json',
-                     'data/guide-index.json', 'data/method-families.json',
+                     'data/guide-index.json', 'data/method-families.json', 'data/research-map.json',
                      'downloads/SHA256SUMS.txt', 'downloads/reference-data.zip'):
             self.write(path, 'generated\n')
         ids, reason = self.selected()
@@ -135,10 +135,70 @@ class BundleSelectionTest(unittest.TestCase):
         self.assertEqual(ids, {'alpha', 'beta'})
         self.assertIn('full fallback', reason)
 
+    def test_browser_retrieval_check_alone_does_not_reextract_bundles(self):
+        self.write('scripts/test_assistant.cjs', 'browser retrieval check\n')
+        self.assertEqual(self.selected()[0], set())
+
+    def test_reviewed_exceptions_still_select_declared_consumers(self):
+        for name in ('scripts/test_assistant.cjs', 'data/research-map.json'):
+            self.records[0]['reproduction']['inputs'].append({'path': name})
+            self.write(name, 'original\n')
+        self.write('data/experiments.json', json.dumps({'records': self.records}))
+        git(self.root, 'add', '.')
+        git(self.root, 'commit', '-qm', 'declare reviewed paths as dependencies')
+        self.write('scripts/test_assistant.cjs', 'changed test dependency\n')
+        self.write('data/research-map.json', 'changed map dependency\n')
+        self.assertEqual(self.selected()[0], {'alpha'})
+
+    def test_unknown_check_or_data_still_forces_all(self):
+        for name in ('scripts/test_unknown.cjs', 'data/unknown.json'):
+            self.write(name, 'unknown\n')
+            ids, reason = self.selected()
+            self.assertEqual(ids, {'alpha', 'beta'})
+            self.assertIn('full fallback', reason)
+            (self.root / name).unlink()
+
+    def test_dependency_in_baseline_still_selects_after_declaration_removed(self):
+        self.records[0]['reproduction']['inputs'].append({'path': 'data/research-map.json'})
+        self.write('data/research-map.json', 'original\n')
+        self.write('data/experiments.json', json.dumps({'records': self.records}))
+        git(self.root, 'add', '.')
+        git(self.root, 'commit', '-qm', 'baseline map dependency')
+        self.records[0]['reproduction']['inputs'].pop()
+        self.write('data/research-map.json', 'changed\n')
+        self.assertEqual(self.selected()[0], {'alpha'})
+
     def test_missing_baseline_forces_full_validation(self):
         ids, reason = select_records(self.root, self.records, 'missing-ref')
         self.assertEqual(ids, {'alpha', 'beta'})
         self.assertIn('full fallback', reason)
+
+    def test_generated_child_of_declared_directory_selects_consumer(self):
+        self.records[0]['scope']['artifacts'].append('data')
+        self.write('data/experiments.json', json.dumps({'records': self.records}))
+        git(self.root, 'add', '.')
+        git(self.root, 'commit', '-qm', 'declare directory')
+        self.write('data/research-map.json', 'changed generated child\n')
+        self.assertEqual(self.selected()[0], {'alpha'})
+
+    def test_path_aliases_cannot_hide_declared_consumers(self):
+        self.records[0]['reproduction']['inputs'].append({'path': './data/research-map.json'})
+        self.records[1]['reproduction']['inputs'].append({'path': 'scripts\\test_assistant.cjs'})
+        self.write('data/experiments.json', json.dumps({'records': self.records}))
+        git(self.root, 'add', '.')
+        git(self.root, 'commit', '-qm', 'declare path aliases')
+        self.write('data/research-map.json', 'changed\n')
+        self.write('scripts/test_assistant.cjs', 'changed\n')
+        self.assertEqual(self.selected()[0], {'alpha', 'beta'})
+
+    def test_registry_change_also_selects_declared_directory_consumer(self):
+        self.records[0]['scope']['artifacts'].append('data')
+        self.write('data/experiments.json', json.dumps({'records': self.records}))
+        git(self.root, 'add', '.')
+        git(self.root, 'commit', '-qm', 'declare registry directory consumer')
+        self.records[1]['finding'] = 'updated finding'
+        self.write('data/experiments.json', json.dumps({'records': self.records}))
+        self.assertEqual(self.selected()[0], {'alpha', 'beta'})
 
 
 if __name__ == '__main__':

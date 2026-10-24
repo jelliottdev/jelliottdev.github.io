@@ -1,0 +1,65 @@
+{
+  "schema": "r12-c1-k2-family-prototype-v1",
+  "frozen_at_utc": "2026-10-24T12:21:52.896671+00:00",
+  "purpose": "Prototype/source parity and benchmark on synthetic and known controls only. No LP2 target loading or scoring authorized.",
+  "files": [
+    {
+      "path": "engine.py",
+      "sha256": "35f4e87d2c5a55dfec8036613d5d5b196141557702fe580a6f81526c4c87fbc7"
+    },
+    {
+      "path": "probe.py",
+      "sha256": "ee890566e7c6126e89c396546f90ae16735cfcf60d693d28e9f4b05eeba861a0"
+    },
+    {
+      "path": "source-manifest.json",
+      "sha256": "05ab5b6492172fd521b401ea747a47fa9191dd004b9635c8cedc063d7018a440"
+    }
+  ],
+  "source_rule": "k2 source F_BASIS seven functions; history pt/mix; signs±1; forward/reverse input orientations; all841 ordered starting-key pairs, reset page-local; unchanged GP transliteration/scorer after dropping2 decoded runes.",
+  "proposed_target_grid": {
+    "pages": 55,
+    "runes": 12956,
+    "branches": 56,
+    "pairs_per_page": 841,
+    "labelled_cases": 2590280,
+    "already_covered_single_branch_cases": 46255,
+    "diagonal_cases_already_in_original_baseline": 89320,
+    "new_cases_relative_to_union_prior_records": 2456300
+  },
+  "synthetic_seed": 2410263302,
+  "synthetic_parity": "All841pairs at each56labelledbranch on random61-symbol input/reversal; exact arrays and score error<=1e−12 against source; complete pair function truth tables used by JIT.",
+  "controls": "Two known texts (original control and Warning)×three unequal starting-key pairs×all56branches. For reverse branch, externally reverse planted ciphertext so decoder direction sees known plaintext. Same underlying texts reused; not336 independent text samples. Retain every failure and both exact-key recovery and actualearliest-best output/full vs scored-tail recovery.",
+  "primers": [
+    [
+      7,
+      11
+    ],
+    [
+      0,
+      28
+    ],
+    [
+      28,
+      0
+    ]
+  ],
+  "control_diagnostic_gate": "Truth decodes exactly, uniquely rankfirst within1e−12 and score>=−5.5; record ties/higheralternatives and stable earliest-best exact/tail recovery separately. This is a diagnostic criterion, not an instruction to drop failing branches or claim allprimer identifiability.",
+  "benchmark_lengths": [
+    64,
+    256,
+    1024
+  ],
+  "benchmark_repeats": 3,
+  "benchmark_patterns": "Deterministic random and repeated28 inputs; warm compiled grid; source allseven functions lookedup in exhaustively built29x29 pair tables.",
+  "projection": "Worst per-rune time among eachbranch length/pattern repeats ×12956runes ×50(observed+49matchednullwholegrids), sum56branches. Measured projection, not a guaranteed walltime bound; retains compilation/I/O/checker overhead separately.",
+  "proposed_future_null_rule": "49 within-page histogram-preserving full searches, same56labelledbranches/all841pairs/page-localtail scoring. Reuse source alias results only after exact equivalence proof and preserve labelcounts/ties. Freeze RNG/budget before any target.",
+  "proposed_future_decision": "Source absolute score>=−5.5 plus largest49global whole-family shuffled maxima +0.5; selected output is score evidence only. Branch-specific control failures remain material limits and do not justify a family negative. No downstream target scan in this prototype.",
+  "storage": "Observed scores56x55x841float64≈20.7MB; one global/per-branch/per-page max pernull, exactseeds/hashes, top40targetoutputs and selectedmaxwitnesses. No everycandidate/nullplaintext serialization. Optional compressed numeric arrays only if auditneeds; do not duplicate fullpublished source models.",
+  "alias_method": "Exhaust all29x29signed function tables. Equal signed tables imply exact decoder equality under sign-compatible primer mapping, bothsources/directions; verify841arrays onsynthetic for eachproved alias. No reverse/mixed equivalence assumed from scorecoincidence.",
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "numpy": "2.5.4",
+    "numba": "0.67.0"
+  }
+}

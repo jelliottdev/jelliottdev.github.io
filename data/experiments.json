@@ -68229,7 +68229,8 @@
       "related": [
         "cumulative-autokey-literal",
         "linear-ciphertext-feedback",
-        "crib-inferred-feedback-table"
+        "crib-inferred-feedback-table",
+        "two-rune-feedback-family"
       ],
       "reader_finding": "None of 23,520 settings reached the English-score threshold. But the search also missed all 14 planted plaintext-history and mixed-history examples when limited to its actual starting values, so that negative result cannot rule out those methods.",
       "reader_limit": "The search uses seven fixed rules, two to six earlier runes, and only starting sequences whose values are all equal. Other starting sequences and feedback rules were not searched.",
@@ -83960,6 +83961,401 @@
       ]
     },
     {
+      "id": "two-rune-feedback-family",
+      "status": "published",
+      "title": "Two-rune feedback with every starting pair",
+      "question": "Do any two-rune starting keys pass the fixed source-family English-score gates?",
+      "reader_question": "Can any starting pair make these two-rune feedback rules yield a strong English score?",
+      "bounds_note": "Seven fixed functions; every two-rune start; page-local English scoring.",
+      "summary": "No candidate passed the frozen score rules; 35 of 49 shuffled whole-family searches scored at least as highly. Known-input controls also show that the top-scoring output is not always the complete true text.",
+      "finding": "All 2,590,280 labelled cases (2,220,240 effective cases) were scored. Best is −6.163949899504046 on LP2-51, lastdiff/plaintext/sign −1/forward, starting key [9,16], below absolute −5.5 and the joint −5.330115462503459 gate. Whole-family shuffled maxima >= observed: 35/49. True supplied keys recover in all 336 constructed controls and pass −5.5, but unique truth ranks first in 216, 88 have ties-only and 32 have a strictly higher alternative; earliest-best complete recovery is 264/336. All observed scores match an independent implementation exactly. No cipher-family rejection follows.",
+      "reader_finding": "No starting pair passed the fixed score checks. Thirty-five of 49 shuffled searches scored at least as highly; some controls ranked a wrong output above the known text.",
+      "reader_limit": "One fixed two-rune feedback family and English scorer. The controls reuse only two passages; this is score screening, not a validated rejection of autokey ciphers.",
+      "limitations": "Other history lengths/functions, continuous or word-reset streams, skipping, different alphabets or language scorers, plaintext identification, per-branch significance claims and control-validated cipher-family rejection. Identification controls reuse two passages, three starts and dependent branch labels: all 336 true-key outputs recover, but only 264 selected winners recover completely; 88 ties-only and 32 higher wrong alternatives remain material limits. Null full-grid independent checks are sampled; observed scores and reported null maxima are all independently checked.",
+      "next_steps": "Use any concrete alternative as a separately frozen proposal. Inspect exact retained outputs and identification failures before interpreting a high English score; do not promote this finite result to a whole-family or language exclusion.",
+      "outcome": "inconclusive",
+      "tags": [
+        "autokey",
+        "two-rune feedback",
+        "two-rune gematria feedback",
+        "seven feedback rules",
+        "plaintext and mixed history",
+        "starting keys",
+        "English scoring",
+        "matched whole-search controls"
+      ],
+      "family": {
+        "id": "public-multihistory-feedback",
+        "title": "Multi-rune feedback and autokey",
+        "question": "Do fixed multi-rune feedback rules produce English-like page outputs?",
+        "baseline": "public-multihistory-feedback"
+      },
+      "variant": {
+        "label": "Complete k2 starting-key family, with identification limits",
+        "changes": [
+          {
+            "field": "artifacts",
+            "before": [
+              "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt"
+            ],
+            "after": [
+              "experiments/records/two-rune-feedback-family/protocol-frozen.json",
+              "experiments/records/two-rune-feedback-family/pages.json",
+              "experiments/records/two-rune-feedback-family/purpose-amendment-before-target.json"
+            ],
+            "reason": "Fill the two-value starting-key gap."
+          },
+          {
+            "field": "representation",
+            "before": "Zero-based GP rune indices from the pinned source transcription: 12,956 unsolved runes in 55 nonempty source segments, plus their concatenation.",
+            "after": "The same pinned 12,956 GP29 rune indices on 55 nonempty LP2-00–55 pages, excluding empty LP2-50. Page-local input; drop first two decoded runes before source GP Latin expansion and normalized English quadgram scoring.",
+            "reason": "Fill the two-value starting-key gap."
+          },
+          {
+            "field": "procedure",
+            "before": "For each stream, sweep seven fixed feedback functions, k=2..6, three history sources, both signs and both directions; score decoded transliteration using the pinned English quadgram table and 29 all-equal seeds for plaintext/mixed history.",
+            "after": "Enumerate all 841 ordered two-rune key starts for every fixed k2 source function, plaintext/mixed history, both signs and forward/reversed inputs. Compute 48 proved effective branches and retain all 56 source labels by exact signed-function/starting-key permutation. Repeat the same whole-family selection on 49 shared within-page-shuffled corpora. Retain failed known-text identification diagnostics; interpret as fixed score-screening enumeration only.",
+            "reason": "Fill the two-value starting-key gap."
+          },
+          {
+            "field": "parameters",
+            "before": "56 streams x 7 functions x 5 history lengths x 3 sources x 2 signs x 2 directions = 23,520 scored configurations. Ciphertext history ignores the seed after k; plaintext/mixed source probe eq0 through eq28. Twenty-one k=3 planted controls.",
+            "after": "7 functions × 2 histories × 2 signs × 2 directions × 55 pages × 841 starts = 2,590,280 labelled cases, 2,220,240 effective cases. Uniform recomputation; prior union overlaps 133,980 labelled/121,220 effective cases, leaving 2,456,300 labelled/2,099,020 effective additional settings. Whole-family null seeds 3301241024–3301241072, same page shuffle order as the prior corner. Candidate gate >= max(−5.5, largest of 49 whole-family null maxima + 0.5). Original stable label/page/starting-key order; exact scores.",
+            "reason": "Fill the two-value starting-key gap."
+          },
+          {
+            "field": "exclusions",
+            "before": "Non-equal initial seeds, k outside 2..6, formulas outside the seven-source basis, state crossing other page boundaries, skip-aware decoding, different transliterations or language scorers.",
+            "after": "Other history lengths/functions, continuous or word-reset streams, skipping, different alphabets or language scorers, plaintext identification, per-branch significance claims and control-validated cipher-family rejection. Identification controls reuse two passages, three starts and dependent branch labels: all 336 true-key outputs recover, but only 264 selected winners recover completely; 88 ties-only and 32 higher wrong alternatives remain material limits. Null full-grid independent checks are sampled; observed scores and reported null maxima are all independently checked.",
+            "reason": "Fill the two-value starting-key gap."
+          }
+        ]
+      },
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "experiments/records/two-rune-feedback-family/protocol-frozen.json",
+          "experiments/records/two-rune-feedback-family/pages.json",
+          "experiments/records/two-rune-feedback-family/purpose-amendment-before-target.json"
+        ],
+        "representation": "The same pinned 12,956 GP29 rune indices on 55 nonempty LP2-00–55 pages, excluding empty LP2-50. Page-local input; drop first two decoded runes before source GP Latin expansion and normalized English quadgram scoring.",
+        "procedure": "Enumerate all 841 ordered two-rune key starts for every fixed k2 source function, plaintext/mixed history, both signs and forward/reversed inputs. Compute 48 proved effective branches and retain all 56 source labels by exact signed-function/starting-key permutation. Repeat the same whole-family selection on 49 shared within-page-shuffled corpora. Retain failed known-text identification diagnostics; interpret as fixed score-screening enumeration only.",
+        "parameters": "7 functions × 2 histories × 2 signs × 2 directions × 55 pages × 841 starts = 2,590,280 labelled cases, 2,220,240 effective cases. Uniform recomputation; prior union overlaps 133,980 labelled/121,220 effective cases, leaving 2,456,300 labelled/2,099,020 effective additional settings. Whole-family null seeds 3301241024–3301241072, same page shuffle order as the prior corner. Candidate gate >= max(−5.5, largest of 49 whole-family null maxima + 0.5). Original stable label/page/starting-key order; exact scores.",
+        "exclusions": "Other history lengths/functions, continuous or word-reset streams, skipping, different alphabets or language scorers, plaintext identification, per-branch significance claims and control-validated cipher-family rejection. Identification controls reuse two passages, three starts and dependent branch labels: all 336 true-key outputs recover, but only 264 selected winners recover completely; 88 ties-only and 32 higher wrong alternatives remain material limits. Null full-grid independent checks are sampled; observed scores and reported null maxima are all independently checked."
+      },
+      "review": {
+        "kind": "complete finite source-family score enumeration with independent reconstruction",
+        "retested_on": "2026-10-24",
+        "reviewer": "Independent direct formulas/raw quadgram scorer check all 2,220,240 observed scores, all 150,920 reported null maxima, sampled 432 fixed full null grids plus 49 winner grids, stable alias selection and 146 full witnesses; 2,312,750 prior-corner scores also match exactly. Identification failures retained.",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/two-rune-feedback-family/quick_verify.py && python experiments/records/two-rune-feedback-family/replay.py && python experiments/records/two-rune-feedback-family/plot.py --check",
+        "environment": "Recorded Python 3.12.10, NumPy 2.5.4 and Numba 0.67.0; pins in requirements.txt. All needed source/model/input files bundled. Scripts install nothing and make no network/model calls. Quick check runs no decoding searches; full replay stages a temporary directory, repeats all original controls plus the entire observed/49-null family, independently checks and compares deterministic values and exact numeric bytes without overwriting expected files.",
+        "script": "experiments/records/two-rune-feedback-family/replay.py",
+        "script_sha256": "5af09e930fb584d08953a2f23ac8c008a76c3872795da56219dd925d9bfb0b0b",
+        "inputs": [
+          {
+            "path": "experiments/records/two-rune-feedback-family/article.md",
+            "sha256": "759f182dbd6716e5802d27ba4bd8c736a9d4743ae51b3f581471a69765846f33"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/engine.py",
+            "sha256": "35f4e87d2c5a55dfec8036613d5d5b196141557702fe580a6f81526c4c87fbc7"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/audit-plan-frozen.json",
+            "sha256": "850d9af3e3afb8e23addc85d851c6a0fb34138d9bd61810ed43aee3cc7b734c1"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/audit_run.py",
+            "sha256": "5d47c4c7e3dcc2d21c61f02735bd71bff2450474b2ac3cf1c2d52bb092b7fa00"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/independent.py",
+            "sha256": "3d79cc567af6d15130cf88d4fb8cafb4e693bf6186d87fd184683c301eca23e1"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/preflight-receipt.json",
+            "sha256": "61ea7bc8008478e8729a6744d612b8f8fadab3480e500152ff0ef25f01b61a5d"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/preflight.py",
+            "sha256": "03f13419547625e05ae52c13f4a692a98fca1ffe7803dfa8e593f1e4f55e12b4"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/protocol-review.json",
+            "sha256": "002f71ca892ffef255f3898aea4e5c4666f94a4eb0538b9724d1b88ef8476527"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/review_protocol.py",
+            "sha256": "876e71d2f397049b9303aaa3f39f7fecb28896195f05a468b673e89a013e0f28"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/known-readings.json",
+            "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/pages.json",
+            "sha256": "552bd7a9db0a43ca3480523864ebc04182c6142b9ef89858e32f62728522905f"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/plot.py",
+            "sha256": "dd8d552cd2fab4c9b75adb9b0a4a53e90c0f662321b6d9c849719687fe764d8c"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prior-score-sha256.json",
+            "sha256": "6ff6fe625a86905b803b43f90717571d1281324ad1f3e13859f8f5a0e86d10f5"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/protocol-frozen.json",
+            "sha256": "2901463fa1157c51f7e310f369b4e52c520e3ae809bcfa5b872925cb3cfca1d7"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/ASSESSMENT.md",
+            "sha256": "aac7673e782ed0b767bd9096e4f35ead735fd22e9fcc5d8ac5b457c7fd7c206b"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/analysis.json",
+            "sha256": "942fa87d8911385430dabddecb2486a5f798945c1ffee01c310541fc3f75a0c6"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/audit_control_witnesses.py",
+            "sha256": "66cb37296e2e895fefc21eb863553b2ef28d5d69fc45fd285c7b4d4a89bebe04"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/control-witnesses.json",
+            "sha256": "e49c9a7edb2bc34569cf45297a9f0d6eec4cd5fed82826bbe95a00d17e4f7083"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/probe.py",
+            "sha256": "ee890566e7c6126e89c396546f90ae16735cfcf60d693d28e9f4b05eeba861a0"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/proposal-frozen.json",
+            "sha256": "61b7f559fb099cd2e325bc614702991479f5b7c69b1233ea64029a6e4b8ae8a9"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/prototype/prototype-results.json",
+            "sha256": "496d1a67060893e4537175d692366f01cf4c4a6baaa20e752135044de9524532"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/purpose-amendment-before-target.json",
+            "sha256": "bfc030055cdb3e43122627cb127da769e9863e13357165e989b5b0e81adb67ac"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/quick_verify.py",
+            "sha256": "9e4a34968ac1be872200aeec5161def2a0220c8f2a8d825701332cf1cda6e55c"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/replay.py",
+            "sha256": "5af09e930fb584d08953a2f23ac8c008a76c3872795da56219dd925d9bfb0b0b"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/requirements.txt",
+            "sha256": "85ca4c5b217056a3b1e9a77b497ffdde09518222b94c0139dc838ea10601ea99"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/run.py",
+            "sha256": "272402beb9a668dde58afbfe9d74980fd7b9e6f7441ca8d2dace7fa882250e6b"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source-manifest.json",
+            "sha256": "05ab5b6492172fd521b401ea747a47fa9191dd004b9635c8cedc063d7018a440"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/analysis/round11/lib_numchannel.py",
+            "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/analysis/round12/C1/control.py",
+            "sha256": "c309ef3bab8f1bcbf5cc9b3dd95774bc9d804333c14b7270043c6c040edc65c3"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/analysis/round12/C1/feedback.py",
+            "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/analysis/round12/C1/sweep.py",
+            "sha256": "0eb8799373237f30c1e589cb8a1ba59ac5e4df7228787ffecacd7c11e86481b0"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/analysis/run_stats.py",
+            "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/data/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/src/lp/ciphers.py",
+            "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/src/lp/corpus.py",
+            "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/src/lp/gematria.py",
+            "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/src/lp/score.py",
+            "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/source/src/lp/stats.py",
+            "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/two-rune-feedback-family/family-score-screen.svg",
+            "sha256": "2170cbc1fb586c855800ef052f49c6ee9c11a62d544606d38deb7ee3345403c8"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/final-receipt.json",
+            "sha256": "83a52bfe90e73239f5255a48679587789f23fd206ac57473bd46717944e62ac0"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/independent/observed-receipt.json",
+            "sha256": "f11c07ebb6245bb8bf5b7de56ffe9da03ac6cfdca5ceb9d32d1d695fe3181c94"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/null-page-maxima-primers.npy",
+            "sha256": "32a249cd0414f85c6437e05aa81cf292b4ad2ac49f19bf9c2bf1ce06fc021601"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/null-page-maxima-scores.npy",
+            "sha256": "7d560bc1b9d864b4bdba0f547cc961ee40850046211d172e6ce66ac73f46c619"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/observed-effective-scores.npy",
+            "sha256": "15c1bf195e25cb19e690a1d99e47a230875813f777d27fb321aa682925ce11b3"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/observed-witnesses.json",
+            "sha256": "0771b1f79323cb4a40c713f44c849ad4309bfb4afb45fc147abe29e6e14868c9"
+          },
+          {
+            "path": "experiments/records/two-rune-feedback-family/results.json",
+            "sha256": "fdd3edc8986b1c9991c86af8c608e5e35b514cf8ccb2db6da2858205c6a7a576"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/two-rune-feedback-family/family-score-screen.svg",
+          "caption": "Dots summarize the best score from each complete family search. Both frozen score rules remain unmet; known-input ranking sometimes chooses a different output than the complete true text."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Dukotah C1 feedback functions and source decoder",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/feedback.py"
+        },
+        {
+          "label": "Original restricted-primer sweep",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/sweep.py"
+        }
+      ],
+      "related": [
+        "public-multihistory-feedback",
+        "two-rune-primer-extension",
+        "feedback-opening-census"
+      ],
+      "materials": {
+        "summary": "Full observed scores, null page/label maxima, leading outputs and failed-control witnesses.",
+        "reuse": "Reconstruct the fixed search and inspect retained candidates.",
+        "limits": "Candidates are not plaintexts. Observed and reported null maxima are independently checked; full null-grid checking is sampled.",
+        "evidence": [
+          "experiments/records/two-rune-feedback-family/observed-effective-scores.npy",
+          "experiments/records/two-rune-feedback-family/results.json",
+          "experiments/records/two-rune-feedback-family/independent/final-receipt.json"
+        ]
+      },
+      "article": "# Two-rune feedback with every starting pair\n\nTrying every starting pair across seven fixed two-rune feedback functions produced no candidate above the preset English-score rules. But known-input checks also showed that the highest-scoring output is not always the complete true text. This is a bounded score-screening result, not a rejection of autokey ciphers.\n\n![Whole-family score screening and its known-input limit](experiments/records/two-rune-feedback-family/family-score-screen.svg)\n\nEach rule derives the next key value from the previous two recovered rune values, or from those values combined with the corresponding ciphertext values. Rune values here are alphabet indices 0–28, not the gematria primes; some functions then use their prime values. We tried all 841 ordered starting-key pairs on each of 55 nonempty LP2-00–55 pages. The first two output runes are omitted before GP-to-Latin expansion and English quadgram scoring. Empty LP2-50 supplies no rune stream.\n\n## What the search found\n\nThe best output was on [LP2-51](#/reader/lp2-51), using plaintext-history last-difference feedback, subtraction, forward order and starting values 9 and 16. Its score was -6.164, below the absolute −5.5 threshold. Its complete output contains 92 runes; the scored tail has 117 Latin quadgrams. It is a retained candidate, not an established reading.\n\nEvery shuffled control repeats the entire family search after independently shuffling the rune order within each page. Thirty-five of 49 whole-family maxima scored at least as highly as the manuscript. The strongest shuffled maximum was -5.830; the frozen rule also required a margin of 0.5 above that, making the combined gate -5.330. No candidate passed. These are whole-family comparisons, not separate probabilities for each branch or a general significance claim.\n\n## What the known-input controls do and do not show\n\nThe two known passages were the original source control and the separately documented Warning reading. Across three unequal starting pairs and all branch labels, all 336 supplied true keys recovered their text exactly and scored above −5.5. The complete search selected the whole true output in 264 of those constructed cases. The unique-truth-first diagnostic passed 216; another 88 had tied maxima without a better alternative, and 32 had a higher-scoring alternative.\n\nAll 88 tied cases retained the true scored tail under the deterministic selected output. Forty changed only the two unscored starting positions. The higher-scoring alternatives changed scored positions too. Every failure is retained. These counts reuse only two passages and dependent directions/aliases; they are not 336 independent language samples. A passing score does not establish exact recovery or a decipherment.\n\nThe imperfect identification diagnostic was recorded before target scoring. A separate purpose amendment authorized the fixed score-screening enumeration with those limits intact. No branch, control text, scorer or threshold was replaced to obtain an easier pass.\n\n## Scope, overlap and exact duplicates\n\nThe seven source functions are sum, prime-value sum, XOR, prime-of-sum, prime-of-prime-sum, last difference and alternating sum. Plaintext and mixed histories, both signs and both input directions give 56 labels. At two-rune history, last difference and alternating sum duplicate one another after sign reversal and negating both starting-key values. Exhaustive pair tables and source parity establish 48 effective branches; the original labels and stable tie order remain visible.\n\nThe grid contains 2,590,280 labelled settings, representing 2,220,240 effective settings. The [original restricted-primer search](#/experiments/public-multihistory-feedback) already covers the equal-start cases; the [single-rule primer extension](#/experiments/two-rune-primer-extension) adds one unequal-start branch. Their union overlaps 133,980 labelled settings here. The additional scope is 2,456,300 labelled settings, or 2,099,020 effective settings. Settings are not counted as distinct solving ideas. Every branch was recomputed uniformly; no prior scores or null panels were reused.\n\nOther history lengths, functions, boundaries, skips, alphabets and language models remain outside this experiment. The previous restricted-seed result for three-rune plaintext/mixed history is not repaired by a two-rune extension.\n\n## Check or repeat the calculation\n\nThe complete observed effective score matrix, per-page/per-label maxima for all 49 shuffled searches, top 40 observed outputs, per-label best outputs, global shuffled witnesses, exact inputs and source hashes are retained. The original producer took 417.3 seconds. A separate checker uses direct formulas and raw-table language scoring; it reconstructs the whole observed matrix and all retained null maxima. Its full null-grid reconstruction is explicitly sampled, rather than a second calculation of every discarded shuffled candidate.\n\nFrom the extracted bundle root:\n\n```text\npython experiments/records/two-rune-feedback-family/quick_verify.py\npython experiments/records/two-rune-feedback-family/replay.py\npython experiments/records/two-rune-feedback-family/plot.py --check\n```\n\nThe quick check validates saved bytes, matching shuffled inputs, alias ordering and gate arithmetic without running decoding searches. Full replay stages a fresh temporary directory, reruns all original control outcomes and the complete target plus 49 whole-family searches, checks independent formulas, and compares deterministic values and exact numeric bytes. Expected results stay unchanged. Runtime may vary.\n\nThe recorded environment is Python 3.12.10, NumPy 2.5.4 and Numba 0.67.0. Package pins are provided separately; scripts install nothing and make no network or model calls. Source code and source scoring inputs are from Dukotah/cicada3301 revision `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`. The exact source license is bundled; its MIT grant for original work excludes third-party puzzle material and community transcriptions.\n",
+      "article_path": "experiments/records/two-rune-feedback-family/article.md",
+      "script_sha256": "5af09e930fb584d08953a2f23ac8c008a76c3872795da56219dd925d9bfb0b0b",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      },
+      "method_topics": [
+        {
+          "id": "feedback",
+          "title": "Autokey and ciphertext feedback",
+          "aliases": [
+            "autokey",
+            "feedback",
+            "ciphertext feedback",
+            "plaintext autokey"
+          ]
+        }
+      ]
+    },
+    {
       "id": "two-rune-primer-extension",
       "status": "published",
       "title": "All two-rune starts for one feedback rule",
@@ -83969,6 +84365,7 @@
       "finding": "The full 46,255-case grid has best score −6.504483411536969 on LP2-49 with primer [11,8], below −5.5. The 1,595 overlapping diagonal cases have best −6.557488304189059; 44,660 off-diagonal cases extend the baseline. No candidate meets score >= max(−5.5, largest 49-shuffle maximum + 0.5). Forty of 49 whole-search shuffled maxima are at least the observed maximum. All six controls (two texts × three primers) recover completely and rank uniquely first among 841; native-source control parity and independent all-target scores and decodes match exactly.",
       "reader_finding": "Unequal starts improved the best score slightly, but no candidate passed the fixed English-score gate. Forty of 49 shuffled searches scored at least as highly.",
       "reader_limit": "One two-rune plaintext-feedback rule and one English scorer only. The controls reuse two known passages; this does not exclude other autokey rules or plaintext languages.",
+      "bounds_note": "55 pages; all 841 ordered starting pairs; 49 complete shuffled searches.",
       "limitations": "Other six source functions, other history sources, k outside 2, sign +1, reversed/continuous/word-reset streams, skips, other alphabets or languages, broader autokey exclusion and plaintext identification. The six plants reuse two texts; 49 null searches do not establish a general probability. Independent checking reconstructs all 46,255 target outputs and scores and 49 null maximum witnesses, but not every nonwinning shuffled candidate. The manuscript maximum comes from a short 66-rune page.",
       "next_steps": "Inspect any concrete alternative recurrence or plaintext-language proposal under a separately frozen, control-validated scope; do not treat the finite score result as a whole-family exclusion.",
       "outcome": "not-supported",
@@ -84277,7 +84674,8 @@
       "related": [
         "public-multihistory-feedback",
         "feedback-opening-census",
-        "wulfic-autokey-seed-families"
+        "wulfic-autokey-seed-families",
+        "two-rune-feedback-family"
       ],
       "materials": {
         "summary": "Full observed/null score arrays, 55 page witnesses, 40 leading outputs and 49 null maximum witnesses.",

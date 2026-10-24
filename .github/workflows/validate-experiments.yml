@@ -105,9 +105,11 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_export_reproducibility.py
         if: steps.scope.outputs.science == 'true'
-      - run: python scripts/test_experiment_bundles.py
+      - run: python scripts/ci_experiment_bundles.py
         if: steps.scope.outputs.science == 'true'
       - run: python tests/test_experiment_bundle_selection.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python tests/test_bundle_ci_dispatch.py
         if: steps.scope.outputs.science == 'true'
       - run: python tests/test_prior_work.py
         if: steps.scope.outputs.science == 'true'
