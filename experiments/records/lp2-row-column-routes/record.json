@@ -76,7 +76,7 @@
       "lp2-55"
     ],
     "representation": "Keep every recognized rune including headings, grouped by archived source line. Ignore non-rune characters and lines with no runes. Retain original line and within-line rune positions. LP2-50 is retained as a zero-rune page, with no candidate routes. Left-align rune rows by within-row ordinal. Unequal row lengths remain unequal. Missing cells are skipped, not padded. Ordinal columns are not asserted to be physical image columns.",
-    "procedure": "Enumerate row-first and column-first routes, both outer directions, both initial inner directions, and constant/alternating inner direction. Preserve every source position and compare the first 12 output indices with nine fixed known openings.",
+    "procedure": "Enumerate 16 row-first and column-first routes, both outer directions, both initial inner directions, and constant/alternating inner direction. This includes reversing the rune order within every archived row while keeping the rows in their original order, on LP2-15 and every other rune-bearing target page (row-first, forward outer direction, reversed inner direction, no alternation). Preserve every source position and compare the first 12 output indices with nine fixed known openings.",
     "parameters": "16 route configurations per nonempty page; 55 nonempty pages; 880 cases; 7920 exact opening comparisons. No substitution or later-position search.",
     "exclusions": "Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions."
   },
@@ -425,6 +425,14 @@
     ],
     "evaluation": [
       "known-opening"
+    ]
+  },
+  "materials": {
+    "summary": "Saved results contain the complete rune-index output and source-position mapping for all 880 routes, including each-row reversal on LP2-15.",
+    "reuse": "Read output_indices using the saved alphabet; source_ordinals traces each output rune to its original line and rune position.",
+    "limits": "Non-rune characters are omitted. The opening comparison is limited to the nine fixed 12-rune readings; these candidate sequences are not established plaintext.",
+    "evidence": [
+      "experiments/records/lp2-row-column-routes/results.json"
     ]
   }
 }

@@ -23,7 +23,7 @@ Rows are left-aligned by rune ordinal, not by measured image coordinates. The fi
 
 The product is 2 × 2 × 2 × 2 = 16 parameter routes per nonempty page. Alternation begins with the selected initial direction and changes by visited-group ordinal, not by the original printed row number. Some routes or output strings can coincide; 16 is a parameter count, not a claim of 16 distinct texts on every page.
 
-No substitution, fixed shift or repeating key is applied. A pure transposition uses every source position once and keeps its rune value.
+One of these routes reverses the runes within every archived row while keeping row order unchanged, including on [LP2-15](#/page/lp2-15). A schematic example is `ABC / DE → CBA / ED`, where `/` separates rows; these letters are invented, not manuscript text. Keeping rune values unchanged means their order may change; it does not mean their positions stay fixed. No substitution, fixed shift or repeating key is applied.
 
 ## Hand-checkable ragged-row controls
 

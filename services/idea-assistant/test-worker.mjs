@@ -112,11 +112,13 @@ let realCalls=0;
 const realHandler=createHandler(async()=>realDocs);
 const realEnv={...env,AI:{run:async(model,options)=>{
  realCalls++;
- const evidence=JSON.parse(options.messages[1].content).records;
+ const modelInput=JSON.parse(options.messages[1].content);
+ const evidence=modelInput.records,expectedDocs=Search.select(realDocs,modelInput.idea,[]);
  assert(evidence.length>=1&&evidence.length<=2);
- for(const source of evidence){
+ for(const [i,source] of evidence.entries()){
+  assert.equal(source.citation,i+1);
   assert.equal(source.kind,'experiment');
-  assert.equal(source.text,realDocs.find(d=>d.id===source.id).text,'Full evidence reaches the model unchanged');
+  assert.equal(source.text,expectedDocs[i].text,'Full evidence reaches the model unchanged');
  }
  return {choices:[{message:{content:'Mock comparison of the recorded scope [1].'}}]};
 }}};
@@ -169,9 +171,15 @@ let contextResponse=await contextHandler(confirmedRequest(compact,complete),cont
 assert.equal(contextResponse.status,200);
 assert.deepEqual((await contextResponse.json()).sources.map(d=>d.id),expectedSelection);
 assert.equal(contextMessages[0].idea,complete,'The complete confirmed wording reaches inference unchanged');
-assert.equal(contextMessages[0].records[0].id,'lp2-fibonacci-openings');
-for(const evidence of contextMessages[0].records){
- assert.equal(evidence.text,realDocs.find(d=>d.id===evidence.id).text);
+assert.equal(expectedSelection[0],'lp2-fibonacci-openings');
+for(const [i,evidence] of contextMessages[0].records.entries()){
+ const expected=realDocs.find(d=>d.id===expectedSelection[i]);
+ assert.equal(evidence.citation,i+1);
+ assert.equal(evidence.title,expected.title);
+ assert.equal(evidence.text,expected.text,'Complete findings, bounds and limits reach the model unchanged');
+ assert.equal(evidence.id,undefined,'Storage IDs are not answer-writing vocabulary');
+ assert.equal(evidence.href,undefined,'Citation navigation stays in the browser response');
+ assert.equal(evidence.excerpt,undefined,'Do not repeat a shortened finding beside full evidence');
 }
 contextResponse=await contextHandler(confirmedRequest(compact,complete),contextEnv);
 assert.equal((await contextResponse.json()).cached,true);
@@ -181,7 +189,7 @@ contextResponse=await contextHandler(confirmedRequest(compact,amended),contextEn
 assert.equal(contextResponse.status,200);await contextResponse.json();
 assert.equal(contextCalls,2,'Changed confirmed rules must invalidate an otherwise identical cache key');
 assert.equal(contextMessages[1].idea,amended);
-assert.deepEqual(contextMessages[1].records.map(d=>d.id),expectedSelection);
+assert.deepEqual(contextMessages[1].records,contextMessages[0].records);
 contextResponse=await contextHandler(confirmedRequest(compact,undefined),contextEnv);
 assert.equal(contextResponse.status,200);await contextResponse.json();
 assert.equal(contextCalls,3,'The legacy request does not inherit a different confirmed context');

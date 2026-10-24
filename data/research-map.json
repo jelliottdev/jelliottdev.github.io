@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "2521e7cbf2456af6c2412ca8adf337b58b71c249e6f7cfc8c382f527cddd223f",
+    "current_experiments_sha256": "4d0058a43ea1591ca5ee1ee7c1ad514a24eefc27b4e8408a2d0bc32b3ce66404",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -20515,16 +20515,19 @@
           "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
         ],
         "representation": "All 55 rune-bearing LP2-00–55 text pages as ragged, left-aligned source rows. The pinned 16-route trace is reused by the producer and rebuilt from structured page JSON by the checker.",
-        "procedure": "Score the full output of 16 pure row/column routes per page with canonical GP Latin quadgrams; compare the best eligible route with 256 maxima of complete 880-route searches on shared within-page rune shuffles.",
+        "procedure": "Score the full output of 16 pure row/column routes per page with canonical GP Latin quadgrams. This includes reversing the rune order within every archived row while keeping the rows in their original order, on LP2-15 and every other rune-bearing target page (row-first, forward outer direction, reversed inner direction, no alternation). Compare the best eligible route with 256 maxima of complete 880-route searches on shared within-page rune shuffles.",
         "parameters": "880 parameter routes, 848 with ≥100 English quadgrams; 256 shared full-route controls seeded 33017128–33017383; all 16 routes have exact inverse-permutation planted Welcome-reading controls.",
         "exclusions": "Physical image alignment, diagonals, rectangle padding, spirals, arbitrary permutations, across-page transposition, added substitutions, non-English output and claims about all historical attempts."
       },
       "outcome": "inconclusive",
       "href": "#/experiments/lp2-row-column-english",
-      "current_sha256": "696166b11f8da012cc7b0c7f893b6f417f08de0c6cd5f327ae9ab19f883245dc",
+      "current_sha256": "d19674504c00afe0859b81cebf7c99c99625c6e0b67cd5634b7c5439bf1e9608",
       "snapshot_sha256": "2a7d326cdede439e80a1d64e6de68da4fa0c3434b4279a3a1c8c0c7f94b431c0",
       "changed_fields": [
-        "discovery"
+        "article",
+        "discovery",
+        "materials",
+        "scope"
       ],
       "classification": "draft"
     },
@@ -20652,16 +20655,19 @@
           "lp2-55"
         ],
         "representation": "Keep every recognized rune including headings, grouped by archived source line. Ignore non-rune characters and lines with no runes. Retain original line and within-line rune positions. LP2-50 is retained as a zero-rune page, with no candidate routes. Left-align rune rows by within-row ordinal. Unequal row lengths remain unequal. Missing cells are skipped, not padded. Ordinal columns are not asserted to be physical image columns.",
-        "procedure": "Enumerate row-first and column-first routes, both outer directions, both initial inner directions, and constant/alternating inner direction. Preserve every source position and compare the first 12 output indices with nine fixed known openings.",
+        "procedure": "Enumerate 16 row-first and column-first routes, both outer directions, both initial inner directions, and constant/alternating inner direction. This includes reversing the rune order within every archived row while keeping the rows in their original order, on LP2-15 and every other rune-bearing target page (row-first, forward outer direction, reversed inner direction, no alternation). Preserve every source position and compare the first 12 output indices with nine fixed known openings.",
         "parameters": "16 route configurations per nonempty page; 55 nonempty pages; 880 cases; 7920 exact opening comparisons. No substitution or later-position search.",
         "exclusions": "Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions."
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-row-column-routes",
-      "current_sha256": "024a16e9a4cbb9fe14deeaca2f2fa59e5940eed2acd7325d7149ae43e9ca331b",
+      "current_sha256": "b262a6e4d16bcb64bd2b1536cb1f980d7910b3878d802c42eb3cd45116acb9b7",
       "snapshot_sha256": "c0db5ed419a33ab45ee51dca7343886a20b8da68146f8d26750963e82a43839f",
       "changed_fields": [
-        "discovery"
+        "article",
+        "discovery",
+        "materials",
+        "scope"
       ],
       "classification": "draft"
     },
@@ -21910,10 +21916,11 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-word-order-reversal",
-      "current_sha256": "bdaa027d8543a0974999e8a24b31661e7ec2799b4fa71a7bb4170b9a4c6fa22c",
+      "current_sha256": "a363d1d7bfd5226464c20a97913ee2b89bb1eadf0cc21cdaa26e5d5243b9e614",
       "snapshot_sha256": "3b3e62bfd30d35c98914eaee34ea1a24cb8fb35c521e8fe15cb4060b9a7b685d",
       "changed_fields": [
-        "discovery"
+        "discovery",
+        "variant"
       ],
       "classification": "draft"
     },
@@ -22047,10 +22054,11 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-word-reversal",
-      "current_sha256": "a004451d9d520386658c2295208854c3067f6f9c51b156e136d9bcfa59d7246e",
+      "current_sha256": "fdda903e9840bd4f44af7c91c0893ecddae46d778687ba35abd637b4ee2388f6",
       "snapshot_sha256": "4a9cd7306e4489400fff4754a7e8fc9907782658fcf64570a95c8c3b69a14798",
       "changed_fields": [
-        "discovery"
+        "discovery",
+        "variant"
       ],
       "classification": "draft"
     },

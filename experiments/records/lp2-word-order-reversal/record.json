@@ -30,7 +30,7 @@
       },
       {
         "field": "procedure",
-        "before": "Enumerate row-first and column-first routes, both outer directions, both initial inner directions, and constant/alternating inner direction. Preserve every source position and compare the first 12 output indices with nine fixed known openings.",
+        "before": "Enumerate 16 row-first and column-first routes, both outer directions, both initial inner directions, and constant/alternating inner direction. This includes reversing the rune order within every archived row while keeping the rows in their original order, on LP2-15 and every other rune-bearing target page (row-first, forward outer direction, reversed inner direction, no alternation). Preserve every source position and compare the first 12 output indices with nine fixed known openings.",
         "after": "Reverse the order of all segments across the complete page, then concatenate their runes without changing within-segment order. No within-segment reversal, alphabet substitution, heading removal or later-position search. Compare the first 12 output indices with nine fixed known beginnings.",
         "reason": "Reverse the complete page’s segment order while retaining forward order inside every segment."
       },

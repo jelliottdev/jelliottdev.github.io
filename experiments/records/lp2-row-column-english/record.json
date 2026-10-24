@@ -87,7 +87,7 @@
       "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
     ],
     "representation": "All 55 rune-bearing LP2-00–55 text pages as ragged, left-aligned source rows. The pinned 16-route trace is reused by the producer and rebuilt from structured page JSON by the checker.",
-    "procedure": "Score the full output of 16 pure row/column routes per page with canonical GP Latin quadgrams; compare the best eligible route with 256 maxima of complete 880-route searches on shared within-page rune shuffles.",
+    "procedure": "Score the full output of 16 pure row/column routes per page with canonical GP Latin quadgrams. This includes reversing the rune order within every archived row while keeping the rows in their original order, on LP2-15 and every other rune-bearing target page (row-first, forward outer direction, reversed inner direction, no alternation). Compare the best eligible route with 256 maxima of complete 880-route searches on shared within-page rune shuffles.",
     "parameters": "880 parameter routes, 848 with ≥100 English quadgrams; 256 shared full-route controls seeded 33017128–33017383; all 16 routes have exact inverse-permutation planted Welcome-reading controls.",
     "exclusions": "Physical image alignment, diagonals, rectangle padding, spirals, arbitrary permutations, across-page transposition, added substitutions, non-English output and claims about all historical attempts."
   },
@@ -625,6 +625,15 @@
     ],
     "evaluation": [
       "english-readability"
+    ]
+  },
+  "materials": {
+    "summary": "Saved results contain scores for all 880 routes and the complete best output. The earlier route trace retains every complete candidate output, including LP2-15 each-row reversal.",
+    "reuse": "Join observed_cases to the earlier results by page, axis, outer_reverse, inner_reverse and alternating to inspect the corresponding output_indices and source_ordinals.",
+    "limits": "Most English result entries store scores rather than candidate text; use the earlier trace for their complete rune output. The fixed English score is not a plaintext or language proof.",
+    "evidence": [
+      "experiments/records/lp2-row-column-english/results.json",
+      "experiments/records/lp2-row-column-routes/results.json"
     ]
   }
 }
