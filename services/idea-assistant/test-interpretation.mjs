@@ -1,0 +1,83 @@
+/* Proposed candidates are mocked untrusted JSON. No model/network calls. */
+import assert from 'node:assert/strict';
+import C from '../../claim-specification.js';
+import {SCHEMA,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft} from './interpretation.mjs';
+const copy=x=>JSON.parse(JSON.stringify(x));
+const at=(raw,quote,start=raw.indexOf(quote))=>({start,quote});
+const step=(raw,quote=raw,id='described_method',familyId=null)=>({id,familyId,source:at(raw,quote),parameters:{}});
+const candidate=(raw,steps=[step(raw)])=>({schema:SCHEMA,outcome:null,steps,scope:null,rules:{}});
+let groups=0;function test(name,fn){fn();groups++;console.log('PASS '+name);}
+test('exported bounded schema and prompt do not call or confirm anything',()=>{
+ assert.equal(JSON_SCHEMA.additionalProperties,false);assert(PROMPT.includes('must review and confirm'));assert(PROMPT.includes('negation'));assert.throws(()=>validateInput(''));assert.throws(()=>validateInput('x'.repeat(1501)));assert.equal(validateInput(' x '),' x ');
+ const raw='Use the supplied rule.',result=toDraft(raw,candidate(raw));assert.equal(result.draft.source.text,raw);assert.equal(result.draft.status,'draft');assert.equal(result.draft.confirmation,null);assert.equal(result.draft.execution,'not_run');assert.equal(result.requiresConfirmation,true);assert.equal(result.meaningVerified,false);
+});
+test('row paraphrases activate the same consequential existing boundary question',()=>{
+ for(const raw of ['Reverse each row on LP2-15, preserving word boundaries.','Try reversing rune order within each row on LP2-15, preserving word boundaries.']){
+  const p=candidate(raw,[step(raw,raw,'reverse_row_runes','transposition')]);p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,'preserving word boundaries')};p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};
+  const result=toDraft(raw,p);assert.equal(result.draft.method.value.operations[0].id,'reverse_row_runes');assert.equal(result.draft.rules.wordBoundaries.value,'preserve');assert.deepEqual(result.questions.map(q=>q.id),['word-boundary']);assert.equal(C.completeness(result.draft).researchReady,false);assert.equal(result.draft.source.text,raw);
+ }
+});
+test('digit versus value reversal stays distinct, with ambiguity reused from C.questions',()=>{
+ for(const raw of ['Reverse decimal digits of each prime value.','Try reversing the digits of each value.']){
+  const result=toDraft(raw,candidate(raw,[step(raw,raw,'reverse_value_digits')]));assert.equal(result.draft.method.value.operations[0].id,'reverse_value_digits');assert.equal(result.draft.rules.unmapped.status,'unspecified');assert.equal(result.draft.rules.representation.status,'unspecified');
+ }
+ const raw='Reverse prime values in each row.',result=toDraft(raw,candidate(raw,[step(raw,raw,'ambiguous_reversal')]));assert.deepEqual(result.questions.map(q=>q.id),['operation']);assert.equal(result.draft.unresolved[0].kind,'operation_ambiguity');
+ assert.throws(()=>validateCandidate(raw,candidate(raw,[step(raw,raw,'reverse_value_digits')])),/unsupported known-operation/);
+});
+test('compound order and opaque tails survive, reordered/overlapping quote claims fail',()=>{
+ const raw='Reverse each row then apply the supplied cipher with key "A B".',first='Reverse each row',tail='apply the supplied cipher with key "A B".';
+ const p=candidate(raw,[step(raw,first,'reverse_row_runes'),step(raw,tail)]);p.steps[1].parameters.key={value:'A B',source:at(raw,'key "A B"')};
+ const before=JSON.stringify(p),result=toDraft(raw,p),ops=result.draft.method.value.operations;
+ assert.deepEqual(ops.map(o=>o.sourceText),[first,tail]);assert.equal(ops[1].key,'A B');assert.equal(JSON.parse(ops[1].keyProvenance.refs[0]).quote,'key "A B"');assert(result.draft.rules.exceptionalCases.value.includes('then'));assert.equal(JSON.stringify(p),before);
+ const reordered=copy(p);reordered.steps.reverse();assert.throws(()=>validateCandidate(raw,reordered),/source order/);
+ const overlap=copy(p);overlap.steps[0]=step(raw,raw);assert.throws(()=>validateCandidate(raw,overlap),/overlap/);
+ const allKnown=copy(p);allKnown.steps=[step(raw,raw,'reverse_row_runes')];assert.throws(()=>validateCandidate(raw,allKnown),/unsupported known-operation/);
+});
+test('negation and conditional context cannot be discarded into a positive operation',()=>{
+ for(const raw of ['Do not reverse each row.','Reverse each row only if the key is supplied.','Unless it changes word order, reverse each row.','Never reverse each row; use another method.']){
+  const quote=raw.match(/reverse each row/i)[0];assert.throws(()=>validateCandidate(raw,candidate(raw,[step(raw,quote,'reverse_row_runes')])),/negated\/conditional/);
+  assert.throws(()=>validateCandidate(raw,candidate(raw,[step(raw,quote)])),/drops its negation/);
+  const whole=toDraft(raw,candidate(raw));assert.equal(whole.draft.method.value.operations[0].label,raw);assert.equal(whole.draft.method.value.operations[0].id,'described_method');
+ }
+ const raw='Do not preserve word boundaries.',p=candidate(raw,[]);p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,'preserve word boundaries')};assert.throws(()=>validateCandidate(raw,p),/drops its negation/);
+ const goal='I am not trying to solve LP2.',a=candidate(goal);a.outcome={id:'decipher',source:at(goal,'solve LP2')};assert.throws(()=>validateCandidate(goal,a),/negated\/conditional outcome/);a.outcome={id:'unclassified',source:at(goal,goal)};assert.equal(toDraft(goal,a).draft.aim.value.outcomeId,'unclassified');
+ const scope='not LP2-15',b=candidate(scope);b.scope={pages:['lp2-15'],passage:null,source:at(scope,'LP2-15')};assert.throws(()=>validateCandidate(scope,b),/conditional\/excluded/);b.scope={pages:null,passage:'LP2-15',source:at(scope,'LP2-15')};assert.throws(()=>validateCandidate(scope,b),/negation\/condition/);b.scope={pages:null,passage:scope,source:at(scope,scope)};assert.equal(toDraft(scope,b).draft.scope.value.description,scope);
+ const reset='Unless the word continues, reset the key at each word.',c=candidate(reset);c.rules.reset={status:'specified',value:'reset the key at each word',source:at(reset,'reset the key at each word')};assert.throws(()=>validateCandidate(reset,c),/drops its negation/);c.rules.reset={status:'specified',value:reset,source:at(reset,reset)};assert.equal(toDraft(reset,c).draft.rules.reset.value,reset);
+ const state='Search bounds are not unrestricted.',d=candidate(state);d.rules.searchBounds={status:'unrestricted',source:at(state,'unrestricted')};assert.throws(()=>validateCandidate(state,d),/negated rule state/);
+});
+test('uninterpreted source remains visible even when broad rule/scope quotes cover it',()=>{
+ const raw='On LP2-15 use key ABC; do not remove punctuation.',p=candidate(raw,[]);p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};p.rules.initialState={status:'specified',value:'key ABC',source:at(raw,'key ABC')};
+ const result=toDraft(raw,p);assert(result.draft.rules.exceptionalCases.value.includes('do not remove punctuation'));assert(result.uninterpreted.some(s=>s.quote.includes('do not remove punctuation')));assert.equal(result.draft.method.status,'unspecified');
+ const compound='Reverse each row then use a custom undefined transform.',q=candidate(compound,[step(compound,'Reverse each row','reverse_row_runes')]);const second=toDraft(compound,q);assert(second.draft.rules.exceptionalCases.value.includes('custom undefined transform'));assert.equal(second.draft.source.text,compound);
+ const broad='On LP2-15 use key ABC; preserve punctuation.',r=candidate(broad,[]);r.rules.initialState={status:'specified',value:'key ABC',source:at(broad,broad)};r.scope={pages:['lp2-15'],passage:null,source:at(broad,broad)};assert(toDraft(broad,r).draft.rules.exceptionalCases.value.includes('preserve punctuation'));
+});
+test('missing settings remain unknown; explicit literal rule values retain source provenance',()=>{
+ const raw='Use Vigenere with key ABC on LP2-15; reset the key at each word.',p=candidate(raw,[step(raw,'Use Vigenere with key ABC on LP2-15','described_method','polyalphabetic')]);p.steps[0].parameters.key={value:'ABC',source:at(raw,'key ABC')};p.rules.reset={status:'specified',value:'reset the key at each word',source:at(raw,'reset the key at each word')};p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};
+ const result=toDraft(raw,p);assert.equal(result.draft.rules.reset.value,'reset the key at each word');assert.equal(result.draft.rules.reset.provenance.kind,'proposed');assert.equal(result.draft.rules.inputVersion.status,'unspecified');assert.equal(result.draft.rules.evaluation.status,'unspecified');assert.equal(result.draft.aim.status,'unspecified');
+ const absent=toDraft('Use Vigenere.',candidate('Use Vigenere.'));assert(!Object.hasOwn(absent.draft.method.value.operations[0],'key'));assert.equal(absent.draft.rules.reset.status,'unspecified');
+});
+test('exact page holes/ranges and passage qualifiers never become fabricated whole pages',()=>{
+ const raw='Apply to LP2-15, LP2-17–18, lines 2–3.',p=candidate(raw);p.scope={pages:['lp2-15','lp2-17','lp2-18'],passage:'lines 2–3',source:at(raw,raw)};assert.deepEqual(toDraft(raw,p).draft.scope.value,{pages:['lp2-15','lp2-17','lp2-18'],description:'lines 2–3'});
+ const missing=copy(p);missing.scope.passage=null;assert.throws(()=>validateCandidate(raw,missing),/passage qualifier/);
+ const invented=copy(p);invented.scope.pages.push('lp2-16');assert.throws(()=>validateCandidate(raw,invented),/invented\/partial/);
+ const partial=copy(p);partial.scope.pages=['lp2-15'];assert.throws(()=>validateCandidate(raw,partial),/invented\/partial/);
+ const excluded='LP2-15–18 except LP2-16',q=candidate(excluded);q.scope={pages:['lp2-15','lp2-16','lp2-17','lp2-18'],passage:null,source:at(excluded,excluded)};assert.throws(()=>validateCandidate(excluded,q),/conditional\/excluded/);q.scope={pages:null,passage:excluded,source:at(excluded,excluded)};assert.equal(toDraft(excluded,q).draft.scope.value.description,excluded);
+});
+test('invented quotes, categories, parameters, values, states and derived claims rejected',()=>{
+ const raw='Use cipher with key "ABC".',valid=candidate(raw);valid.steps[0].parameters.key={value:'ABC',source:at(raw,'key "ABC"')};
+ const mutations=[p=>p.steps[0].source.quote='not in input',p=>p.steps[0].source.start=1,p=>p.steps[0].familyId='new-family',p=>p.steps[0].id='execute_code',p=>p.steps[0].parameters.modulus=29,p=>p.steps[0].parameters.key.value='AB',p=>p.steps[0].parameters.key.value='XYZ',p=>p.tags=['invented'],p=>p.outcome={id:'invented-goal',source:at(raw,raw)},p=>p.rules.reset={status:'specified',value:'page',source:at(raw,raw)},p=>p.rules.reset={status:'unrestricted',source:at(raw,raw)},p=>p.rules.reset={status:'not_applicable',source:at(raw,raw)},p=>p.confirmed=true];
+ for(const mutate of mutations){const p=copy(valid);mutate(p);assert.throws(()=>validateCandidate(raw,p));}
+ let invoked=false;const accessor={};Object.defineProperty(accessor,'schema',{enumerable:true,get(){invoked=true;return SCHEMA;}});assert.throws(()=>validateCandidate(raw,accessor));assert.equal(invoked,false);
+ const accessorArray=copy(valid);Object.defineProperty(accessorArray.steps,'0',{get(){invoked=true;return valid.steps[0];}});assert.throws(()=>validateCandidate(raw,accessorArray));assert.equal(invoked,false);
+ assert.throws(()=>validateCandidate(raw,'x'.repeat(24001)),/candidate size/);
+});
+test('repeated quotes require explicit occurrence offsets and cannot reassign key evidence',()=>{
+ const raw='Use key ABC then use key ABC.',p=candidate(raw,[step(raw,'Use key ABC'),{...step(raw,'use key ABC.'),source:at(raw,'use key ABC.',17)}]);
+ // The lower-case second step starts at the actual source offset, not the
+ // first matching key token. Each key's occurrence belongs to its own step.
+ p.steps[1].source.start=raw.indexOf('use key');p.steps[1].parameters.key={value:'ABC',source:at(raw,'key ABC',raw.lastIndexOf('key ABC'))};assert.equal(validateCandidate(raw,p).steps.length,2);
+ p.steps[1].parameters.key.source.start=raw.indexOf('key ABC');assert.throws(()=>validateCandidate(raw,p),/invented\/unsupported key/);
+ const repeated='Reverse each row. Reverse each row.',q=candidate(repeated,[step(repeated,'Reverse each row.','reverse_row_runes'),{...step(repeated,'Reverse each row.','reverse_row_runes'),source:at(repeated,'Reverse each row.',18)}]);assert.equal(validateCandidate(repeated,q).steps[1].source.start,18);
+ q.steps[1].source.start=0;assert.throws(()=>validateCandidate(repeated,q),/overlap/);
+});
+console.log('PASS '+groups+' proposed interpretation groups; no model/network/execution/confirmation');

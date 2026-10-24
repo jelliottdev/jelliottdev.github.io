@@ -177,41 +177,46 @@ without unknown-state JSON scaffolding. It is a discovery query, not the full
 meaning of the confirmed idea. Tests against actual registry records preserve
 the original top two results for Fibonacci, Hill and language-comparison queries.
 
-The standalone interface sends `{query: compactQuery, confirmedQuery: fullQuery,
-pages}`. Its compact discovery query is limited to 1,500 characters and the full
-confirmed query to 6,000, matching the accompanying Worker adaptation. Both are
-derived from the same immutable snapshot, and stale responses are discarded.
-The server sees explicit confirmed wording, not a validated confirmed object;
-do not claim server enforcement of confirmation. The page parameter cap is
-**two**. Never slice a larger exact
-set: either explicitly support it in the service or omit the optional page hint
-as a whole while retaining the full scope in the untruncated query. The latter
-only preserves lexical context, not a structured page-coverage guarantee.
+With `data/assistant.json.researchContract = "card-v1"`, the standalone interface
+sends `{version:1, card, originalIdea?}` through `claim-research.js`. The card is
+the active `ClaimShare.cardData` format: outcome, ordered operations and their
+parameters, complete scope, all rule states, and unresolved constraints. The
+server validates this structure and derives both retrieval and model context.
+Caller-supplied query/page overrides are rejected. This validates data, not proof
+that a human clicked Confirm or that an interpretation is semantically correct.
 
-Future server contract adaptation:
+All selected manuscript pages (up to the complete 75-image collection) remain
+explicit. Page IDs are separate retrieval hints rather than repetitive ranking
+text. Passage qualifiers, non-page targets, missing values and literal method
+parameters remain intact; page membership still does not prove executed coverage.
+Structured parameter values participate in retrieval even when a short operation
+label does not mention them. No procedure-equivalence inference is made.
 
-1. Accept a versioned confirmed snapshot, validate bounded JSON and schema with
-   `validateConfirmed`, and derive the research query server-side. Raise the
-   current 32,000-byte body / 1,500-character discovery query / 6,000-character context limits only through an explicit
-   bounded request-budget decision; do not truncate snapshots.
-2. Preserve exact selected page sets, unknowns, non-page targets and positional
-   selections. Current `readQuery()` only accepts query + at most two page IDs;
-   it cannot receive this richer claim unchanged.
-3. Keep retrieval as candidate discovery. Current `experimentDocs` preserves
-   full scope, family, variant, finding and limitations, but these are not a
-   machine-verified executed-configuration relation. Include record type and
-   exact source fields in the prompt; ask for difference-first bounded findings.
-4. Cache on prompt/model version, exact confirmed binding and exact selected
-   evidence. Return the claim binding with every response. Query-only identity
-   is insufficient when source provenance/revision or consequential fields differ.
-5. Bind reviewed answers with `bindResearch(snapshot,{id,at,evidence,answer,
-   openQuestions,proposedTests})`, using actual published records including scope,
-   finding and limitations and a registry snapshot ID/hash. It preserves the
-   full evidence and marks proposed tests `not_run`. It does not generate claims.
-   Snapshot dates are caller-supplied; use exact registry content hashes.
-6. `packetSnapshot(snapshot,result)` rejects a mismatched revision/binding and
-   serializes the same confirmed claim/evidence/answer. Printing must render this
-   object, never make a second model call or strengthen its conclusions.
+The original human wording is separate and exact. Imported share-link summaries
+are not passed off as original wording. Edit history, material metadata and prior
+results are not active card fields; this route does not analyze attached files.
+Limits remain 12,000 card bytes, 32,000 request bytes, 1,500 discovery characters
+and 6,000 model-context characters. An 8,000-character original-text ceiling is
+also checked, subject to the stricter combined context limit. Nothing is silently
+truncated. Nonempty unresolved constraints still block comparison under the claim
+model's existing readiness policy.
+
+`ClaimResearch.binding(request)` hashes the canonical active card and supplied
+original wording. Every accepted-card response, including no-match and cached
+responses, echoes this SHA-256 binding. The browser verifies it before displaying
+findings or a no-match conclusion. Cache identity includes that binding, model and
+prompt version, derived queries, exact page hints and complete selected evidence.
+The full client confirmation revision remains separately bound to the print packet.
+
+The legacy `{query, confirmedQuery?, pages}` API remains available to old clients;
+its two-page optional hint limit is unchanged. It does not offer card validation
+or response binding. Deploy the updated Worker before enabling the new config.
+
+`bindResearch` retains the exact local confirmation and published evidence;
+`packetSnapshot` rejects a mismatched revision. Printing reuses this packet and
+never makes a second model call. Retrieval remains candidate discovery: full
+record evidence is preserved, but prose scopes do not form an automatic proof of
+containment, equivalence, novelty or exhaustion.
 
 There are 321 published records at this review. Every record has `scope.pages`,
 `representation`, `procedure`, `parameters`, `exclusions`; 212 have `artifacts`.
@@ -309,3 +314,14 @@ It leaves gaps and release changes explicit and never changes the confirmed
 page array. An unrelated interpretation edit preserves a custom passage scope.
 Additional tests cover no-match findings/packet/printing and edit restoration,
 and ensure generic aim wording does not derail strong technique retrieval.
+
+### Proposed interpretation foundation
+
+`services/idea-assistant/interpretation.mjs` defines an offline validator and draft
+adapter for proposed interpretations. It is not connected to a model endpoint or
+the public interface yet. Each extracted field cites an exact source substring;
+controlled categories, ordered operations and literal keys are checked before a
+draft can be proposed. Missing values remain unknown and uncovered wording stays
+visible. Negated or conditional instructions cannot be reduced to positive
+operations. These checks establish provenance and structural consistency, not
+semantic correctness; every returned draft still requires user confirmation.

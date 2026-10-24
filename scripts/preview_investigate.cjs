@@ -3,9 +3,9 @@
 'use strict';
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
-const qa=`window.__investigateMock=async function(url,options){
+const qa=`window.__investigateMockCore=async function(url,options){
  const proposalMode=new URLSearchParams(location.search).get('qa');
- if(url==='data/assistant.json'&&proposalMode?.startsWith('intake-'))return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals'});
+ if(url==='data/assistant.json')return Response.json({endpoint:'https://mock.example/ask',researchContract:'card-v1',proposalEndpoint:proposalMode?.startsWith('intake-')?'https://mock.example/proposals':null});
  if(url==='https://mock.example/proposals'&&proposalMode==='intake-error')return Response.json({error:'Mock-only save unavailable'},{status:503});
  if(url==='https://mock.example/proposals')return Response.json({id:'p_'+'c'.repeat(64),status:'received',receivedAt:new Date().toISOString()});
  if(!String(url).startsWith('https://'))return fetch(url,options);
@@ -14,12 +14,19 @@ const qa=`window.__investigateMock=async function(url,options){
  if(mode==='empty')return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  if(mode==='delay')await new Promise((resolve,reject)=>{let t=setTimeout(resolve,10000);options.signal.addEventListener('abort',()=>{clearTimeout(t);reject(new DOMException('Canceled','AbortError'));});});
  const registry=await (await fetch('data/experiments.json')).json();
- const request=JSON.parse(options.body),docs=AssistantSearch.experimentDocs(registry.records);
+ const raw=JSON.parse(options.body),request=raw.version===1?ClaimResearch.validate(raw):raw,docs=AssistantSearch.experimentDocs(registry.records);
  const selected=AssistantSearch.select(docs,request.query,request.pages).filter(d=>d.kind==='experiment').slice(0,1);
  if(!selected.length)return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  const record=registry.records.find(r=>r.id===selected[0].id);
  if(mode==='changed')selected[0].text+=' changed';
  return Response.json({answer:(record.reader_finding||record.finding)+' [1].\\n\\n'+(record.reader_limit||record.limitations)+' [1].',sources:selected});
+};
+window.__investigateMock=async function(url,options){
+ const response=await window.__investigateMockCore(url,options);
+ if(url==='https://mock.example/ask'&&JSON.parse(options.body).version===1){
+  const payload=await response.json();return Response.json({...payload,claimBinding:await ClaimResearch.binding(JSON.parse(options.body))},{status:response.status});
+ }
+ return response;
 };`;
 http.createServer((req,res)=>{
  const url=new URL(req.url,'http://localhost');

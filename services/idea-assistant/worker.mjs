@@ -1,5 +1,6 @@
 /* The AI binding supplies inference access; no provider key or secret is required. */
 import AssistantSearch from '../../assistant-search.js';
+import ClaimResearch from '../../claim-research.js';
 import {handleProposal} from './proposals.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
@@ -52,6 +53,11 @@ async function readQuery(request) {
   let offset = 0;
   for (const chunk of chunks) {bytes.set(chunk, offset); offset += chunk.length;}
   const data = JSON.parse(new TextDecoder().decode(bytes));
+  if (data && Object.prototype.hasOwnProperty.call(data,'version')) {
+    const validated=ClaimResearch.validate(data);
+    return {query:validated.query,confirmedQuery:validated.confirmedQuery,pages:validated.pages,
+      claimBinding:await ClaimResearch.binding(validated.request)};
+  }
   if (typeof data.query !== 'string' || !data.query.trim() || data.query.length > 1500) throw Error('Invalid query');
   const confirmedQuery=data.confirmedQuery;
   if(confirmedQuery!==undefined&&(typeof confirmedQuery!=='string'||!confirmedQuery.trim()||confirmedQuery.length>6000))throw Error('Invalid confirmed idea');
@@ -72,11 +78,12 @@ export function createHandler(loadRecords = records) {
   let coolingUntil=0;
   const remember=(key,data)=>{if(memory.size>=100)memory.delete(memory.keys().next().value);memory.set(key,{data,until:Date.now()+3600000});};
   return async function handle(request, env, ctx) {
+    let claimBinding;
     const origin = request.headers.get('Origin');
     const allowed = env.SITE_ORIGIN || 'https://jelliottdev.github.io';
     const headers = {'Content-Type':'application/json', 'Cache-Control':'no-store', 'Vary':'Origin'};
     if (origin === allowed) headers['Access-Control-Allow-Origin'] = allowed;
-    const reply = (data, status = 200) => Response.json(data, {status, headers});
+    const reply = (data, status = 200) => Response.json(claimBinding?{...data,claimBinding}:data, {status, headers});
     if (new URL(request.url).pathname !== '/ask') return reply({error:'Not found'},404);
     if (origin !== allowed) return reply({error:'Origin not allowed'},403);
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...headers,
@@ -84,7 +91,7 @@ export function createHandler(loadRecords = records) {
       'Access-Control-Max-Age':'86400'}});
     if (request.method !== 'POST') return reply({error:'Use POST'},405);
     let query,pages,confirmedQuery;
-    try {({query,pages,confirmedQuery} = await readQuery(request));} catch {return reply({error:'Enter a question of up to 1,500 characters and at most two page IDs.'},400);}
+    try {({query,pages,confirmedQuery,claimBinding} = await readQuery(request));} catch {return reply({error:'The idea could not be read within the comparison limits. Review its wording and try again.'},400);}
     try {
       if (!env.IDEA_LIMIT || !env.AI) return reply({error:'Assistant is not configured.'},503);
       const {success} = await env.IDEA_LIMIT.limit({key:request.headers.get('CF-Connecting-IP') || 'unknown'});
@@ -99,7 +106,7 @@ export function createHandler(loadRecords = records) {
       if (!selected.length) return reply({answer:null, sources:[], reason:'no-matching-records'});
       const context = JSON.stringify(selected);
       // Exact normalized query + exact evidence + prompt version prevent stale reuse.
-      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(['research-v10-shared-outcomes',MODEL,query,confirmedQuery||query,pages,selected])));
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(['research-v11-validated-card',MODEL,claimBinding||null,query,confirmedQuery||query,pages,selected])));
       const key=[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
       const cacheRequest=new Request(new URL('/answer-cache/'+key,request.url));
       const edge=globalThis.caches?.default;

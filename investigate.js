@@ -5,6 +5,7 @@
  const M=typeof module!=='undefined'?require('./assistant-markdown.js'):root.AssistantMarkdown;
  const S=typeof module!=='undefined'?require('./assistant-search.js'):root.AssistantSearch;
  const H=typeof module!=='undefined'?require('./claim-share.js'):root.ClaimShare;
+ const R=typeof module!=='undefined'?require('./claim-research.js'):root.ClaimResearch;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -194,12 +195,19 @@
   if(!citations.length||citations.some(n=>n<1||n>data.sources.length))throw Error('The comparison could not be checked against its sources.');
   return {answer:data.answer,sources:data.sources.map(s=>knownDocuments.find(d=>d.id===s.id&&d.href===s.href)),cached:Boolean(data.cached)};
  }
+ function operationDetails(operation){
+  if(!operation)return '';
+  const entries=Object.entries(operation).filter(([key])=>!['id','label','sourceText','provenance','editHistory','declaredFamilyId'].includes(key)&&!(key==='familyId'&&operation.id==='family_selection'));
+  if(!entries.length)return '';
+  const label=key=>key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
+  return '<dl class="method-parameters">'+entries.map(([key,value])=>'<div><dt>'+esc(label(key))+'</dt><dd>'+esc(typeof value==='string'?value:JSON.stringify(value))+'</dd></div>').join('')+'</dl>';
+ }
  function rowsHTML(spec){return '<dl>'+C.reviewRows(spec).filter(r=>r.label!=='Unresolved'&&(r.tags||[]).length).map(r=>{
   const originalTags=r.label==='Scope'&&spec.scope.status==='specified'?r.tags.map(t=>t.id==='scope:description'?{...t,text:spec.scope.value.description}:t):r.tags;
   const tags=r.label==='Scope'&&spec.scope.status==='specified'&&spec.scope.value.pages?[...compactPages(spec.scope.value.pages),...originalTags.filter(t=>!/^lp[12]-\d{2}$/.test(t.id))]:originalTags;
   const label=r.label==='Aim'?'Outcome':r.label==='Rules'?'Bounds & rules':r.label;
   let content;
-  if(r.label==='Method')content=tags.length>1?'<ol class="method-steps">'+tags.map(t=>'<li>'+esc(t.text)+'</li>').join('')+'</ol>':'<p class="method-wording">'+esc(tags[0].text)+'</p>';
+  if(r.label==='Method')content=tags.length>1?'<ol class="method-steps">'+tags.map((t,i)=>'<li>'+esc(t.text)+operationDetails(spec.method.value?.operations[i])+'</li>').join('')+'</ol>':'<div class="method-wording"><p>'+esc(tags[0].text)+'</p>'+operationDetails(spec.method.value?.operations[0])+'</div>';
   else content=tags.map(t=>'<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(t.text)+'</span>').join('');
   if(r.label==='Aim'&&spec.aim.status==='specified'){
    const outcome=C.normalizeOutcome(spec.aim.value),detail=outcome.detail||outcome.wording;
@@ -209,7 +217,7 @@
   if(r.label==='Aim'&&spec.aim.status!=='specified')content='<span class="tag unknown">Outcome undecided</span>';
   if(r.label==='Method'){const families=C.classifyMethod(spec.method).familyIds;if(tags.length===1&&families.some(id=>C.METHOD_FAMILIES[id]===tags[0].text))content='';content=families.map(id=>'<span class="tag">'+esc(C.METHOD_FAMILIES[id])+'</span>').join('')+content;}
   return '<div class="tag-row"><dt>'+esc(label)+'</dt><dd>'+content+'</dd></div>';
- }).join('')+'</dl>';}
+ }).join('')+(spec.unresolved.length?'<div class="tag-row"><dt>Other details</dt><dd class="unresolved-details">'+spec.unresolved.map(item=>{const value={...item};delete value.provenance;return '<p>'+esc(Object.keys(value).length===1&&typeof value.text==='string'?value.text:JSON.stringify(value))+'</p>';}).join('')+'</dd></div>':'')+'</dl>';}
  function methodText(spec){return C.reviewRows(spec).find(r=>r.label==='Method').tags.map(t=>t.text).join('; then ');}
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
  function sourceHTML(doc,records,full=false){
@@ -249,6 +257,7 @@
   let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
   let intakeEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
   let renderedResearchCard=null;
+  let cardContract=false;
   const fragment=doc.defaultView?.location?.hash||'';
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
@@ -387,7 +396,8 @@
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
    if(result)return '<h2>Findings</h2><div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="index.html#/research" target="_blank" rel="noopener">Browse the research index</a></p>')+controls+(result.noMatch?'':'<p class="small answer-note">AI comparison based on the linked records.</p>');
-   const q=C.retrievalQuery(confirmed),scope=C.queryForResearch(confirmed,{maxLength:6000}),related=q.query?S.select(documents,q.query,scope.pages||[]).filter(d=>d.kind==='experiment').slice(0,2):[];
+   let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
+   const related=q.query?S.select(documents,q.query,scope.pages||[]).filter(d=>d.kind==='experiment').slice(0,2):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records)).join(''):'');
   }
   function bind(){
@@ -438,8 +448,11 @@
    });
    doc.getElementById('confirm')?.addEventListener('click',()=>{
     try{if(draft.method.status!=='specified')throw Error('Choose a method before comparing prior tests.');if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
-     if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
-     if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
+     if(cardContract)R.prepare(confirmed);
+     else{
+      if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
+      if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
+     }
      stage='research';error='';message='';prepareCard();saveIntake(confirmed);compare();
     }catch(e){error=e.message;render();}
    });
@@ -468,6 +481,7 @@
     records=registry.records.filter(r=>r.status==='published');documents=S.experimentDocs(records);
     if(!records.length)throw Error('No published research records are available.');
     endpoint=typeof config.endpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ask$/.test(config.endpoint)?config.endpoint:null;
+    cardContract=config.researchContract==='card-v1';
     intakeEndpoint=typeof config.proposalEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/proposals$/.test(config.proposalEndpoint)?config.proposalEndpoint:null;
     const hash=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(registry)));
     registryId='sha256-json:'+Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
@@ -484,13 +498,19 @@
    stop();const token=generation,snapshot=confirmed;
    if(!snapshot)return;
    if(!endpoint){error='Automatic comparison is unavailable. The related records remain available.';render();return;}
-   const query=C.queryForResearch(snapshot,{maxLength:6000}),compact=C.retrievalQuery(snapshot);
+   let prepared,query,compact;
+   try{prepared=cardContract?R.prepare(snapshot):null;query=prepared?{query:prepared.confirmedQuery,pages:prepared.pages}:C.queryForResearch(snapshot,{maxLength:6000});compact=prepared?{query:prepared.query}:C.retrievalQuery(snapshot);}
+   catch(e){error=e.message;render();return;}
    if(!query.query||!compact.query){error='The confirmed wording cannot fit this comparison. Edit the idea before retrying.';render();return;}
    busy=true;message='';error='';render();const requestController=new AbortController();controller=requestController;
    const timer=schedule(()=>requestController.abort(),30000);
    try{
-    const data=await json(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:compact.query,confirmedQuery:query.query,pages:query.pages.length<=2?query.pages:[]}),signal:requestController.signal});
+    const expectedBinding=prepared?await R.binding(prepared.request):null;
     if(token!==generation||confirmed!==snapshot)return;
+    const body=prepared?prepared.request:{query:compact.query,confirmedQuery:query.query,pages:query.pages.length<=2?query.pages:[]};
+    const data=await json(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:requestController.signal});
+    if(token!==generation||confirmed!==snapshot)return;
+    if(expectedBinding&&data.claimBinding!==expectedBinding)throw Error('This response does not match your confirmed idea. Try the comparison again.');
     if(!data.answer&&data.reason==='no-matching-records'){
      const answer='No close research record was returned for this confirmed idea. The search covered the published research index; it does not establish that nobody has tried the idea.\n\nYou can edit the method wording or inspect the research index. Without a closer record, this comparison cannot judge what has already been tested or whether another run would add useful evidence.';
      const research=C.bindResearch(snapshot,{id:id(),at:now(),evidence:{snapshotId:registryId,records:[],documents:[],search:{query:compact.query,reason:data.reason}},answer});
