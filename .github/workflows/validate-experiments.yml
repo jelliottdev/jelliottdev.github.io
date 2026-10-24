@@ -152,7 +152,7 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_search_maximum_controls.py
         if: steps.scope.outputs.science == 'true'
-      - run: python scripts/check_experiment_authoring.py
+      - run: python scripts/check_experiment_authoring.py --github-event --fetch-base
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_authoring.py
         if: steps.scope.outputs.science == 'true'

@@ -1,6 +1,7 @@
 """Authoring policy and actual committed Git transition regression tests."""
 import importlib.util
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -15,6 +16,19 @@ spec.loader.exec_module(module)
 
 
 class AuthoringTests(unittest.TestCase):
+    def test_event_baselines(self):
+        sha = 'a' * 40
+        self.assertEqual(module.event_base('push', {'before': sha}), sha)
+        self.assertEqual(module.event_base('pull_request', {'pull_request': {'base': {'sha': sha}}}), sha)
+        self.assertEqual(module.event_base('push', {'before': '0' * 40}), 'HEAD^')
+        self.assertEqual(module.event_base('workflow_dispatch', {}), 'HEAD^')
+        for name, event in [('push', {}), ('push', {'before': '--help'}), ('push', {'before': 'a' * 39}),
+                            ('pull_request', {}), ('pull_request', {'pull_request': None}),
+                            ('pull_request', {'pull_request': {'base': []}}),
+                            ('pull_request', {'pull_request': {'base': {'sha': '0' * 40}}})]:
+            with self.subTest(name=name, event=event), self.assertRaises(ValueError):
+                module.event_base(name, event)
+
     def test_policy(self):
         v2 = {'schema': module.SCHEMA, 'status': 'draft'}
         for status in ('draft', 'published'):
@@ -65,6 +79,19 @@ class AuthoringTests(unittest.TestCase):
                 self.assertIn('records/' + name + '/record.json', rejected.stderr)
             self.assertNotIn('records/legacy/', rejected.stderr)
             self.assertNotIn('records/deleted/', rejected.stderr)
+            # A later unrelated commit must not conceal an earlier invalid record.
+            (root / 'wording.txt').write_text('Unrelated follow-up', encoding='utf-8')
+            commit()
+            self.assertEqual(run().returncode, 0)  # The old last-commit check misses it.
+            event_file = root / 'event.json'
+            for name, event in [('push', {'before': baseline}),
+                                ('pull_request', {'pull_request': {'base': {'sha': baseline}}})]:
+                event_file.write_text(json.dumps(event), encoding='utf-8')
+                env = dict(os.environ, GITHUB_EVENT_NAME=name, GITHUB_EVENT_PATH=str(event_file))
+                batch = subprocess.run([sys.executable, str(script), '--github-event'], env=env, capture_output=True, text=True)
+                self.assertNotEqual(batch.returncode, 0, batch.stdout)
+                self.assertIn('records/added/record.json', batch.stderr)
+            event_file.unlink()
             for name in ('draft', 'modern', 'added'):
                 write(name, {'schema': module.SCHEMA, 'status': 'published' if name != 'added' else 'draft'})
             commit()
@@ -76,6 +103,36 @@ class AuthoringTests(unittest.TestCase):
             self.assertEqual(run('--base', baseline).returncode, 0)
             self.assertNotEqual(run('--base', 'missing-ref').returncode, 0)
             self.assertNotEqual(run('--base', '--help').returncode, 0)
+
+    def test_shallow_baseline_fetch(self):
+        with tempfile.TemporaryDirectory(prefix='authoring-fetch-') as folder:
+            root = Path(folder)
+            source, checkout = root / 'source', root / 'checkout'
+            source.mkdir()
+            def git(where, *args):
+                return subprocess.run(['git', '-C', str(where), *args], capture_output=True, check=True).stdout.decode().strip()
+            git(source, 'init', '-q')
+            git(source, 'config', 'user.name', 'Test')
+            git(source, 'config', 'user.email', 'test@example.invalid')
+            (source / 'baseline.txt').write_text('baseline', encoding='utf-8')
+            git(source, 'add', '.'); git(source, 'commit', '-qm', 'baseline')
+            baseline = git(source, 'rev-parse', 'HEAD')
+            path = source / 'experiments/records/new/record.json'
+            path.parent.mkdir(parents=True)
+            path.write_text('{"status":"draft"}', encoding='utf-8')
+            git(source, 'add', '.'); git(source, 'commit', '-qm', 'invalid legacy addition')
+            (source / 'wording.txt').write_text('follow-up', encoding='utf-8')
+            git(source, 'add', '.'); git(source, 'commit', '-qm', 'unrelated')
+            subprocess.run(['git', 'clone', '-q', '--depth=1', source.as_uri(), str(checkout)], check=True, capture_output=True)
+            with self.assertRaises(ValueError):
+                module.check(checkout, baseline)
+            module.fetch_baseline(checkout, baseline)
+            count, errors = module.check(checkout, baseline)
+            self.assertEqual(count, 1)
+            self.assertTrue(any('New records' in error for error in errors))
+            # Once present, an unavailable origin must not trigger a needless fetch.
+            git(checkout, 'remote', 'set-url', 'origin', str(root / 'missing-origin'))
+            module.fetch_baseline(checkout, baseline)
 
 
 if __name__ == '__main__':

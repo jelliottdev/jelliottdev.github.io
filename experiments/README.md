@@ -61,6 +61,8 @@ Write the result once. The page, graph preview, search index, checker evidence a
 
 For quick wording and layout iteration, use `python scripts/build_research.py --preview`. It refreshes the record views and map without rebuilding downloads or the catalog. Run the full command once before publishing; a preview is not a release build.
 
+CI checks new-record authoring across the whole push or pull request, including batches of commits. It fetches only the comparison commit when the shallow checkout lacks it. Locally, `python scripts/check_experiment_authoring.py --base <commit>` checks a chosen batch; the default checks the last commit.
+
 For new-format records, changing status to `draft` removes the active index assignment and map leaf on the next build. Republishing restores them from the same record. Evidence files and the pinned historical map are retained. References from other published records still need explicit review; the build does not silently remove them.
 
 This command builds records, articles, checker data, downloads, the research map and its home preview in dependency order, then checks catalog hashes and map freshness. It does not run experiments, alter findings, commit or push. Batch related records into one build and release.

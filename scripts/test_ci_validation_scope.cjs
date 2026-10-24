@@ -55,6 +55,7 @@ test('actual checked-in registry/catalog allow app-only changes and workflow ret
  const root=path.resolve(__dirname,'..'),r=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json'),'utf8')),c=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8'));
  assert.equal(classifyChanges([entry('app.js')],r,c).science,false);assert.equal(classifyChanges([entry('home.js'),entry('scripts/test_home_preview.cjs')],r,c).science,false);
  const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');assert(workflow.includes('  workflow_dispatch:\n'));assert(workflow.includes('  validate:\n'));
+ assert(workflow.includes('python scripts/check_experiment_authoring.py --github-event --fetch-base'),'Authoring policy must check the full push/PR, including a shallow baseline fetch');
  const blocks=workflow.split('    steps:\n')[1].split(/(?=^      - )/m).filter(s=>s.startsWith('      - '));
  for(const b of blocks)assert((b.match(/^        if:/gm)||[]).length<=1,'Duplicate workflow condition makes YAML invalid: '+b.split('\n')[0]);
  const python=blocks.findIndex(s=>s.includes('actions/setup-python@'));assert(python>0);for(const [i,b]of blocks.entries()){if(/run: node\b/.test(b))assert(i<python,'Node check delayed behind science setup');if(/run: python\b|uses: actions\/setup-python@|git diff --exit-code/.test(b))assert(b.includes("if: steps.scope.outputs.science == 'true'"),'Science gate removed: '+b.split('\n')[0]);}
