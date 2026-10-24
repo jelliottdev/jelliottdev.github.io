@@ -1,0 +1,286 @@
+{
+  "scope": "Read-only reconciliation audit of authored wiki assertions against 321 published experiment records. No article changes, builds, staging or commits. Constellation matching remains unrun. Line-gaps skipped as parent-owned.",
+  "snapshot": {
+    "published_records": 321,
+    "registry_path": "data/experiments.json",
+    "registry_sha256": "46344036c4a5c4707f4d862a1806694b8781299211e38efa3564c5b7c6a3fd09"
+  },
+  "findings": [
+    {
+      "priority": 1,
+      "article": "articles/section-rune-counts.html",
+      "anchor_line": 51,
+      "article_sha256": "f281690d5a5626202160ab3120e9aec2bc6d0923188d80bc17210bc6a5a07175",
+      "current_text_excerpt": "needs a fixed symbol-level test and matched controls",
+      "why_update": "The equal-length arithmetic remains valid, but the separate claim that no fixed symbol-level alignment test/control exists is stale. Preserve the surrounding statement that no plaintext or intended key follows.",
+      "proposed_replacement_text": "Five specified subtraction variants of the 2,883-rune pairing have now been tested. The best whole-stream IoC was ordinary under complete five-variant shift and shuffle controls (about 0.320 and 0.342). This tests those alignments, not other operations or the original equal-length selection process.",
+      "experiment_ids": [
+        "spiral-branches-paired-subtraction"
+      ],
+      "evidence": [
+        {
+          "id": "spiral-branches-paired-subtraction",
+          "published_status": "published",
+          "finding": "Reverse-tail produces 287,504 ordered equal-symbol pairs out of 8,308,806, IoC 0.034602. The other four scores are lower. Complete-search control fractions are 922/2,883 ≈ 0.320 for circular shifts and 342/1,000 = 0.342 for within-page shuffles. No unusual IoC peak under either conditional comparison.",
+          "scope_parameters": "Five predeclared variants; 2,883 positions; 2,882 exhaustive shifts; 999 shuffles with random.Random seed 33012883. Include ties. Shift comparison (tail+1)/2883; shuffle estimate (tail+1)/1000. Threshold 0.05, considered separately for both controls.",
+          "record_sha256": "5157e822ad14018f5ebb502757df4aa14fc507f8f3faa984e415583c7de9aa86"
+        }
+      ],
+      "limits_to_preserve": [
+        "Five variants; 2,883 positions; 2,882 exhaustive shifts and999 shuffles.",
+        "Whole-stream IoC is not an English score; no plaintext recovered; controls do not correct the prior search over equal-length section choices."
+      ]
+    },
+    {
+      "priority": 2,
+      "article": "articles/method-compression.html",
+      "anchor_line": 21,
+      "article_sha256": "a877fcd68a51056160ea057f2e0e250b922fea0a64ba05723bfc505f018d76e6",
+      "current_text_excerpt": "No compressed-manuscript decoding experiment is linked yet.",
+      "why_update": "Direct complete-stream decompression is already a published controlled experiment. A present-tense no-test claim hides an executed bounded negative.",
+      "proposed_replacement_text": "The direct-rune compression experiment tried three fixed byte packings over 55 pages and their joined stream: 168 streams under five formats, 840 attempts. None completely decoded; valid, truncated, trailing-junk and output-limit controls passed. Unknown transforms, offsets, dictionaries and other formats remain outside this result.",
+      "experiment_ids": [
+        "rune-direct-compression"
+      ],
+      "evidence": [
+        {
+          "id": "rune-direct-compression",
+          "published_status": "published",
+          "finding": "All 840 format/stream attempts were invalid: zero complete decompressions among 168 fixed rune-to-byte streams under five formats. No attempt hit the 1 MiB output cap. Known compressed, truncated, trailing-junk and over-limit controls passed for every format; a synthetic rune-packed zlib stream also decoded correctly.",
+          "scope_parameters": "168 input streams × five formats = 840 attempts; output cap 1,048,576 bytes; no offsets. Synthetic valid, truncated, trailing-junk and over-limit controls for all five formats, plus one rune-packed zlib fixture.",
+          "record_sha256": "f4e94d20b7d4c5ce6603168bf433966eec641b2f5f4bc4a9ae230116b54abb93"
+        }
+      ],
+      "limits_to_preserve": [
+        "840 attempts, zero complete decompressions, no output cap reached.",
+        "Three fixed rune packings; byte-zero streams only; no inference about compression after an unknown cipher."
+      ]
+    },
+    {
+      "priority": 3,
+      "article": "articles/method-positional-extraction.html",
+      "anchor_line": 21,
+      "article_sha256": "063f80e286db1ccccd414e74442dbec4c47b8d30dc78604a92d81368def7c87c",
+      "current_text_excerpt": "No standalone stride or general grille-decoding experiment is linked here yet.",
+      "why_update": "The disjunction conflates an untested general grille with an already completed standalone stride search.",
+      "proposed_replacement_text": "A fixed-step extraction test now covers forward steps 2–29 at every phase under page-reset and joined clocks: 868 settings. Its best English score was exceeded or equalled by 182 of 256 matched full-search controls. Arbitrary grille masks, reverse routes and extra cipher layers remain untested.",
+      "experiment_ids": [
+        "fixed-step-position-extraction"
+      ],
+      "evidence": [
+        {
+          "id": "fixed-step-position-extraction",
+          "published_status": "published",
+          "finding": "The best setting was step 24, zero-based phase 2 with page resets: score −7.151 over 563 selected runes. In 182 of 256 shared page-shuffle full searches, the best setting scored at least as high (global add-one 183/257≈0.712).",
+          "scope_parameters": "868 settings (2 clocks × sum of p for p=2..29); all have ≥360 Latin quadgrams against a frozen 100-quad eligibility gate. Shared null seeds 33017121–33017376. Source-backed bound p≤29 uses GP alphabet size, without treating it as a detected period.",
+          "record_sha256": "fc54770bfb5a34f472d4521790aacf60a2598aa63f5b57035217d50df0d8fedf"
+        }
+      ],
+      "limits_to_preserve": [
+        "868 settings; all eligibility lengths pass; all868 planted controls recover and pass recognition.",
+        "Only forward steps2–29 and two clocks; not a general grille exclusion."
+      ]
+    },
+    {
+      "priority": 4,
+      "article": "articles/method-moving-alphabets.html",
+      "anchor_line": 18,
+      "article_sha256": "da0696433f9f320042cbdc9a9cb002e72bccc6686057e78b3d75a8ff9debd05c",
+      "current_text_excerpt": "No dedicated moving-alphabet experiment is linked yet.",
+      "why_update": "Published experiments explicitly execute evolving shifts and separator-stepped disks, rather than merely repeating-key or feedback proxies.",
+      "proposed_replacement_text": "Dedicated bounded tests now include every constant-rate page-local alphabet ramp (44,660 outputs, none above the English-score bar) and a separator-clock Alberti source replay. These preserve their own clocks, alphabets, parsing and controls; they do not settle general rotor wirings or solver-chosen stepping.",
+      "experiment_ids": [
+        "wholepage-progressive-caesar",
+        "wulfic-separator-clock-alberti"
+      ],
+      "evidence": [
+        {
+          "id": "wholepage-progressive-caesar",
+          "published_status": "published",
+          "finding": "All nine complete archived readings and all nine planted progressive-shift controls passed. None of 44,660 LP2 outputs reached the fixed −5.5 English threshold; the best scored −6.426. Seventy of 199 page-shuffled full-search controls had an equal or higher maximum.",
+          "scope_parameters": "812 nonconstant schedules, 55 pages, 44,660 candidate outputs; fixed English threshold −5.5; 200 shuffles per positive control and 199 complete-search null replicates.",
+          "record_sha256": "cf1a3bd17e679dc771cd3374651d3220f85ef4ebd0961b2f4479379c6d629f29"
+        },
+        {
+          "id": "wulfic-separator-clock-alberti",
+          "published_status": "published",
+          "finding": "Across eleven actual LP2 targets, all 1,682 distinct effective schedules per page yield zero outputs above the source's normalized-IoC 1.4 gate with either parser. The highest LP2 values are 1.164 (literal parser) and 1.159 (canonical correction). The source's twelfth named page is solved LP1-15; its literal parser yields two gated outputs but its corrected parser yields none. Eight known-reading plants recover and pass the gate; none of 49 whole-search page-shuffle controls passes either.",
+          "scope_parameters": "11 LP2 pages plus one solved LP1 source target; 2 parsers; 29 rune shifts × 29 separator shifts × 2 directions × 3 modes; 49 complete-search shuffles; seed 330123.",
+          "record_sha256": "bf0a93d6e7f179413a35918cacb6b1169e2e528fbfb82a9aa6c87ba46a8186d6"
+        }
+      ],
+      "limits_to_preserve": [
+        "Progressive:55 pages×812 schedules;70/199 shuffled full-search maxima at least as high.",
+        "Separator-clock:11 unsolved targets,1,682 distinct effective schedules/page, literal and corrected parsers; no LP2 output above its IoC gate.",
+        "The source parser omits canonical J; its corrected parser is a bounded new variant. No general rotor/external wiring exclusion."
+      ]
+    },
+    {
+      "priority": 5,
+      "article": "articles/method-blocks.html",
+      "anchor_line": 30,
+      "article_sha256": "061632a4a858ad191eb412d4f73b02f278a43a2cd0935e0e15580a9a7abec323",
+      "current_text_excerpt": "No completed experiment is linked to this family in the current catalog.",
+      "why_update": "A complete direct-Hill matrix-feasibility test is already in the family, with explicit algebraic coverage rather than only source scoring.",
+      "proposed_replacement_text": "The direct-Hill experiment checks invertible 2×2 and 3×3 matrices over F29 against nine fixed openings on all 55 nonempty pages: 990 complete-key feasibility cases, none satisfiable. Another record replays six book-derived matrices. These tests cover named blocks and origins, not arbitrary block ciphers.",
+      "experiment_ids": [
+        "direct-hill-key-feasibility",
+        "dukotah-book-matrix-hill"
+      ],
+      "evidence": [
+        {
+          "id": "direct-hill-key-feasibility",
+          "published_status": "published",
+          "finding": "Neither dimension two nor three admits an invertible direct block matrix for any of the 495 page-opening pairs. All 55 page starts have full ciphertext rank, so each candidate matrix is uniquely determined by its first independent blocks and fails on later blocks.",
+          "scope_parameters": "2 block dimensions × 55 page starts × 9 openings = 990 complete-key feasibility cases over F29.",
+          "record_sha256": "e61e2240de0d213e6b5898f04d9383cb3f589f85c36cd50acf631a5c823494ee"
+        },
+        {
+          "id": "dukotah-book-matrix-hill",
+          "published_status": "published",
+          "finding": "The best source result scores -6.873 versus a −5.0 flag; its one-cell-corrected 4×4 arm scores at best -6.907. Zero outputs in either grid cross the flag. The complete known-reading plant recovers for all 28 operations; 146/199 and 69/199 complete shuffled searches equal or exceed the respective observed maxima.",
+          "scope_parameters": "Six literal source matrices × four M/transpose/inverse/inverse-transpose operations × 56 targets = 1,344 outputs; one corrected 4×4 matrix × four operations × 56 targets = 224 outputs; modulus 29, block origin zero, final partial block dropped. The amended full-reading plant uses explicit zero padding removed after decoding.",
+          "record_sha256": "0ca3ff0459334a2cb1297baf03f9cbf9966e28aeccc55a11d2190e055d6a669e"
+        }
+      ],
+      "limits_to_preserve": [
+        "Direct Hill:2 dimensions×55 starts×9 cribs, no invertible direct matrix; ciphertext full-rank at all55 starts.",
+        "Other plaintexts, offsets, affine additions, changing matrices and transposition remain open.",
+        "Book-matrix source includes a miscopied LP2-15 cell; retain that record’s source/repair distinction."
+      ]
+    },
+    {
+      "priority": 6,
+      "article": "articles/method-fractionation.html",
+      "anchor_line": 20,
+      "article_sha256": "0fa969e3c7f9d32af380fff5a43c898955752a2a3dfb7d94898e815050180f2a",
+      "current_text_excerpt": "No completed experiment is linked to this family in the current catalog.",
+      "why_update": "There is a published controlled fractionation replay, but its source failure means the update must report an audited attempt rather than a general negative.",
+      "proposed_replacement_text": "The ADFGVX fractionation replay tests its declared keywords, page streams, splits, widths and coordinate shifts. Its archived inverse fails 476 of 588 planted round trips; a repaired inverse passes all 588. The few score-gated manuscript rows contain invalid grid cells, so none establishes a reading or excludes fractionation.",
+      "experiment_ids": [
+        "wulfic-adfgvx-fractionation"
+      ],
+      "evidence": [
+        {
+          "id": "wulfic-adfgvx-fractionation",
+          "published_status": "published",
+          "finding": "The source names 1,260 settings; its own length rule skips 336, and 2 of the remaining 924 cross its vocabulary-score gate. Its raw IoC is bounded by 1, so the IoC >1.3 gate cannot fire. A separately labeled exact inverse produces 2 score-gated rows among 588 settings. Every gated setting has invalid grid cells. The correction repairs a transposition inverse; it does not identify the manuscript cipher.",
+          "scope_parameters": "14 source keywords; six source-intended LP2 pages; split n/n−5/n+5/n//2/2n//3; widths 7,11,13,17,19,23,29; sub/add coordinate shifts.",
+          "record_sha256": "53dcc4faa61ba80739b12f161098b101def4440d372a647dfc18c362759ff182"
+        }
+      ],
+      "limits_to_preserve": [
+        "14 keywords,six source page streams,five splits,seven widths,two coordinate shifts.",
+        "1,260 named source settings;336 skipped by length rule;2/924 vocabulary-gated; source raw IoC>1.3 gate cannot fire because raw IoC≤1.",
+        "Repair is separately labelled; invalid-cell dropping and weak source gates prevent a broad cipher verdict."
+      ]
+    },
+    {
+      "priority": 7,
+      "article": "articles/method-homophonic.html",
+      "anchor_line": 40,
+      "article_sha256": "08ee4e67540dcd6d18d96c71b6b6a5c59bec67f280ba7d65d871e2758cddc0fb",
+      "current_text_excerpt": "No completed experiment is linked to this family in the current catalog.",
+      "why_update": "A bounded dedicated homophone model has been tested, although no general code-assignment recovery is established.",
+      "proposed_replacement_text": "A source replay tests a fixed even-choice homophone model: 29 ciphertext symbols allocated to 26 plaintext categories. Its best expected frequency mismatch is 4,802, compared with 26 observed and a source cutoff of 200. This rejects that proxy-based model, not uneven or contextual homophones or every many-to-one substitution.",
+      "experiment_ids": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "evidence": [
+        {
+          "id": "wulfic-letter-encoding-bounds",
+          "published_status": "published",
+          "finding": "The marker rule narrows 29 plaintext runes to NG, IA and EA by repeat count, then none survives the word-position check. In a separate fixed, even-choice homophone model, the optimal expected frequency mismatch is 4,802 versus 26 observed on LP2; the source cutoff is 200. Six targeted source tests pass and independent checks reconstruct the manuscript statistics and optimum.",
+          "scope_parameters": "C3: 12,947 adjacent opportunities, 86 doublets, count p<1e-6 and word-position LLR<=-10 exclusion gates. C15: 29 ciphertext symbols allocated to 26 used plaintext categories; 3,654 allocations including unused slots; even within-category choices; expected chi-square exclusion cutoff 200.",
+          "record_sha256": "f8fdbfe311544024d215ce8fbc585c8e5d639810500563319a9d1d0970f9af5d"
+        }
+      ],
+      "limits_to_preserve": [
+        "3,654 allocations including unused slots; source and independent optimum checks pass.",
+        "Dedicated ciphertext symbols, uniform choices within categories, and solved-reading frequency proxies are assumptions. No homophonic plaintext recovered."
+      ]
+    },
+    {
+      "priority": 8,
+      "article": "articles/method-acrostics.html",
+      "anchor_line": 19,
+      "article_sha256": "134ae11619f63d6ba24c000d071e3502c9276109102d78b99c0da5119f3442d1",
+      "current_text_excerpt": "No completed experiment is linked to this family in the current catalog.",
+      "why_update": "The placeholder contradicts both the family map and the detailed replay paragraph immediately below it. It should be replaced with a result/limit bridge, rather than another generic instruction to test acrostics.",
+      "proposed_replacement_text": "Published records include a 3,508-read decoded-text selection sweep and 48 line/word-boundary reads. None crosses the source final gate, but neither do its planted messages; these are reproducible reported attempts, not demonstrated exclusions of hidden acrostics. The separate line-initial study shows why line wrapping belongs in its comparison model.",
+      "experiment_ids": [
+        "solved-text-selection-source-gate",
+        "line-initial-layout-control"
+      ],
+      "evidence": [
+        {
+          "id": "solved-text-selection-source-gate",
+          "published_status": "published",
+          "finding": "The four planted examples clear their own length thresholds and all miss the final bars. The source therefore established that it can extract and score these planted reads, but not its claimed power to detect them at the threshold used for the manuscript. Its zero-hit result is a bounded report, not a control-validated exclusion.",
+          "scope_parameters": "R22-A: 1,754 selection functions for each of letter and rune streams (3,508); R23-A2: four read types × six scopes × two directions (48). Both use seed 3301 and 1,000 source null shuffles per distinct length.",
+          "record_sha256": "547947021d201865d11c3763b0acb2c40448133a07a940cbf76293208150d5ab"
+        },
+        {
+          "id": "line-initial-layout-control",
+          "published_status": "published",
+          "finding": "Independent parsing confirms 12,956 runes on 594 physical lines. The line-initial chi-square is 78.656 against a flat-null mean near 27, but a layout-aware reflow gives p=0.177 in the pinned source and p=0.195 in an independently seeded replay. The other nine position tests and five rejection tests do not clear their gate. Six English-reading families remain below their own best-of-family null maxima; planted controls are recovered. The layout-aware detector has 200/200 power in the two source-planted mechanisms when at least 60% of line initials are forced.",
+          "scope_parameters": "55 pages; 594 physical lines; 29 runes; source 200,000 Arm A and C null draws per applicable test; source 5,000 layout reflows plus 2,000 independent reflows; six Arm B families and 56,376 source candidate variants; family-specific null replicate counts recorded in replay-armB.json; 200 planted streams per mechanism/fraction and 2,000 synthetic null streams; per-test gate 0.001/21.",
+          "record_sha256": "2848e5b9b8f80eeef6a4bbc5b7773e9c55e5578a84f1c8a4035ece60b9e167c2"
+        }
+      ],
+      "limits_to_preserve": [
+        "Source selections are from known decoded text, not unsolved LP2; five source sections span ten LP1 images in source-specific order.",
+        "All four plants pass length-specific gates but fail the final acceptance threshold.",
+        "Line-start statistic78.66 becomes ordinary under modelled reflow:sourcep0.177,independentp0.195; this is a layout measurement, not a decoded message."
+      ]
+    },
+    {
+      "priority": 9,
+      "article": "articles/research-coverage.html",
+      "anchor_line": 28,
+      "article_sha256": "a340b972731152c11089c7acc6f0a7c1bc648c29a8063fe495e037c9724b1ca1",
+      "current_text_excerpt": "Running keys now have one narrow Emerson test",
+      "why_update": "The current coverage count is321 but this prose still describes the much earlier one-record running-key inventory. Prefer concrete new examples and their limits over a blanket claim that the family has been covered.",
+      "proposed_replacement_text": "Running-key records now include Emerson, two fixed Cypherpunk Manifesto conversions on three pages, and the joined solved-reading stream on 55 complete pages, each with explicit offset and sign rules and controls. None supplies independently confirmed LP2 plaintext; other texts, conversions and clocks remain open.",
+      "experiment_ids": [
+        "emerson-running-key",
+        "cypherpunk-manifesto-running-key",
+        "solved-reading-running-key"
+      ],
+      "evidence": [
+        {
+          "id": "emerson-running-key",
+          "published_status": "published",
+          "finding": "The synthetic LP1-06 plant is ranked first and recovers exactly at offset 3301. For the three LP2 pages, Emerson's selected-window scores are within the range of eight full-search shuffled-source maxima, with low held-out scores relative to the plant. LP2-54's holdout exceeds the eight shuffled holdouts but its selected window does not, and the finite controls do not support a general significance claim.",
+          "scope_parameters": "LP2-00, 31 and 54; 43,325 zero-based offsets per search; 96 selection plus 96 holdout runes; eight full-source shuffles with seeds 330100–330107; one fixed source, arithmetic direction, model and representation.",
+          "record_sha256": "974f41ffe0eaf7e957b5a4a90013f08d5cf17d255b5b76a6866f824ccb2776f4"
+        },
+        {
+          "id": "cypherpunk-manifesto-running-key",
+          "published_status": "published",
+          "finding": "For the A–Z mapping, respectively 13, 16 and 13 of 16 full-search shuffled maxima equalled or exceeded the source maximum on LP2-00, 31 and 54; for greedy GP mapping, 11, 14 and 9 of 16 did. Both positive-control searches rank the planted offset first and recover the complete LP1-04 reading.",
+          "scope_parameters": "Two named source mappings; LP2-00 (262 runes), LP2-31 (269), LP2-54 (232); 3,804–3,841 A–Z offsets and 3,625–3,662 GP offsets per page; 16 complete shuffled-key searches for every mapping/page; one fixed subtraction direction and scorer.",
+          "record_sha256": "664e4a0857f7441e5900c32b57e4cdb333c6db89984beb9c8a6873667ab8ba3f"
+        },
+        {
+          "id": "solved-reading-running-key",
+          "published_status": "published",
+          "finding": "Across 292,318 whole-page offset/sign alignments, the best English quadgram score was −5.897 on the 66-rune LP2-49. No one of 16 shuffled-key global maxima reached it (add-one estimate 1/17), but the output is not coherent English. Four later GP-encoded Emerson windows also scored below it.",
+          "scope_parameters": "55 complete pages; 292,318 observed page/offset/sign alignments, 16 complete shuffled-key grids (seeds 33017100–33017115), both arithmetic signs, four post-observation English GP-key windows.",
+          "record_sha256": "354a56b614a043cf927ed877c29975eddbb4d33780adfb2aeeca5253888f7f65"
+        }
+      ],
+      "limits_to_preserve": [
+        "Cypherpunk:three pages,two mappings,16 complete shuffled-key searches per pair; complete planted LP1 recovery passes.",
+        "Solved reading:292,318 whole-page alignments; best on66-rune LP2-49 is not coherent English;16 global shuffles are weak/coarse controls.",
+        "Do not turn these tests into a general running-key exclusion or infer an authenticated puzzle key."
+      ]
+    }
+  ],
+  "not_flagged_as_contradictions": [
+    "method-codebooks: structural repeat-preservation tests exist but do not establish a codebook-decoding attempt, so no forced replacement of that narrow wording.",
+    "method-constraints: published finite-constraint methods do not by themselves prove a SAT/SMT engine was run; no literal SAT/SMT coverage claim added.",
+    "dots constellation match remains unrun: candidate input preparation is not a dot-to-star test.",
+    "Tree segmentation/source-processing questions and third-party OutGuess extraction gaps were not converted into completed facts without exact experiment support."
+  ]
+}

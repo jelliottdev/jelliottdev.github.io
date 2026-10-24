@@ -24610,7 +24610,7 @@ Check the source and arithmetic
 
 Run python scripts/audit_section_rune_counts.py --check from the repository or from the extracted reference-data bundle. The Python script counts stored runes, splits only at explicit & markers, checks all 23 published CSV rows, verifies that every rune-bearing page is covered exactly once, and recalculates the six equations. Download its complete JSON for source hashes, page pieces and every operand. Run python scripts/check_section_rune_counts.py for an independent Unicode-block recount, then python scripts/plot_section_splits.py --check to verify the figure.
 
-These equalities were identified after exploring section combinations and choices to omit F. Their existence is reproducible, but there is no stated count of combinations searched, selected-beforehand prediction, or operation that turns the paired runes into plaintext. The separate 2,883-rune stream-alignment proposal still needs a fixed symbol-level test and matched controls. Equal lengths make such a test possible; they do not establish a key.
+These equalities were identified after exploring section combinations and choices to omit F. Their existence is reproducible, but there is no stated count of combinations searched, selected-beforehand prediction, or operation that turns the paired runes into plaintext. The 2,883-rune stream-alignment proposal now has a five-variant subtraction test. Its best rune-coincidence score did not stand out under two matched control comparisons. Other operations and the earlier selection of equal-length sections are outside that test; equal lengths do not establish a key.
 
 Sources, related references, and files
 - section-count spreadsheet
@@ -24631,6 +24631,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/section-rune-counts.json
 - 2,883-rune stream-alignment proposal
   https://jelliottdev.github.io/reference/articles/reported-attempts.html#spirals-branches-2883-alignment
+- five-variant subtraction test
+  https://jelliottdev.github.io/#/experiments/spiral-branches-paired-subtraction
 
 Article: https://jelliottdev.github.io/reference/articles/section-rune-counts.html
 
@@ -27764,13 +27766,15 @@ Test recovery on synthetic homophonic ciphertexts and on shuffled controls. Coun
 
 Documented experiments
 
-No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+A fixed homophone-model test assigned 29 ciphertext symbols to the 26 plaintext rune types found in solved readings, with equal use of each rune’s alternatives. Even its best allocation predicted much more uneven rune frequencies than the manuscript has. That model does not fit; the result depends on the solved readings representing the unknown plaintext and does not cover unequal choices, context-dependent mappings or extra cipher layers.
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
 - doublet measurements
   https://jelliottdev.github.io/reference/articles/doublets.html
+- fixed homophone-model test
+  https://jelliottdev.github.io/#/experiments/wulfic-letter-encoding-bounds
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -27828,7 +27832,9 @@ Check that encoding and decoding are inverses under the chosen scheme. Use known
 
 Documented experiments
 
-No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+An ADFGVX-style fractionation replay tried 14 fixed keywords on six source-selected LP2 page streams, without establishing a coherent reading. Its archived transposition inverse failed 476 of 588 planted round trips; a separately labeled repair recovered all 588. The repair fixes that reversal, not the manuscript cipher.
+
+The few outputs passing the vocabulary-score gate in either run contain invalid grid cells, which the source drops before scoring words. Another check required a repetition measure to exceed 1.3 even though its maximum is 1, so no output could pass it. These defects prevent a broad negative conclusion. The replay covers only its declared keywords, page streams, splits, widths and coordinate shifts; other fractionation rules remain open.
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
@@ -27839,6 +27845,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/fractionation_example.py
 - Download report
   https://jelliottdev.github.io/exports/fractionation-example.json
+- ADFGVX-style fractionation replay
+  https://jelliottdev.github.io/#/experiments/wulfic-adfgvx-fractionation
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -27912,7 +27920,9 @@ First round-trip known plaintext through the proposed encoder and decoder. Then 
 
 Documented experiments
 
-No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+The direct Hill-key test found no invertible two- or three-rune matrix that turns any of the 55 nonempty page starts into one of nine fixed 12-rune openings. This checks every possible key for those alignments: independent blocks determine a candidate matrix, and later blocks contradict it. Other openings, block offsets, affine additions and changing keys remain outside the result.
+
+A replay of six book-derived matrices also found no output above its English-score flag. That record distinguishes the source's miscopied LP2-15 number-panel cell from a separately tested correction. It covers fixed four- and five-rune operators at block origin zero, dropping incomplete final blocks; it does not exclude other matrix keys or block ciphers.
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
@@ -27925,6 +27935,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-cribs.html
 - modular arithmetic
   https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+- direct Hill-key test
+  https://jelliottdev.github.io/#/experiments/direct-hill-key-feasibility
+- replay of six book-derived matrices
+  https://jelliottdev.github.io/#/experiments/dukotah-book-matrix-hill
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -28174,9 +28188,9 @@ Retain a trace from each selected symbol to its source unit. Compare the complet
 
 Documented experiments
 
-No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+Two replayed searches of already-decoded text tried 3,508 positional selections and 48 line- or word-edge readings. None crossed the final score thresholds, but neither did any of the four planted messages. Those results therefore do not show that the tested hiding places are empty. The searches did not use unsolved LP2 ciphertext; the line/word search used five decoded sections spanning ten LP1 images in source-specific order. The source audit records the exact inputs and limits.
 
-One public source reports 3,508 selections from decoded text and a 48-read line- and word-boundary follow-up. We replayed both: no read cleared their final thresholds, but the planted messages did not clear those same thresholds either. These are reported attempts, not demonstrated exclusions. The second test's five input sections span ten manuscript images and are not concatenated in page order. Read the source audit and exact limits.
+A separate LP2 line-initial study found that first runes looked unusual against random manuscript positions, but ordinary when shuffled text was wrapped into lines using estimated rune widths. Its six fixed English-reading searches also found no message. This tests those readings and that approximate layout model, rather than every possible acrostic.
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
@@ -28187,12 +28201,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - automatic search and candidate scoring
   https://jelliottdev.github.io/reference/articles/method-automatic-search.html
-- 3,508 selections from decoded text
-  https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/A-selfembedded-read/RESULTS.md
-- 48-read line- and word-boundary follow-up
-  https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round23/A2-line-acrostic/RESULTS.md
-- Read the source audit and exact limits
+- replayed searches of already-decoded text
+  https://jelliottdev.github.io/#/experiments/solved-text-selection-source-gate
+- source audit
   https://github.com/jelliottdev/jelliottdev.github.io/blob/main/research/dukotah-r23-a2-source-audit-2026-10-22.md
+- LP2 line-initial study
+  https://jelliottdev.github.io/#/experiments/line-initial-layout-control
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -28889,7 +28903,7 @@ A decoder accepting bytes is only the first check
 Record errors and complete outputs. Check declared lengths, checksums where the format provides them, end-of-stream handling and whether trailing bytes are ignored. Use known compressed samples and controls passed through the same packing search. High entropy alone does not identify compression.
 
 Documented experiments
-No compressed-manuscript decoding experiment is linked yet. Rune entropy and byte encoding provide background, not evidence that a compression format was tested.
+The direct-rune compression test found no complete decompression using three fixed packings and five formats. It starts at byte zero; other offsets, formats and transformations before packing are outside that test. Rune entropy and byte encoding explain the measurements and representations used to define such tests.
 
 All method families · File integrity · Codebooks
 
@@ -28902,6 +28916,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/compression_example.py
 - Download the report
   https://jelliottdev.github.io/exports/compression-example.json
+- direct-rune compression test
+  https://jelliottdev.github.io/#/experiments/rune-direct-compression
 - Rune entropy
   https://jelliottdev.github.io/reference/articles/rune-entropy.html
 - byte encoding
@@ -29827,7 +29843,7 @@ Extraction can combine with substitution or numerical shifts. Specify whether th
 
 Current coverage
 
-No standalone stride or general grille-decoding experiment is linked here yet. The carrier study is an input inventory. It should not be read as a completed test of all masks that could be placed on that carrier.
+Every-nth-rune extraction has been tested for steps 2–29 with page resets and joined pages. Its best English score did not stand out from matched searches of shuffled pages. Arbitrary grille masks and additional cipher layers remain outside that test; the carrier study is still an input inventory.
 
 All method families · Search space and bounds
 
@@ -29844,6 +29860,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - null-removal family
   https://jelliottdev.github.io/reference/articles/method-nulls.html
+- Every-nth-rune extraction
+  https://jelliottdev.github.io/#/experiments/fixed-step-position-extraction
 - All method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -30150,7 +30168,9 @@ Publish the actual finite choice set. A failed search over offsets of one wiring
 
 Documented experiments
 
-No dedicated moving-alphabet experiment is linked yet. Existing repeating-key and feedback tests concern their own rules; they do not establish that a proposed disk, rotor or evolving permutation was tested.
+A constant-rate alphabet test tried every nonconstant linear shift schedule on each of the 55 rune-bearing unsolved pages. None reached its fixed English-score threshold, although planted known readings recovered correctly. The best manuscript score also lay within the range of complete searches on shuffled pages.
+
+A separate separator-clock Alberti replay advances the alphabet at both runes and separators. None of its eleven LP2 targets passed the source's frequency gate, with either the original parser or a correction for its omitted rune. These results concern the declared clocks, page resets and alphabets; other rotor wirings, evolving permutations and stepping rules remain open.
 
 All method families · Fixed substitutions · Repeating-key ciphers · Documenting a test
 
@@ -30161,6 +30181,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - composition order
   https://jelliottdev.github.io/reference/articles/method-composition.html
+- constant-rate alphabet test
+  https://jelliottdev.github.io/#/experiments/wholepage-progressive-caesar
+- separator-clock Alberti replay
+  https://jelliottdev.github.io/#/experiments/wulfic-separator-clock-alberti
 - All method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Fixed substitutions
@@ -30369,7 +30393,7 @@ Current gaps with the greatest downstream effect
 
 	Page-boundary and separator decisions	Rune-only agreement between two text sources does not settle word joining, punctuation or key-clock resets. A test may use these marks even when its rune frequency is unchanged.	Make a page-by-page contestable-location register, then rerun one fixed word-edge or reset experiment with one change at a time.
 
-	Unexercised solving families	Some method families have no linked completed record; the current count is given above. Useful candidates include homophonic/fractionated mappings and moving alphabets. Running keys now have one narrow Emerson test, while null removal has one doublet measurement; neither covers its whole family. An index page alone is not evidence a method has been tried.	Choose one small, fixed parameter set per family, require a solved-page recovery control, and state what remains outside the bound.
+	Families without records	AI-assisted interpretation and error-correction methods currently have no linked completed record. Running keys, moving alphabets and several other families already have bounded tests; each covers its stated rules rather than the whole family.	Choose one small, fixed parameter set per family, require a solved-page recovery control, and state what remains outside the bound.
 
 	Search-pattern controls	The new prime-path shuffle test makes one retrospective pattern less compelling: three or more values are absent in about 15% of either control set. Other attractive patterns still need controls matched to the actual search procedure.	For each proposed pattern, freeze the selection rule and full search budget before comparing the same statistic with appropriate controls; preserve every candidate, not only the best-looking one.
 
@@ -30383,7 +30407,7 @@ These are proposed series, not completed results. Each should have a baseline an
 
 	Transcription sensitivity	The baseline audit now compares the eight stored reviewed layers. Next, specify a punctuation-driven key clock or newly reviewed ambiguous mark and recompute its result.	Archive baseline; one change at a time; report which conclusions move. Do not combine uncertain edits into one preferred text.
 
-	Running keys and cited works	The Emerson baseline fixes one preserved text, A–Z shift mapping, complete offset search and three page openings. Its planted control recovers; LP2 openings do not distinguish this source from eight fully searched shuffles.	Other editions or source texts, alternate rune conversion and interruption clocks need separately bounded variants with a known-reading control and untouched continuation. A thematic resemblance alone is not a key.
+	Running keys and cited works	Published tests include Emerson on fixed page openings, the Cypherpunk Manifesto on three pages, and the joined known readings on 55 complete pages. None produced independently confirmed LP2 plaintext.	Other editions or source texts, alternate rune conversion and interruption clocks need separately bounded variants with a known-reading control and untouched continuation. A thematic resemblance alone is not a key.
 
 	LP2-49–51 table use	The direct-byte baseline now checks 16 rectangular routes and ten stem choices for complete text or four file starts. Further work can specify a different route, byte rule or downstream operation before inspecting output.	Separate base-60 decoding from a claimed route; record all tested orders, byte assumptions and stopping rules. The prime-path tests cover another narrow route family.
 
@@ -30410,7 +30434,7 @@ First preserve the original claim and distinguish its proposed rule from any obs
 This register is an editorial snapshot, not a claim that unlisted approaches have never been explored. The published counts are regenerated from the current registry. Promote independently checkable work to a research record with its purpose labeled; only a bounded test of an explicit solving operation belongs in the solving-test group.
 
 Sources, related references, and files
-- method map; method-family map; Unexercised solving families
+- method map; method-family map; Families without records
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - prime-shift test
   https://jelliottdev.github.io/#/experiments/lp2-prime-openings
@@ -30472,8 +30496,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/transcription-correction-sensitivity
 - Running keys and cited works
   https://jelliottdev.github.io/reference/articles/method-running-key.html
-- Emerson baseline
+- Emerson on fixed page openings
   https://jelliottdev.github.io/#/experiments/emerson-running-key
+- Cypherpunk Manifesto on three pages
+  https://jelliottdev.github.io/#/experiments/cypherpunk-manifesto-running-key
+- joined known readings on 55 complete pages
+  https://jelliottdev.github.io/#/experiments/solved-reading-running-key
 - LP2-49–51 table use
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
 - direct-byte baseline
