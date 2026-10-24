@@ -1,7 +1,7 @@
 /* Proposed candidates are mocked untrusted JSON. No model/network calls. */
 import assert from 'node:assert/strict';
 import C from '../../claim-specification.js';
-import {SCHEMA,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft} from './interpretation.mjs';
+import {SCHEMA,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations} from './interpretation.mjs';
 const copy=x=>JSON.parse(JSON.stringify(x));
 const at=(raw,quote,start=raw.indexOf(quote))=>({start,quote});
 const step=(raw,quote=raw,id='described_method',familyId=null)=>({id,familyId,source:at(raw,quote),parameters:{}});
@@ -12,10 +12,73 @@ test('exported bounded schema and prompt do not call or confirm anything',()=>{
  const raw='Use the supplied rule.',result=toDraft(raw,candidate(raw));assert.equal(result.draft.source.text,raw);assert.equal(result.draft.status,'draft');assert.equal(result.draft.confirmation,null);assert.equal(result.draft.execution,'not_run');assert.equal(result.requiresConfirmation,true);assert.equal(result.meaningVerified,false);
 });
 test('row paraphrases activate the same consequential existing boundary question',()=>{
- for(const raw of ['Reverse each row on LP2-15, preserving word boundaries.','Try reversing rune order within each row on LP2-15, preserving word boundaries.']){
+ for(const raw of ['Reverse each row on LP2-15, preserving word boundaries.','Try reversing rune order within each row on LP2-15, preserving word boundaries.','Reverse rune order within rows on LP2-15, preserving word boundaries.','Reverse the runes in every row on LP2-15, preserving word boundaries.']){
   const p=candidate(raw,[step(raw,raw,'reverse_row_runes','transposition')]);p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,'preserving word boundaries')};p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};
   const result=toDraft(raw,p);assert.equal(result.draft.method.value.operations[0].id,'reverse_row_runes');assert.equal(result.draft.rules.wordBoundaries.value,'preserve');assert.deepEqual(result.questions.map(q=>q.id),['word-boundary']);assert.equal(C.completeness(result.draft).researchReady,false);assert.equal(result.draft.source.text,raw);
  }
+});
+
+test('literal key evidence may cite declaration, quoted token or exact value but must belong to its full parent step',()=>{
+ const raw='Use Vigenere with key "A B" on LP2-43.';
+ for(const quote of ['key "A B"','"A B"','A B',raw]){
+  const p=candidate(raw);p.steps[0].parameters.key={value:'A B',source:at(raw,quote)};
+  assert.equal(toDraft(raw,p).draft.method.value.operations[0].key,'A B');
+ }
+ const bare='Use cipher with key ABC.';for(const quote of ['key ABC','ABC']){const p=candidate(bare);p.steps[0].parameters.key={value:'ABC',source:at(bare,quote)};assert.equal(validateCandidate(bare,p).steps[0].parameters.key.value,'ABC');}
+ const missing=candidate(raw,[step(raw,'Use Vigenere')]);missing.steps[0].parameters.key={value:'A B',source:at(raw,'"A B"')};assert.throws(()=>validateCandidate(raw,missing),/key/);
+ const invented=candidate(raw);invented.steps[0].parameters.key={value:'different',source:at(raw,'"A B"')};assert.throws(()=>validateCandidate(raw,invented),/key/);
+});
+
+test('explicit key declarations distinguish grammar from literal values and quoted condition words',()=>{
+ for(const raw of ['Reset the key at each word.','Carry the key by row.','Use a key stream.','Set key length=3.'])assert.deepEqual(keyDeclarations(raw),[],raw);
+ for(const [raw,value]of [['Use key ABC.','ABC'],['Use key=at.','at'],['Use key: "from".','from']]){
+  const keys=keyDeclarations(raw);assert.equal(keys.length,1);assert.equal(keys[0].value,value);assert.equal(raw.slice(keys[0].source.start,keys[0].source.start+keys[0].source.quote.length),keys[0].source.quote);
+ }
+ const reset='Reset the key at each word.',falseKey=candidate(reset);falseKey.steps[0].parameters.key={value:'at',source:at(reset,'at')};assert.throws(()=>validateCandidate(reset,falseKey),/key/);
+ const raw='Find readable text. Reverse each row then use Vigenere with key "IF; NOT." on LP2-43.',first='Reverse each row',tail='use Vigenere with key "IF; NOT." on LP2-43.';
+ const p=candidate(raw,[step(raw,first,'reverse_row_runes'),step(raw,tail)]);p.outcome={id:'decipher',source:at(raw,'Find readable text.')};p.steps[1].parameters.key={value:'IF; NOT.',source:at(raw,'"IF; NOT."')};p.scope={pages:['lp2-43'],passage:null,source:at(raw,'LP2-43')};
+ const result=toDraft(raw,p);assert.equal(result.draft.method.value.operations[0].id,'reverse_row_runes');assert.equal(result.draft.method.value.operations[1].key,'IF; NOT.');assert.deepEqual(result.draft.scope.value.pages,['lp2-43']);assert.equal(result.draft.source.text,raw);
+ for(const input of ['',null,'x'.repeat(1501)])assert.throws(()=>keyDeclarations(input));
+});
+
+test('complete sentence boundaries and explicit limited reading criteria preserve their actual meaning',()=>{
+ const raw='Use Vigenere with key ABC. Reset the key at each word unless the word continues across a line.',first='Use Vigenere with key ABC.',tail='Reset the key at each word unless the word continues across a line.';
+ const p=candidate(raw,[step(raw,first),step(raw,tail)]);p.steps[0].parameters.key={value:'ABC',source:at(raw,'ABC')};p.rules.reset={status:'specified',value:tail,source:at(raw,tail)};assert.equal(toDraft(raw,p).draft.rules.reset.value,tail);
+ const goal='Recover only the first twelve runes.',q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};assert.equal(toDraft(goal,q).draft.aim.outcome.id,'decipher');assert.equal(toDraft(goal,q).draft.aim.outcome.detail,goal);
+ for(const goal of ['Recover text only if the key is supplied.','Do not recover only the opening.']){const q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};assert.throws(()=>validateCandidate(goal,q),/conditional outcome/);}
+ const negative='Reverse each row only if the key is supplied.',r=candidate(negative,[step(negative,'Reverse each row','reverse_row_runes')]);assert.throws(()=>validateCandidate(negative,r),/conditional/);
+});
+
+test('literal keys cannot manufacture outcome, page scope, rule values or unrestricted state',()=>{
+ for(const [literal,field]of [['decipher','outcome'],['LP2-15','scope'],['preserve word boundaries','rules']]){
+  const raw='Use cipher with key "'+literal+'".',p=candidate(raw);
+  if(field==='outcome')p.outcome={id:'decipher',source:at(raw,literal)};
+  if(field==='scope')p.scope={pages:['lp2-15'],passage:null,source:at(raw,literal)};
+  if(field==='rules')p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,literal)};
+  assert.throws(()=>validateCandidate(raw,p),/literal key/);
+ }
+ const raw='Use cipher with key "LP2-15" on LP2-43.',p=candidate(raw);p.scope={pages:['lp2-15','lp2-43'],passage:null,source:at(raw,raw)};assert.throws(()=>validateCandidate(raw,p),/partial page/);p.scope.pages=['lp2-43'];assert.deepEqual(validateCandidate(raw,p).scope.pages,['lp2-43']);assert.deepEqual(pagesFromSource(raw),['lp2-43']);
+ for(const [literal,key,status,value]of [['preserve word boundaries','wordBoundaries','specified','preserve'],['unrestricted','searchBounds','unrestricted'],['reset at each word','reset','specified','reset at each word']]){
+  const text='Use cipher with key "'+literal+'".',q=candidate(text);q.rules[key]={status,...(value?{value}:{}),source:at(text,text)};assert.throws(()=>validateCandidate(text,q));
+ }
+});
+
+test('to/through ranges expand exactly and are covered; alternatives and mixed-release ranges stay opaque',()=>{
+ for(const join of ['to','through','–']){
+  const raw='Use cipher on LP2-15 '+join+' LP2-17.',range='LP2-15 '+join+' LP2-17',p=candidate(raw,[step(raw,'Use cipher')]);p.scope={pages:['lp2-15','lp2-16','lp2-17'],passage:null,source:at(raw,range)};
+  const result=toDraft(raw,p);assert.deepEqual(result.draft.scope.value.pages,['lp2-15','lp2-16','lp2-17']);assert.deepEqual(result.uninterpreted,[]);assert.equal(result.draft.source.text,raw);
+ }
+ assert.deepEqual(pagesFromSource('LP2-15 through LP2-17, LP2-19'),['lp2-15','lp2-16','lp2-17','lp2-19']);
+ for(const raw of ['LP2-15 or LP2-17','LP2-15 and/or LP2-17','LP1-15 to LP2-03','LP2-15, 17'])assert.throws(()=>pagesFromSource(raw));
+ assert.deepEqual(pagesFromSource('LP1-15, LP2-03'),['lp1-15','lp2-03']);
+ for(const input of ['',null,'x'.repeat(1501)])assert.throws(()=>pagesFromSource(input));
+});
+
+test('normalization covers only its matched wording; by is grammar and other source conditions stay visible',()=>{
+ const raw='Decipher LP2-15 by reversing rune order within each row, preserving word boundaries.',p=candidate(raw,[step(raw,'reversing rune order within each row','reverse_row_runes')]);p.outcome={id:'decipher',source:at(raw,'Decipher')};p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,raw)};
+ const result=toDraft(raw,p);assert.deepEqual(result.uninterpreted,[]);assert.equal(result.draft.rules.exceptionalCases.status,'unspecified');assert.equal(result.draft.source.text,raw);
+ const broad='Reverse each row, preserving word boundaries; preserve punctuation.',q=candidate(broad,[step(broad,'Reverse each row','reverse_row_runes')]);q.rules.wordBoundaries={status:'specified',value:'preserve',source:at(broad,broad)};
+ const kept=toDraft(broad,q);assert(kept.draft.rules.exceptionalCases.value.includes('preserve punctuation'));assert(!kept.draft.rules.exceptionalCases.value.includes('preserving word boundaries'));assert.equal(kept.draft.source.text,broad);
 });
 test('digit versus value reversal stays distinct, with ambiguity reused from C.questions',()=>{
  for(const raw of ['Reverse decimal digits of each prime value.','Try reversing the digits of each value.']){
@@ -74,6 +137,11 @@ test('exact page holes/ranges and passage qualifiers never become fabricated who
  const invented=copy(p);invented.scope.pages.push('lp2-16');assert.throws(()=>validateCandidate(raw,invented),/invented\/partial/);
  const partial=copy(p);partial.scope.pages=['lp2-15'];assert.throws(()=>validateCandidate(raw,partial),/invented\/partial/);
  const excluded='LP2-15–18 except LP2-16',q=candidate(excluded);q.scope={pages:['lp2-15','lp2-16','lp2-17','lp2-18'],passage:null,source:at(excluded,excluded)};assert.throws(()=>validateCandidate(excluded,q),/conditional\/excluded/);q.scope={pages:null,passage:excluded,source:at(excluded,excluded)};assert.equal(toDraft(excluded,q).draft.scope.value.description,excluded);
+ for(const phrase of ['apart from','other than','minus']){
+  const raw='LP2-00–55 '+phrase+' LP2-50',p=candidate(raw);p.scope={pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')),passage:raw,source:at(raw,raw)};
+  assert.throws(()=>validateCandidate(raw,p),/conditional\/excluded/,'Excluded page must not enter a derived page set');
+  p.scope.pages=null;const preserved=toDraft(raw,p);assert.equal(preserved.draft.scope.value.description,raw);assert(!preserved.draft.scope.value.pages?.includes('lp2-50'));assert.equal(preserved.draft.source.text,raw);
+ }
 });
 test('invented quotes, categories, parameters, values, states and derived claims rejected',()=>{
  const raw='Use cipher with key "ABC".',valid=candidate(raw);valid.steps[0].parameters.key={value:'ABC',source:at(raw,'key "ABC"')};

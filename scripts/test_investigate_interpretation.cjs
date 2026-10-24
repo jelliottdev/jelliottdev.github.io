@@ -47,6 +47,7 @@ async function accepted(){
   assert(f.doc.getElementById('cancel-interpretation'));assert(f.doc.getElementById('use-original'));assert.equal(f.doc.getElementById('confirm'),null);
   f.requests[0].resolve(await response());await until(()=>f.app.getSnapshot().stage==='review','Accepted candidate did not reach questions');
   const draft=f.app.getSnapshot().draft;assert.equal(draft.source.text,raw);assert.equal(draft.confirmation,null);assert.equal(draft.method.value.operations[0].key,'A B');assert.deepEqual(draft.scope.value.pages,['lp2-00','lp2-02','lp2-17']);assert.equal(draft.rules.wordBoundaries.value,'preserve');
+  const visible=I.rowsHTML(draft);assert(visible.includes('A B'));assert(!/key provenance|keyProvenance|provenance|source:text:/i.test(visible),'Extracted evidence stays in provenance rather than visible method parameters');
   assert.equal(I.intakeQuestions(draft)[0].id,'aim','An unstated outcome remains a question, not an invented goal');assert.equal(f.requests.length,1);
   answer(f,'decipher');assert(f.doc.getElementById('confirm'));assert.equal(f.requests.length,1,'Answering questions cannot ask or save');
   f.doc.getElementById('edit').fire('click');assert.equal(f.requests.length,1);f.doc.getElementById('cancel-edit').fire('click');assert.equal(f.requests.length,1,'Editing does not reinterpret');

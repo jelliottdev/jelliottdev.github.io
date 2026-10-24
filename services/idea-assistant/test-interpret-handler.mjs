@@ -7,7 +7,7 @@ import {SCHEMA,toDraft} from './interpretation.mjs';
 const ORIGIN='https://jelliottdev.github.io';
 const originalFetch=globalThis.fetch;let fetches=0;globalThis.fetch=()=>{fetches++;throw Error('Network forbidden in offline tests');};
 const proposal=text=>({schema:SCHEMA,outcome:null,steps:[{id:'described_method',familyId:null,source:{start:0,quote:text},parameters:{}}],scope:null,rules:{}});
-const toWire=value=>({...value,steps:value.steps.map(({parameters,...step})=>({...step,key:parameters.key??null})),rules:Object.entries(value.rules).map(([name,rule])=>({name,status:rule.status,value:rule.status==='specified'?rule.value:null,source:rule.source}))});
+const toWire=value=>({...value,steps:value.steps.map(({parameters,...step})=>step),scope:value.scope?{source:value.scope.source,passage:value.scope.passage}:null,rules:Object.entries(value.rules).map(([name,rule])=>({name,source:rule.source}))});
 const providerResult=value=>({choices:[{message:{content:typeof value==='string'?value:JSON.stringify(Array.isArray(value?.rules)?value:toWire(value))}}]});
 function request(text='Use the supplied rule.',options={}){
  return new Request('https://worker.invalid'+(options.path||'/interpret'),{method:options.method||'POST',headers:{Origin:options.origin??ORIGIN,'Content-Type':options.type||'application/json',...options.headers},...((options.method||'POST')==='POST'?{body:options.body??JSON.stringify({text})}:{}),...(options.stream?{duplex:'half'}:{})});
@@ -40,7 +40,7 @@ await test('validated candidate only, exact source binding, unknown scope/outcom
  const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.equal(response.headers.get('Cache-Control'),'no-store');
  assert.equal(data.sourceBinding,createHash('sha256').update(text,'utf8').digest('hex'));assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(data.requiresConfirmation,true);assert.equal(data.meaningVerified,false);
  assert.deepEqual(data.candidate,proposal(text));assert(!Object.hasOwn(data,'draft'));assert(!Object.hasOwn(data,'answer'));assert(!Object.hasOwn(data,'finding'));assert(!Object.hasOwn(data,'confirmation'));
- assert.equal(inputs.model,MODEL);assert.equal(inputs.payload.messages.length,2);assert.equal(inputs.payload.messages[0].role,'system');assert(inputs.payload.messages[0].content.includes('MODEL WIRE LAYOUT'));assert.deepEqual(JSON.parse(inputs.payload.messages[1].content),{text});
+ assert.equal(inputs.model,MODEL);assert.equal(inputs.payload.messages.length,2);assert.equal(inputs.payload.messages[0].role,'system');assert(inputs.payload.messages[0].content.includes('Extract exact evidence'));assert.deepEqual(JSON.parse(inputs.payload.messages[1].content),{text});
  assert.equal(inputs.payload.stream,false);assert.equal(inputs.payload.store,false);assert.equal(inputs.payload.max_completion_tokens,2500);assert.deepEqual(inputs.payload.response_format,{type:'json_schema',json_schema:{name:'proposed_interpretation_wire',strict:true,schema:WIRE_SCHEMA}});
 });
 await test('input injection stays user data, no fetching or generated instructions executed',async()=>{
@@ -48,30 +48,68 @@ await test('input injection stays user data, no fetching or generated instructio
  const handler=createInterpretHandler(),env=environment(async(_,payload)=>{seen=payload;return providerResult(proposal(text));});
  assert.equal((await handler(request(text),env)).status,200);assert.equal(JSON.parse(seen.messages[1].content).text,text);assert(!seen.messages[0].content.includes('https://example.org/private'));assert.equal(fetches,0);
 });
-await test('wire schema makes every object property required and nullable absences explicit',async()=>{
+await test('source-only schema requires every field and cannot generate keys/pages/rule states',async()=>{
  const visit=node=>{if(!node||typeof node!=='object')return;if(node.type==='object'){assert.equal(node.additionalProperties,false);assert.deepEqual([...node.required].sort(),Object.keys(node.properties).sort());}for(const child of Object.values(node)){if(Array.isArray(child))child.forEach(visit);else if(child&&typeof child==='object')visit(child);}};visit(WIRE_SCHEMA);
- const text='Use a custom rule.',wire=toWire(proposal(text)),before=JSON.stringify(wire),canonical=fromWire(wire);
- assert.equal(wire.steps[0].key,null);assert.deepEqual(wire.rules,[]);assert.deepEqual(canonical,proposal(text));assert.deepEqual(canonical.steps[0].parameters,{});assert.equal(canonical.outcome,null);assert.equal(canonical.scope,null);assert.equal(JSON.stringify(wire),before);
- const example=JSON.parse(WIRE_PROMPT.split('Exact example output: ')[1]),exampleText='Reverse each row on LP2-15, preserving word boundaries.';
- assert.equal(example.outcome,null);assert.equal(example.steps.length,1);assert.equal(example.steps[0].key,null);assert.equal(example.rules.length,1);assert.equal(example.rules[0].name,'wordBoundaries');assert.equal(toDraft(exampleText,fromWire(example)).questions[0].id,'word-boundary');
+ const text='Use a custom rule.',wire=toWire(proposal(text)),before=JSON.stringify(wire),canonical=fromWire(wire,text);
+ assert(!Object.hasOwn(wire.steps[0],'key'));assert(!Object.hasOwn(wire.steps[0],'parameters'));assert.deepEqual(wire.rules,[]);assert.deepEqual(canonical,proposal(text));assert.deepEqual(canonical.steps[0].parameters,{});assert.equal(canonical.outcome,null);assert.equal(canonical.scope,null);assert.equal(JSON.stringify(wire),before);
+ const examples=[...WIRE_PROMPT.matchAll(/Example input: (.+)\nExample output: (.+)/g)];assert.equal(examples.length,2);
+ for(const [,input,output]of examples){const raw=JSON.parse(input).text,example=JSON.parse(output);assert.equal(example.outcome,null);assert.equal(example.steps.length,1);assert(!Object.hasOwn(example.steps[0],'key'));assert(!Object.hasOwn(example.scope||{},'pages'));const candidate=fromWire(example,raw);if(raw.includes('boundaries')){assert.equal(example.rules.length,1);assert.equal(candidate.rules.wordBoundaries.value,'preserve');assert.equal(toDraft(raw,candidate).questions[0].id,'word-boundary');}else{assert.deepEqual(example.rules,[]);assert.equal(candidate.steps[0].parameters.key.value,'ABC');}}
 });
-await test('wire conversion rejects duplicate rule names, omitted fields and mismatched null states',async()=>{
- const text='Search bounds unrestricted.',wire=toWire(proposal(text));wire.rules=[{name:'searchBounds',status:'unrestricted',value:null,source:{start:text.indexOf('unrestricted'),quote:'unrestricted'}}];
- assert.deepEqual(fromWire(wire).rules.searchBounds,{status:'unrestricted',source:wire.rules[0].source});assert.equal(toDraft(text,fromWire(wire)).draft.rules.searchBounds.status,'unrestricted');
+await test('rules derive explicit states from evidence and reject old fields/duplicates/inventions',async()=>{
+ const text='Search bounds unrestricted; reset rule not applicable.',wire=toWire(proposal(text));wire.rules=[{name:'searchBounds',source:{start:0,quote:'Search bounds unrestricted'}},{name:'reset',source:{start:text.indexOf('reset'),quote:'reset rule not applicable'}}];
+ const canonical=fromWire(wire,text);assert.deepEqual(canonical.rules.searchBounds,{status:'unrestricted',source:wire.rules[0].source});assert.equal(canonical.rules.reset.status,'not_applicable');assert(!Object.hasOwn(canonical.rules.reset,'value'));assert.equal(toDraft(text,canonical).draft.rules.searchBounds.status,'unrestricted');
  const copy=()=>JSON.parse(JSON.stringify(wire));
- const invalid=[w=>delete w.steps[0].key,w=>w.steps[0].parameters={},w=>w.rules.push({...w.rules[0]}),w=>w.rules[0].value='invented',w=>w.rules[0].status='specified',w=>delete w.rules[0].value,w=>w.rules[0].name='inventedRule',w=>w.rules[0].status='unspecified',w=>w.rules={},w=>delete w.outcome];
- for(const mutate of invalid){const value=copy();mutate(value);assert.throws(()=>fromWire(value));}
- assert.throws(()=>fromWire(proposal(text)),'Old canonical provider shape is not silently accepted as wire');
+ const invalid=[w=>w.steps[0].key=null,w=>w.steps[0].parameters={},w=>delete w.steps[0].source,w=>w.rules.push({...w.rules[0]}),w=>w.rules[0].value='invented',w=>w.rules[0].status='specified',w=>delete w.rules[0].source,w=>w.rules[0].name='inventedRule',w=>w.rules[0].source.quote='not in source',w=>w.rules={},w=>delete w.outcome];
+ for(const mutate of invalid){const value=copy();mutate(value);assert.throws(()=>fromWire(value,text));}
+ assert.throws(()=>fromWire(proposal(text),text),'Old canonical provider shape is not silently accepted as wire');
  let calls=0;const duplicate=copy();duplicate.rules.push({...duplicate.rules[0]});const response=await createInterpretHandler()(request(text),environment(async()=>{calls++;return providerResult(duplicate);}));assert.equal(response.status,503);assert.equal(calls,1);
 });
-await test('captured invented row/page keys, duplicate steps and unsupported unrestricted rule still fail',async()=>{
+await test('full compound instructions preserve derived literal key, exact scope and boundary question',async()=>{
+ const text='Reverse each row, then apply Vigenere with key \'IF\' on LP2-15, preserving word boundaries.';
+ const wire={schema:SCHEMA,outcome:null,steps:[{id:'reverse_row_runes',familyId:'transposition',source:{start:0,quote:'Reverse each row'}},{id:'described_method',familyId:'polyalphabetic',source:{start:text.indexOf('apply'),quote:"apply Vigenere with key 'IF' on LP2-15, preserving word boundaries."}}],scope:{source:{start:text.indexOf('LP2'),quote:'LP2-15'},passage:null},rules:[{name:'wordBoundaries',source:{start:text.indexOf('preserving'),quote:'preserving word boundaries'}}]};
+ const candidate=fromWire(wire,text);assert.equal(candidate.steps[1].parameters.key.value,'IF');assert.equal(candidate.steps[1].parameters.key.source.quote,"key 'IF'");assert.deepEqual(candidate.scope.pages,['lp2-15']);assert.equal(candidate.rules.wordBoundaries.value,'preserve');assert.deepEqual(toDraft(text,candidate).questions.map(q=>q.id),['word-boundary']);
+ const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);const data=await response.json();assert.equal(data.candidate.steps[1].parameters.key.value,'IF');assert.equal(data.candidate.steps[1].source.quote,wire.steps[1].source.quote);assert.deepEqual(data.candidate.scope.pages,['lp2-15']);
+});
+await test('scope holes/passages derive from evidence and unstated rules stay absent',async()=>{
+ const text='Use this route on LP2-15, LP2-17–18, lines 2–3.',wire=toWire(proposal(text));wire.scope={source:{start:text.indexOf('LP2'),quote:'LP2-15, LP2-17–18, lines 2–3'},passage:'lines 2–3'};
+ const candidate=fromWire(wire,text);assert.deepEqual(candidate.scope.pages,['lp2-15','lp2-17','lp2-18']);assert(!candidate.scope.pages.includes('lp2-16'));assert.equal(candidate.scope.passage,'lines 2–3');assert.deepEqual(candidate.rules,{});assert(!Object.hasOwn(candidate.steps[0].parameters,'key'));
+ const draft=toDraft(text,candidate).draft;assert.equal(draft.rules.searchBounds.status,'unspecified');assert.equal(draft.rules.reset.status,'unspecified');assert.equal(draft.rules.evaluation.status,'unspecified');
+ const invented=JSON.parse(JSON.stringify(wire));invented.rules=[{name:'reset',source:{start:0,quote:'Use this route'}}];assert.throws(()=>fromWire(invented,text),/Unstated wire rule/);
+});
+await test('exclusion/disjunction scope stays exact passage prose without an invented conjunctive page set',async()=>{
+ for(const passage of ['LP2-00–55 except LP2-50','LP2-00–55 apart from LP2-50','LP2-00–55 other than LP2-50','LP2-00–55 minus LP2-50','LP2-15 or LP2-17']){
+  const text='Use the supplied route on '+passage+'.',wire=toWire(proposal(text));wire.scope={source:{start:text.indexOf('LP2'),quote:passage},passage};
+  const candidate=fromWire(wire,text);assert.equal(candidate.scope.pages,null,'Unsafe derived conjunctive pages for '+passage);assert(!candidate.scope.pages?.includes('lp2-50'));assert.equal(candidate.scope.passage,passage);assert.equal(toDraft(text,candidate).draft.scope.value.description,passage);
+  const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);const actual=(await response.json()).candidate;assert.equal(actual.scope.pages,null);assert.equal(actual.scope.passage,passage);
+ }
+});
+await test('multiple literal keys stay in source with no arbitrary selected key',async()=>{
+ const text='Use key "ABC" for the first pass and key "DEF" for the second pass.',wire=toWire(proposal(text));const candidate=fromWire(wire,text);assert.deepEqual(candidate.steps[0].parameters,{});assert.equal(candidate.steps[0].source.quote,text);
+ const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);const data=await response.json();assert(!Object.hasOwn(data.candidate.steps[0].parameters,'key'));assert.equal(data.candidate.steps[0].source.quote,text);
+});
+await test('key reset/bounds prose is not a literal key declaration',async()=>{
+ for(const text of ['Reset the key at each word.','Key reset not applicable.','Use a key of length 3.']){
+  const wire=toWire(proposal(text)),candidate=fromWire(wire,text);assert.deepEqual(candidate.steps[0].parameters,{},'Invented key from non-declaration: '+text);
+  const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);assert.deepEqual((await response.json()).candidate.steps[0].parameters,{});
+ }
+ for(const value of ['at','reset','of']){const text='Use key "'+value+'".',candidate=fromWire(toWire(proposal(text)),text);assert.equal(candidate.steps[0].parameters.key.value,value,'Explicit quoted literal must survive prose guard');}
+});
+await test('unrelated status words do not promote reset to unrestricted or not applicable',async()=>{
+ for(const text of ['Reset every page; the search is unrestricted.','Reset every page; scoring is not applicable.']){
+  const wire=toWire(proposal(text));wire.rules=[{name:'reset',source:{start:0,quote:text}}];const candidate=fromWire(wire,text);assert.equal(candidate.rules.reset.status,'specified');assert.equal(candidate.rules.reset.value,text);
+  const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(wire)));assert.equal(response.status,200);const rule=(await response.json()).candidate.rules.reset;assert.equal(rule.status,'specified');assert.equal(rule.value,text);
+ }
+ const text='Search bounds unrestricted.',wire=toWire(proposal(text));wire.rules=[{name:'searchBounds',source:{start:0,quote:text}}];assert.equal(fromWire(wire,text).rules.searchBounds.status,'unrestricted');
+});
+await test('old generated key/status fields and overlapping evidence steps reject without repair',async()=>{
  const text='Try reversing rune order within each row on LP2-15, preserving word boundaries.';
  const base={schema:SCHEMA,outcome:null,steps:[{id:'reverse_row_runes',familyId:null,source:{start:4,quote:'reversing rune order within each row on LP2-15, preserving word boundaries'},parameters:{}}],scope:{pages:['lp2-15'],passage:null,source:{start:0,quote:text}},rules:{wordBoundaries:{status:'specified',value:'preserve',source:{start:text.indexOf('preserving'),quote:'preserving word boundaries'}}}};
- const copy=()=>JSON.parse(JSON.stringify(base));const cases=[];
- const pageKey=copy();pageKey.steps[0].parameters.key={value:'LP2-15',source:{start:text.indexOf('LP2-15'),quote:'LP2-15'}};cases.push(pageKey);
- const rowKey=copy();rowKey.steps[0].parameters.key={value:'row',source:{start:text.indexOf('each row'),quote:'each row'}};cases.push(rowKey);
+ const copy=()=>toWire(JSON.parse(JSON.stringify(base)));const cases=[];
+ const pageKey=copy();pageKey.steps[0].key={value:'LP2-15',source:{start:text.indexOf('LP2-15'),quote:'LP2-15'}};cases.push(pageKey);
+ const rowKey=copy();rowKey.steps[0].parameters={key:{value:'row',source:{start:text.indexOf('each row'),quote:'each row'}}};cases.push(rowKey);
  const duplicates=copy();duplicates.steps.push({...duplicates.steps[0],id:'described_method'});cases.push(duplicates);
- const unrestricted=copy();unrestricted.rules.wordBoundaries={status:'unrestricted',source:{start:text.indexOf('preserving'),quote:'preserving word boundaries'}};cases.push(unrestricted);
+ const unrestricted=copy();unrestricted.rules[0].status='unrestricted';cases.push(unrestricted);
+ const generatedPages=copy();generatedPages.scope.pages=['lp2-15'];cases.push(generatedPages);
  for(const candidate of cases){let calls=0;const response=await createInterpretHandler()(request(text),environment(async()=>{calls++;return providerResult(candidate);}));assert.equal(response.status,503);assert.equal((await response.json()).reason,'invalid-interpretation');assert.equal(calls,1);}
 });
 await test('captured synthetic model output aligns unique exact quotes without changing meaning fields',async()=>{
@@ -82,12 +120,12 @@ await test('captured synthetic model output aligns unique exact quotes without c
  const original=JSON.stringify(captured),aligned=alignQuotePositions(text,original);
  assert.equal(aligned.steps[0].source.start,4);assert.equal(aligned.scope.source.start,4);assert.equal(aligned.rules.wordBoundaries.source.start,text.indexOf('preserving'));
  const expected=JSON.parse(original);expected.steps[0].source.start=4;expected.scope.source.start=4;expected.rules.wordBoundaries.source.start=text.indexOf('preserving');assert.deepEqual(aligned,expected);assert.equal(JSON.stringify(captured),original);
- let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v4-nullable-wire');
+ let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v6-source-rules');
 });
 await test('alignment uses UTF-16 positions and only whitelisted evidence fields',async()=>{
- const text='😀 Use key "ABC" on LP2-15; measure a pattern.',candidate=proposal(text);
- candidate.outcome={id:'measure',source:{start:99,quote:'measure a pattern'}};candidate.steps[0].source={start:99,quote:'Use key "ABC" on LP2-15'};candidate.steps[0].parameters.key={value:'ABC',source:{start:99,quote:'key "ABC"'}};candidate.scope={pages:['lp2-15'],passage:null,source:{start:99,quote:'LP2-15'}};candidate.rules.initialState={status:'specified',value:'key "ABC"',source:{start:99,quote:'key "ABC"'}};
- const aligned=alignQuotePositions(text,JSON.stringify(candidate));assert.equal(aligned.steps[0].source.start,3);assert.equal(aligned.steps[0].parameters.key.source.start,text.indexOf('key'));assert.equal(aligned.outcome.source.start,text.indexOf('measure'));assert.equal(aligned.scope.source.start,text.indexOf('LP2'));assert.equal(aligned.rules.initialState.source.start,text.indexOf('key'));
+ const text='😀 Use key "ABC" on LP2-15; measure a pattern; reset each word.',candidate=proposal(text);
+ candidate.outcome={id:'measure',source:{start:99,quote:'measure a pattern'}};candidate.steps[0].source={start:99,quote:'Use key "ABC" on LP2-15'};candidate.steps[0].parameters.key={value:'ABC',source:{start:99,quote:'key "ABC"'}};candidate.scope={pages:['lp2-15'],passage:null,source:{start:99,quote:'LP2-15'}};candidate.rules.reset={status:'specified',value:'reset each word',source:{start:99,quote:'reset each word'}};
+ const aligned=alignQuotePositions(text,JSON.stringify(candidate));assert.equal(aligned.steps[0].source.start,3);assert.equal(aligned.steps[0].parameters.key.source.start,text.indexOf('key'));assert.equal(aligned.outcome.source.start,text.indexOf('measure'));assert.equal(aligned.scope.source.start,text.indexOf('LP2'));assert.equal(aligned.rules.reset.source.start,text.indexOf('reset'));
  const response=await createInterpretHandler()(request(text),environment(async()=>providerResult(candidate)));assert.equal(response.status,200);assert.equal((await response.json()).sourceBinding,createHash('sha256').update(text).digest('hex'));
  candidate.extra={source:{start:99,quote:'LP2-15'}};candidate.steps[0].parameters.unknown={source:{start:99,quote:'LP2-15'}};candidate.rules.unknown={source:{start:99,quote:'LP2-15'}};
  const untouched=alignQuotePositions(text,JSON.stringify(candidate));assert.equal(untouched.extra.source.start,99);assert.equal(untouched.steps[0].parameters.unknown.source.start,99);assert.equal(untouched.rules.unknown.source.start,99);

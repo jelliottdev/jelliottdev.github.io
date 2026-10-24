@@ -317,10 +317,13 @@ and ensure generic aim wording does not derail strong technique retrieval.
 
 ### Proposed interpretation before review
 
-Release status (24 October): disabled in the public configuration. A simple
-row-reversal request passed a live check; a compound reversal/Vigenere request
-failed validation. Keep the existing local clarification flow until representative
-live inputs pass. Offline contract tests do not establish generation reliability.
+Release status (24 October): disabled in the public configuration. Source-only
+extraction now preserves a live compound reversal/Vigenere request, including its
+key and operation order. A measurement request preserves its page range, missing
+page and shuffle count, but omits the explicitly stated measurement aim. Keep the
+existing local clarification flow until interpretation is reliable across these
+cases. Passing validation does not establish complete extraction or semantic
+correctness; offline contract tests do not establish generation reliability.
 
 `claim-interpretation.js` is the shared browser/Worker validator and draft adapter;
 `services/idea-assistant/interpretation.mjs` preserves its ESM interface. The
@@ -338,11 +341,20 @@ remain unknown; uncovered wording stays visible. These checks establish source
 provenance and structural consistency, not semantic correctness. The user still
 reviews and confirms the interpretation.
 
-The model uses a separate strict wire schema: each step has a nullable key, and
-only explicitly supplied rules appear in an array. The adapter rejects duplicate
-rules and invalid state/value combinations before converting to the shared
-canonical candidate. This prevents optional schema fields from becoming required
-invented settings; it does not make generated interpretations automatically correct.
+The model uses a separate strict wire schema containing ordered instruction
+quotes, scope wording and explicitly stated rule quotes. The adapter derives
+literal keys and inclusive page ranges from that evidence; it does not ask the
+model to generate keys, page arrays or rule defaults. Multiple keys remain in the
+full instruction, without arbitrarily selecting one. Qualified or alternative
+page selections must retain their complete wording. Rule states such as
+“unrestricted” require an explicit statement about that particular rule. Duplicate
+rules, unsupported classifications and invented fields fail validation.
+
+Literal key contents cannot create outcome, scope or rule evidence. For example,
+a key named “IF” is not a condition and a key named “LP2-15” does not select that
+page. The offline corpus covers 21 idea shapes alongside validator, browser
+parity, handler and frontend journey checks. It tests proposed candidates rather
+than claiming live model accuracy.
 
 The response carries the SHA-256 of the exact original text; the browser checks it
 and independently validates the candidate. Cancel, fallback, new input and leaving

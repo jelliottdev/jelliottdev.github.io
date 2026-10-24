@@ -14,8 +14,8 @@ let count=0;const test=(name,fn)=>{fn();count++;console.log('PASS '+name);};
 
 (async()=>{
  const E=await import('../services/idea-assistant/interpretation.mjs');
- test('browser UMD, CommonJS and existing ESM wrapper preserve seven exact exports',()=>{
-  assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft'].sort());
+ test('browser UMD, CommonJS and existing ESM wrapper preserve the exact exports',()=>{
+  assert.deepEqual(Object.keys(I).sort(),['SCHEMA','MAX_TEXT','JSON_SCHEMA','PROMPT','validateInput','validateCandidate','toDraft','pagesFromSource','keyDeclarations'].sort());
   for(const key of Object.keys(I))assert.equal(E[key],I[key]);
   assert.equal(B.SCHEMA,I.SCHEMA);assert.equal(B.MAX_TEXT,I.MAX_TEXT);assert.equal(B.PROMPT,I.PROMPT);assert.deepEqual(plain(B.JSON_SCHEMA),I.JSON_SCHEMA);
   assert.equal(context.document,undefined);assert.equal(context.fetch,undefined);assert.equal(context.localStorage,undefined);
@@ -39,6 +39,14 @@ let count=0;const test=(name,fn)=>{fn();count++;console.log('PASS '+name);};
   cases[1].steps[0].familyId='invented-category';const wrong=candidate(raw);wrong.steps[0].source.start=9;cases.push(wrong);
   for(const p of cases){let node,browser;try{I.validateCandidate(raw,p);}catch(e){node=e.message;}try{B.validateCandidate(raw,local(p));}catch(e){browser=e.message;}assert(node);assert.equal(browser,node);}
   for(const rawInput of ['', 'x'.repeat(1501)]){assert.throws(()=>I.validateInput(rawInput));assert.throws(()=>B.validateInput(rawInput));}
+ });
+ test('browser helpers and literal-key condition masking retain the same bounded semantics',()=>{
+  assert.deepEqual(plain(B.pagesFromSource('LP2-15 through LP2-17, LP2-19')),I.pagesFromSource('LP2-15 through LP2-17, LP2-19'));
+  assert.deepEqual(plain(B.keyDeclarations('Use key "IF" then reset the key at each word.')),I.keyDeclarations('Use key "IF" then reset the key at each word.'));
+  const raw='Reverse every row then use Vigenere with key "IF".',tail='use Vigenere with key "IF".';
+  const p=candidate(raw,[step(raw,'Reverse every row','reverse_row_runes'),step(raw,tail)]);p.steps[1].parameters.key={value:'IF',source:source(raw,'IF')};
+  assert.deepEqual(plain(B.toDraft(raw,local(p))),I.toDraft(raw,p));
+  for(const text of ['LP2-15 or LP2-17','LP1-15 to LP2-03']){assert.throws(()=>I.pagesFromSource(text));assert.throws(()=>B.pagesFromSource(text));}
  });
  console.log('PASS '+count+' interpretation UMD parity groups; no DOM, network, model, execution or confirmation calls.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

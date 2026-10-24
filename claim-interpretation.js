@@ -37,12 +37,37 @@ function boundedData(value,depth=0,budget={n:0}){
 }
 function validateInput(raw){if(typeof raw!=='string'||!raw.trim()||raw.length>MAX_TEXT)error('input must contain 1–1500 characters');return raw;}
 function source(raw,s){object(s,['start','quote']);if(!Number.isInteger(s.start)||s.start<0||typeof s.quote!=='string'||!s.quote.trim()||raw.slice(s.start,s.start+s.quote.length)!==s.quote)error('source quote/start mismatch');return {start:s.start,quote:s.quote};}
-const conditional=/\b(?:not|never|unless|except|excluding|exclude|avoid|if|when|without|only|instead|otherwise|but|until|provided|before|after)\b|\bdon['’]t\b/i;
+const conditional=/\b(?:not|never|unless|except|excluding|exclude|avoid|if|when|without|only|instead|otherwise|but|until|provided|before|after|apart\s+from|other\s+than|minus)\b|\bdon['’]t\b/i;
+function scanKeyDeclarations(text){
+ const result=[],pattern=/\bkey\b\s*(?:is\s+|[:=]\s*)?(?:"([^"]*)"|'([^']*)'|([^\s,;.!?]+))/gi;
+ for(const match of text.matchAll(pattern)){
+  const quoted=match[1]!==undefined||match[2]!==undefined,value=match[1]??match[2]??match[3];
+  const end=match.index+match[0].length,valueStart=end-value.length-(quoted?1:0);
+  const assigned=/\bkey\b\s*[:=]\s*$/i.test(text.slice(match.index,valueStart-(quoted?1:0)));
+  if(!quoted&&!assigned&&/^(?:at|by|from|for|length|stream|position|index|offset|size|reset|initial|state|each|every|the|a|an|to|with|without|in|on|of|when|if|unless|after|before|only|should|must|will|can|may|starts?|ends?|continues?|changes?|is|are|was|were|be|not|schedule|material|values?|digits?)\b/i.test(value))continue;
+  result.push({value,start:match.index,end,valueStart,valueEnd:valueStart+value.length,tokenStart:valueStart-(quoted?1:0),tokenEnd:end,source:{start:match.index,quote:match[0]}});
+ }return result;
+}
+function keyDeclarations(text){validateInput(text);return scanKeyDeclarations(text);}
+function maskedKeys(text){
+ const chars=text.split('');for(const key of scanKeyDeclarations(text))for(let i=key.valueStart;i<key.valueEnd;i++)chars[i]=' ';
+ return chars.join('');
+}
+function keyEvidence(raw,s){return scanKeyDeclarations(raw).some(k=>s.start>=k.tokenStart&&s.start+s.quote.length<=k.tokenEnd);}
+function literalOutsideKey(raw,s,value){
+ for(let at=s.quote.indexOf(value);at!==-1;at=s.quote.indexOf(value,at+1))if(!keyEvidence(raw,{start:s.start+at,quote:value}))return at;
+ return -1;
+}
+function conditionWord(text){return maskedKeys(text).match(conditional)?.[0];}
+function hasCondition(text){return conditionWord(text)!==undefined;}
 function clause(raw,s){
  // Conservative context check prevents positive substring extraction from a
  // negated/conditional sentence. Commas do not isolate away a condition.
- const start=Math.max(raw.lastIndexOf('.',s.start-1),raw.lastIndexOf(';',s.start-1),raw.lastIndexOf('\n',s.start-1))+1;
- let end=raw.length;for(const char of ['.',';','\n']){const found=raw.indexOf(char,s.start+s.quote.length);if(found!==-1)end=Math.min(end,found);}
+ const context=maskedKeys(raw);
+ const start=Math.max(context.lastIndexOf('.',s.start-1),context.lastIndexOf(';',s.start-1),context.lastIndexOf('\n',s.start-1))+1;
+ const terminal=context.slice(s.start,s.start+s.quote.length).match(/[.;\n]\s*$/);
+ let end=terminal?s.start+terminal.index+1:raw.length;
+ if(!terminal)for(const char of ['.',';','\n']){const found=context.indexOf(char,s.start+s.quote.length);if(found!==-1)end=Math.min(end,found);}
  return raw.slice(start,end);
 }
 function semanticQuote(s){
@@ -55,25 +80,35 @@ function semanticQuote(s){
 }
 function knownMatches(id,quote){
  const q=semanticQuote(quote);
- if(id==='reverse_row_runes')return /^(?:read each row backwards|reverse (?:the )?(?:rune )?order within each row|reverse (?:the )?rune order in each row|reverse each row)$/i.test(q);
+ if(id==='reverse_row_runes')return /^(?:read (?:each|every) row backwards|reverse (?:the )?(?:(?:rune )?order|order of (?:the )?runes|runes) (?:within|in) (?:(?:each|every) row|rows)|reverse (?:each|every) row)$/i.test(q);
  if(id==='reverse_value_digits')return /^reverse (?:the )?(?:decimal )?digits of each (?:prime )?value(?: in (?:each|every) row)?$/i.test(q);
  if(id==='ambiguous_reversal')return /^reverse (?:the )?prime values (?:of|in) (?:each|every) row$/i.test(q);
  return true;
 }
+function pageReferences(quote){return quote.matchAll(/\bLP([12])-(\d{1,2})(?:\s*(?:[-–—]|to\b|through\b)\s*(?:LP\1-)?(\d{1,2}))?/gi);}
 function explicitPages(quote){
- const pages=[];const pattern=/\bLP([12])-(\d{1,2})(?:\s*[-–—]\s*(?:LP\1-)?(\d{1,2}))?/gi;
- for(const m of quote.matchAll(pattern)){const a=Number(m[2]),b=m[3]===undefined?a:Number(m[3]);if(b<a||b-a>74)error('invalid source page range');for(let i=a;i<=b;i++)pages.push('lp'+m[1]+'-'+String(i).padStart(2,'0'));}
+ quote=maskedKeys(quote);
+ const cross=/\bLP([12])-\d{1,2}\s*(?:[-–—]|to\b|through\b)\s*LP([12])-/gi;
+ for(const m of quote.matchAll(cross))if(m[1]!==m[2])error('unsupported mixed-release page range');
+ if(/\bLP[12]-\d{1,2}\s*(?:or|and\s*\/\s*or|\/)\s*(?:LP[12]-)?\d{1,2}/i.test(quote))error('alternative scope must remain passage prose');
+ const pages=[];
+ for(const m of pageReferences(quote)){const a=Number(m[2]),b=m[3]===undefined?a:Number(m[3]);if(b<a||b-a>74)error('invalid source page range');for(let i=a;i<=b;i++)pages.push('lp'+m[1]+'-'+String(i).padStart(2,'0'));}
  // Shorthand lists cannot be expanded partially while dropping their tail.
  if(/LP[12]-\d{1,2}\s*(?:and|,)\s*\d/i.test(quote))error('unsupported shorthand scope; retain passage prose');
  return C.pages(pages);
 }
+function pagesFromSource(quote){validateInput(quote);return explicitPages(quote);}
+function normalizedRuleMatch(key,value,quote){
+ const pattern=key==='wordBoundaries'&&value==='preserve'?/(?:keep(?:ing)?|preserv(?:e|ing)) word boundaries/i:
+  key==='boundaryMode'?{within_words:/reverse (?:runes? )?(?:inside|within) each word/i,fixed_spaces:/(?:keep|preserve) (?:the )?(?:original )?space positions/i,word_blocks:/reverse (?:the )?whole[- ]word order/i}[value]:null;
+ return pattern?quote.match(pattern):null;
+}
 function ruleValue(key,value,s){
  if(typeof value!=='string'||!value.trim()||value.length>MAX_TEXT)error('rule value');
  if(key==='wordBoundaries'&&value==='preserve'){
-  if(conditional.test(s.quote)||!/(?:keep(?:ing)?|preserv(?:e|ing)) word boundaries/i.test(s.quote))error('unsupported word-boundary normalization');
+  if(hasCondition(s.quote)||!normalizedRuleMatch(key,value,s.quote))error('unsupported word-boundary normalization');
  }else if(key==='boundaryMode'&&own(C.BOUNDARIES,value)){
-  const patterns={within_words:/reverse (?:runes? )?(?:inside|within) each word/i,fixed_spaces:/(?:keep|preserve) (?:the )?(?:original )?space positions/i,word_blocks:/reverse (?:the )?whole[- ]word order/i};
-  if(conditional.test(s.quote)||!patterns[value].test(s.quote))error('unsupported boundary-mode normalization');
+  if(hasCondition(s.quote)||!normalizedRuleMatch(key,value,s.quote))error('unsupported boundary-mode normalization');
  }else if(!s.quote.includes(value))error('invented rule value');
  return value;
 }
@@ -83,64 +118,72 @@ function validateCandidate(raw,input){
  boundedData(input);if(new TextEncoder().encode(JSON.stringify(input)).length>24000)error('candidate size');
  object(input,['schema','outcome','steps','scope','rules']);if(input.schema!==SCHEMA)error('schema version');
  const out={schema:SCHEMA,outcome:null,steps:[],scope:null,rules:{}};
- if(input.outcome!==null){object(input.outcome,['id','source']);if(!OUTCOMES.includes(input.outcome.id))error('outcome ID');const s=source(raw,input.outcome.source),condition=clause(raw,s).match(conditional)?.[0];
-  if(condition&&(input.outcome.id!=='unclassified'||!s.quote.includes(condition)))error('negated/conditional outcome must remain complete unclassified wording');out.outcome={id:input.outcome.id,source:s};}
+ if(input.outcome!==null){object(input.outcome,['id','source']);if(!OUTCOMES.includes(input.outcome.id))error('outcome ID');const s=source(raw,input.outcome.source),context=clause(raw,s),condition=conditionWord(context);if(keyEvidence(raw,s))error('literal key is not outcome evidence');
+  // "Only" can explicitly limit the desired reading, rather than condition or
+  // negate it. Keep that entire criterion; do not relax method/scope guards.
+  const conditions=[...maskedKeys(context).matchAll(new RegExp(conditional.source,'gi'))];
+  const limitedReading=input.outcome.id==='decipher'&&/\bonly\b/i.test(s.quote)&&conditions.every(m=>/^only$/i.test(m[0]));
+  if(condition&&!limitedReading&&(input.outcome.id!=='unclassified'||!s.quote.includes(condition)))error('negated/conditional outcome must remain complete unclassified wording');out.outcome={id:input.outcome.id,source:s};}
  if(!Array.isArray(input.steps)||input.steps.length>12)error('step limit');
  let end=0;
  for(const step of input.steps){
   object(step,['id','familyId','source','parameters']);if(!IDS.includes(step.id)||step.familyId!==null&&!FAMILIES.includes(step.familyId))error('operation/family ID');
   const s=source(raw,step.source);if(s.start<end)error('steps overlap or change source order');end=s.start+s.quote.length;
   const context=clause(raw,s);
-  if(conditional.test(context)&&step.id!=='described_method')error('negated/conditional known operation must remain opaque');
-  if(conditional.test(context)&&context.match(conditional)?.[0]&&!s.quote.includes(context.match(conditional)[0]))error('step drops its negation/condition');
+  if(hasCondition(context)&&step.id!=='described_method')error('negated/conditional known operation must remain opaque');
+  if(hasCondition(context)&&!s.quote.includes(conditionWord(context)))error('step drops its negation/condition');
   if(!knownMatches(step.id,s.quote))error('unsupported known-operation wording; retain opaque step');
   object(step.parameters,['key'],[]);const parameters={};
   if(own(step.parameters,'key')){const key=step.parameters.key;object(key,['value','source']);const evidence=source(raw,key.source);
-   const literal=evidence.quote.match(/\bkey\s*(?:is\s+|[:=]\s*)?(?:"([^"]*)"|'([^']*)'|([^\s,;.!?]+))/i),actual=literal&&(literal[1]??literal[2]??literal[3]);
-   if(typeof key.value!=='string'||!key.value.length||key.value.length>300||key.value!==actual||evidence.start<s.start||evidence.start+evidence.quote.length>s.start+s.quote.length)error('invented/unsupported key');
+   const a=evidence.start-s.start,b=a+evidence.quote.length;
+   const declaration=scanKeyDeclarations(s.quote).find(k=>k.value===key.value&&(
+    (a<=k.start&&b>=k.end)||(a===k.valueStart&&b===k.valueEnd)||(a===k.tokenStart&&b===k.tokenEnd)));
+   if(typeof key.value!=='string'||!key.value.length||key.value.length>300||!declaration||evidence.start<s.start||evidence.start+evidence.quote.length>s.start+s.quote.length)error('invented/unsupported key');
    parameters.key={value:key.value,source:evidence};}
   const family={reverse_row_runes:'transposition',reverse_value_digits:'prime-indices'}[step.id];if(family&&step.familyId!==null&&step.familyId!==family)error('known operation/family conflict');
   out.steps.push({id:step.id,familyId:step.familyId,source:s,parameters});
  }
- if(input.scope!==null){object(input.scope,['pages','passage','source']);const s=source(raw,input.scope.source),scope={pages:null,passage:null,source:s};
-  if(input.scope.pages!==null){if(conditional.test(clause(raw,s)))error('conditional/excluded page selection must remain passage prose');if(!Array.isArray(input.scope.pages)||input.scope.pages.length>75)error('scope pages');const p=C.pages(input.scope.pages);if(!p.length||C.serialize(p)!==C.serialize(explicitPages(s.quote)))error('invented/partial page set');scope.pages=p;}
+ if(input.scope!==null){object(input.scope,['pages','passage','source']);const s=source(raw,input.scope.source),scope={pages:null,passage:null,source:s};if(keyEvidence(raw,s))error('literal key is not scope evidence');
+  if(input.scope.pages!==null){if(hasCondition(clause(raw,s)))error('conditional/excluded page selection must remain passage prose');if(!Array.isArray(input.scope.pages)||input.scope.pages.length>75)error('scope pages');const p=C.pages(input.scope.pages);if(!p.length||C.serialize(p)!==C.serialize(explicitPages(maskedKeys(raw).slice(s.start,s.start+s.quote.length))))error('invented/partial page set');scope.pages=p;}
   if(input.scope.passage!==null){if(typeof input.scope.passage!=='string'||!input.scope.passage.trim()||!s.quote.includes(input.scope.passage))error('invented passage');scope.passage=input.scope.passage;}
   if(scope.pages===null&&scope.passage===null)error('empty scope');
-  const condition=clause(raw,s).match(conditional)?.[0];if(condition&&(!s.quote.includes(condition)||!scope.passage?.includes(condition)))error('passage drops its negation/condition');
+  const condition=conditionWord(clause(raw,s));if(condition&&(!s.quote.includes(condition)||!scope.passage?.includes(condition)))error('passage drops its negation/condition');
   if(/\b(?:line|row|rune|position|word|paragraph|clause)s?\s+\d/i.test(s.quote)&&!scope.passage)error('passage qualifier cannot become a whole page');out.scope=scope;
  }
  object(input.rules,C.RULES,[]);
  for(const [key,rule]of Object.entries(input.rules)){
   object(rule,['status','value','source'],['status','source']);if(!['specified','not_applicable','unrestricted'].includes(rule.status)||(rule.status==='specified')!==own(rule,'value'))error('rule state/value');
-  const s=source(raw,rule.source);if(rule.status!=='specified'&&!new RegExp(rule.status==='unrestricted'?'\\bunrestricted\\b':'\\bnot applicable\\b','i').test(s.quote))error('unstated rule state');
+  const s=source(raw,rule.source);if(keyEvidence(raw,s))error('literal key is not rule evidence');const proof={...s,quote:maskedKeys(raw).slice(s.start,s.start+s.quote.length)};
+  if(rule.status!=='specified'&&!new RegExp(rule.status==='unrestricted'?'\\bunrestricted\\b':'\\bnot applicable\\b','i').test(proof.quote))error('unstated rule state');
   const stateContext=rule.status==='not_applicable'?clause(raw,s).replace(/\bnot applicable\b/gi,''):clause(raw,s);
-  if(rule.status!=='specified'&&conditional.test(stateContext))error('conditional/negated rule state must remain opaque');
-  const condition=clause(raw,s).match(conditional)?.[0];if(rule.status==='specified'&&condition&&(!s.quote.includes(condition)||!rule.value.includes(condition)))error('rule drops its negation/condition');
+  if(rule.status!=='specified'&&hasCondition(stateContext))error('conditional/negated rule state must remain opaque');
+  const condition=conditionWord(clause(raw,s));if(rule.status==='specified'&&condition&&(!s.quote.includes(condition)||!rule.value.includes(condition)))error('rule drops its negation/condition');
   if(key==='reset'&&rule.status==='specified'&&!/\b(?:reset|restart|carry|continue)\b/i.test(s.quote))error('unstated reset rule');
-  out.rules[key]={status:rule.status,...(rule.status==='specified'?{value:ruleValue(key,rule.value,s)}:{}),source:s};
+  const normalized=key==='wordBoundaries'&&rule.value==='preserve'||key==='boundaryMode'&&own(C.BOUNDARIES,rule.value);
+  if(rule.status==='specified'&&!normalized&&literalOutsideKey(raw,s,rule.value)===-1)error('literal key is not rule value evidence');
+  out.rules[key]={status:rule.status,...(rule.status==='specified'?{value:ruleValue(key,rule.value,normalized?proof:s)}:{}),source:s};
  }
  return out;
 }
 function references(s){return {kind:'proposed',refs:[JSON.stringify({source:'original wording',start:s.start,end:s.start+s.quote.length,quote:s.quote})]};}
 function uncovered(raw,candidate){
  const covered=new Uint8Array(raw.length),mark=s=>covered.fill(1,s.start,s.start+s.quote.length);
- const literal=(s,value)=>{const at=s.quote.indexOf(value);if(at!==-1)mark({start:s.start+at,quote:value});};
+ const literal=(s,value)=>{const at=literalOutsideKey(raw,s,value);if(at!==-1)mark({start:s.start+at,quote:value});};
  if(candidate.outcome)mark(candidate.outcome.source);
- if(candidate.scope){const s=candidate.scope.source;if(candidate.scope.passage)literal(s,candidate.scope.passage);if(candidate.scope.pages)for(const m of s.quote.matchAll(/\bLP([12])-(\d{1,2})(?:\s*[-–—]\s*(?:LP\1-)?(\d{1,2}))?/gi))mark({start:s.start+m.index,quote:m[0]});}
+ if(candidate.scope){const s=candidate.scope.source;if(candidate.scope.passage)literal(s,candidate.scope.passage);if(candidate.scope.pages)for(const m of pageReferences(maskedKeys(raw).slice(s.start,s.start+s.quote.length)))mark({start:s.start+m.index,quote:m[0]});}
  candidate.steps.forEach(step=>mark(step.source));
  for(const [key,rule]of Object.entries(candidate.rules)){
   if(rule.status!=='specified'){literal(rule.source,rule.status==='unrestricted'?'unrestricted':'not applicable');continue;}
-  if(rule.source.quote.includes(rule.value))literal(rule.source,rule.value);
-  // Normalized boundary values have no literal spelling in the source. Keep
-  // their complete quoted wording visible rather than marking unrelated text
-  // as interpreted merely because it shares a broad evidence quote.
+  const normalized=normalizedRuleMatch(key,rule.value,maskedKeys(raw).slice(rule.source.start,rule.source.start+rule.source.quote.length));
+  if(normalized)mark({start:rule.source.start+normalized.index,quote:normalized[0]});
+  else if(rule.source.quote.includes(rule.value))literal(rule.source,rule.value);
  }
  const spans=[];for(let i=0;i<raw.length;){
   if(covered[i]){i++;continue;}const start=i;while(i<raw.length&&!covered[i])i++;const quote=raw.slice(start,i);
   // Only isolated grammar is dispensable. Never trim these words out of a
   // meaningful clause, and never treat a condition/negation as a connector.
   const trimmed=quote.replace(/^[\s\p{P}]+|[\s\p{P}]+$/gu,'');
-  const grammarOnly=/^(?:please|try|and|then|on)(?:\s+(?:please|try|and|then|on))*$/i.test(trimmed);
+  const grammarOnly=/^(?:please|try|and|then|on|by)(?:\s+(?:please|try|and|then|on|by))*$/i.test(trimmed);
   if(/[\p{L}\p{N}]/u.test(quote)&&!grammarOnly)spans.push({start,quote});
  }return spans;
 }
@@ -167,6 +210,6 @@ function toDraft(raw,input){
  return {candidate,draft,questions:C.questions(draft),uninterpreted:remainder,requiresConfirmation:true,meaningVerified:false};
 }
 
-const api={SCHEMA,MAX_TEXT,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft};
+const api={SCHEMA,MAX_TEXT,JSON_SCHEMA,PROMPT,validateInput,validateCandidate,toDraft,pagesFromSource,keyDeclarations};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimInterpretation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
