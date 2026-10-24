@@ -197,3 +197,17 @@ const oversizedBody=new Request('https://fixture.workers.dev/ask',{
 assert.equal((await contextHandler(oversizedBody,contextEnv)).status,400,'The raw request body remains bounded');
 assert.equal(contextCalls,beforeInvalid);
 console.log('PASS: confirmed context reaches inference without affecting ranking; independent limits, UTF-8 body and confirmation-bound caches. All inference mocked.');
+
+// Production dispatch sends proposals to persistence, never to the AI route.
+const production=(await import('./worker.mjs')).default;
+const proposalEnv={SITE_ORIGIN:origin,AI:{run(){throw Error('Proposal route must not infer');}}};
+assert.equal((await production.fetch(new Request('https://fixture.workers.dev/proposals',{
+ method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'
+}),proposalEnv)).status,503,'Missing proposal bindings fail closed');
+assert.equal((await production.fetch(new Request('https://fixture.workers.dev/proposals',{
+ method:'OPTIONS',headers:{Origin:origin,'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'Content-Type'}
+}),proposalEnv)).status,204);
+assert.equal((await production.fetch(new Request('https://fixture.workers.dev/proposals',{
+ method:'GET',headers:{Origin:origin}
+}),proposalEnv)).status,405,'Pending proposals have no public list endpoint');
+console.log('PASS: production proposal routing is isolated from inference and fails closed without storage.');

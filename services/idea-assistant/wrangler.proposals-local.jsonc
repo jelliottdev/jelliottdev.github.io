@@ -1,0 +1,14 @@
+{
+  "name": "liberpedia-proposals-local",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-19",
+  "vars": {"SITE_ORIGIN": "http://127.0.0.1:4397"},
+  "d1_databases": [{
+    "binding": "PROPOSALS",
+    "database_name": "liberpedia-proposals-local",
+    "database_id": "00000000-0000-0000-0000-000000000001",
+    "migrations_dir": "migrations"
+  }],
+  "ratelimits": [{"name": "PROPOSAL_LIMIT", "namespace_id": "1002", "simple": {"limit": 3, "period": 60}}],
+  "observability": {"enabled": false}
+}

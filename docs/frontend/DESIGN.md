@@ -26,3 +26,11 @@ The research index remains separate. Optional research maps help discover relate
 Organize an idea as outcome, ordered methods, scope, and bounds or rules. Reuse the small maintained outcome and method-family vocabularies; spelling or phrasing changes do not create categories. Keep the exact objective and output-changing settings alongside the shared labels. A readable passage and a complete solution can share a deciphering outcome without sharing a success criterion.
 
 Free text can clarify an existing category or remain unclassified. It cannot add categories automatically. Expand the maintained vocabulary only when an existing category cannot describe the distinction. Scope and parameter changes belong in the specification, not in new method names. A broad method label helps find related work; it never establishes that an exact configuration was executed. An outcome alone is not a method and must not retrieve arbitrary experiments.
+
+### Home composition (24 October)
+
+Use the supplied Liberpedia-home-current composition as the home reference. The standalone home shares one frame between the manuscript preview, idea entry and research-map preview. Keep source imagery on cool gray, functional headings in sans-serif and the serif Liberpedia wordmark. Secondary reference destinations remain quiet direct links below. Home styles are isolated from articles and reader styles; the home must render without loading the experiment registry.
+
+The file picker currently keeps originals in this browser for preview only. Show that boundary in file review; transfer only the confirmed text into the checker. Do not imply that attached files, linked repositories or scripts have been interpreted or executed.
+
+The confirmed standardized idea is the intake. Do not add a second “Suggest a test” form. Preserve original wording beside its standardized interpretation internally; checking overlap and designing a bounded test are maintainer work. Exact duplicate storage does not establish semantic novelty. Sharing remains an optional card action. No automatic experiment result or public untested page is implied by saving.

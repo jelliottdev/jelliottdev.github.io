@@ -1,5 +1,6 @@
 /* The AI binding supplies inference access; no provider key or secret is required. */
 import AssistantSearch from '../../assistant-search.js';
+import {handleProposal} from './proposals.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
@@ -137,4 +138,8 @@ export function createHandler(loadRecords = records) {
   };
 }
 
-export default {fetch:createHandler()};
+const ask=createHandler();
+export default {fetch(request,env,ctx){
+  if(new URL(request.url).pathname==='/proposals')return handleProposal(request,env);
+  return ask(request,env,ctx);
+}};

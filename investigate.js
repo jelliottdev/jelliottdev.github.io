@@ -231,6 +231,7 @@
   raw=incoming.get('q')||'';
   let legacyScope=null;
   let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
+  let intakeEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
   const fragment=doc.defaultView?.location?.hash||'';
   if(fragment.startsWith('#idea=')){
    try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
@@ -240,6 +241,7 @@
   if(pageHint){try{legacyScope=parseScope(pageHint,{kind:'supplied',refs:['URL page hint']});}catch{message='The linked page selection could not be read. You can enter exact pages when reviewing the idea.';}}
   const focus=selector=>doc.querySelector(selector)?.focus();
   function stop(){generation++;controller?.abort();controller=null;busy=false;}
+  function stopIntake(clear=false){intakeVersion++;intakeController?.abort();intakeController=null;if(intake)intake.busy=false;if(clear)intake=null;}
   function render(){
    const prior=doc.activeElement?.id;
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
@@ -248,16 +250,41 @@
    }else{
     host.innerHTML='<button class="back" id="back" type="button">Back to idea</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+
      (pending?'':(stage==='research'?'<section class="confirmed-card"><button id="share-idea" class="share-icon" type="button" aria-label="Share confirmed idea" title="Share idea"'+(shareBusy?' disabled':'')+'><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-4 4 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/></svg></button><details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
-     '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details><p id="share-status" class="small" role="status">'+esc(shareNotice)+'</p><div id="share-fallback"></div></section>':'</section>')+
+     '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>'+intakeHTML()+'<p id="share-status" class="small" role="status">'+esc(shareNotice)+'</p><div id="share-fallback"></div></section>':'</section>')+
      '')+(editing?editorHTML():questionsHTML())+(pending?'<button id="edit" type="button">Edit interpretation</button>':'')+
      (stage==='review'?'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'')+
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status!=='specified'?'<p>Choose a method before comparing it with prior tests. <a href="index.html#/research">Browse the research index</a> for approaches.</p>':'')+
-     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p><div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
+     (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p class="small">Unstated inputs and success criteria remain undecided. Confirming this wording does not mean a test has run.</p>'+'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
    bind();
    if(prior&&doc.getElementById(prior))focus('#'+prior);
+  }
+  function intakeHTML(){
+   if(!intakeEndpoint||!intake||intake.snapshot!==confirmed)return '';
+   return '<div class="idea-save"><span id="idea-save-status" class="small" role="status">'+(intake.busy?'Saving idea…':intake.saved?'Saved.':intake.error?"Couldn’t save this idea.":'')+'</span>'+(intake.error?'<button id="retry-save" type="button">Retry saving</button>':'')+'</div>';
+  }
+  async function saveIntake(snapshot=confirmed){
+   if(!intakeEndpoint||!snapshot||snapshot!==confirmed)return;
+   if(!intake||intake.snapshot!==snapshot){
+    stopIntake(true);
+    intake={snapshot,requestId:id(),busy:false,saved:false,error:false};
+    try{intake.body={requestId:intake.requestId,fragment:H.encode(snapshot),...(snapshot.source.origin==='shared_link'?{}:{originalIdea:snapshot.source.text})};}
+    catch{intake.error=true;render();return;}
+   }
+   const current=intake;if(current.busy||current.saved||!current.body)return;
+   const token=++intakeVersion,requestController=new AbortController();intakeController=requestController;current.busy=true;current.error=false;render();
+   const timer=schedule(()=>requestController.abort(),30000);
+   try{
+    const response=await fetcher(intakeEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(current.body),signal:requestController.signal});
+    const data=await response.json();
+    if(requestController.signal.aborted)throw Error('Save interrupted');
+    if(token!==intakeVersion||intake!==current||confirmed!==snapshot)return;
+    if(!response.ok||!/^p_[a-f0-9]{64}$/.test(data.id)||!['received','already_received'].includes(data.status)||!Number.isFinite(Date.parse(data.receivedAt)))throw Error('Save unavailable');
+    current.saved=true;
+   }catch{if(token===intakeVersion&&intake===current&&confirmed===snapshot)current.error=true;}
+   finally{unschedule(timer);if(token===intakeVersion&&intake===current&&confirmed===snapshot){current.busy=false;intakeController=null;render();}}
   }
   function prepareCard(){
    const snapshot=confirmed;preparedFor=snapshot;preparedCard=null;shareNotice='';shareFallback=null;
@@ -336,6 +363,7 @@
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records)).join(''):'');
   }
   function bind(){
+   doc.getElementById('retry-save')?.addEventListener('click',()=>saveIntake());
    doc.getElementById('share-idea')?.addEventListener('click',shareIdea);
    if(stage==='research')updateShare();
    bindMethodSteps();
@@ -343,10 +371,10 @@
    doc.getElementById('idea')?.addEventListener('input',event=>{raw=event.target.value;});
    doc.getElementById('intake')?.addEventListener('submit',event=>{
     event.preventDefault();raw=doc.getElementById('idea').value;if(!raw.trim())return;
-    stop();draft=initialDraft(raw);if(legacyScope){draft=C.revise(draft,{scope:legacyScope});legacyScope=null;message='The linked page selection is included in the scope below; the original wording is unchanged.';}else message='';confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;stage='review';error='';render();focus('#review-title');
+    stopIntake(true);stop();draft=initialDraft(raw);if(legacyScope){draft=C.revise(draft,{scope:legacyScope});legacyScope=null;message='The linked page selection is included in the scope below; the original wording is unchanged.';}else message='';confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;stage='review';error='';render();focus('#review-title');
    });
-   doc.getElementById('back')?.addEventListener('click',()=>{stop();stage='input';editing=false;confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#idea');});
-   doc.getElementById('edit')?.addEventListener('click',()=>{stop();editingBackup={stage,draft,confirmed,result,packet,message,error};editing=true;stage='review';draft=C.revise(draft,{});confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#edit-method');});
+   doc.getElementById('back')?.addEventListener('click',()=>{stopIntake(true);stop();stage='input';editing=false;confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#idea');});
+   doc.getElementById('edit')?.addEventListener('click',()=>{stopIntake(true);stop();editingBackup={stage,draft,confirmed,result,packet,message,error};editing=true;stage='review';draft=C.revise(draft,{});confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#edit-method');});
    doc.getElementById('cancel-edit')?.addEventListener('click',()=>{editing=false;if(editingBackup){({stage,draft,confirmed,result,packet,message,error}=editingBackup);editingBackup=null;if(packet)printHost.innerHTML=packetHTML(packet);}render();focus('#edit');});
    doc.getElementById('editor')?.addEventListener('submit',event=>{
     event.preventDefault();try{
@@ -384,7 +412,7 @@
     try{if(draft.method.status!=='specified')throw Error('Choose a method before comparing prior tests.');if(intakeQuestions(draft).length)throw Error('Review the unanswered question before confirming.');confirmed=C.confirm(draft,{id:id(),at:now()});const q=C.queryForResearch(confirmed,{maxLength:6000}),compact=C.retrievalQuery(confirmed);
      if(q.needsShorter||compact.needsShorter){error='This idea exceeds the comparison’s length limit. Shorten the wording without removing important rules.';confirmed=null;render();return;}
      if(q.needsClarification){error='The interpretation still needs clarification before automatic comparison.';confirmed=null;render();return;}
-     stage='research';error='';message='';prepareCard();compare();
+     stage='research';error='';message='';prepareCard();saveIntake(confirmed);compare();
     }catch(e){error=e.message;render();}
    });
    doc.getElementById('cancel')?.addEventListener('click',()=>{stop();message='Stopped waiting. Your confirmed idea is kept.';error='';render();});
@@ -398,6 +426,7 @@
    if(status)status.textContent=message||(!loaded&&!loadError?'Loading research records…':'');
    if(notice)notice.textContent=error||loadError;
    if(confirm)confirm.disabled=!loaded;
+   const collection=doc.getElementById('collection-notice');if(collection){collection.hidden=!intakeEndpoint;collection.textContent=intakeEndpoint?'Confirmed ideas are saved for research review.':'';}
    const privacy=doc.querySelector('.privacy');if(privacy)privacy.textContent=endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'';
    const retry=doc.getElementById('reload');
    if(loaded)retry?.remove();
@@ -411,6 +440,7 @@
     records=registry.records.filter(r=>r.status==='published');documents=S.experimentDocs(records);
     if(!records.length)throw Error('No published research records are available.');
     endpoint=typeof config.endpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ask$/.test(config.endpoint)?config.endpoint:null;
+    intakeEndpoint=typeof config.proposalEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/proposals$/.test(config.proposalEndpoint)?config.proposalEndpoint:null;
     const hash=await root.crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(registry)));
     registryId='sha256-json:'+Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
     loaded=true;
@@ -446,8 +476,8 @@
    }catch(e){if(token===generation)error=e.name==='AbortError'?'The comparison timed out. Your confirmed idea is kept; try again.':e.message;}
    finally{unschedule(timer);if(token===generation){busy=false;controller=null;render();}}
   }
-  render();load();
-  return {getSnapshot:()=>({stage,draft,confirmed,result,packet,busy}),destroy:stop};
+  render();const ready=load();
+  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy}),destroy:()=>{stopIntake(true);stop();}};
  }
  const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,createApp};
  if(typeof module!=='undefined')module.exports=api;

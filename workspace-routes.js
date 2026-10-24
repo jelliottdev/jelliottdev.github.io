@@ -4,6 +4,7 @@
   function destination(hash){
     const [path,query='']=String(hash||'').replace(/^#/, '').split('?');
     const parts=path.split('/').filter(Boolean);
+    if(!parts.length || (parts.length===1&&parts[0]==='overview'))return 'home.html';
     if(parts[0]==='reader' && parts.length<=2){
       const id=parts[1]||'lp1-00';
       if(!/^lp[12]-\d{2}$/.test(id))return null;

@@ -4,6 +4,10 @@
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const qa=`window.__investigateMock=async function(url,options){
+ const proposalMode=new URLSearchParams(location.search).get('qa');
+ if(url==='data/assistant.json'&&proposalMode?.startsWith('intake-'))return Response.json({endpoint:'https://mock.example/ask',proposalEndpoint:'https://mock.example/proposals'});
+ if(url==='https://mock.example/proposals'&&proposalMode==='intake-error')return Response.json({error:'Mock-only save unavailable'},{status:503});
+ if(url==='https://mock.example/proposals')return Response.json({id:'p_'+'c'.repeat(64),status:'received',receivedAt:new Date().toISOString()});
  if(!String(url).startsWith('https://'))return fetch(url,options);
  const mode=new URLSearchParams(location.search).get('qa');
  if(mode==='offline')return Response.json({error:'Mock outage'},{status:503});
