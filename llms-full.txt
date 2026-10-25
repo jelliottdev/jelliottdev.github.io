@@ -77489,6 +77489,42 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "url": "https://jelliottdev.github.io/#/wiki/search-space"
     }
   ],
+  "research_questions": [
+    {
+      "id": "preserve-section-lengths",
+      "question": "Does the balance remain unusual when each section keeps its own word lengths?",
+      "state": "tested",
+      "note": "The table remains unusually balanced in this comparison: only 88 of 49,999 shuffles were at least as even. Keeping each section’s word lengths changes the comparison, but this is still the same previously selected table, not independent confirmation.",
+      "records": [
+        "lp1-section-balance"
+      ]
+    },
+    {
+      "id": "search-section-orders",
+      "question": "Does the result survive checking every order of the four sections?",
+      "state": "tested",
+      "note": "The original order ties for best. When every shuffled sample also tries all 24 orders, 440 of 49,999 are at least as balanced. That accounts for choosing the section order; it does not account for choosing these words or the table width.",
+      "records": [
+        "lp1-section-order"
+      ]
+    },
+    {
+      "id": "search-six-widths",
+      "question": "What happens when six table widths are compared?",
+      "state": "tested",
+      "note": "The six-width search did not distinguish the manuscript from shuffled controls: 6,035 of 49,999 were at least as balanced after the same search. These controls shuffle across sections. This tests a different choice rule from the fixed 16-column comparison.",
+      "records": [
+        "lp1-width-selection"
+      ]
+    },
+    {
+      "id": "preserve-sentence-structure",
+      "question": "Does the balance remain unusual when sentence structure is preserved?",
+      "state": "open",
+      "note": "This needs reliable sentence breaks and one fixed rule: rearrange words inside each sentence, or move whole sentences without changing their words. Those are different comparisons; neither has a prepared test here.",
+      "records": []
+    }
+  ],
   "related": [
     "lp1-section-balance",
     "lp1-section-order",

@@ -8,6 +8,7 @@ from pathlib import Path
 from experiment_content import compile_content, article_bytes, draft_record_ids
 from experiment_taxonomy import apply_classifications
 from browser_followups import validate_followups
+from research_questions import validate_research_questions, validate_research_question_refs
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -15,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
                   'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
                   'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials', 'discovery',
-                  'recorded_comparison')
+                  'recorded_comparison', 'research_questions')
 
 
 def checker_payload(records, registry_bytes):
@@ -233,6 +234,8 @@ def validate_record(root, path, pages):
         validate_recorded_comparison(d['recorded_comparison'], scope, pages)
     if 'browser_followups' in d:
         validate_followups(d['browser_followups'], root, pages)
+    if 'research_questions' in d:
+        validate_research_questions(d['research_questions'], d)
     if 'pages_note' in d:
         text(d['pages_note'], f'{identifier}.pages_note')
     if 'bounds_note' in d:
@@ -434,6 +437,7 @@ def build(root=ROOT):
             continue
         records.append(validate_record(root, path, pages))
     ids = {d['id'] for d in records}
+    validate_research_question_refs(records, {record['id']: record for record in records})
     # Editorial record types travel with complete evidence, including offline exports.
     type_path = root / 'data/method-families.json'
     if type_path.exists():

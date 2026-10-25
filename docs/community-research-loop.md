@@ -299,3 +299,20 @@ community feed prioritizes unfinished summaries within its ten-task projection
 so older unfinished work remains directly reachable. Overall community loading
 and pagination remain separate, and missing pages or a service error cannot
 establish that no unfinished work exists.
+
+
+### Linked questions and completed results
+
+A published record can declare optional `research_questions` in its single
+`record.json`: 1–12 objects with `id`, `question`, `state` (`tested` or `open`),
+`note`, and `records` (other published record IDs). Notes explain what the linked
+results answer, including their limits; open questions can have no linked record.
+The research map and library reuse that source rather than authoring separate
+coverage summaries.
+
+Question state is an explicit editorial judgment. Neither AI matching, similar
+wording, a saved computation nor a new published result automatically closes a
+question. `tested` is not proof or universal coverage, and `open` is not a claim
+that a browser plan exists. Runnable follow-ups remain separate validated
+declarations. When evidence changes, update the originating question and its
+links deliberately, preserving the historical experiment and its exact bounds.

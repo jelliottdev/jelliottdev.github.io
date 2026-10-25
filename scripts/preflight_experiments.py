@@ -6,6 +6,7 @@ import re
 from build_experiments import ROOT, article_link_aliases, require, validate_family, validate_record, validate_record_placement
 from experiment_taxonomy import apply_classifications
 from experiment_content import draft_record_ids
+from research_questions import validate_research_question_refs
 
 
 def preflight(identifiers, root=ROOT):
@@ -29,6 +30,7 @@ def preflight(identifiers, root=ROOT):
     if taxonomy.exists():
         apply_classifications(json.loads(taxonomy.read_text(encoding='utf-8')), list(by_id.values()), retired_ids=sorted(retired))
     validate_record_placement(root, selected)
+    validate_research_question_refs(selected, by_id)
     for record in selected:
         require(all(identifier in by_id and identifier != record['id']
                     for identifier in record['related']), 'Related IDs must be published or in this batch')

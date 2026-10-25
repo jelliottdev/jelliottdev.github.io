@@ -95,6 +95,24 @@ Existing records and archived bundles remain supported in their original format.
 
 Drafts do not enter public indexes, but committed drafts are still public files. Never commit private material. Review metadata must identify the actual computational reviewer; independent human review is complete only when its name, date and findings are recorded. A pending review has no implied assignee or deadline.
 
+## Linked research questions
+
+A published record may author `research_questions` in its own `record.json`.
+Use 1–12 entries, each with exactly `id`, `question`, `state`, `note` and
+`records`: a stable hyphenated ID, a plain question, `tested` or `open`, a short
+explanation, and IDs of other published records that answer or inform it.
+`records` may be empty for an open question. Keep this account in the originating
+file; generated indexes and views reuse it rather than maintaining another list.
+
+These are explicit editorial states, not inferred from similarity, tags,
+`next_steps`, a completed run or AI text. `tested` means the linked work addresses
+the precise question under its stated bounds; it does not mean a theory is
+proven or all variants are closed. Explain differences in controls or selection
+rules beside the result. `open` means the stated question remains unresolved;
+it does not advertise executable code or a runnable follow-up. Running and
+publication do not automatically change these states: reconcile new evidence
+and linked completed results explicitly.
+
 ## Record vocabulary
 
 `supported`, `not-supported`, and `inconclusive` describe the result within the stated scope. They do not settle a general theory. Record a precise finding and limitations even when a test produces no useful result. Include related work and explain how the new test differs.

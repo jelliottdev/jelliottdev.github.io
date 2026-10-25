@@ -564,6 +564,7 @@ function experimentArticle(r,catalog=experimentRecords){
       <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.reader_limit||r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
       ${readerSections.selected.map(section=>`<section class="experiment-prose"><h3>${esc(section.title)}</h3>${renderExperimentMarkdown(section.body,accountFiles,r.article_links||{},shownVisuals)}</section>`).join('')}
     </section>
+    ${globalThis.RecordQuestionView?.render(r,{headingLevel:2})||''}
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Get the files</h2>
       <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download experiment ZIP</a></p>
       <details class="experiment-extra"><summary>Run it yourself and browse individual files</summary><p>${esc(r.reproduction.environment)}${needsImages?' Original image inputs are separate: extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''} The <a href="#/wiki/running-scripts">script setup guide</a> explains how to run the command below.</p>
@@ -574,7 +575,7 @@ function experimentArticle(r,catalog=experimentRecords){
       ${r.family?`<div id="experiment-family">${experimentFamily(r,catalog)}</div>`:''}
       <div data-related-records>${experimentOtherRelated(r,catalog)}</div>
       ${r.family||r.related.length?`<p class="small muted" data-related-status role="status"${catalog?' hidden':''}>Loading related research…</p><button type="button" data-related-retry hidden>Retry related research</button><p class="small"><a data-related-index href="#/research${r.family?'?family='+encodeURIComponent(r.family.id):''}">Browse related research in the index</a></p>`:''}
-      <h3 id="experiment-remaining">What remains open</h3><p>${esc(r.next_steps)}</p>
+      ${Object.hasOwn(r,'research_questions')?'':`<h3 id="experiment-remaining">What remains open</h3><p>${esc(r.next_steps)}</p>`}
     </details>
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
       <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt id="experiment-input">Input</dt><dd>${esc(r.scope.representation)}</dd><dt id="experiment-procedure">Method</dt><dd>${esc(r.scope.procedure)}</dd><dt id="experiment-bounds">Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt id="experiment-exclusions">Not tested</dt><dd>${esc(r.scope.exclusions)}</dd><dt id="experiment-limitations">Limitations</dt><dd>${esc(r.limitations)}</dd></dl>

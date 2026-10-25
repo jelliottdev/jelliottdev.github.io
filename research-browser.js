@@ -109,11 +109,12 @@
  function recordNode(id){return [...nodes.values()].find(n=>n.record_id===id)}
  function readerLimit(value){return String(value??'').replace(/\s*(?:;\s*)?human review(?: is)? pending\.?\s*$/i,'').trim();}
  function previewScopeHTML(record){
-  const text=value=>typeof value==='string'?value.trim():'',normal=value=>value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim(),parameters=text(record.scope?.parameters),excluded=text(record.scope?.exclusions),next=readerLimit(record.next_steps),limit=readerLimit(record.reader_limit||record.limitations);
+  const text=value=>typeof value==='string'?value.trim():'',normal=value=>value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim(),parameters=text(record.scope?.parameters),excluded=Object.hasOwn(record,'research_questions')?'':text(record.scope?.exclusions),next=Object.hasOwn(record,'research_questions')?'':readerLimit(record.next_steps),limit=readerLimit(record.reader_limit||record.limitations);
   const already=[record.reader_finding||record.finding,parameters,excluded,next].map(value=>normal(text(value))).filter(Boolean),distinctLimit=limit&&!already.some(value=>value.includes(normal(limit)));
-  return '<section class="record-scope"><h3>Tested bounds</h3><p>'+esc(pageRanges(record.pages))+'</p>'+(parameters?'<p>'+esc(parameters)+'</p>':'')+'</section>'+
-   (excluded||next?'<section class="record-open-questions"><h3>Further checks</h3>'+(excluded?'<p><strong>Not tested:</strong> '+esc(excluded)+'</p>':'')+(next?'<p><strong>Next check:</strong> '+esc(next)+'</p>':'')+'</section>':'')+
-   (distinctLimit?'<p class="record-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'');
+  return (distinctLimit?'<p class="record-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+
+   (globalThis.RecordQuestionView?.render(record,{headingLevel:3})||'')+
+   '<section class="record-scope"><h3>Tested bounds</h3><p>'+esc(pageRanges(record.pages))+'</p>'+(parameters?'<p>'+esc(parameters)+'</p>':'')+'</section>'+
+   (excluded||next?'<section class="record-open-questions"><h3>Further checks</h3>'+(excluded?'<p><strong>Not tested:</strong> '+esc(excluded)+'</p>':'')+(next?'<p><strong>Next check:</strong> '+esc(next)+'</p>':'')+'</section>':'');
  }
  function previewFollowupsHTML(record){return globalThis.RecordFollowupView?.render(record)||'';}
  function bindPreviewFollowups(record){globalThis.RecordFollowupView?.bind(panel,record);}
