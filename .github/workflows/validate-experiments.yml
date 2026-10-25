@@ -137,6 +137,10 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_published_program_projection.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_published_known_key_projection.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/published_known_key_projection.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_published_count_evidence.py --check
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_published_evidence_history.py

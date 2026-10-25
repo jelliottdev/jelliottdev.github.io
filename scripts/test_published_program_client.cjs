@@ -27,5 +27,9 @@ let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS 
  await test('count-v1 remains unchanged and public target-run entry is never invoked while loading either proof',async()=>{
   const countWire=apiFor(Count.entries[0],Count.records[0]),countValue=await coverage(Count.entries[0].task,countWire),programWire=apiFor(),programValue=await coverage(entry.task,programWire),original=E.run;E.run=()=>{throw Error('No public target-run call during receipt loading');};try{for(const [wire,value,kind] of [[countWire,countValue,'count'],[programWire,programValue,'opening']]){const {client,calls}=clientFor(wire),checked=await client.checkCoverage(value);assert.equal(calls.length,1);assert.match(checked.titles[wire.task.taskId],new RegExp('Published '+kind+' check'));if(kind==='count')assert.equal(client.getSources(checked)[0].run.result.wordPairs.matches,77);}}finally{E.run=original;}
  });
+ await test('imported source programs use a distinct provenance association without inventing runnable follow-ups',async()=>{
+  const wire=apiFor();wire.provenance.projection.sourceProgramId=wire.provenance.projection.id;delete wire.provenance.projection.followupId;repin(wire);const value=await coverage(entry.task,wire),{client}=clientFor(wire),checked=await client.checkCoverage(value);assert.equal(checked.coveredPages.length,55);assert.equal(checked.links[entry.task.taskId],'library.html#/experiment/'+entry.recordId);assert(!Object.hasOwn(client.getSources(checked)[0],'followupId'));
+  for(const mutate of [p=>p.followupId='invented-browser-check',p=>delete p.sourceProgramId,p=>p.sourceProgramId='../wrong']){const bad=clone(wire);mutate(bad.provenance.projection);repin(bad);const {client}=clientFor(bad);await assert.rejects(()=>client.checkCoverage({...value,publishedSources:[bad.publishedSource]}));}
+ });
  console.log(groups+' published program client groups passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

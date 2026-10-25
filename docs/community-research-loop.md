@@ -454,10 +454,16 @@ Browser QA on private synthetic inputs verified discovery before registration,
 explicit review/run/save, four saved results sharing one snapshot, and reload
 without re-execution. This is software verification, not manuscript evidence.
 
-Before publishing the known-key language follow-up, expose its archived 2,352
-outputs through the audited evidence provider. Preserve their original opening
-criterion and provenance; any language comparison is a new evaluation of those
-outputs, not a historical language result. Do not advertise them as untried.
+The indexed published-program provider now exposes the archived 2,352 known-key
+outputs as 42 bounded, independently audited source receipts. It filters exact
+programs, input versions, alphabets and page text before fetching a receipt;
+byte pins, cancellation, timeouts and a bounded cache apply to each fetch.
+The original Warning-opening criterion and all nine historical comparison
+traces remain pinned. Language scoring and output inspection are new evaluations
+of these saved outputs, not historical language results or new transformations.
+The complete local reuse check covers 2,310 usable outputs and 42 empty-rune
+cases. Private browser QA found all cases without creating tasks or results.
+Imported programs use sourceProgramId, separately from a real runnable followupId.
 
 These connections have software fixture coverage; no finite source recipe is
 published yet. Release one only after the complete hosted execution/save/reload

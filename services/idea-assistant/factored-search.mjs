@@ -18,7 +18,7 @@ function createHandler({fetcher=globalThis.fetch,now=()=>new Date(),taskHandler}
  const findSelected=inspection?findSelectedFactoredInspectionEvidence:output?findSelectedFactoredOutputEvidence:prefix?findSelectedFactoredPrefixEvidence:findSelectedFactoredEvidence;
  const clock=()=>now().getTime();
  const gate=({db,proposalId,currentDomain,body,env})=>verify({db,proposalId,domain:currentDomain.domain,inputVersion:currentDomain.domain.inputVersion,snapshotToken:body.snapshotToken,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
- const prefixReuse=async context=>{const {db,proposalId,currentDomain,cases,env,request}=context,reuse=await findSelected({db,proposalId,domain:currentDomain.domain,cases,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});await gate(context);if(request.signal.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});return reuse;};
+ const prefixReuse=async context=>{const {db,proposalId,currentDomain,cases,env,request}=context,reuse=await findSelected({db,proposalId,domain:currentDomain.domain,cases,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock(),fetcher,signal:request.signal});await gate(context);if(request.signal.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});return reuse;};
  return createFiniteSearchHandler({fetcher,now,verifyGroupSnapshot:gate,...(taskHandler?{taskHandler}:{}),settingsAPI:Settings.factored,...((prefix||output||inspection)?{routePrefix:inspection?'factored-inspection-search':output?'factored-output-search':'factored-prefix-search',reuseCasesBeforeCreate:prefixReuse}:{}),
   async authorizeDomain(context){
    const {card,bundle,body,action}=context;
@@ -27,11 +27,11 @@ function createHandler({fetcher=globalThis.fetch,now=()=>new Date(),taskHandler}
    if(action!=='evidence')await gate({...context,currentDomain:compiled});
    return compiled;
   },
-  async discoverEvidence({db,proposalId,currentDomain,body,env}){
-   return readPage({db,proposalId,domain:currentDomain.domain,inputVersion:body.inputVersion,cursor:body.cursor,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
+  async discoverEvidence({db,proposalId,currentDomain,body,env,request}){
+   return readPage({db,proposalId,domain:currentDomain.domain,inputVersion:body.inputVersion,cursor:body.cursor,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock(),fetcher,signal:request.signal});
   },
   async prepareCases(context){
-   const {currentDomain,db,cases,request,proposalId,env}=context,selected=await selectFactoredCases({compiled:currentDomain,cases}),reuse=await findSelected({db,domain:currentDomain.domain,cases:selected,...((prefix||output||inspection)?{proposalId,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()}:{} )});
+   const {currentDomain,db,cases,request,proposalId,env}=context,selected=await selectFactoredCases({compiled:currentDomain,cases}),reuse=await findSelected({db,domain:currentDomain.domain,cases:selected,fetcher,signal:request.signal,...((prefix||output||inspection)?{proposalId,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()}:{} )});
    await gate(context);
    if(request.signal.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});
    const prepared=reuse.missing.length?await prepareFiniteCases({...context,cases:reuse.missing,settingsAPI:Settings.factored,...(questionPolicy?{questionPolicy}:{}),signal:request.signal}):{inputVersion:currentDomain.domain.inputVersion,cases:[]};

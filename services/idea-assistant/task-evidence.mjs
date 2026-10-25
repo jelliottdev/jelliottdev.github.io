@@ -8,7 +8,7 @@ const HEX=/^[a-f0-9]{64}$/;
 const IDEA=/^p_[a-f0-9]{64}$/;
 const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
 const digest=async(value,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(value))))].map(n=>n.toString(16).padStart(2,'0')).join('');
-export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=globalThis.crypto}){
+export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=globalThis.crypto,fetcher=globalThis.fetch,signal}){
  if(typeof db?.prepare!=='function')throw Error('Computation evidence storage is unavailable.');
  await Evidence.describe(task,inputVersion,cryptoAPI);
  // Keep title and batch scope out of the protocol lookup. Both the origin and
@@ -73,7 +73,7 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
  }
  const family=await findFamilyEvidence({db,task,inputVersion,crypto:cryptoAPI}),familySources=[];
  for(const source of family.sources)if(!seen.has(source.task.taskId)){seen.add(source.task.taskId);sources.push(source);familySources.push(family.familySources.find(item=>item.taskId===source.task.taskId));}
- const published=await findPublishedEvidence({task,inputVersion,crypto:cryptoAPI}),publishedSources=[];
+ const published=await findPublishedEvidence({task,inputVersion,crypto:cryptoAPI,fetcher,signal}),publishedSources=[];
  for(const source of published.sources)if(!seen.has(source.task.taskId)){seen.add(source.task.taskId);sources.push(source);publishedSources.push(published.publishedSources.find(item=>item.taskId===source.task.taskId));}
  const comparison=await Evidence.compare(task,inputVersion,sources,cryptoAPI);
  for(const pin of selected){const receipt=comparison.evidence.find(item=>item.taskId===pin.taskId);if(!receipt||E.stable(receipt.pages)!==E.stable(pin.pages))throw Error('Selected computation evidence changed its exact page coverage.');}
@@ -126,7 +126,7 @@ export async function readIdeaEvidence({db,proposalId,taskId,crypto:cryptoAPI=gl
 
 /* Recheck the precise immutable source receipts named by a preparation basis.
  * Newer unrelated results cannot silently replace these pinned sources. */
-export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryptoAPI=globalThis.crypto,includeSources=false}){
+export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryptoAPI=globalThis.crypto,includeSources=false,fetcher=globalThis.fetch,signal}){
  await Evidence.describe(task,inputVersion,cryptoAPI);
  if(typeof db?.prepare!=='function'||!Array.isArray(evidence)||evidence.length>75)throw Error('The pinned computation evidence is malformed.');
  const sources=[],seen=new Set();
@@ -139,8 +139,8 @@ export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryp
     JOIN research_ideas public ON public.proposal_id=links.proposal_id WHERE links.task_id=t.id AND links.input_version=?)`)
   .bind(ref.resultId,ref.taskId,inputVersion,inputVersion).first();
   if(!row||row.created_at!==ref.createdAt){
-   const family=await resolveFamilyEvidence({db,taskId:ref.taskId,resultId:ref.resultId,inputVersion,createdAt:ref.createdAt,crypto:cryptoAPI});
-   const published=family?null:await resolvePublishedEvidence({taskId:ref.taskId,resultId:ref.resultId,inputVersion,createdAt:ref.createdAt,crypto:cryptoAPI});
+   const family=await resolveFamilyEvidence({db,taskId:ref.taskId,resultId:ref.resultId,inputVersion,createdAt:ref.createdAt,crypto:cryptoAPI,fetcher,signal});
+   const published=family?null:await resolvePublishedEvidence({taskId:ref.taskId,resultId:ref.resultId,inputVersion,createdAt:ref.createdAt,crypto:cryptoAPI,fetcher,signal});
    if(!family&&!published)throw Error('Pinned public computation evidence is unavailable.');sources.push((family||published).source);continue;
   }
   if(row.task_id!==ref.taskId||row.result_id!==ref.resultId||!HEX.test(row.task_hash)||typeof row.task_json!=='string'||typeof row.result_json!=='string'||row.input_version!==inputVersion)throw Error('Pinned public computation evidence is unavailable.');

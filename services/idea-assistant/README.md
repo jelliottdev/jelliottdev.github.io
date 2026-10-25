@@ -327,5 +327,6 @@ Apply migration 0014 before deploying the source-aware finite Worker. It adds
 immutable shared snapshots and lightweight task-origin references, retaining all
 old origin bytes and the existing response shape. Local SQLite and private
 browser QA cover migration compatibility, quotas, tampering, source changes and
-save/reload. The October 25 deployment attempt was stopped before migration by
-Cloudflare account authorization error 7403; these changes are not claimed live.
+save/reload. An initial October 25 attempt stopped at Cloudflare authorization
+error 7403. A later read-only connection check succeeded and migration 0014 was
+applied remotely. Worker deployment remains a separate release step.
