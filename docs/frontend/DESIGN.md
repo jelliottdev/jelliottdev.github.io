@@ -116,6 +116,13 @@ are saved results, not a claim that the manuscript is deciphered. Limit chooser
 lookups to two at once, load verification tools only on entry, and discard late
 updates after a selection change or closing the chooser.
 
+Offer one verified starting point for visitors who do not know which check to
+choose. It is a convenient contribution, not a ranking of theories. Keep its
+source question, purpose and destination together; never swap it for a different
+check after it appears. The full chooser remains one direct disclosure below.
+If a visitor opens that chooser while evidence is loading, do not insert a new
+recommendation above their place. Unknown availability must stay explicit.
+
 Explain the sequence in ordinary words: review, run in this browser, choose
 whether to save. Say how saving updates the question's checked work. Keep exact
 rules available before Run, and distinguish a completed calculation from a
