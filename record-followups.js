@@ -3,6 +3,7 @@
  'use strict';
  const node=typeof module==='object'&&module.exports;
  const C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,E=node?require('./local-experiment.js'):root.LocalExperiment,Control=node?require('./local-control.js'):root.LocalControl;
+ const Protocols=node?require('./experiment-protocols.js'):root.ExperimentProtocols;
  const HEX=/^[a-f0-9]{64}$/,SLUG='[a-z0-9]+(?:-[a-z0-9]+)*',ID=new RegExp('^'+SLUG+'$');
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -32,17 +33,15 @@
  function cardProgram(card){
   const snapshot=cardSnapshot(card),draft=snapshot,rules=draft.rules,known=k=>rules[k].status==='specified';
   if(draft.unresolved.length||draft.method.status!=='specified'||draft.scope.status!=='specified'||!exact(draft.scope.value,['pages'])||!Array.isArray(draft.scope.value.pages)||!draft.scope.value.pages.length||Object.values(rules).some(v=>v.status==='unrestricted'))throw Error('The published idea is not a fixed complete-page experiment.');
-  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||['exact-prefix','word-affine-count','word-prime-sums'].includes(rules.evaluation.value?.kind)))throw Error('The published input and evaluation must be explicit.');
+  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||rules.evaluation.value?.kind==='exact-prefix'||Protocols.identify(rules.evaluation.value)))throw Error('The published input and evaluation must be explicit.');
   for(const k of ['searchBounds','searchProtocol','exceptionalCases'])if(known(k))throw Error('The published conditions need an execution adapter.');
   if(known('unmapped')&&rules.unmapped.value!=='preserve'||known('wordBoundaries')&&rules.wordBoundaries.value!=='preserve')throw Error('The published separator rule needs an adapter.');
-  if(draft.method.value.operations.some(op=>op.id==='word_prime_sums')){
-   const operations=draft.method.value.operations,op=operations[0],evaluation=rules.evaluation.value;
-   if(operations.length!==1||op.id!=='word_prime_sums'||!exact(op,['id','label','table','boundaries',...(Object.hasOwn(op,'declaredFamilyId')?['declaredFamilyId']:[])])||Object.hasOwn(op,'declaredFamilyId')&&(typeof op.declaredFamilyId!=='string'||!Object.hasOwn(C.METHOD_FAMILIES,op.declaredFamilyId))||op.label!=='Word prime sums'||!exact(evaluation,['kind','table','boundaries'])||!same(evaluation,{kind:'word-prime-sums',table:op.table,boundaries:op.boundaries})||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The word-sum table, boundaries and evaluation must agree.');
-   return {snapshot,steps:[],pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:evaluation};
-  }
-  if(draft.method.value.operations.some(op=>op.id==='word_affine_count')){
-   const operations=draft.method.value.operations,op=operations[0],evaluation=rules.evaluation.value;
-   if(operations.length!==1||op.id!=='word_affine_count'||Object.keys(op).some(k=>!['id','label','declaredFamilyId','lag','a','b','boundaries'].includes(k))||op.label!==undefined&&op.label!=='Within-word affine pair count'||!exact(evaluation,['kind','lag','a','b','boundaries'])||!same(evaluation,{kind:'word-affine-count',lag:op.lag,a:op.a,b:op.b,boundaries:op.boundaries})||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The published measurement and evaluation must agree.');
+  const measurementIds=new Set(Protocols.list().map(d=>d.operation.id));
+  if(draft.method.value.operations.some(op=>measurementIds.has(op.id))){
+   const operations=draft.method.value.operations,op=operations[0],evaluation=rules.evaluation.value,withoutFamily={...op};delete withoutFamily.declaredFamilyId;
+   if(Object.hasOwn(op,'declaredFamilyId')&&(typeof op.declaredFamilyId!=='string'||!Object.hasOwn(C.METHOD_FAMILIES,op.declaredFamilyId)))throw Error('The published method family is not in the maintained vocabulary.');
+   const expected=Protocols.fromOperation(withoutFamily);
+   if(operations.length!==1||!expected||!Protocols.identify(evaluation)||!same(evaluation,expected)||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The published measurement settings and evaluation must agree.');
    return {snapshot,steps:[],pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:evaluation};
   }
   if(rules.evaluation.value!=='measurement'&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');

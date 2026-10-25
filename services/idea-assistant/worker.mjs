@@ -10,6 +10,7 @@ import {createPrepareTaskHandler} from './prepare-task.mjs';
 import {createCommunityIdeaHandler} from './community-ideas.mjs';
 import {createCommunityFeedHandler} from './community-feed.mjs';
 import {createTaskExtensionHandler} from './task-extensions.mjs';
+import {createTaskVariantHandler} from './task-variants.mjs';
 import {createRecordPlanHandler} from './record-plans.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
@@ -177,10 +178,12 @@ const recordPlans=createRecordPlanHandler();
 const communityIdeas=createCommunityIdeaHandler();
 const communityFeed=createCommunityFeedHandler();
 const taskExtensions=createTaskExtensionHandler();
+const taskVariants=createTaskVariantHandler();
 export default {fetch(request,env,ctx){
   const path=new URL(request.url).pathname;
   if(path==='/community-research')return communityFeed(request,env);
   if(/^\/tasks\/[a-f0-9]{64}\/extensions$/.test(path))return taskExtensions(request,env);
+  if(/^\/tasks\/[a-f0-9]{64}\/variants$/.test(path))return taskVariants(request,env);
   if(path==='/prepare-task')return prepareTask(request,env);
   if(path==='/record-plans')return recordPlans(request,env);
   if(path==='/ideas'||path.startsWith('/ideas/'))return communityIdeas(request,env);

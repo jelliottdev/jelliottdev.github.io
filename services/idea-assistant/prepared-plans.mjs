@@ -2,6 +2,7 @@
 import C from '../../claim-specification.js';
 import E from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
+import Variants from '../../task-variants.js';
 import {validateCard} from './idea-relations.mjs';
 
 const HEX=/^[a-f0-9]{64}$/,PREP=/^prep_[a-f0-9]{64}$/,PROPOSAL=/^p_[a-f0-9]{64}$/;
@@ -52,6 +53,17 @@ async function basisFor(db,value,bound,authority){
   const normalized=validateCard(basis.normalizedCard);
   if(basis.kind==='compiled-card')require(C.serialize(normalized)===C.serialize(bound.card),'Compiled basis changed the original card');
   else require(basis.mapping&&typeof basis.mapping==='object'&&!Array.isArray(basis.mapping),'Mapped basis requires reviewed mapping evidence');
+ }else if(authority==='word-boundaries'){
+  require(exact(basis,['kind','parentTaskId','parentTaskHash','from','to'])&&basis.kind==='word-boundaries'
+   &&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),
+   'Invalid word-boundary preparation basis');
+  const row=await query(db,'SELECT t.task_hash,t.task_json FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',basis.parentTaskId,bound.base.proposalId);
+  require(row?.task_hash===basis.parentTaskHash,'Word-boundary parent is not associated with this idea');
+  const parent=JSON.parse(row.task_json);await E.checkIdentity(parent);
+  require(parent.taskId===basis.parentTaskId&&await sha(E.stable(parent))===row.task_hash,'Stored word-boundary parent differs from its hash');
+  const variant=Variants.inspect(parent);
+  require(variant&&variant.from===basis.from&&variant.to===basis.to,'Word-boundary basis differs from the fixed comparison');
+  await Variants.validate(parent,bound.task);
  }else{
   require(authority==='remaining-lp2'&&exact(basis,['kind','parentTaskId','parentTaskHash','protocolHash','coveredPages','remainingPages'])
    &&basis.kind==='remaining-lp2'&&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),
@@ -70,7 +82,7 @@ async function basisFor(db,value,bound,authority){
 async function checked(row,bound){
  if(!row||row.binding_hash!==bound.bindingHash)return null;
  const p=projection(row);
- if(!['idea','remaining-lp2'].includes(row.authority)||!PREP.test(row.id)||typeof row.basis_json!=='string'||row.basis_json.length>128000)return null;
+ if(!['idea','remaining-lp2','word-boundaries'].includes(row.authority)||!PREP.test(row.id)||typeof row.basis_json!=='string'||row.basis_json.length>128000)return null;
  for(const key of Object.keys(bound.base))if(p[key]!==bound.base[key])return null;
  try{
   const basis=JSON.parse(row.basis_json);if(E.stable(basis)!==row.basis_json||await sha(row.basis_json)!==row.basis_hash)return null;
@@ -83,7 +95,7 @@ export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,c
  require(await proposal(db,bound),'Confirmed proposal is unavailable or changed');
  if(parentTaskId!==null)require(await query(db,'SELECT t.id FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',parentTaskId,proposalId),
   'Prepared parent is not associated with this idea');
- require(['idea','remaining-lp2'].includes(authority),'Invalid prepared authority');
+ require(['idea','remaining-lp2','word-boundaries'].includes(authority),'Invalid prepared authority');
  const source=await basisFor(db,basis,bound,authority),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
  let row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
  if(row){const receipt=await checked(row,bound);require(receipt,'Stored preparation differs from its binding');return receipt;}

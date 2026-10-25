@@ -1,3 +1,6 @@
+import {createRequire} from 'node:module';
+import vm from 'node:vm';
+import Protocols from '../../experiment-protocols.js';
 import {createHash} from 'node:crypto';
 /* Deterministic planner: real SQLite, fixed injected pages, no AI/network. */
 import assert from 'node:assert/strict';
@@ -30,6 +33,31 @@ function fixture(data=card(),options={}){
 const request=(body={proposalId:id,parentTaskId:null},extra={})=>new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json','CF-Connecting-IP':'203.0.113.9',...extra},body:JSON.stringify(body)});
 async function submit(f,body){const response=await f.handle(request(body),f.env);return {response,value:await response.json()};}
 let count=0;async function test(name,fn){await fn();console.log('PASS '+name);count++;}
+await test('definition-derived measurements agree in browser and backend compilers with exact legacy titles and notes',async()=>{
+ const frontendSource=readFileSync(new URL('../../record-followups.js',import.meta.url),'utf8'),needle='const api={reference,validateOrigins,createWorkspace}';assert(frontendSource.includes(needle));
+ const context={module:{exports:{}},require:createRequire(new URL('../../record-followups.js',import.meta.url)),btoa,TextEncoder,crypto};vm.createContext(context);vm.runInContext(frontendSource.replace(needle,'const api={cardProgram,reference,validateOrigins,createWorkspace}'),context);
+ const criteria=[];
+ for(const boundaries of ['non-rune','hyphen-period']){
+  for(const table of ['canonical','reversed'])criteria.push({kind:'word-prime-sums',table,boundaries});
+  for(const lag of [1,12])for(const a of [0,28])for(const b of [0,28])criteria.push({kind:'word-affine-count',lag,a,b,boundaries});
+ }
+ for(const criterion of criteria){
+  const definition=Protocols.identify(criterion),description=Protocols.describe(criterion),{kind,...parameters}=criterion;
+  assert(definition);const operation={id:definition.operation.id,label:definition.operation.label,...parameters};
+  const input=card({method:known({operations:[operation]}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(criterion)}}),before=structuredClone(input),plan=planCard(input),browser=context.module.exports.cardProgram(input);
+  assert(!plan.reason,plan.reason);assert.deepEqual(plan.criterion,criterion);assert.deepEqual(JSON.parse(JSON.stringify(browser.criterion)),criterion);assert.deepEqual(JSON.parse(JSON.stringify(browser.steps)),plan.steps);assert.deepEqual(JSON.parse(JSON.stringify(browser.pages)),plan.pages);assert.equal(browser.inputVersion,plan.inputVersion);assert(plan.notes.includes(description.compilerNote));assert.deepEqual(input,before);
+  const f=fixture(input),{response,value}=await submit(f);assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.equal(value.task.title,description.title);assert.equal(value.task.title,kind==='word-prime-sums'?'Word prime sums · '+criterion.table+' table · '+criterion.boundaries:'Within-word rune pairs · lag '+criterion.lag+' · '+criterion.boundaries);assert.deepEqual(value.task.criterion,criterion);
+  if(kind==='word-affine-count'){const noLabel=structuredClone(input);delete noLabel.method.value.operations[0].label;assert.deepEqual(planCard(noLabel).criterion,criterion);assert.deepEqual(JSON.parse(JSON.stringify(context.module.exports.cardProgram(noLabel).criterion)),criterion);}
+ }
+ for(const definition of Protocols.list()){
+  const criterion=definition.id==='word-prime-sums'?{kind:definition.id,table:'canonical',boundaries:'non-rune'}:{kind:definition.id,lag:6,a:27,b:24,boundaries:'non-rune'},operation={id:definition.operation.id,label:definition.operation.label,...Object.fromEntries(Object.entries(criterion).filter(([k])=>k!=='kind'))};
+  const base=card({method:known({operations:[operation]}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(criterion)}});
+  for(const mutate of [c=>c.method.value.operations[0].unknown=true,c=>c.method.value.operations[0].label+=' except F',c=>c.method.value.operations[0].boundaries='spaces',c=>c.rules.evaluation.value.boundaries='hyphen-period',c=>c.method.value.operations[0].declaredFamilyId='unmaintained',c=>c.method.value.operations.push({id:'reverse_row_runes'}),c=>c.rules.evaluation.value.unknown=true,...(criterion.kind==='word-prime-sums'?[['table','custom']]:[['lag',0],['lag',13],['a',-1],['a',29],['b',-1],['b',29],['lag',1.5]]).map(([k,v])=>c=>{c.method.value.operations[0][k]=v;c.rules.evaluation.value[k]=v;})]){
+   const input=structuredClone(base);mutate(input);let refused=false;try{refused=!!planCard(input).reason;}catch{refused=true;}assert(refused);assert.throws(()=>context.module.exports.cardProgram(input));
+   const f=fixture(input);let ai=0;f.env.AI.run=()=>{ai++;throw Error('No canonical downgrade');};const {value}=await submit(f);assert.notEqual(value.state,'plan-ready');assert.equal(f.calls,0);assert.equal(ai,0);
+  }
+ }
+});
 await test('hosted Welcome wording maps numeric key and exact reset prose through interpretation to reviewed plan',async()=>{
  const text='Reproduce the Welcome opening on LP1-03 using Vigenere with key indices [23,10,1,10,9,10,16,26], subtract, reset at each page.';
  const evidence=quote=>({start:text.indexOf(quote),quote}),phrase=text.slice(text.indexOf('using'));

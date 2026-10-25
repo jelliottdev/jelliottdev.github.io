@@ -234,10 +234,50 @@ it does not establish readability, statistical significance or complete coverage
 
 ### Remaining loop boundaries
 
-A generic task is checked against official manuscript input, but task admission
-still needs a server-issued prepared-plan receipt binding its program and
-criterion to the reviewed idea (including AI mappings and authorized scope
-extensions). Existing frontend review checks do not replace this API boundary.
-Extensions currently cover remaining LP2 pages, not arbitrary parameter sweeps.
+Generic tasks require a server-issued preparation binding the original idea,
+exact program, criterion, input version, parent and known-answer controls.
+Validated AI mappings and supported extensions preserve their separate basis.
+Existing tasks remain retryable without changing their original evidence.
+Extensions cover remaining LP2 pages and fixed word-boundary comparisons,
+not arbitrary parameter sweeps.
 The existing global daily persistence caps also remain in place. These gaps mean
 the full contribution loop is not complete for every idea or research node.
+
+
+### Comparing word boundaries
+
+Completed word-prime-sum and within-word affine-pair measurements can prepare a
+second run that changes only how words end: either every non-rune ends a word,
+or only ASCII hyphens and periods do. Both use the exact same saved page text,
+alphabet and other measurement settings; transformed text is excluded. The
+original idea and result remain unchanged. A saved parent is required before
+creating the comparison, and an existing matching task is reused.
+
+Review and creation remain explicit. After the comparison runs, show the two
+results side by side: group counts and assigned totals for sums; matching and
+eligible pairs for the affine measurement. Neither rule is pronounced correct,
+and these differences do not establish a cipher. Scope extensions and boundary
+comparisons have different preparation authorities and cannot impersonate each
+other. No AI chooses a new boundary rule or writes a result.
+
+
+### Shared protocol definitions
+
+`experiment-protocols.js` is the common description of the word-prime-sum and
+within-word affine-pair protocols: accepted method parameters, named settings,
+canonical task titles, plain questions, instructions, limits and supported next
+changes. The planner, authored follow-up validator and browser workspace use
+these definitions. The word-boundary variation uses the same settings and
+allowed choices, rather than maintaining a separate version of each method.
+
+Protocol descriptions do not calculate answers or certify scientific outcomes.
+The JavaScript evaluator, independent Python runner and synthetic known-answer
+controls remain separate implementations. Existing task titles, identities,
+criteria and results retain their meaning. New numerical methods still need an
+explicit evaluator and independent verification; a metadata entry alone cannot
+make arbitrary ideas executable.
+
+This is the first migrated branch, not a claim that all published records now
+have structured executable bounds or that every open setting is a runnable
+follow-up. Expanding the catalog requires both executable support and a stated
+question, evaluation and limit.

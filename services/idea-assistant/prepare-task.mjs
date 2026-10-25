@@ -1,6 +1,7 @@
 import {issue as issuePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 import PlanControls from '../../local-plan-controls.js';
+import Protocols from '../../experiment-protocols.js';
 /* Source-bound proposed plans; inference can map wording, never execute code. */
 import L from '../../local-experiment.js';
 import C from '../../claim-specification.js';
@@ -10,6 +11,7 @@ import {createAIPlanner} from './propose-task-plan.mjs';
 const ALPHABET=[{"rune":"ᚠ","latin":"F","prime":2},{"rune":"ᚢ","latin":"U","prime":3},{"rune":"ᚦ","latin":"TH","prime":5},{"rune":"ᚩ","latin":"O","prime":7},{"rune":"ᚱ","latin":"R","prime":11},{"rune":"ᚳ","latin":"C","prime":13},{"rune":"ᚷ","latin":"G","prime":17},{"rune":"ᚹ","latin":"W","prime":19},{"rune":"ᚻ","latin":"H","prime":23},{"rune":"ᚾ","latin":"N","prime":29},{"rune":"ᛁ","latin":"I","prime":31},{"rune":"ᛄ","latin":"J","prime":37},{"rune":"ᛇ","latin":"EO","prime":41},{"rune":"ᛈ","latin":"P","prime":43},{"rune":"ᛉ","latin":"X","prime":47},{"rune":"ᛋ","latin":"S","prime":53},{"rune":"ᛏ","latin":"T","prime":59},{"rune":"ᛒ","latin":"B","prime":61},{"rune":"ᛖ","latin":"E","prime":67},{"rune":"ᛗ","latin":"M","prime":71},{"rune":"ᛚ","latin":"L","prime":73},{"rune":"ᛝ","latin":"NG","prime":79},{"rune":"ᛟ","latin":"OE","prime":83},{"rune":"ᛞ","latin":"D","prime":89},{"rune":"ᚪ","latin":"A","prime":97},{"rune":"ᚫ","latin":"AE","prime":101},{"rune":"ᚣ","latin":"Y","prime":103},{"rune":"ᛡ","latin":"IA","prime":107},{"rune":"ᛠ","latin":"EA","prime":109}];
 const PURPOSE='A proposed bounded computation, not a confirmed cipher rule or a decryption verdict.';
 const fail=reason=>({reason});
+const MEASUREMENTS=Protocols.list(),MEASUREMENT_IDS=new Set(MEASUREMENTS.map(d=>d.operation.id)),MEASUREMENT_KINDS=new Set(MEASUREMENTS.map(d=>d.id));
 export function planCard(input){
  const card=validateCard(input);
  if(card.unresolved.length)return fail('The idea still has unresolved conditions.');
@@ -32,32 +34,21 @@ export function planCard(input){
   const value=rules.evaluation.value;
   if(value==='measurement')criterion={kind:'measurement'};
   else if(value&&typeof value==='object'&&value.kind==='exact-prefix'&&Object.keys(value).length===2&&Object.hasOwn(value,'values'))criterion={kind:value.kind,values:value.values};
-  else if(value&&value.kind==='word-affine-count'&&Object.keys(value).length===5&&['kind','lag','a','b','boundaries'].every(k=>Object.hasOwn(value,k))&&Number.isInteger(value.lag)&&value.lag>=1&&value.lag<=12&&[value.a,value.b].every(n=>Number.isInteger(n)&&n>=0&&n<=28)&&['non-rune','hyphen-period'].includes(value.boundaries))criterion={...value};
-  else if(value&&value.kind==='word-prime-sums'&&Object.keys(value).length===3&&['kind','table','boundaries'].every(k=>Object.hasOwn(value,k))&&['canonical','reversed'].includes(value.table)&&['non-rune','hyphen-period'].includes(value.boundaries))criterion={...value};
+  else if(Protocols.identify(value))criterion={...value};
   else return fail('The requested evaluation needs an adapter.');
  }else notes.push('Proposed evaluation: measure rune frequencies and adjacent repeats; no readability decision.');
  for(const key of ['searchBounds','searchProtocol','exceptionalCases'])if(specified(key))return fail('The specified '+key+' condition needs an adapter.');
- if(operations.some(op=>op.id==='word_prime_sums')){
-  const op=operations[0],allowed=['id','label','declaredFamilyId','table','boundaries'];
-  if(operations.length!==1||op.id!=='word_prime_sums'||Object.keys(op).some(k=>!allowed.includes(k))||op.label!=='Word prime sums')return fail('Word prime sums need one explicit canonical measurement operation.');
+ if(operations.some(op=>MEASUREMENT_IDS.has(op.id))){
+  const op=operations[0],withoutFamily={...op};delete withoutFamily.declaredFamilyId;
   if(Object.hasOwn(op,'declaredFamilyId')&&(typeof op.declaredFamilyId!=='string'||!Object.hasOwn(C.METHOD_FAMILIES,op.declaredFamilyId)))return fail('A declared method family must use the maintained vocabulary.');
-  const expected={kind:'word-prime-sums',table:op.table,boundaries:op.boundaries};
-  if(criterion.kind!=='word-prime-sums'||L.stable(criterion)!==L.stable(expected))return fail('The prime-table and boundary settings must match the explicit evaluation.');
-  if(['boundaryMode','reset','initialState'].some(specified)||rules.wordBoundaries.status==='not_applicable')return fail('The word-sum boundary conflicts with another supplied rule.');
-  notes.push('Add the authorized GP prime value of every rune in each declared word. Reversed means reverse the prime assignments across the same ordered alphabet; it does not reverse digits or rune order. Non-rune characters are not assigned numbers. Pages remain separate.');
-  return {pages:card.scope.value.pages,steps:[],inputVersion,criterion,notes};
- }
- if(criterion.kind==='word-prime-sums')return fail('The evaluation needs the matching word-prime-sum measurement operation.');
- if(operations.some(op=>op.id==='word_affine_count')){
-  const op=operations[0],allowed=['id','label','declaredFamilyId','lag','a','b','boundaries'];
-  if(operations.length!==1||op.id!=='word_affine_count'||Object.keys(op).some(k=>!allowed.includes(k))||op.label!==undefined&&op.label!=='Within-word affine pair count')return fail('The within-word count needs one explicit measurement operation.');
-  const expected={kind:'word-affine-count',lag:op.lag,a:op.a,b:op.b,boundaries:op.boundaries};
-  if(criterion.kind!=='word-affine-count'||L.stable(criterion)!==L.stable(expected))return fail('The measurement parameters and explicit evaluation must agree.');
+  const expected=Protocols.fromOperation(withoutFamily);
+  if(operations.length!==1||!expected)return fail('The measurement needs one explicit supported operation.');
+  if(L.stable(criterion)!==L.stable(expected))return fail('The measurement parameters and explicit evaluation must agree.');
   if(['boundaryMode','reset','initialState'].some(specified)||rules.wordBoundaries.status==='not_applicable')return fail('The measurement boundary conflicts with another supplied rule.');
-  notes.push('Count only pairs within each page and declared word boundary. Compare with the exact average under uniformly shuffled rune order inside each word; this is not a tail probability or a correction for choosing a formula.');
+  notes.push(Protocols.describe(criterion).compilerNote);
   return {pages:card.scope.value.pages,steps:[],inputVersion,criterion,notes};
  }
- if(criterion.kind==='word-affine-count')return fail('The evaluation needs the matching within-word measurement operation.');
+ if(MEASUREMENT_KINDS.has(criterion.kind))return fail('The evaluation needs its matching measurement operation.');
  const steps=[];let reverse=false,cumulative=false,keyed=false;
  const keyedModes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};
  for(const operation of operations){
@@ -145,7 +136,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    if(body.parentTaskId&&!await query('SELECT id FROM local_tasks WHERE id=?',body.parentTaskId))return reply({error:'Parent task not found.'},404);
    const card=validateCard(row.card_json);let plan=planCard(card),interpretationNotes=[],basis={kind:'compiled-card',normalizedCard:card};
    if(plan.reason){
-    if(card.method.value?.operations?.some(op=>op.id==='word_prime_sums')||card.rules.evaluation.value?.kind==='word-prime-sums')return reply({state:'needs-adapter',reason:plan.reason,proposalId:body.proposalId});
+    if(card.method.value?.operations?.some(op=>MEASUREMENT_IDS.has(op.id))||MEASUREMENT_KINDS.has(card.rules.evaluation.value?.kind))return reply({state:'needs-adapter',reason:plan.reason,proposalId:body.proposalId});
     const mapped=await proposePlan(card,env);
     if(!mapped.reason){plan=mapped.plan;interpretationNotes=mapped.notes;basis={kind:'mapped-card',normalizedCard:mapped.card,mapping:mapped.mapping};}
     else return reply({state:'needs-adapter',reason:mapped.reason,proposalId:body.proposalId});
@@ -157,7 +148,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
     const worker=async()=>{try{while(next<plan.pages.length){if(controller.signal.aborted)throw Error();const index=next++,id=plan.pages[index];const response=bundle?null:await fetcher('https://jelliottdev.github.io/data/pages/'+id+'.json',{redirect:'manual',signal:controller.signal});if(response&&!response.ok)throw Error();const page=bundle?bundle.pages.get(id):await jsonBody(response,512*1024),text=plan.inputVersion==='raw'?page.raw:page.reviewed_text;if(page.id!==id||typeof text!=='string')throw Error();totalBytes+=new TextEncoder().encode(text).length;if(totalBytes>2000000)throw Error();pages[index]={id,text};}}catch(error){controller.abort();throw error;}};
     await Promise.all(Array.from({length:Math.min(4,pages.length)},()=>worker()));
    }catch(error){console.warn('prepare-task: official manuscript source unavailable',error?.name||'Error',error?.message||'');return reply({error:'The selected manuscript text could not be loaded.'},422);}finally{clearTimeout(timer);}
-   const title=plan.criterion.kind==='word-prime-sums'?'Word prime sums · '+plan.criterion.table+' table · '+plan.criterion.boundaries:plan.criterion.kind==='word-affine-count'?'Within-word rune pairs · lag '+plan.criterion.lag+' · '+plan.criterion.boundaries:plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':s.op==='finite-shift'?'Finite key stream '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+' indices · '+s.reset+' resets':s.op==='interrupted-keyed-shift'?'Interrupted repeating-key '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune key · '+s.reset+' resets':s.op==='keyed-shift'?(s.mode==='repeat'?'Repeating-key':s.mode==='plaintext-autokey'?'Plaintext autokey':'Ciphertext autokey')+' '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune '+(s.mode==='repeat'?'key':'seed')+' · '+s.reset+' resets':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
+   const title=Protocols.describe(plan.criterion)?.title||plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':s.op==='finite-shift'?'Finite key stream '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+' indices · '+s.reset+' resets':s.op==='interrupted-keyed-shift'?'Interrupted repeating-key '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune key · '+s.reset+' resets':s.op==='keyed-shift'?(s.mode==='repeat'?'Repeating-key':s.mode==='plaintext-autokey'?'Plaintext autokey':'Ciphertext autokey')+' '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune '+(s.mode==='repeat'?'key':'seed')+' · '+s.reset+' resets':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
    let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch(error){return reply({state:'needs-adapter',reason:String(error?.message||'').startsWith('The finite key stream is shorter')?'The supplied finite stream is too short for a complete page segment. Supply enough values or specify a different reset.':'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
    let controls;
    try{controls=await prepareControls(task,crypto);await PlanControls.validate(controls,task,crypto);}

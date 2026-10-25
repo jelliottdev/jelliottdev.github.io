@@ -7,15 +7,16 @@ import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 import E from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
+import Variants from '../../task-variants.js';
 import {issue,authorize} from './prepared-plans.mjs';
 const at='2026-10-24T12:00:00.000Z',sha=v=>createHash('sha256').update(v).digest('hex');
 const alphabet=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const f=value=>C.field('specified',value);
 function makeCard(extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic plan fixture'},aim:f('Measure'),
  method:f({operations:[{id:'affine',a:7,b:7}]}),scope:f({pages:['lp2-15']}),rules:{inputVersion:f('raw'),evaluation:f('measurement')},...extra}),{id:'fixture',at}));}
-async function fixture(){
+async function fixture(includeV9=true){
  const sqlite=new DatabaseSync(':memory:');
- for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql','0009_word_boundary_preparations.sql']){if(!includeV9&&name==='0009_word_boundary_preparations.sql')continue;sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));}
  const db={prepare(sql){return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}},card=makeCard(),cardHash=sha(C.serialize(card)),proposalId='p_'+cardHash;
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,cardHash,C.serialize(card),'unused',at);
  const task=await E.prepare({title:'Synthetic prepared target',alphabet,pages:[{id:'lp2-15',text:'ᚠᚢ-ᚦ'}],steps:[{op:'affine',a:7,b:7}],criterion:{kind:'measurement'}});
@@ -74,6 +75,42 @@ await test('remaining-page authority binds the original idea parent and exact un
  assert.equal(receipt.authority,'remaining-lp2');assert.deepEqual(await authorize({...expanded,preparationId:receipt.id}),receipt);
  for(const delta of [{parentTaskHash:'0'.repeat(64)},{protocolHash:'0'.repeat(64)},{remainingPages:['lp2-17']},{coveredPages:['lp2-16']}])await assert.rejects(issue({...expanded,basis:{...basis,...delta}}));
  const unknown='f'.repeat(64);await assert.rejects(issue({...expanded,parentTaskId:unknown,basis:{...basis,parentTaskId:unknown}}));
+});
+await test('word-boundary authority binds exact parent, rule toggle and immutable original idea',async()=>{
+ for(const criterion of [{kind:'word-prime-sums',table:'reversed',boundaries:'non-rune'},
+  {kind:'word-affine-count',lag:6,a:27,b:24,boundaries:'hyphen-period'}]){
+  const {sqlite,args}=await fixture(),parent=await E.prepare({...args.task,title:'Synthetic word measurement',steps:[],criterion}),taskJSON=E.stable(parent),taskHash=sha(taskJSON);
+  sqlite.prepare('INSERT INTO local_tasks VALUES(?,?,?,?,?,?,?,?,?,?)').run(parent.taskId,taskHash,'0'.repeat(64),args.proposalId,C.serialize(args.card),taskJSON,'raw',null,at,at.slice(0,10));
+  sqlite.prepare('INSERT INTO local_task_ideas VALUES(?,?,?,?,?,?)').run(parent.taskId,args.proposalId,'raw',null,at,at.slice(0,10));
+  const task=await Variants.prepare(parent),controls=await Controls.prepare(task),v=Variants.inspect(parent),basis={kind:'word-boundaries',parentTaskId:parent.taskId,parentTaskHash:taskHash,from:v.from,to:v.to};
+  const change={...args,task,controls,parentTaskId:parent.taskId,authority:'word-boundaries',basis},receipt=await issue(change);
+  assert.equal(receipt.authority,'word-boundaries');assert.equal(receipt.cardHash,sha(C.serialize(args.card)));assert.deepEqual(await authorize({...change,preparationId:receipt.id}),receipt);
+  const before=sqlite.prepare('SELECT total_changes() n').get().n;
+  for(const delta of [{parentTaskHash:'0'.repeat(64)},{from:v.to},{to:v.from},{extra:1}])await assert.rejects(issue({...change,basis:{...basis,...delta}}));
+  for(const delta of [{title:'Other child title'},{pages:[{id:'lp2-16',text:task.pages[0].text}]},{criterion:parent.criterion},{steps:[{op:'affine',a:1,b:0}]}]){
+   const changed=await E.prepare({...task,...delta}),suite=await Controls.prepare(changed);await assert.rejects(issue({...change,task:changed,controls:suite}));
+   assert.equal(await authorize({...change,task:changed,controls:suite,preparationId:receipt.id}),null);
+  }
+  assert.equal(sqlite.prepare('SELECT total_changes() n').get().n,before);assert.equal(sqlite.prepare('SELECT card_json FROM proposals WHERE id=?').get(args.proposalId).card_json,C.serialize(args.card));
+ }
+});
+await test('migration nine preserves issued receipts, keys, indexes and immutability for older clients',async()=>{
+ const {sqlite,args}=await fixture(false),receipt=await issue(args),rows=sqlite.prepare('SELECT * FROM prepared_plans ORDER BY id').all();
+ const beforeIndexes=sqlite.prepare("SELECT name,sql FROM sqlite_master WHERE type='index' AND tbl_name='prepared_plans' ORDER BY name").all();
+ const beforeFKs=sqlite.prepare('PRAGMA foreign_key_list(prepared_plans)').all();
+ sqlite.exec(readFileSync(new URL('./migrations/0009_word_boundary_preparations.sql',import.meta.url),'utf8'));
+ assert.deepEqual(sqlite.prepare('SELECT * FROM prepared_plans ORDER BY id').all(),rows);
+ assert.deepEqual(sqlite.prepare("SELECT name,sql FROM sqlite_master WHERE type='index' AND tbl_name='prepared_plans' ORDER BY name").all(),beforeIndexes);
+ assert.deepEqual(sqlite.prepare('PRAGMA foreign_key_list(prepared_plans)').all(),beforeFKs);
+ assert.deepEqual(sqlite.prepare('PRAGMA foreign_key_check').all(),[]);
+ assert.equal(sqlite.prepare('PRAGMA foreign_keys').get().foreign_keys,1);
+ assert.deepEqual(await authorize({...args,preparationId:receipt.id}),receipt);assert.deepEqual(await authorize(args),receipt);
+ assert.deepEqual(await issue(args),receipt);
+ assert.throws(()=>sqlite.prepare("UPDATE prepared_plans SET authority='word-boundaries'").run(),/immutable/);
+ const row=rows[0],keys=Object.keys(row),insert=sqlite.prepare('INSERT INTO prepared_plans('+keys.join(',')+') VALUES('+keys.map(()=>'?').join(',')+')');
+ assert.throws(()=>insert.run(...keys.map(k=>k==='id'?'prep_'+'f'.repeat(64):k==='proposal_id'?'p_'+'f'.repeat(64):row[k])),/FOREIGN KEY/);
+ assert.throws(()=>insert.run(...keys.map(k=>k==='id'?'prep_'+'f'.repeat(64):k==='parent_task_id'?'f'.repeat(64):row[k])),/FOREIGN KEY/);
+ assert.throws(()=>insert.run(...keys.map(k=>k==='id'?'prep_'+'f'.repeat(64):k==='authority'?'arbitrary':row[k])),/CHECK constraint/);
 });
 await test('missing migration and storage faults remain errors, never an admission fallback',async()=>{
  const {sqlite,args}=await fixture();sqlite.exec('DROP TABLE prepared_plans');await assert.rejects(authorize(args),/no such table/);await assert.rejects(issue(args),/no such table/);

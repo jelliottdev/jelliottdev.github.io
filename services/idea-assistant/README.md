@@ -286,3 +286,11 @@ Worker supports the previous frontend without admitting arbitrary tasks.
 
 Checks: `node services/idea-assistant/test-prepared-plans.mjs` from the repository
 root, alongside the preparation, task, extension and browser UI suites.
+
+
+`POST /tasks/:id/variants` prepares the fixed word-boundary comparison for an
+eligible saved measurement. Migration `0009_word_boundary_preparations.sql`
+extends the receipt authority set while preserving earlier authorizations.
+Apply it before deploying the variant-dependent Worker and frontend. The shared
+`experiment-protocols.js` definitions supply the measurement constraints and
+presentation; the numerical engine and independent controls remain separate.
