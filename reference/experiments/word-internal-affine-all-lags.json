@@ -953,6 +953,305 @@
         },
         "expected_result_sha256": "591e90f805408ce272506b8e5d76958e53f45f270736304b721bc4dc4e78a710"
       }
+    },
+    {
+      "id": "direct-reading-lag-five-control",
+      "title": "Compare the five-position repeat with readable passages",
+      "question": "How often does the same rune repeat five positions later within words on the seven already-readable direct-text pages?",
+      "scope_change": "Use all seven pages in data/evidence/known-readings.json whose recorded method is direct: LP1-05, LP1-10 to LP1-13, LP1-16 and LP2-57. These already-readable pages replace the original LP2-00 to LP2-55 scope. Keep raw text, headings, the frozen relation and hyphen/period grouping; each page remains separate. Slashes and line breaks do not end a group.",
+      "limitation": "This is a descriptive comparison with readable passages, not held-out validation, an independent cipher test or a significance test. It counts one frozen relation and its exact within-word rearrangement average, without repeating the original formula search or shuffled trials. These passages share manuscript spelling conventions and are not a representative language sample. Raw LP1-10 retains its archived rune order rather than the separate reviewed swap. A higher or lower count does not establish or exclude a cipher mechanism.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "measure",
+            "detail": "Count one fixed affine relation at one fixed lag under the declared word boundaries; this does not identify a cipher."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "word_affine_count",
+                "label": "Within-word affine pair count",
+                "lag": 5,
+                "a": 1,
+                "b": 0,
+                "boundaries": "hyphen-period"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp1-05",
+              "lp1-10",
+              "lp1-11",
+              "lp1-12",
+              "lp1-13",
+              "lp1-16",
+              "lp2-57"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "not_applicable"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "word-affine-count",
+              "lag": 5,
+              "a": 1,
+              "b": 0,
+              "boundaries": "hyphen-period"
+            }
+          },
+          "reset": {
+            "status": "not_applicable"
+          },
+          "initialState": {
+            "status": "not_applicable"
+          },
+          "searchBounds": {
+            "status": "not_applicable"
+          },
+          "searchProtocol": {
+            "status": "not_applicable"
+          },
+          "exceptionalCases": {
+            "status": "not_applicable"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp1-05",
+            "text_sha256": "eb29e0b98fc7099c3f8f97cdec0d8d151d307ec1cf3d23d1afb648f86e99bb9c"
+          },
+          {
+            "id": "lp1-10",
+            "text_sha256": "7fab106f7615476fa180b30f386688d1d9dedf980d91cbe7536b06ebb2b9da2b"
+          },
+          {
+            "id": "lp1-11",
+            "text_sha256": "1234cb2c232d83c1044919d3e391b4ee3bff12c6f180fa5586b0af75f7571805"
+          },
+          {
+            "id": "lp1-12",
+            "text_sha256": "7ffc5a822d60bfc36ecdb9cb9df95a98d2c48fe6af625f5d9e0c6a5f8193b1cd"
+          },
+          {
+            "id": "lp1-13",
+            "text_sha256": "141734c60bbaed277e5ab598d5cf49fc5ebde0d5202663e2030cbe4c50fdafaf"
+          },
+          {
+            "id": "lp1-16",
+            "text_sha256": "3ba86b3cacff98e3c94e3075c8c0b93bb1c53d9bed5fe96ad58cf3b08cc11082"
+          },
+          {
+            "id": "lp2-57",
+            "text_sha256": "c89a73dc20c77308cb6b65d76895f18ada8b9cd9ff788fad3fd7ee521f36f9a0"
+          }
+        ]
+      },
+      "control": {
+        "label": "Count every planted synthetic pair using the declared word boundaries and distinguish its shuffled-order mean",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic planted word-pair control: direct-reading-lag-five-control",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᚠᚢᚦᚩᚱᚠᚢ /\r\nᚦᚩᚱᚠᚢᚦᚩᚱ. ᚠᚢᚦᚩᚱᚠᚢᚦᚩᚱᚠᚢᚦᚩᚱ"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [],
+          "criterion": {
+            "kind": "word-affine-count",
+            "lag": 5,
+            "a": 1,
+            "b": 0,
+            "boundaries": "hyphen-period"
+          },
+          "taskId": "926b0167025c397dbc8bce6a600d8a8193af24e22796dd46f70b0a3c6386a6d7"
+        },
+        "expected_result_sha256": "866b88631482f7a9b5171bad0e534579b91ee0a12971a89f8c1342093eab8e27"
+      },
+      "motivation": "Count the same-rune pairs five positions apart in already-readable passages and compare with their rearrangement average. This shows whether the selected repeat also occurs in ordinary readable text."
     }
   ],
   "research_questions": [

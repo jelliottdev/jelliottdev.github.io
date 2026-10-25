@@ -1,7 +1,9 @@
 'use strict';
 const assert=require('node:assert/strict'),Help=require('../research-help.js'),F=require('../record-followup-view.js'),registry=require('../data/experiments.json');
 const records=Object.fromEntries(registry.records.map(r=>[r.id,r])),before=JSON.stringify(records),groups=Help.choices(records),html=Help.render(records),tick=()=>new Promise(resolve=>setImmediate(resolve));
-const multiIndex=groups.findIndex(g=>g.checks.length>1),singleIndex=groups.findIndex(g=>g.checks.length===1);
+// The bounded-discovery tests below deliberately exercise a full eight-choice family.
+const multiIndex=groups.findIndex(g=>g.checks.length===8),singleIndex=groups.findIndex(g=>g.checks.length===1),shortMultiIndex=groups.findIndex(g=>g.checks.length===2);
+assert(multiIndex>=0&&singleIndex>=0&&shortMultiIndex>=0);
 function fixture(indices=[multiIndex,singleIndex],source=records,{failFactory=false}={}){
  const catalogue=Help.choices(source),rows=indices.map(index=>{
   const nodes=new Map(),group=catalogue[index],get=key=>{
@@ -62,6 +64,20 @@ await test('all displayed initial choices must settle before a sequential altern
 });
 await test('unavailable alternatives do not stop discovery or invent completion',async()=>{
  const f=fixture();settleInitial(f,[{state:'unavailable'},{state:'results'}]);await tick();f.calls[2].onState({state:'unavailable'});await tick();assert.equal(f.calls.length,4);const next=f.calls[3];next.onState({state:'remaining',remainingCount:1});await tick();assert.equal(f.topGet('[data-help-start-title]').textContent,next.check.title);assert.equal(f.topGet('[data-help-start-count]').textContent,'1 page remains to check.');assert.equal(f.calls.length,4);f.destroy();
+});
+await test('two-choice families stop at their real boundary and retain unknown results',async()=>{
+ for(const state of ['unavailable','remaining']){
+  const f=fixture([shortMultiIndex,singleIndex]);settleInitial(f);await tick();assert.equal(f.calls.length,3);
+  const alternative=f.calls[2];assert.equal(alternative.check,f.rows[0].group.checks[1]);
+  alternative.onState(state==='remaining'?{state,remainingCount:7}:{state});await tick();
+  assert.equal(f.calls.length,3,'Do not invent additional checks when this family has only two choices');assert(f.topGet('[data-help-more]').hidden);
+  if(state==='remaining'){
+   assert.equal(f.topGet('[data-help-start-title]').textContent,alternative.check.title);
+   assert.equal(f.topGet('[data-help-start-purpose]').textContent,alternative.check.motivation);
+   assert.equal(f.topGet('[data-help-start-link]').href,'run.html#record='+alternative.record.id+'&followup='+alternative.check.id);
+  }else{assert.match(f.topGet('[data-help-start-status]').textContent,/could not be checked/);assert(f.topGet('[data-help-start-choice]').hidden);}
+  f.destroy();
+ }
 });
 await test('automatic pass is capped at four alternatives; explicit next batch continues without duplicates and claims completion only after all choices',async()=>{
  const f=fixture();settleInitial(f);await tick();

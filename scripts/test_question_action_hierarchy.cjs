@@ -20,6 +20,7 @@ for(const render of [record=>library.overview(record),preview]){
  const before=JSON.stringify(deor);verify(render(deor),deor,true);assert.equal(JSON.stringify(deor),before);
  const editorial=structuredClone(deor);editorial.research_questions[0].state='tested';editorial.research_questions[0].records=['lp1-section-balance'];verify(render(editorial),editorial,true);
  const ordinary=structuredClone(deor);delete ordinary.research_questions[0].protocol;verify(render(ordinary),ordinary,false);
- const one=render(boundary);assert(one.includes('data-live-question='));assert(!one.includes('Other prepared checks'));assert(!one.includes('class="record-followups"'),'An exact question-owned recipe is not rendered twice');
+ const onlyBoundary=structuredClone(boundary);onlyBoundary.browser_followups=onlyBoundary.browser_followups.filter(recipe=>recipe.id==='lag-six-non-rune-boundaries');const one=render(onlyBoundary);assert(one.includes('data-live-question='));assert(!one.includes('Other prepared checks'));assert(!one.includes('class="record-followups"'),'An exact question-owned recipe is not rendered twice');
+ const expanded=render(boundary);verify(expanded,boundary,true);assert(expanded.includes('direct-reading-lag-six-control'),'The distinct readable-text control stays available beside the primary boundary question');
 }
 console.log('PASS library and map current questions lead; every distinct legacy setting remains once in one closed disclosure; ordinary records/editorial changes preserve their behavior and canonical data.');
