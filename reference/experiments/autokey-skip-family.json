@@ -7,6 +7,11 @@
     "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
   },
   "title": "Autokey with skipped key positions",
+  "reader_test": {
+    "input": "Rune text on the 55 rune-bearing pages from LP2-00 to LP2-55, with 45 fixed starting keys.",
+    "action": "Extend each starting key with recovered or encrypted runes, allowing up to three key positions to be skipped when they would repeat the previous encrypted rune.",
+    "check": "Compare returned full-page English-pattern scores with the fixed threshold, check planted known messages rune for rune, and separately score all retained final alternatives."
+  },
   "question": "Does the complete source autokey-with-skips grid produce a full-page candidate above its English-score gate?",
   "reader_question": "Can recovered or encrypted runes continue a key when positions may be skipped?",
   "summary": "No candidate crossed the source English-score threshold in 9,900 full-page decodes. The source encoder and decoder follow different future-key rules in 247 of 360 known-message tests, limiting the result.",

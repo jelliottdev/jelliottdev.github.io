@@ -375,7 +375,45 @@ async function familyEvidenceCoverageTests(){
  console.log('PASS family-to-idea evidence: historical-revision case fetching and exact links, full/partial/reloaded reuse without copied tasks or automatic execution, strict mapping and independent complete-result checks.');
 }
 
+async function keyedReviewIllustrationTests(){
+ const modes=[['repeat','Repeat the key','return to the first key rune.'],['plaintext-autokey','Use output runes to extend the key','take the next key rune from the first output above.'],['ciphertext-autokey','Use input runes to extend the key','take the next key rune from the first input above.']];
+ const illustrations=new Map();
+ for(const [index,[mode,label,continuation]] of modes.entries())for(const direction of ['subtract','add']){
+  const reset=['page','line','word'][index],step={op:'keyed-shift',mode,key:[28,2],direction,reset};
+  const plan=await E.prepare({title:'Synthetic keyed review '+mode+' '+direction,alphabet,pages:[{id:'lp2-15',text:'ᚠᚠᚠᚠ-ᚠᚠ\nᚠᚠᚠ'}],steps:[step],criterion:{kind:'measurement'}},webcrypto);
+  const ideaCard=card();ideaCard.method.value.operations=[{id:mode==='repeat'?'repeating_key':mode==='plaintext-autokey'?'plaintext_autokey':'ciphertext_autokey',key:[28,2],direction,reset}];
+  const planBefore=E.stable(plan),cardBefore=E.stable(ideaCard),controls=await PC.prepare(plan,webcrypto),controlsBefore=E.stable(controls);
+  const f=await fixture({task:plan,hash:'#idea='+proposalId,ideaCard,prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',task:plan,controls,notes:[],purpose:'Inspect the declared keyed rule before running'})});
+  try{
+   const state=f.app.getState(),markup=f.doc.getElementById('prepared-plan').innerHTML,runAt=markup.indexOf('id="create-experiment"'),visible=markup.slice(0,runAt),example=visible.match(/<section class="protocol-example protocol-keyed-example"[\s\S]*?<\/section>/)?.[0];
+   assert(state.prepared,mode+' '+direction+' has an actual reviewed plan');assert.equal(f.doc.getElementById('idea-heading').textContent,'Review this check');assert(f.doc.getElementById('prepare-experiment').hidden);
+   assert(example,mode+' '+direction+' shows its illustration before the explicit Run action');assert(example.includes('aria-label="Illustrative key calculation"'));assert(example.includes('Illustrative example · not manuscript evidence'));
+   assert(visible.includes('<strong>'+label+'.</strong>'));assert(visible.includes(direction==='subtract'?'Subtract each key rune’s alphabet position from the input rune’s position':'Add each key rune’s alphabet position to the input rune’s position'));assert(visible.includes('wrapping to 0–28'));assert(visible.includes('Restart at each '+reset+'.'));
+   assert(example.includes('First rune · alphabet positions 0–28'));assert(example.includes(continuation));
+   for(const heading of ['Input','Key','Output'])assert(example.includes('<th scope="col">'+heading+'</th>'));
+   assert(example.includes('5'+(direction==='subtract'?' − ':' + ')+'28 = '+(direction==='subtract'?'-23; wrap to 6.':'33; wrap to 4.')),'The illustration explains negative or overflowing arithmetic with a concrete wrap');
+   assert(example.includes('<span class="protocol-example-runes">'+alphabet[5].rune+'</span><small>5</small>'),'Illustrative first input is fixed index 5, not a target rune');
+   assert(example.includes('at rune 3 '),'The second displayed step occurs after the two-rune starting key');
+   assert(visible.indexOf('class="reviewed-check-question"')<visible.indexOf('protocol-keyed-example'),'The actual question precedes the illustrative calculation');assert(markup.includes(UI.stepText(step)),'Exact settings retain the original technical step description');
+   assert.equal(E.stable(state.prepared.task),planBefore);assert.equal(E.stable(state.prepared.controls),controlsBefore);assert.equal(E.stable(state.idea.card),cardBefore);assert.equal(E.stable(plan),planBefore);assert.equal(E.stable(controls),controlsBefore);assert.equal(E.stable(ideaCard),cardBefore);
+   assert.equal(f.executions.length,0,'Preview starts no target worker');assert.equal(f.controlExecutions.length,0,'Preview starts no control worker');assert.equal(f.requests.filter(r=>r.url===prepareEndpoint&&r.options.method==='POST').length,1);assert.equal(f.requests.filter(r=>r.options.method==='POST'&&r.url!==prepareEndpoint).length,0,'Preview does not create tasks, save results, or submit another idea');assert.equal(state.selected,null);assert.equal(state.saved,null);
+   illustrations.set(mode+'|'+direction,example);
+  }finally{f.app.destroy();}
+ }
+ const simpleStep={op:'keyed-shift',mode:'repeat',key:[28,2],direction:'subtract',reset:'page'};
+ for(const steps of [[simpleStep],[{op:'reverse',unit:'word'},simpleStep],[simpleStep,{op:'affine',a:28,b:0}]]){
+  const plan=await E.prepare({title:'Synthetic pipeline preview',alphabet,pages:[{id:'lp2-15',text:'ᛠᛗᛇᚢ-ᛁᚦ\nᚩᛒ'}],steps,criterion:{kind:'measurement'}},webcrypto),before=E.stable(plan),f=await fixture({task:plan,hash:'#idea='+proposalId,prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',task:plan,notes:[],purpose:'Review exact ordered steps'})});
+  try{
+   assert(f.app.getState().prepared);const markup=f.doc.getElementById('prepared-plan').innerHTML,visible=markup.slice(0,markup.indexOf('id="create-experiment"')),example=visible.match(/<section class="protocol-example protocol-keyed-example"[\s\S]*?<\/section>/)?.[0];
+   if(steps.length===1)assert.equal(example,illustrations.get('repeat|subtract'),'Changing manuscript input cannot alter the fixed synthetic example');else{assert(!example,'A multi-step pipeline must not borrow the isolated keyed illustration');assert(!visible.includes('Illustrative key calculation'));}
+   for(const step of steps)assert(markup.includes(UI.stepText(step)),'Every exact pipeline step remains available');assert.equal(E.stable(f.app.getState().prepared.task),before);assert.equal(E.stable(plan),before);assert.equal(f.executions.length,0);assert.equal(f.controlExecutions.length,0);assert.equal(f.requests.filter(r=>r.options.method==='POST'&&r.url!==prepareEndpoint).length,0);
+  }finally{f.app.destroy();}
+ }
+ console.log('PASS keyed review illustrations: three modes, both signs, page/line/word resets, fixed synthetic arithmetic before Run, no workers/task writes, unchanged cards/plans/controls, target-independent examples and honest multi-step omission.');
+}
+
 (async()=>{
+ await keyedReviewIllustrationTests();
  // A same-document family link must dispatch to the family workspace rather
  // than being parsed as an invalid legacy task. Reload preserves the hash and
  // lets the normal browser boot select the correct workspace.

@@ -1475,6 +1475,11 @@
         "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
       },
       "title": "Autokey with skipped key positions",
+      "reader_test": {
+        "input": "Rune text on the 55 rune-bearing pages from LP2-00 to LP2-55, with 45 fixed starting keys.",
+        "action": "Extend each starting key with recovered or encrypted runes, allowing up to three key positions to be skipped when they would repeat the previous encrypted rune.",
+        "check": "Compare returned full-page English-pattern scores with the fixed threshold, check planted known messages rune for rune, and separately score all retained final alternatives."
+      },
       "question": "Does the complete source autokey-with-skips grid produce a full-page candidate above its English-score gate?",
       "reader_question": "Can recovered or encrypted runes continue a key when positions may be skipped?",
       "summary": "No candidate crossed the source English-score threshold in 9,900 full-page decodes. The source encoder and decoder follow different future-key rules in 247 of 360 known-message tests, limiting the result.",
@@ -5782,6 +5787,11 @@
       "id": "cumulative-autokey-literal",
       "status": "published",
       "title": "Literal cumulative-sum autokey on LP2",
+      "reader_test": {
+        "input": "Archived LP2-00 through LP2-55 rune text, alongside 2,797 runes from known LP1 readings for the frequency comparison.",
+        "action": "Undo the rule that adds a running total of earlier decoded rune values, starting the total at zero on each page and keeping its first rune unchanged.",
+        "check": "Confirm that adding the decoded values back reconstructs the input, then compare how often each rune appears with raw LP2 and known LP1 readings without a pass-or-fail readability score."
+      },
       "question": "Does the supplied cumulative plaintext-sum rule yield a plaintext-like rune stream across LP2?",
       "tags": [
         "cumulative autokey",
@@ -21327,6 +21337,11 @@
       "id": "dukotah-longkey-skip-beam",
       "status": "published",
       "title": "Long-key search with optional skipped positions",
+      "reader_test": {
+        "input": "The six longest rune-bearing LP2 pages, with three fixed key texts: Tao Te Ching, Gospel of Thomas, and Cicada PGP prose.",
+        "action": "Try each text from its beginning, quarter point, and halfway point, allowing the key to advance one or two positions at every rune.",
+        "check": "Compare full-page English-pattern scores with the fixed threshold, and separately check whether planted messages are recovered exactly with and without skipped key positions."
+      },
       "question": "Does a pinned beam search over three long candidate keys recover complete text from six unsolved LP2 pages?",
       "reader_question": "Could a long running key stay hidden by skipping key positions?",
       "summary": "The archived 54-case beam search reproduces and finds no score above its −5 bar. In 18 planted collision-skip cases with the correct key, all scores clear that bar but none recover the exact text, so the source screen cannot exclude the proposed mechanism.",
@@ -26319,6 +26334,11 @@
       "id": "emerson-running-key",
       "title": "Emerson as an additive LP2 running key",
       "status": "published",
+      "reader_test": {
+        "input": "The first 192 runes of LP2-00, LP2-31, and LP2-54, plus the preserved text of Emerson's Self-Reliance.",
+        "action": "Subtract Emerson's letter values, A=0 through Z=25, from rune alphabet numbers at every possible text starting place, wrapping within the 29-rune alphabet.",
+        "check": "Select the best English-pattern score on the first 96 runes, assess the next 96 at the same starting place, and compare with eight complete searches of shuffled Emerson letters."
+      },
       "question": "Does the preserved Self-Reliance text, mapped A=0 through Z=25 and subtracted modulo 29 at any contiguous offset, produce strong 96-rune LP2 openings and held-out continuations on three fixed pages?",
       "summary": "The planted LP1 control is recovered at its exact offset. Best Emerson openings on LP2-00, 31 and 54 score near full-search shuffled-source maxima, and their continuations remain much lower than the known-reading control.",
       "tags": [
@@ -34222,6 +34242,11 @@
       "id": "grid-stem-uncertainty",
       "title": "LP2-49–51: ten visually ambiguous grid stems",
       "status": "published",
+      "reader_test": {
+        "input": "All 256 number-grid entries on LP2-49 to LP2-51, their archived text readings, and the preserved page images.",
+        "action": "Review ten ambiguous vertical stems and try all 1,024 combinations of uppercase I or lowercase l, keeping every other entry fixed.",
+        "check": "Under one fixed conversion to byte values, compare how the choices change the number of distinct entries, the number of binary 1s, and the number of even values."
+      },
       "question": "Which grid cells contain an I/l-shaped bare stem, and how do those unresolved case readings affect conditional base-60 byte measurements?",
       "summary": "Ten cells have a bare vertical stem. Enumerating all 1,024 I/l alternatives changes the distinct-token count from the wiki's 161 to a possible 160–163 under the stated bounds.",
       "tags": [
@@ -37648,6 +37673,11 @@
         "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
       },
       "title": "Keyword search with skipped key positions",
+      "reader_test": {
+        "input": "Archived rune text on the 55 rune-bearing pages from LP2-00 through LP2-55 and 623 source keyword labels representing 617 distinct numeric keys.",
+        "action": "Repeat each keyword from every position in its cycle, trying both arithmetic directions and optional alphabet reversal while allowing up to three skips when a key value would repeat the previous encrypted rune.",
+        "check": "For each keyword and decoding rule, only the best starting position may proceed from a first-90-rune English-pattern score above -6 to a full-page score above -5.5, with shorter pages screened in full."
+      },
       "question": "Does the complete source keyword-with-skips grid produce a candidate above its English-score gates?",
       "reader_question": "Can these repeating keyword keys decode pages when key positions may be skipped?",
       "summary": "None of 619,080 short screens passed the first source gate, so no full-page target decode ran. Controls passed scores more often than they recovered the correct text.",
@@ -48658,6 +48688,11 @@
       "id": "lp2-known-vigenere-keys",
       "title": "LP2-00–55: two known Vigenère keys and nine openings",
       "status": "published",
+      "reader_test": {
+        "input": "Archived rune text from LP2-00 through LP2-55, including headings, and the two previously known keys of 8 and 13 runes.",
+        "action": "Repeat each key from every starting place in its cycle, trying addition and subtraction and restarting independently on each page.",
+        "check": "A candidate passes only if its first 12 output runes exactly match the beginning of one of nine fixed known readings."
+      },
       "question": "Do either of the two known Vigenere keys recover a 12-rune known-reading opening at the start of an LP2-00–55 page under uninterrupted repeating-key decoding?",
       "summary": "All 2352 key/phase/direction/page cases completed. None matched the first 12 runes of any of the nine declared known openings. Other keys, plaintext beginnings and interruption rules remain untested.",
       "tags": [
@@ -53886,6 +53921,11 @@
       "id": "lp2-row-column-routes",
       "title": "LP2-00–55: simple row and column reading routes",
       "status": "published",
+      "reader_test": {
+        "input": "Archived rune rows from LP2-00 through LP2-55, including headings, with columns defined by position within each recorded row rather than measured image alignment.",
+        "action": "Read rows or columns in 16 fixed orders, including reversals and alternating directions, skipping missing cells without padding uneven rows into a rectangle.",
+        "check": "A route passes only if its first 12 runes exactly match the beginning of one of nine known readings; an independent checker also reconstructs every output from its source positions."
+      },
       "question": "Can reading the LP2-00–55 runes by rows or columns recover one of nine known passage openings without changing the runes?",
       "summary": "All 880 parameter routes completed on 55 rune-bearing pages; none matched the nine declared openings. Each output retains its complete source-coordinate trace. LP2-50 has no eligible runes.",
       "pages_note": "LP2-00–55 · 55 contain runes; LP2-50 is empty",
@@ -70559,11 +70599,11 @@
           },
           {
             "path": "experiments/records/cumulative-autokey-literal/record.json",
-            "sha256": "703c2817b8d39b3b3480c2b91e4dfe6b199d9279ea0440b5b411736c9cc72398"
+            "sha256": "89ff42403cbb2c1f10d96f3d94517fd58aa0c15dd4de836ffbc3879bff143ae6"
           },
           {
             "path": "experiments/records/lp2-row-column-routes/record.json",
-            "sha256": "f28530f52a7d1c0a3f03fc80d3793a3e5ecb785ce8404a1d75aa8614339c75ca"
+            "sha256": "a1ada14fbdebacd225f6ff7b920281737d1d6d992e5cccaa45ca362206f0fed6"
           },
           {
             "path": "experiments/records/lp2-word-reversal/record.json",
@@ -97553,6 +97593,11 @@
       "id": "wulfic-autokey-seed-families",
       "status": "published",
       "title": "Short seeds for autokey ciphers",
+      "reader_test": {
+        "input": "Archived rune text on LP2-04 through LP2-37, with three-rune starting keys tested on 31 eligible pages and the distinct four-rune DEOR key on LP2-04 through LP2-13.",
+        "action": "Try named words and every two- or three-rune starting key, plus one four-rune DEOR key, extending each key with earlier recovered or encrypted runes and restarting it on each page.",
+        "check": "Except for four-rune DEOR, single-rune words must become I or A before the whole-page rune-frequency test; a candidate must pass that fixed frequency threshold."
+      },
       "question": "Do the pinned source keyword, two-rune, or three-rune autokey seeds pass their one-rune and IoC screens on the selected LP2 pages?",
       "reader_question": "Could a short word or rune seed drive an autokey cipher?",
       "summary": "Four related archived search branches were replayed on verified LP2 page streams. None passed the source-defined hit screen; the gate and ciphertext-feedback design sharply limit what that result can exclude.",
@@ -102179,6 +102224,11 @@
       "id": "wulfic-deor-interlocking-streams",
       "status": "published",
       "title": "Deor and interlocking rune streams",
+      "reader_test": {
+        "input": "The rune text of LP2-03 and the archived Old English poem Deor.",
+        "action": "Split runes by whether their zero-based alphabet number is prime, try Deor as a key for that group, then use its best output as a repeating key for the other group.",
+        "check": "Check whether the original score thresholds can be reached, and separately compare rescaled scores from the full two-stage search with 199 shuffled pages."
+      },
       "question": "Does the archived prime-index split and Deor-to-derived-key sequence produce a distinctive second-stream IoC on current LP2-03?",
       "reader_question": "Can Deor unlock one stream and use it to unlock the rest?",
       "summary": "The original source hit thresholds are impossible for its raw score. A separately normalized whole-procedure control finds no distinctive final-stage peak in this bounded test.",

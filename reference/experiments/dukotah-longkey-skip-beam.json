@@ -2,6 +2,11 @@
   "id": "dukotah-longkey-skip-beam",
   "status": "published",
   "title": "Long-key search with optional skipped positions",
+  "reader_test": {
+    "input": "The six longest rune-bearing LP2 pages, with three fixed key texts: Tao Te Ching, Gospel of Thomas, and Cicada PGP prose.",
+    "action": "Try each text from its beginning, quarter point, and halfway point, allowing the key to advance one or two positions at every rune.",
+    "check": "Compare full-page English-pattern scores with the fixed threshold, and separately check whether planted messages are recovered exactly with and without skipped key positions."
+  },
   "question": "Does a pinned beam search over three long candidate keys recover complete text from six unsolved LP2 pages?",
   "reader_question": "Could a long running key stay hidden by skipping key positions?",
   "summary": "The archived 54-case beam search reproduces and finds no score above its −5 bar. In 18 planted collision-skip cases with the correct key, all scores clear that bar but none recover the exact text, so the source screen cannot exclude the proposed mechanism.",
