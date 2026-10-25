@@ -93,7 +93,10 @@ def build(root=ROOT, write=True):
     if browser['result']['wordPairs'] != total:
         raise ValueError('Browser engine and independent Python count disagree')
     source_pins = [{'path': name, 'sha256': pins[name]} for name in REQUIRED]
-    source_pins += [{'path': name, 'sha256': sha((root / name).read_bytes())} for name in ['local-experiment.js', 'scripts/build_published_count_evidence.py']]
+    # These maintained code files are published with repository LF endings.
+    # Windows checkout conversion must not change their published identity.
+    # Archived manuscript/report/checker pins above remain exact raw bytes.
+    source_pins += [{'path': name, 'sha256': sha((root / name).read_bytes().replace(b'\r\n', b'\n'))} for name in ['local-experiment.js', 'scripts/build_published_count_evidence.py']]
     provenance = {'schema': 'liberpedia-published-count-projection-v1', 'recordId': RECORD, 'projection': {'id': declaration['id'], 'criterion': CRITERION, 'pages': PAGES, 'alphabetSha256': declaration['alphabet_sha256'], 'taskId': browser['task']['taskId'], 'resultId': browser['id']}, 'sourcePins': sorted(source_pins, key=lambda pin: pin['path']), 'checkedAt': declaration['checked_at'], 'dateMeaning': 'Count projection independently checked; not a historical browser submission.', 'expectationMeaning': 'Exact rational shuffle averages freshly recomputed; archived floating-point means are not reinterpreted as exact.'}
     revision = sha(stable(provenance))
     manifest = {'schema': 'liberpedia-published-count-evidence-v1', 'records': [{'recordId': RECORD, 'revision': revision, 'provenance': provenance}], 'entries': [{'recordId': RECORD, 'revision': revision, 'caseId': 'lag-six-hyphen-period--all-pages', 'task': browser['task'], 'inputVersion': 'raw', 'run': {'id': browser['id'], 'createdAt': declaration['checked_at'], 'result': browser['result']}}]}

@@ -56,6 +56,15 @@ class ProjectionTests(unittest.TestCase):
         path.write_text(json.dumps(record), encoding='utf-8')
         self.assertEqual(build(root, write=False), build(write=False))
 
+    def test_maintained_code_checkout_endings_do_not_change_published_identity(self):
+        root = self.fixture()
+        expected = build(write=False)
+        for ending in (b'\n', b'\r\n'):
+            for name in ['local-experiment.js', 'scripts/build_published_count_evidence.py']:
+                path = root / name
+                path.write_bytes(path.read_bytes().replace(b'\r\n', b'\n').replace(b'\n', ending))
+            self.assertEqual(build(root, write=False), expected)
+
     def test_changed_original_text_checker_and_result_bytes_fail_source_pins(self):
         for name in ['text/lp2-00.txt', f'{BASE}/check.py', f'{BASE}/results.json']:
             with self.subTest(name=name):
