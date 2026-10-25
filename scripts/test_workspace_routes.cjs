@@ -49,7 +49,7 @@ const checkerScripts=[...checkerHTML.matchAll(/<script\b([^>]*)>/g)].map(([,attr
  assert(fs.existsSync(require.resolve('../'+filename)),'Entry dependency exists: '+filename);
  return filename;
 });
-assert.deepEqual(checkerScripts.filter(name=>name!=='site-navigation.js'),['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','recorded-comparison.js','idea-input.js','word-sum-intake.js','finite-json.js','word-affine-intake.js','investigate.js'],'The formatter and all dependencies must load before the checker');
+assert.deepEqual(checkerScripts.filter(name=>name!=='site-navigation.js'),['claim-specification.js','claim-share.js','claim-research.js','claim-interpretation.js','assistant-search.js','assistant-markdown.js','recorded-comparison.js','idea-input.js','word-sum-intake.js','finite-json.js','word-affine-intake.js','cumulative-intake.js','investigate.js'],'The formatter and all dependencies must load before the checker');
 console.log('PASS: checker entry script attributes, dependency paths and load order.');
 
 assert.equal(workspaceTarget(routes.destination('#/research?page=lp2-15')),'research.html#page=lp2-15&mode=list');

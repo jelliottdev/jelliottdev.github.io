@@ -11,6 +11,7 @@
  const Input=typeof module!=='undefined'?require('./idea-input.js'):root.IdeaInput;
  const WordSums=typeof module!=='undefined'?require('./word-sum-intake.js'):root.WordSumIntake;
  const WordAffine=typeof module!=='undefined'?require('./word-affine-intake.js'):root.WordAffineIntake;
+ const Cumulative=typeof module!=='undefined'?require('./cumulative-intake.js'):root.CumulativeIntake;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -190,6 +191,7 @@
    {id:'undecided',label:'Leave the scope undecided'}]});
   const wordQuestion=WordSums?.question(draft);if(wordQuestion)result.push(wordQuestion);
   const pairQuestion=WordAffine?.question(draft);if(pairQuestion)result.push(pairQuestion);
+  const cumulativeQuestion=Cumulative?.question(draft);if(cumulativeQuestion)result.push(cumulativeQuestion);
   const evaluation=C.evaluationQuestion(draft);if(evaluation)result.push(evaluation);
   return result;
  }
@@ -247,6 +249,7 @@
   }).join('')+'</div>';
  }
  function answerIntake(draft,id,choice,text=''){
+  if(/^cumulative-(?:reset|initial|representation|confirm):/.test(id))return Cumulative.clarify(draft,id,choice);
   if(/^word-affine-(?:boundaries|evaluation):/.test(id))return WordAffine.clarify(draft,id,choice);
   if(/^family-(?:method|setting):/.test(id))return answerFamilyMethod(draft,id,choice,text);
   if(WordSums?.question(draft)?.id===id)return WordSums.clarify(draft,choice);
@@ -697,7 +700,7 @@
    doc.getElementById('clarification')?.addEventListener('submit',event=>{
     event.preventDefault();const choice=doc.querySelector('input[name=choice]:checked')?.value;if(!choice)return;
     const q=intakeQuestions(draft)[0];if(!q||q.id!==renderedQuestion?.id)return;
-    if(['aim','method','scope'].includes(q.id)||/^family-(?:method|setting):/.test(q.id)||WordSums?.question(draft)?.id===q.id||WordAffine?.question(draft)?.id===q.id){
+    if(['aim','method','scope'].includes(q.id)||/^family-(?:method|setting):/.test(q.id)||WordSums?.question(draft)?.id===q.id||WordAffine?.question(draft)?.id===q.id||Cumulative?.question(draft)?.id===q.id){
      try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
     }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;
@@ -737,7 +740,7 @@
   }
   async function interpret(){
    stopInterpretation();const token=interpretVersion,text=raw;let returnedInterpretation=false;
-   if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))||WordSums?.matches(text)||WordAffine?.matches(text)){acceptDraft(initialDraft(text));return;}
+   if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))||WordSums?.matches(text)||WordAffine?.matches(text)||Cumulative?.matches(text)){acceptDraft(initialDraft(text));return;}
    stage='input';interpreting=true;interpretError='';error='';message='';updateInterpretationInput();
    try{
     if(configResolved&&!configValid)loadConfig().catch(()=>{});

@@ -28,11 +28,12 @@
   }else{
    // A table must be named explicitly. Bare "sum words" or an unspecified GP
    // table never receives the usual assignments by convention.
-   const direct=/^sum (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime values (?:within|in) each word$/i.test(phrase);
-   const selected=phrase.match(/^use (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
-   if(!direct&&!selected)return null;
-   if(selected?.[1]&&!/^\(\s*F\s*=\s*2\s*,\s*U\s*=\s*3\s*(?:,\s*)?(?:\.{3}|\u2026)?\s*\)$/i.test(selected[1]))return null;
-   table='canonical';
+   const direct=/^(?:sum|add) (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime values (?:within|in) each word$/i.test(phrase);
+   const selected=phrase.match(/^use (?:the )?(usual|standard|canonical|reversed) (?:GP|gematria(?: primus)?) prime table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
+   const trailing=phrase.match(/^sum (?:the words|each word|words) using (?:the )?(usual|standard|canonical|reversed) (?:GP|gematria(?: primus)?) prime table$/i);
+   if(!direct&&!selected&&!trailing)return null;
+   table=(selected?.[1]||trailing?.[1]||'canonical').toLowerCase()==='reversed'?'reversed':'canonical';
+   if(selected?.[2]&&!(table==='reversed'?/^\(\s*F\s*=\s*109\s*,\s*U\s*=\s*107\s*(?:,\s*)?(?:\.{3}|\u2026)?\s*\)$/i:/^\(\s*F\s*=\s*2\s*,\s*U\s*=\s*3\s*(?:,\s*)?(?:\.{3}|\u2026)?\s*\)$/i).test(selected[2]))return null;
   }
   return {table,sourceText:text,...(scopePages?{scopePages}:{})};
  }

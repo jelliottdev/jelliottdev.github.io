@@ -3,7 +3,7 @@ import {validateCard} from './idea-relations.mjs';
 import L from '../../local-experiment.js';
 import C from '../../claim-specification.js';
 export const MODEL='@cf/google/gemma-4-26b-a4b-it';
-export const VERSION='source-plan-grammar-v7-exact-reversal-scope';
+export const VERSION='source-plan-grammar-v8-exact-cumulative-scope';
 export const LIMITS=Object.freeze({timeoutMs:20000,concurrency:3,cacheEntries:50,cacheMs:600000,responseBytes:16000});
 const object=(properties,required=Object.keys(properties))=>({type:'object',additionalProperties:false,properties,required});
 const integer={type:'integer',minimum:0,maximum:28};
@@ -41,6 +41,8 @@ function parse(quote,scope){
  if(scoped&&reversal(scoped[1])&&exactScopeTail(scoped[2],scope))return reversal(scoped[1]);
  if((m=q.match(/^(?:apply |use )?affine(?: mapping| substitution)? a\s*=\s*(\d{1,2})\s*,\s*b\s*=\s*(\d{1,2})$/i))&&Number(m[1])<=28&&Number(m[2])<=28)return {op:'affine',a:Number(m[1]),b:Number(m[2])};
  if((m=q.match(/^(?:apply |use )?cumulative[ -]difference(?: with)? reset (?:at |per )?(?:each |every )?(page|line|word)$/i)))return {op:'cumulative-difference',reset:m[1].toLowerCase()};
+ const scopedCumulative=q.match(/^((?:apply |use )?cumulative[ -]difference(?: with)? reset (?:at |per )?(?:each |every )?(page|line|word))\s+on\s+([\s\S]+)$/i);
+ if(scopedCumulative&&exactScopeTail(scopedCumulative[3],scope))return {op:'cumulative-difference',reset:scopedCumulative[2].toLowerCase()};
  if((m=q.match(/^(?:apply |use |using )?finite key stream with key indices \[([0-9,\s]+)\], (subtract|add), reset at each (page|line|word)$/i))){
   const tokens=m[1].split(',').map(n=>n.trim());if(!tokens.length||tokens.length>2048||tokens.some(n=>!/^\d{1,2}$/.test(n)||Number(n)>28))return null;
   return {op:'finite-shift',key:tokens.map(Number),direction:m[2].toLowerCase(),reset:m[3].toLowerCase()};
