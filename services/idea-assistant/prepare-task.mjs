@@ -13,8 +13,19 @@ const ALPHABET=[{"rune":"ᚠ","latin":"F","prime":2},{"rune":"ᚢ","latin":"U","
 const PURPOSE='A proposed bounded computation, not a confirmed cipher rule or a decryption verdict.';
 const fail=reason=>({reason});
 const MEASUREMENTS=Protocols.list(),MEASUREMENT_IDS=new Set(MEASUREMENTS.map(d=>d.operation.id)),MEASUREMENT_KINDS=new Set(MEASUREMENTS.map(d=>d.id));
+function evaluationIssue(card){
+ const evaluation=card.rules.evaluation;
+ if(C.normalizeOutcome(card.outcome).id==='decipher'&&evaluation.status!=='specified')return {state:'needs-clarification',field:'evaluation',reason:'Choose what this experiment should check before preparing it.'};
+ if(evaluation.status!=='specified')return null;
+ const value=evaluation.value;
+ if(value==='readability'||value&&typeof value==='object'&&value.kind==='readability')return {state:'needs-adapter',field:'evaluation',reason:'Readable-text evaluation is not available yet. This idea has not been tested for readable text.'};
+ const prefix=value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===2&&value.kind==='exact-prefix'&&Array.isArray(value.values)&&value.values.length>=1&&value.values.length<=256&&value.values.every(n=>Number.isInteger(n)&&n>=0&&n<=28);
+ if(value!=='measurement'&&!prefix&&!Protocols.identify(value))return {state:'needs-adapter',field:'evaluation',reason:'The requested evaluation needs an adapter.'};
+ return null;
+}
 export function planCard(input){
  const card=validateCard(input);
+ const evaluation=evaluationIssue(card);if(evaluation)return evaluation;
  if(card.unresolved.length)return fail('The idea still has unresolved conditions.');
  if(card.method.status!=='specified'||!card.method.value.operations.length)return fail('An explicit supported method is needed.');
  if(card.scope.status!=='specified'||!Array.isArray(card.scope.value.pages)||!card.scope.value.pages.length||Object.keys(card.scope.value).some(k=>k!=='pages'))return fail('Select exact complete pages; passages and descriptive scope need an adapter.');
@@ -136,6 +147,9 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    const row=await query('SELECT card_json FROM proposals WHERE id=?',body.proposalId);if(!row)return reply({error:'Confirmed idea not found.'},404);
    if(body.parentTaskId&&!await query('SELECT id FROM local_tasks WHERE id=?',body.parentTaskId))return reply({error:'Parent task not found.'},404);
    const card=validateCard(row.card_json);let plan=planCard(card),interpretationNotes=[],basis={kind:'compiled-card',normalizedCard:card};
+   // Choosing a check is a research decision. Neither the planner nor its AI
+   // wording adapter may silently replace it with descriptive measurements.
+   if(plan.field==='evaluation')return reply({state:plan.state,proposalId:body.proposalId,...(plan.state==='needs-clarification'?{field:'evaluation'}:{}),reason:plan.reason});
    if(plan.reason){
     if(card.method.value?.operations?.some(op=>MEASUREMENT_IDS.has(op.id))||MEASUREMENT_KINDS.has(card.rules.evaluation.value?.kind))return reply({state:'needs-adapter',reason:plan.reason,proposalId:body.proposalId});
     const mapped=await proposePlan(card,env);

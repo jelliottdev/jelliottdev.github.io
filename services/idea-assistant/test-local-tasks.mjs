@@ -207,7 +207,7 @@ function addIdea(f,label,value=card,isPublic=false){
 }
 await test('different real goal cards reuse the same computation and saved result without exposing private original context',async()=>{
  const f=fixture({publicOriginal:false}),field=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
- const cards=['decipher','measure'].map(outcomeId=>H.cardData(C.confirm(C.createDraft({source:{text:'DO NOT PROJECT ORIGINAL'},aim:field({outcomeId,wording:C.OUTCOMES[outcomeId],detail:''}),method:field({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:field({pages:['lp2-15']})}),{id:outcomeId,at})));
+ const cards=['decipher','measure'].map(outcomeId=>H.cardData(C.confirm(C.createDraft({source:{text:'DO NOT PROJECT ORIGINAL'},aim:field({outcomeId,wording:C.OUTCOMES[outcomeId],detail:''}),method:field({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:field({pages:['lp2-15']}),rules:{evaluation:field('measurement')}}),{id:outcomeId,at})));
  f.db.sqlite.prepare('DELETE FROM proposals WHERE id=?').run(proposalId);proposalId=addIdea(f,'original',cards[0]);
  const plans=await Promise.all(cards.map(value=>{const plan=planCard(value);assert(!plan.reason);return task('Local test: rune reversal','raw',{steps:plan.steps,criterion:plan.criterion})}));
  assert.notDeepEqual(cards[0],cards[1]);assert.equal(plans[0].taskId,plans[1].taskId);

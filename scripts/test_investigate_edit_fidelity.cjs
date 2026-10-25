@@ -133,7 +133,7 @@ function save(doc){doc.getElementById('editor').fire('submit');assert(!doc.getEl
  third.doc.getElementById('other-detail').value='Reset the key at each page.';
  third.doc.getElementById('clarification').fire('submit');
  assert.equal(third.app.getSnapshot().draft.rules.reset.value,'Reset the key at each page.');
- assert(third.doc.getElementById('confirm'),'The corrected card can now be confirmed');
+ assert.equal(I.intakeQuestions(third.app.getSnapshot().draft)[0].id,'evaluation');assert(!third.doc.getElementById('confirm'));third.doc.selectedChoice='inspect-output';third.doc.getElementById('clarification').fire('submit');assert(third.doc.getElementById('confirm'),'The corrected card can now be confirmed with its explicit evaluation');
  assert.equal(third.app.getSnapshot().draft.source.text,raw);
  third.app.destroy();
 

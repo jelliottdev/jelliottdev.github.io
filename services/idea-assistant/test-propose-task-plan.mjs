@@ -8,7 +8,7 @@ import {readFileSync} from 'node:fs';
 import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
-function card(text,extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE HUMAN ORIGINAL'},aim:known('solve LP2'),method:known({operations:[{id:'described_method',label:text}]}),scope:known({pages:['lp2-15']}),...extra}),{id:'test',at:'2026-10-24T12:00:00.000Z'}));}
+function card(text,extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE HUMAN ORIGINAL'},aim:known('solve LP2'),method:known({operations:[{id:'described_method',label:text}]}),scope:known({pages:['lp2-15']}),...extra,rules:{evaluation:known('measurement'),...extra.rules}}),{id:'test',at:'2026-10-24T12:00:00.000Z'}));}
 const candidate=(text,quotes,steps)=>({version:1,steps:quotes.map((quote,i)=>({source:{operationIndex:0,start:text.indexOf(quote),quote},step:steps[i]})),unsupported:[]});
 const value=v=>({choices:[{message:{content:typeof v==='string'?v:JSON.stringify(v)}}]});
 // Keep provider lifecycle tests on a connector-prefixed label, outside the

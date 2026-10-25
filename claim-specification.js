@@ -17,6 +17,20 @@
   // this registry deliberately; visitor wording cannot mint another category.
   const OUTCOMES=Object.freeze({decipher:'Decipher the text',measure:'Test a pattern',
     reproduce:'Reproduce a result',explain:'Explain a feature',verify_source:'Verify source material'});
+  const EVALUATION_CHOICES=freeze([
+    {id:'readable-text',label:'Readable text',example:'Automatic scoring is not available yet.',value:{kind:'readability'}},
+    {id:'warning-opening',label:'Known Warning opening (12 runes)',example:'Compare only the first 12 runes with that known opening.',value:{kind:'exact-prefix',values:[24,7,24,4,9,21,17,18,20,10,18,1]}},
+    {id:'inspect-output',label:'Inspect transformed text',example:'Show output and counts without judging readability.',value:'measurement'}
+  ]);
+  function evaluationText(value){
+    const choice=EVALUATION_CHOICES.find(item=>stable(item.value)===stable(value));
+    if(!choice)return null;
+    return choice.label+(choice.id==='readable-text'?' — automatic evaluation is not available yet.':choice.id==='inspect-output'?' — no readability decision.':' — all 12 runes at the page start.');
+  }
+  function evaluationQuestion(spec){
+    if(normalizeOutcome(spec.aim).id!=='decipher'||spec.method?.status!=='specified'||!['unspecified','not_applicable','unrestricted'].includes(spec.rules?.evaluation?.status))return null;
+    return {id:'evaluation',prompt:'What should this check look for?',...(spec.rules.evaluation.status!=='unspecified'?{context:'A bounded decoding test needs a specific check.'}:{}),choices:EVALUATION_CHOICES.map(({value,...choice})=>({...choice}))};
+  }
   const OUTCOME_ALIASES=Object.freeze({
     decipher:['decipher','decipher the text','decipher lp2','decrypt','decrypt the text','decrypt lp2','solve lp2','solving lp2','solving','solve liber primus','find readable text','find plaintext','recover plaintext','produce readable text','find readable plaintext'],
     measure:['measure','test a pattern','test a statistical effect','test statistical effect','measure a pattern','test a statistical pattern'],
@@ -312,11 +326,13 @@
     return next;
   }
   function clarify(draft,id,choice,text=''){
-    const question=questions(draft).find(q=>q.id===id);
+    const question=id==='evaluation'?evaluationQuestion(draft):questions(draft).find(q=>q.id===id);
     if(!question||!question.choices.some(c=>c.id===choice))throw Error('Unavailable clarification');
     const provenance={kind:'user_clarification',refs:[id]};
     let next;
-    if(id.startsWith('rule-review:')){
+    if(id==='evaluation'){
+      next=revise(draft,{rules:{evaluation:field('specified',EVALUATION_CHOICES.find(item=>item.id===choice).value,provenance)}});
+    }else if(id.startsWith('rule-review:')){
       const key=id.slice('rule-review:'.length);
       if(choice==='replace'&&(typeof text!=='string'||!text.trim()))throw Error('Write the replacement condition.');
       const current=draft.rules[key];
@@ -340,7 +356,7 @@
     }else{
       next=revise(draft,{rules:{boundaryMode:field('specified',choice,provenance)}});
     }
-    next.clarifications.push({question:id,choice,...(['other','replace'].includes(choice)?{text}:{}),revision:next.revision});
+    next.clarifications.push({question:id,choice,...(['other','replace'].includes(choice)?{text}:{}),...(id==='evaluation'&&draft.rules.evaluation.status!=='unspecified'?{previousRule:copy(draft.rules.evaluation)}:{}),revision:next.revision});
     return next;
   }
   function completeness(spec){
@@ -471,7 +487,7 @@
     if(!result||result.schema!=='liberpedia-claim-research-v1'||result.claimBinding!==binding(snapshot)||binding(result.confirmed)!==binding(snapshot))throw Error('Research belongs to another confirmed revision');
     return freeze({schema:'liberpedia-claim-packet-v1',confirmed:snapshot,research:copy(result)});
   }
-  const api={SCHEMA,STATES,RULES,BOUNDARIES,OUTCOMES,METHOD_FAMILIES,METHODS:METHOD_FAMILIES,normalizeOutcome,normalizeAim,outcomeLabel,classifyMethod,field,pages,createDraft,fromText,revise,clarify,questions,
+  const api={SCHEMA,STATES,RULES,BOUNDARIES,OUTCOMES,EVALUATION_CHOICES,evaluationText,evaluationQuestion,METHOD_FAMILIES,METHODS:METHOD_FAMILIES,normalizeOutcome,normalizeAim,outcomeLabel,classifyMethod,field,pages,createDraft,fromText,revise,clarify,questions,
     completeness,reviewRows,summary,confirm,validateConfirmed,binding,queryForResearch,retrievalQuery,bindResearch,packetSnapshot,applyMethodEdit,serialize:stable};
   if(typeof module!=='undefined')module.exports=api;else root.ClaimSpecification=api;
 })(globalThis);

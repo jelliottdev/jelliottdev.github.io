@@ -9,10 +9,12 @@ module.exports=async function(options){
  return Response.json({candidate,sourceBinding:Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))).toString('hex')});
 };
 module.exports.acknowledge=(doc,app)=>{
- for(let i=0;i<4;i++){
+ for(let i=0;i<5;i++){
   const question=I.intakeQuestions(app.getSnapshot().draft)[0];if(!question)return;
-  if(!question.choices.some(choice=>choice.id==='undecided'))throw Error('Fixture must explicitly answer '+question.id);
-  doc.selectedChoice='undecided';for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.checked=radio.value==='undecided';
+  const selected=question.id==='evaluation'?'inspect-output':'undecided';
+  if(!question.choices.some(choice=>choice.id===selected))throw Error('Fixture must explicitly answer '+question.id);
+  // Test fixtures explicitly choose descriptive inspection; production has no default.
+  doc.selectedChoice=selected;for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.checked=radio.value===selected;
   doc.getElementById('other-detail').value='';doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;
  }
  throw Error('Fixture did not finish its explicit undecided answers');

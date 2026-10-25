@@ -251,6 +251,15 @@ async function crossIdeaCoverageTests(){
  console.log('PASS cross-idea evidence: independently replayed different-title/outcome sources, full union avoids creation, partial creates only unchanged remaining bytes with original card/controls, reload persistence, forged scopes/receipts/input versions and stale navigation rejected.');
 }
 
+async function evaluationClarificationTests(){
+ const reason='Choose what this experiment should check before preparing it.',f=await fixture({hash:'#idea='+proposalId,prepare:async()=>({state:'needs-clarification',proposalId,field:'evaluation',reason})});
+ try{assert(!f.app.getState().prepared);assert(f.app.getState().idea);assert(f.doc.getElementById('idea-status').textContent.includes(reason));assert(f.doc.host.innerHTML.includes('Review this idea'));assert(!f.doc.host.innerHTML.includes('Experiment unavailable'));assert(!f.doc.getElementById('create-experiment'));assert(!f.doc.getElementById('run-browser'));assert.equal(f.executions.length,0);assert.equal(f.requests.filter(r=>r.options.method==='POST'&&r.url!==prepareEndpoint).length,0);}finally{f.app.destroy();}
+ for(const malformed of [{field:'scope',reason},{field:'evaluation',reason:''},{field:'evaluation',reason,task:await makeTask()}]){const bad=await fixture({hash:'#idea='+proposalId,prepare:async()=>({state:'needs-clarification',proposalId,...malformed})});try{assert(!bad.app.getState().prepared);assert(bad.doc.getElementById('idea-error').textContent);assert.equal(bad.executions.length,0);}finally{bad.app.destroy();}}
+ const readable=structuredClone(card());readable.rules.evaluation={status:'specified',value:{kind:'readability'}};const unsupported=await fixture({hash:'#idea='+proposalId,ideaCard:readable,prepare:async()=>({state:'needs-adapter',proposalId,reason:'Automatic readability evaluation is not available yet.'})});
+ try{assert.deepEqual(unsupported.app.getState().idea.card,readable);assert(!unsupported.app.getState().prepared);assert(unsupported.doc.getElementById('idea-status').textContent.includes('readability evaluation is not available yet'));assert.equal(unsupported.executions.length,0);assert(!unsupported.doc.getElementById('create-experiment'));}finally{unsupported.app.destroy();}
+ console.log('PASS evaluation clarification: missing criterion stays inline with original idea/review link, no creation/run, malformed clarification refused and explicit readability preserved as unsupported.');
+}
+
 async function familyEvidenceCoverageTests(){
  const Family=require('../research-family.js'),bundle=JSON.parse(fs.readFileSync('data/local-run-inputs.json','utf8')),view=await Family.snapshot(bundle,webcrypto),ids=Family.caseIds(view),plan=await Family.prepare(bundle,ids.slice(0,3),webcrypto),familyId='deor-feedback-v1';
  const requested=await E.prepare({...plan.cases[0].task,title:'An independent question using the same DEOR rule',pages:plan.cases.map(c=>c.task.pages[0])},webcrypto),sources=await Promise.all(plan.cases.map(async c=>({task:c.task,inputVersion:'raw',run:await receipt(E.run(c.task))}))),refs=plan.cases.map(c=>({taskId:c.task.taskId,familyId,revision:plan.revision,caseId:c.id}));
@@ -292,6 +301,7 @@ async function familyEvidenceCoverageTests(){
   const requestCount=familyNavigation.requests.length;familyNavigation.doc.defaultView.location.hash='#family=deor-feedback-v1';await familyNavigation.doc.events.hashchange();
   assert.equal(reloads,1);assert.equal(familyNavigation.doc.defaultView.location.hash,'#family=deor-feedback-v1');assert.equal(familyNavigation.requests.length,requestCount);assert(!familyNavigation.doc.host.innerHTML.includes('Experiment unavailable'));
  }finally{familyNavigation?.app.destroy();if(priorFamily===undefined)delete globalThis.FamilyWorkspace;else globalThis.FamilyWorkspace=priorFamily;}
+ await evaluationClarificationTests();
  await familyEvidenceCoverageTests();
  await crossIdeaCoverageTests();
  await genericKnownControlTests();

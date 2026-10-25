@@ -114,6 +114,7 @@
    {id:'specific',label:'Specific pages or a passage',requiresText:true,fieldLabel:'Name the pages or passage',placeholder:'LP2-15, LP2-17; or LP2-43, lines 2–3'},
    {id:'undecided',label:'Leave the scope undecided'}]});
   const wordQuestion=WordSums?.question(draft);if(wordQuestion)result.push(wordQuestion);
+  const evaluation=C.evaluationQuestion(draft);if(evaluation)result.push(evaluation);
   return result;
  }
  function chosenScope(text){
@@ -229,7 +230,7 @@
   const label=r.label==='Aim'?'Outcome':r.label==='Rules'?'Bounds & rules':r.label;
   let content;
   if(r.label==='Method')content=tags.length>1?'<ol class="method-steps">'+tags.map((t,i)=>'<li>'+esc(t.text)+operationDetails(spec.method.value?.operations[i])+'</li>').join('')+'</ol>':'<div class="method-wording"><p>'+esc(tags[0].text)+'</p>'+operationDetails(spec.method.value?.operations[0])+'</div>';
-  else content=tags.map(t=>{const key=t.id.startsWith('rule:')?t.id.slice(5):null,f=key?spec.rules[key]:null,v=key==='evaluation'&&f?.status==='specified'?f.value:null,numeric=v?.kind==='word-prime-sums'&&Object.keys(v).length===3?H.wordPrimeSumLabels(v.table,v.boundaries):null,plain=f?.status==='specified'?H.wordPrimeSumRuleLabel(spec,key,f.value):null;return '<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(numeric?'Evaluation: '+numeric.evaluation:plain||t.text)+'</span>';}).join('');
+  else content=tags.map(t=>{const key=t.id.startsWith('rule:')?t.id.slice(5):null,f=key?spec.rules[key]:null,v=key==='evaluation'&&f?.status==='specified'?f.value:null,numeric=v?.kind==='word-prime-sums'&&Object.keys(v).length===3?H.wordPrimeSumLabels(v.table,v.boundaries):null,plain=f?.status==='specified'?H.wordPrimeSumRuleLabel(spec,key,f.value):null;return '<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(numeric?'Evaluation: '+numeric.evaluation:key==='evaluation'&&f?.status==='specified'&&C.evaluationText(f.value)?'Evaluation: '+C.evaluationText(f.value):plain||t.text)+'</span>';}).join('');
   if(r.label==='Aim'&&spec.aim.status==='specified'){
    const outcome=C.normalizeOutcome(spec.aim.value),detail=outcome.detail||outcome.wording;
    if(outcome.id==='unclassified')content='<span class="tag unknown">Outcome not classified</span>';
@@ -563,7 +564,7 @@
   function questionsHTML(){
    if(stage!=='review')return '';
    const q=intakeQuestions(draft)[0];if(!q)return '';
-   return '<form id="clarification" class="question"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Continue</button></div></form>';
+   return '<form id="clarification" class="question'+(q.id==='evaluation'?' evaluation-question':'')+'"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Continue</button></div></form>';
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';

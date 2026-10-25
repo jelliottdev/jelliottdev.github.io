@@ -4,7 +4,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
 const I=require('../investigate.js'),C=require('../claim-specification.js'),H=require('../claim-share.js');
 const registry=JSON.parse(fs.readFileSync(require.resolve('../data/experiments.json'),'utf8'));
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
-const card=C.confirm(C.createDraft({source:{text:'Use a fixed Vigenere key on LP2-15'},aim:known('Find readable text'),method:known({operations:[{id:'vigenere',label:'Vigenere with key ABC',key:'ABC'}]}),scope:known({pages:['lp2-15']})}),{id:'fixture',at:'2026-10-24T12:00:00Z'});
+const card=C.confirm(C.createDraft({source:{text:'Use a fixed Vigenere key on LP2-15'},aim:known('Find readable text'),method:known({operations:[{id:'vigenere',label:'Vigenere with key ABC',key:'ABC'}]}),scope:known({pages:['lp2-15']}),rules:{evaluation:known('measurement')}}),{id:'fixture',at:'2026-10-24T12:00:00Z'});
 const unescape=text=>text.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
 class Element{
  constructor(doc,id='',markup=''){this.doc=doc;this.id=id;this.markup=markup;this.html='';this.listeners={};this.isConnected=true;this.disabled=/\sdisabled(?:\s|>)/.test(markup);this.hidden=/\shidden(?:\s|>)/.test(markup);this.value=unescape(markup.match(/\bvalue="([^"]*)"/)?.[1]||markup.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/)?.[1]||'');this.textContent='';this.selectionStart=this.selectionEnd=0;this.dataset={};}
@@ -38,7 +38,7 @@ function makeDocument(){
   const markup=live.match(new RegExp('<([a-z][a-z0-9]*)\\b[^>]*\\bid="'+id+'"[^>]*>(?:[\\s\\S]*?<\\/\\1>)?','i'))?.[0];if(!markup)return null;
   if(!doc.cache.has(id))doc.cache.set(id,new Element(doc,id,markup));return doc.cache.get(id);
  };
- doc.querySelector=selector=>selector==='.confirmed-card>.confirmed'?doc.details.find(d=>d.className.split(' ').includes('confirmed')):selector.startsWith('#')?doc.getElementById(selector.slice(1)):null;
+ doc.querySelector=selector=>selector==='input[name=choice]:checked'?(doc.selectedChoice?{value:doc.selectedChoice}:null):selector==='.confirmed-card>.confirmed'?doc.details.find(d=>d.className.split(' ').includes('confirmed')):selector.startsWith('#')?doc.getElementById(selector.slice(1)):null;
  return doc;
 }
 const turn=()=>new Promise(resolve=>setImmediate(resolve));
@@ -85,7 +85,7 @@ async function selectionAndStage(){
  assert.equal(doc.getElementById('edit-method'),method);assert.equal(method.value,'Unsaved exact method');assert.equal(doc.activeElement,method);assert.equal(method.selectionStart,3);assert.equal(method.selectionEnd,9,'An older save cannot replace an editing textarea/caret');
  doc.getElementById('cancel-edit').fire('click');assert.equal(doc.details.find(d=>d.summary.textContent==='Your idea').open,false,'Disclosure state does not leak across an editing-stage transition');
  doc.details.find(d=>d.summary.textContent==='Your idea').open=true;doc.getElementById('back').fire('click');
- doc.getElementById('idea').value='Find readable text using Vigenere with key XYZ on LP2-17';doc.getElementById('intake').fire('submit');await require('./mock_interpretation_response.cjs').waitForReview(app);doc.getElementById('confirm').fire('click');
+ doc.getElementById('idea').value='Find readable text using Vigenere with key XYZ on LP2-17';doc.getElementById('intake').fire('submit');await require('./mock_interpretation_response.cjs').waitForReview(app);require('./mock_interpretation_response.cjs').acknowledge(doc,app);doc.getElementById('confirm').fire('click');
  assert.deepEqual(app.getSnapshot().confirmed.scope.value.pages,['lp2-17']);assert.equal(doc.details.find(d=>d.summary.textContent==='Your idea').open,false,'A different confirmed card gets its own initial disclosure state');
  app.destroy();
 }

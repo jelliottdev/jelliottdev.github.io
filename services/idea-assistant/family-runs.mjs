@@ -96,6 +96,8 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(action==='prepare'){
     if(body.revision!==snapshot.revision)return reply({error:'The family inputs changed. Reload the family before preparing work.'},409);
     let plan;try{plan=await preparer.prepare(body.caseIds);}catch{return reply({error:'Choose one to twelve distinct supported cases.'},400);}
+    const excluded=new Set(F.proveCaseExclusions(snapshot,bundle.alphabet).excluded.map(item=>item.caseId));
+    if(plan.cases.some(item=>excluded.has(item.id)))return reply({error:'The first rune already differs from the Warning opening for some of these cases. Reload to choose cases that still need checking.'},409);
     const savedRows=(await query('SELECT case_id FROM family_case_results WHERE family_id=? AND revision=?',FAMILY,snapshot.revision).all()).results;
     if(!Array.isArray(savedRows))throw Error('Saved coverage unavailable');
     const shared=await sharedFamilyCoverage({db,preparer}),covered=new Set([...savedRows.map(row=>row.case_id),...shared.completed]);

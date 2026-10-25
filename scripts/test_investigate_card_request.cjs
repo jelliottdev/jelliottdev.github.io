@@ -46,7 +46,7 @@ async function fixture({gateBinding=false,legacy=false}={}){
  draft.aim=C.normalizeAim(known('Find readable text'));
  draft.method=known({operations:[{id:'vigenere',label:'Vigenere',key:'FIRFUMFERENFE',offset:7},{id:'atbash',label:'Atbash',offset:3}]});
  draft.scope=known({pages,description:'Only lines 2–3 on the selected pages'});
- draft.rules={...draft.rules,wordBoundaries:known('preserve'),boundaryMode:known('within_words'),reset:known('per_page')};
+ draft.rules={...draft.rules,evaluation:known('measurement'),wordBoundaries:known('preserve'),boundaryMode:known('within_words'),reset:known('per_page')};
  draft.unresolved=[];
  // Re-enter the ordinary review through production handlers after fixture specification.
  doc.getElementById('edit').fire('click');doc.getElementById('cancel-edit').fire('click');

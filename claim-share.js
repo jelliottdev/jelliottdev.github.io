@@ -105,7 +105,7 @@
   for(const [k,f]of Object.entries(p.rules))if(f.status!=='unspecified'){
    const value=f.value,wordSum=k==='evaluation'&&f.status==='specified'&&value?.kind==='word-prime-sums'&&Object.keys(value).length===3&&['kind','table','boundaries'].every(name=>own(value,name))?wordPrimeSumLabels(value.table,value.boundaries):null;
    const wordSumRule=f.status==='specified'?wordPrimeSumRuleLabel(p,k,f.value):null;
-   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
+   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule||(k==='evaluation'&&f.status==='specified'?C.evaluationText(f.value):null)|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
   }
   if(p.unresolved.length)rows.push(['Unresolved',JSON.stringify(p.unresolved)]);
   const unknown=Object.entries(p.rules).filter(([,f])=>f.status==='unspecified').map(([k])=>k);

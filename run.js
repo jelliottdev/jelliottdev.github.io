@@ -161,6 +161,7 @@
    try{
     const value=await(await request(config.taskPreparationEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({proposalId:id,parentTaskId:null})},45000)).json();if(!live(token,id))return;if(value.proposalId!==id)throw Error('The proposed plan belongs to another idea.');
     if(value.state==='needs-adapter'){if(typeof value.reason!=='string')throw Error('The preparation response is invalid.');set('idea-status','This idea is saved, but needs a supported runner before it can be tested. '+value.reason);return;}
+    if(value.state==='needs-clarification'){if(value.field!=='evaluation'||typeof value.reason!=='string'||!value.reason.trim()||value.reason.length>700||['task','controls','preparation'].some(key=>Object.hasOwn(value,key)))throw Error('The clarification response is invalid.');set('idea-status',value.reason+' Use “Review this idea” to choose what to check.');return;}
     if(!['plan-ready','scope-covered'].includes(value.state)||value.parentTaskId!==null||!['raw','reviewed'].includes(value.inputVersion)||!Array.isArray(value.notes)||value.notes.some(n=>typeof n!=='string')||typeof value.purpose!=='string')throw Error('The proposed plan is invalid.');
     const coverage=value.coverage===undefined?null:await checkedCoverage(value.coverage,token,id,value.inputVersion);if(!live(token,id))return;
     if(value.state==='scope-covered'){

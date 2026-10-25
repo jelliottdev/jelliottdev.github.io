@@ -59,7 +59,7 @@ async function fixture(session,backend,options={}){
 async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('intake').fire('submit');
  await require('./mock_interpretation_response.cjs').waitForReview(f.app);
  require('./mock_interpretation_response.cjs').acknowledge(f.doc,f.app);
- const d=f.app.getSnapshot().draft;d.aim=C.normalizeAim(known({outcomeId:'decipher',wording:'Find readable text',detail:''}));d.method=known({operations:JSON.parse(JSON.stringify(operations))});d.scope=known({pages:['lp2-15']});
+ const d=f.app.getSnapshot().draft;d.aim=C.normalizeAim(known({outcomeId:'decipher',wording:'Find readable text',detail:''}));d.method=known({operations:JSON.parse(JSON.stringify(operations))});d.scope=known({pages:['lp2-15']});d.rules.evaluation=known('measurement');
  // Re-render through the existing edit/cancel path after replacing fixture fields.
  f.doc.getElementById('edit').fire('click');f.doc.getElementById('cancel-edit').fire('click');
 }
@@ -124,7 +124,7 @@ async function main(){
  console.log('PASS contribution identity: changed card with same original gets new UUID; failed save survives refresh without background submission.');
 
 
- const shared=C.confirm(C.createDraft({source:{text:'Private sender wording'},aim:known({outcomeId:'decipher',detail:''}),method:known({operations}),scope:known({pages:['lp2-15']})}),{id:'shared',at:AT});
+ const shared=C.confirm(C.createDraft({source:{text:'Private sender wording'},aim:known({outcomeId:'decipher',detail:''}),method:known({operations}),scope:known({pages:['lp2-15']}),rules:{evaluation:known('measurement')}}),{id:'shared',at:AT});
  const sharedSession=storage(),sharedServer=server(),hash=H.encode(shared);
  f=await fixture(sharedSession,sharedServer,{hash});await confirm(f);assert(!Object.hasOwn(sharedServer.posts[0].body,'originalIdea'),'Shared-card reconstruction must not become original wording');const sharedBody=sharedServer.posts[0].body;f.app.destroy();
  f=await fixture(sharedSession,sharedServer,{hash});assert.equal(sharedServer.posts.length,1);await confirm(f);assert.equal(sharedServer.posts.length,2);assert.deepEqual(sharedServer.posts[1].body,sharedBody);assert.equal(sharedServer.ledger.size,1);assert.deepEqual(JSON.parse(sharedSession.getItem(INTAKE)).body,sharedBody);f.app.destroy();

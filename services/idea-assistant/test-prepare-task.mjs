@@ -20,7 +20,7 @@ const index=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.
 const alphabet=index.alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const raw=alphabet.slice(0,3).map(r=>r.rune).join('')+' '+alphabet[0].rune,reviewed=raw+'\n'+alphabet[2].rune;
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
-function card(extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE original idea'},aim:known('solve LP2'),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:known({pages:['lp2-15']}),...extra}),{id:'test',at}));}
+function card(extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE original idea'},aim:known('solve LP2'),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:known({pages:['lp2-15']}),...extra,rules:{evaluation:known('measurement'),...extra.rules}}),{id:'test',at}));}
 function fixture(data=card(),options={}){
  const sqlite=new DatabaseSync(':memory:');for(const migration of readdirSync(new URL('./migrations/',import.meta.url)).filter(name=>/^\d{4}_.*\.sql$/.test(name)).sort())sqlite.exec(readFileSync(new URL('./migrations/'+migration,import.meta.url),'utf8'));
  const cardHash=createHash('sha256').update(C.serialize(data)).digest('hex');id='p_'+cardHash;
@@ -33,6 +33,20 @@ function fixture(data=card(),options={}){
 const request=(body={proposalId:id,parentTaskId:null},extra={})=>new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json','CF-Connecting-IP':'203.0.113.9',...extra},body:JSON.stringify(body)});
 async function submit(f,body){const response=await f.handle(request(body),f.env);return {response,value:await response.json()};}
 let count=0;async function test(name,fn){await fn();console.log('PASS '+name);count++;}
+await test('deciphering requires an explicit evaluation before AI, source loading or task creation',async()=>{
+ for(const evaluation of [C.field(),C.field('not_applicable'),C.field('unrestricted')]){
+  const input=card({rules:{evaluation}}),before=structuredClone(input),plan=planCard(input);assert.equal(plan.state,'needs-clarification');assert.equal(plan.field,'evaluation');assert.deepEqual(input,before);
+  const f=fixture(input),{response,value}=await submit(f);assert.equal(response.status,200);assert.deepEqual(value,{state:'needs-clarification',proposalId:id,field:'evaluation',reason:'Choose what this experiment should check before preparing it.'});assert.equal(f.calls,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM idea_computation_evidence').get().n,0);
+ }
+});
+await test('readability requests stay unsupported rather than becoming measurements or prefixes',async()=>{
+ for(const aim of ['solve LP2','Measure the output']){
+  const input=card({aim:known(aim),rules:{evaluation:known({kind:'readability'})}}),before=structuredClone(input),plan=planCard(input);assert.equal(plan.state,'needs-adapter');assert.match(plan.reason,/Readable-text evaluation is not available/);assert.deepEqual(input,before);
+  const f=fixture(input),{value}=await submit(f);assert.equal(value.state,'needs-adapter');assert.match(value.reason,/not been tested for readable text/);assert.equal(f.calls,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);
+ }
+ const inspect=card({rules:{evaluation:known('measurement')}}),snapshot=structuredClone(inspect),f=fixture(inspect),{value}=await submit(f);assert.equal(value.state,'plan-ready');assert.deepEqual(value.task.criterion,{kind:'measurement'});assert.deepEqual(inspect,snapshot);assert.equal(inspect.outcome.value.outcomeId,'decipher');assert(value.notes.some(note=>note.includes('not a test of whether the output is readable')));
+ const descriptive=card({aim:known('Measure the output'),rules:{evaluation:C.field()}});assert(!planCard(descriptive).reason,'Existing descriptive aims retain their explicit proposed measurement behavior');
+});
 await test('definition-derived measurements agree in browser and backend compilers with exact legacy titles and notes',async()=>{
  const frontendSource=readFileSync(new URL('../../record-followups.js',import.meta.url),'utf8'),needle='const api={reference,validateOrigins,createWorkspace}';assert(frontendSource.includes(needle));
  const context={module:{exports:{}},require:createRequire(new URL('../../record-followups.js',import.meta.url)),btoa,TextEncoder,crypto};vm.createContext(context);vm.runInContext(frontendSource.replace(needle,'const api={cardProgram,reference,validateOrigins,createWorkspace}'),context);
@@ -130,7 +144,7 @@ await test('keyed plans reject omitted, guessed and unsupported parameters witho
  assert(planCard(card({method:known({operations:[{id:'reverse_row_runes',key:[1]}]})})).reason);
 });
 await test('explicit unrestricted choices and inapplicable consumed state never become a fixed plan',async()=>{
- for(const key of C.RULES){const input=card({rules:{[key]:C.field('unrestricted')}}),before=structuredClone(input);assert(planCard(input).reason,key);assert.deepEqual(input,before);const f=fixture(input),{value}=await submit(f);assert.equal(value.state,'needs-adapter',key);assert.equal(f.calls,0);}
+ for(const key of C.RULES){const input=card({rules:{[key]:C.field('unrestricted')}}),before=structuredClone(input);assert(planCard(input).reason,key);assert.deepEqual(input,before);const f=fixture(input),{value}=await submit(f);assert.equal(value.state,key==='evaluation'?'needs-clarification':'needs-adapter',key);assert.equal(f.calls,0);}
  for(const operation of [{id:'cumulative_difference',reset:'page'},{id:'vigenere',key:[1],direction:'subtract',reset:'page'}]){
   const input=card({method:known({operations:[operation]}),rules:{reset:C.field('not_applicable')}});assert(planCard(input).reason);assert.equal((await submit(fixture(input))).value.state,'needs-adapter');
  }

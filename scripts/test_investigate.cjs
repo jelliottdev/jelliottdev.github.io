@@ -11,6 +11,16 @@ test('exact scope lists/ranges preserve holes; invalid shorthand is rejected',()
  assert.throws(()=>I.parseScope('15–17'));assert.throws(()=>I.parseScope('LP2-99'));
  assert.equal(I.parseScope('').status,'unspecified');
 });
+test('deciphering intake explicitly chooses evaluation without changing aim, method, scope or source',()=>{
+ const H=require('../claim-share.js'),known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']}),source='Try this transformation to recover the hidden text.',base=C.createDraft({source:{text:source},aim:known({outcomeId:'decipher',wording:'Find readable text',detail:'Recover a complete passage'}),method:known({operations:[{id:'reverse_row_runes'}]}),scope:known({pages:['lp2-15']})});
+ const question=I.intakeQuestions(base).find(q=>q.id==='evaluation');assert.equal(question.prompt,'What should this check look for?');assert.deepEqual(question.choices.map(c=>c.id),['readable-text','warning-opening','inspect-output']);assert(question.choices[0].example.includes('not available yet'));assert(question.choices[1].label.includes('12 runes'));
+ for(const choice of C.EVALUATION_CHOICES){const next=I.answerIntake(base,'evaluation',choice.id);assert.deepEqual(next.rules.evaluation.value,choice.value);assert.deepEqual(next.aim,base.aim);assert.deepEqual(next.method,base.method);assert.deepEqual(next.scope,base.scope);assert.equal(next.source.text,source);assert(!I.intakeQuestions(next).some(q=>q.id==='evaluation'));assert.throws(()=>I.answerIntake(next,'evaluation',choice.id));const shared=H.cardData(C.confirm(next,{id:'evaluation-'+choice.id,at}));assert.deepEqual(shared.rules.evaluation.value,choice.value);assert(H.sections(shared).find(row=>row[0]==='Evaluation')[1].includes(choice.label));assert(I.rowsHTML(next).includes(choice.label));}
+ assert.deepEqual(C.EVALUATION_CHOICES.find(c=>c.id==='warning-opening').value.values,[24,7,24,4,9,21,17,18,20,10,18,1]);
+ const explicit={kind:'exact-prefix',values:[1,2,3]},supplied=C.revise(base,{rules:{evaluation:known(explicit)}});assert(!I.intakeQuestions(supplied).some(q=>q.id==='evaluation'));assert.deepEqual(supplied.rules.evaluation.value,explicit);
+ for(const aim of [{outcomeId:'measure',detail:'Test the pattern'},{outcomeId:'unclassified',detail:'A custom research goal'},{outcomeId:'explain',detail:'Explain the drawing'}])assert(!I.intakeQuestions(C.revise(base,{aim:known(aim)})).some(q=>q.id==='evaluation'));
+ for(const status of ['not_applicable','unrestricted']){const prior=C.field(status,undefined,{kind:'supplied',refs:['original:evaluation']}),unbounded=C.revise(base,{rules:{evaluation:prior}}),q=I.intakeQuestions(unbounded).find(q=>q.id==='evaluation');assert(q);assert.equal(q.context,'A bounded decoding test needs a specific check.');assert.deepEqual(unbounded.rules.evaluation,prior);const resolved=I.answerIntake(unbounded,'evaluation','warning-opening');assert.deepEqual(resolved.aim,base.aim);assert.deepEqual(resolved.clarifications.at(-1).previousRule,prior);assert.deepEqual(resolved.rules.evaluation.value,C.EVALUATION_CHOICES[1].value);assert(!I.intakeQuestions(resolved).some(q=>q.id==='evaluation'));}
+ assert.throws(()=>I.answerIntake(base,'evaluation','automatic-plaintext-proof'));
+});
 test('arbitrary source is retained as editable method wording without an invented goal',()=>{
  const text='Try the odd columns, then my own key rule.';const d=I.initialDraft(text);
  assert.equal(d.source.text,text);assert.equal(d.method.value.operations[0].label,text);
@@ -396,7 +406,7 @@ async function waitForReview(app){await require('./mock_interpretation_response.
  const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async(url,options)=>url==='https://mock.example/interpret'?mockInterpretation(options):Response.json(url==='data/experiments.json'?registry:url==='data/assistant.json'?{endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'}:{documents:[]})});
  await app.ready;
  const source='Reverse each row on LP2-15, then apply Vigenere with key FIRFUMFERENFE';
- doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');await waitForReview(app);answerInDOM(doc,'decipher');
+ doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');await waitForReview(app);answerInDOM(doc,'decipher');answerInDOM(doc,'inspect-output');
  const original=app.getSnapshot().draft;
  original.method.value.operations[1].parameters={key:'FIRFUMFERENFE',offset:7};
  original.unresolved.push({kind:'source_note',text:'Preserve this independent constraint'});

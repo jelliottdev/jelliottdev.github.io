@@ -42,6 +42,25 @@
   if(!view||view.id!==ID||!Array.isArray(view.configurations)||!Array.isArray(view.pages))throw Error('Invalid family snapshot.');
   return view.configurations.flatMap(c=>view.pages.map(p=>c.id+'--'+p.id)).sort();
  }
+ function proveCaseExclusions(view,alphabet){
+  // This is a necessary first-position condition, not a run or a full-prefix result.
+  if(!view||view.id!==ID||typeof view.revision!=='string'||!/^[a-f0-9]{64}$/.test(view.revision)||view.totalCases!==990||!Array.isArray(view.configurations)||view.configurations.length!==18||!Array.isArray(view.pages)||view.pages.length!==55)throw Error('The family exclusion snapshot is invalid.');
+  const expectedConfigs=new Map(configurations().map(c=>[c.id,c])),seen=new Set();
+  for(const config of view.configurations){
+   const expected=expectedConfigs.get(config?.id);
+   if(!expected||seen.has(config.id)||['mode','direction','reset'].some(k=>config[k]!==expected[k]))throw Error('The family exclusion configuration is invalid.');seen.add(config.id);
+  }
+  const pages=new Map(view.pages.map(p=>[p.id,p]));
+  if(pages.size!==55||PAGE_IDS.some(id=>!pages.has(id)))throw Error('The family exclusion page domain is invalid.');
+  E.validateTask({schema:'liberpedia-local-task-v1',engine:'rune-program-v1',taskId:'0'.repeat(64),title:TITLE,pages:view.pages,alphabet,steps:[],criterion:{kind:'exact-prefix',values:WARNING.slice()}});
+  const index=new Map(alphabet.map((entry,i)=>[entry.rune,i])),excluded=[],eligible=[];
+  for(const config of view.configurations)for(const page of view.pages){
+   const first=Array.from(page.text).find(ch=>index.has(ch));if(first===undefined)throw Error('A family exclusion page has no rune text.');
+   const inputIndex=index.get(first),keyIndex=KEY[0],expectedIndex=WARNING[0],actualIndex=((inputIndex+(config.direction==='add'?keyIndex:-keyIndex))%29+29)%29,caseId=config.id+'--'+page.id;
+   if(actualIndex!==expectedIndex)excluded.push({caseId,rule:'first-rune',inputIndex,keyIndex,expectedIndex,actualIndex});else eligible.push(caseId);
+  }
+  excluded.sort((a,b)=>a.caseId.localeCompare(b.caseId));eligible.sort();return {excluded,eligible};
+ }
  function selection(selected){
   if(!Array.isArray(selected)||selected.length<1||selected.length>12||selected.some(id=>typeof id!=='string')||new Set(selected).size!==selected.length)throw Error('Select one to 12 distinct family cases.');
   return selected.slice().sort();
@@ -92,6 +111,6 @@
   if(await hash(body,cryptoAPI)!==copy.planId)throw Error('The family execution plan identity changed.');
   return copy;
  }
- const api={snapshot,caseIds,prepare,validatePlan,validateExecutionPlan,createPreparer};
+ const api={snapshot,caseIds,prepare,validatePlan,validateExecutionPlan,createPreparer,proveCaseExclusions};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ResearchFamily=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

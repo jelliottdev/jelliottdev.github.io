@@ -90,6 +90,27 @@ page bytes match exactly. The historical case route pins the saved revision
 rather than substituting the current input snapshot. Reviewed prose records
 are not automatically imported, and no concurrent work reservations exist.
 
+## Evaluation must match the intended question
+
+A deciphering outcome with no specific evaluation is a clarification state,
+not permission to substitute descriptive statistics. Intake offers a maintained
+choice between readable-text evaluation, the exact 12-rune Warning opening,
+and explicit output inspection. Each choice preserves the original aim and
+source. Specified criteria are not replaced. Explicit inspection may report
+counts, but does not judge readability. Readable-text evaluation currently
+requires an adapter and cannot silently become inspection or a prefix test.
+The backend checks this before AI mapping, input loading or task creation;
+older saved ideas receive an inline path back to review.
+
+The current family also has a necessary-condition filter. `proveCaseExclusions`
+checks the first output rune against the fixed opening without decoding the
+page. Excluded cases retain their identities and previous saved runs, but are
+not offered as new work. They are deductions under this exact family and opening,
+not saved computations or exclusions of other plaintext. With the current raw
+inputs, 963 of 990 cases fail this condition and 27 survive it. Surviving a
+necessary condition is not a match. Browser and server independently apply the
+filter; preparation rejects excluded cases before controls or manuscript runs.
+
 ## First execution contract
 
 `local-experiment.js` is the shared, deterministic validator/evaluator.

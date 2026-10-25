@@ -6,7 +6,7 @@ const known=value=>C.field('specified',value,{kind:'supplied',refs:['test source
 const card=C.confirm(C.createDraft({source:{text:'PRIVATE ORIGINAL PROMPT'},aim:known('Find readable text'),method:known({operations:[{id:'vigenere',label:'Vigenere with key ABC',key:'ABC',offset:7}]}),scope:known({pages:['lp2-15','lp2-17'],description:'Only lines 2–3'})}),{id:'private-confirmation',at:'2026-10-24T12:00:00Z'});
 const decode=text=>text.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
 class Element{
- constructor(id,doc,markup=''){this.id=id;this.doc=doc;this.listeners={};this.html='';this.textContent='';this.hidden=false;this.disabled=/\sdisabled(?:\s|>)/.test(markup);this.value=decode(markup.match(/\bvalue="([^"]*)"/)?.[1]||markup.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/)?.[1]||'');this.selectionStart=this.selectionEnd=0;}
+ constructor(id,doc,markup=''){this.id=id;this.doc=doc;this.listeners={};this.html='';this.textContent='';this.hidden=/\shidden(?:\s|>)/.test(markup);this.disabled=/\sdisabled(?:\s|>)/.test(markup);this.value=decode(markup.match(/\bvalue="([^"]*)"/)?.[1]||markup.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/)?.[1]||'');this.selectionStart=this.selectionEnd=0;}
  addEventListener(type,fn){this.listeners[type]=fn;}
  fire(type){return this.listeners[type]?.({preventDefault(){},target:this});}
  focus(){this.doc.activeElement=this;}
@@ -46,6 +46,8 @@ async function setup(enabled=true,shared=true){
   await require('./mock_interpretation_response.cjs').waitForReview(app);
   doc.selectedChoice='decipher';doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;
  }
+ assert.equal(I.intakeQuestions(app.getSnapshot().draft)[0].id,'evaluation');assert.equal(doc.getElementById('confirm'),null,'Deciphering intent alone cannot choose a criterion');
+ const aimBefore=C.serialize(app.getSnapshot().draft.aim);doc.selectedChoice='inspect-output';doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;assert.equal(app.getSnapshot().draft.rules.evaluation.value,'measurement');assert.equal(C.serialize(app.getSnapshot().draft.aim),aimBefore,'The explicit inspection criterion does not rewrite the aim');
  assert.equal(app.getSnapshot().stage,'review');assert.equal(requests.length,0,'Review is not confirmation');
  assert.equal(doc.getElementById('confirm').disabled,false,'Wait for actual registry/config readiness');
  assert.equal(doc.getElementById('collection-notice').hidden,!enabled,'Collection notice appears only when saving is configured, including a late config on imported review');

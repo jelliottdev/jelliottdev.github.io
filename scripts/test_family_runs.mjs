@@ -9,7 +9,7 @@ const origin='https://jelliottdev.github.io',path='/families/deor-feedback-v1',a
 const hash=async value=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(L.stable(value))))].map(n=>n.toString(16).padStart(2,'0')).join('');
 const raw=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import.meta.url),'utf8'));
 // Small independent synthetic manuscript fixture. No network or production writes.
-for(const page of raw.pages)page.raw=page.id==='lp2-50'?'':raw.alphabet.map(a=>a.rune).join('')+'-ᚠᚠ\nᚢᚦ';
+for(const page of raw.pages)page.raw=page.id==='lp2-50'?'':raw.alphabet[18].rune+raw.alphabet.map(a=>a.rune).join('')+'-ᚠᚠ\nᚢᚦ';
 function fixture(){
  const sqlite=new DatabaseSync(':memory:');for(const name of readdirSync(new URL('../services/idea-assistant/migrations/',import.meta.url)).filter(n=>n.endsWith('.sql')).sort())sqlite.exec(readFileSync(new URL('../services/idea-assistant/migrations/'+name,import.meta.url),'utf8'));
  let bundle=structuredClone(raw),beforeBatch=null,calls=0;
@@ -24,7 +24,7 @@ function fixture(){
 }
 function req(action='',body,options={}){return new Request('https://worker.example'+path+(action?'/'+action:''),{method:body===undefined?'GET':'POST',headers:{origin,'content-type':'application/json',...options.headers},...(body===undefined?{}:{body:JSON.stringify(body)}),...options});}
 async function call(f,action,body,status=200){const response=await f.handle(req(action,body),f.env);assert.equal(response.status,status,await response.clone().text());return response.json();}
-async function prepared(f,count=2){const snapshot=await F.snapshot(f.bundle),caseIds=F.caseIds(snapshot).slice(0,count);return call(f,'prepare',{revision:snapshot.revision,caseIds});}
+async function prepared(f,count=2){const snapshot=await F.snapshot(f.bundle),caseIds=F.proveCaseExclusions(snapshot,f.bundle.alphabet).eligible.slice(0,count);return call(f,'prepare',{revision:snapshot.revision,caseIds});}
 function submission(prepared){return {plan:prepared.plan,results:prepared.plan.cases.map(c=>({caseId:c.id,result:L.run(c.task)})),controls:prepared.controls.map(c=>({caseId:c.caseId,results:c.suite.cases.map(f=>({id:f.id,result:L.run(f.task)}))}))};}
 function count(f){return f.sqlite.prepare('SELECT COUNT(*) n FROM family_case_results').get().n;}
 function fill(f,n){const insert=f.sqlite.prepare('INSERT INTO family_case_results VALUES(?,?,?,?,?,?,?,?,?,?)');for(let i=0;i<n;i++)insert.run('fixture','old','filler-'+i,'t','{}','h','{}',0,at,at.slice(0,10));}
@@ -74,6 +74,10 @@ await test('historical family receipts remain directly readable after another pa
  const read=await call(f,'cases/'+item.id+'?revision='+p.plan.revision);assert.deepEqual(read.task,item.task);assert.deepEqual(read.result,body.results[0].result);
  await call(f,'cases/'+item.id+'?revision='+'0'.repeat(64),undefined,404);await call(f,'cases/'+item.id+'?revision=bad',undefined,404);
  await call(f,'cases/'+item.id+'?revision='+p.plan.revision+'&revision='+p.plan.revision,undefined,404);
+});
+await test('deductively excluded cases cannot be offered as new device work',async()=>{
+ const f=fixture(),snapshot=await F.snapshot(f.bundle),excluded=F.proveCaseExclusions(snapshot,f.bundle.alphabet).excluded[0];const original=L.verify;L.verify=async()=>{throw Error('No target needed');};
+ try{const reply=await call(f,'prepare',{revision:snapshot.revision,caseIds:[excluded.caseId]},409);assert(reply.error.includes('first rune'));assert.equal(count(f),0);}finally{L.verify=original;}
 });
 await test('quota checked before target replay and concurrent quota race rolls back whole batch',async()=>{
  const f=fixture(),body=submission(await prepared(f));fill(f,999);const original=L.verify;L.verify=async()=>{throw Error('Quota must reject before replay');};
