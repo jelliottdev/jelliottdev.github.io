@@ -21,8 +21,9 @@ test('word-sum clarification stays UI-only while execution and declared inputs s
  }
  const workflow=fs.readFileSync(path.join(__dirname,'../.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');
  for(const script of ['scripts/test_word_sum_intake.cjs','scripts/test_word_sum_intake_flow.cjs']){
-  const block=workflow.split(/(?=^      - )/m).find(s=>s.startsWith('      - run: node '+script+'\n'));
-  assert(block,'The reviewed clarification must keep its unconditional Node check: '+script);
+  const block=workflow.split(/(?=^      - )/m).find(s=>s.includes('run: node scripts/run_node_checks.cjs\n'));
+  const manifest=require('./run_node_checks.cjs').validateManifest(JSON.parse(fs.readFileSync(path.join(__dirname,'node-checks.json'),'utf8')));
+  assert(block&&manifest.checks.some(c=>c.args.length===1&&c.args[0]===script),'The reviewed clarification must keep its unconditional Node check: '+script);
   assert(!/^        if:/m.test(block),'Frontend clarification tests cannot be gated by science scope');
  }
 });

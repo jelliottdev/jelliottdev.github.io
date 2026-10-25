@@ -114,3 +114,11 @@ Explain the sequence in ordinary words: review, run in this browser, choose
 whether to save. Say how saving updates the question's checked work. Keep exact
 rules available before Run, and distinguish a completed calculation from a
 decipherment. Learning exercises must not imply that practice adds new evidence.
+
+### Worked plan examples
+
+The shared plan review can illustrate a maintained numeric criterion with one
+small rune strip or word calculation before Run. Derive its numbers from the
+reviewed criterion and alphabet; label it as an illustration and keep it
+distinct from manuscript results. Preserve the exact rule, word boundaries and
+limit before Run. Do not add another review step or a separate lesson panel.
