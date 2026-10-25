@@ -46,9 +46,20 @@
   for(const character of text){const rune=labels.has(character);out+=(rune&&previousRune&&!joined?'·':'')+(rune?labels.get(character):character);previousRune=rune;}
   return out;
  }
- function prefixAlignment(task,result,pageId,mode='runes',expected=task.criterion.values){
+ function prefixDifference(task,result,pageId,expected){
   const indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),text=result.transformed.find(page=>page.page===pageId).text,observed=Array.from(text).filter(rune=>indices.has(rune)).map(rune=>indices.get(rune));
-  const mismatch=expected.findIndex((value,i)=>observed[i]!==value),start=mismatch<0?0:Math.max(0,mismatch-3),end=Math.min(expected.length,start+8),label=value=>value===undefined?'Missing':mode==='latin'?task.alphabet[value].latin:task.alphabet[value].rune;
+  return {observed,mismatch:expected.findIndex((value,i)=>observed[i]!==value)};
+ }
+ function prefixMismatch(task,result){
+  for(const page of task.pages){
+   const {observed,mismatch}=prefixDifference(task,result,page.id,task.criterion.values);if(mismatch<0)continue;
+   const expected=task.alphabet[task.criterion.values[mismatch]].rune,actual=observed[mismatch]===undefined?null:task.alphabet[observed[mismatch]].rune;
+   return '<p class="run-prefix-status"><strong>'+esc(page.id.toUpperCase())+' · '+(task.pages.length>1?'example: ':'')+(actual===null?'output ends before rune ':'first mismatch at rune ')+(mismatch+1)+'.</strong> Expected <span class="run-prefix-symbol">'+esc(expected)+'</span>; '+(actual===null?'no output rune remains.':'actual <span class="run-prefix-symbol">'+esc(actual)+'</span>.')+'</p>';
+  }
+  return '';
+ }
+ function prefixAlignment(task,result,pageId,mode='runes',expected=task.criterion.values){
+  const {observed,mismatch}=prefixDifference(task,result,pageId,expected),start=mismatch<0?0:Math.max(0,mismatch-3),end=Math.min(expected.length,start+8),label=value=>value===undefined?'Missing':mode==='latin'?task.alphabet[value].latin:task.alphabet[value].rune;
   const status=mismatch<0?'All '+expected.length+' prefix positions match.':observed[mismatch]===undefined?'The output ends before prefix position '+(mismatch+1)+'.':'First mismatch at prefix position '+(mismatch+1)+'.';
   return '<section class="run-prefix-alignment"><h3>Expected and observed prefix</h3><p class="run-prefix-status">'+esc(pageId.toUpperCase()+': '+status)+'</p><p class="run-text-note">'+'Showing positions '+(start+1)+'–'+end+' of '+expected.length+'. '+'Positions count runes only; separators do not occupy a position.</p><table class="run-prefix-table"><thead><tr><th scope="col">Position</th><th scope="col">Expected</th><th scope="col">Actual</th><th scope="col">Result</th></tr></thead><tbody>'+expected.slice(start,end).map((value,offset)=>{const i=start+offset,missing=observed[i]===undefined,same=value===observed[i];return '<tr class="run-prefix-pair'+(same?'':' is-different')+'"><th scope="row">'+(i+1)+'</th><td class="run-prefix-symbol">'+esc(label(value))+'</td><td'+(missing?'':' class="run-prefix-symbol"')+'>'+esc(label(observed[i]))+'</td><td>'+(same?'Match':missing?'Missing':'Different')+'</td></tr>';}).join('')+'</tbody></table></section>';
  }
@@ -148,7 +159,7 @@
   if(task.criterion.kind==='language-score')return '<section class="local-run-result" aria-labelledby="local-run-finding"><h2 id="local-run-finding">Output</h2>'+languageView(task,result)+'<dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
   if(task.criterion.kind==='measurement'&&task.steps.length)return '<section class="local-run-result" aria-labelledby="local-run-finding">'+outputPreview(task,result)+'<dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'<details><summary>Rune counts</summary><p>Computation verified. '+esc(data.finding)+'</p><ul>'+data.comparison.map(row=>'<li>'+esc(row.label+': '+row.value+' of '+row.total+' pairs')+'</li>').join('')+'</ul><p>'+esc(data.limit)+'</p></details></section>';
   return '<section class="local-run-result" aria-labelledby="local-run-finding"><p class="run-state">Computation verified</p><h2 id="local-run-finding">What this run found</h2><p>'+esc(data.finding)+'</p>'+
-   (task.criterion.kind==='word-prime-sums'?wordSumsView(task,result):task.criterion.kind==='word-affine-count'?wordPairChart(task,result):task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
+   (task.criterion.kind==='exact-prefix'?prefixMismatch(task,result):'')+(task.criterion.kind==='word-prime-sums'?wordSumsView(task,result):task.criterion.kind==='word-affine-count'?wordPairChart(task,result):task.criterion.kind==='exact-prefix'?prefixChart(task,result):'<figure class="local-run-chart"><figcaption>Repeated neighbouring runes</figcaption><div role="img" aria-label="'+esc(data.comparison.map(r=>r.label+': '+r.value+' of '+r.total+' pairs').join('. '))+'">'+
    data.comparison.map((row,i)=>'<div class="run-bar-row"><span>'+esc(row.label)+'</span><div class="run-bar-track"><span class="run-bar run-bar-'+i+'" style="width:'+(row.value/max*100).toFixed(4)+'%"></span></div><strong>'+row.value+'</strong></div>').join('')+
    '</div><p class="run-chart-note">Counts follow the rune sequence on each page, ignoring spaces and punctuation.</p></figure>')+
    (task.criterion.kind==='word-affine-count'?wordPairExample(task,result):'')+'<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';

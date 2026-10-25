@@ -50,6 +50,11 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':method+', OPTIONS','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'600'}});
   }
   if(request.method!==method){headers.Allow=method+', OPTIONS';return reply({error:'Method is not allowed.'},405);}
+  let selectedIdea=null;
+  if(request.method==='GET'&&!create&&!comparisonRoute&&url.searchParams.has('idea')){
+   if(url.searchParams.getAll('idea').length!==1||[...url.searchParams.keys()].some(key=>key!=='idea')||!PROPOSAL.test(url.searchParams.get('idea')||''))return reply({error:'The selected idea is invalid.'},400);
+   selectedIdea=url.searchParams.get('idea');
+  }
   if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Local experiments are unavailable.'},503);
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
   const controlsFor=async task=>{const suite=await prepareControls(task,crypto);await PlanControls.validate(suite,task,crypto);return suite;};
@@ -174,10 +179,13 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
-   const context=await publicContext(row);if(!context)return reply({error:'Experiment not found.'},404);
+   const context=selectedIdea?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
+    FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
+    JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=? AND links.proposal_id=?`,row.id,selectedIdea).first():await publicContext(row);
+   if(!context)return reply({error:'Experiment not found.'},404);
    const task=await storedTask(row);
    if(comparisonRoute){const comparison=await boundaryComparison({db,task,inputVersion:context.input_version,discoverEvidence});return comparison?reply(comparison):reply({error:'This experiment has no supported boundary comparison.'},422);}
-   if(method==='GET')return reply(await view(row,null,context));
+   if(method==='GET')return reply(await view(row,selectedIdea,context));
    let result,controls;
    try{
     exact(body,['result']);
