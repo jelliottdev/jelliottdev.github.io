@@ -67,7 +67,7 @@ console.log('PASS: no page-only experiment matches, scope separation, page ID pa
 
 // Published experiment prose must preserve literal reproduction syntax.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-const experimentContext={esc:text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),URLSearchParams,location:{hash:'#/experiments'}};
+const experimentContext={RecordQuestionView:require('../record-question-view.js'),esc:text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),URLSearchParams,location:{hash:'#/experiments'}};
 vm.createContext(experimentContext);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../experiments.js'),'utf8'),experimentContext);
 const literal=experimentContext.renderExperimentMarkdown('Use `**pattern**` beside **emphasis** and `<script>`.');
