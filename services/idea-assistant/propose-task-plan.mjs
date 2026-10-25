@@ -3,7 +3,7 @@ import {validateCard} from './idea-relations.mjs';
 import L from '../../local-experiment.js';
 import C from '../../claim-specification.js';
 export const MODEL='@cf/google/gemma-4-26b-a4b-it';
-export const VERSION='source-plan-grammar-v8-exact-cumulative-scope';
+export const VERSION='source-plan-grammar-v9-bounded-ordered-then';
 export const LIMITS=Object.freeze({timeoutMs:20000,concurrency:3,cacheEntries:50,cacheMs:600000,responseBytes:16000});
 const object=(properties,required=Object.keys(properties))=>({type:'object',additionalProperties:false,properties,required});
 const integer={type:'integer',minimum:0,maximum:28};
@@ -54,6 +54,38 @@ function parse(quote,scope){
  return null;
 }
 function connectors(text){return text.replace(/[\s,;.!]+/g,' ').trim().split(/\s+/).every(word=>!word||['please','try','then','and'].includes(word.toLowerCase()));}
+function orderedSpans(label){
+ if(typeof label!=='string'||!label.length||label.length>12000||/["'`{}]/.test(label))return null;
+ const cuts=[];let depth=0;
+ for(let i=0;i<label.length;i++){
+  const ch=label[i];if(ch==='['){if(depth)return null;depth=1;continue;}if(ch===']'){if(!depth)return null;depth=0;continue;}
+  if(depth||label.slice(i,i+4).toLowerCase()!=='then'||i===0||!(/\s/).test(label[i-1])||!(/\s/).test(label[i+4]||''))continue;
+  let start=i;while(start>0&&/\s/.test(label[start-1]))start--;if(start>0&&/[,;]/.test(label[start-1]))start--;
+  let end=i+4;while(end<label.length&&/\s/.test(label[end]))end++;
+  cuts.push({start,end});if(cuts.length>=8)return null;i=end-1;
+ }
+ if(depth||!cuts.length)return null;
+ const spans=[];let start=0;
+ for(const stop of [...cuts,{start:label.length,end:label.length}]){
+  let a=start,b=stop.start;while(a<b&&/\s/.test(label[a]))a++;while(b>a&&/\s/.test(label[b-1]))b--;
+  if(a===b||b-a>1200)return null;spans.push({start:a,quote:label.slice(a,b)});start=stop.end;
+ }
+ return spans;
+}
+function deterministicCandidate(card){
+ const operations=card.method.value.operations;if(!operations.length||operations.length>8)return null;const steps=[];
+ for(let operationIndex=0;operationIndex<operations.length;operationIndex++){
+  const operation=operations[operationIndex],label=operation.label;if(typeof label!=='string'||!label.length||label.length>12000)return null;
+  const whole=label.length<=1200?parse(label,card.scope):null;let parts;
+  if(whole)parts=[{start:0,quote:label,step:whole}];
+  else{
+   if(operation.id!=='described_method')return null;const spans=orderedSpans(label);if(!spans)return null;
+   parts=spans.map(span=>({...span,step:parse(span.quote,card.scope)}));if(parts.some(part=>!part.step))return null;
+  }
+  for(const {start,quote,step}of parts){if(steps.length===8)return null;steps.push({source:{operationIndex,start,quote},step});}
+ }
+ return {version:1,steps,unsupported:[]};
+}
 export function validateCandidate(input,candidate,{compile}={}){
  try{
   const card=validateCard(input);
@@ -110,9 +142,8 @@ export function createAIPlanner({AI,compile,now=()=>Date.now(),schedule=setTimeo
   // Complete labels need no generated source offsets. The same validator still
   // checks parameters, conditions, immutable rules and the reviewed compiler.
   if(card.method.status==='specified'){
-   const operations=card.method.value.operations;
-   const steps=operations.map((operation,operationIndex)=>({source:{operationIndex,start:0,quote:operation.label},step:typeof operation.label==='string'?parse(operation.label,card.scope):null}));
-   if(steps.length&&steps.length<=8&&steps.every(item=>item.step))return validateCandidate(card,{version:1,steps,unsupported:[]},{compile});
+   const candidate=deterministicCandidate(card);
+   if(candidate)return validateCandidate(card,candidate,{compile});
   }
   const provider=env.AI||AI;if(typeof provider?.run!=='function')return failure('AI-assisted plan mapping is unavailable.');
   const key=VERSION+'|'+MODEL+'|'+L.stable(card),hit=memory.get(key);

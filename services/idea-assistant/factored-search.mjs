@@ -19,7 +19,7 @@ function createHandler({fetcher=globalThis.fetch,now=()=>new Date(),taskHandler}
  const clock=()=>now().getTime();
  const gate=({db,proposalId,currentDomain,body,env})=>verify({db,proposalId,domain:currentDomain.domain,inputVersion:currentDomain.domain.inputVersion,snapshotToken:body.snapshotToken,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
  const prefixReuse=async context=>{const {db,proposalId,currentDomain,cases,env,request}=context,reuse=await findSelected({db,proposalId,domain:currentDomain.domain,cases,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});await gate(context);if(request.signal.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});return reuse;};
- return createFiniteSearchHandler({fetcher,now,...(taskHandler?{taskHandler}:{}),settingsAPI:Settings.factored,...((prefix||output||inspection)?{routePrefix:inspection?'factored-inspection-search':output?'factored-output-search':'factored-prefix-search',reuseCasesBeforeCreate:prefixReuse}:{}),
+ return createFiniteSearchHandler({fetcher,now,verifyGroupSnapshot:gate,...(taskHandler?{taskHandler}:{}),settingsAPI:Settings.factored,...((prefix||output||inspection)?{routePrefix:inspection?'factored-inspection-search':output?'factored-output-search':'factored-prefix-search',reuseCasesBeforeCreate:prefixReuse}:{}),
   async authorizeDomain(context){
    const {card,bundle,body,action}=context;
    const compiled=await compiler.compile({card,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]}});

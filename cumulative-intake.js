@@ -30,28 +30,38 @@
   return {draft:d,candidate,binding:binding(d)};
  }
  function inspect(input){try{return checked(input)?.candidate||null;}catch{return null;}}
- function question(input){
-  let value;try{value=checked(input);}catch{return null;}if(!value)return null;const {draft:d,candidate:c,binding:key}=value;
-  const history=d.clarifications.filter(x=>x.text===key&&/^cumulative-(reset|initial|representation|confirm)$/.test(x.question));if(history.some(x=>x.choice==='as-described'))return null;
+ function settings(value){
+  const {draft:d,candidate:c,binding:key}=value;
+  const history=d.clarifications.filter(x=>x.text===key&&/^cumulative-(reset|initial|representation|confirm|interpretation)$/.test(x.question));
   const selected=kind=>history.filter(x=>x.question==='cumulative-'+kind).at(-1)?.choice;
-  const global=d.rules.reset,reset=c.reset||(['page','line','word'].includes(global.value)&&global.status==='specified'?global.value:null)||selected('reset');
-  const initial=c.initial===0||d.rules.initialState.status==='specified'&&d.rules.initialState.value===0||selected('initial')==='zero';
-  const representation=d.rules.representation,needsRepresentation=representation.status==='unspecified'&&selected('representation')!=='gp29';
-  const make=(kind,prompt,context,choices)=>({id:'cumulative-'+kind+':'+d.revision,prompt,context,choices:[...choices,{id:'as-described',label:'Keep my wording without choosing this calculation'}]});
-  if(!reset)return make('reset','When should the cumulative sum restart?','The literal plaintext-sum rule needs an explicit restart boundary. Each page is processed separately.',[{id:'page',label:'At each page',example:'Keep state across spaces and line breaks.'},{id:'line',label:'At each line',example:'Restart at each newline.'},{id:'word',label:'At every non-rune character',example:'Spaces, punctuation and line breaks all restart the sum.'}]);
-  if(!initial)return make('initial','How should the cumulative sum start?','The maintained calculation supports a sum starting at zero. A different supplied initial condition stays active and prevents preparation.',[{id:'zero',label:'Start the sum at zero after each restart'}]);
-  if(needsRepresentation)return make('representation','Which numbers does the formula use?','This calculation uses the ordered GP rune indices 0–28, not GP prime values. Your aim, text edition and evaluation stay unchanged.',[{id:'gp29',label:'Use GP rune indices 0–28'}]);
-  const conflicts=(representation.status!=='unspecified'&&!(representation.status==='specified'&&representation.value==='GP29')?' Your different representation is retained and prevents this GP-index calculation.':'')+(d.rules.initialState.status==='specified'&&d.rules.initialState.value!==0?' Your supplied nonzero initial condition is retained and prevents preparation.':'');
-  return {...make('confirm','Use the equivalent cumulative difference?','Subtract the preceding ciphertext rune from each rune, modulo 29. Keep the first rune after each '+(reset==='word'?'non-rune separator':reset)+' restart. This is equivalent to the literal cumulative plaintext sum with a zero start. It does not establish a decryption.'+conflicts,[{id:'use-difference',label:'Use this literal zero-start calculation'}]),reset};
+  const combined=selected('interpretation'),global=d.rules.reset,representation=d.rules.representation,initialState=d.rules.initialState;
+  const globalReset=global.status==='specified'&&['page','line','word'].includes(global.value)?global.value:null;
+  const reset=c.reset||globalReset||selected('reset');
+  const initial=c.initial===0||initialState.status==='specified'&&initialState.value===0||selected('initial')==='zero'||['zero','zero-gp29'].includes(combined);
+  const gp=representation.status==='specified'&&representation.value==='GP29'||representation.status==='unspecified'&&(selected('representation')==='gp29'||['gp29','zero-gp29'].includes(combined));
+  const conflict=global.status!=='unspecified'&&(global.status!=='specified'||!globalReset||c.reset&&globalReset!==c.reset)||initialState.status!=='unspecified'&&(initialState.status!=='specified'||initialState.value!==0)||representation.status!=='unspecified'&&(representation.status!=='specified'||representation.value!=='GP29');
+  return {reset,initial,gp,blocked:conflict||history.some(x=>x.choice==='as-described')};
+ }
+ function complete(input){
+  let value;try{value=checked(input);}catch{return input;}if(!value)return input;const state=settings(value);
+  if(state.blocked||!['page','line','word'].includes(state.reset)||!state.initial||!state.gp)return input;
+  const provenance={kind:'user_clarification',refs:['literal-cumulative-equivalence',...value.draft.method.provenance.refs]},field=v=>C.field('specified',v,provenance),rules={};
+  if(value.draft.rules.representation.status==='unspecified')rules.representation=field('GP29');
+  if(value.draft.rules.initialState.status==='unspecified')rules.initialState=field(0);
+  let next=C.applyMethodEdit(value.draft,{type:'replace',index:0,operation:{id:'cumulative_difference',label:'Cumulative difference',reset:state.reset}});next=C.revise(next,{rules});return next;
+ }
+ function question(input){
+  let value;try{value=checked(input);}catch{return null;}if(!value)return null;const state=settings(value);if(state.blocked)return null;
+  const make=(kind,prompt,context,choices)=>({id:'cumulative-'+kind+':'+value.draft.revision,prompt,context,choices:[...choices,{id:'as-described',label:'Keep my wording without choosing this calculation'}]});
+  if(!state.reset)return make('reset','When should the cumulative sum restart?','The literal plaintext-sum rule needs an explicit restart boundary. Each page is processed separately.',[{id:'page',label:'At each page',example:'Keep state across spaces and line breaks.'},{id:'line',label:'At each line',example:'Restart at each newline.'},{id:'word',label:'At every non-rune character',example:'Spaces, punctuation and line breaks all restart the sum.'}]);
+  if(state.initial&&state.gp)return null;
+  const choice=!state.initial&&!state.gp?'zero-gp29':!state.initial?'zero':'gp29';
+  const label=choice==='zero-gp29'?'Use GP rune indices 0\u201328 and a zero starting sum':choice==='zero'?'Start the sum at zero after each restart':'Use GP rune indices 0\u201328';
+  return make('interpretation','Use this interpretation of the formula?','Subtract the preceding ciphertext rune from each rune, modulo 29. The first rune after each '+(state.reset==='word'?'non-rune separator':state.reset)+' restart stays unchanged. This is the stated cumulative plaintext sum when the starting sum is zero. Your aim, text edition and chosen evaluation stay unchanged.',[{id:choice,label}]);
  }
  function clarify(input,id,choice){
   const value=checked(input),q=question(input);if(!value||!q||q.id!==id||!q.choices.some(x=>x.id===choice))throw Error('This cumulative-sum question changed. Review the current choices.');
-  const kind=id.slice(0,id.lastIndexOf(':'));
-  if(kind!=='cumulative-confirm'||choice==='as-described'){const next=C.revise(value.draft,{});next.clarifications.push({question:kind,choice,text:value.binding,revision:next.revision});return next;}
-  const provenance={kind:'user_clarification',refs:[id,...value.draft.method.provenance.refs]},field=v=>C.field('specified',v,provenance),rules={};
-  if(value.draft.rules.representation.status==='unspecified')rules.representation=field('GP29');
-  if(value.draft.rules.initialState.status==='unspecified')rules.initialState=field(0);
-  let next=C.applyMethodEdit(value.draft,{type:'replace',index:0,operation:{id:'cumulative_difference',label:'Cumulative difference',reset:q.reset}});next=C.revise(next,{rules});next.clarifications.push({question:kind,choice,text:value.binding,revision:next.revision});return next;
+  const next=C.revise(value.draft,{});next.clarifications.push({question:id.slice(0,id.lastIndexOf(':')),choice,text:value.binding,revision:next.revision});return complete(next);
  }
- const api={matches,inspect,question,clarify};if(node)module.exports=api;else root.CumulativeIntake=api;
+ const api={matches,inspect,question,clarify,complete};if(node)module.exports=api;else root.CumulativeIntake=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

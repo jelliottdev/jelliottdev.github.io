@@ -249,7 +249,7 @@
   }).join('')+'</div>';
  }
  function answerIntake(draft,id,choice,text=''){
-  if(/^cumulative-(?:reset|initial|representation|confirm):/.test(id))return Cumulative.clarify(draft,id,choice);
+  if(/^cumulative-(?:reset|initial|representation|confirm|interpretation):/.test(id))return Cumulative.clarify(draft,id,choice);
   if(/^word-affine-(?:boundaries|evaluation):/.test(id))return WordAffine.clarify(draft,id,choice);
   if(/^family-(?:method|setting):/.test(id))return answerFamilyMethod(draft,id,choice,text);
   if(WordSums?.question(draft)?.id===id)return WordSums.clarify(draft,choice);
@@ -496,6 +496,7 @@
   function stopInterpretation(){interpretVersion++;interpretController?.abort();interpretController=null;interpreting=false;}
   function stopIntake(clear=false){intakeVersion++;intakeController?.abort();intakeController=null;if(intake)intake.busy=false;if(clear)intake=null;}
   function render(){
+   if(stage==='review'&&!editing&&draft)draft=Cumulative?.complete(draft)||draft;
    const prior=doc.activeElement?.id;
    const sameResearch=stage==='research'&&confirmed&&renderedResearchCard===confirmed;
    const disclosures=sameResearch?captureDisclosureState(host,doc.activeElement):[];

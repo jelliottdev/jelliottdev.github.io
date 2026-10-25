@@ -54,6 +54,13 @@ async function proposal(db,bound){
 async function basisFor(db,value,bound,authority){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
+  if(basis.kind==='factored-page-group-v1'){
+   require(exact(basis,['kind','domainId','settings','caseIds'])&&typeof basis.domainId==='string'&&HEX.test(basis.domainId)&&Array.isArray(basis.caseIds)&&basis.caseIds.length>=1&&basis.caseIds.length<=75&&basis.caseIds.every(id=>typeof id==='string'&&HEX.test(id))&&new Set(basis.caseIds).size===basis.caseIds.length&&bound.base.parentTaskId===null,'Invalid reviewed page-group basis');
+   const member=Settings.factored.member(bound.card,basis.settings),plan=Compiler.compile(member.card),evaluation=bound.card.rules.evaluation.value==='measurement'?{kind:'measurement'}:bound.card.rules.evaluation.value;
+   require(!plan.reason&&Array.isArray(plan.steps)&&bound.card.rules.inputVersion.status==='specified'&&bound.card.rules.evaluation.status==='specified','Page groups need the unchanged explicit source and evaluation');Policy.describe(evaluation);
+   require(E.stable(basis.settings)===E.stable(member.settings)&&plan.inputVersion===bound.base.inputVersion&&plan.inputVersion===bound.card.rules.inputVersion.value&&E.stable(plan.criterion)===E.stable(evaluation)&&E.stable(bound.task.criterion)===E.stable(plan.criterion)&&E.stable(bound.task.steps)===E.stable(plan.steps)&&E.stable(plan.pages)===E.stable(bound.card.scope.value.pages)&&bound.task.pages.length>=1&&bound.task.pages.length<=75&&bound.task.pages.every(page=>plan.pages.includes(page.id))&&E.stable(bound.task.pages.map(p=>p.id))===E.stable(bound.task.pages.map(p=>p.id).sort())&&new TextEncoder().encode(E.stable(bound.task)).length<=800000,'Page groups changed the declared method, evaluation or exact reviewed pages');
+   const described=await Evidence.describe(bound.task,bound.base.inputVersion);require(E.stable(described.pages.map(page=>page.caseId))===E.stable(basis.caseIds),'Page-group cases differ from the whole prepared ordinary task');return {text:data.text,hash:await sha(data.text)};
+  }
   if(basis.kind==='finite-settings'||basis.kind==='factored-finite-settings'||basis.kind==='factored-output-settings'||basis.kind==='factored-inspection-settings'){
    require(exact(basis,['kind','settings','caseId'])&&HEX.test(basis.caseId)&&bound.base.parentTaskId===null,'Invalid finite-settings preparation basis');
    const settingsAPI=basis.kind!=='finite-settings'?Settings.factored:Settings;
