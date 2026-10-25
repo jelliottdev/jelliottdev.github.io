@@ -5,17 +5,20 @@
 const fail=reason=>({reason});
 const MEASUREMENTS=Protocols.list(),MEASUREMENT_IDS=new Set(MEASUREMENTS.map(d=>d.operation.id)),MEASUREMENT_KINDS=new Set(MEASUREMENTS.map(d=>d.id));
 const KEYED_REASON='A keyed step needs explicit GP indices (0–28), add or subtract, and a page, line or word reset.';
-function missingRepeatingKeyChoice(card,operation){
- // Only expose decisions that finish an otherwise supported literal-key step.
- // Missing keys, invalid values and other methods retain their adapter result.
- if(card.method.value.operations.length!==1||operation.id!=='repeating_key'||Object.keys(operation).some(k=>!['id','label','key','direction','reset'].includes(k))||!Array.isArray(operation.key)||!operation.key.length||operation.key.length>256||operation.key.some(n=>!Number.isInteger(n)||n<0||n>28))return null;
- const rules=card.rules;
- const globalReset=typeof rules.reset.value==='string'?(rules.reset.value.match(/^reset at each (page|line|word)$/i)?.[1].toLowerCase()||rules.reset.value):rules.reset.value;
- if(rules.reset.status==='specified'&&(!Object.hasOwn(operation,'reset')||globalReset!==operation.reset)||rules.reset.status==='not_applicable'||rules.boundaryMode.status==='specified'||rules.initialState.status==='specified')return null;
- const missing=['direction','reset'].filter(key=>!Object.hasOwn(operation,key));
- if(!missing.length||Object.hasOwn(operation,'direction')&&!['subtract','add'].includes(operation.direction)||Object.hasOwn(operation,'reset')&&!['page','line','word'].includes(operation.reset))return null;
- const parameter=missing[0],choices=parameter==='direction'?[{id:'subtract',value:'subtract',label:'Subtract key indices'},{id:'add',value:'add',label:'Add key indices'}]:['page','line','word'].map(value=>({id:value,value,label:'Restart the key at each '+value}));
- return {state:'needs-clarification',field:'method',reason:KEYED_REASON,clarification:{version:1,kind:'keyed-operation',operationIndex:0,operationId:'repeating_key',parameter,choices}};
+function missingRepeatingKeyChoice(card,operation,operationIndex){
+ // A validation-only probe checks the unchanged surrounding program. Its
+ // temporary completions never become an output plan or proposed parameter.
+ const operations=card.method.value.operations;if(operations.length>8)return null;
+ const eligible=op=>op?.id==='repeating_key'&&!Object.keys(op).some(k=>!['id','label','key','direction','reset'].includes(k))&&Array.isArray(op.key)&&op.key.length>0&&op.key.length<=256&&op.key.every(n=>Number.isInteger(n)&&n>=0&&n<=28)
+  &&['direction','reset'].some(key=>!Object.hasOwn(op,key))&&(!Object.hasOwn(op,'direction')||['subtract','add'].includes(op.direction))&&(!Object.hasOwn(op,'reset')||['page','line','word'].includes(op.reset));
+ if(!eligible(operation)||operations.filter(eligible).length!==1)return null;
+ const rules=card.rules,globalReset=typeof rules.reset.value==='string'?(rules.reset.value.match(/^reset at each (page|line|word)$/i)?.[1].toLowerCase()||rules.reset.value):rules.reset.value;
+ if(rules.reset.status==='specified'&&(!Object.hasOwn(operation,'reset')||globalReset!==operation.reset)||rules.reset.status==='not_applicable'||operations.length===1&&(rules.boundaryMode.status==='specified'||rules.initialState.status==='specified'))return null;
+ const missing=['direction','reset'].filter(key=>!Object.hasOwn(operation,key)),parameter=missing[0];
+ const completed={...operation,...Object.fromEntries(missing.map(key=>[key,key==='direction'?'subtract':'page']))},probe={...card,method:{...card.method,value:{...card.method.value,operations:operations.map((op,index)=>index===operationIndex?completed:op)}}},checked=compile(probe);
+ if(checked.reason||!Array.isArray(checked.steps))return null;
+ const choices=parameter==='direction'?[{id:'subtract',value:'subtract',label:'Subtract key indices'},{id:'add',value:'add',label:'Add key indices'}]:['page','line','word'].map(value=>({id:value,value,label:'Restart the key at each '+value}));
+ return {state:'needs-clarification',field:'method',reason:KEYED_REASON,clarification:{version:1,kind:'keyed-operation',operationIndex,operationId:'repeating_key',parameter,choices}};
 }
 function evaluationIssue(card){
  const evaluation=card.rules.evaluation;
@@ -67,7 +70,7 @@ function compile(card){
  if(MEASUREMENT_KINDS.has(criterion.kind))return fail('The evaluation needs its matching measurement operation.');
  const steps=[];let reverse=false,cumulative=false,keyed=false;
  const keyedModes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};
- for(const operation of operations){
+ for(const [operationIndex,operation] of operations.entries()){
   const labels={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference'],vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey'],finite_key:['Finite key stream'],interrupted_repeating_key:['Interrupted repeating key']};
   if(Object.hasOwn(operation,'label')&&(!labels[operation.id]||!labels[operation.id].includes(operation.label)))return fail('The operation wording contains details that need an execution adapter.');
   if(Object.keys(operation).some(k=>!['id','label','a','b','reset','unit','declaredFamilyId','key','direction','interrupts'].includes(k)))return fail('An operation contains parameters the runner cannot represent.');
@@ -103,7 +106,7 @@ function compile(card){
    if(specified('reset')&&resetValue(rules.reset.value)!==operation.reset)return fail('The global reset conflicts with an operation reset.');
    keyed=true;steps.push({op:'interrupted-keyed-shift',key:[...operation.key],direction:operation.direction,reset:operation.reset,interrupts:[...operation.interrupts]});
   }else if(operation.id==='finite_key'||Object.hasOwn(keyedModes,operation.id)){
-   if(['a','b','unit'].some(k=>Object.hasOwn(operation,k))||!Array.isArray(operation.key)||!operation.key.length||operation.key.length>(operation.id==='finite_key'?20000:256)||operation.key.some(n=>!Number.isInteger(n)||n<0||n>28)||!['subtract','add'].includes(operation.direction)||!['page','line','word'].includes(operation.reset))return missingRepeatingKeyChoice(card,operation)||fail(KEYED_REASON);
+   if(['a','b','unit'].some(k=>Object.hasOwn(operation,k))||!Array.isArray(operation.key)||!operation.key.length||operation.key.length>(operation.id==='finite_key'?20000:256)||operation.key.some(n=>!Number.isInteger(n)||n<0||n>28)||!['subtract','add'].includes(operation.direction)||!['page','line','word'].includes(operation.reset))return missingRepeatingKeyChoice(card,operation,operationIndex)||fail(KEYED_REASON);
    if(rules.reset.status==='not_applicable')return fail('An explicit reset conflicts with reset being marked not applicable.');
    if(specified('reset')&&resetValue(rules.reset.value)!==operation.reset)return fail('The global reset conflicts with an operation reset.');
    keyed=true;steps.push(operation.id==='finite_key'?{op:'finite-shift',key:[...operation.key],direction:operation.direction,reset:operation.reset}:{op:'keyed-shift',key:[...operation.key],mode:keyedModes[operation.id],direction:operation.direction,reset:operation.reset});

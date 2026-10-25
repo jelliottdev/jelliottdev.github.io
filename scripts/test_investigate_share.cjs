@@ -18,7 +18,7 @@ function documentFor(hash){
   if(id==='investigate')return host;if(id==='print-snapshot')return print;
   if(!host.html.includes('id="'+id+'"'))return null;
   if(!cache.has(id))cache.set(id,new Element());return cache.get(id);
- },querySelector(s){return s.startsWith('#')?this.getElementById(s.slice(1)):null;}};
+ },querySelector(s){if(s==='input[name=choice]:checked')return this.selectedChoice?{value:this.selectedChoice}:null;return s.startsWith('#')?this.getElementById(s.slice(1)):null;}};
 }
 const tick=()=>new Promise(r=>setTimeout(r,10));
 async function until(predicate){const end=Date.now()+5000;while(Date.now()<end){if(predicate())return;await tick();}assert.fail('Share fixture did not reach the expected state');}
@@ -36,7 +36,9 @@ async function until(predicate){const end=Date.now()+5000;while(Date.now()<end){
  await app.ready;assert.equal(posts,0);assert.equal(app.getSnapshot().stage,'review');
  assert.equal(app.getSnapshot().confirmed,null);assert(!doc.getElementById('share-idea'));
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15']);
- assert(doc.getElementById('confirm'),'unknown outcome remains acknowledged');
+ assert(!doc.getElementById('confirm'),'Shared cards do not manufacture an acknowledgment of an unknown outcome');
+ doc.selectedChoice='undecided';doc.getElementById('clarification').fire('submit');
+ assert(doc.getElementById('confirm'),'The recipient can explicitly leave the outcome undecided');
  doc.getElementById('confirm').fire('click');await until(()=>posts===1&&!app.getSnapshot().busy);assert.equal(posts,1);
  assert(doc.getElementById('share-idea'));assert(doc.host.html.includes('aria-label="Share confirmed idea"'));
  const pending=doc.getElementById('share-idea').fire('click');assert.equal(shares,1);

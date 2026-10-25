@@ -373,7 +373,7 @@
   }
   let restoringOverlay=null;
   if(fragment.startsWith('#idea=')){
-   try{const shared=H.decode(fragment);draft=shared.draft;for(const name of ['aim','scope'])if(draft[name].status==='unspecified')draft=answerIntake(draft,name,'undecided');raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
+   try{const shared=H.decode(fragment);draft=shared.draft;raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
    catch{error='This shared idea link could not be read. Ask for a new link or enter the idea below.';}
   }
   const pageHint=incoming.getAll('pages').join(',');

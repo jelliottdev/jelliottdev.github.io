@@ -4,12 +4,17 @@
  const L=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const HEX=/^[a-f0-9]{64}$/;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value'));
- const clone=v=>JSON.parse(L.stable(v));
+ // Capture before serialization so getters and serialization hooks never run.
+ // Callers already bound source batches to the same maintained 8 MiB limit.
+ const JSONData=typeof module==='object'&&module.exports?require('./finite-json.js'):root.FiniteJSON;
+ const clone=v=>JSONData.capture(v,{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});
  const whole=v=>Number.isSafeInteger(v)&&v>=0;
  const scalar=s=>typeof s==='string'&&!/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(s);
  async function hash(value,cryptoAPI){return Array.from(new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(L.stable(value)))),n=>n.toString(16).padStart(2,'0')).join('');}
- async function describe(task,inputVersion,cryptoAPI=root.crypto){
-  const frozen=clone(task);if(!['raw','reviewed'].includes(inputVersion))throw Error('An exact input version is required.');await L.checkIdentity(frozen,cryptoAPI);
+ async function describe(task,inputVersion,cryptoAPI=root.crypto){return describeCaptured(clone(task),inputVersion,cryptoAPI);}
+ // Private captured inputs cannot be substituted through caller trust flags.
+ async function describeCaptured(frozen,inputVersion,cryptoAPI){
+  if(!['raw','reviewed'].includes(inputVersion))throw Error('An exact input version is required.');await L.checkIdentity(frozen,cryptoAPI);
   const protocolId=await hash({schema:'liberpedia-computation-protocol-v1',engine:frozen.engine,inputVersion,alphabet:frozen.alphabet,steps:frozen.steps,criterion:frozen.criterion},cryptoAPI);
   const pages=[];for(const page of frozen.pages)pages.push({id:page.id,caseId:await hash({protocolId,page},cryptoAPI)});
   return {protocolId,pages};
@@ -63,10 +68,12 @@
  async function compare(requestedTask,requestedVersion,sources,cryptoAPI=root.crypto){
   const requested=clone(requestedTask),saved=clone(sources);if(!Array.isArray(saved))throw Error('Saved computation sources must be an array.');
   const languageMemo={values:new Map(),runes:0};
-  const wanted=await describe(requested,requestedVersion,cryptoAPI),wantedCases=new Map(wanted.pages.map(p=>[p.caseId,p.id])),covered=new Set(),seen=new Map(),evidence=[],exactTasks=[];
+  const requestedBytes=L.stable(requested),wanted=await describeCaptured(requested,requestedVersion,cryptoAPI),wantedCases=new Map(wanted.pages.map(p=>[p.caseId,p.id])),covered=new Set(),seen=new Map(),evidence=[],exactTasks=[];
   for(const source of saved){
    if(!exact(source,['task','inputVersion','run'])||!exact(source.run,['id','createdAt','result'])||typeof source.run.id!=='string'||!HEX.test(source.run.id)||typeof source.run.createdAt!=='string'||!Number.isFinite(Date.parse(source.run.createdAt)))throw Error('The saved evidence receipt is invalid.');
-   const described=await describe(source.task,source.inputVersion,cryptoAPI),signature=L.stable(source);
+   // Reuse only this call's already checked, byte-identical requested task.
+   // Result claims, result SHA, envelopes and conflicts are checked below anew.
+   const described=source.inputVersion===requestedVersion&&L.stable(source.task)===requestedBytes?wanted:await describeCaptured(source.task,source.inputVersion,cryptoAPI),signature=L.stable(source);
    if(seen.has(source.task.taskId)){if(seen.get(source.task.taskId)!==signature)throw Error('Conflicting saved evidence for one task.');continue;}seen.set(source.task.taskId,signature);
    resultShape(source.task,source.run.result,languageMemo);if(await hash(source.run.result,cryptoAPI)!==source.run.id)throw Error('The saved result identity does not match its bytes.');
    if(described.protocolId!==wanted.protocolId)continue;
