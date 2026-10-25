@@ -218,6 +218,7 @@
  }
  function operationDetails(operation){
   if(!operation)return '';
+  if(H.operationParameters){const rows=H.operationParameters(operation);return rows.length?'<dl class="method-parameters">'+rows.map(row=>'<div><dt>'+esc(row.label)+'</dt><dd>'+esc(row.value)+'</dd></div>').join('')+'</dl>':'';}
   const entries=Object.entries(operation).filter(([key])=>!['id','label','sourceText','provenance','editHistory','declaredFamilyId'].includes(key)&&!(key==='familyId'&&operation.id==='family_selection'));
   if(!entries.length)return '';
   const label=key=>key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
@@ -230,7 +231,7 @@
   const label=r.label==='Aim'?'Outcome':r.label==='Rules'?'Bounds & rules':r.label;
   let content;
   if(r.label==='Method')content=tags.length>1?'<ol class="method-steps">'+tags.map((t,i)=>'<li>'+esc(t.text)+operationDetails(spec.method.value?.operations[i])+'</li>').join('')+'</ol>':'<div class="method-wording"><p>'+esc(tags[0].text)+'</p>'+operationDetails(spec.method.value?.operations[0])+'</div>';
-  else content=tags.map(t=>{const key=t.id.startsWith('rule:')?t.id.slice(5):null,f=key?spec.rules[key]:null,v=key==='evaluation'&&f?.status==='specified'?f.value:null,numeric=v?.kind==='word-prime-sums'&&Object.keys(v).length===3?H.wordPrimeSumLabels(v.table,v.boundaries):null,plain=f?.status==='specified'?H.wordPrimeSumRuleLabel(spec,key,f.value):null;return '<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(numeric?'Evaluation: '+numeric.evaluation:key==='evaluation'&&f?.status==='specified'&&C.evaluationText(f.value)?'Evaluation: '+C.evaluationText(f.value):plain||t.text)+'</span>';}).join('');
+  else content=tags.map(t=>{const key=t.id.startsWith('rule:')?t.id.slice(5):null,f=key?spec.rules[key]:null,v=key==='evaluation'&&f?.status==='specified'?f.value:null,numeric=v?.kind==='word-prime-sums'&&Object.keys(v).length===3?H.wordPrimeSumLabels(v.table,v.boundaries):null,plain=f?.status==='specified'?(H.protocolRuleLabel||H.wordPrimeSumRuleLabel)(spec,key,f.value):null;return '<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(numeric?'Evaluation: '+numeric.evaluation:key==='evaluation'&&f?.status==='specified'&&(H.evaluationText||C.evaluationText)(f.value)?'Evaluation: '+(H.evaluationText||C.evaluationText)(f.value):plain||t.text)+'</span>';}).join('');
   if(r.label==='Aim'&&spec.aim.status==='specified'){
    const outcome=C.normalizeOutcome(spec.aim.value),detail=outcome.detail||outcome.wording;
    if(outcome.id==='unclassified')content='<span class="tag unknown">Outcome not classified</span>';

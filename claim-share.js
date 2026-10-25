@@ -75,9 +75,37 @@
   const labels={inputVersion:{raw:'Archived rune text'},representation:{GP29:'29-rune GP alphabet'},unmapped:{preserve:'Keep original separators'},wordBoundaries:{preserve:'Keep original word marks'}};
   return typeof value==='string'&&own(labels,key)&&own(labels[key],value)?labels[key][value]:null;
  }
+ function wordAffineLabels(value){
+  if(!value||!['lag','a','b'].every(key=>Number.isInteger(value[key]))||value.lag<1||value.lag>12||value.a<0||value.a>28||value.b<0||value.b>28||!['non-rune','hyphen-period'].includes(value.boundaries))return null;
+  const boundaries=wordPrimeSumLabels('canonical',value.boundaries).boundaries;
+  return {distance:value.lag+' rune '+(value.lag===1?'position':'positions'),boundaries,evaluation:'Count pairs '+value.lag+' rune '+(value.lag===1?'position':'positions')+' apart inside each word that follow y = '+value.a+'x + '+value.b+' (mod 29). Compare with the average after rearranging the same runes within each word. '+boundaries};
+ }
+ function evaluationText(value){
+  if(value&&typeof value==='object'&&!Array.isArray(value)){
+   if(value.kind==='word-affine-count'&&Object.keys(value).length===5&&['kind','lag','a','b','boundaries'].every(key=>own(value,key)))return wordAffineLabels(value)?.evaluation||null;
+   if(value.kind==='word-prime-sums'&&Object.keys(value).length===3&&['kind','table','boundaries'].every(key=>own(value,key)))return wordPrimeSumLabels(value.table,value.boundaries)?.evaluation||null;
+  }
+  return C.evaluationText(value);
+ }
+ function affineOperation(operation){
+  return operation?.id==='word_affine_count'&&['lag','a','b','boundaries'].every(key=>own(operation,key))&&Object.keys(operation).every(key=>['id','label','lag','a','b','boundaries','declaredFamilyId'].includes(key))&&(!own(operation,'declaredFamilyId')||own(C.METHOD_FAMILIES,operation.declaredFamilyId))?wordAffineLabels(operation):null;
+ }
+ function protocolRuleLabel(idea,key,value){
+  const numeric=wordPrimeSumRuleLabel(idea,key,value);if(numeric)return numeric;
+  const operations=idea?.method?.status==='specified'?idea.method.value?.operations:null,evaluation=idea?.rules?.evaluation;
+  if(!Array.isArray(operations)||operations.length!==1||!affineOperation(operations[0])||evaluation?.status!=='specified'||!evaluationText(evaluation.value)||evaluation.value.kind!=='word-affine-count'||!['lag','a','b','boundaries'].every(name=>evaluation.value[name]===operations[0][name]))return null;
+  const labels={inputVersion:{raw:'Archived rune text'},representation:{GP29:'29-rune GP alphabet'},unmapped:{preserve:'Keep original separators'},wordBoundaries:{preserve:'Keep original word marks'}};
+  return typeof value==='string'&&own(labels,key)&&own(labels[key],value)?labels[key][value]:null;
+ }
+ function operationParameters(operation){
+  if(!operation||typeof operation!=='object'||Array.isArray(operation))return [];
+  const affine=affineOperation(operation);
+  if(affine)return [{label:'Rune distance',value:affine.distance},{label:'Multiplier',value:String(operation.a)},{label:'Offset',value:String(operation.b)},{label:'Word breaks',value:affine.boundaries}];
+  const numeric=operation.id==='word_prime_sums'?wordPrimeSumLabels(operation.table,operation.boundaries):null;
+  return Object.entries(operation).filter(([key])=>!['id','label','sourceText','provenance','editHistory','declaredFamilyId'].includes(key)&&!(key==='familyId'&&operation.id==='family_selection')).map(([key,value])=>({label:key==='boundaries'&&numeric?'Word breaks':niceKey(key),value:numeric&&['table','boundaries'].includes(key)?numeric[key]:pretty(value)}));
+ }
  function operationDetails(o){
-  const labels=o.id==='word_prime_sums'?wordPrimeSumLabels(o.table,o.boundaries):null;
-  return Object.entries(o).filter(([k])=>!['id','label','declaredFamilyId'].includes(k)&&!(k==='familyId'&&o.id==='family_selection')).map(([k,v])=>labels&&k==='table'?labels.table:labels&&k==='boundaries'?labels.boundaries:niceKey(k)+': '+pretty(v)).join('\n');
+  return operationParameters(o).map(({label,value})=>label+': '+value).join('\n');
  }
  function pageLabel(pages){
   if(!pages.length)return 'No pages selected';const result=[];
@@ -104,8 +132,8 @@
   }else rows.push(['Scope',state(p.scope)]);
   for(const [k,f]of Object.entries(p.rules))if(f.status!=='unspecified'){
    const value=f.value,wordSum=k==='evaluation'&&f.status==='specified'&&value?.kind==='word-prime-sums'&&Object.keys(value).length===3&&['kind','table','boundaries'].every(name=>own(value,name))?wordPrimeSumLabels(value.table,value.boundaries):null;
-   const wordSumRule=f.status==='specified'?wordPrimeSumRuleLabel(p,k,f.value):null;
-   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule||(k==='evaluation'&&f.status==='specified'?C.evaluationText(f.value):null)|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
+   const wordSumRule=f.status==='specified'?protocolRuleLabel(p,k,f.value):null;
+   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule||(k==='evaluation'&&f.status==='specified'?evaluationText(f.value):null)|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
   }
   if(p.unresolved.length)rows.push(['Unresolved',JSON.stringify(p.unresolved)]);
   const unknown=Object.entries(p.rules).filter(([,f])=>f.status==='unspecified').map(([k])=>k);
@@ -179,6 +207,6 @@
   if(!png)try{png=await renderPNG(spec,{document:doc});}catch(failure){imageError=failure.message;}
   return {status,url:complete,png,...(error?{error}:{}),imageError};
  }
- const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),wordPrimeSumLabels,wordPrimeSumRuleLabel,encode,decode,link,renderPNG,prepare:renderPNG,share};
+ const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),wordPrimeSumLabels,wordPrimeSumRuleLabel,evaluationText,protocolRuleLabel,operationParameters,encode,decode,link,renderPNG,prepare:renderPNG,share};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimShare=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
