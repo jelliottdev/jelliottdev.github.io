@@ -88,3 +88,14 @@ Graph zoom changes the space available for detail. Keep markers, strokes and tou
 Resizing or opening a preview must preserve map zoom. Keep the inspected area in view; entering Graph from List should reveal its selected record. A sort change returns keyboard focus to the replacement sort control. Reader options requested for an earlier page must not open after navigation or another dialog takes focus. Shared-card URLs use the same current checker entry as navigation without copying source-query parameters.
 
 On phones, a Graph record selection replaces the canvas with a reading panel; do not float a short scrolling card over the map or List. Give it one Back to map action and show its authored result, exact tested page ranges and a plain-language limit. The map is inert while that panel is visible, and returning restores its camera. List remains hierarchical navigation: branches drill one level and terminal records are native links to the full record, with no duplicate preview/open controls. Explain outcomes before raw scores; preserve all original scientific findings and bounds in the source record. Revalidate published data on first load while retaining the app's in-memory cache.
+
+### Saved-idea experiment preview
+
+For a saved idea with no experiments and a complete task list, load the proposed
+plan automatically. Preparation is read-only: never create a task, execute a
+worker or submit a result during page load. Show the exact plan before the
+creation action. Keep the full confirmed card and preparation notes available
+below it; the outcome and its specific objective remain visible above it.
+Existing experiments come first on return visits. A truncated list does not
+establish that no experiment exists. Retry preparation explicitly after errors;
+late responses must not replace another idea's workspace.
