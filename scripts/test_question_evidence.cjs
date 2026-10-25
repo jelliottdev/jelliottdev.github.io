@@ -52,5 +52,22 @@ let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS 
   const requested=await task(),saved=await source(requested);await assert.rejects(()=>Q.summarize(requested,'raw',Array(76).fill(saved)),/75/);
   const context={LocalExperiment:E,ComputationEvidence:require('../computation-evidence.js'),crypto:crypto.webcrypto};vm.createContext(context);vm.runInContext(fs.readFileSync('question-evidence.js','utf8'),context);const aggregate=await context.QuestionEvidence.summarize(requested,'raw',[saved]);assert.equal(context.QuestionEvidence.inspect(aggregate),aggregate);assert.throws(()=>Q.inspect(aggregate),/verified/);
  });
+ await test('exact-prefix aggregation shares titled and overlapping page batches without rerunning a missing target',async()=>{
+  const rules={kind:'exact-prefix',values:[2,1]},steps=[{op:'reverse',unit:'word'}],pages=[{id:'lp2-00',text:'ᚠᚢᚦ'},{id:'lp2-01',text:'ᚩᚱᚳ'},{id:'lp2-02',text:'ᚷᚹᚻ'}],requested=await task({pages,rules,steps}),first=await task({title:'A different aim and category',pages:pages.slice(0,2),rules,steps}),last=await task({title:'Another original page batch',pages:pages.slice(1).reverse(),rules,steps}),saved=[await source(first),await source(last)],verify=E.verify,calls=[];
+  E.verify=async(t,...args)=>{calls.push(t.taskId);assert.notEqual(t.taskId,requested.taskId,'Never execute the requested new whole scope.');return verify(t,...args);};let proof;
+  try{proof=await Q.summarize(requested,'raw',saved);}finally{E.verify=verify;}
+  assert.equal(proof.kind,'verified-exact-prefix-aggregate-v1');assert.equal(proof.complete,true);assert.deepEqual(proof.coveredPages,pages.map(p=>p.id));assert.deepEqual(proof.matchingPages,['lp2-00']);assert.deepEqual(proof.pages.map(p=>p.matched),[true,false,false]);assert.equal(new Set(proof.pages.map(p=>p.page)).size,3);assert(calls.every(id=>saved.some(s=>s.task.taskId===id)));assert.equal(calls.length,2);assert(Object.isFrozen(proof.pages[0].source));assert.throws(()=>Q.inspect(clone(proof)));assert.throws(()=>Q.paired(proof,proof),/affine counts/);
+  const partial=await Q.summarize(requested,'raw',[saved[1]]);assert.deepEqual(partial.remainingPages,['lp2-00']);assert.deepEqual(partial.matchingPages,[]);assert.equal(partial.complete,false);
+ });
+ await test('prefix criteria, bytes, step order, alphabet and input versions bind exact coverage',async()=>{
+  const rules={kind:'exact-prefix',values:[2,1]},steps=[{op:'reverse',unit:'word'},{op:'affine',a:1,b:0}],requested=await task({rules,steps}),saved=await source(requested);
+  for(const [changed,version] of [[await task({rules:{kind:'exact-prefix',values:[2]},steps}),'raw'],[await task({rules,steps:steps.slice().reverse()}),'raw'],[await task({rules,steps,pages:requested.pages.map(p=>({...p,text:p.text+'ᚠ'}))}),'raw'],[await task({rules,steps,letters:alphabet.slice().reverse()}),'raw'],[requested,'reviewed']]){const proof=await Q.summarize(changed,version,[saved]);assert.deepEqual(proof.coveredPages,[]);assert.deepEqual(proof.remainingPages,changed.pages.map(p=>p.id));}
+ });
+ await test('self-consistent but unverified prefix output, forged identity and conflict cannot answer a question',async()=>{
+  const rules={kind:'exact-prefix',values:[2,1]},steps=[{op:'reverse',unit:'word'}],pages=[{id:'lp2-00',text:'ᚠᚢᚦ'}],requested=await task({rules,steps,pages}),saved=await source(requested),raw=await task({rules,pages}),forged=clone(saved);
+  forged.run.result=E.run(raw);forged.run.result.taskId=requested.taskId;forged.run.id=hash(forged.run.result);await assert.rejects(()=>Q.summarize(requested,'raw',[forged]));
+  const falseHash=clone(saved);falseHash.run.id='0'.repeat(64);await assert.rejects(()=>Q.summarize(requested,'raw',[falseHash]));const falseTask=clone(saved);falseTask.task.title+='tampered';await assert.rejects(()=>Q.summarize(requested,'raw',[falseTask]));
+  const duplicate=await source(await task({title:'A separately titled claim',rules,steps,pages}));duplicate.run.result=clone(forged.run.result);duplicate.run.result.taskId=duplicate.task.taskId;duplicate.run.id=hash(duplicate.run.result);await assert.rejects(()=>Q.summarize(requested,'raw',[saved,duplicate]),/Conflicting/);
+ });
  console.log('Question evidence: '+groups+' groups passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

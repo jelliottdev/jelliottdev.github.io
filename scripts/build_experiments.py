@@ -9,6 +9,7 @@ from experiment_content import compile_content, article_bytes, draft_record_ids
 from experiment_taxonomy import apply_classifications
 from browser_followups import validate_followups
 from research_questions import validate_research_questions, validate_research_question_refs
+from check_download_catalog import portable_line_ending_errors
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -428,10 +429,31 @@ def validate_record_placement(root, records):
 
 
 def build(root=ROOT):
+    # Only records explicitly used as raw reproduction files have byte identity
+    # at risk from Git normalization. Ordinary authoring metadata may use CRLF.
+    # Parse sources first, but check raw dependencies before generated writes.
+    source_paths = sorted((root / 'experiments/records').glob('*/record.json'))
+    sources = [(path, json.loads(path.read_text(encoding='utf-8')))
+               for path in source_paths]
+    raw_dependencies = set()
+    for _, record in sources:
+        reproduction = record.get('reproduction', {})
+        if isinstance(reproduction, dict):
+            for role in ('inputs', 'outputs'):
+                entries = reproduction.get(role, [])
+                if isinstance(entries, list):
+                    raw_dependencies.update(entry['path'] for entry in entries
+                                            if isinstance(entry, dict)
+                                            and isinstance(entry.get('path'), str))
+    line_ending_errors = portable_line_ending_errors(root, [
+        path.relative_to(root).as_posix() for path in source_paths
+        if path.relative_to(root).as_posix() in raw_dependencies
+        and b'\r\n' in path.read_bytes()
+    ])
+    require(not line_ending_errors, '\n'.join(line_ending_errors))
     records = []
     pages = {p['id'] for p in json.loads((root / 'data/index.json').read_text(encoding='utf-8'))['pages']}
-    for path in sorted((root / 'experiments/records').glob('*/record.json')):
-        d = json.loads(path.read_text(encoding='utf-8'))
+    for path, d in sources:
         require(d.get('status') in ('draft', 'published'), f'{path}: invalid status')
         if d['status'] == 'draft':
             continue

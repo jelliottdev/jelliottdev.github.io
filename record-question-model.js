@@ -6,16 +6,23 @@
  const object=value=>value&&typeof value==='object'&&!Array.isArray(value);
  const exact=(value,keys)=>object(value)&&Reflect.ownKeys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
  const clone=value=>JSON.parse(JSON.stringify(value)),hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
+ function pinnedScope(inputs,scope){return exact(inputs,['version','alphabet_sha256','pages'])&&['raw','reviewed'].includes(inputs.version)&&hex(inputs.alphabet_sha256)&&Array.isArray(inputs.pages)&&inputs.pages.length>0&&inputs.pages.length<=75&&!inputs.pages.some(page=>!exact(page,['id','text_sha256'])||!/^lp[12]-\d{2}$/.test(page.id)||!hex(page.text_sha256))&&new Set(inputs.pages.map(page=>page.id)).size===inputs.pages.length&&scope?.status==='specified'&&exact(scope.value,['pages'])&&JSON.stringify(scope.value.pages)===JSON.stringify(inputs.pages.map(page=>page.id));}
  function resolveProtocol(item,recipes){
   const p=item.protocol;if(!exact(p,['id','version'])||p.version!==1)return null;
   if(p.id==='deor-warning-opening')return Object.hasOwn(item,'followup')?null:{id:p.id,version:1,familyId:'deor-feedback-v1'};
-  if(p.id!=='word-boundary-sensitivity'||!Object.hasOwn(item,'followup'))return null;
+  if(!['word-boundary-sensitivity','fixed-program-prefix'].includes(p.id)||!Object.hasOwn(item,'followup'))return null;
   const owned=recipes.filter(recipe=>recipe?.id===item.followup);if(owned.length!==1)return null;
   const recipe=owned[0],card=recipe.card,inputs=recipe.inputs,method=card?.method,rules=card?.rules,c=rules?.evaluation?.value,scope=card?.scope;
+  if(p.id==='fixed-program-prefix'){
+   // Metadata permits lazy activation, not an answer. The maintained compiler
+   // and exact source pins are checked by the live controller before evidence.
+   if(card?.version!==1||!Array.isArray(card.unresolved)||card.unresolved.length||method?.status!=='specified'||!exact(method.value,['operations'])||!Array.isArray(method.value.operations)||!method.value.operations.length||method.value.operations.length>8||method.value.operations.some(op=>!object(op)||typeof op.id!=='string'||!/^[a-z][a-z0-9_]{0,99}$/.test(op.id))||rules?.evaluation?.status!=='specified'||!exact(c,['kind','values'])||c.kind!=='exact-prefix'||!Array.isArray(c.values)||!c.values.length||c.values.length>256||c.values.some(n=>!Number.isInteger(n)||n<0||n>28)||!pinnedScope(inputs,scope)||rules.inputVersion?.status!=='specified'||rules.inputVersion.value!==inputs.version)return null;
+   return {id:p.id,version:1,followupId:recipe.id,inputs:clone(inputs)};
+  }
   if(card?.version!==1||!Array.isArray(card.unresolved)||card.unresolved.length||method?.status!=='specified'||!exact(method.value,['operations'])||!Array.isArray(method.value.operations)||method.value.operations.length!==1||rules?.evaluation?.status!=='specified'||!exact(c,['kind','lag','a','b','boundaries'])||c.kind!=='word-affine-count'||!Number.isInteger(c.lag)||c.lag<1||c.lag>12||!Number.isInteger(c.a)||c.a<0||c.a>28||!Number.isInteger(c.b)||c.b<0||c.b>28||!['non-rune','hyphen-period'].includes(c.boundaries))return null;
   const operation=method.value.operations[0],fields=['id','lag','a','b','boundaries',...(Object.hasOwn(operation||{},'label')?['label']:[])];
   if(!exact(operation,fields)||operation.id!=='word_affine_count'||Object.hasOwn(operation,'label')&&operation.label!=='Within-word affine pair count'||['lag','a','b','boundaries'].some(k=>operation[k]!==c[k]))return null;
-  if(!exact(inputs,['version','alphabet_sha256','pages'])||!['raw','reviewed'].includes(inputs.version)||!hex(inputs.alphabet_sha256)||!Array.isArray(inputs.pages)||!inputs.pages.length||inputs.pages.length>75||inputs.pages.some(page=>!exact(page,['id','text_sha256'])||!/^lp[12]-\d{2}$/.test(page.id)||!hex(page.text_sha256))||new Set(inputs.pages.map(page=>page.id)).size!==inputs.pages.length||scope?.status!=='specified'||!exact(scope.value,['pages'])||JSON.stringify(scope.value.pages)!==JSON.stringify(inputs.pages.map(page=>page.id)))return null;
+  if(!pinnedScope(inputs,scope))return null;
   const specified={representation:'GP29',wordBoundaries:'preserve',unmapped:'preserve',inputVersion:inputs.version};
   if(Object.entries(specified).some(([k,v])=>!exact(rules[k],['status','value'])||rules[k].status!=='specified'||rules[k].value!==v)||['boundaryMode','reset','initialState','searchBounds','searchProtocol','exceptionalCases'].some(k=>!exact(rules[k],['status'])||rules[k].status!=='not_applicable'))return null;
   return {id:p.id,version:1,followupId:recipe.id,parameters:{lag:c.lag,a:c.a,b:c.b},inputs:clone(inputs)};

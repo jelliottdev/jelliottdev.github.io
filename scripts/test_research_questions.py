@@ -19,6 +19,28 @@ def question(**changes):
 
 
 class QuestionShapeTests(unittest.TestCase):
+    def test_fixed_prefix_reference_reuses_existing_compiler_and_exact_recipe_pins(self):
+        root = Path(__file__).resolve().parents[1]
+        record = json.loads((root / 'experiments/records/lp2-row-column-routes/record.json').read_text(encoding='utf-8'))
+        before = copy.deepcopy(record)
+        validate_research_questions(record['research_questions'], record)
+        source = record['research_questions'][0]
+        self.assertEqual(source['state'], 'tested')
+        self.assertEqual(protocol_reference(source, record),
+                         {'id': 'fixed-program-prefix', 'version': 1, 'followupId': source['followup'],
+                          'inputs': record['browser_followups'][0]['inputs']})
+        self.assertEqual(record, before)
+        for mutate in (lambda r: r['research_questions'][0].pop('followup'),
+                       lambda r: r['research_questions'][0]['protocol'].update(version=2),
+                       lambda r: r['browser_followups'][0]['card']['method']['value']['operations'][0].update(id='unknown_operation'),
+                       lambda r: r['browser_followups'][0]['card']['rules']['evaluation'].update(value={'kind': 'measurement'}),
+                       lambda r: r['browser_followups'][0]['card']['rules']['evaluation']['value'].update(values=[29]),
+                       lambda r: r['browser_followups'][0]['inputs']['pages'][0].update(text_sha256='bad'),
+                       lambda r: r['browser_followups'][0]['card']['scope']['value']['pages'].pop()):
+            bad = copy.deepcopy(record); mutate(bad)
+            with self.assertRaisesRegex(ValueError, 'research_questions'):
+                validate_research_questions(bad['research_questions'], bad)
+
     def test_maintained_protocols_resolve_owned_inputs_without_editorial_answers(self):
         root = Path(__file__).resolve().parents[1]
         for identifier in ('word-internal-affine-lags', 'wulfic-autokey-seed-families'):

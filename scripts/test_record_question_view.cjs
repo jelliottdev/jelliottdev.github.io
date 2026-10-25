@@ -16,6 +16,11 @@ test('maintained protocol references derive exact recipe inputs and ignore edito
  const deor=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/wulfic-autokey-seed-families/record.json'),'utf8'));assert.deepEqual(M.protocolReference(deor,deor.research_questions[0].id),{id:'deor-warning-opening',version:1,familyId:'deor-feedback-v1'});
  const bad=structuredClone(deor);bad.research_questions[0].followup=record.browser_followups[0].id;bad.browser_followups=record.browser_followups;assert.deepEqual(M.questions(bad,bad.browser_followups),[]);
 });
+test('fixed program references preserve historical assessment and expose only owned structural pins',()=>{
+ const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/lp2-row-column-routes/record.json'),'utf8')),before=JSON.stringify(r),q=r.research_questions[0],ref=M.protocolReference(r,q.id);
+ assert.equal(q.state,'tested');assert.deepEqual(ref,{id:'fixed-program-prefix',version:1,followupId:q.followup,inputs:r.browser_followups[0].inputs});assert.equal(JSON.stringify(r),before);assert(!Object.hasOwn(ref,'state'));assert(!Object.hasOwn(ref,'answer'));
+ for(const mutate of [x=>delete x.research_questions[0].followup,x=>x.research_questions[0].protocol.version=2,x=>x.browser_followups[0].card.rules.evaluation.value={kind:'measurement'},x=>x.browser_followups[0].card.rules.evaluation.value.values=[29],x=>x.browser_followups[0].inputs.pages[0].text_sha256='bad',x=>x.browser_followups[0].card.scope.value.pages.pop()]){const bad=structuredClone(r);mutate(bad);assert.deepEqual(M.questions(bad,bad.browser_followups),[]);}
+});
 test('open questions precede completed comparisons without mutation',()=>{
  const r={...record,research_questions:[tested,open]},before=JSON.stringify(r),html=V.render(r);
  assert.equal(JSON.stringify(r),before);assert.equal(V.questions(r)[0].state,'open');assert(html.indexOf(open.question)<html.indexOf(tested.question));assert.equal((html.match(/id="experiment-remaining"/g)||[]).length,1);assert.match(html,/<h2>Questions to explore<\/h2>/);assert.match(html,/Tested<\/span>/);assert.match(html,/library\.html#\/experiment\/lp1-section-balance/);assert.match(html,new RegExp('run.html#record='+record.id+'&amp;followup='+open.followup));assert(!/Run now|Create experiment|Proven|<details|<button/.test(html));

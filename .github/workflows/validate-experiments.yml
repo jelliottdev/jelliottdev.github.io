@@ -51,6 +51,7 @@ jobs:
       - run: node scripts/test_question_protocols.cjs
       - run: node scripts/test_family_question_evidence.cjs
       - run: node scripts/test_published_evidence.mjs
+      - run: node scripts/test_published_program_client.cjs
       - run: node scripts/test_task_evidence.mjs
       - run: node scripts/test_evidence_planning.mjs
       - run: node scripts/test_research_family.cjs
@@ -84,6 +85,7 @@ jobs:
       - run: node scripts/test_plan_control_package.cjs
       - run: node scripts/test_record_followups.cjs
       - run: node scripts/test_record_question_view.cjs
+      - run: node scripts/test_question_action_hierarchy.cjs
       - run: node scripts/test_record_question_mount.cjs
       - run: node scripts/test_record_question_runtime.cjs
       - run: node scripts/test_record_question_live.cjs
@@ -246,6 +248,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_build_research.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_record_line_endings.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_content.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_new_experiment.py
@@ -259,6 +263,8 @@ jobs:
       - run: python scripts/test_research_questions.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_published_count_evidence.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_published_program_projection.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_published_count_evidence.py --check
         if: steps.scope.outputs.science == 'true'

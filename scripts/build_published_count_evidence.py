@@ -1,4 +1,4 @@
-"""Compile explicitly declared archived counts into reproducible browser receipts.
+"""Compile source-bound archived measurements and fixed-program reproductions.
 
 This verifies a fixed published measurement; it does not rerun the exploratory
 shuffle search, alter its findings, or create a community task/submission.
@@ -19,6 +19,12 @@ BASE = f'experiments/records/{RECORD}'
 PAGES = [f'lp2-{i:02d}' for i in range(56)]
 CRITERION = {'kind': 'word-affine-count', 'lag': 6, 'a': 27, 'b': 24, 'boundaries': 'hyphen-period'}
 REQUIRED = [f'text/{page}.txt' for page in PAGES] + ['data/index.json', f'{BASE}/results.json', f'{BASE}/run.py', f'{BASE}/check.py']
+
+
+def build_opening_projection(root=ROOT, write=True):
+    """Build generic program evidence separately from the count-v1 contract."""
+    from published_program_projection import build as build_program
+    return build_program(root, write)
 
 
 def stable(value):
@@ -117,3 +123,5 @@ if __name__ == '__main__':
     options = parser.parse_args()
     value = build(write=not options.check)
     print('Published count evidence: verified ' + str(len(value['entries'])) + ' immutable projection receipt.')
+    openings = build_opening_projection(write=not options.check)
+    print('Published program evidence: verified ' + str(len(openings['entries'])) + ' immutable projection receipt.')

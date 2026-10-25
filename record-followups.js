@@ -141,5 +141,5 @@
   }catch(error){if(live(token))status('',error.message);}finally{if(live(token)){busy=false;const button=get('create-followup');if(button){button.disabled=false;button.textContent=actionLabel();}}}}
   const ready=load();return {ready,destroy(){dead=true;version++;controller.abort();},getState:()=>({plan,busy})};
  }
- const api={reference,validateOrigins,createWorkspace};if(node)module.exports=api;else root.RecordFollowups=api;
+ const api={reference,validateOrigins,createWorkspace};api.describeCard=cardProgram;if(node)module.exports=api;else root.RecordFollowups=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -39,7 +39,7 @@ def protocol_reference(question, record):
     if protocol['id'] == 'deor-warning-opening':
         require('followup' not in question, 'DEOR definition cannot inherit another follow-up scope')
         return {'id': protocol['id'], 'version': 1, 'familyId': 'deor-feedback-v1'}
-    require(protocol['id'] == 'word-boundary-sensitivity' and 'followup' in question,
+    require(protocol['id'] in ('word-boundary-sensitivity', 'fixed-program-prefix') and 'followup' in question,
             'unknown protocol or missing owned boundary follow-up')
     require(isinstance(record.get('browser_followups'), list)
             and all(isinstance(recipe, dict) for recipe in record['browser_followups']),
@@ -55,6 +55,29 @@ def protocol_reference(question, record):
     evaluation = rules.get('evaluation', {})
     require(isinstance(evaluation, dict), 'invalid boundary evaluation')
     criterion = evaluation.get('value', {})
+    if protocol['id'] == 'fixed-program-prefix':
+        # Publication uses the existing maintained compiler. No second method
+        # implementation or inferred program is introduced for question views.
+        from browser_followups import compile_card
+        try:
+            compiled = compile_card(card)
+        except (ValueError, TypeError, KeyError) as error:
+            raise ValueError('research_questions: incompatible fixed-prefix recipe') from error
+        require(isinstance(criterion, dict) and set(criterion) == {'kind', 'values'}
+                and criterion['kind'] == 'exact-prefix' and isinstance(criterion['values'], list)
+                and 1 <= len(criterion['values']) <= 256
+                and all(type(n) is int and 0 <= n <= 28 for n in criterion['values'])
+                and compiled['criterion'] == criterion, 'invalid fixed-prefix criterion')
+        require(isinstance(inputs, dict) and set(inputs) == {'version', 'alphabet_sha256', 'pages'}
+                and inputs['version'] == compiled['inputVersion']
+                and isinstance(inputs['alphabet_sha256'], str) and re.fullmatch(r'[a-f0-9]{64}', inputs['alphabet_sha256'])
+                and isinstance(inputs['pages'], list) and len(inputs['pages']) == len(compiled['pages'])
+                and all(isinstance(page, dict) and set(page) == {'id', 'text_sha256'}
+                        and page['id'] == identifier and isinstance(page['text_sha256'], str)
+                        and re.fullmatch(r'[a-f0-9]{64}', page['text_sha256'])
+                        for page, identifier in zip(inputs['pages'], compiled['pages'])),
+                'fixed-prefix scope must match exact follow-up pins')
+        return {'id': protocol['id'], 'version': 1, 'followupId': recipe['id'], 'inputs': copy.deepcopy(inputs)}
     require(type(card.get('version')) is int and card.get('version') == 1 and card.get('unresolved') == []
             and method.get('status') == 'specified'
             and isinstance(method.get('value'), dict) and set(method['value']) == {'operations'}

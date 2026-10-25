@@ -37,6 +37,7 @@
    if(value.state==='answered'&&decision.next?.kind==='inspect-evidence'&&reference.id==='deor-warning-opening'){
     const caseId=decision.next.caseIds?.[0],revision=decision.evidence?.revision;if(typeof caseId==='string'&&/^[a-z0-9-]{1,200}$/.test(caseId)&&typeof revision==='string'&&/^[a-f0-9]{64}$/.test(revision))next='<p class="record-question-next"><a href="run.html#family=deor-feedback-v1&amp;case='+esc(caseId)+'&amp;revision='+revision+'">Inspect matching output</a></p>';
    }
+   if(value.state==='answered'&&decision.next?.kind==='inspect-evidence'&&reference.id==='fixed-program-prefix')next='<p class="record-question-next"><a href="'+esc(href)+'">Inspect matching output</a></p>';
    element.innerHTML='<h'+level+' class="record-question-answer">'+esc(decision.heading)+'</h'+level+'><p>'+esc(decision.finding)+'</p><p class="record-question-live-limit">'+esc(decision.limit)+'</p>'+next+(next?'':'<p class="record-question-workspace"><a href="'+esc(href)+'">Inspect source calculations</a></p>');
   }
   async function activate(entry,retry=false){

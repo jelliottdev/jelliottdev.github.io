@@ -2,6 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),{createHash}=require('node:crypto'),E=require('../local-experiment.js'),Evidence=require('../computation-evidence.js'),V=require('../task-variants.js'),Live=require('../record-question-live.js'),Client=require('../verified-evidence-client.js'),F=require('../research-family.js'),FQ=require('../family-question-evidence.js');
 const clone=v=>JSON.parse(JSON.stringify(v)),hash=v=>createHash('sha256').update(E.stable(v)).digest('hex'),at='2026-10-25T12:00:00.000Z',config={endpoint:'https://worker.example/ask',localTaskEndpoint:'https://worker.example/tasks',recordPlanEndpoint:'https://worker.example/record-plans'},bundle=JSON.parse(fs.readFileSync('data/local-run-inputs.json','utf8'));
 const boundaryRecord=JSON.parse(fs.readFileSync('experiments/records/word-internal-affine-lags/record.json','utf8')),familyRecord=JSON.parse(fs.readFileSync('experiments/records/wulfic-autokey-seed-families/record.json','utf8'));
+const prefixRecord=JSON.parse(fs.readFileSync('experiments/records/lp2-row-column-routes/record.json','utf8')),Followups=require('../record-followups.js');
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}const response=value=>new Response(JSON.stringify(value),{headers:{'content-type':'application/json'}});
 async function receipt(task){const result=E.run(task);return {task,inputVersion:'raw',run:{id:hash(result),createdAt:at,result}};}
 async function fixture(){
@@ -11,6 +12,12 @@ async function fixture(){
  const plan={state:'plan-ready',origin:{recordId:record.id,followupId:recipe.id,protocolSha256:hash(recipe)},task,inputVersion:'raw',coverage:await coverage(task,[a]),boundaryComparison:{task:other,coverage:await coverage(other,[b])}};
  const calls=[];const fetcher=async(url,init={})=>{calls.push({url,init});if(url===config.recordPlanEndpoint){assert.equal(init.method,'POST');assert.deepEqual(JSON.parse(init.body),{recordId:record.id,followupId:recipe.id,includeExisting:true,includeBoundaryComparison:true});return response(plan);}const s=sources.get(url.split('/').pop());if(!s)throw Error('Unexpected request '+url);return response({id:s.task.taskId,title:s.task.title,plan:s.task,inputVersion:'raw',state:'results-verified',latestRun:s.run});};
  return {record,recipe,task,other,a,b,plan,coverage,calls,fetcher};
+}
+async function prefixFixture(){
+ const record=clone(prefixRecord),recipe=record.browser_followups[0];recipe.inputs.pages=recipe.inputs.pages.slice(0,2);recipe.card.scope.value.pages=recipe.inputs.pages.map(p=>p.id);
+ const program=Followups.describeCard(recipe.card),task=await E.prepare({title:recipe.title,pages:recipe.inputs.pages.map(p=>({id:p.id,text:bundle.pages.find(x=>x.id===p.id).raw})),alphabet:bundle.alphabet,steps:program.steps,criterion:program.criterion}),saved=await receipt(await E.prepare({...task,title:'A different original title and placement'})),sources=new Map([[saved.task.taskId,saved]]),coverage=async src=>({...await Evidence.compare(task,'raw',src),requestedTask:task,inputVersion:'raw',truncated:false}),plan={state:'plan-ready',origin:{recordId:record.id,followupId:recipe.id,protocolSha256:hash(recipe)},task,inputVersion:'raw',coverage:await coverage([saved])},calls=[];
+ const fetcher=async(url,init={})=>{calls.push({url,init});if(url===config.recordPlanEndpoint){assert.equal(init.method,'POST');assert.deepEqual(JSON.parse(init.body),{recordId:record.id,followupId:recipe.id,includeExisting:true});return response(plan);}assert(!init.method||init.method==='GET');const source=sources.get(url.split('/').pop());assert(source,'No boundary comparison or unrelated source request');return response({id:source.task.taskId,title:source.task.title,plan:source.task,inputVersion:'raw',state:'results-verified',latestRun:source.run});};
+ return {record,recipe,task,saved,sources,coverage,plan,calls,fetcher};
 }
 (async()=>{
  await test('boundary live answer is lazy, exact and read-only; no target execution API',async()=>{
@@ -45,6 +52,35 @@ async function fixture(){
    if(mode==='streamed'){assert.equal(reads,2,'Do not consume the rest of an oversized body');assert.equal(cancelled,true);}
    if(mode==='broken-stream')assert.equal(cancelled,true);c.destroy();
   }
+ });
+ await test('fixed prefix activation compiles the exact owned recipe and reads one shared proof without a boundary request or execution',async()=>{
+  const f=await prefixFixture(),before=clone(f.record),states=[],controller=Live.createController({record:f.record,questionId:'warning-row-reversal-atbash',config,loadInputs:()=>bundle,fetcher:f.fetcher,onState:s=>states.push(s)});assert.equal(f.calls.length,0);const run=E.run;E.run=()=>{throw Error('Current answers must not execute an unsaved target.');};
+  try{const decision=await controller.activate();assert.equal(decision.state,'answered');assert.equal(decision.answer,'prefix-not-found');assert.equal(decision.next,null);assert.equal(decision.question.id,'fixed-program-prefix');assert.equal(f.calls.length,2);assert.deepEqual(states.map(s=>s.state),['loading','answered']);assert.deepEqual(f.record,before);assert.equal(f.record.research_questions[0].state,'tested');await controller.activate();assert.equal(f.calls.length,2);}finally{E.run=run;controller.destroy();}
+ });
+ await test('prefix partial and incomplete evidence preserve exact missing scope without trusting historical state',async()=>{
+  const f=await prefixFixture(),one=await receipt(await E.prepare({...f.task,title:'Only the first declared page',pages:[f.task.pages[0]]}));f.sources.set(one.task.taskId,one);f.plan.coverage=await f.coverage([one]);const states=[],c=Live.createController({record:f.record,questionId:'warning-row-reversal-atbash',config,loadInputs:()=>bundle,fetcher:f.fetcher,onState:s=>states.push(s)});
+  const missing=await c.activate();assert.equal(missing.state,'missing-evidence');assert.deepEqual(missing.next.pages,['lp2-01']);assert.equal(missing.answer,null);f.plan.coverage.truncated=true;const unavailable=await c.retry();assert.equal(unavailable.state,'unavailable');assert.deepEqual(unavailable.next,{kind:'retry-evidence'});assert.deepEqual(unavailable.evidence.coveredPages,['lp2-00']);assert.equal(f.record.research_questions[0].state,'tested');c.destroy();
+ });
+ await test('prefix compiler, source pins, task rules and verified output fail unavailable on incompatibility',async()=>{
+  for(const mode of ['unknown-operation','source-bytes','wrong-program','wrong-prefix','forged-output','unexpected-companion']){
+   const f=await prefixFixture();
+   if(mode==='unknown-operation')f.record.browser_followups[0].card.method.value.operations[0].id='unknown_operation';
+   if(mode==='source-bytes')f.recipe.inputs.pages[0].text_sha256='0'.repeat(64);
+   if(mode==='wrong-program')f.plan.task=await E.prepare({...f.task,steps:f.task.steps.slice().reverse()});
+   if(mode==='wrong-prefix')f.plan.task=await E.prepare({...f.task,criterion:{kind:'exact-prefix',values:[0]}});
+   if(mode==='forged-output'){const raw=await E.prepare({...f.saved.task,steps:[]}),output=E.run(raw);output.taskId=f.saved.task.taskId;f.saved.run.result=output;f.saved.run.id=hash(output);f.plan.coverage=await f.coverage([f.saved]);}
+   if(mode==='unexpected-companion')f.plan.boundaryComparison={task:f.task};
+   const states=[],c=Live.createController({record:f.record,questionId:'warning-row-reversal-atbash',config,loadInputs:()=>bundle,fetcher:f.fetcher,onState:s=>states.push(s)});assert.equal(await c.activate(),null,mode);assert.equal(states.at(-1).state,'unavailable');assert(!states.at(-1).decision);if(['unknown-operation','source-bytes'].includes(mode))assert.equal(f.calls.length,0);c.destroy();
+  }
+ });
+ await test('real published 55-page opening receipt answers the authored archived question without new work',async()=>{
+  const {findPublishedEvidence,readPublishedEvidence}=await import('../services/idea-assistant/published-evidence.mjs'),record=clone(prefixRecord),before=clone(record),recipe=record.browser_followups.find(r=>r.id==='row-reversal-atbash-warning'),program=Followups.describeCard(recipe.card),task=await E.prepare({title:recipe.title,pages:recipe.inputs.pages.map(p=>({id:p.id,text:bundle.pages.find(x=>x.id===p.id).raw})),alphabet:bundle.alphabet,steps:program.steps,criterion:program.criterion}),published=await findPublishedEvidence({task,inputVersion:'raw'});
+  assert.equal(task.pages.length,55);assert.equal(published.sources.length,1);assert.equal(published.sources[0].task.pages.length,55);assert.equal(published.publishedSources.length,1);
+  const coverage={...await Evidence.compare(task,'raw',published.sources),requestedTask:task,inputVersion:'raw',truncated:false,publishedSources:published.publishedSources},plan={state:'plan-ready',origin:{recordId:record.id,followupId:recipe.id,protocolSha256:hash(recipe)},task,inputVersion:'raw',coverage},ref=published.publishedSources[0],source=await readPublishedEvidence(ref),calls=[],states=[];let tamper=false;
+  assert(source);assert.equal(source.provenance.schema,'liberpedia-published-program-projection-v1');assert.equal(source.provenance.projection.ownerRecordId,record.id);assert.equal(source.provenance.projection.followupId,recipe.id);
+  const fetcher=async(url,init={})=>{calls.push({url,init});if(url===config.recordPlanEndpoint){assert.equal(init.method,'POST');assert.deepEqual(JSON.parse(init.body),{recordId:record.id,followupId:recipe.id,includeExisting:true});return response(plan);}assert(!init.method||init.method==='GET','No task, idea or result may be created');const u=new URL(url);assert.equal(u.pathname,'/published-evidence/'+ref.recordId+'/'+ref.caseId);assert.equal(u.searchParams.get('revision'),ref.revision);const value=clone(source);if(tamper)value.provenance.projection.steps.reverse();return response(value);};
+  const c=Live.createController({record,questionId:'warning-row-reversal-atbash',config,loadInputs:()=>bundle,fetcher,onState:s=>states.push(s)}),run=E.run;E.run=()=>{throw Error('Do not execute a new target for an archived answer');};
+  try{const d=await c.activate();assert.equal(d.state,'answered');assert.equal(d.answer,'prefix-not-found');assert.equal(d.next,null);assert.equal(d.evidence.coveredPages.length,55);assert.equal(d.evidence.missingPages.length,0);assert.equal(d.evidence.receipts.length,1);assert.equal(calls.length,2);assert.deepEqual(record,before);assert.equal(record.research_questions.find(q=>q.id==='warning-row-reversal-atbash').state,'tested');tamper=true;assert.equal(await c.retry(),null);assert.equal(states.at(-1).state,'unavailable');assert.equal(calls.length,4);assert.deepEqual(record,before);}finally{E.run=run;c.destroy();}
  });
  console.log(groups+' live question test groups passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

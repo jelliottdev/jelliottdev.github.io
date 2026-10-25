@@ -19,11 +19,20 @@
    if(E.stable(normalized)!==E.stable(DEOR))throw Error('The finite-prefix question must retain the declared DEOR domain.');
    return freeze({id,version:1,evidenceKind:'finite-exact-prefix',evaluatorId:'finite-exact-prefix-existence-v1',parameters:clone(DEOR),scopePolicy:'same-pinned-inputs',nextByState:{'missing-evidence':'run-missing-evidence',unavailable:'retry-evidence'},nextByAnswer:{'prefix-found':'inspect-evidence','prefix-not-found':null},mathematics:{familyId:'deor-feedback-v1',modulus:29,pageStart:true,headings:'included',separatorRule:'preserve-and-do-not-advance-key',pageState:'fresh',resetBoundaries:{page:'page-start',line:'CR-or-LF',word:'every-non-rune'},necessaryExclusion:'first-rune-mismatch',stop:'first-verified-full-prefix-match-or-all-cases-excluded'},question:'Does the DEOR key recover the fixed 12-rune Warning opening in any declared case?',limit:'Covers DEOR, the 12-rune Warning opening, these restart rules and these page texts. A match needs the rest of the page checked; other openings and cipher rules remain open.'});
   }
+  if(id==='fixed-program-prefix'){
+   if(!exact(parameters,['steps','criterion'])||parameters.criterion?.kind!=='exact-prefix')throw Error('The fixed program question needs an exact prefix criterion and ordered steps.');
+   // Reuse the engine's structural validation without executing a target or
+   // substituting input values. The real alphabet/pages bind below; an empty
+   // validation page cannot establish finite-key sufficiency for real inputs.
+   E.validateTask({schema:E.TASK,engine:E.ENGINE,taskId:'0'.repeat(64),title:'Question structure validation',alphabet:Array.from({length:29},(_,i)=>({rune:String.fromCodePoint(0x16a0+i),latin:'R'+i,prime:i+2})),pages:[{id:'lp2-00',text:''}],steps:parameters.steps,criterion:parameters.criterion});
+   return freeze({id,version:1,evidenceKind:'fixed-program-exact-prefix',evaluatorId:'verified-page-prefix-existence-v1',parameters:clone(parameters),scopePolicy:'same-pinned-inputs',nextByState:{'missing-evidence':'run-missing-evidence',unavailable:'retry-evidence'},nextByAnswer:{'prefix-found':'inspect-evidence','prefix-not-found':null},mathematics:{engine:E.ENGINE,modulus:29,pageStart:true,headings:'included',prefixUnit:'ordered-rune-index',pageState:'fresh',stop:'first-verified-full-prefix-match-or-all-declared-pages-checked'},question:'Does this fixed program produce the specified opening on any declared page?',limit:'Covers only these ordered steps, the exact prefix and the pinned complete pages. A matching opening is not a complete reading; other prefixes, rules and inputs remain open.'});
+  }
   throw Error('The question protocol is not maintained.');
  }
  async function hash(value,cryptoAPI){return Array.from(new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(value)))),n=>n.toString(16).padStart(2,'0')).join('');}
  async function identity(id,parameters,cryptoAPI=root.crypto){const d=definition(id,parameters);const {question,limit,...semantic}=d;return {id:d.id,version:d.version,definitionSha256:await hash({schema:'liberpedia-question-definition-v1',...semantic},cryptoAPI)};}
  async function bindInputs(id,parameters,inputs,cryptoAPI=root.crypto){
+  parameters=clone(parameters);inputs=clone(inputs);
   const keys=['engine','inputVersion','alphabetSha256','pages',...(Object.hasOwn(inputs||{},'domainRevision')?['domainRevision']:[])];
   if(!exact(inputs,keys)||inputs.engine!==E.ENGINE||!['raw','reviewed'].includes(inputs.inputVersion)||!HEX.test(inputs.alphabetSha256)||!Array.isArray(inputs.pages)||!inputs.pages.length||inputs.pages.length>75||inputs.pages.some(p=>!exact(p,['id','sha256'])||!/^lp[12]-\d{2}$/.test(p.id)||!HEX.test(p.sha256))||new Set(inputs.pages.map(p=>p.id)).size!==inputs.pages.length||Object.hasOwn(inputs,'domainRevision')&&!HEX.test(inputs.domainRevision))throw Error('Question inputs require an exact pinned scope.');
   const protocol=await identity(id,parameters,cryptoAPI),pinned=clone(inputs);pinned.pages.sort((a,b)=>a.id.localeCompare(b.id));
@@ -31,8 +40,9 @@
   return freeze({...body,id:await hash(body,cryptoAPI)});
  }
  async function bindTask(id,parameters,task,inputVersion,cryptoAPI=root.crypto){
-  const frozen=clone(task);await E.checkIdentity(frozen,cryptoAPI);
-  if(id!=='word-boundary-sensitivity'||frozen.criterion.kind!=='word-affine-count'||frozen.steps.length||E.stable(parameters)!==E.stable({lag:frozen.criterion.lag,a:frozen.criterion.a,b:frozen.criterion.b}))throw Error('The task does not implement this exact question protocol.');
+  const frozen=clone(task);parameters=clone(parameters);await E.checkIdentity(frozen,cryptoAPI);
+  const boundary=id==='word-boundary-sensitivity'&&frozen.criterion.kind==='word-affine-count'&&!frozen.steps.length&&E.stable(parameters)===E.stable({lag:frozen.criterion.lag,a:frozen.criterion.a,b:frozen.criterion.b}),prefix=id==='fixed-program-prefix'&&frozen.criterion.kind==='exact-prefix'&&E.stable(parameters)===E.stable({steps:frozen.steps,criterion:frozen.criterion});
+  if(!boundary&&!prefix)throw Error('The task does not implement this exact question protocol.');
   const pages=[];for(const page of frozen.pages)pages.push({id:page.id,sha256:Array.from(new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(page.text))),n=>n.toString(16).padStart(2,'0')).join('')});
   return bindInputs(id,parameters,{engine:frozen.engine,inputVersion,alphabetSha256:await hash(frozen.alphabet,cryptoAPI),pages},cryptoAPI);
  }

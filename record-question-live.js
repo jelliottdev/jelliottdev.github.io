@@ -3,6 +3,7 @@
  'use strict';
  const node=typeof module==='object'&&module.exports;
  const E=node?require('./local-experiment.js'):root.LocalExperiment,Model=node?require('./record-question-model.js'):root.RecordQuestionModel,Client=node?require('./verified-evidence-client.js'):root.VerifiedEvidenceClient,Q=node?require('./question-evidence.js'):root.QuestionEvidence,D=node?require('./question-decisions.js'):root.QuestionDecisions,F=node?require('./research-family.js'):root.ResearchFamily,FQ=node?require('./family-question-evidence.js'):root.FamilyQuestionEvidence,V=node?require('./task-variants.js'):root.TaskVariants;
+ const Followups=node?require('./record-followups.js'):root.RecordFollowups;
  const clone=v=>JSON.parse(E.stable(v));
  async function digest(value,cryptoAPI,raw=false){return [...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(raw?value:E.stable(value))))].map(v=>v.toString(16).padStart(2,'0')).join('');}
  function validEndpoint(value,path,pageURL,anchor){
@@ -39,14 +40,27 @@
      const recipe=captured.browser_followups.find(item=>item.id===reference.followupId),pins=reference.inputs;
      if(bundle.schema!=='liberpedia-local-inputs-v1'||!Array.isArray(bundle.alphabet)||!Array.isArray(bundle.pages)||await digest(bundle.alphabet,cryptoAPI)!==pins.alphabet_sha256)throw Error('The question alphabet changed.');
      const pages=[];for(const pin of pins.pages){const found=bundle.pages.filter(page=>page.id===pin.id);if(found.length!==1)throw Error('The question page is unavailable.');const text=pins.version==='raw'?found[0].raw:found[0].reviewed_text;if(typeof text!=='string'||await digest(text,cryptoAPI,true)!==pin.text_sha256)throw Error('The question page changed.');pages.push({id:pin.id,text});}
-     const task=await E.prepare({title:recipe.title,pages,alphabet:bundle.alphabet,steps:[],criterion:recipe.card.rules.evaluation.value},cryptoAPI),plan=await json(settings.recordPlanEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:captured.id,followupId:reference.followupId,includeExisting:true,includeBoundaryComparison:true})});
+     let steps=[];
+     if(reference.id==='fixed-program-prefix'){
+      const program=Followups.describeCard(recipe.card);
+      if(program.inputVersion!==pins.version||program.criterion.kind!=='exact-prefix'||E.stable(program.pages)!==E.stable(pins.pages.map(page=>page.id))||E.stable(program.criterion)!==E.stable(recipe.card.rules.evaluation.value))throw Error('The compiled question changed its declared scope or prefix.');
+      steps=program.steps;
+     }
+     const task=await E.prepare({title:recipe.title,pages,alphabet:bundle.alphabet,steps,criterion:recipe.card.rules.evaluation.value},cryptoAPI),plan=await json(settings.recordPlanEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:captured.id,followupId:reference.followupId,includeExisting:true,...(reference.id==='word-boundary-sensitivity'?{includeBoundaryComparison:true}:{})})});
      if(plan.state!=='plan-ready'||plan.origin?.recordId!==captured.id||plan.origin?.followupId!==reference.followupId||plan.origin?.protocolSha256!==await digest(recipe,cryptoAPI)||plan.inputVersion!==pins.version||E.stable(plan.task)!==E.stable(task))throw Error('The current question plan changed its definition or inputs.');
+     if(reference.id==='fixed-program-prefix'){
+      if(!plan.coverage||plan.coverageUnavailable===true||Object.hasOwn(plan,'boundaryComparison'))throw Error('The current opening evidence could not be checked.');
+      const client=Client.create({request,endpoint,validEndpoint:allowed,crypto:cryptoAPI}),coverage=await client.checkCoverage(plan.coverage,{inputVersion:pins.version,isLive:()=>live(token)});
+      if(E.stable(coverage.requestedTask)!==E.stable(task))throw Error('The current evidence changed the opening scope.');
+      const proof=await Q.summarize(task,pins.version,client.getSources(coverage),cryptoAPI);decision=await D.prefix({task,inputVersion:pins.version,proof,lookupComplete:!coverage.truncated},cryptoAPI);
+     }else{
      const companion=plan.boundaryComparison;if(!companion?.task||!plan.coverage||!companion.coverage||companion.coverageUnavailable===true)throw Error('Both sides of the current comparison could not be checked.');
      await V.validate(task,companion.task,cryptoAPI);
      const client=Client.create({request,endpoint,validEndpoint:allowed,crypto:cryptoAPI}),left=await client.checkCoverage(plan.coverage,{inputVersion:pins.version,isLive:()=>live(token)}),right=await client.checkCoverage(companion.coverage,{inputVersion:pins.version,isLive:()=>live(token)});
      if(E.stable(left.requestedTask)!==E.stable(task)||E.stable(right.requestedTask)!==E.stable(companion.task))throw Error('The current evidence changed the question scope.');
      const a=await Q.summarize(task,pins.version,client.getSources(left),cryptoAPI),b=await Q.summarize(companion.task,pins.version,client.getSources(right),cryptoAPI);
      decision=await D.boundary({task,otherTask:companion.task,inputVersion:pins.version,left:a,right:b,lookupComplete:!left.truncated&&!right.truncated},cryptoAPI);
+     }
     }
     emit(token,{state:decision.state,decision});return decision;
    }catch(error){if(live(token))emit(token,{state:'unavailable',error:'Current evidence could not be verified. Retry to check it again.'});return null;}
