@@ -72,6 +72,7 @@ jobs:
       - run: node scripts/test_factored_pending_recovery.cjs
       - run: node scripts/test_factored_search_session.cjs
       - run: node scripts/test_factored_search_session_adversarial.cjs
+      - run: node scripts/test_factored_compilation_refresh.cjs
       - run: node scripts/test_factored_finite_workspace.cjs
       - run: node scripts/test_factored_finite_workspace_adversarial.cjs
       - run: node scripts/test_finite_workspace_router.cjs
@@ -196,6 +197,8 @@ jobs:
       - run: node scripts/test_reader_continuous.cjs
       - run: node scripts/test_manuscript_search.cjs
       - run: node scripts/test_home_preview.cjs
+      - run: node scripts/test_word_affine_intake.cjs
+      - run: node scripts/test_word_affine_intake_flow.cjs
       - run: node scripts/test_word_sum_intake.cjs
       - run: node scripts/test_word_sum_intake_flow.cjs
       - run: node scripts/test_investigate.cjs
@@ -212,6 +215,9 @@ jobs:
       - run: node scripts/test_proposal_ui.cjs
       - run: node scripts/test_research_map.cjs
       - run: node scripts/test_assistant_retrieval.cjs
+      - run: node scripts/test_research_map_responsive.cjs
+      - run: node --experimental-sqlite scripts/test_saved_idea_review.mjs
+      - run: node scripts/test_factored_prefix_intersections.cjs
       - run: node scripts/test_research_browser.cjs
       - run: node scripts/test_research_graph_geometry.cjs
       - run: node scripts/test_research_graph_controller.cjs

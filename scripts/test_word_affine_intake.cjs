@@ -1,0 +1,49 @@
+'use strict';
+const assert=require('node:assert/strict'),C=require('../claim-specification.js'),H=require('../claim-share.js'),I=require('../investigate.js'),W=require('../word-affine-intake.js'),Compiler=require('../fixed-plan-compiler.js');
+const field=value=>C.field('specified',value,{kind:'supplied',refs:['original statement']}),prefix='Count rune pairs 6 positions apart within each word satisfying ',text=prefix+"c\u2032 = 24\u22122c mod29 on LP2-15, LP2-17";
+function draft(source=text){return C.createDraft({source:{text:source},aim:field({outcomeId:'decipher',wording:'Solve the full manuscript',detail:'Keep the original broad aim'}),scope:field({pages:['lp2-15','lp2-17']}),method:field({operations:[{id:'described_method',label:source,sourceText:source}]}),rules:{inputVersion:field('reviewed')}});}
+function answer(d,choice){const q=W.question(d);assert(q);return W.clarify(d,q.id,choice);}
+function ready(d=draft(),boundaries='hyphen-period'){let value=d;if(W.question(value)?.id.startsWith('word-affine-boundaries:'))value=answer(value,boundaries);return answer(value,'count-only');}
+function compile(d){return Compiler.compile(H.cardData(C.confirm(d,{id:'private-software-test',at:'2026-10-25T12:00:00Z'})));}
+let groups=0;const test=(name,fn)=>{fn();groups++;console.log('PASS '+name);};
+test('complete positive grammar normalizes only explicit mod29 bounded integers',()=>{
+ for(const [source,expected]of [[text,[6,27,24]],[prefix+"c' = -2c + 24 (mod 29)",[6,27,24]],[prefix+'y = 27x + 24 modulo 29',[6,27,24]],[prefix+'y = 56x - 5 mod 29',[6,27,24]],["Test whether rune pairs 1 positions apart within words follow c' = c mod 29",[1,1,0]],[prefix+"c' = 24 + 0c (mod29)",[6,0,24]],[prefix+"c' = 9007199254740991c - 9007199254740991 mod29",[6,Number(9007199254740991n%29n),Number((-9007199254740991n%29n+29n)%29n)]]]){assert(W.matches(source),source);const original=draft(source),candidate=W.inspect(original);assert.deepEqual([candidate.lag,candidate.a,candidate.b],expected);assert.equal(candidate.sourceText,source);assert(Object.isFrozen(candidate));}
+});
+test('wrong or absent moduli, unknown lag, transformation intent, extra methods and claims stay opaque',()=>{
+ for(const source of [text.replace('mod29','mod28'),text.replace('mod29',''),text.replace('6 positions','some positions'),text.replace('6 positions','13 positions'),text.replace('6 positions','0 positions'),"Apply c'=24-2c mod29 to each rune within words on LP2-15",'Do not '+text,text+' only when an F rune appears',text+' then reverse each word',text+" and c'=2c+24 mod29",text+'. I counted 137 matches.',text+'; this should give 137 matches',text+' because this proves the cipher is affine',prefix+"y = 24 - 2c mod29",text+', lines 1-3',text+'\nThen use a key',text.replace('24\u22122c','2.4\u22122c'),prefix+"c'=9007199254740992c+24 mod29"]){const value=draft(source),before=C.serialize(value);assert.equal(W.matches(source),false,source);assert.equal(W.inspect(value),null,source);assert.equal(C.serialize(value),before);assert(compile(value).reason,'No hidden prefix of an unsupported full method is executable');}
+});
+test('missing aim and exact full scope are clarified first; scope holes and passages are never widened',()=>{
+ for(const fieldName of ['aim','scope']){const value=draft();value[fieldName]=C.field();assert.equal(W.question(value),null);assert.equal(I.intakeQuestions(value)[0].id,fieldName);}
+ for(const scope of [{pages:['lp2-15']},{pages:['lp2-15','lp2-16','lp2-17']},{pages:['lp2-15','lp2-17'],description:'Only the headings'}]){const value=draft();value.scope=field(scope);assert.equal(W.question(value),null);assert.deepEqual(value.scope.value,scope);}
+ const scoped=draft(text.replace('LP2-15, LP2-17','LP2-15-17'));assert.equal(W.inspect(scoped),null);assert(!W.matches(text.replace('LP2-17','LP2-99')));
+});
+test('word breaks and numeric-only GP consent precede any operation/evaluation changes',()=>{
+ const original=draft(),before=C.serialize(original);assert(W.question(original).id.startsWith('word-affine-boundaries:'));const chosen=answer(original,'hyphen-period');assert(W.question(chosen).id.startsWith('word-affine-evaluation:'));assert.deepEqual(chosen.method,original.method);assert.deepEqual(chosen.rules,original.rules);assert.equal(C.serialize(original),before);const q=W.question(chosen);assert(q.context.includes('GP rune indices 0–28'));assert(q.context.includes('multiplier 27 and offset 24'));assert(q.context.includes('reported count'));assert(q.context.includes('Your original aim is kept'));
+ const result=answer(chosen,'count-only'),plan=compile(result);assert.equal(W.question(result),null);assert.deepEqual(result.source,original.source);assert.deepEqual(result.aim,original.aim);assert.deepEqual(result.scope,original.scope);assert.deepEqual(result.rules.inputVersion,original.rules.inputVersion);assert.equal(result.rules.representation.value,'GP29');assert.deepEqual(plan.criterion,{kind:'word-affine-count',lag:6,a:27,b:24,boundaries:'hyphen-period'});assert.deepEqual(plan.steps,[]);assert.equal(plan.inputVersion,'reviewed');assert.equal(result.methodEdits.at(-1).previousOperation.sourceText,text);
+});
+test('both boundary policies compile to their exact existing measurement adapter',()=>{
+ for(const boundaries of ['non-rune','hyphen-period']){const result=ready(draft(),boundaries);assert.equal(compile(result).criterion.boundaries,boundaries);assert.equal(result.rules.boundaryMode.status,'unspecified');assert.equal(result.rules.reset.status,'unspecified');}
+});
+test('supplied matching numerical boundaries skip only the already specified choice',()=>{
+ const original=draft();original.rules.evaluation=field({kind:'word-affine-count',lag:6,a:27,b:24,boundaries:'non-rune'});original.rules.representation=field('GP29');assert(W.question(original).id.startsWith('word-affine-evaluation:'));const result=answer(original,'count-only');assert.equal(compile(result).criterion.boundaries,'non-rune');assert.deepEqual(result.rules.representation,original.rules.representation);
+});
+test('unrelated evaluation is replaced only by explicit numerical choice; keep intended check leaves it exact',()=>{
+ for(const evaluation of [{kind:'readability'},{kind:'exact-prefix',values:[1,2]},'measurement']){const original=draft();original.rules.evaluation=field(evaluation);const selected=answer(original,'non-rune');assert.deepEqual(selected.rules.evaluation,original.rules.evaluation);assert(W.question(selected).context.includes('replaces the current evaluation'));const kept=answer(selected,'as-described');assert.equal(W.question(kept),null);assert.deepEqual(kept.method,original.method);assert.deepEqual(kept.rules,original.rules);assert.equal(ready(original,'non-rune').rules.evaluation.value.kind,'word-affine-count');}
+});
+test('contradictory representation, global boundaries, reset and active conditions are never erased',()=>{
+ for(const [name,value]of [['representation','GP primes'],['representation','latin'],['boundaryMode','word_blocks'],['reset','word'],['wordBoundaries','remove'],['exceptionalCases','Only count after F'],['initialState',7],['inputVersion','unknown edition']]){const original=draft();original.rules[name]=field(value);const result=ready(original);assert.deepEqual(result.rules[name],original.rules[name],name);assert(compile(result).reason,name+' conflict must remain an execution refusal');}
+ const unknown=draft();unknown.unresolved.push({kind:'reported_count',operationIndex:0,text:'137 matches'});assert.equal(W.question(unknown),null);assert.deepEqual(unknown.unresolved,[{kind:'reported_count',operationIndex:0,text:'137 matches'}]);
+});
+test('extra parameters, sibling operations and partial AI source spans cannot be silently dropped',()=>{
+ for(const edit of [d=>d.method.value.operations[0].key=[1],d=>d.method.value.operations.push({id:'affine',a:7,b:7}),d=>d.source.text+=' and this proves the cipher',d=>d.method.value.operations[0].sourceText='Only part of the original']){const original=draft();edit(original);const before=C.serialize(original);assert.equal(W.question(original),null);assert.equal(C.serialize(original),before);}
+});
+test('question IDs and whole-spec acknowledgements reject stale answers and reask after actual changes',()=>{
+ const original=draft(),q=W.question(original),selected=answer(original,'non-rune');assert.throws(()=>W.clarify(selected,q.id,'hyphen-period'),/changed/);const kept=answer(original,'as-described');assert.equal(W.question(kept),null);const changed=C.revise(kept,{aim:field('Test a pattern')});assert(W.question(changed));const modified=C.revise(selected,{scope:field({pages:['lp2-15','lp2-17'],artifactNote:'New condition'})});assert(W.question(modified).id.startsWith('word-affine-boundaries:'));
+});
+test('shared complete cards do not reask; shared opaque original methods still clarify from their exact full label',()=>{
+ for(const source of [draft(),ready()]){const shared=H.decode(H.encode(C.confirm(source,{id:'share',at:'2026-10-25T12:00:00Z'}))).draft;if(source.method.value.operations[0].id==='word_affine_count'){assert.equal(W.question(shared),null);assert.deepEqual(compile(shared).criterion,compile(source).criterion);}else{assert(W.question(shared));const result=ready(shared);assert.equal(result.source.text,shared.source.text);assert.deepEqual(compile(result).criterion,compile(ready(source)).criterion);}}
+});
+test('descriptor-safe inspection invokes no getters and malformed data grants no clarification',()=>{
+ let calls=0;const original=draft();Object.defineProperty(original.source,'text',{enumerable:true,get(){calls++;return text;}});assert.equal(W.inspect(original),null);assert.equal(W.question(original),null);assert.equal(calls,0);assert.throws(()=>W.clarify(original,'word-affine-boundaries:0','non-rune'));assert.equal(calls,0);
+});
+console.log(groups+' source-bound affine-pair intake groups passed; no network or experiment execution.');

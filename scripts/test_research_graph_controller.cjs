@@ -51,7 +51,7 @@ for(const scale of [.28,1,4,8]){
  for(const [id,el] of f.groups){const item=f.c.labelNodes.find(x=>x.id===id),mark=el.parts.mark,hit=el.parts.hit;
   assert.equal(el.group.parent,f.c.world.layer,'Production moves each label into the top overlay');assert(!el.children.includes(el.group));assert.equal(el.group.hit.closest('[data-node]').getAttribute('data-node'),id,'Label rectangle retains its own node target after reparenting');
   if(mark&&Number(mark.attrs.r)>0)assert(Math.abs(Number(mark.attrs.r)*scale-(item.isChild?6:item.record?2.5:4))<1e-12);
-  if(Number(hit.attrs.r)>0)assert(Math.abs(Number(hit.attrs.r)*scale-18)<1e-12);
+  if(Number(hit.attrs.r)>0)assert(Math.abs(Number(hit.attrs.r)*scale-22)<1e-12);
   if(mark)assert.equal(mark.attrs['vector-effect'],'non-scaling-stroke');
  }
  const boxes=visibleBoxes(f);for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)assert(!G.intersects(boxes[i],boxes[j],8));

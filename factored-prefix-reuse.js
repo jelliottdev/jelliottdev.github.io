@@ -12,14 +12,16 @@
   const programs=new Map(d.programs.map(p=>[programKey(d.engine,d.alphabet,p.steps),p])),pages=new Map(d.pages.map(p=>[p.id,p.text])),groups=new Map();
   // Admission is strict for this already-selected candidate primitive. An
   // unrelated source cannot be silently dropped from an otherwise valid chunk.
-  for(const source of sources){if(!exact(source,['task','inputVersion','run'])||!exact(source.run,['id','createdAt','result'])||source.inputVersion!==d.inputVersion)throw Error('An original source has a different envelope or text edition.');E.validateTask(source.task);if(!['measurement','exact-prefix'].includes(source.task.criterion.kind))throw Error('Only original measurement and exact-prefix outputs support this derivation.');const program=programs.get(programKey(source.task.engine,source.task.alphabet,source.task.steps));if(!program||!source.task.pages.some(p=>pages.get(p.id)===p.text))throw Error('An original source is outside the exact declared transformations and page bytes.');if(!groups.has(program.id))groups.set(program.id,{program,sources:[]});groups.get(program.id).sources.push(source);}
+  for(const source of sources){if(!exact(source,['task','inputVersion','run'])||!exact(source.run,['id','createdAt','result'])||source.inputVersion!==d.inputVersion)throw Error('An original source has a different envelope or text edition.');E.validateTask(source.task);if(!['measurement','exact-prefix'].includes(source.task.criterion.kind))throw Error('Only original measurement and exact-prefix outputs support this derivation.');const program=programs.get(programKey(source.task.engine,source.task.alphabet,source.task.steps));const intersections=source.task.pages.filter(p=>pages.get(p.id)===p.text);if(!program||!intersections.length)throw Error('An original source is outside the exact declared transformations and page bytes.');if(!groups.has(program.id))groups.set(program.id,{program,sources:[],pageIds:new Set()});const group=groups.get(program.id);group.sources.push(source);for(const page of intersections)group.pageIds.add(page.id);}
   const claims=new Map();
   for(const group of [...groups.values()].sort((a,b)=>a.program.id.localeCompare(b.program.id))){
-   // One full-scope logical task per program, transiently. Preparing this task
-   // definition is not admission or execution of the requested calculation.
-   const target=await E.prepare({title:'Derived opening check for program '+group.program.id,alphabet:d.alphabet,pages:d.pages,steps:group.program.steps,criterion:d.criterion},crypto);
+   // The branded domain has already validated every declared page. This
+   // transient evaluator target contains only this program's exact source
+   // intersections, in domain order; its completeness is never domain coverage.
+   const targetPages=d.pages.filter(page=>group.pageIds.has(page.id));
+   const target=await E.prepare({title:'Derived opening check for program '+group.program.id,alphabet:d.alphabet,pages:targetPages,steps:group.program.steps,criterion:d.criterion},crypto);
    // Keep whole originals in packets bounded by the maintained evaluator's
-   // total input limit. A full75-page target is shared by each transient packet.
+   // total input limit. The exact intersection target is shared by each packet.
    // In particular, identical dated originals can use its local replay memo.
    const emptyBytes=new TextEncoder().encode(E.stable({task:target,inputVersion:d.inputVersion,sources:[]})).byteLength;let packet=[],packetBytes=emptyBytes;
    async function flush(){if(!packet.length)return;const proof=P.inspect(await P.evaluate({task:target,inputVersion:d.inputVersion,sources:packet},crypto)),expected=d.pages.filter(p=>packet.some(source=>source.task.pages.some(s=>s.id===p.id&&s.text===p.text))).map(p=>p.id);if(E.stable(proof.coveredPages)!==E.stable(expected))throw Error('The derived check changed its exact page intersection.');

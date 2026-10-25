@@ -25,6 +25,9 @@
    // A member task may correctly stay unrun after another member answered an
    // existence question. Counts do not decide whether that question is open.
    if(isFiniteQuestion(record))return {kind:'question',count:1,label:'Check declared settings',href:'run.html#idea='+record.proposal_id};
+   // A saved original with no task still needs a reachable review link. This
+   // navigation cue says nothing about capability, novelty or an unanswered aim.
+   if(work.taskCount===0)return {kind:'question',count:1,label:'Review saved idea',href:'run.html#idea='+record.proposal_id};
    if(!work.pendingCount)return null;
    const first=work.tasks.find(t=>t.state==='not-run');
    return {kind:'unfinished',count:work.pendingCount,label:work.pendingCount===1?'1 unfinished experiment':work.pendingCount+' unfinished experiments',

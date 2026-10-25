@@ -39,8 +39,8 @@ const navigation={state:{...requested,record:parent.members[0]},listKey:'',prefe
 vm.createContext(navigation);vm.runInContext(production('navigate'),navigation);navigation.navigate({mode:'list'});const listRoute=JSON.parse(navigation.location.hash);assert.equal(listRoute.record,'');assert.equal(listRoute.branch,parent.id);assert.equal(listRoute.mode,'list');
 const fitsBeforeFilter=c.fitCalls;requested.q='no-such-phrase-12345';requested.record='';c.render();assert.equal(c.fitCalls,fitsBeforeFilter+1,'Changed filtering gets a fresh geometric fit');
 // Run actual resize math against a movable map viewport. Preserve the world
-// coordinate at the screen centre and the zoom; only first use is allowed to Fit.
-let size={width:600,height:450};const resize={data:{},state:{mode:'graph'},camera:{x:140,y:-70,k:2.4},cameraViewport:{width:600,height:450},map:{getBoundingClientRect:()=>({...size,left:0,top:0})},fitCalls:0,revealCalls:0,applyCalls:0,fit(){resize.fitCalls++},updatePreviewMode(){},revealSelection(){resize.revealCalls++},applyCamera(){resize.applyCalls++}};
+// coordinate at the screen centre and manual zoom; automatic framing is tested separately.
+let size={width:600,height:450};const resize={data:{},state:{mode:'graph'},cameraFitted:false,camera:{x:140,y:-70,k:2.4},cameraViewport:{width:600,height:450},map:{getBoundingClientRect:()=>({...size,left:0,top:0})},fitCalls:0,revealCalls:0,applyCalls:0,fit(){resize.fitCalls++},updatePreviewMode(){},revealSelection(){resize.revealCalls++},applyCamera(){resize.applyCalls++}};
 vm.createContext(resize);vm.runInContext(production('reframe'),resize);
 const centre=()=>({x:(size.width/2-resize.camera.x)/resize.camera.k,y:(size.height/2-resize.camera.y)/resize.camera.k});const worldCentre=centre();
 size={width:390,height:600};resize.reframe();assert.equal(resize.camera.k,2.4);assert.deepEqual(centre(),worldCentre);assert.equal(resize.fitCalls,0);assert.equal(resize.applyCalls,1);
