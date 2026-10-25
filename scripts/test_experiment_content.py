@@ -156,6 +156,57 @@ class ContentTests(unittest.TestCase):
         self.assertEqual(compile_content(self.record), self.record)
         self.assertIsNot(compile_content(self.record), self.record)
 
+    def test_reader_test_preserves_authored_text_and_evidence_in_both_schemas(self):
+        description = {'input': 'Archived rune rows, including headings.',
+                       'action': 'Add each rune value within its row.',
+                       'check': 'Compare prime totals with shuffled rows.'}
+        for source in (self.record, self.source()):
+            with self.subTest(schema=source.get('schema', 'legacy')):
+                raw = copy.deepcopy(source)
+                expected = compile_content(raw)
+                raw['reader_test'] = description
+                original = copy.deepcopy(raw)
+                compiled = compile_content(raw)
+                self.assertEqual(raw, original)
+                self.assertEqual(compiled.pop('reader_test'), description)
+                self.assertEqual(compiled, expected)
+                path = self.write(raw)
+                validated = validate_record(self.root, path, {'lp2-15'})
+                self.assertEqual(validated['reader_test'], description)
+                projected = checker_payload([validated], b'original registry')['records'][0]
+                self.assertEqual(projected['reader_test'], description)
+
+    def test_reader_test_rejects_malformed_descriptions_before_writes(self):
+        valid = {'input': 'Archived rune rows.', 'action': 'Add rune values.',
+                 'check': 'Compare shuffled totals.'}
+        malformed = [None, [], 'description', {},
+                     {**valid, 'extra': 'No extra fields.'},
+                     {key: value for key, value in valid.items() if key != 'check'}]
+        bad_text = ['', ' ', ' leading', 'trailing ', 'x' * 321, None, 1, True,
+                    '<b>Markup</b>', 'A\nB', 'A\rB', 'A\tB', 'A\x00B', 'A\x7fB',
+                    'A\u0085B', 'A\u2028B', 'A\u2029B', 'A\u202eB', 'A\u2066B', 'A\ud800B']
+        malformed.extend({**valid, key: value} for key in valid for value in bad_text)
+        for source in (self.record, self.source()):
+            for description in malformed:
+                with self.subTest(schema=source.get('schema', 'legacy'), description=repr(description)):
+                    raw = copy.deepcopy(source)
+                    raw['reader_test'] = description
+                    path = self.write(raw)
+                    before = self.files()
+                    with self.assertRaisesRegex(ValueError, 'reader_test'):
+                        validate_record(self.root, path, {'lp2-15'})
+                    self.assertEqual(before, self.files())
+
+    def test_reader_test_counts_unicode_codepoints_without_rewriting_text(self):
+        description = {'input': '\U0001f50e' * 320, 'action': 'Count rune pairs.',
+                       'check': 'Compare the counts.'}
+        raw = self.source()
+        raw['reader_test'] = description
+        self.assertEqual(compile_content(raw)['reader_test'], description)
+        raw['reader_test']['input'] += '\U0001f50e'
+        with self.assertRaisesRegex(ValueError, 'reader_test.input'):
+            compile_content(raw)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -246,6 +246,11 @@
   &quot;id&quot;: &quot;alternating-alphabet-interruption-clocks&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Alternating alphabets with two interruption clocks&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;The first 12 runes, including headings, of the 55 rune-bearing pages from LP2-00 to LP2-55, plus two keys used in known readings.&quot;,
+    &quot;action&quot;: &quot;Switch between normal and reversed rune alphabets, testing whether F pauses just the key position or also pauses the switch to the other alphabet.&quot;,
+    &quot;check&quot;: &quot;A setting succeeds at this opening check only if its output matches all 12 runes at the start of one of nine fixed known readings.&quot;
+  },
   &quot;question&quot;: &quot;Do two known keys, alternating GP/reversed-GP cipher alphabets and either of two ciphertext-F pause rules recover a declared page opening?&quot;,
   &quot;reader_question&quot;: &quot;Could F pause the key, the alphabet, or both?&quot;,
   &quot;summary&quot;: &quot;Neither F-clock rule recovered a declared twelve-rune opening in 55 LP2 pages.&quot;,
@@ -23146,6 +23151,11 @@
   &quot;id&quot;: &quot;dukotah-payload-key-skip&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Number-grid bytes as a key with skipped positions&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;The runes on 55 pages from LP2-00 to LP2-55, excluding rune-free LP2-50, and two fixed readings of the LP2-49 to LP2-51 number grid, each containing 256 numbers.&quot;,
+    &quot;action&quot;: &quot;Use the grid numbers as a key in both orders and decoding directions, with optional alphabet reversal, allowing up to three key values to be skipped only when they would repeat the previous encrypted rune.&quot;,
+    &quot;check&quot;: &quot;A full-page output passes only if its score for English four-letter patterns exceeds the fixed threshold; planted known messages are also compared rune for rune.&quot;
+  },
   &quot;question&quot;: &quot;Do either pinned 256-byte LP2-49–51 grid reading, in either order, sign and Atbash orientation, yield a complete English-scoring LP2 page under the Campaign XVIII collision-constrained key-skip decoder?&quot;,
   &quot;reader_question&quot;: &quot;Could the number-grid bytes be a key whose positions sometimes get skipped?&quot;,
   &quot;summary&quot;: &quot;The exact published page search scores 880 fixed settings; none clears its −5.5 screen. The same decoder exactly recovers 16 of 16 planted complete known readings. The result concerns this byte-to-key rule and the executable source padding behavior.&quot;,
@@ -55294,6 +55304,11 @@
   &quot;title&quot;: &quot;LP2-00–55: prime row sums against shuffled pages&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;question&quot;: &quot;Do the archived row boundaries on LP2-00–55 produce more prime-valued Gematria Primus row sums than within-page rune shuffles?&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;Archived rune text on LP2-00–55, with each rune-bearing line, including headings, treated as one row.&quot;,
+    &quot;action&quot;: &quot;Add the usual prime value of every rune in each row, then count how many row totals are prime.&quot;,
+    &quot;check&quot;: &quot;Compare the combined count with 999 page-by-page rune shuffles that keep the original row lengths.&quot;
+  },
   &quot;summary&quot;: &quot;76 of 594 eligible row sums are prime. Of 999 shuffled datasets, 843 have at least as many; corrected one-sided p=0.844. No evidence of an excess under this model.&quot;,
   &quot;tags&quot;: [
     &quot;Gematria Primus&quot;,
@@ -58763,6 +58778,11 @@
   &quot;title&quot;: &quot;LP2-00–55: reverse runes within word-like segments&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;question&quot;: &quot;Does reversing runes within declared word-like segments recover any of nine known 12-rune openings on LP2-00–55?&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;Archived rune text on LP2-00–55, including headings, grouped using two declared rules for separators and line breaks.&quot;,
+    &quot;action&quot;: &quot;Reverse the runes inside each group while keeping the groups in their original order.&quot;,
+    &quot;check&quot;: &quot;Compare the first twelve output runes with nine fixed beginnings from already decoded passages.&quot;
+  },
   &quot;summary&quot;: &quot;Two explicit line-boundary conventions produce 110 distinct page outputs; none matches the nine fixed openings. Complete source-position traces are retained.&quot;,
   &quot;tags&quot;: [
     &quot;word reversal&quot;,
@@ -67664,6 +67684,11 @@
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   },
   &quot;title&quot;: &quot;Number-grid bytes as an encrypted message&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;Two fixed readings of the LP2-49 to LP2-51 number grid, converted into 256-rune sequences and treated as the encrypted message rather than as a key.&quot;,
+    &quot;action&quot;: &quot;Try twelve fixed 356-number keys in both decoding directions, with optional alphabet reversal and up to three key skips when they would repeat the previous encrypted rune.&quot;,
+    &quot;check&quot;: &quot;A complete 256-rune output passes the fixed English four-letter-pattern score threshold; known-message controls also require every recovered rune to match.&quot;
+  },
   &quot;question&quot;: &quot;Do the two source number-grid payload readings decode above the fixed English-score gate under the twelve finite source keys and conditional skips?&quot;,
   &quot;reader_question&quot;: &quot;Could the number-grid bytes be an encrypted message under these keys?&quot;,
   &quot;summary&quot;: &quot;None of 96 complete payload decodes passed the English-score threshold. The known-message controls recovered 137 of 144 readings despite all 144 passing scores; seven wrong outputs outranked retained correct readings.&quot;,
@@ -70332,7 +70357,7 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/lp2-word-reversal/record.json&quot;,
-        &quot;sha256&quot;: &quot;2be6dd9f756df1650f4680ab691b930c10678e299c7852e74ace45e39fe7791a&quot;
+        &quot;sha256&quot;: &quot;67bf6a3db110735d1b7d30fbe0d1742243f614ff9b6f84f3144f6757a0d05df9&quot;
       }
     ],
     &quot;outputs&quot;: [
@@ -93860,6 +93885,11 @@
   &quot;title&quot;: &quot;LP2: affine patterns across twelve distances&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;question&quot;: &quot;Does the strongest word-internal affine relation across distances one through twelve exceed a full shuffled-word search?&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;Archived rune text on LP2-00–55, with words ending at hyphens or periods and pages kept separate.&quot;,
+    &quot;action&quot;: &quot;Count matches for 841 alphabet-number rules at each of twelve distances inside words, then select the strongest score against a shuffled-word baseline.&quot;,
+    &quot;check&quot;: &quot;Repeat the entire search on 999 versions rearranged within words and compare their strongest scores with the original.&quot;
+  },
   &quot;summary&quot;: &quot;The strongest of 10,092 measured relations is a same-rune repeat five places apart: 102 matches versus 60.6 expected. Four of 999 complete shuffled-word searches reached its standardized score. The proposed six-rune formula is not the strongest.&quot;,
   &quot;tags&quot;: [
     &quot;affine relation&quot;,
@@ -94855,6 +94885,11 @@
   &quot;status&quot;: &quot;published&quot;,
   &quot;question&quot;: &quot;Does c′ = 24 − 2c (mod 29) recur unusually often six runes later inside visible words?&quot;,
   &quot;reader_question&quot;: &quot;When two runes are six places apart inside a word, do they follow a specific rule more often than we would expect by chance?&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;Archived rune text on LP2-00–55, with words ending at hyphens or periods and pages kept separate.&quot;,
+    &quot;action&quot;: &quot;Count how often a rune predicts the one six places later: subtract twice its alphabet position from 24, wrapping values into the 29-rune alphabet. Compare this with the other 840 multiply-and-add rules.&quot;,
+    &quot;check&quot;: &quot;Compare the counts with their shuffled-word averages and with the best rule from each of 2,000 versions rearranged within words.&quot;
+  },
   &quot;summary&quot;: &quot;The archived LP2-00–55 transcription has 77 matches in 1,267 word-internal opportunities. It leads 841 affine maps at lag six; three of 2,000 within-word shuffles reach its count after choosing the best map.&quot;,
   &quot;tags&quot;: [
     &quot;lag-six affine relation&quot;,
@@ -108205,6 +108240,11 @@
   &quot;id&quot;: &quot;wulfic-p21-running-key-layers&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;title&quot;: &quot;Deor and Emerson as running keys on ten pages&quot;,
+  &quot;reader_test&quot;: {
+    &quot;input&quot;: &quot;The runes on LP2-04 to LP2-13 and the archived texts of Deor and Emerson&#x27;s Self-Reliance.&quot;,
+    &quot;action&quot;: &quot;Turn the two texts into number keys and try sampled starting places, either directly or combined with each page&#x27;s assigned keyword.&quot;,
+    &quot;check&quot;: &quot;Keep only outputs that pass the program&#x27;s fixed test of how often two output runes agree, then rank those outputs by word-list matches.&quot;
+  },
   &quot;question&quot;: &quot;Do the archived Deor and Self-Reliance running-key or assigned-keyword-plus-running-key sweeps clear their own coincidence gate on LP2-04–13?&quot;,
   &quot;reader_question&quot;: &quot;Did those two texts work as keys for these pages?&quot;,
   &quot;summary&quot;: &quot;None of 24,639 source-defined settings passed the program’s normalized coincidence gate. The same gate recovered planted complete messages, including a later independent-key known-reading check.&quot;,

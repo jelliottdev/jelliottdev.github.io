@@ -168,3 +168,16 @@ the detailed findings. State the actual executed pages and what saving contribut
 A failed save retains local results and the retry action. Source questions and
 scientific limits remain available; never make a visitor judge significance before
 they can contribute a calculation.
+
+### Space for the map and readable test descriptions
+
+Keep Graph/List, contribution access and Filters in one compact row on phones.
+Default discovery shortcuts must not create extra rows above the graph. Show
+filter chips only for applied filters and omit the root-only breadcrumb; ancestor
+navigation remains visible inside branches. Keep controls at least 44px high.
+
+A recorded finding needs context: what the test used, what it changed, and what
+it checked. Author this once as reader_test in the canonical record and reuse it
+in the record page and map preview. It describes the original experiment, never
+a different prepared follow-up. Keep exact methods and bounds available; do not
+invent a simplified description when source-authored text is absent.

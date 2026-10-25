@@ -4,6 +4,11 @@
   "status": "published",
   "question": "Does c′ = 24 − 2c (mod 29) recur unusually often six runes later inside visible words?",
   "reader_question": "When two runes are six places apart inside a word, do they follow a specific rule more often than we would expect by chance?",
+  "reader_test": {
+    "input": "Archived rune text on LP2-00–55, with words ending at hyphens or periods and pages kept separate.",
+    "action": "Count how often a rune predicts the one six places later: subtract twice its alphabet position from 24, wrapping values into the 29-rune alphabet. Compare this with the other 840 multiply-and-add rules.",
+    "check": "Compare the counts with their shuffled-word averages and with the best rule from each of 2,000 versions rearranged within words."
+  },
   "summary": "The archived LP2-00–55 transcription has 77 matches in 1,267 word-internal opportunities. It leads 841 affine maps at lag six; three of 2,000 within-word shuffles reach its count after choosing the best map.",
   "tags": [
     "lag-six affine relation",

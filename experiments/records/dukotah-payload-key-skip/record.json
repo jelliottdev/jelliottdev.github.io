@@ -2,6 +2,11 @@
   "id": "dukotah-payload-key-skip",
   "status": "published",
   "title": "Number-grid bytes as a key with skipped positions",
+  "reader_test": {
+    "input": "The runes on 55 pages from LP2-00 to LP2-55, excluding rune-free LP2-50, and two fixed readings of the LP2-49 to LP2-51 number grid, each containing 256 numbers.",
+    "action": "Use the grid numbers as a key in both orders and decoding directions, with optional alphabet reversal, allowing up to three key values to be skipped only when they would repeat the previous encrypted rune.",
+    "check": "A full-page output passes only if its score for English four-letter patterns exceeds the fixed threshold; planted known messages are also compared rune for rune."
+  },
   "question": "Do either pinned 256-byte LP2-49–51 grid reading, in either order, sign and Atbash orientation, yield a complete English-scoring LP2 page under the Campaign XVIII collision-constrained key-skip decoder?",
   "reader_question": "Could the number-grid bytes be a key whose positions sometimes get skipped?",
   "summary": "The exact published page search scores 880 fixed settings; none clears its −5.5 screen. The same decoder exactly recovers 16 of 16 planted complete known readings. The result concerns this byte-to-key rule and the executable source padding behavior.",

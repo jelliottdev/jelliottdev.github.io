@@ -558,6 +558,7 @@ function experimentArticle(r,catalog=experimentRecords){
   return head(r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.reader_question||r.question)}</p>
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
+    ${globalThis.RecordTestView?.render(r,{headingLevel:2})||''}
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">What we found</h2><div class="experiment-finding">${findingHTML}</div>
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}${r.id==='parallel-language-blocks'?languageBlockFigure():''}
       ${r.reader_note?`<div class="experiment-meaning"><h3>What it means</h3><p>${esc(r.reader_note)}</p></div>`:''}

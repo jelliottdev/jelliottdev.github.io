@@ -3,6 +3,11 @@
   "status": "published",
   "record_type": "experiment",
   "title": "Number-grid bytes as an encrypted message",
+  "reader_test": {
+    "input": "Two fixed readings of the LP2-49 to LP2-51 number grid, converted into 256-rune sequences and treated as the encrypted message rather than as a key.",
+    "action": "Try twelve fixed 356-number keys in both decoding directions, with optional alphabet reversal and up to three key skips when they would repeat the previous encrypted rune.",
+    "check": "A complete 256-rune output passes the fixed English four-letter-pattern score threshold; known-message controls also require every recovered rune to match."
+  },
   "question": "Do the two source number-grid payload readings decode above the fixed English-score gate under the twelve finite source keys and conditional skips?",
   "reader_question": "Could the number-grid bytes be an encrypted message under these keys?",
   "summary": "None of 96 complete payload decodes passed the English-score threshold. The known-message controls recovered 137 of 144 readings despite all 144 passing scores; seven wrong outputs outranked retained correct readings.",

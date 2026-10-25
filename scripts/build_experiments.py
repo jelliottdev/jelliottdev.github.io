@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
                   'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
                   'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials', 'discovery',
-                  'recorded_comparison', 'research_questions')
+                  'recorded_comparison', 'research_questions', 'reader_test')
 
 
 def checker_payload(records, registry_bytes):

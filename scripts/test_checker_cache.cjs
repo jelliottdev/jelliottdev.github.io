@@ -1,7 +1,7 @@
 /* Cold checker, warm details, malformed artifacts and retry must stay separate. */
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.join(__dirname,'..'),full=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json')));
-const fields=['id','status','title','question','summary','tags','record_type','family','variant','scope','outcome','finding','limitations','article','method_topics','reader_finding','reader_limit','materials'];
+const fields=['id','status','title','question','summary','tags','record_type','family','variant','scope','outcome','finding','limitations','article','method_topics','reader_finding','reader_limit','reader_test','materials'];
 const compact={schema:'liberpedia-checker-records-v1',registry_sha256:'a'.repeat(64),records:full.records.slice(0,2).map(record=>Object.fromEntries(fields.filter(k=>Object.hasOwn(record,k)).map(k=>[k,record[k]])))};
 const source=fs.readFileSync(path.join(root,'experiments.js'),'utf8');
 const make=()=>{const context={};vm.createContext(context);vm.runInContext(source,context);return context};

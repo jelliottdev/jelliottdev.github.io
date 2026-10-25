@@ -6,11 +6,24 @@ are derived views; this module never writes files or executes experiments.
 import copy
 import json
 import re
+import unicodedata
 
 SCHEMA = 'liberpedia-experiment-v2'
 DERIVED = {'summary', 'finding', 'limitations', 'next_steps', 'reader_finding',
            'reader_limit', 'reader_question', 'article', 'article_path', 'reader_sections',
            'record_type', 'method_topics', 'script_sha256', 'article_links'}
+
+
+def validate_reader_test(value):
+    """Validate authored description without interpreting or deriving a method."""
+    if not isinstance(value, dict) or set(value) != {'input', 'action', 'check'}:
+        raise ValueError('reader_test needs input, action and check only')
+    for name, sentence in value.items():
+        if (not isinstance(sentence, str) or not sentence or sentence != sentence.strip()
+                or len(sentence) > 320 or re.search(r'[<>]', sentence)
+                or any(unicodedata.category(char) in {'Cc', 'Cf', 'Cs', 'Zl', 'Zp'}
+                       for char in sentence)):
+            raise ValueError('reader_test.' + name + ' needs one plain trimmed paragraph of at most 320 characters')
 
 
 def article_bytes(raw):
@@ -25,6 +38,8 @@ def article_bytes(raw):
 
 def compile_content(raw):
     record = copy.deepcopy(raw)
+    if 'reader_test' in record:
+        validate_reader_test(record['reader_test'])
     if 'schema' not in record:
         return record
     if record['schema'] != SCHEMA:
