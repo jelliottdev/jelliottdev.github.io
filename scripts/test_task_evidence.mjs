@@ -3,6 +3,8 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync,readdirSync} from 'node:fs';
 import L from '../local-experiment.js';
 import {findEvidence,rememberEvidence,readIdeaEvidence,checkedEvidence} from '../services/idea-assistant/task-evidence.mjs';
+import Family from '../research-family.js';
+import {readFamilyEvidence} from '../services/idea-assistant/family-evidence.mjs';
 
 const at='2026-10-24T12:00:00.000Z',alphabet=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import.meta.url),'utf8')).alphabet;
 const digest=async value=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(L.stable(value))))].map(n=>n.toString(16).padStart(2,'0')).join('');
@@ -25,6 +27,12 @@ async function source(f,t,{published=true,version='raw',associationVersion=versi
  let run=null;if(result){const output=L.run(t),resultJson=L.stable(output),resultId=await digest(output);f.sqlite.prepare('INSERT OR IGNORE INTO local_task_results VALUES(?,?,?,?,?)').run(resultId,t.taskId,resultJson,date,date.slice(0,10));run={id:resultId,result:output};}
  return {id,task:t,run};
 }
+async function familySource(f,{page='lp2-00',bundle=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import.meta.url),'utf8')),date=at}={}){
+ const preparer=await Family.createPreparer(bundle),caseId='plaintext-autokey--subtract--word--'+page,plan=await preparer.prepare([caseId]),item=plan.cases[0],result=L.run(item.task),resultId=await digest(result);
+ f.sqlite.prepare('INSERT INTO family_case_results VALUES(?,?,?,?,?,?,?,?,?,?)').run(plan.familyId,plan.revision,item.id,item.task.taskId,L.stable(item.task),resultId,L.stable(result),Number(result.matches[0].matched),date,date.slice(0,10));
+ return {plan,item,result,resultId,bundle};
+}
+async function familyRequest(source,{pages=source.item.task.pages,steps=source.item.task.steps,criterion=source.item.task.criterion}={}){return L.prepare({title:'Independent generic wording',pages,alphabet:source.item.task.alphabet,steps,criterion});}
 async function inspect(f,t,version='raw'){
  const original=L.run,verify=L.verify,before=f.sqlite.prepare('SELECT total_changes() n').get().n;
  L.run=()=>{throw Error('Evidence discovery must not execute a target');};L.verify=async()=>{throw Error('Evidence discovery must not replay a target');};
@@ -67,7 +75,7 @@ await test('bounded candidate discovery reports truncation and deterministically
 });
 await test('protocol expression index covers historical immutable rows without backfill',async()=>{
  const f=fixture(),t=await task();await source(f,t);const before=f.sqlite.prepare('SELECT task_json,task_hash,id FROM local_tasks').all();await inspect(f,t);
- const lookup=f.queries.at(-1),plan=f.sqlite.prepare('EXPLAIN QUERY PLAN '+lookup).all('raw',t.engine,L.stable(t.alphabet),L.stable(t.steps),L.stable(t.criterion),'raw');assert(plan.some(row=>String(row.detail).includes('local_tasks_protocol_lookup')));assert.deepEqual(f.sqlite.prepare('SELECT task_json,task_hash,id FROM local_tasks').all(),before);
+ const lookup=f.queries.findLast(sql=>sql.includes('FROM local_tasks t JOIN local_task_results')),plan=f.sqlite.prepare('EXPLAIN QUERY PLAN '+lookup).all('raw',t.engine,L.stable(t.alphabet),L.stable(t.steps),L.stable(t.criterion),'raw');assert(plan.some(row=>String(row.detail).includes('local_tasks_protocol_lookup')));assert.deepEqual(f.sqlite.prepare('SELECT task_json,task_hash,id FROM local_tasks').all(),before);
 });
 await test('frozen requested computation survives reload while coverage is derived afresh',async()=>{
  const f=fixture(),t=await task(),idea=await source(f,await task({title:'Unrun idea anchor'}),{result:false});f.setWrites(true);
@@ -91,6 +99,45 @@ await test('pinned immutable evidence remains valid when newer candidates appear
   f.sqlite.prepare('INSERT INTO local_task_results VALUES(?,?,?,?,?)').run('0'.repeat(64),saved.task.taskId,'{}','2026-10-25T12:00:00.000Z','2026-10-25');assert.deepEqual((await checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:proof})).coveredPages,checked.coveredPages);
   for(const mutate of [p=>{p[0].pages=['lp2-03'];},p=>{p[0].createdAt='2026-10-25T12:00:00.000Z';},p=>{p[0].resultId='f'.repeat(64);},p=>{p.push(p[0]);}]){const altered=structuredClone(proof);mutate(altered);await assert.rejects(()=>checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:altered}));}
   f.sqlite.prepare('DELETE FROM research_ideas WHERE proposal_id=?').run(saved.id);await assert.rejects(()=>checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:proof}));
+ }finally{L.run=original;L.verify=verify;}
+});
+await test('generic discovery consumes family receipts without copying tasks or fabricating public ideas',async()=>{
+ const f=fixture(),saved=await familySource(f),t=await familyRequest(saved),coverage=await inspect(f,t);
+ assert.deepEqual(coverage.coveredPages,['lp2-00']);assert.deepEqual(coverage.remainingPages,[]);assert.equal(coverage.exactTaskId,saved.item.task.taskId);assert.deepEqual(coverage.familySources,[{taskId:saved.item.task.taskId,familyId:saved.plan.familyId,revision:saved.plan.revision,caseId:saved.item.id}]);assert.equal(coverage.evidence[0].resultId,saved.resultId);
+ assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM proposals').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
+ assert.deepEqual((await checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:coverage.evidence})).coveredPages,['lp2-00']);
+ const lookup=f.queries.findLast(sql=>sql.includes('SELECT saved.* FROM family_case_results')),query=f.sqlite.prepare('EXPLAIN QUERY PLAN '+lookup).all('deor-feedback-v1',t.engine,L.stable(t.alphabet),L.stable(t.steps),L.stable(t.criterion),L.stable(t.pages));assert(query.some(row=>String(row.detail).includes('family_case_protocol_lookup')));
+});
+await test('mixed stores union exact pages, preserve family routing and refresh frozen idea coverage',async()=>{
+ const f=fixture(),saved=await familySource(f),pages=['lp2-00','lp2-01','lp2-02'].map(id=>({id,text:saved.bundle.pages.find(p=>p.id===id).raw})),t=await familyRequest(saved,{pages});
+ const generic=await source(f,await familyRequest(saved,{pages:[pages[1]]}));const coverage=await inspect(f,t);assert.deepEqual(coverage.coveredPages,['lp2-00','lp2-01']);assert.deepEqual(coverage.remainingPages,['lp2-02']);assert.equal(coverage.evidence.length,2);assert.equal(coverage.familySources.length,1);assert(!coverage.familySources.some(ref=>ref.taskId===generic.task.taskId));
+ assert.deepEqual((await checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:coverage.evidence})).evidence,coverage.evidence);
+ f.setWrites(true);await rememberEvidence({db:f.db,proposalId:generic.id,task:t,inputVersion:'raw',coverage,createdAt:at});f.setWrites(false);
+ assert.deepEqual((await readIdeaEvidence({db:f.db,proposalId:generic.id})).familySources,coverage.familySources);
+ await familySource(f,{page:'lp2-02'});const refreshed=await readIdeaEvidence({db:f.db,proposalId:generic.id});assert.deepEqual(refreshed.remainingPages,[]);assert.equal(refreshed.familySources.length,2);
+});
+await test('family evidence cannot cover changed rules, changed page bytes or reviewed source context',async()=>{
+ const f=fixture(),saved=await familySource(f),normal=await familyRequest(saved);
+ for(const changed of [await familyRequest(saved,{pages:[{...normal.pages[0],text:normal.pages[0].text+'ᚠ'}]}),await familyRequest(saved,{steps:[{...normal.steps[0],reset:'line'}]}),await familyRequest(saved,{criterion:{kind:'measurement'}}),await familyRequest(saved,{steps:[{...normal.steps[0],key:[1,2,3,4]}]})]){const coverage=await inspect(f,changed);assert.deepEqual(coverage.coveredPages,[]);assert(!Object.hasOwn(coverage,'familySources'));}
+ assert.deepEqual((await inspect(f,normal,'reviewed')).coveredPages,[]);
+ const privateSource=await source(f,normal,{published:false});const coverage=await inspect(f,normal);assert.equal(coverage.evidence.length,1);assert.equal(coverage.evidence[0].taskId,saved.item.task.taskId);assert(!JSON.stringify(coverage).includes(privateSource.id));
+});
+await test('family case, result and verdict corruption fails closed across discovery and pinned checks',async()=>{
+ for(const mutation of ['result','case','task','verdict']){
+  const f=fixture(),saved=await familySource(f),t=await familyRequest(saved),proof=(await inspect(f,t)).evidence;
+  if(mutation==='result')f.sqlite.prepare('UPDATE family_case_results SET result_json=?').run('{}');
+  if(mutation==='case')f.sqlite.prepare('UPDATE family_case_results SET case_id=?').run('plaintext-autokey--subtract--line--lp2-00');
+  if(mutation==='task')f.sqlite.prepare('UPDATE family_case_results SET task_id=?').run('0'.repeat(64));
+  if(mutation==='verdict')f.sqlite.prepare('UPDATE family_case_results SET matched=1-matched').run();
+  await assert.rejects(()=>inspect(f,t));await assert.rejects(()=>checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:proof}));
+ }
+});
+await test('historical family revisions remain readable and pinned receipts survive newer equivalent rows',async()=>{
+ const f=fixture(),first=await familySource(f),t=await familyRequest(first),proof=(await inspect(f,t)).evidence;
+ const next=structuredClone(first.bundle);next.pages.find(p=>p.id==='lp2-01').raw+='ᚠ';const second=await familySource(f,{bundle:next,date:'2026-10-25T12:00:00.000Z'});assert.notEqual(second.plan.revision,first.plan.revision);assert.equal(second.item.task.taskId,first.item.task.taskId);
+ const original=L.run,verify=L.verify;L.run=()=>{throw Error('No target decode');};L.verify=async()=>{throw Error('No target replay');};
+ try{const old=await readFamilyEvidence({db:f.db,familyId:first.plan.familyId,revision:first.plan.revision,caseId:first.item.id,taskId:first.item.task.taskId,resultId:first.resultId});assert.equal(old.source.run.createdAt,at);assert.deepEqual(old.source.run.result,first.result);assert.deepEqual((await checkedEvidence({db:f.db,task:t,inputVersion:'raw',evidence:proof})).evidence,proof);
+  const newest=await inspect(f,t);assert.equal(newest.familySources[0].revision,second.plan.revision);assert.equal(newest.evidence[0].createdAt,'2026-10-25T12:00:00.000Z');assert.equal(await readFamilyEvidence({db:f.db,familyId:first.plan.familyId,revision:'f'.repeat(64),caseId:first.item.id}),null);
  }finally{L.run=original;L.verify=verify;}
 });
 console.log('Task evidence discovery: '+groups+' groups passed');

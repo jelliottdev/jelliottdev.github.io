@@ -3,6 +3,8 @@ import F from '../../research-family.js';
 import L from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
 import {loadInputBundle} from './official-inputs.mjs';
+import {readFamilyEvidence} from './family-evidence.mjs';
+import {sharedFamilyCoverage,readSharedFamilyCase} from './family-shared-coverage.mjs';
 
 const FAMILY='deor-feedback-v1',MAX_BODY=2*1024*1024;
 const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
@@ -31,7 +33,9 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
   if(request.headers.get('origin')!==env.SITE_ORIGIN)return reply({error:'Request is not allowed.'},403);
   headers['Access-Control-Allow-Origin']=env.SITE_ORIGIN;
   const url=new URL(request.url),match=url.pathname.match(/^\/families\/deor-feedback-v1(?:\/(prepare|results)|\/cases\/([^/]+))?$/),action=match?.[2]?'case':match?.[1]||'snapshot';
-  if(!match||url.search)return reply({error:'Not found.'},404);
+  if(!match)return reply({error:'Not found.'},404);
+  const revision=url.searchParams.get('revision');
+  if(url.search&&(action!=='case'||[...url.searchParams.keys()].length!==1||!/^[a-f0-9]{64}$/.test(revision||'')))return reply({error:'Not found.'},404);
   let caseId=null;if(action==='case')try{caseId=decodeURIComponent(match[2]);if(caseId.length>200)throw Error();}catch{return reply({error:'Case not found.'},404);}
   const method=['snapshot','case'].includes(action)?'GET':'POST';
   if(request.method==='OPTIONS'){
@@ -47,6 +51,10 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
   try{
    if(!(await env.TASK_LIMIT.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);
    const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args);
+   if(action==='case'&&revision){
+    const pinned=await readFamilyEvidence({db,familyId:FAMILY,revision,caseId});
+    if(pinned){const {source}=pinned;return reply({familyId:FAMILY,revision,caseId,task:source.task,result:source.run.result,resultId:source.run.id,verifiedAt:source.run.createdAt});}
+   }
    const controller=new AbortController(),cancel=()=>controller.abort(),timer=setTimeout(()=>controller.abort(),timeoutMs);request.signal.addEventListener('abort',cancel,{once:true});let bundle;
    try{const parsed=await loadInputBundle({fetcher,signal:controller.signal,read:readJSON});bundle={schema:'liberpedia-local-inputs-v1',alphabet:parsed.alphabet,pages:[...parsed.pages.values()]};}
    catch{return reply({error:'The official manuscript inputs could not be loaded.'},422);}finally{clearTimeout(timer);request.signal.removeEventListener('abort',cancel);}
@@ -55,9 +63,14 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
    // case hashes only its own task, never all 75 source pages again.
    const preparer=await F.createPreparer(bundle),snapshot=preparer.snapshot,ids=new Set(F.caseIds(snapshot));
    if(action==='case'){
+    if(revision&&revision!==snapshot.revision)return reply({error:'No verified result has been saved for this case and input snapshot.'},404);
     if(!ids.has(caseId))return reply({error:'Case not found.'},404);
     const row=await query('SELECT * FROM family_case_results WHERE family_id=? AND revision=? AND case_id=?',FAMILY,snapshot.revision,caseId).first();
-    if(!row)return reply({error:'No verified result has been saved for this case.'},404);
+    if(!row){
+     const shared=await readSharedFamilyCase({db,preparer,caseId});
+     if(!shared)return reply({error:'No verified result has been saved for this case.'},404);
+     return reply({familyId:FAMILY,revision:snapshot.revision,caseId,source:shared.source});
+    }
     const task=(await preparer.prepare([caseId])).cases[0].task,result=await storedEvidence(row,task);
     return reply({familyId:FAMILY,revision:snapshot.revision,caseId,task,result,resultId:row.result_hash,verifiedAt:row.created_at});
    }
@@ -76,11 +89,17 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
      await storedEvidence(row,expectedTasks.get(row.case_id));
      completed.push(row.case_id);if(row.matched)matched.push(row.case_id);
     }
-    return reply({family:snapshot,coverage:{completed,matched}});
+    const shared=await sharedFamilyCoverage({db,preparer});
+    for(const id of shared.completed){if(seen.has(id)&&matched.includes(id)!==shared.matched.includes(id))throw Error('Conflicting saved family coverage');if(!seen.has(id)){completed.push(id);if(shared.matched.includes(id))matched.push(id);}}
+    return reply({family:snapshot,coverage:{completed:completed.sort(),matched:matched.sort()}});
    }
    if(action==='prepare'){
     if(body.revision!==snapshot.revision)return reply({error:'The family inputs changed. Reload the family before preparing work.'},409);
     let plan;try{plan=await preparer.prepare(body.caseIds);}catch{return reply({error:'Choose one to twelve distinct supported cases.'},400);}
+    const savedRows=(await query('SELECT case_id FROM family_case_results WHERE family_id=? AND revision=?',FAMILY,snapshot.revision).all()).results;
+    if(!Array.isArray(savedRows))throw Error('Saved coverage unavailable');
+    const shared=await sharedFamilyCoverage({db,preparer}),covered=new Set([...savedRows.map(row=>row.case_id),...shared.completed]);
+    if(plan.cases.some(item=>covered.has(item.id)))return reply({error:'Some of these cases already have saved results. Reload the family to choose the remaining pages.'},409);
     const controls=[];for(const item of plan.cases)controls.push({caseId:item.id,suite:await Controls.prepare(item.task)});
     return reply({plan,controls});
    }

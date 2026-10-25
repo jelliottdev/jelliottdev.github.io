@@ -10,7 +10,7 @@ import {createCommunityFeedHandler} from './community-feed.mjs';
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture({relation=true}={}){
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql',...(relation?['0006_task_ideas.sql']:[]),'0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql',...(relation?['0006_task_ideas.sql']:[]),'0010_family_case_results.sql','0011_task_protocol_lookup.sql','0012_family_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  const db={sqlite,queries:[],projected:[],fail:false,prepare(sql){
   assert.match(sql,/^\s*(?:SELECT|WITH)\b/i,'Feed must never issue a write');db.queries.push(sql);
   return {bind(...args){return {all:async()=>{if(db.fail)throw Error('PRIVATE SQL failure');const results=sqlite.prepare(sql).all(...args);db.projected.push(...results);return {results};}};}};
@@ -33,6 +33,12 @@ async function task(f,p,index,{verified=false,associateTask=true,changes={},inpu
  f.db.sqlite.prepare('INSERT INTO local_tasks(id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?,?,?,?,?)').run(plan.taskId,await digest(text),'0'.repeat(64),p.id,p.cardJson,text,inputVersion,null,at,at.slice(0,10));
  if(associateTask)associate(f,p,plan,at,inputVersion);
  if(verified){const result=L.stable(await L.verify(plan,L.run(plan)));f.db.sqlite.prepare('INSERT INTO local_task_results(id,task_id,result_json,created_at,created_day) VALUES(?,?,?,?,?)').run(await digest(result),plan.taskId,result,at,at.slice(0,10));}
+ return plan;
+}
+async function familyResult(f,index,{familyId='deor-feedback-v1'}={}){
+ const plan=await L.prepare({title:'Fixed family source '+index,alphabet:Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2})),pages:[{id:'lp2-15',text:'ᚠᚢᚦ'}],steps:[{op:'keyed-shift',key:[23,18,3,4],mode:'plaintext-autokey',direction:'subtract',reset:'page'}],criterion:{kind:'exact-prefix',values:[24,7,24,4,9,21,17,18,20,10,18,1]}});
+ const result=L.stable(await L.verify(plan,L.run(plan))),revision=await digest('family snapshot '+index);
+ f.db.sqlite.prepare('INSERT INTO family_case_results(family_id,revision,case_id,task_id,task_json,result_hash,result_json,matched,created_at,created_day) VALUES(?,?,?,?,?,?,?,?,?,?)').run(familyId,revision,'plaintext-autokey--subtract--page--lp2-15',plan.taskId,L.stable(plan),await digest(result),result,Number(L.run(plan).matches[0].matched),at,at.slice(0,10));
  return plan;
 }
 function associate(f,p,plan,createdAt=at,inputVersion='raw'){f.db.sqlite.prepare('INSERT INTO local_task_ideas(task_id,proposal_id,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?)').run(plan.taskId,p.id,inputVersion,null,createdAt,createdAt.slice(0,10));}
@@ -101,6 +107,21 @@ await test('shared status requires exact bytes/criterion/version and a public ac
   const entry=(await view(f)).entries.find(e=>e.id===other.id);assert(!Object.hasOwn(entry,'hasSharedComputation'),variation);
  }
 });
+await test('family accepted evidence sets only shared status, using the family protocol index and no copied tasks',async()=>{
+ const f=fixture(),p=await idea(f,'family-related',{aim:'measure a pattern'}),source=await familyResult(f,'related'),requested=await L.prepare({...source,title:'A separate question using the same calculation',pages:[...source.pages,{id:'lp2-16',text:'ᚩᚱ'}]});await cacheRequest(f,p,requested);
+ const before=f.db.sqlite.prepare('SELECT total_changes() n').get().n,entry=(await view(f)).entries[0];assert.equal(entry.hasSharedComputation,true);assert.equal(entry.taskCount,0);assert.equal(entry.verifiedTaskCount,0);assert.deepEqual(entry.tasks,[]);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas').get().n,0);assert.equal(f.db.sqlite.prepare('SELECT total_changes() n').get().n,before);assert.equal(f.db.queries.length,2);assert(!JSON.stringify(entry).includes(source.taskId));
+ assert(f.db.projected.every(row=>!Object.hasOwn(row,'task_json')&&!Object.hasOwn(row,'requested_task_json')&&!Object.hasOwn(row,'result_json')));
+ const explain=f.db.sqlite.prepare('EXPLAIN QUERY PLAN '+f.db.queries[0]).all();assert(explain.some(row=>row.detail.includes('family_case_protocol_lookup')),'Family discovery must use migration12 expression index');
+});
+await test('family shared status requires a supported raw source with exact engine, alphabet, steps, criterion and page bytes',async()=>{
+ for(const variation of ['text','page','criterion','steps','alphabet','engine','reviewed','unsupported-family','no-result']){
+  const f=fixture(),p=await idea(f,'family-'+variation),source=await familyResult(f,variation,{familyId:variation==='unsupported-family'?'another-family':'deor-feedback-v1'}),changes={title:'Requested family variation '+variation};
+  if(variation==='text')changes.pages=[{id:'lp2-15',text:'ᚠᚢᚦ '}];if(variation==='page')changes.pages=[{id:'lp2-16',text:'ᚠᚢᚦ'}];if(variation==='criterion')changes.criterion={kind:'measurement'};if(variation==='steps')changes.steps=[{...source.steps[0],reset:'line'}];if(variation==='alphabet')changes.alphabet=source.alphabet.slice().reverse();
+  if(variation==='engine')f.db.sqlite.prepare('UPDATE family_case_results SET task_json=?').run(L.stable({...source,engine:'another-engine'}));if(variation==='no-result')f.db.sqlite.exec('DELETE FROM family_case_results');
+  await cacheRequest(f,p,await L.prepare({...source,...changes}),{inputVersion:variation==='reviewed'?'reviewed':'raw'});
+  const entry=(await view(f)).entries[0];assert(!Object.hasOwn(entry,'hasSharedComputation'),variation);assert.equal(entry.taskCount,0);assert.equal(entry.verifiedTaskCount,0);
+ }
+});
 await test('shared projection follows latest frozen request and notices later accepted results',async()=>{
  const f=fixture(),owner=await idea(f,'latest-owner'),other=await idea(f,'latest-other'),source=await task(f,owner,190),matching=await L.prepare({...source,title:'Initial matching request'});await cacheRequest(f,other,matching);
  assert(!Object.hasOwn((await view(f)).entries.find(e=>e.id===other.id),'hasSharedComputation'));
@@ -160,4 +181,4 @@ await test('corrupt cards, task identities/titles and SQL failures fail closed w
   const f=fixture(),p=await idea(f,4);await mutate(f,p);const response=await f.handle(request(),f.env);assert.equal(response.status,503);const body=await response.json();assert(!JSON.stringify(body).includes('PRIVATE'));assert(!Object.hasOwn(body,'entries'));
  }
 });
-console.log('PASS '+groups+' community feed groups: SQLite migrations1–6 and11; read-only indexed shared metadata; no network/model/deploy.');
+console.log('PASS '+groups+' community feed groups: SQLite migrations1–6 and10–12; read-only indexed shared metadata; no network/model/deploy.');

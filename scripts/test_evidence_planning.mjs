@@ -12,6 +12,7 @@ import {createCommunityIdeaHandler} from '../services/idea-assistant/community-i
 import {createCommunityFeedHandler} from '../services/idea-assistant/community-feed.mjs';
 import {issue} from '../services/idea-assistant/prepared-plans.mjs';
 import Controls from '../local-plan-controls.js';
+import Family from '../research-family.js';
 const origin='https://jelliottdev.github.io',at='2026-10-25T12:00:00.000Z',sha=v=>createHash('sha256').update(L.stable(v)).digest('hex');
 const alphabet=JSON.parse(readFileSync(new URL('../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']}),criterion={kind:'exact-prefix',values:[28,28]};
@@ -24,8 +25,8 @@ function fixture(){
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async()=>({success:true})},AI:{run(){throw Error('No model during exact reuse');}}};
  return {sqlite,db,raw,env,prepare:createPrepareTaskHandler({fetcher,now:()=>new Date(at)}),tasks:createLocalTaskHandler({fetcher,now:()=>new Date(at)}),ideas:createCommunityIdeaHandler({now:()=>new Date(at)}),feed:createCommunityFeedHandler()};
 }
-function idea(f,pages,aim='Solve LP2',evaluation=criterion,publish=true){
- const card=H.cardData(C.confirm(C.createDraft({source:{text:'Original wording stays outside the computation identity'},aim:known(aim),method:known({operations:[{id:'reverse_runes',label:'Reverse rune order within each word',unit:'word'}]}),scope:known({pages}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(evaluation)}}),{id:'fixture',at})),hash=sha(card),id='p_'+hash;
+function idea(f,pages,aim='Solve LP2',evaluation=criterion,publish=true,operations=[{id:'reverse_runes',label:'Reverse rune order within each word',unit:'word'}]){
+ const card=H.cardData(C.confirm(C.createDraft({source:{text:'Original wording stays outside the computation identity'},aim:known(aim),method:known({operations}),scope:known({pages}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(evaluation)}}),{id:'fixture',at})),hash=sha(card),id='p_'+hash;
  f.sqlite.prepare('INSERT OR IGNORE INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,hash,L.stable(card),'fixture',at);
  if(publish)f.sqlite.prepare('INSERT OR IGNORE INTO research_ideas VALUES(?,?,?)').run(id,at,at.slice(0,10));return {id,card};
 }
@@ -81,6 +82,18 @@ await test('a forged evidence basis cannot remove an untested page or change its
  const args={db:f.db,proposalId:incoming.id,card:incoming.card,task:originalTask,inputVersion:'raw',parentTaskId:null,controls,authority:'idea',createdAt:at};
  const bad=structuredClone(basis);bad.evidence[0].pages=['lp2-02'];await assert.rejects(issue({...args,basis:bad}));
  const changed=await L.prepare({...originalTask,steps:[{op:'affine',a:1,b:1}]});await assert.rejects(issue({...args,task:changed,controls:await Controls.prepare(changed),basis}));
+});
+await test('family evidence authorizes only the missing idea pages and keeps original receipts',async()=>{
+ const f=fixture(),bundle=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import.meta.url),'utf8'));for(const page of bundle.pages)if(f.raw.has(page.id))page.raw=f.raw.get(page.id);
+ const warning={kind:'exact-prefix',values:[24,7,24,4,9,21,17,18,20,10,18,1]},operation={id:'vigenere',label:'Vigenere',key:[23,18,3,4],direction:'subtract',reset:'page'},incoming=idea(f,['lp2-01','lp2-02'],'Solve LP2',warning,true,[operation]);
+ const family=await Family.prepare(bundle,['repeat--subtract--page--lp2-01']),item=family.cases[0],result=L.run(item.task);
+ f.sqlite.prepare('INSERT INTO family_case_results VALUES(?,?,?,?,?,?,?,?,?,?)').run(family.familyId,family.revision,item.id,item.task.taskId,L.stable(item.task),sha(result),L.stable(result),Number(result.matches[0].matched),at,at.slice(0,10));
+ const plan=await prepare(f,incoming);assert.equal(plan.state,'plan-ready');assert.deepEqual(plan.task.pages.map(p=>p.id),['lp2-02']);assert.equal(plan.coverage.familySources[0].caseId,item.id);assert.deepEqual(plan.coverage.coveredPages,['lp2-01']);
+ const created=await call(f,'tasks','/tasks',{proposalId:incoming.id,task:plan.task,inputVersion:plan.inputVersion,parentTaskId:null,preparationId:plan.preparation.id});
+ await call(f,'tasks','/tasks/'+created.id+'/results',{result:L.run(plan.task)});
+ const all=await prepare(f,incoming);assert.equal(all.state,'scope-covered');assert.deepEqual(all.coverage.remainingPages,[]);assert.equal(all.coverage.evidence.length,2);assert.equal(all.coverage.familySources.length,1);
+ assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,1);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM family_case_results').get().n,1);
+ const reload=await call(f,'ideas','/ideas/'+incoming.id);assert.deepEqual(reload.coverage.familySources,all.coverage.familySources);assert.equal(reload.tasks.length,1);
 });
 await test('different bytes or success criteria retain genuinely new work; private sources never count',async()=>{
  const f=fixture(),old=idea(f,['lp2-01'],'Measure rune frequencies'),incoming=idea(f,['lp2-01']);await seed(f,old,['lp2-01'],'Original bytes');f.raw.set('lp2-01',f.raw.get('lp2-01')+alphabet[10].rune);

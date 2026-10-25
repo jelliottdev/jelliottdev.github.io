@@ -18,6 +18,18 @@ async function fixture({saveError=false,readError=false,runner,wrongPreparedCase
  let clicked,focused=false,prevented=false;require('../run.js').bindSkip({querySelector(){return {addEventListener(type,fn){assert.equal(type,'click');clicked=fn;}};},getElementById(){return {focus(){focused=true;},scrollIntoView(){}};}});clicked({preventDefault(){prevented=true;}});assert(focused&&prevented,'skip link must preserve route hash');
  const snapshot=await F.snapshot(bundle,webcrypto),ids=F.caseIds(snapshot),configuration=snapshot.configurations[0].id;
  assert(UI.route('#family=deor-feedback-v1'));assert(!UI.route('#family=other'));
+ const caseId=ids[0],plan=await F.prepare(bundle,[caseId],webcrypto),caseTask=plan.cases[0].task,result=E.run(caseTask),digest=async r=>Buffer.from(await webcrypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(r)))).toString('hex');
+ const pinnedRoute='#family=deor-feedback-v1&case='+caseId+'&revision='+snapshot.revision;
+ assert(UI.route(pinnedRoute));assert(!UI.route(pinnedRoute+'&revision='+snapshot.revision));assert(!UI.route('#family=deor-feedback-v1&case=bad'));assert(!UI.route('#family=deor-feedback-v1&revision='+snapshot.revision));assert(!UI.route('#family=deor-feedback-v1&unknown=yes'));
+ const receipt={familyId:snapshot.id,revision:snapshot.revision,caseId,task:caseTask,result,resultId:await digest(result),verifiedAt:'2026-10-24T12:00:00.000Z'};
+ const checked=await UI.checkedSavedCase(receipt,{caseId,revision:snapshot.revision,bundle,crypto:webcrypto});assert.equal(checked.sourceTaskId,null);assert.equal(checked.output.text,result.transformed[0].text);
+ const historical={...receipt,revision:'1'.repeat(64)};await UI.checkedSavedCase(historical,{caseId,revision:historical.revision,bundle,crypto:webcrypto});
+ const originalTask=await E.prepare({...caseTask,title:'Original independent experiment',pages:[caseTask.pages[0],{id:'lp2-01',text:bundle.pages.find(p=>p.id==='lp2-01').raw}]},webcrypto),originalResult=E.run(originalTask),source={task:originalTask,inputVersion:'raw',run:{id:await digest(originalResult),createdAt:receipt.verifiedAt,result:originalResult}},sharedReceipt={familyId:snapshot.id,revision:snapshot.revision,caseId,source};
+ const shared=await UI.checkedSavedCase(sharedReceipt,{caseId,revision:snapshot.revision,bundle,crypto:webcrypto});assert.equal(shared.sourceTaskId,originalTask.taskId);assert.equal(shared.output.text,result.transformed[0].text);assert.equal(shared.matched,result.matches[0].matched);
+ const changed=structuredClone(sharedReceipt);changed.source.run.result.metrics.runes++;await assert.rejects(UI.checkedSavedCase(changed,{caseId,revision:snapshot.revision,bundle,crypto:webcrypto}));
+ await assert.rejects(UI.checkedSavedCase({...sharedReceipt,source:{...source,inputVersion:'reviewed'}},{caseId,revision:snapshot.revision,bundle,crypto:webcrypto}));
+ await assert.rejects(UI.checkedSavedCase(receipt,{caseId,revision:'0'.repeat(64),bundle,crypto:webcrypto}));
+
  assert.throws(()=>UI.coverage({completed:[ids[0],ids[0]],matched:[]},snapshot));assert.throws(()=>UI.coverage({completed:[],matched:[ids[0]]},snapshot));assert.throws(()=>UI.coverage({completed:['unknown'],matched:[]},snapshot));
  const all=F.caseIds(snapshot).filter(id=>id.startsWith(configuration+'--'));assert.equal(UI.nextCases(snapshot,{completed:[]},configuration).length,12);assert.equal(UI.nextCases(snapshot,{completed:all},configuration).length,0);
  const f=await fixture();assert(f.doc.getElementById('task-workspace').innerHTML.includes('0 of 990'));assert.equal(f.requests.filter(r=>r.init.method==='POST').length,0);

@@ -27,10 +27,16 @@ save nothing. Duplicate submissions are idempotent. The server checks returned
 calculations, not proof that a particular device physically performed them.
 
 GET coverage checks saved task/result identities, full result digests and
-prefix witnesses without re-executing targets. GET case evidence returns the
-complete saved task, result and receipt. Coverage is revision-specific; a source
-change does not silently apply earlier evidence to new text. The first version
-conservatively starts a new family revision even if only one source page changes.
+prefix witnesses without re-executing targets. It combines the current revision's
+family rows with exact compatible public general-task results. GET case evidence
+returns the original saved task, result and receipt. A general-task source uses
+the typed `source:{task,inputVersion,run}` response; it is not relabeled as a new
+family run. Preparation rejects cases already covered by either source.
+
+The family's own ledger remains revision-specific. Changing even one selected
+source page starts a new revision, and the snapshot does not scan older family
+revisions for unchanged cases. General task evidence can still contribute when
+its exact page and protocol match the current inputs.
 
 The workspace reviews a batch, runs locally, shows the result, saves only on
 explicit action, then selects uncovered pages. Reload retrieves saved coverage
@@ -43,17 +49,14 @@ per-client task limiter, and 1,000 newly stored family cases per day. D1 enforce
 the daily limit inside the atomic transaction. This is a bounded first family,
 not a general solution for large searches or distributed proof verification.
 
-## Remaining cross-idea gap
+## Two-way shared evidence
 
-Proposal identity currently hashes the complete standardized card, including
-descriptive aim, labels and classifications. The relation matcher requires
-these fields to agree before recognizing a page-scope variation. Community map
-entries are projected per proposal. Consequently, alternate wording or placement
-can still create separate cards for identical computations.
+Proposal identity hashes the complete standardized card, including descriptive
+aim, labels and classifications. Those cards remain distinct statements of
+intent. `computation-evidence.js` separately identifies exact protocols and page
+cases, allowing different cards or map placements to share execution evidence.
 
-Do not solve this by erasing intent, making fuzzy matches authoritative, or
-silently merging categories. Preserve proposal IDs as statements, task IDs and
-receipts as immutable artifacts, and add a separate computation/evidence index:
+Preserve proposal IDs, original task IDs and immutable receipts:
 
 - Exact engine, ordered operations, alphabet, input bytes and evaluation define
   executable equivalence. Labels, prose and map location do not.
@@ -64,7 +67,27 @@ receipts as immutable artifacts, and add a separate computation/evidence index:
 - Multiple ideas and navigation placements may link to the same computation.
   Sharing a computation does not establish that it answers every linked aim.
 
-The finite family's revision/case coverage is the first implemented instance
-of this separation. General task deduplication, evidence reuse across family
-definitions, compatible source-revision reuse, reservations for concurrent
-visitors and automatic coverage of all map nodes remain incomplete.
+`family-shared-coverage.mjs` imports no results. It reads validated public general
+task receipts into the current family snapshot, matching raw input version,
+ordered alphabet, steps, criterion and exact page ID/text. Matching and failed
+Warning openings both cover their cases; the matched subset remains explicit.
+The lookup uses eighteen indexed protocol queries, at most 100 source tasks per
+configuration and 16 MB total. Exceeding a limit or finding conflicting evidence
+fails explicitly. Reading one shared case returns its original general receipt.
+
+In the other direction, `family-evidence.mjs` supplies validated family receipts
+to general task discovery. `familySources` identifies their family, revision and
+case without copying a result into `local_task_results`. A pinned
+`GET /families/deor-feedback-v1/cases/:caseId?revision=:revision` opens the saved
+historical family receipt, including after the official input snapshot changes.
+General discovery may reuse a historical family page only when its exact text
+and protocol match the requested computation. That does not make the current
+family snapshot scan older revisions automatically.
+
+Partial general requests keep their full intended scope and prepare only pages
+not covered by original pinned receipts. Unsupported protocols and missing
+settings are not equivalent by inference. Historical reviewed records are not
+automatically imported. Reservations or concurrent leases are not implemented:
+two visitors can prepare the same open work before either saves it, although
+saved duplicate submissions remain idempotent. Automatic coverage and execution
+for all map nodes remain incomplete.

@@ -76,9 +76,19 @@ work. That label neither claims complete coverage nor increases the idea's owned
 task/result counts. Source discovery is bounded to 100 candidates and reports
 truncation; missing evidence is not proof that work has never been done.
 
-The finite family ledger uses family revision plus case ID. Its
-`family_case_results` are not yet consumed by general task-evidence discovery.
-Do not claim that these two stores already provide a unified coverage index.
+The finite family ledger uses family revision plus case ID. General discovery
+now also reads validated `family_case_results`, returning `familySources`
+metadata and links to revision-pinned family receipts. Conversely, the current
+family snapshot reads exact compatible public general-task results. Both paths
+preserve original tasks and receipts; neither copies results into the other
+store. Family preparation rejects work already covered by either source.
+
+The family snapshot still considers only its own current-revision family rows;
+it does not scan earlier family revisions for unchanged pages. General idea
+discovery can reuse an older family receipt when the requested protocol and
+page bytes match exactly. The historical case route pins the saved revision
+rather than substituting the current input snapshot. Reviewed prose records
+are not automatically imported, and no concurrent work reservations exist.
 
 ## First execution contract
 

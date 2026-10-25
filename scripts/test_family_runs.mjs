@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import F from '../research-family.js';
 import L from '../local-experiment.js';
 import {createFamilyRunHandler} from '../services/idea-assistant/family-runs.mjs';
@@ -11,7 +11,7 @@ const raw=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import
 // Small independent synthetic manuscript fixture. No network or production writes.
 for(const page of raw.pages)page.raw=page.id==='lp2-50'?'':raw.alphabet.map(a=>a.rune).join('')+'-ᚠᚠ\nᚢᚦ';
 function fixture(){
- const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync(new URL('../services/idea-assistant/migrations/0010_family_case_results.sql',import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');for(const name of readdirSync(new URL('../services/idea-assistant/migrations/',import.meta.url)).filter(n=>n.endsWith('.sql')).sort())sqlite.exec(readFileSync(new URL('../services/idea-assistant/migrations/'+name,import.meta.url),'utf8'));
  let bundle=structuredClone(raw),beforeBatch=null,calls=0;
  const db={prepare(sql){return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null,all:async()=>({results:sqlite.prepare(sql).all(...args)}),_sql:sql,_args:args};}};},async batch(statements){
   assert(statements.length,'D1 batches must contain SQL');
@@ -54,6 +54,27 @@ await test('official source revision changes invalidate old plans and isolate ol
  const f=fixture(),p=await prepared(f);await call(f,'results',submission(p));const next=structuredClone(f.bundle);next.pages.find(p=>p.id==='lp2-00').raw+='ᚠ';f.setBundle(next);
  await call(f,'results',submission(p),422);assert.deepEqual((await call(f,'')).coverage,{completed:[],matched:[]});assert.equal(count(f),2);
 });
+await test('individual saved work covers family cases and preserves original source receipts',async()=>{
+ const f=fixture(),p=await prepared(f),base=p.plan.cases[0],other=p.plan.cases[1],task=await L.prepare({...base.task,title:'Independent original task',pages:[base.task.pages[0],other.task.pages[0]]}),result=L.run(task),resultId=await hash(result),idea='p_'+'7'.repeat(64);
+ f.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(idea,idea.slice(2),'{}','',at);
+ f.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(idea,at,at.slice(0,10));
+ f.sqlite.prepare('INSERT INTO local_tasks VALUES(?,?,?,?,?,?,?,?,?,?)').run(task.taskId,await hash(task),'0'.repeat(64),idea,'{}',L.stable(task),'raw',null,at,at.slice(0,10));
+ f.sqlite.prepare('INSERT INTO local_task_ideas VALUES(?,?,?,?,?,?)').run(task.taskId,idea,'raw',null,at,at.slice(0,10));
+ f.sqlite.prepare('INSERT INTO local_task_results VALUES(?,?,?,?,?)').run(resultId,task.taskId,L.stable(result),at,at.slice(0,10));
+ const original=L.verify;L.verify=async()=>{throw Error('Discovery must not rerun targets');};
+ try{
+  const view=await call(f,'');assert.deepEqual(view.coverage.completed,[base.id,other.id].sort());assert.equal(count(f),0,'No copied family results');
+  const read=await call(f,'cases/'+base.id+'?revision='+p.plan.revision);assert.deepEqual(read.source.task,task);assert.deepEqual(read.source.run.result,result);assert.equal(read.source.run.id,resultId);assert.equal(read.task,undefined,'Original receipt remains intact');
+  await call(f,'prepare',{revision:p.plan.revision,caseIds:[base.id]},409);assert.equal(count(f),0);
+ }finally{L.verify=original;}
+});
+await test('historical family receipts remain directly readable after another page changes',async()=>{
+ const f=fixture(),p=await prepared(f),body=submission(p),item=p.plan.cases[0];await call(f,'results',body);
+ const next=structuredClone(f.bundle);next.pages.find(p=>p.id==='lp2-15').raw+='ᚠ';f.setBundle(next);
+ const read=await call(f,'cases/'+item.id+'?revision='+p.plan.revision);assert.deepEqual(read.task,item.task);assert.deepEqual(read.result,body.results[0].result);
+ await call(f,'cases/'+item.id+'?revision='+'0'.repeat(64),undefined,404);await call(f,'cases/'+item.id+'?revision=bad',undefined,404);
+ await call(f,'cases/'+item.id+'?revision='+p.plan.revision+'&revision='+p.plan.revision,undefined,404);
+});
 await test('quota checked before target replay and concurrent quota race rolls back whole batch',async()=>{
  const f=fixture(),body=submission(await prepared(f));fill(f,999);const original=L.verify;L.verify=async()=>{throw Error('Quota must reject before replay');};
  try{await call(f,'results',body,429);assert.equal(count(f),999);}finally{L.verify=original;}
@@ -81,7 +102,7 @@ await test('full 990-case coverage validates official inputs once and prepares i
  const original=F.createPreparer,verify=L.verify;let factories=0,batches=0;
  F.createPreparer=async(...args)=>{factories++;const prepared=await original(...args);return {...prepared,prepare:async selected=>{batches++;assert(selected.length<=12);return prepared.prepare(selected);}};};
  L.verify=async()=>{throw Error('Coverage retrieval must not replay targets');};
- try{const started=performance.now(),output=await call(f,'');console.log('Real-input 990-case coverage GET: '+Math.round(performance.now()-started)+' ms (local SQLite fixture)');assert.equal(output.coverage.completed.length,990);assert.deepEqual(output.coverage.completed,ids);assert.equal(factories,1);assert.equal(batches,83);}finally{F.createPreparer=original;L.verify=verify;}
+ try{const started=performance.now(),output=await call(f,'');console.log('Real-input 990-case coverage GET: '+Math.round(performance.now()-started)+' ms (local SQLite fixture)');assert.equal(output.coverage.completed.length,990);assert.deepEqual(output.coverage.completed,ids);assert.equal(factories,1);assert.equal(batches,101,'83 stored batches plus 18 single-case shared-protocol lookups');}finally{F.createPreparer=original;L.verify=verify;}
 });
 await test('cancelled requests never publish coverage, including cancellation during replay',async()=>{
  const f=fixture(),body=submission(await prepared(f)),controller=new AbortController(),original=L.verify;

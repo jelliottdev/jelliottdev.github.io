@@ -45,7 +45,7 @@ export function createCommunityFeedHandler(){
     SELECT i.proposal_id,i.created_at FROM research_ideas i${where}
     ORDER BY i.created_at DESC,i.proposal_id DESC LIMIT 51
    ) SELECT i.proposal_id,i.created_at,p.card_json,p.card_hash,
-    CASE WHEN request.requested_task_id IS NULL THEN 0 ELSE EXISTS(
+    CASE WHEN request.requested_task_id IS NULL THEN 0 ELSE (EXISTS(
      SELECT 1 FROM local_tasks source
      WHERE source.input_version=request.input_version
       AND json_extract(source.task_json,'$.engine')=json_extract(request.requested_task_json,'$.engine')
@@ -59,7 +59,18 @@ export function createCommunityFeedHandler(){
        JOIN json_each(request.requested_task_json,'$.pages') requested_page
         ON json_extract(source_page.value,'$.id')=json_extract(requested_page.value,'$.id')
         AND json_extract(source_page.value,'$.text')=json_extract(requested_page.value,'$.text'))
-    ) END AS has_shared_computation
+    ) OR (request.input_version='raw' AND EXISTS(
+     SELECT 1 FROM family_case_results source
+     WHERE source.family_id='deor-feedback-v1'
+      AND json_extract(source.task_json,'$.engine')=json_extract(request.requested_task_json,'$.engine')
+      AND json_extract(source.task_json,'$.alphabet')=json_extract(request.requested_task_json,'$.alphabet')
+      AND json_extract(source.task_json,'$.steps')=json_extract(request.requested_task_json,'$.steps')
+      AND json_extract(source.task_json,'$.criterion')=json_extract(request.requested_task_json,'$.criterion')
+      AND EXISTS(SELECT 1 FROM json_each(source.task_json,'$.pages') source_page
+       JOIN json_each(request.requested_task_json,'$.pages') requested_page
+        ON json_extract(source_page.value,'$.id')=json_extract(requested_page.value,'$.id')
+        AND json_extract(source_page.value,'$.text')=json_extract(requested_page.value,'$.text'))
+    ))) END AS has_shared_computation
     FROM page i JOIN proposals p ON p.id=i.proposal_id
     LEFT JOIN idea_computation_evidence request ON request.rowid=(
      SELECT latest.rowid FROM idea_computation_evidence latest WHERE latest.proposal_id=i.proposal_id
