@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from experiment_content import compile_content, article_bytes, draft_record_ids
 from experiment_taxonomy import apply_classifications
-from browser_followups import validate_followups
+from authored_finite_followups import validate_followups
 from research_questions import validate_research_questions, validate_research_question_refs
 from check_download_catalog import portable_line_ending_errors
 
@@ -234,6 +234,10 @@ def validate_record(root, path, pages):
     if 'recorded_comparison' in d:
         validate_recorded_comparison(d['recorded_comparison'], scope, pages)
     if 'browser_followups' in d:
+        if (isinstance(d['browser_followups'], list)
+                and any(isinstance(recipe, dict) and recipe.get('kind') == 'finite-settings'
+                        for recipe in d['browser_followups'])):
+            require(path.stat().st_size <= 2 * 1024 * 1024, 'Finite follow-up source record exceeds 2 MiB')
         validate_followups(d['browser_followups'], root, pages)
     if 'research_questions' in d:
         validate_research_questions(d['research_questions'], d)

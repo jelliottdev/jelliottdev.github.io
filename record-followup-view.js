@@ -14,6 +14,8 @@
    if(Object.hasOwn(item,'motivation')&&!Context?.valid(item.motivation))return false;
    const pins=item.inputs,control=item.control,task=control?.task;
    if(!object(item.card)||item.card.version!==1||!object(pins)||!['raw','reviewed'].includes(pins.version)||!hash(pins.alphabet_sha256)||!Array.isArray(pins.pages)||!pins.pages.length||pins.pages.length>75||pins.pages.some(p=>!object(p)||!/^lp[12]-\d{2}$/.test(p.id)||!hash(p.text_sha256))||new Set(pins.pages.map(p=>p.id)).size!==pins.pages.length)return false;
+   if(item.kind==='finite-settings'){if(!model?.finiteRecipe(item))return false;seen.add(item.id);return true;}
+   if(Object.hasOwn(item,'kind'))return false;
    if(!object(control)||!text(control.label,300)||!hash(control.expected_result_sha256)||!object(task)||task.schema!=='liberpedia-local-task-v1'||task.engine!=='rune-program-v1'||!hash(task.taskId)||!Array.isArray(task.steps)||!Array.isArray(task.alphabet)||task.alphabet.length!==29||!['exact-prefix','word-affine-count','word-prime-sums'].includes(task.criterion?.kind)||task.criterion.kind==='exact-prefix'&&(!Array.isArray(task.criterion.values)||!task.criterion.values.length))return false;
    seen.add(item.id);return true;
   });

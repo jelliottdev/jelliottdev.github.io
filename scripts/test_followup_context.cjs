@@ -6,3 +6,10 @@ const legacy=structuredClone(record);delete legacy.browser_followups[0].motivati
 const ctx=vm.createContext({});vm.runInContext(fs.readFileSync(require.resolve('../followup-context.js'),'utf8'),ctx);ctx.value='😀'.repeat(500);assert.equal(vm.runInContext('FollowupContext.valid(value)',ctx),true);
 for(const name of ['run.html','research.html','index.html','library.html']){const html=fs.readFileSync(require.resolve('../'+name),'utf8'),consumer=name==='run.html'?'record-followups.js':'record-followup-view.js';assert(html.indexOf('followup-context.js')<html.indexOf(consumer),'Context must load before its consumer: '+name);assert.equal(html.split('src="followup-context.js').length-1,1);}
 console.log('PASS shared context validation, strict source rejection, legacy recipes, Unicode, browser export and loader order');
+
+for(const name of ['index.html','library.html','research.html']){
+ const html=fs.readFileSync(require.resolve('../'+name),'utf8');
+ const scripts=['claim-specification.js','claim-share.js','finite-settings.js','record-question-model.js','record-followup-view.js'];
+ let previous=-1;
+ for(const script of scripts){const at=html.indexOf('src="'+script);assert(at>previous,'Finite recipe dependency order: '+name+' '+script);assert.equal(html.split('src="'+script).length-1,1);previous=at;}
+}

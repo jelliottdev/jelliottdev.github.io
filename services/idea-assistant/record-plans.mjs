@@ -1,5 +1,6 @@
 /* Authored bounded follow-ups. No inference, persistence or target execution. */
 import L from '../../local-experiment.js';
+import {loadFiniteRecordPlan} from './finite-record-plans.mjs';
 import Control from '../../local-control.js';
 import Evaluators from '../../output-evaluators.js';
 import C from '../../claim-specification.js';
@@ -27,9 +28,11 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
  const controller=new AbortController();let timer;
  const work=async()=>{
   const get=async(path,max=512*1024)=>{if(controller.signal.aborted)throw Error('Source loading cancelled.');return readJSON(await fetcher(BASE+path,{redirect:'manual',signal:controller.signal,cache:'no-cache'}),max);};
-  const raw=await get('/experiments/records/'+recordId+'/record.json'),record=raw.value;
+  const raw=await get('/experiments/records/'+recordId+'/record.json',2*1024*1024),record=raw.value;
   if(record.id!==recordId||record.status!=='published'||!Array.isArray(record.browser_followups)||record.browser_followups.length>8)throw Error('This published follow-up is unavailable.');
   const found=record.browser_followups.filter(v=>v?.id===followupId);if(found.length!==1)throw Error('This published follow-up is unavailable.');const recipe=found[0];
+  if(recipe.kind==='finite-settings')return loadFiniteRecordPlan({recordId,followupId},{raw,get,signal:controller.signal});
+  if(raw.bytes.byteLength>512*1024)throw Error('Source exceeds its bound.');
   const hasMotivation=Object.hasOwn(recipe,'motivation');
   if(!exact(recipe,['id','title','question','scope_change','limitation','card','inputs','control',...(hasMotivation?['motivation']:[])]))throw Error('The follow-up declaration is malformed.');
   if(hasMotivation&&!Context.valid(recipe.motivation))throw Error('The follow-up motivation is malformed.');
@@ -78,6 +81,7 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
   let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting'),flags=['includeBoundaryComparison','includeExistingContext','includeDerivedPrefixEvidence','includeMotivation'].filter(key=>body&&Object.hasOwn(body,key));if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[]),...flags])||optedIn&&body.includeExisting!==true||flags.some(key=>body[key]!==true||body.includeExisting!==true)||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
   let loaded;try{loaded=await loadRecordPlan(body,{fetcher,timeoutMs});}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
   const {snapshot,motivation,...plan}=loaded;
+  if(loaded.state==='finite-plan-ready')return reply({...plan,snapshot,...(body.includeMotivation===true&&motivation!==undefined?{motivation}:{})});
   if(body.includeMotivation===true&&motivation!==undefined)plan.motivation=motivation;
   if(body.includeExisting===true){
    try{

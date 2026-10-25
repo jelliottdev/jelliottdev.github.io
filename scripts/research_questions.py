@@ -39,7 +39,7 @@ def protocol_reference(question, record):
     if protocol['id'] == 'deor-warning-opening':
         require('followup' not in question, 'DEOR definition cannot inherit another follow-up scope')
         return {'id': protocol['id'], 'version': 1, 'familyId': 'deor-feedback-v1'}
-    require(protocol['id'] in ('word-boundary-sensitivity', 'fixed-program-prefix') and 'followup' in question,
+    require(protocol['id'] in ('word-boundary-sensitivity', 'fixed-program-prefix', 'finite-settings-output') and 'followup' in question,
             'unknown protocol or missing owned boundary follow-up')
     require(isinstance(record.get('browser_followups'), list)
             and all(isinstance(recipe, dict) for recipe in record['browser_followups']),
@@ -55,6 +55,25 @@ def protocol_reference(question, record):
     evaluation = rules.get('evaluation', {})
     require(isinstance(evaluation, dict), 'invalid boundary evaluation')
     criterion = evaluation.get('value', {})
+    if protocol['id'] == 'finite-settings-output':
+        from finite_followup_cards import compile_card
+        require(recipe.get('kind') == 'finite-settings', 'finite protocol needs an owned finite recipe')
+        try:
+            expanded = compile_card(card)
+        except (ValueError, TypeError, KeyError) as error:
+            raise ValueError('research_questions: incompatible finite-settings recipe') from error
+        compiled = expanded['variants'][0]['compiled']
+        require(isinstance(inputs, dict) and set(inputs) == {'version', 'alphabet_sha256', 'pages'}
+                and inputs['version'] == compiled['inputVersion']
+                and isinstance(inputs['alphabet_sha256'], str) and re.fullmatch(r'[a-f0-9]{64}', inputs['alphabet_sha256'])
+                and isinstance(inputs['pages'], list) and len(inputs['pages']) == len(compiled['pages'])
+                and all(isinstance(page, dict) and set(page) == {'id', 'text_sha256'}
+                        and page['id'] == identifier and isinstance(page['text_sha256'], str)
+                        and re.fullmatch(r'[a-f0-9]{64}', page['text_sha256'])
+                        for page, identifier in zip(inputs['pages'], compiled['pages'])),
+                'finite scope must match exact follow-up pins')
+        return {'id': protocol['id'], 'version': 1, 'followupId': recipe['id'], 'inputs': copy.deepcopy(inputs)}
+    require('kind' not in recipe, 'legacy fixed protocol cannot accept a finite or unknown recipe kind')
     if protocol['id'] == 'fixed-program-prefix':
         # Publication uses the existing maintained compiler. No second method
         # implementation or inferred program is introduced for question views.

@@ -95,6 +95,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_finite_followup_cards.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_authored_finite_followups.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_verify_controls.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_browser_followups_interrupted.py

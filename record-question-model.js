@@ -7,12 +7,48 @@
  const exact=(value,keys)=>object(value)&&Reflect.ownKeys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
  const clone=value=>JSON.parse(JSON.stringify(value)),hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
  function pinnedScope(inputs,scope){return exact(inputs,['version','alphabet_sha256','pages'])&&['raw','reviewed'].includes(inputs.version)&&hex(inputs.alphabet_sha256)&&Array.isArray(inputs.pages)&&inputs.pages.length>0&&inputs.pages.length<=75&&!inputs.pages.some(page=>!exact(page,['id','text_sha256'])||!/^lp[12]-\d{2}$/.test(page.id)||!hex(page.text_sha256))&&new Set(inputs.pages.map(page=>page.id)).size===inputs.pages.length&&scope?.status==='specified'&&exact(scope.value,['pages'])&&JSON.stringify(scope.value.pages)===JSON.stringify(inputs.pages.map(page=>page.id));}
+ const settingsAPI=()=>typeof module==='object'&&module.exports?require('./finite-settings.js'):root.FiniteSettings;
+ // Discovery metadata only: canonical settings and source-shaped controls permit
+ // a review link. The maintained loader still verifies every executable member.
+ function finiteRecipe(recipe){
+  try{
+   let nodes=0,characters=0;const plain=(value,depth=0)=>{
+    if(depth>24||++nodes>1000000)return false;
+    if(value===null||typeof value==='boolean')return true;
+    if(typeof value==='number')return Number.isFinite(value);
+    if(typeof value==='string'){characters+=value.length;return characters<=8*1024*1024;}
+    if(!object(value)&&!Array.isArray(value))return false;
+    const keys=Reflect.ownKeys(value),descriptors=Object.getOwnPropertyDescriptors(value);
+    if(Array.isArray(value)&&keys.length!==value.length+1)return false;
+    return keys.every(key=>key==='length'&&Array.isArray(value)||typeof key==='string'&&!['__proto__','constructor','prototype'].includes(key)&&Object.hasOwn(descriptors[key],'value')&&descriptors[key].enumerable&&plain(descriptors[key].value,depth+1));
+   };
+   if(!plain(recipe)||recipe.kind!=='finite-settings')return null;
+   const Settings=settingsAPI();if(!Settings?.factored?.inspect||!Settings.factored.member)return null;
+   const card=recipe.card,inputs=recipe.inputs,criterion=card?.rules?.evaluation;
+   if(card?.version!==1||card.unresolved.length||criterion?.status!=='specified'||!pinnedScope(inputs,card.scope)||card.rules.inputVersion?.status!=='specified'||card.rules.inputVersion.value!==inputs.version)return null;
+   const c=criterion.value,language=exact(c,['kind','modelId','modelSha256'])&&c.kind==='language-score'&&c.modelId==='gp29-flores-trigram-v1'&&c.modelSha256==='8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4',prefix=exact(c,['kind','values'])&&c.kind==='exact-prefix'&&Array.isArray(c.values)&&c.values.length>0&&c.values.length<=256&&c.values.every(n=>Number.isInteger(n)&&n>=0&&n<=28);
+   if(!prefix&&!language&&c!=='measurement')return null;
+   const declaration=Settings.factored.inspect(card),control=recipe.control;
+   if(!exact(control,['kind','members'])||control.kind!=='finite-program-controls'||!Array.isArray(control.members)||control.members.length!==declaration.programCount||control.members.length>1024)return null;
+   const seen=new Set();
+   for(const member of control.members){
+    if(!exact(member,['settings','control']))return null;
+    const selected=Settings.factored.member(card,member.settings),identity=JSON.stringify(selected.settings),test=member.control,task=test?.task;
+    if(seen.has(identity)||!exact(test,['label','task','expected_result_sha256'])||!prose(test.label,300)||!hex(test.expected_result_sha256)||!object(task)||task.schema!=='liberpedia-local-task-v1'||task.engine!=='rune-program-v1'||!hex(task.taskId)||!Array.isArray(task.steps)||task.steps.length>8||!Array.isArray(task.alphabet)||task.alphabet.length!==29||!Array.isArray(task.pages)||task.pages.length!==1||!exact(task.pages[0],['id','text'])||!/^lp[12]-\d{2}$/.test(task.pages[0].id)||typeof task.pages[0].text!=='string'||!exact(task.criterion,['kind','values'])||task.criterion.kind!=='exact-prefix'||!Array.isArray(task.criterion.values)||task.criterion.values.length<1||task.criterion.values.length>256||task.criterion.values.some(n=>!Number.isInteger(n)||n<0||n>28))return null;
+    const runes=new Set(task.alphabet.map(entry=>entry?.rune));if(runes.size!==29||[...runes].some(rune=>typeof rune!=='string'||Array.from(rune).length!==1)||Array.from(task.pages[0].text).filter(rune=>runes.has(rune)).length!==task.criterion.values.length)return null;
+    seen.add(identity);
+   }
+   return {kind:'finite-settings',programCount:declaration.programCount,caseCount:declaration.caseCount};
+  }catch{return null;}
+ }
  function resolveProtocol(item,recipes){
   const p=item.protocol;if(!exact(p,['id','version'])||p.version!==1)return null;
   if(p.id==='deor-warning-opening')return Object.hasOwn(item,'followup')?null:{id:p.id,version:1,familyId:'deor-feedback-v1'};
-  if(!['word-boundary-sensitivity','fixed-program-prefix'].includes(p.id)||!Object.hasOwn(item,'followup'))return null;
+  if(!['word-boundary-sensitivity','fixed-program-prefix','finite-settings-output'].includes(p.id)||!Object.hasOwn(item,'followup'))return null;
   const owned=recipes.filter(recipe=>recipe?.id===item.followup);if(owned.length!==1)return null;
   const recipe=owned[0],card=recipe.card,inputs=recipe.inputs,method=card?.method,rules=card?.rules,c=rules?.evaluation?.value,scope=card?.scope;
+  if(recipe.kind==='finite-settings'&&p.id!=='finite-settings-output')return null;
+  if(p.id==='finite-settings-output'){if(!finiteRecipe(recipe))return null;return {id:p.id,version:1,followupId:recipe.id,inputs:clone(inputs)};}
   if(p.id==='fixed-program-prefix'){
    // Metadata permits lazy activation, not an answer. The maintained compiler
    // and exact source pins are checked by the live controller before evidence.
@@ -41,5 +77,5 @@
   return record.research_questions.slice().sort((a,b)=>(a.state==='open'?0:1)-(b.state==='open'?0:1));
  }
  function protocolReference(record,questionId,recipes=record?.browser_followups||[]){const item=questions(record,recipes).find(item=>item.id===questionId);return item&&Object.hasOwn(item,'protocol')?resolveProtocol(item,recipes):null;}
- const api={questions,protocolReference};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordQuestionModel=api;
+ const api={questions,protocolReference,finiteRecipe};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordQuestionModel=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

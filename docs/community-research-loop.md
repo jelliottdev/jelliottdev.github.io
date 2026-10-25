@@ -426,7 +426,17 @@ A finite follow-up belongs in its source experiment as one card with explicit
 The independent `scripts/finite_followup_cards.py` now validates and expands the
 supported fixed-compiler subset without running manuscript text. Its parity
 checks cover the known-key search's 42 programs and all 56 pages (2,352 cases).
-This is a validation foundation, not an available authored finite-plan endpoint.
+The source validator now accepts one explicit finite recipe with a complete
+synthetic witness for every member. The server loader verifies its exact source
+and input pins and returns a distinct `finite-plan-ready` domain, never a fake
+fixed task. Review performs no persistence or manuscript calculation. Generic
+question references and discovery can identify that bounded recipe.
+
+The browser handoff, source-bound task admission and saved-origin projection are
+still incomplete. No finite source recipe is published until those connections
+and the complete execution/save/reload path are verified. Backend changes must
+be deployed with that finished handoff; a successful source build alone does not
+establish that the hosted contribution path is available.
 
 Before publishing a finite source recipe, complete the generic question/action
 and reviewed-plan handoff. Bind the original source snapshot and full domain to
