@@ -9,12 +9,18 @@
  const P=typeof module!=='undefined'?require('./claim-interpretation.js'):root.ClaimInterpretation;
  const D=typeof module!=='undefined'?require('./recorded-comparison.js'):root.RecordedComparison;
  const Input=typeof module!=='undefined'?require('./idea-input.js'):root.IdeaInput;
+ const WordSums=typeof module!=='undefined'?require('./word-sum-intake.js'):root.WordSumIntake;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
  const editProvenance={kind:'user_clarification',refs:['interpretation editor']};
  const clarified=v=>C.field('specified',v,editProvenance);
  const plainPrimeReversal=/^reverse (?:the )?prime values (?:of|in) (?:(?:each|every) row|rows)$/i;
+ function validServiceEndpoint(value,path,pageURL=''){
+  if(typeof value!=='string'||!['ask','interpret','proposals','ideas'].includes(path))return false;
+  if(new RegExp('^https://[a-z0-9.-]+/'+path+'$').test(value))return true;
+  try{const page=new URL(pageURL),url=new URL(value);return ['localhost','127.0.0.1'].includes(page.hostname)&&page.protocol==='http:'&&url.origin===page.origin&&url.pathname==='/'+path&&!url.username&&!url.password&&!url.search&&!url.hash;}catch{return false;}
+ }
  function parseScope(text,provenance=prov){
   if(!text.trim())return C.field();
   const selected=[];
@@ -107,6 +113,7 @@
    {id:'unsolved-lp2',label:'The unsolved LP2 pages',example:'LP2-00–55'},
    {id:'specific',label:'Specific pages or a passage',requiresText:true,fieldLabel:'Name the pages or passage',placeholder:'LP2-15, LP2-17; or LP2-43, lines 2–3'},
    {id:'undecided',label:'Leave the scope undecided'}]});
+  const wordQuestion=WordSums?.question(draft);if(wordQuestion)result.push(wordQuestion);
   return result;
  }
  function chosenScope(text){
@@ -163,6 +170,7 @@
   }).join('')+'</div>';
  }
  function answerIntake(draft,id,choice,text=''){
+  if(WordSums?.question(draft)?.id===id)return WordSums.clarify(draft,choice);
   if(!['aim','method','scope'].includes(id))return C.clarify(draft,id,choice,text);
   const question=intakeQuestions(draft).find(q=>q.id===id),option=question?.choices.find(c=>c.id===choice);
   if(!option)throw Error('Choose an available answer.');
@@ -211,7 +219,8 @@
   const entries=Object.entries(operation).filter(([key])=>!['id','label','sourceText','provenance','editHistory','declaredFamilyId'].includes(key)&&!(key==='familyId'&&operation.id==='family_selection'));
   if(!entries.length)return '';
   const label=key=>key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
-  return '<dl class="method-parameters">'+entries.map(([key,value])=>'<div><dt>'+esc(label(key))+'</dt><dd>'+esc(typeof value==='string'?value:JSON.stringify(value))+'</dd></div>').join('')+'</dl>';
+  const numeric=operation.id==='word_prime_sums'?H.wordPrimeSumLabels(operation.table,operation.boundaries):null;
+  return '<dl class="method-parameters">'+entries.map(([key,value])=>'<div><dt>'+esc(key==='boundaries'&&numeric?'Word breaks':label(key))+'</dt><dd>'+esc(numeric&&['table','boundaries'].includes(key)?numeric[key]:typeof value==='string'?value:JSON.stringify(value))+'</dd></div>').join('')+'</dl>';
  }
  function rowsHTML(spec){return '<dl>'+C.reviewRows(spec).filter(r=>r.label!=='Unresolved'&&(r.tags||[]).length).map(r=>{
   const originalTags=r.label==='Scope'&&spec.scope.status==='specified'?r.tags.map(t=>t.id==='scope:description'?{...t,text:spec.scope.value.description}:t):r.tags;
@@ -219,7 +228,7 @@
   const label=r.label==='Aim'?'Outcome':r.label==='Rules'?'Bounds & rules':r.label;
   let content;
   if(r.label==='Method')content=tags.length>1?'<ol class="method-steps">'+tags.map((t,i)=>'<li>'+esc(t.text)+operationDetails(spec.method.value?.operations[i])+'</li>').join('')+'</ol>':'<div class="method-wording"><p>'+esc(tags[0].text)+'</p>'+operationDetails(spec.method.value?.operations[0])+'</div>';
-  else content=tags.map(t=>'<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(t.text)+'</span>').join('');
+  else content=tags.map(t=>{const key=t.id.startsWith('rule:')?t.id.slice(5):null,f=key?spec.rules[key]:null,v=key==='evaluation'&&f?.status==='specified'?f.value:null,numeric=v?.kind==='word-prime-sums'&&Object.keys(v).length===3?H.wordPrimeSumLabels(v.table,v.boundaries):null,plain=f?.status==='specified'?H.wordPrimeSumRuleLabel(spec,key,f.value):null;return '<span class="tag'+(t.unknown?' unknown':'')+'">'+esc(numeric?'Evaluation: '+numeric.evaluation:plain||t.text)+'</span>';}).join('');
   if(r.label==='Aim'&&spec.aim.status==='specified'){
    const outcome=C.normalizeOutcome(spec.aim.value),detail=outcome.detail||outcome.wording;
    if(outcome.id==='unclassified')content='<span class="tag unknown">Outcome not classified</span>';
@@ -594,7 +603,7 @@
    doc.getElementById('clarification')?.addEventListener('submit',event=>{
     event.preventDefault();const choice=doc.querySelector('input[name=choice]:checked')?.value;if(!choice)return;
     const q=intakeQuestions(draft)[0];
-    if(['aim','method','scope'].includes(q.id)){
+    if(['aim','method','scope'].includes(q.id)||WordSums?.question(draft)?.id===q.id){
      try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
     }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;
@@ -634,7 +643,7 @@
   }
   async function interpret(){
    stopInterpretation();const token=interpretVersion,text=raw;let returnedInterpretation=false;
-   if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))){acceptDraft(initialDraft(text));return;}
+   if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))||WordSums?.matches(text)){acceptDraft(initialDraft(text));return;}
    stage='input';interpreting=true;interpretError='';error='';message='';updateInterpretationInput();
    try{
     if(configResolved&&!configValid)loadConfig().catch(()=>{});
@@ -689,11 +698,11 @@
    configAttempt=json('data/assistant.json',{signal:AbortSignal.timeout(8000)}).then(config=>{
     if(destroyed)return;
     if(!config||typeof config!=='object'||Array.isArray(config))throw Error('Research configuration could not be read.');
-    endpoint=typeof config.endpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ask$/.test(config.endpoint)?config.endpoint:null;
+    endpoint=validServiceEndpoint(config.endpoint,'ask',doc.defaultView?.location?.href||'')?config.endpoint:null;
     cardContract=config.researchContract==='card-v1';
-    interpretationEndpoint=typeof config.interpretationEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/interpret$/.test(config.interpretationEndpoint)?config.interpretationEndpoint:null;
-    intakeEndpoint=typeof config.proposalEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/proposals$/.test(config.proposalEndpoint)?config.proposalEndpoint:null;
-    ideaEndpoint=typeof config.researchIdeaEndpoint==='string'&&/^https:\/\/[a-z0-9.-]+\/ideas$/.test(config.researchIdeaEndpoint)&&intakeEndpoint&&new URL(config.researchIdeaEndpoint).origin===new URL(intakeEndpoint).origin?config.researchIdeaEndpoint:null;
+    interpretationEndpoint=validServiceEndpoint(config.interpretationEndpoint,'interpret',doc.defaultView?.location?.href||'')?config.interpretationEndpoint:null;
+    intakeEndpoint=validServiceEndpoint(config.proposalEndpoint,'proposals',doc.defaultView?.location?.href||'')?config.proposalEndpoint:null;
+    ideaEndpoint=validServiceEndpoint(config.researchIdeaEndpoint,'ideas',doc.defaultView?.location?.href||'')&&intakeEndpoint&&new URL(config.researchIdeaEndpoint).origin===new URL(intakeEndpoint).origin?config.researchIdeaEndpoint:null;
     configValid=true;configResolved=true;availability();
    }).catch(e=>{
     if(!destroyed){endpoint=null;interpretationEndpoint=null;intakeEndpoint=null;ideaEndpoint=null;cardContract=false;configValid=false;configResolved=true;availability();}
@@ -758,7 +767,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
- const api={parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,readIntake,createApp};
+ const api={validServiceEndpoint,parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,readIntake,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);

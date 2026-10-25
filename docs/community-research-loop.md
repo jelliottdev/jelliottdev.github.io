@@ -191,3 +191,18 @@ complete expected result digest. Direct sums do not reproduce a prime-excess
 permutation test, candidate-key collision study or a readable-text test. Changing
 the table in such a study also changes its controls and target values; the
 original findings cannot be inherited from this ledger.
+
+
+### Clarifying a word-sum idea
+
+The intake recognizes only complete positive instructions to reverse the GP
+prime table and sum words. It asks for aim and scope first, then an explicit
+word-break choice. The choice also confirms the archived rune input and the
+reversed prime assignment. The canonical operation and numeric evaluation are
+created only after that answer, before confirmation and storage. Choosing to
+keep the original wording does not silently select a boundary rule.
+
+Negations, conditions, appended methods, conflicting value examples and existing
+rule conflicts remain opaque. Existing confirmed cards are never rewritten.
+The adapter changes neither the visitor's outcome nor page selection. Its result
+is a word-value ledger, not a readability test or statistical explanation.

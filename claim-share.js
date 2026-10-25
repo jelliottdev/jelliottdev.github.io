@@ -62,6 +62,23 @@
  const RULE_LABELS={representation:'Representation',wordBoundaries:'Word boundaries',boundaryMode:'Word handling',unmapped:'Unmapped values',inputVersion:'Input version',evaluation:'Evaluation',reset:'Restart rule',initialState:'Initial state',searchBounds:'Search bounds',searchProtocol:'Search protocol',exceptionalCases:'Exceptions'};
  const niceKey=s=>s.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
  const pretty=v=>typeof v==='string'?v:JSON.stringify(v);
+ function wordPrimeSumLabels(table,boundaries){
+  if(!['canonical','reversed'].includes(table)||!['non-rune','hyphen-period'].includes(boundaries))return null;
+  const split=boundaries==='non-rune'?'Every non-rune character separates words.':"Only ASCII '-' and '.' separate groups; other non-rune characters are ignored.";
+  return {table:table==='reversed'?'Reversed prime assignments: F=109, U=107, …, EA=2.':'Usual prime assignments: F=2, U=3, …, EA=109.',boundaries:split,evaluation:'Add the '+(table==='reversed'?'reversed':'usual')+' prime values within each word. '+split};
+ }
+ function wordPrimeSumRuleLabel(idea,key,value){
+  const operations=idea?.method?.status==='specified'?idea.method.value?.operations:null,evaluation=idea?.rules?.evaluation;
+  if(!Array.isArray(operations)||operations.length!==1||evaluation?.status!=='specified')return null;
+  const op=operations[0],criterion=evaluation.value;
+  if(!op||op.id!=='word_prime_sums'||op.label!=='Word prime sums'||Object.keys(op).some(k=>!['id','label','table','boundaries','declaredFamilyId'].includes(k))||own(op,'declaredFamilyId')&&(typeof op.declaredFamilyId!=='string'||!own(C.METHOD_FAMILIES,op.declaredFamilyId))||!wordPrimeSumLabels(op.table,op.boundaries)||!criterion||criterion.kind!=='word-prime-sums'||Object.keys(criterion).length!==3||criterion.table!==op.table||criterion.boundaries!==op.boundaries)return null;
+  const labels={inputVersion:{raw:'Archived rune text'},representation:{GP29:'29-rune GP alphabet'},unmapped:{preserve:'Keep original separators'},wordBoundaries:{preserve:'Keep original word marks'}};
+  return typeof value==='string'&&own(labels,key)&&own(labels[key],value)?labels[key][value]:null;
+ }
+ function operationDetails(o){
+  const labels=o.id==='word_prime_sums'?wordPrimeSumLabels(o.table,o.boundaries):null;
+  return Object.entries(o).filter(([k])=>!['id','label','declaredFamilyId'].includes(k)&&!(k==='familyId'&&o.id==='family_selection')).map(([k,v])=>labels&&k==='table'?labels.table:labels&&k==='boundaries'?labels.boundaries:niceKey(k)+': '+pretty(v)).join('\n');
+ }
  function pageLabel(pages){
   if(!pages.length)return 'No pages selected';const result=[];
   for(let i=0;i<pages.length;i++){
@@ -76,8 +93,7 @@
   const aim=p.outcome.status==='specified'?title+(p.outcome.value.detail&&p.outcome.value.detail!==title?' — '+p.outcome.value.detail:''):state(p.outcome);
   const rows=[['Outcome',aim]];
   const methodLabels=C.reviewRows({aim:p.outcome,method:p.method,scope:p.scope,rules:p.rules,unresolved:p.unresolved}).find(row=>row.label==='Method').tags;
-  if(p.method.status==='specified')p.method.value.operations.forEach((o,i)=>rows.push(['Step '+(i+1),methodLabels[i].text,
-   Object.entries(o).filter(([k])=>!['id','label','declaredFamilyId'].includes(k)&&!(k==='familyId'&&o.id==='family_selection')).map(([k,v])=>niceKey(k)+': '+pretty(v)).join('\n')]));
+  if(p.method.status==='specified')p.method.value.operations.forEach((o,i)=>rows.push(['Step '+(i+1),methodLabels[i].text,operationDetails(o)]));
   else rows.push(['Method',state(p.method)]);
   if(p.scope.status==='specified'){
    const scope=p.scope.value,parts=[];
@@ -86,8 +102,11 @@
    for(const [k,v]of Object.entries(scope))if(!['pages','description'].includes(k))parts.push(niceKey(k)+': '+pretty(v));
    rows.push(['Scope',parts.length?parts.join('\n'):'Explicit empty scope description']);
   }else rows.push(['Scope',state(p.scope)]);
-  for(const [k,f]of Object.entries(p.rules))if(f.status!=='unspecified')rows.push([RULE_LABELS[k],
-   k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f)]);
+  for(const [k,f]of Object.entries(p.rules))if(f.status!=='unspecified'){
+   const value=f.value,wordSum=k==='evaluation'&&f.status==='specified'&&value?.kind==='word-prime-sums'&&Object.keys(value).length===3&&['kind','table','boundaries'].every(name=>own(value,name))?wordPrimeSumLabels(value.table,value.boundaries):null;
+   const wordSumRule=f.status==='specified'?wordPrimeSumRuleLabel(p,k,f.value):null;
+   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
+  }
   if(p.unresolved.length)rows.push(['Unresolved',JSON.stringify(p.unresolved)]);
   const unknown=Object.entries(p.rules).filter(([,f])=>f.status==='unspecified').map(([k])=>k);
   if(unknown.length)rows.push(['Other rules','Not specified']);
@@ -160,6 +179,6 @@
   if(!png)try{png=await renderPNG(spec,{document:doc});}catch(failure){imageError=failure.message;}
   return {status,url:complete,png,...(error?{error}:{}),imageError};
  }
- const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),encode,decode,link,renderPNG,prepare:renderPNG,share};
+ const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),wordPrimeSumLabels,wordPrimeSumRuleLabel,encode,decode,link,renderPNG,prepare:renderPNG,share};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimShare=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

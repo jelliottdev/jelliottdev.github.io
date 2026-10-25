@@ -9,6 +9,24 @@ test('only exact reviewed UI paths bypass science; all mixed/unknown paths remai
  for(const p of ['articles/method-feedback.html','scripts/build_articles.py','scripts/test_experiments.py','experiments/records/x/record.json','data/pages/lp2-15.json','data/experiments.json','images/lp2-15.jpg','text/lp2-15.txt','exports/x.json','research/x.md','reference/x.html','downloads/x.zip','.gitattributes','.github/workflows/validate-experiments.yml','scripts/ci_validation_scope.cjs','scripts/test_ci_validation_scope.cjs','unknown.js','services/idea-assistant/worker.mjs'])assert.equal(classifyChanges([entry('app.js'),entry(p)],registry(),catalog()).science,true,p);
  assert.equal(classifyChanges([],registry(),catalog()).science,true);assert.equal(classifyChanges([entry('app.js','A')],registry(),catalog()).science,false);
 });
+test('word-sum clarification stays UI-only while execution and declared inputs stay full',()=>{
+ const ui=['word-sum-intake.js','scripts/test_word_sum_intake.cjs','scripts/test_word_sum_intake_flow.cjs'];
+ assert.equal(classifyChanges(ui.map(p=>entry(p,'A')),registry(),catalog()).science,false);
+ for(const dependency of ['local-experiment.js','tools/research_runner.py','services/idea-assistant/prepare-task.mjs',
+  'scripts/browser_followups.py','experiments/records/lp2-row-prime-sums/record.json','data/local-run-inputs.json'])
+  assert.equal(classifyChanges([...ui.map(p=>entry(p)),entry(dependency)],registry(),catalog()).science,true,dependency);
+ for(const name of ui){
+  const c=catalog();c.files.push({path:name});assert.equal(classifyChanges([entry(name)],registry(),c).science,true,name);
+  const r=registry();r.records.push({reproduction:{inputs:[{path:name}]}});assert.equal(classifyChanges([entry(name)],r,catalog()).science,true,name);
+ }
+ const workflow=fs.readFileSync(path.join(__dirname,'../.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');
+ for(const script of ['scripts/test_word_sum_intake.cjs','scripts/test_word_sum_intake_flow.cjs']){
+  const block=workflow.split(/(?=^      - )/m).find(s=>s.startsWith('      - run: node '+script+'\n'));
+  assert(block,'The reviewed clarification must keep its unconditional Node check: '+script);
+  assert(!/^        if:/m.test(block),'Frontend clarification tests cannot be gated by science scope');
+ }
+});
+
 test('deletions, copies, renames and type changes always preserve full validation',()=>{
  for(const status of ['D','T','U','X','B'])assert.equal(classifyChanges([entry('app.js',status)],registry(),catalog()).science,true);
  for(const status of ['R100','C100'])assert.equal(classifyChanges([{status,paths:['app.js','home.js']}],registry(),catalog()).science,true);
@@ -53,6 +71,7 @@ test('actual Git baseline and NUL diff choose UI-only, mixed/deleted files choos
 test('current reviewed allowlist does not silently include arbitrary future filenames',()=>{assert(!UI_PATHS.has('new-ui.js'));assert(!UI_PATHS.has('scripts/test_new_science.cjs'));assert(!UI_PATHS.has('.github/workflows/validate-experiments.yml'));});
 test('actual checked-in registry/catalog allow app-only changes and workflow retains gated science checks',()=>{
  const root=path.resolve(__dirname,'..'),r=JSON.parse(fs.readFileSync(path.join(root,'data/experiments.json'),'utf8')),c=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8'));
+ assert.equal(classifyChanges(['word-sum-intake.js','scripts/test_word_sum_intake.cjs','scripts/test_word_sum_intake_flow.cjs'].map(p=>entry(p)),r,c).science,false);
  assert.equal(classifyChanges([entry('app.js')],r,c).science,false);assert.equal(classifyChanges([entry('home.js'),entry('scripts/test_home_preview.cjs')],r,c).science,false);
  const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');assert(workflow.includes('  workflow_dispatch:\n'));assert(workflow.includes('  validate:\n'));
  assert(workflow.includes('python scripts/check_experiment_authoring.py --github-event --fetch-base'),'Authoring policy must check the full push/PR, including a shallow baseline fetch');
