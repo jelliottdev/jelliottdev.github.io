@@ -281,3 +281,21 @@ This is the first migrated branch, not a claim that all published records now
 have structured executable bounds or that every open setting is a runnable
 follow-up. Expanding the catalog requires both executable support and a stated
 question, evaluation and limit.
+
+
+### Discovering available work
+
+The research map uses its existing filter for two different work states:
+prepared published follow-ups (`followups=1`) and saved unfinished experiments
+(`followups=pending`). Graph and List keep the same current branch and matching
+records. Prepared work may already have a saved result. Unfinished means a
+registered task has no accepted result; an idea with no task is not advertised
+as ready to run.
+
+`research-work.js` classifies the currently loaded snapshot from validated
+follow-up declarations and exact community task counts. Its counts describe
+individual records or ideas, not unique computations across the archive. The
+community feed prioritizes unfinished summaries within its ten-task projection
+so older unfinished work remains directly reachable. Overall community loading
+and pagination remain separate, and missing pages or a service error cannot
+establish that no unfinished work exists.

@@ -5,15 +5,16 @@ const read=name=>JSON.parse(fs.readFileSync(require.resolve('../'+name),'utf8'))
 const data=require('../research-browser-model.js').build(read('data/research-map.json'),read('data/experiments.json'));
 const Index=require('../research-index.js'),source=fs.readFileSync(require.resolve('../research-browser.js'),'utf8');
 const originalRecordMetadata=JSON.stringify(data.records);
+const helpers=['workFor','recordHref','traversalChildren'].map(name=>source.split('\n').find(line=>line.startsWith(' function '+name+'('))).join('\n');
 const code=source.slice(source.indexOf(' function renderList(){'),source.indexOf('\n function filterMenu(){'));
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function render(focusId,{matches=Object.keys(data.records),colour='methods',selected=''}={}){
  const nodes=new Map(data.views.all.nodes.map(n=>[n.id,n])),focus=nodes.get(focusId),matching=new Set(matches),calls=[];
  const container={html:'',scrollTop:0,set innerHTML(value){this.html=value;this.buttons=[...value.matchAll(/<button[^>]*data-list-node="([^"]+)"[^>]*>/g)].map(m=>({dataset:{listNode:m[1]},disabled:/ disabled/.test(m[0])}));this.links=[...value.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].filter(m=>/\bhref="/.test(m[1])).map(m=>({href:m[1].match(/\bhref="([^"]+)"/)[1],dataset:{listNode:m[1].match(/data-list-node="([^"]+)"/)?.[1]},html:m[2]}));},get innerHTML(){return this.html;},querySelectorAll(selector){return selector==='button[data-list-node]'?this.buttons:selector==='[data-list-node]'?[...this.buttons,...this.links.filter(a=>a.dataset.listNode)]:[];},querySelector(selector){return selector==='#research-sort'&&this.html.includes('id="research-sort"')?{}:null;}};
  const state={view:'all',q:'',type:'',method:'',family:'',result:'',page:'',sort:'title',p:999,colour,record:selected};
- const context={state,data,nodes,focus,esc,aliases:{},sorts:{title:'Title A–Z'},arrow:'<svg aria-hidden="true"></svg>',chevron:'<svg aria-hidden="true"></svg>',count:n=>n.members.filter(id=>matching.has(id)).length,
+ const context={ResearchWork:require('../research-work.js'),state,data,nodes,focus,esc,aliases:{},sorts:{title:'Title A–Z'},arrow:'<svg aria-hidden="true"></svg>',chevron:'<svg aria-hidden="true"></svg>',count:n=>n.members.filter(id=>matching.has(id)).length,
   indexResult:Index.select(Object.values(data.records),{}),$:()=>container,listPositions:new Map(),listKey:'',scopeLabel:r=>r.pages.length+' pages',outcomes:{supported:'Supported within scope',inconclusive:'Inconclusive','not-supported':'Not supported within scope'},resultColours:{supported:'#138575',inconclusive:'#75649a','not-supported':'#7b899b'},navigate:changes=>calls.push(changes),clearFilters(){},dialog:{querySelectorAll:()=>[]},openDialog(){},closeDialog(){}};
- vm.createContext(context);vm.runInContext(code,context);context.renderList();return{container,context,calls,focus,nodes};
+ vm.createContext(context);vm.runInContext(helpers+'\n'+code,context);context.renderList();return{container,context,calls,focus,nodes};
 }
 for(const focus of data.views.all.nodes.filter(n=>n.children.length)){
  const r=render(focus.id),children=focus.children.map(id=>r.nodes.get(id)),branches=children.filter(n=>n.kind!=='record'),records=children.filter(n=>n.kind==='record');

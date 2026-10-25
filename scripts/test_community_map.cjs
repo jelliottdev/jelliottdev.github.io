@@ -14,6 +14,7 @@ assert.equal(JSON.stringify(base),before,'Community navigation must not rewrite 
 assert.equal(merged.community_count,4);assert.equal(nodes.get('all-research').members.length,base.views.all.nodes.find(n=>n.id==='all-research').members.length+4);
 for(const e of entries){const id='idea-'+e.id.slice(2),record=merged.records[id],leaf=nodes.get('record:'+id);assert.equal(record.href,'run.html#idea='+e.id);assert.equal(record.outcome,'');assert.equal(record.record_type.id,'idea');assert.equal(merged.views.all.nodes.filter(n=>n.record_id===id).length,1);assert(leaf);assert(!JSON.stringify(record).includes('PRIVATE'));}
 assert.equal(M.label(merged.records['idea-'+entries[0].id.slice(2)]),'Untested idea');
+assert.equal(merged.records['idea-'+entries[1].id.slice(2)].verified_task_count,1);assert.deepEqual(merged.records['idea-'+entries[1].id.slice(2)].task_summaries,[]);
 assert.equal(M.label(merged.records['idea-'+entries[1].id.slice(2)]),'Computation available','Older verified task counts even outside displayed summaries');
 assert.equal(nodes.get('record:idea-'+entries[2].id.slice(2)).parent,'aim:understand');
 assert.equal(nodes.get('record:idea-'+entries[3].id.slice(2)).parent,'solve-lp2','Partially classified combinations stay at their outcome');
@@ -24,4 +25,5 @@ for(const mutation of [e=>e.verifiedTaskCount=-1,e=>e.verifiedTaskCount=12,e=>e.
  const e=structuredClone(entries[1]);mutation(e);if(e.verifiedTaskCount<0||e.verifiedTaskCount>e.taskCount)assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[e],nextCursor:null}));
  else assert.equal(M.merge(base,[e]).records['idea-'+e.id.slice(2)].title,'<script>opaque</script>');
 }
+const inconsistent=structuredClone(entries[1]);inconsistent.tasks=[{id:'b'.repeat(64),title:'Synthetic pending',state:'not-run'}];inconsistent.taskCount=1;inconsistent.verifiedTaskCount=1;assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[inconsistent],nextCursor:null}));
 console.log('PASS community map preserves evidence, routes active cards, separates computation state, filters and validates');

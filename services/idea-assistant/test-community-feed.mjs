@@ -53,13 +53,21 @@ await test('only explicit public entries appear; active card exact; private cont
 await test('task metadata limited10 with exact total count and accepted-result state, no full plan/result payloads',async()=>{
  const f=fixture(),p=await idea(f,3),plans=[];for(let i=0;i<12;i++)plans.push(await task(f,p,i,{verified:i%2===0}));
  const body=await view(f),entry=body.entries[0];assert.equal(entry.taskCount,12);assert.equal(entry.verifiedTaskCount,6);assert.equal(entry.tasks.length,10);
- const expected=plans.map((plan,i)=>({id:plan.taskId,title:plan.title,state:i%2===0?'results-verified':'not-run'})).sort((a,b)=>b.id.localeCompare(a.id)).slice(0,10);
+ const expected=plans.map((plan,i)=>({id:plan.taskId,title:plan.title,state:i%2===0?'results-verified':'not-run'})).sort((a,b)=>(a.state==='results-verified')-(b.state==='results-verified')||b.id.localeCompare(a.id)).slice(0,10);
  assert.deepEqual(entry.tasks,expected);
  const sql=f.db.queries[1];assert.match(sql,/ROW_NUMBER\(\) OVER \(PARTITION BY proposal_id/);assert.match(sql,/COUNT\(\*\) OVER/);assert.match(sql,/WHERE r.position<=10/);
  assert.match(sql,/json_extract\(t.task_json,'\$\.title'\) AS title/);assert.match(sql,/json_extract\(t.task_json,'\$\.taskId'\) AS embedded_id/);
  assert(!sql.includes('result_json'));assert(f.db.projected.every(row=>!Object.hasOwn(row,'task_json')&&!Object.hasOwn(row,'result_json')));
  assert.deepEqual(Object.keys(entry.tasks[0]).sort(),['id','state','title']);
 });
+await test('older unfinished work stays reachable ahead of ten newer completed computations',async()=>{
+ const f=fixture(),p=await idea(f,'old-pending'),pending=await task(f,p,301);
+ f.db.sqlite.prepare('UPDATE local_task_ideas SET created_at=?,created_day=? WHERE task_id=?').run('2026-10-23T12:00:00.000Z','2026-10-23',pending.taskId);
+ for(let i=0;i<12;i++)await task(f,p,302+i,{verified:true});
+ const entry=(await view(f)).entries[0];assert.equal(entry.taskCount,13);assert.equal(entry.verifiedTaskCount,12);assert.equal(entry.tasks.length,10);assert.equal(entry.tasks[0].id,pending.taskId);assert.equal(entry.tasks[0].state,'not-run');assert.equal(entry.tasks.filter(t=>t.state==='not-run').length,1);
+ assert.equal(f.db.queries.length,2);assert(!JSON.stringify(entry.tasks).includes('task_json'));assert(!JSON.stringify(entry).includes('PRIVATE original'));
+});
+
 await test('latest50 stable cursor pagination preserves timestamp ties and constant query count',async()=>{
  const f=fixture(),all=[];for(let i=0;i<61;i++)all.push(await idea(f,'page'+i));
  const first=await view(f);assert.equal(first.entries.length,50);assert.equal(typeof first.nextCursor,'string');assert.equal(f.db.queries.length,2,'Query count is independent of50 entries');
@@ -79,7 +87,7 @@ await test('task order uses association time rather than original computation ti
  f.db.sqlite.prepare('UPDATE local_task_ideas SET created_at=?,created_day=? WHERE task_id=? AND proposal_id=?').run('2026-10-25T01:00:00.000Z','2026-10-25',plans[0].taskId,p.id);
  const body=await view(f);assert.deepEqual(body.entries[0].tasks.map(t=>t.id),plans.map(t=>t.taskId));
 });
-await test('verified total includes older accepted result outside newest10 summaries',async()=>{
+await test('verified total includes older accepted result outside displayed10 summaries',async()=>{
  const f=fixture(),p=await idea(f,'old-verified'),privateIdea=await idea(f,'private-verified',{published:false});
  const oldest=await task(f,p,120,{verified:true});
  f.db.sqlite.prepare('UPDATE local_task_ideas SET created_at=?,created_day=? WHERE task_id=? AND proposal_id=?').run('2026-10-23T01:00:00.000Z','2026-10-23',oldest.taskId,p.id);

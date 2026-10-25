@@ -53,9 +53,10 @@ export function createCommunityFeedHandler(){
    if(entries.length){
     // Rank/count small identity columns before extracting JSON. Only the ten
     // selected summaries per idea cross the D1 boundary, never complete plans.
+    // Prefer unfinished work so a newer completed run cannot bury its direct link.
     const taskRows=await query(`WITH ranked AS (
      SELECT proposal_id,task_id AS id,created_at,
-      ROW_NUMBER() OVER (PARTITION BY proposal_id ORDER BY created_at DESC,task_id DESC) AS position,
+      ROW_NUMBER() OVER (PARTITION BY proposal_id ORDER BY EXISTS(SELECT 1 FROM local_task_results pending WHERE pending.task_id=local_task_ideas.task_id),created_at DESC,task_id DESC) AS position,
       COUNT(*) OVER (PARTITION BY proposal_id) AS task_count,
       SUM(EXISTS(SELECT 1 FROM local_task_results v WHERE v.task_id=local_task_ideas.task_id))
        OVER (PARTITION BY proposal_id) AS verified_task_count
@@ -65,7 +66,7 @@ export function createCommunityFeedHandler(){
      json_extract(t.task_json,'$.taskId') AS embedded_id,
      EXISTS(SELECT 1 FROM local_task_results a WHERE a.task_id=r.id) AS has_results
     FROM ranked r JOIN local_tasks t ON t.id=r.id WHERE r.position<=10
-    ORDER BY r.proposal_id,r.created_at DESC,r.id DESC`,...entries.map(e=>e.id));
+    ORDER BY r.proposal_id,has_results,r.created_at DESC,r.id DESC`,...entries.map(e=>e.id));
     if(!Array.isArray(taskRows.results)||taskRows.results.length>PAGE_SIZE*TASKS_PER_IDEA)throw Error('Invalid task metadata response');
     const seen=new Set();
     for(const row of taskRows.results){

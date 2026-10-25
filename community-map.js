@@ -1,6 +1,7 @@
 /* Community entries are navigation objects, never published solving evidence. */
 (function(root){
  'use strict';
+ const Work=typeof module==='object'&&module.exports?require('./research-work.js'):root.ResearchWork;
  const C=typeof module==='object'&&module.exports?require('./claim-specification.js'):root.ClaimSpecification;
  const H=typeof module==='object'&&module.exports?require('./claim-share.js'):root.ClaimShare;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/;
@@ -18,6 +19,7 @@
   const ids=new Set();
   for(const entry of feed.entries){
    exact(entry,['id','card','createdAt','tasks','taskCount','verifiedTaskCount']);
+   if(!Work.communityTasks(entry))throw Error('Inconsistent community task counts or summaries.');
    if(!Number.isSafeInteger(entry.verifiedTaskCount)||entry.verifiedTaskCount<0||entry.verifiedTaskCount>entry.taskCount)throw Error('Invalid verified task count.');
    if(!IDEA.test(entry.id)||ids.has(entry.id)||!Number.isFinite(Date.parse(entry.createdAt))||!Array.isArray(entry.tasks)||entry.tasks.length>10||!Number.isSafeInteger(entry.taskCount)||entry.taskCount<entry.tasks.length)throw Error('Invalid community entry.');
    ids.add(entry.id);decodeCard(entry.card);const tasks=new Set();
@@ -49,7 +51,7 @@
    const record={id,title,question:aim.detail||aim.wording||description,summary:description,community:true,proposal_id:entry.id,
     evidence_state:entry.verifiedTaskCount>0?'computation-available':'untested',created_at:entry.createdAt,
     outcome:'',record_type:{id:'idea',label:'Community idea'},method_topics:classified.familyIds.map(id=>({id,title:C.METHOD_FAMILIES[id]})),
-    pages,scope:{pages,representation:'',procedure:description,parameters:'',exclusions:''},href:'run.html#idea='+entry.id,task_count:entry.taskCount};
+    pages,scope:{pages,representation:'',procedure:description,parameters:'',exclusions:''},href:'run.html#idea='+entry.id,task_count:entry.taskCount,verified_task_count:entry.verifiedTaskCount,task_summaries:structuredClone(entry.tasks)};
    data.records[id]=record;
    const node={id:'record:'+id,parent:parent.id,label:title,color:parent.color,kind:'record',record_id:id,children:[],members:[id],parent_basis:'confirmed idea navigation'};
    parent.children.push(node.id);view.nodes.push(node);nodes.set(node.id,node);
