@@ -123,6 +123,13 @@ check after it appears. The full chooser remains one direct disclosure below.
 If a visitor opens that chooser while evidence is loading, do not insert a new
 recommendation above their place. Unknown availability must stay explicit.
 
+A saved calculation comes before an unfinished comparison. Explain the next
+change in ordinary words, and derive its action label from the other verified
+grouping. A small illustration may show the same rune order inside different
+group boundaries; label it as an illustration, never as measured evidence.
+Reviewing the other grouping must still lead to an explicit Run decision and
+reuse any pages that already have verified results.
+
 Explain the sequence in ordinary words: review, run in this browser, choose
 whether to save. Say how saving updates the question's checked work. Keep exact
 rules available before Run, and distinguish a completed calculation from a
