@@ -14,6 +14,7 @@
  const request=q=>new Promise((resolve,reject)=>{q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error||Error('Local storage request failed.'));});
  function linkValid(link,source){return exact(link,['taskId','href','label'])&&link.taskId===source.task.taskId&&typeof link.label==='string'&&link.label.trim()&&link.label.length<=300&&typeof link.href==='string'&&(link.href==='run.html#task='+link.taskId||/^library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(link.href)||/^run\.html#family=deor-feedback-v1&case=[a-z0-9-]+&revision=[a-f0-9]{64}$/.test(link.href));}
  async function open(options={}){return openStore(options,false);}
+ async function openOutputInspection(options={}){return openOutputComparison(options);}
  async function openOutputComparison(options={}){
   try{const descriptors=Object.getOwnPropertyDescriptors(options);if(!options||typeof options!=='object'||Array.isArray(options)||Reflect.ownKeys(options).some(key=>typeof key!=='string'||!['indexedDB','crypto','name'].includes(key)||!Object.hasOwn(descriptors[key],'value')))return {state:'invalid'};}catch{return {state:'invalid'};}
   return openStore(options,true);
@@ -70,5 +71,5 @@
   async function recoverExport(input,selection){const n=namespace(input),v=capture(selection);if(!exact(v,['sessionId','state','chunkCount','bytes','snapshotId','revision']))reject('invalid','Select one exact retained export.');const key=n.key+'--'+v.sessionId,saved=await transaction(['sessions'],'readonly',tx=>request(tx.objectStore('sessions').get(key)));if(!saved||saved.namespace!==n.key||E.stable(header(saved))!==E.stable(v))reject('stale','This selected export changed or was removed.');const token=Object.freeze({});tokens.set(token,{...saved,recovery:v});return token;}
   return {state:'ready',store:{listPending,getPinnedPending,listExports,recoverExport,putSources,sources,sourceStream,getSource,savePending,restorePending,removePending,beginExport,writeChunk,readChunk,commitExport,discardExport,close(){closed=true;db.close();}}};
  }
- const api={open,openOutputComparison,LIMITS};if(node)module.exports=api;else root.FactoredSearchStore=api;
+ const api={open,openOutputComparison,openOutputInspection,LIMITS};if(node)module.exports=api;else root.FactoredSearchStore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -24,6 +24,8 @@ MAX_DOMAIN = 4 * 1024 * 1024
 PATH = re.compile(r'^chunks/[0-9]{6}\.json$')
 DERIVATION = 'The requested opening is evaluated now from independently replayed original transformed text. Original source criteria, verdicts and dates remain unchanged; no requested-experiment result receipt or historical test is created.'
 OUTPUT_DERIVATION = 'The requested language comparison is evaluated now from independently replayed original transformed text. Original source criteria, verdicts and dates remain unchanged; no requested-experiment result receipt or historical test is created.'
+INSPECTION_LIMIT = 'These receipts preserve the complete output of the declared transformations on the pinned texts. Completion means the declared outputs are ready to inspect; it does not decide language, readability or decryption. Outputs containing no runes still count as computed. Missing cases are absent from these receipts; they are not established as new work.'
+INSPECTION_DERIVATION = 'The requested output inspection uses independently replayed original transformed text. Original source criteria, verdicts and dates remain unchanged; no requested-experiment result receipt or historical test is created.'
 OUTPUT_LIMIT = 'These comparisons describe the declared outputs against the eight pinned reference texts and their 32 same-rune rearrangements. They do not identify a language or establish a decryption. Outputs with fewer than 40 runes are too short to compare. Missing cases are absent from these receipts; they are not established as new work.'
 
 
@@ -42,7 +44,7 @@ def read_bytes(path, limit):
     return raw
 
 
-def domain_check(original, q, output=False):
+def domain_check(original, q, output=False, inspection=False):
     fields(original, ('proposalId', 'card'), 'Original')
     card = original['card']
     require(original['proposalId'] == 'p_' + old.digest(card), 'Original proposal identity mismatch')
@@ -54,8 +56,10 @@ def domain_check(original, q, output=False):
     require(len(old.stable(q).encode('utf-8')) <= MAX_DOMAIN, 'Shared domain exceeds 4 MiB')
     require(q['id'] == old.digest({k: v for k, v in q.items() if k != 'id'}), 'Factored domain digest mismatch')
     require(card['rules']['inputVersion'] == {'status': 'specified', 'value': q['inputVersion']}
-            and card['rules']['evaluation'] == {'status': 'specified', 'value': q['criterion']}, 'Original edition/criterion changed')
-    if output:
+            and card['rules']['evaluation'] == {'status': 'specified', 'value': 'measurement' if inspection else q['criterion']}, 'Original edition/criterion changed')
+    if inspection:
+        require(q['questionPolicy'] == 'transformed-output-inspection-v1' and q['criterion'] == {'kind': 'measurement'}, 'The explicit output inspection changed')
+    elif output:
         require(q['questionPolicy'] == 'language-reference-comparison-v1' and q['criterion'] ==
                 {'kind': 'language-score', 'modelId': runner.LANGUAGE_MODEL_ID, 'modelSha256': runner.LANGUAGE_MODEL_SHA256}, 'The explicit pinned comparison changed')
     else:
@@ -90,17 +94,18 @@ def verify(manifest, directory):
     output = manifest.get('schema') == 'liberpedia-factored-finite-output-snapshot-v1'
     fields(manifest, ('schema', 'questionPolicy', 'original', 'question', 'evidence', 'proof', 'finding', 'snapshotId') if output
            else ('schema', 'original', 'question', 'evidence', 'proof', 'finding', 'snapshotId'), 'Manifest')
+    inspection = output and manifest.get('questionPolicy') == 'transformed-output-inspection-v1'
     if output:
-        require(manifest['questionPolicy'] == 'language-reference-comparison-v1', 'The output question policy changed')
+        require(manifest['questionPolicy'] in ('language-reference-comparison-v1', 'transformed-output-inspection-v1'), 'The output question policy changed')
     derived = manifest['schema'] == 'liberpedia-factored-finite-search-snapshot-v3'
     require(output or derived or manifest['schema'] == 'liberpedia-factored-finite-search-snapshot-v2', 'Unsupported snapshot schema')
     require(manifest['snapshotId'] == old.digest({k: v for k, v in manifest.items() if k != 'snapshotId'}), 'Snapshot digest mismatch')
     q, e = manifest['question'], manifest['evidence']
-    programs = domain_check(manifest['original'], q, output)
+    programs = domain_check(manifest['original'], q, output, inspection)
     fields(e, ('chunks', 'lookup', 'provenanceMeaning', 'mode', 'derivationMeaning') if derived or output
            else ('chunks', 'lookup', 'provenanceMeaning'), 'Evidence')
     if output:
-        require(e['mode'] == 'verified-output-language-v1' and e['derivationMeaning'] == OUTPUT_DERIVATION, 'Derived comparison meaning changed')
+        require(e['mode'] == ('verified-output-inspection-v1' if inspection else 'verified-output-language-v1') and e['derivationMeaning'] == (INSPECTION_DERIVATION if inspection else OUTPUT_DERIVATION), 'Derived comparison meaning changed')
     if derived:
         require(e['mode'] == 'verified-output-prefix-v1' and e['derivationMeaning'] == DERIVATION, 'Derived evidence meaning changed')
     fields(e['lookup'], ('recordedComplete', 'meaning'), 'Recorded lookup')
@@ -178,14 +183,17 @@ def verify(manifest, directory):
                     values = [indices[ch] for ch in text if ch in indices]
                     match = values[:len(q['criterion']['values'])] == q['criterion']['values']
                 if output:
-                    if direct:
+                    if inspection:
+                        rune_set = {entry['rune'] for entry in q['alphabet']}
+                        assessment = {'status': 'rune-output' if any(ch in rune_set for ch in text) else 'no-runes'}
+                    elif direct:
                         assessment = next(p for p in run['result']['languageScore']['pages'] if p['page'] == page['id'])
                     else:
                         indices = {entry['rune']: i for i, entry in enumerate(q['alphabet'])}
                         assessment = runner.language_evaluate([indices[ch] for ch in text if ch in indices])
-                    require(assessment['status'] in ('compared', 'insufficient'), 'An original comparison status changed')
+                    require(assessment['status'] in (('rune-output', 'no-runes') if inspection else ('compared', 'insufficient')), 'An original comparison status changed')
                     signature = old.digest({'text': text, 'status': assessment['status']})
-                    if assessment['status'] == 'insufficient':
+                    if assessment['status'] == ('no-runes' if inspection else 'insufficient'):
                         insufficient[position >> 3] |= 1 << (position & 7)
                 else:
                     signature = old.digest({'text': text, 'matched': match})
@@ -206,10 +214,10 @@ def verify(manifest, directory):
              'matchingSha256': hashlib.sha256(matching).hexdigest()}
     if output:
         insufficient_count = sum(bin(byte).count('1') for byte in insufficient)
-        proof = {'coveredCases': covered_count, 'usableCases': covered_count - insufficient_count,
-                 'insufficientCases': insufficient_count, 'remainingCases': q['totalCases'] - covered_count,
+        proof = {'coveredCases': covered_count, ('runeOutputCases' if inspection else 'usableCases'): covered_count - insufficient_count,
+                 ('noRuneCases' if inspection else 'insufficientCases'): insufficient_count, 'remainingCases': q['totalCases'] - covered_count,
                  'complete': covered_count == q['totalCases'], 'coverageSha256': hashlib.sha256(coverage).hexdigest(),
-                 'insufficientSha256': hashlib.sha256(insufficient).hexdigest()}
+                 ('noRuneSha256' if inspection else 'insufficientSha256'): hashlib.sha256(insufficient).hexdigest()}
     if derived or output:
         derived_coverage = bytearray(len(coverage))
         for position, owner in owners.items():
@@ -220,14 +228,14 @@ def verify(manifest, directory):
                      derivedCoverageSha256=hashlib.sha256(derived_coverage).hexdigest())
         require(type(manifest['proof'].get('directCases')) is int and type(manifest['proof'].get('derivedCases')) is int, 'Derived coverage count types changed')
     if output:
-        proof['evidenceMode'] = 'verified-output-language-v1'
+        proof['evidenceMode'] = 'verified-output-inspection-v1' if inspection else 'verified-output-language-v1'
     fields(manifest['proof'], tuple(proof), 'Coverage proof')
-    require(all(type(manifest['proof'][key]) is int for key in (('coveredCases', 'usableCases', 'insufficientCases', 'remainingCases') if output else ('coveredCases', 'matchingCases', 'remainingCases')))
+    require(all(type(manifest['proof'][key]) is int for key in (('coveredCases', 'runeOutputCases', 'noRuneCases', 'remainingCases') if inspection else ('coveredCases', 'usableCases', 'insufficientCases', 'remainingCases') if output else ('coveredCases', 'matchingCases', 'remainingCases')))
             and type(manifest['proof']['complete']) is bool
-            and all(isinstance(manifest['proof'][key], str) and old.HEX.fullmatch(manifest['proof'][key]) for key in (('coverageSha256', 'insufficientSha256') if output else ('coverageSha256', 'matchingSha256'))), 'Coverage proof types changed')
+            and all(isinstance(manifest['proof'][key], str) and old.HEX.fullmatch(manifest['proof'][key]) for key in (('coverageSha256', 'noRuneSha256') if inspection else ('coverageSha256', 'insufficientSha256') if output else ('coverageSha256', 'matchingSha256'))), 'Coverage proof types changed')
     require(manifest['proof'] == proof, 'Coverage counts or bitmap digests changed')
-    answer = ('comparisons-complete' if proof['complete'] else 'incomplete') if output else 'prefix-found' if matched_count else 'prefix-not-found' if proof['complete'] else 'incomplete'
-    limit = OUTPUT_LIMIT if output else old.LIMIT
+    answer = (('outputs-ready' if inspection else 'comparisons-complete') if proof['complete'] else 'incomplete') if output else 'prefix-found' if matched_count else 'prefix-not-found' if proof['complete'] else 'incomplete'
+    limit = INSPECTION_LIMIT if inspection else OUTPUT_LIMIT if output else old.LIMIT
     require(manifest['finding'] == {'kind': answer, 'limit': limit}, 'Finding or scientific limit changed')
     return {'snapshotId': manifest['snapshotId'], 'domainId': q['id'], 'finding': answer, **proof,
             'replayedSources': len(replayed), 'originalReceipts': len(receipts),

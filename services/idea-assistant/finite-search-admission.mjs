@@ -19,11 +19,12 @@ const captureCard=card=>Json.capture(card,{maxBytes:Share.MAX_BYTES,maxDepth:16,
 
 const checkedSettings=api=>{if(api!==Settings&&api!==Settings.factored)throw Error('Unsupported finite settings policy.');return api;};
 export function compileFiniteMember(card,settings,settingsAPI=Settings,questionPolicy){
- if(questionPolicy!==undefined&&(questionPolicy!=='language-reference-comparison-v1'||settingsAPI!==Settings.factored))throw Error('Unsupported finite evaluation policy.');
+ if(questionPolicy!==undefined&&(!['language-reference-comparison-v1','transformed-output-inspection-v1'].includes(questionPolicy)||settingsAPI!==Settings.factored))throw Error('Unsupported finite evaluation policy.');
+ const inspection=questionPolicy==='transformed-output-inspection-v1';
  const original=captureCard(card),member=checkedSettings(settingsAPI).member(original,settings),plan=Compiler.compile(member.card);
  if(plan.reason||!Array.isArray(plan.steps))throw Error('The selected finite setting needs an execution adapter: '+(plan.reason||'unsupported program'));
- if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value)||original.rules.evaluation.status!=='specified'||(questionPolicy?Policy.describe(original.rules.evaluation.value).id!==questionPolicy:original.rules.evaluation.value?.kind!=='exact-prefix')
-  ||plan.inputVersion!==original.rules.inputVersion.value||E.stable(plan.pages)!==E.stable(original.scope.value.pages)||E.stable(plan.criterion)!==E.stable(original.rules.evaluation.value))throw Error('Finite cases need the unchanged explicit text version, page scope and '+(questionPolicy?'pinned language comparison.':'opening check.'));
+ if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value)||original.rules.evaluation.status!=='specified'||(inspection?original.rules.evaluation.value!=='measurement':questionPolicy?Policy.describe(original.rules.evaluation.value).id!==questionPolicy:original.rules.evaluation.value?.kind!=='exact-prefix')
+  ||plan.inputVersion!==original.rules.inputVersion.value||E.stable(plan.pages)!==E.stable(original.scope.value.pages)||E.stable(plan.criterion)!==E.stable(inspection?{kind:'measurement'}:original.rules.evaluation.value))throw Error('Finite cases need the unchanged explicit text version, page scope and '+(inspection?'transformed-output inspection.':questionPolicy?'pinned language comparison.':'opening check.'));
  return freeze({declaration:member.declaration,settings:member.settings,plan});
 }
 
@@ -48,6 +49,6 @@ export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto
  for(const item of prepared){item.controls=await prepareControls(item.task,cryptoAPI);await Controls.validate(item.controls,item.task,cryptoAPI);}
  prepared.sort((a,b)=>a.caseId.localeCompare(b.caseId));
  if(new TextEncoder().encode(E.stable(prepared)).length>LIMITS.batchBytes)throw Error('The selected cases exceed the bounded batch size. No preparations were issued.');
- for(const item of prepared){if(signal?.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});item.preparation=await issue({db,proposalId,card:original,task:item.task,inputVersion,parentTaskId:null,controls:item.controls,authority:'idea',basis:{kind:questionPolicy?'factored-output-settings':settingsAPI===Settings.factored?'factored-finite-settings':'finite-settings',settings:item.settings,caseId:item.caseId},createdAt});}
+ for(const item of prepared){if(signal?.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});item.preparation=await issue({db,proposalId,card:original,task:item.task,inputVersion,parentTaskId:null,controls:item.controls,authority:'idea',basis:{kind:questionPolicy==='transformed-output-inspection-v1'?'factored-inspection-settings':questionPolicy?'factored-output-settings':settingsAPI===Settings.factored?'factored-finite-settings':'finite-settings',settings:item.settings,caseId:item.caseId},createdAt});}
  return freeze({declaration,inputVersion,cases:prepared});
 }

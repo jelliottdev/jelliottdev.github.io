@@ -97,6 +97,19 @@ jobs:
       - run: node scripts/test_derived_language_view.cjs
       - run: node scripts/test_factored_output_package.cjs
       - run: node scripts/test_factored_output_snapshot_adversarial.cjs
+      - run: node scripts/test_factored_output_inspection.cjs
+      - run: node scripts/test_factored_inspection_snapshot.cjs
+      - run: node scripts/test_finite_inspection_execution.cjs
+      - run: node scripts/test_family_method_intake.cjs
+      - run: node scripts/test_missing_idea_ui.cjs
+      - run: node scripts/test_word_sum_ellipsis_intake.cjs
+      - run: node scripts/check_published_utf8.cjs
+      - run: node scripts/test_output_policy_compatibility.cjs
+      - run: node scripts/test_factored_inspection_lifecycle.cjs
+      - run: node scripts/test_factored_inspection_workspace.cjs
+      - run: node --experimental-sqlite scripts/test_factored_inspection_loop.mjs
+      - run: node --experimental-sqlite scripts/test_factored_inspection_search_http.mjs
+      - run: node --experimental-sqlite services/idea-assistant/test-factored-evidence-window.mjs
       - run: node --experimental-sqlite services/idea-assistant/test-factored-output-evidence.mjs
       - run: node --experimental-sqlite scripts/test_factored_output_search_http.mjs
       - run: node scripts/test_factored_prefix_reuse.cjs

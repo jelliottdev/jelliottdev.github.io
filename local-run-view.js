@@ -3,7 +3,7 @@
  'use strict';
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const bindings=new WeakMap(),languageComparisons=new WeakMap();
+ const bindings=new WeakMap(),languageComparisons=new WeakMap(),inspectionOutputs=new WeakMap();
  const LANGUAGE_REFERENCES=[['eng_Latn','English'],['cym_Latn','Welsh'],['deu_Latn','German'],['fra_Latn','French'],['spa_Latn','Spanish'],['ita_Latn','Italian'],['por_Latn','Portuguese'],['fin_Latn','Finnish']];
  function languageDescriptor(task){
   const registry=typeof module==='object'&&module.exports?require('./output-evaluators.js'):root.OutputEvaluators;
@@ -170,5 +170,16 @@
   const value=languageComparisons.get(token);if(!value)throw Error('Prepare the original verified output comparison before displaying it.');
   return '<section class="run-language">'+languagePage(value.task,value.result,value.pageId,value.comparison)+'<section class="run-language-next"><h3>What to check next</h3><p>'+esc(value.descriptor.next)+'</p><p>'+esc(value.descriptor.limit)+'</p></section></section>';
  }
- const api={render,bind,pageLabel,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ function criterionLabel(criterion){return ({measurement:'Rune measurements','exact-prefix':'Exact opening','word-affine-count':'Word pair counts','word-prime-sums':'Word prime sums','language-score':'Language reference comparison'})[criterion?.kind]||'Original check';}
+ async function prepareInspectionOutput(task,result,pageId,crypto=root.crypto){
+  const J=typeof module==='object'&&module.exports?require('./finite-json.js'):root.FiniteJSON,captured=J.capture({task,result,pageId},{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});
+  if(!captured.task.pages?.some(page=>page.id===captured.pageId))throw Error('Choose an original output page.');
+  const verified=await E.verify(captured.task,captured.result,crypto),page=verified.transformed.find(page=>page.page===captured.pageId);if(!page)throw Error('The original output page is missing.');
+  const token=Object.freeze({});inspectionOutputs.set(token,{text:page.text,pageId:captured.pageId,hasRunes:Array.from(page.text).some(ch=>captured.task.alphabet.some(entry=>entry.rune===ch))});return token;
+ }
+ function renderInspectionOutput(token){
+  const value=inspectionOutputs.get(token);if(!value)throw Error('Verify the original output before displaying it.');
+  return '<section class="run-output-inspection"><h3>Transformed text · '+esc(value.pageId.toUpperCase())+'</h3><p>'+ (value.hasRunes?'Exact rune text after the declared method.':'This output contains no runes. Its exact punctuation and spacing are shown below.')+' This does not decide readability or a decryption.</p><pre class="run-language-excerpt" data-inspection-rune-text>'+esc(value.text)+'</pre></section>';
+ }
+ const api={render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

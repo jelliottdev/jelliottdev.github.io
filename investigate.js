@@ -98,6 +98,79 @@
   if(outcomeOnly)aim=known({outcomeId:goalCategory.id,wording:text.trim(),detail:text.trim()});
   return C.createDraft({source:{text},aim,method:outcomeOnly?C.field():known({operations}),scope,rules,unresolved});
  }
+ // Families organize ideas; only a visitor's explicit narrower choice supplies
+ // an operation. Question identities include the revision so old forms cannot
+ // apply a choice to a different operation after editing or recovery.
+ function familyMethodQuestion(draft){
+  const ops=draft.method.status==='specified'?draft.method.value.operations:[];
+  for(const [index,op] of ops.entries()){
+   const id='family-method:'+index+':'+draft.revision;
+   if(op.id==='family_selection'&&Object.hasOwn(C.METHOD_FAMILIES,op.familyId)){
+    const custom={id:'describe',label:'Describe another exact rule',requiresText:true,fieldLabel:'Describe the exact steps and settings'};
+    const choices={
+     'fixed-substitution':[{id:'affine',label:'An affine substitution with supplied settings',requiresText:true,fieldLabel:'Enter multiplier a and offset b (0–28)',placeholder:'7, 7'},{id:'affine-all',label:'Try all invertible affine substitutions',example:'Review the GP29 convention and complete search before running.'}],
+     polyalphabetic:[{id:'repeating_key',label:'A repeating key with supplied GP indices',requiresText:true,fieldLabel:'Enter the key as GP indices (0–28)',placeholder:'3, 4, 7, 20'},{id:'keys-one',label:'Try all 29 one-rune repeating keys',example:'Explicit GP index domain 0–28; review its settings before running.'},{id:'keys-two',label:'Try all 841 two-rune repeating keys',example:'Every ordered pair of GP indices 0–28; review before running.'}],
+     feedback:[{id:'plaintext_autokey',label:'Plaintext autokey with a supplied seed',requiresText:true,fieldLabel:'Enter the seed as GP indices (0–28)'},{id:'ciphertext_autokey',label:'Ciphertext autokey with a supplied seed',requiresText:true,fieldLabel:'Enter the seed as GP indices (0–28)'}],
+     transposition:['word','line','page'].map(unit=>({id:'reverse-'+unit,label:'Reverse rune order within each '+unit,example:unit==='word'?'Keep the words in place.':unit==='line'?'Keep the lines in place.':'Reverse all runes on each page.'})),
+     'prime-indices':[{id:'word_prime_sums',label:'Add GP prime values within each word',example:'Choose the prime table and word breaks. This produces totals, not plaintext.'}],
+     'number-streams':[{id:'finite_key',label:'Use a supplied finite stream of GP indices',requiresText:true,fieldLabel:'Enter the complete stream as GP indices (0–28)',example:'The supplied stream must cover each selected segment; it does not repeat.'}],
+     repetition:[{id:'word_affine_count',label:'Count within-word rune pairs following a formula',example:'Choose a distance and y = a·x + b modulo 29; compare with the rearrangement average.'}],
+     'book-codes':[]
+    }[op.familyId];
+    return {id,prompt:'Which specific method do you mean?',context:C.METHOD_FAMILIES[op.familyId]+'. '+(op.familyId==='book-codes'?'Book and coordinate lookups need an exact source and lookup rule. The browser does not yet run a general book cipher.':'A family alone does not define a test. Choose an exact method or keep your own rule; other methods may need an adapter.'),choices:[...choices,custom]};
+   }
+   if(!Object.hasOwn(C.METHOD_FAMILIES,op.declaredFamilyId))continue;
+   const setting=(name,prompt,choices,context)=>({id:'family-setting:'+index+':'+draft.revision+':'+name,prompt,choices,...(context?{context}:{})});
+   if(['repeating_key','plaintext_autokey','ciphertext_autokey','finite_key'].includes(op.id)){
+    if(!Object.hasOwn(op,'direction'))return setting('direction','How should the key indices be combined with the text?',[{id:'subtract',label:'Subtract key indices'},{id:'add',label:'Add key indices'}]);
+    if(!Object.hasOwn(op,'reset'))return setting('reset','When should the key restart?',['page','line','word'].map(value=>({id:value,label:'Restart at each '+value})),draft.rules.reset.status==='specified'?'Your separately supplied reset condition is kept. These settings must agree before this can run.':undefined);
+   }
+   if(['word_prime_sums','word_affine_count'].includes(op.id)){
+    if(op.id==='word_prime_sums'&&!Object.hasOwn(op,'table'))return setting('table','Which prime assignments should be added?',[{id:'canonical',label:'Usual GP prime table',example:'F = 2, U = 3, …, EA = 109'},{id:'reversed',label:'Reversed GP prime table',example:'F = 109, U = 107, …, EA = 2'}]);
+    for(const [name,label,max] of op.id==='word_affine_count'?[['lag','Distance between runes',12],['a','Multiplier a',28],['b','Offset b',28]]:[]){if(!Object.hasOwn(op,name))return setting(name,label+'?', [{id:'supply',label:'Use my supplied value',requiresText:true,fieldLabel:label+' ('+(name==='lag'?1:0)+'–'+max+')'}]);}
+    if(!Object.hasOwn(op,'boundaries'))return setting('boundaries','Where should each word end?',[{id:'non-rune',label:'Every non-rune character ends a word',example:'Spaces and line breaks also end words.'},{id:'hyphen-period',label:'Only hyphens and periods end words',example:'Spaces and line breaks join the runes on either side.'}]);
+    const criterion={kind:op.id==='word_prime_sums'?'word-prime-sums':'word-affine-count',...Object.fromEntries((op.id==='word_prime_sums'?['table','boundaries']:['lag','a','b','boundaries']).map(key=>[key,op[key]]))};
+    if(draft.rules.evaluation.status!=='specified'||C.serialize(draft.rules.evaluation.value)!==C.serialize(criterion))return {...setting('evaluation','What should this measurement establish?',[{id:'measurement',label:op.id==='word_prime_sums'?'List each word and its numerical total':'Count matching pairs and compare with the rearrangement average'},{id:'describe',label:'Keep a different intended check',requiresText:true,fieldLabel:'Describe the rule and intended check together'}],op.id==='word_prime_sums'?'This lists totals. It does not test readable text or statistical significance. Your original aim is kept.':'This is an exact count and rearrangement average, not a deciphering verdict or a tail probability. Your original aim is kept.'),criterion};
+   }
+  }
+  return null;
+ }
+ function answerFamilyMethod(draft,id,choice,text){
+  const question=familyMethodQuestion(draft),option=question?.choices.find(item=>item.id===choice);
+  if(!question||question.id!==id||!option)throw Error('This method question changed. Review the current choices.');
+  if(option.requiresText&&(typeof text!=='string'||!text.trim()))throw Error(option.fieldLabel+'.');
+  const index=Number(id.split(':')[1]),prior=draft.method.value.operations[index],family=prior.familyId||prior.declaredFamilyId;
+  let op={...prior};
+  const integers=(value,maxCount=256)=>{let raw=value.trim();if(raw.startsWith('[')&&raw.endsWith(']'))raw=raw.slice(1,-1);if(!/^\d+(?:\s*,\s*\d+)*$/.test(raw))throw Error('Use comma-separated whole GP indices from 0 to 28.');const values=raw.split(',').map(Number);if(!values.length||values.length>maxCount||values.some(n=>!Number.isSafeInteger(n)||n>28))throw Error('Use whole GP indices from 0 to 28 within the supported key length.');return values;};
+  if(id.startsWith('family-method:')){
+   if(choice==='describe')op={id:'described_method',label:text.trim(),sourceText:text.trim()};
+   else if(choice==='affine'){const values=integers(text,2);if(values.length!==2)throw Error('Supply exactly two indices: multiplier a, offset b.');op={id:'affine',label:'Affine substitution',a:values[0],b:values[1]};}
+   else if(choice==='affine-all')op={id:'described_method',label:'Try all invertible affine substitutions'};
+   else if(choice.startsWith('keys-'))op={id:'described_method',label:'Try all '+(choice==='keys-one'?'one':'two')+'-rune repeating keys using GP indices 0-28'};
+   else if(choice.startsWith('reverse-')){const unit=choice.slice(8);op={id:'reverse_runes',label:'Reverse rune order within each '+unit,unit};}
+   else if(['word_prime_sums','word_affine_count'].includes(choice))op={id:choice,label:choice==='word_prime_sums'?'Word prime sums':'Within-word affine pair count'};
+   else op={id:choice,label:{repeating_key:'Repeating key',plaintext_autokey:'Plaintext autokey',ciphertext_autokey:'Ciphertext autokey',finite_key:'Finite key stream'}[choice],key:integers(text,choice==='finite_key'?20000:256)};
+   // Imported family entries can carry additional supplied parameters. Keep
+   // those active; an unsupported condition must refuse compilation, not vanish.
+   const retained=Object.fromEntries(Object.entries(prior).filter(([key])=>!['id','familyId','label','sourceText','provenance','editHistory','declaredFamilyId'].includes(key)));
+   op={...retained,...op,declaredFamilyId:family};
+   // An already supplied global reset is an explicit setting, not a default.
+   // Unknown conditions remain separate and are never coerced into a reset.
+   if(['repeating_key','plaintext_autokey','ciphertext_autokey','finite_key'].includes(op.id)&&!Object.hasOwn(op,'reset')&&draft.rules.reset.status==='specified'){
+    const supplied=draft.rules.reset.value,reset=typeof supplied==='string'?(supplied.match(/^reset at each (page|line|word)$/i)?.[1].toLowerCase()||supplied):null;
+    if(['page','line','word'].includes(reset))op.reset=reset;
+   }
+  }else{
+   const parameter=id.split(':')[3];
+   if(parameter==='evaluation'&&choice==='measurement'){
+    const next=C.revise(draft,{rules:{evaluation:clarified(question.criterion)}});next.clarifications.push({question:id,choice,revision:next.revision});return next;
+   }
+   if(parameter==='evaluation')op={id:'described_method',label:text.trim(),sourceText:text.trim(),declaredFamilyId:family};
+   else if(['lag','a','b'].includes(parameter)){if(!/^\d+$/.test(text.trim()))throw Error('Supply one whole number.');const value=Number(text.trim()),min=parameter==='lag'?1:0,max=parameter==='lag'?12:28;if(!Number.isSafeInteger(value)||value<min||value>max)throw Error('Choose a whole number from '+min+' to '+max+'.');op[parameter]=value;}
+   else op[parameter]=choice;
+  }
+  const next=C.applyMethodEdit(draft,{type:'replace',index,operation:op});next.clarifications.push({question:id,choice,...(option.requiresText?{text:text.trim()}:{}),revision:next.revision});return next;
+ }
  function intakeQuestions(draft){
   const result=C.questions(draft);
   const acknowledged=name=>draft.clarifications.some(c=>c.question===name&&c.choice==='undecided');
@@ -109,6 +182,7 @@
    ...Object.entries(C.METHOD_FAMILIES).map(([id,label])=>({id:'family:'+id,label})),
    {id:'describe',label:'Describe the method',requiresText:true,fieldLabel:'Describe the rule or steps you want to test'},
    {id:'undecided',label:'I haven’t chosen a method'}]});
+  const familyQuestion=familyMethodQuestion(draft);if(familyQuestion)result.push(familyQuestion);
   if(draft.scope.status==='unspecified'&&!acknowledged('scope'))result.push({id:'scope',prompt:'Which material should this apply to?',choices:[
    {id:'unsolved-lp2',label:'The unsolved LP2 pages',example:'LP2-00–55'},
    {id:'specific',label:'Specific pages or a passage',requiresText:true,fieldLabel:'Name the pages or passage',placeholder:'LP2-15, LP2-17; or LP2-43, lines 2–3'},
@@ -171,6 +245,7 @@
   }).join('')+'</div>';
  }
  function answerIntake(draft,id,choice,text=''){
+  if(/^family-(?:method|setting):/.test(id))return answerFamilyMethod(draft,id,choice,text);
   if(WordSums?.question(draft)?.id===id)return WordSums.clarify(draft,choice);
   if(!['aim','method','scope'].includes(id))return C.clarify(draft,id,choice,text);
   const question=intakeQuestions(draft).find(q=>q.id===id),option=question?.choices.find(c=>c.id===choice);
@@ -610,14 +685,16 @@
      editing=false;editingBackup=null;error='';render();focus('#review-title');
     }catch(e){error=e.message;doc.getElementById('error').textContent=error;}
    });
+   const renderedQuestion=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    doc.getElementById('clarification')?.addEventListener('change',()=>{
-    const selected=doc.querySelector('input[name=choice]:checked')?.value,q=intakeQuestions(draft)[0],option=q.choices.find(c=>c.id===selected),other=Boolean(option?.requiresText);
+    const selected=doc.querySelector('input[name=choice]:checked')?.value,q=intakeQuestions(draft)[0];if(!q||q.id!==renderedQuestion?.id)return;
+    const option=q.choices.find(c=>c.id===selected),other=Boolean(option?.requiresText);
     doc.getElementById('other-label').hidden=!other;doc.getElementById('other-label').textContent=option?.fieldLabel||'Describe what you mean';doc.getElementById('other-detail').hidden=!other;doc.getElementById('other-detail').required=other;doc.getElementById('other-detail').placeholder=option?.placeholder||'';
    });
    doc.getElementById('clarification')?.addEventListener('submit',event=>{
     event.preventDefault();const choice=doc.querySelector('input[name=choice]:checked')?.value;if(!choice)return;
-    const q=intakeQuestions(draft)[0];
-    if(['aim','method','scope'].includes(q.id)||WordSums?.question(draft)?.id===q.id){
+    const q=intakeQuestions(draft)[0];if(!q||q.id!==renderedQuestion?.id)return;
+    if(['aim','method','scope'].includes(q.id)||/^family-(?:method|setting):/.test(q.id)||WordSums?.question(draft)?.id===q.id){
      try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
     }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;

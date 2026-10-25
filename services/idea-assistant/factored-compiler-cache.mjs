@@ -38,3 +38,4 @@ function createCompiler(compileMethod,{crypto=globalThis.crypto,maxEntries=LIMIT
 
 export const createFactoredCompiler=options=>createCompiler(Compiler.compile,options);
 export const createFactoredOutputCompiler=options=>createCompiler(Compiler.compileLanguageComparison,options);
+export const createFactoredInspectionCompiler=options=>createCompiler(Compiler.compileOutputInspection,options);

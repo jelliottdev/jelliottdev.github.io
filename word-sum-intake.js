@@ -23,7 +23,7 @@
   const reversed=phrase.match(/^reverse (?:the )?(?:gematria(?: primus)? prime|gematria primus|gematria|GP(?: prime)?) table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
   let table=null;
   if(reversed){
-   if(reversed[1]&&!/^\(\s*F\s*=\s*109\s*,\s*U\s*=\s*107\s*(?:,\s*)?(?:\.{3}|…)?\s*\)$/i.test(reversed[1]))return null;
+   if(reversed[1]&&!/^\(\s*F\s*=\s*109\s*,\s*U\s*=\s*107\s*(?:,\s*)?(?:\.{3}|\u2026)?\s*\)$/i.test(reversed[1]))return null;
    table='reversed';
   }else{
    // A table must be named explicitly. Bare "sum words" or an unspecified GP
@@ -31,7 +31,7 @@
    const direct=/^sum (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime values (?:within|in) each word$/i.test(phrase);
    const selected=phrase.match(/^use (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
    if(!direct&&!selected)return null;
-   if(selected?.[1]&&!/^\(\s*F\s*=\s*2\s*,\s*U\s*=\s*3\s*(?:,\s*)?(?:\.{3}|…)?\s*\)$/i.test(selected[1]))return null;
+   if(selected?.[1]&&!/^\(\s*F\s*=\s*2\s*,\s*U\s*=\s*3\s*(?:,\s*)?(?:\.{3}|\u2026)?\s*\)$/i.test(selected[1]))return null;
    table='canonical';
   }
   return {table,sourceText:text,...(scopePages?{scopePages}:{})};

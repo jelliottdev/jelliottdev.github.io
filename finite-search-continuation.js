@@ -7,7 +7,11 @@
  const copy=v=>J.capture(v,{maxBytes:65536,maxDepth:10,maxNodes:6000}),stable=v=>JSON.stringify(v);
  function sleep(ms,signal){return new Promise((resolve,reject)=>{if(signal.aborted)return reject(new DOMException('Paused.','AbortError'));const stop=()=>{clearTimeout(timer);signal.removeEventListener('abort',stop);reject(new DOMException('Paused.','AbortError'));},timer=setTimeout(()=>{signal.removeEventListener('abort',stop);resolve();},ms);signal.addEventListener('abort',stop,{once:true});});}
  function createController(options={}){return controller(options,null);}
- function createOutputController({domain,...options}={}){const q=node?require('./factored-finite-question.js'):root.FactoredFiniteQuestion;q?.inspect(domain);if(!q||domain.schema!=='liberpedia-factored-finite-output-question-v1'||domain.questionPolicy!=='language-reference-comparison-v1')throw Error('Use an explicitly bound maintained output question.');return controller(options,domain);}
+ function createOutputController(options={}){return outputController(options,'language-reference-comparison-v1');}
+ function createInspectionController(options={}){
+  if(!options||typeof options!=='object'||Array.isArray(options))throw Error('Use explicit inspection continuation options.');const descriptors=Object.getOwnPropertyDescriptors(options),captured={};for(const key of Reflect.ownKeys(options)){const descriptor=descriptors[key];if(typeof key!=='string'||!['domain','adapter','clock','onState','maxRetries','maxDelayMs'].includes(key)||!descriptor.enumerable||!Object.hasOwn(descriptor,'value'))throw Error('Use explicit inspection continuation options.');captured[key]=descriptor.value;}return outputController(captured,'transformed-output-inspection-v1');
+ }
+ function outputController({domain,...options},policy){const q=node?require('./factored-finite-question.js'):root.FactoredFiniteQuestion;q?.inspect(domain);if(!q||domain.schema!=='liberpedia-factored-finite-output-question-v1'||domain.questionPolicy!==policy)throw Error('Use an explicitly bound maintained output question.');return controller(options,domain);}
  function controller({adapter,clock={sleep},onState,maxRetries=3,maxDelayMs=300000},outputDomain){
   for(const name of ['inspectState','refresh','prepareNext','runPrepared','saveLocal','cancel'])if(typeof adapter?.[name]!=='function')throw Error('A checkpoint-safe finite adapter is required.');
   if(typeof clock?.sleep!=='function'||!Number.isInteger(maxRetries)||maxRetries<0||maxRetries>5||!Number.isSafeInteger(maxDelayMs)||maxDelayMs<1000||maxDelayMs>3600000)throw Error('Invalid continuation retry limits.');
@@ -16,7 +20,7 @@
   function emit(){try{onState?.(getState());}catch{}}
   function read(){const s=copy(adapter.inspectState());
    if(!exact(s,['proposalId','domainId','inputVersion','phase','decision','lookupComplete','preparedCaseIds','unsavedCaseIds','lastError'])||s.proposalId!==binding.proposalId||s.domainId!==binding.domainId||s.inputVersion!==binding.inputVersion)throw Error('The reviewed finite question changed.');
-   if(typeof s.phase!=='string'||typeof s.lookupComplete!=='boolean'||!s.decision||!['answered','missing-evidence','unavailable'].includes(s.decision.state)||(s.decision.state==='answered'&&!(outputDomain?['comparisons-complete']:['prefix-found','prefix-not-found']).includes(s.decision.answer))||Object.keys(s.decision).some(k=>!['state','answer'].includes(k)))throw Error('The finite adapter returned an invalid decision.');
+   if(typeof s.phase!=='string'||typeof s.lookupComplete!=='boolean'||!s.decision||!['answered','missing-evidence','unavailable'].includes(s.decision.state)||(s.decision.state==='answered'&&!(outputDomain?[outputDomain.questionPolicy==='transformed-output-inspection-v1'?'outputs-ready':'comparisons-complete']:['prefix-found','prefix-not-found']).includes(s.decision.answer))||Object.keys(s.decision).some(k=>!['state','answer'].includes(k)))throw Error('The finite adapter returned an invalid decision.');
    for(const ids of [s.preparedCaseIds,s.unsavedCaseIds])if(!Array.isArray(ids)||ids.length>12||new Set(ids).size!==ids.length||ids.some(id=>!HEX.test(id)))throw Error('The finite adapter returned an invalid batch.');
    if(s.unsavedCaseIds.some(id=>!s.preparedCaseIds.includes(id)))throw Error('Local output lost its reviewed preparation.');
    if(s.lastError!==null&&(!s.lastError||typeof s.lastError.message!=='string'||Object.keys(s.lastError).some(k=>!['message','status','code','retryAfterSeconds','retryAt'].includes(k))))throw Error('The finite adapter returned an invalid error.');
@@ -56,5 +60,5 @@
   async function destroy(){if(destroyed)return getState();const cancellation=pause();destroyed=true;++generation;abort?.abort();await cancellation;status='destroyed';action=null;reason='destroyed';emit();return getState();}
   return {start,pause,resume,destroy,getState};
  }
- const api={createController,createOutputController};if(node)module.exports=api;else root.FiniteSearchContinuation=api;
+ const api={createController,createOutputController,createInspectionController};if(node)module.exports=api;else root.FiniteSearchContinuation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
