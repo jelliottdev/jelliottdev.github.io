@@ -222,9 +222,16 @@
   return '<section class="measurement-comparison">'+scope+body+'</section>';
  }
  function bindMeasurementComparison(host,token){const data=measurementData(token);if(!data.coveredPages.length)return ()=>{};return data.task.criterion.kind==='word-prime-sums'?bindWordSums(host,data.task,{wordSums:data.wordSums}):data.task.criterion.kind==='language-score'?bindLanguage(host,data.task,{transformed:data.outputs,languageScore:data.languageScore}):data.task.criterion.kind==='measurement'?bindOutputPreview(host,data.task,{transformed:data.outputs}):()=>{};}
+ // Workflow copy describes confirmed calculation state, never scientific support.
+ function actionCopy({stage,preparedSource=false}={}){
+  if(stage==='ready'&&preparedSource===true)return 'This check is ready to run on this device. No settings to choose. Save the result afterward to add it to the shared research.';
+  if(stage==='local')return 'Finished on this device. Save to add this calculation to the shared research.';
+  if(stage==='saved')return 'Saved to this research entry.';
+  return '';
+ }
  function continuationHTML({verified=false,unsaved=false,hasNext=false}={}){
   if(verified!==true||unsaved!==false||hasNext!==false)return '';
   return '<p class="research-continuation"><a href="research.html?contribute=1">Find another check <span aria-hidden="true">→</span></a></p>';
  }
- const api={continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ const api={actionCopy,continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

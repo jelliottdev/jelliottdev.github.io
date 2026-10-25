@@ -92,6 +92,16 @@ test('answer validation binds ID, href AND complete exact source text',()=>{
  assert.throws(()=>I.validateAnswer({...answer,answer:'Valid [1], invalid group [1, 99].'},docs));
  assert.throws(()=>I.validateAnswer({...answer,sources:[source,source]},docs));
 });
+test('related cards and findings share authored explanations without replacing evidence',()=>{
+ const Reader=require('../record-test-view.js');
+ const record=registry.records.find(r=>r.id==='wulfic-p21-running-key-layers'),doc=docs.find(d=>d.id===record.id);
+ const before=JSON.stringify({record,doc});
+ const preview=I.sourceHTML(doc,[record],{preview:true}),observed=I.observedFindingsHTML([doc],[record]);
+ for(const html of [preview,observed]){assert(html.includes(Reader.title(record)));assert(html.includes(Reader.renderIntro(record)));assert(html.indexOf(Reader.renderIntro(record))<html.indexOf(record.reader_finding));}
+ assert(observed.includes(record.reader_finding));assert.equal(JSON.stringify({record,doc}),before);
+ const historic=I.observedFindingsHTML([doc],[{...record,reader_finding:'A different later result.'}]);assert(!historic.includes('A different later result.'));
+});
+
 test('source and answer HTML are escaped and native citations stay local',()=>{
  const s=docs.find(d=>d.id==='fibonacci-stream-skip-grid');
  const c=C.confirm(I.initialDraft('<img src=x onerror=alert(1)>'),{id:'x',at});

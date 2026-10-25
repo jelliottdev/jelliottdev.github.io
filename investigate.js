@@ -8,6 +8,7 @@
  const R=typeof module!=='undefined'?require('./claim-research.js'):root.ClaimResearch;
  const P=typeof module!=='undefined'?require('./claim-interpretation.js'):root.ClaimInterpretation;
  const D=typeof module!=='undefined'?require('./recorded-comparison.js'):root.RecordedComparison;
+ const Reader=typeof module!=='undefined'?require('./record-test-view.js'):root.RecordTestView;
  const Input=typeof module!=='undefined'?require('./idea-input.js'):root.IdeaInput;
  const WordSums=typeof module!=='undefined'?require('./word-sum-intake.js'):root.WordSumIntake;
  const WordAffine=typeof module!=='undefined'?require('./word-affine-intake.js'):root.WordAffineIntake;
@@ -327,18 +328,19 @@
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
  // Editorial status belongs to the record workflow; preserve substantive uncertainty.
  function readerLimit(record){return String(record.reader_limit||record.limitations||'').replace(/\s*(?:Computational review\s*;\s*)?Human review(?: is)? pending\.?\s*$/i,'').replace(/[;\s]+$/,'').trim();}
- function observedFindingsHTML(docs){
+ function observedFindingsHTML(docs,records=[]){
   const findings=docs.flatMap((doc,index)=>{
    if(doc.kind!=='experiment'||typeof doc.text!=='string')return [];
    try{
     const evidence=JSON.parse(doc.text);if(!evidence||typeof evidence!=='object'||Array.isArray(evidence))return [];
     const text=(primary,fallback)=>typeof primary==='string'&&primary.trim()?primary:typeof fallback==='string'?fallback:'';
     const record={finding:text(evidence.reader_finding,evidence.finding),limitations:text(evidence.reader_limit,evidence.limitations)};
-    return record.finding.trim()?[{doc,index,record}]:[];
+    const authored=records.find(item=>item.id===doc.id);
+    return record.finding.trim()?[{doc,index,record,authored}]:[];
    }catch{return [];}
   });
   if(!findings.length)return '';
-  return '<h2>What the records found</h2>'+findings.map(({doc,index,record})=>'<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">['+(index+1)+'] '+esc(doc.title)+'</a></h3><p>'+esc(record.reader_finding||record.finding)+'</p>'+(readerLimit(record)?'<p class="source-limit"><strong>Limit:</strong> '+esc(readerLimit(record))+'</p>':'')+'</section>').join('');
+  return '<h2>What the records found</h2>'+findings.map(({doc,index,record,authored})=>'<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">['+(index+1)+'] '+esc(Reader?.title(authored)||doc.title)+'</a></h3>'+(authored?Reader?.renderIntro(authored)||'':'')+'<p>'+esc(record.reader_finding||record.finding)+'</p>'+(readerLimit(record)?'<p class="source-limit"><strong>Limit:</strong> '+esc(readerLimit(record))+'</p>':'')+'</section>').join('');
  }
  function numericLeadDifference(record,discovery){
   const target=discovery?.steps?.length===1?discovery.steps[0].operation:null,ops=record.discovery?.operations;
@@ -351,7 +353,7 @@
  }
  function sourceHTML(doc,records,{packet=false,preview=false,discovery=null}={}){
   const record=records.find(r=>r.id===doc.id);
-  const heading='<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(doc.title)+'</a></h3>';
+  const heading='<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(Reader?.title(record)||doc.title)+'</a></h3>'+(record?Reader?.renderIntro(record)||'':'');
   if(!record)return heading+'<p>Supporting manuscript context, not evidence that the idea was tested.</p></section>';
   const scope=record.scope||{},limit=readerLimit(record),finding=record.reader_finding||record.finding;
   const pages=Array.isArray(scope.pages)&&scope.pages.length?compactPages(scope.pages).map(p=>p.text).join(', '):'Not specified in this record';
@@ -366,7 +368,7 @@
  function packetHTML(packet){
   const s=packet.confirmed,r=packet.research,docs=r.evidence.documents||[],noMatch=r.evidence.search?.reason==='no-matching-records',recorded=r.evidence.comparisonKind==='recorded-overlap'&&D.compare({snapshot:R.prepare(s).snapshot,documents:docs})?.answer===r.answer;
   return '<h1>Liberpedia · Research note</h1><p>'+esc(r.at)+'</p>'+rowsHTML(s)+
-   observedFindingsHTML(docs)+'<h2>'+(noMatch?'Search result':'How this relates to your idea')+'</h2>'+(noMatch||recorded?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
+   observedFindingsHTML(docs,r.evidence.records)+'<h2>'+(noMatch?'Search result':'How this relates to your idea')+'</h2>'+(noMatch||recorded?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(r.answer,docs))+'</div>'+
    (docs.length?'<h2>Sources &amp; details</h2>'+docs.map(d=>sourceHTML(d,r.evidence.records,{packet:true})).join(''):'<p>No close record was returned by this search. This is a search result, not a finding that the idea is untried.</p>')+
    '<h2>Original idea</h2><pre>'+esc(s.source.text)+'</pre>';
  }
@@ -651,7 +653,7 @@
   }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
-   if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="research.html#mode=list" target="_blank" rel="noopener">Browse research</a></p>')+controls;
+   if(result)return observedFindingsHTML(result.sources,records)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="research.html#mode=list" target="_blank" rel="noopener">Browse research</a></p>')+controls;
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
    const related=q.query?S.select(documents,q.query,scope.pages||[],scope.discovery).filter(d=>d.kind==='experiment'):[];
    return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true,discovery:scope.discovery})).join(''):'');

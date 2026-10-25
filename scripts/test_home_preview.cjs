@@ -85,7 +85,7 @@ function titleDraftHandoff(){
  assert.equal(Input.read(new URL(entry.href,'https://example.org/')).text,text);
  f.get('idea').value='x'.repeat(1501);entry.listeners.click({preventDefault(){prevented=true;}});
  assert.equal(prevented,true);assert.equal(f.get('idea').value.length,1501);assert.match(f.get('idea-feedback').textContent,/1,500/);
- assert(markup.includes('href="research.html?help=1">Help with an existing check</a>'));
+ assert(markup.includes('href="research.html?contribute=1">Help with an existing check</a>'));
  console.log('PASS home title: exact draft navigation, no submission, overlong draft recovery and direct existing-check route.');
 }
 (async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();cachedNavigation();exactTextHandoff();titleDraftHandoff();console.log('PASS production home preview: stale reads ignored, current errors and exact-code retry preserved, Back-cache URLs retained and discarded-page URLs released; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});
