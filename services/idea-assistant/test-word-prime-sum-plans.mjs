@@ -1,3 +1,4 @@
+import {DatabaseSync} from 'node:sqlite';
 /* Fixed GP word-sum plans; synthetic assets only, no provider or target runs. */
 import assert from 'node:assert/strict';
 import {readFileSync,mkdtempSync,writeFileSync,rmSync} from 'node:fs';
@@ -13,7 +14,7 @@ import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 import L from '../../local-experiment.js';
 import Package from '../../local-run-package.js';
-const at='2026-10-24T12:00:00.000Z',origin='https://jelliottdev.github.io',proposalId='p_'+'a'.repeat(64),sha=text=>createHash('sha256').update(text).digest('hex');
+const at='2026-10-24T12:00:00.000Z',origin='https://jelliottdev.github.io',sha=text=>createHash('sha256').update(text).digest('hex');
 const alphabet=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
 function card(table='reversed',boundaries='non-rune',extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic reversed prime assignments and word sums'},aim:known('Measure word sums'),method:known({operations:[{id:'word_prime_sums',label:'Word prime sums',table,boundaries}]}),scope:known({pages:['lp2-15']}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known({kind:'word-prime-sums',table,boundaries})},...extra}),{id:'fixture',at}));}
@@ -21,18 +22,21 @@ const raw='ᚠᚢ-ᚦ\nᚩ.ᚠ',reviewed='ᚠᚢ-ᚦ.ᚩᚠ';
 const frontendSource=readFileSync(new URL('../../record-followups.js',import.meta.url),'utf8'),exportNeedle='const api={reference,validateOrigins,createWorkspace}';assert(frontendSource.includes(exportNeedle));
 const frontendContext={module:{exports:{}},require:createRequire(new URL('../../record-followups.js',import.meta.url)),btoa,TextEncoder,crypto:webcrypto};vm.createContext(frontendContext);vm.runInContext(frontendSource.replace(exportNeedle,'const api={cardProgram,validatePlan,reference,validateOrigins,createWorkspace}'),frontendContext);
 const frontend=frontendContext.module.exports;
-async function prepare(input){let calls=0,ai=0;const handle=createPrepareTaskHandler({fetcher:async url=>{calls++;assert.equal(url,origin+'/data/pages/lp2-15.json');return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}}),env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert.equal(sql,'SELECT card_json FROM proposals WHERE id=?');return {bind(){return {first:async()=>({card_json:C.serialize(input)})};}};}},TASK_LIMIT:{limit:async()=>({success:true})},AI:{run(){ai++;throw Error('No AI grammar for word sums');}}},request=new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId,parentTaskId:null})});
+async function prepare(input){
+ const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0008_prepared_plans.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const stored=C.serialize(input),hash=sha(stored),proposalId='p_'+hash;sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,hash,stored,'unused',at);
+ let calls=0,ai=0;const handle=createPrepareTaskHandler({fetcher:async url=>{calls++;assert.equal(url,origin+'/data/pages/lp2-15.json');return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}}),env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert(/^(?:SELECT|INSERT INTO prepared_plans)/.test(sql));return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}},TASK_LIMIT:{limit:async()=>({success:true})},AI:{run(){ai++;throw Error('No AI grammar for word sums');}}},request=new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId,parentTaskId:null})});
  const original=L.run;L.run=task=>{
   assert.match(task.title,/^Synthetic local reference 1: layout-(?:forward|reversed) for [a-f0-9]{64}$/,'Preparation may run only the fixed independent synthetic controls');
   assert.deepEqual(task.pages.map(page=>page.id),['lp1-00','lp1-01'],'Preparation must not execute manuscript target pages');
   assert(task.pages.every(page=>page.text!==raw&&page.text!==reviewed),'Official target text cannot be relabeled as a control');
   return original(task);
- };try{const response=await handle(request,env);return {response,value:await response.json(),calls,ai};}finally{L.run=original;}
+ };try{const response=await handle(request,env);const value=await response.json();assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);return {response,value,calls,ai};}finally{L.run=original;sqlite.close();}
 }
 for(const table of ['canonical','reversed'])for(const boundaries of ['non-rune','hyphen-period']){
  const input=card(table,boundaries),before=structuredClone(input),plan=planCard(input);assert(!plan.reason,plan.reason);assert.deepEqual(plan.steps,[]);assert.deepEqual(plan.criterion,{kind:'word-prime-sums',table,boundaries});assert.deepEqual(input,before);assert(plan.notes.some(n=>n.includes('does not reverse digits or rune order')));
  const front=frontend.cardProgram(input);assert.deepEqual(JSON.parse(JSON.stringify(front.steps)),plan.steps);assert.deepEqual(JSON.parse(JSON.stringify(front.criterion)),plan.criterion);
- const {response,value,calls,ai}=await prepare(input);assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.deepEqual(value.task.criterion,plan.criterion);assert.deepEqual(value.task.steps,[]);assert(value.task.title.includes(table+' table'));assert.equal(value.task.pages[0].text,raw);assert.equal(calls,1);assert.equal(ai,0);await L.checkIdentity(value.task);
+ const {response,value,calls,ai}=await prepare(input);assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.match(value.preparation.id,/^prep_[a-f0-9]{64}$/);assert.deepEqual(value.task.criterion,plan.criterion);assert.deepEqual(value.task.steps,[]);assert(value.task.title.includes(table+' table'));assert.equal(value.task.pages[0].text,raw);assert.equal(calls,1);assert.equal(ai,0);await L.checkIdentity(value.task);
  // Independent hand totals for synthetic bytes; this is not manuscript data.
  const result=L.run(value.task);assert.equal(result.wordSums.total,table==='canonical'?19:529);assert.deepEqual(result.wordSums.pages[0].words.map(w=>w.sum),table==='canonical'?(boundaries==='non-rune'?[5,5,7,2]:[5,12,2]):(boundaries==='non-rune'?[216,103,101,109]:[216,204,109]));
 }

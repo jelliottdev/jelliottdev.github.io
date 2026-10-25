@@ -1,3 +1,4 @@
+import {issue as issuePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 import PlanControls from '../../local-plan-controls.js';
 /* Source-bound proposed plans; inference can map wording, never execute code. */
@@ -142,11 +143,11 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    const query=(sql,...args)=>env.PROPOSALS.prepare(sql).bind(...args).first();
    const row=await query('SELECT card_json FROM proposals WHERE id=?',body.proposalId);if(!row)return reply({error:'Confirmed idea not found.'},404);
    if(body.parentTaskId&&!await query('SELECT id FROM local_tasks WHERE id=?',body.parentTaskId))return reply({error:'Parent task not found.'},404);
-   const card=validateCard(row.card_json);let plan=planCard(card),interpretationNotes=[];
+   const card=validateCard(row.card_json);let plan=planCard(card),interpretationNotes=[],basis={kind:'compiled-card',normalizedCard:card};
    if(plan.reason){
     if(card.method.value?.operations?.some(op=>op.id==='word_prime_sums')||card.rules.evaluation.value?.kind==='word-prime-sums')return reply({state:'needs-adapter',reason:plan.reason,proposalId:body.proposalId});
     const mapped=await proposePlan(card,env);
-    if(!mapped.reason){plan=mapped.plan;interpretationNotes=mapped.notes;}
+    if(!mapped.reason){plan=mapped.plan;interpretationNotes=mapped.notes;basis={kind:'mapped-card',normalizedCard:mapped.card,mapping:mapped.mapping};}
     else return reply({state:'needs-adapter',reason:mapped.reason,proposalId:body.proposalId});
    }
    if(plan.reason)return reply({state:'needs-adapter',reason:plan.reason,proposalId:body.proposalId});
@@ -161,7 +162,8 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    let controls;
    try{controls=await prepareControls(task,crypto);await PlanControls.validate(controls,task,crypto);}
    catch{return reply({error:'The runner checks failed. No experiment was created.'},422);}
-   return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,controls,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
+   const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:body.proposalId,card,task,inputVersion:plan.inputVersion,parentTaskId:body.parentTaskId,controls,authority:'idea',basis,createdAt:now().toISOString()});
+   return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,controls,preparation,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
   }catch{return reply({error:'Plan preparation is temporarily unavailable.'},503);}
  };
 }

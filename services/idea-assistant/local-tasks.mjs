@@ -1,3 +1,4 @@
+import {authorize as authorizePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 /* Bounded declarative computation persistence. No user code or scientific verdicts. */
 import L from '../../local-experiment.js';
@@ -82,7 +83,8 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(create){
     let task,taskJson,taskHash,createHash;
     try{
-     exact(body,['proposalId','task','inputVersion','parentTaskId',...(Object.hasOwn(body,'origin')?['origin']:[])]);
+     exact(body,['proposalId','task','inputVersion','parentTaskId',...(Object.hasOwn(body,'origin')?['origin']:[]),...(Object.hasOwn(body,'preparationId')?['preparationId']:[])]);
+     if(Object.hasOwn(body,'preparationId')&&(typeof body.preparationId!=='string'||!/^prep_[a-f0-9]{64}$/.test(body.preparationId)||Object.hasOwn(body,'origin')))throw Error();
      if(Object.hasOwn(body,'origin')&&!validRecordedOrigin(body.origin))throw Error();
      if(!PROPOSAL.test(body.proposalId)||!['raw','reviewed'].includes(body.inputVersion)||(body.parentTaskId!==null&&!HEX.test(body.parentTaskId)))throw Error();
      task=await L.checkIdentity(body.task);taskJson=L.stable(task);taskHash=await digest(taskJson);createHash=await digest(L.stable(body));
@@ -97,7 +99,6 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      try{reviewed=await loadRecordPlan(body.origin,{fetcher});if(L.stable(reviewed.origin)!==L.stable(body.origin)||L.stable(reviewed.card)!==cardJson||L.stable(reviewed.task)!==taskJson||reviewed.inputVersion!==body.inputVersion||body.parentTaskId!==null)throw Error();originId=await digest(L.stable(reviewed.origin));}
      catch{return reply({error:'The reviewed origin, input pins, card or task could not be verified.'},422);}
     }
-    if(!reviewed){try{await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}}
     const saveOrigin=async()=>{
      if(!reviewed)return;
      await db.batch([query(`INSERT INTO local_task_origins(task_id,proposal_id,origin_id,origin_json,snapshot_json,created_at,created_day)
@@ -113,6 +114,11 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     const compatible=link=>link.input_version===body.inputVersion&&link.parent_task_id===body.parentTaskId;
     const linked=await association();
     if(linked){if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));}
+    if(!reviewed){
+     let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
+     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls});
+     if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
+    }
     // Identical bytes under the same already-verified input version can be reused.
     // A different version must independently match that version's official source.
     if(!reviewed&&(!existing||existing.input_version!==body.inputVersion)){

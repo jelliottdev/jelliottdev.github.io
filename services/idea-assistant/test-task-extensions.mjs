@@ -15,9 +15,9 @@ const pageIds=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')
 const sourceBundle=(letters=alphabet)=>({schema:'liberpedia-local-inputs-v1',alphabet:letters.map(entry=>({...entry})),pages:pageIds.map(sourcePage)});
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture({fetcher,timeoutMs=20000}={}){
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0008_prepared_plans.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  const queries=[],calls=[],rates=[];let aiCalls=0,bundleAlphabet=alphabet;
- const db={prepare(sql){assert.match(sql,/^\s*SELECT\b/i,'Extension must not write');queries.push(sql);return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}};
+ const db={prepare(sql){assert.match(sql,/^\s*(?:SELECT\b|INSERT INTO prepared_plans\b)/i,'Extension may only issue an admission receipt');queries.push(sql);return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}};
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async value=>{rates.push(value);return {success:true};}},AI:{run(){aiCalls++;throw Error('No AI allowed');}}};
  const handle=createTaskExtensionHandler({timeoutMs,fetcher:async(url,options)=>{
   calls.push({url,options});assert(url===bundleURL||/^https:\/\/jelliottdev\.github\.io\/data\/pages\/lp2-(?:[0-4]\d|5[0-5])\.json$/.test(url));assert.equal(options.redirect,'manual');
@@ -60,7 +60,7 @@ await test('exact remaining-only plan preserves scientific inputs, publishes not
  assert.deepEqual(output.task.pages.map(p=>p.id),Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')).filter(id=>!['lp2-00','lp2-15'].includes(id)));
  assert(output.task.pages.every(page=>page.text===alphabet[(Number(page.id.slice(4))+1)%29].rune));await L.checkIdentity(output.task);assert.notEqual(output.task.taskId,t.taskId);
  assert.match(output.purpose,/beyond the original request/);assert(!JSON.stringify(output).includes('PRIVATE'));
- assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert(f.calls.every(c=>c.options.signal===f.calls[0].options.signal));assert.equal(f.aiCalls,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,changes);assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_tasks').all(),before);
+ assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert(f.calls.every(c=>c.options.signal===f.calls[0].options.signal));assert.equal(f.aiCalls,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,changes+1);assert.match(output.preparation.id,/^prep_[a-f0-9]{64}$/);assert.equal(output.preparation.authority,'remaining-lp2');assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_tasks').all(),before);
 });
 await test('large55-page scopes use one exact aggregate fetch with raw/reviewed bytes and no fallback',async()=>{
  for(const version of ['raw','reviewed']){const f=fixture(),p=await proposal(f),t=await parent(f,p,{version}),out=await ready(f,t);assert.equal(out.task.pages.length,55);assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert.deepEqual(out.task.pages,out.task.pages.map(page=>({id:page.id,text:sourcePage(page.id)[version==='raw'?'raw':'reviewed_text']})));assert.equal(out.task.pages.find(page=>page.id==='lp2-50').text,version==='raw'?'':sourcePage('lp2-50').reviewed_text);if(version==='raw')assert(out.task.pages.find(page=>page.id==='lp2-00').text.endsWith(' /\r\n'));await L.checkIdentity(out.task);}
@@ -193,4 +193,4 @@ await test('corrupt stored parent/card rejected before loading any new input',as
   const f=fixture(),p=await proposal(f),t=await parent(f,p);mutate(f,t);assert.equal((await f.handle(req(t.taskId),f.env)).status,503);assert.equal(f.calls.length,0);
  }
 });
-console.log('PASS '+groups+' scope-extension groups: real SQLite, bounded mocked official source, no model or persistence.');
+console.log('PASS '+groups+' scope-extension groups: real SQLite, bounded mocked official source, no model or task persistence.');

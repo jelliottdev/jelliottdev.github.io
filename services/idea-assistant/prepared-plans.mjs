@@ -1,0 +1,109 @@
+/* Immutable server-issued admission proof. No generation, inference or task writes. */
+import C from '../../claim-specification.js';
+import E from '../../local-experiment.js';
+import Controls from '../../local-plan-controls.js';
+import {validateCard} from './idea-relations.mjs';
+
+const HEX=/^[a-f0-9]{64}$/,PREP=/^prep_[a-f0-9]{64}$/,PROPOSAL=/^p_[a-f0-9]{64}$/;
+const exact=(o,ks)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).length===ks.length&&ks.every(k=>Object.hasOwn(o,k));
+const require=(ok,message)=>{if(!ok)throw Error(message);};
+const sha=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
+function plain(value,depth=0,budget={nodes:0}){
+ require(depth<=20&&++budget.nodes<=30000,'Prepared basis is too complex');
+ if(value===null||typeof value==='boolean'||typeof value==='string')return value;
+ if(typeof value==='number'&&Number.isFinite(value))return value;
+ if(Array.isArray(value)){
+  const out=[];for(let n=0;n<value.length;n++){const d=Object.getOwnPropertyDescriptor(value,String(n));require(d&&Object.hasOwn(d,'value'),'Prepared arrays must contain data fields');out.push(plain(d.value,depth+1,budget));}return out;
+ }
+ require(value&&typeof value==='object'&&[Object.prototype,null].includes(Object.getPrototypeOf(value)),'Prepared basis must be JSON data');
+ const out={};for(const key of Object.keys(value)){
+  require(!['__proto__','constructor','prototype'].includes(key),'Unsafe prepared basis key');
+  const d=Object.getOwnPropertyDescriptor(value,key);require(Object.hasOwn(d,'value'),'Prepared basis must contain data fields');
+  out[key]=plain(d.value,depth+1,budget);
+ }return out;
+}
+function json(value,max){const copied=plain(value),text=E.stable(copied);require(new TextEncoder().encode(text).length<=max,'Prepared metadata exceeds its byte limit');return {value:copied,text};}
+function query(db,sql,...args){require(typeof db?.prepare==='function','Prepared-plan storage unavailable');return db.prepare(sql).bind(...args).first();}
+function projection(row){return {version:1,id:row.id,proposalId:row.proposal_id,cardHash:row.card_hash,
+ taskId:row.task_id,taskHash:row.task_hash,inputVersion:row.input_version,parentTaskId:row.parent_task_id,
+ authority:row.authority,controlsHash:row.controls_hash};}
+function identity(base,authority,basisHash){return {...base,authority,basisHash};}
+async function binding({proposalId,card,task,inputVersion,parentTaskId,controls}){
+ require(typeof proposalId==='string'&&PROPOSAL.test(proposalId)&&['raw','reviewed'].includes(inputVersion)
+  &&(parentTaskId===null||typeof parentTaskId==='string'&&HEX.test(parentTaskId)),'Invalid prepared plan binding');
+ const canonical=validateCard(card),cardHash=await sha(C.serialize(canonical));
+ require(proposalId==='p_'+cardHash,'Prepared proposal does not match the canonical card');
+ E.validateTask(task);const frozen=JSON.parse(E.stable(task));await E.checkIdentity(frozen);
+ const suite=json(controls,2000000).value;await Controls.validate(suite,frozen);
+ const base={version:1,proposalId,cardHash,taskId:frozen.taskId,taskHash:await sha(E.stable(frozen)),
+  inputVersion,parentTaskId,controlsHash:await sha(E.stable(suite))};
+ return {base,bindingHash:await sha(E.stable(base)),card:canonical,task:frozen};
+}
+async function proposal(db,bound){
+ const row=await query(db,'SELECT card_hash,card_json FROM proposals WHERE id=?',bound.base.proposalId);
+ if(!row)return false;
+ try{return row.card_hash===bound.base.cardHash&&C.serialize(validateCard(row.card_json))===C.serialize(bound.card);}catch{return false;}
+}
+async function basisFor(db,value,bound,authority){
+ const data=json(value,128000),basis=data.value;
+ if(authority==='idea'){
+  require(exact(basis,['kind','normalizedCard',...(basis.kind==='mapped-card'?['mapping']:[])])
+   &&['compiled-card','mapped-card'].includes(basis.kind),'Invalid idea preparation basis');
+  const normalized=validateCard(basis.normalizedCard);
+  if(basis.kind==='compiled-card')require(C.serialize(normalized)===C.serialize(bound.card),'Compiled basis changed the original card');
+  else require(basis.mapping&&typeof basis.mapping==='object'&&!Array.isArray(basis.mapping),'Mapped basis requires reviewed mapping evidence');
+ }else{
+  require(authority==='remaining-lp2'&&exact(basis,['kind','parentTaskId','parentTaskHash','protocolHash','coveredPages','remainingPages'])
+   &&basis.kind==='remaining-lp2'&&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),
+   'Invalid remaining-scope preparation basis');
+  require(typeof basis.protocolHash==='string'&&basis.protocolHash===await sha(E.stable({steps:bound.task.steps,criterion:bound.task.criterion,alphabet:bound.task.alphabet})),
+   'Extension protocol differs from its preparation basis');
+  const covered=C.pages(basis.coveredPages),remaining=C.pages(basis.remainingPages);
+  require(E.stable(covered)===E.stable(basis.coveredPages)&&E.stable(remaining)===E.stable(basis.remainingPages)
+   &&remaining.length>0&&remaining.every(p=>/^lp2-(?:[0-4][0-9]|5[0-5])$/.test(p)&&!covered.includes(p))
+   &&E.stable(remaining)===E.stable(bound.task.pages.map(p=>p.id)),'Invalid exact remaining-page scope');
+  const parent=await query(db,'SELECT t.task_hash FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',basis.parentTaskId,bound.base.proposalId);
+  require(parent?.task_hash===basis.parentTaskHash,'Extension parent is not associated with this idea');
+ }
+ return {text:data.text,hash:await sha(data.text)};
+}
+async function checked(row,bound){
+ if(!row||row.binding_hash!==bound.bindingHash)return null;
+ const p=projection(row);
+ if(!['idea','remaining-lp2'].includes(row.authority)||!PREP.test(row.id)||typeof row.basis_json!=='string'||row.basis_json.length>128000)return null;
+ for(const key of Object.keys(bound.base))if(p[key]!==bound.base[key])return null;
+ try{
+  const basis=JSON.parse(row.basis_json);if(E.stable(basis)!==row.basis_json||await sha(row.basis_json)!==row.basis_hash)return null;
+  if(row.id!=='prep_'+await sha(E.stable(identity(bound.base,row.authority,row.basis_hash))))return null;
+ }catch{return null;}
+ return p;
+}
+export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString()}){
+ const bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});
+ require(await proposal(db,bound),'Confirmed proposal is unavailable or changed');
+ if(parentTaskId!==null)require(await query(db,'SELECT t.id FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',parentTaskId,proposalId),
+  'Prepared parent is not associated with this idea');
+ require(['idea','remaining-lp2'].includes(authority),'Invalid prepared authority');
+ const source=await basisFor(db,basis,bound,authority),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
+ let row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
+ if(row){const receipt=await checked(row,bound);require(receipt,'Stored preparation differs from its binding');return receipt;}
+ require(typeof createdAt==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(createdAt)
+  &&Number.isFinite(Date.parse(createdAt))&&new Date(createdAt).toISOString()===createdAt,'Invalid preparation date');
+ const b=bound.base,day=createdAt.slice(0,10);
+ await query(db,`INSERT INTO prepared_plans(id,binding_hash,proposal_id,card_hash,task_id,task_hash,input_version,parent_task_id,authority,controls_hash,basis_hash,basis_json,created_at,created_day)
+  SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM prepared_plans WHERE created_day=?)<500
+  ON CONFLICT(id) DO NOTHING RETURNING id`,id,bound.bindingHash,proposalId,b.cardHash,b.taskId,b.taskHash,inputVersion,parentTaskId,authority,b.controlsHash,source.hash,source.text,createdAt,day,day);
+ row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
+ if(!row){const error=Error('The daily prepared-plan limit has been reached');error.code='preparation-limit';throw error;}
+ const receipt=await checked(row,bound);require(receipt,'Prepared plan could not be verified');return receipt;
+}
+export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls}){
+ let bound;
+ try{if(preparationId!==undefined)require(typeof preparationId==='string'&&PREP.test(preparationId),'Invalid preparation ID');
+  bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});}catch{return null;}
+ if(!await proposal(db,bound))return null;
+ const row=preparationId===undefined?
+  await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
+  await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
+ return checked(row,bound);
+}

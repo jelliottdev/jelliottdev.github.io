@@ -1,0 +1,81 @@
+/* Immutable admission bindings: real SQLite, fixed synthetic tasks, no hosted calls. */
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import C from '../../claim-specification.js';
+import H from '../../claim-share.js';
+import E from '../../local-experiment.js';
+import Controls from '../../local-plan-controls.js';
+import {issue,authorize} from './prepared-plans.mjs';
+const at='2026-10-24T12:00:00.000Z',sha=v=>createHash('sha256').update(v).digest('hex');
+const alphabet=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
+const f=value=>C.field('specified',value);
+function makeCard(extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic plan fixture'},aim:f('Measure'),
+ method:f({operations:[{id:'affine',a:7,b:7}]}),scope:f({pages:['lp2-15']}),rules:{inputVersion:f('raw'),evaluation:f('measurement')},...extra}),{id:'fixture',at}));}
+async function fixture(){
+ const sqlite=new DatabaseSync(':memory:');
+ for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const db={prepare(sql){return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}},card=makeCard(),cardHash=sha(C.serialize(card)),proposalId='p_'+cardHash;
+ sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,cardHash,C.serialize(card),'unused',at);
+ const task=await E.prepare({title:'Synthetic prepared target',alphabet,pages:[{id:'lp2-15',text:'ᚠᚢ-ᚦ'}],steps:[{op:'affine',a:7,b:7}],criterion:{kind:'measurement'}});
+ const controls=await Controls.prepare(task),args={db,proposalId,card,task,inputVersion:'raw',parentTaskId:null,controls,authority:'idea',basis:{kind:'compiled-card',normalizedCard:card},createdAt:at};
+ return {sqlite,db,args};
+}
+let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
+await test('exact issued binding, timestamp-independent retries and no task/result creation',async()=>{
+ const {sqlite,args}=await fixture(),before=JSON.stringify(args.card),receipt=await issue(args);
+ assert.match(receipt.id,/^prep_[a-f0-9]{64}$/);assert.equal(receipt.cardHash,sha(C.serialize(args.card)));assert.equal(receipt.taskHash,sha(E.stable(args.task)));assert.equal(receipt.controlsHash,sha(E.stable(args.controls)));
+ assert.equal(JSON.stringify(args.card),before);assert.deepEqual(await issue({...args,createdAt:'2026-10-25T01:00:00.000Z'}),receipt);
+ assert.deepEqual(await authorize({...args,preparationId:receipt.id}),receipt);assert.deepEqual(await authorize(args),receipt);
+ assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
+ assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,1);
+ assert.throws(()=>sqlite.prepare("UPDATE prepared_plans SET authority='remaining-lp2'").run(),/immutable/);
+});
+await test('genuine concurrent issuance is idempotent and cannot exceed the global daily cap',async()=>{
+ const {sqlite,args}=await fixture(),receipts=await Promise.all(Array.from({length:12},()=>issue(args)));
+ assert(receipts.every(r=>r.id===receipts[0].id));assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,1);
+ // Seed unrelated immutable rows to exercise the SQL cap without running 499
+ // irrelevant control suites. The real receipt remains unchanged and valid.
+ const row=sqlite.prepare('SELECT * FROM prepared_plans').get(),keys=Object.keys(row),insert=sqlite.prepare('INSERT INTO prepared_plans('+keys.join(',')+') VALUES('+keys.map(()=>'?').join(',')+')');
+ for(let n=0;n<499;n++)insert.run(...keys.map(k=>k==='id'?'prep_'+String(n).padStart(64,'0'):row[k]));
+ assert.deepEqual(await issue(args),receipts[0],'Exact retries survive a full issuance day');
+ const task=await E.prepare({...args.task,title:'Another bounded task'}),controls=await Controls.prepare(task),changed={...args,task,controls};
+ await assert.rejects(issue(changed),e=>e.code==='preparation-limit');assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,500);
+ assert(await issue({...changed,createdAt:'2026-10-25T00:00:00.000Z'}));
+});
+await test('unissued, stale and altered bindings never authorize or mutate storage',async()=>{
+ const {sqlite,args}=await fixture();assert.equal(await authorize(args),null);const receipt=await issue(args),before=sqlite.prepare('SELECT total_changes() n').get().n;
+ for(const change of [{preparationId:'prep_'+'f'.repeat(64)},{inputVersion:'reviewed'},{parentTaskId:'f'.repeat(64)},
+  {proposalId:'p_'+'f'.repeat(64)},{card:makeCard({aim:f('Explain a feature')})}])assert.equal(await authorize({...args,preparationId:receipt.id,...change}),null);
+ for(const delta of [{title:'Changed title'},{steps:[{op:'affine',a:7,b:8}]},{criterion:{kind:'exact-prefix',values:[1]}},{pages:[{id:'lp2-16',text:'ᚠᚢ-ᚦ'}]}]){
+  const task=await E.prepare({...args.task,...delta}),controls=await Controls.prepare(task);
+  assert.equal(await authorize({...args,preparationId:receipt.id,task,controls}),null);assert.equal(await authorize({...args,task,controls}),null);
+ }
+ const bad=structuredClone(args.controls);bad.cases[0].expectedResultSha256='0'.repeat(64);assert.equal(await authorize({...args,controls:bad}),null);
+ assert.equal(sqlite.prepare('SELECT total_changes() n').get().n,before);
+});
+await test('basis is immutable hashed server evidence and JSON-only; full replay rejects fabricated controls',async()=>{
+ const {sqlite,args}=await fixture(),first=await issue(args);
+ const mapped={kind:'mapped-card',normalizedCard:args.card,mapping:{version:1,steps:[{source:'Synthetic reviewed mapping'}],unsupported:[]}};
+ const second=await issue({...args,basis:mapped});assert.notEqual(second.id,first.id);assert.deepEqual(await authorize({...args,preparationId:second.id}),second);
+ const before=sqlite.prepare('SELECT total_changes() n').get().n,bad=structuredClone(args.controls);bad.targetId='f'.repeat(64);
+ await assert.rejects(issue({...args,controls:bad}));
+ const getter={kind:'compiled-card'};Object.defineProperty(getter,'normalizedCard',{enumerable:true,get(){throw Error('Must not invoke getter');}});
+ await assert.rejects(issue({...args,basis:getter}),/data fields/);await assert.rejects(issue({...args,basis:{kind:'unknown'}}));
+ assert.equal(sqlite.prepare('SELECT total_changes() n').get().n,before);
+});
+await test('remaining-page authority binds the original idea parent and exact unchanged protocol',async()=>{
+ const {sqlite,args}=await fixture(),parent=args.task,taskJSON=E.stable(parent),taskHash=sha(taskJSON);
+ sqlite.prepare('INSERT INTO local_tasks VALUES(?,?,?,?,?,?,?,?,?,?)').run(parent.taskId,taskHash,'0'.repeat(64),args.proposalId,C.serialize(args.card),taskJSON,'raw',null,at,at.slice(0,10));
+ sqlite.prepare('INSERT INTO local_task_ideas VALUES(?,?,?,?,?,?)').run(parent.taskId,args.proposalId,'raw',null,at,at.slice(0,10));
+ const task=await E.prepare({...parent,title:'Remaining scope',pages:[{id:'lp2-16',text:'ᚦᚢ'}]}),controls=await Controls.prepare(task),basis={kind:'remaining-lp2',parentTaskId:parent.taskId,parentTaskHash:taskHash,protocolHash:sha(E.stable({steps:task.steps,criterion:task.criterion,alphabet:task.alphabet})),coveredPages:['lp2-15'],remainingPages:['lp2-16']};
+ const expanded={...args,task,controls,parentTaskId:parent.taskId,authority:'remaining-lp2',basis},receipt=await issue(expanded);
+ assert.equal(receipt.authority,'remaining-lp2');assert.deepEqual(await authorize({...expanded,preparationId:receipt.id}),receipt);
+ for(const delta of [{parentTaskHash:'0'.repeat(64)},{protocolHash:'0'.repeat(64)},{remainingPages:['lp2-17']},{coveredPages:['lp2-16']}])await assert.rejects(issue({...expanded,basis:{...basis,...delta}}));
+ const unknown='f'.repeat(64);await assert.rejects(issue({...expanded,parentTaskId:unknown,basis:{...basis,parentTaskId:unknown}}));
+});
+await test('missing migration and storage faults remain errors, never an admission fallback',async()=>{
+ const {sqlite,args}=await fixture();sqlite.exec('DROP TABLE prepared_plans');await assert.rejects(authorize(args),/no such table/);await assert.rejects(issue(args),/no such table/);
+});
+console.log('PASS '+groups+' immutable prepared-plan authorization groups; synthetic computations only, real SQLite, no hosted calls.');

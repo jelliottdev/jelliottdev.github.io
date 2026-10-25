@@ -74,7 +74,7 @@ export function validateCandidate(input,candidate,{compile}={}){
   const validated=validateCard(normalized),plan=compile(validated);
   if(!plan||plan.reason)return {reason:plan?.reason||'The mapped plan could not be validated.'};
   if(L.stable(plan.steps)!==L.stable(steps))return {reason:'The deterministic compiler changed the proposed operations.'};
-  return {card:validated,notes,steps:clone(steps),plan:clone(plan)};
+  return {card:validated,notes,steps:clone(steps),plan:clone(plan),mapping:clone(candidate)};
  }catch{return {reason:'The proposed method mapping could not be validated.'};}
 }
 export function createAIPlanner({AI,compile,now=()=>Date.now(),schedule=setTimeout,unschedule=clearTimeout}={}){

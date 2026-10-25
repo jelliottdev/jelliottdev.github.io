@@ -267,3 +267,22 @@ Checks: `node scripts/test_recorded_comparison.cjs`,
 `node services/idea-assistant/test-recorded-comparison.mjs`,
 `node scripts/test_investigate_recorded.cjs`, and
 `python scripts/check_recorded_row_routes.py --self-test`.
+
+
+## Reviewed-plan admission
+
+Migration `0008_prepared_plans.sql` must be applied before deploying the Worker
+and the receipt-dependent run page. Preparation creates an internal immutable
+authorization, not a public experiment or result. It binds the original canonical
+idea, complete task, input version, parent and known-answer controls. Validated
+wording mappings and remaining-page extensions retain their server-side basis.
+
+Generic task creation requires `preparationId`, or an exact previously issued
+binding for older clients. It never recompiles or reinterprets an idea at creation.
+Changed or unissued plans receive 409 and must be prepared again. Existing exact
+idea associations remain retryable, and reviewed record origins keep their
+separate verified admission path. Applying the additive migration before the
+Worker supports the previous frontend without admitting arbitrary tasks.
+
+Checks: `node services/idea-assistant/test-prepared-plans.mjs` from the repository
+root, alongside the preparation, task, extension and browser UI suites.

@@ -92,8 +92,9 @@ On phones, a Graph record selection replaces the canvas with a reading panel; do
 ### Saved-idea experiment preview
 
 For a saved idea with no experiments and a complete task list, load the proposed
-plan automatically. Preparation is read-only: never create a task, execute a
-worker or submit a result during page load. Show the exact plan before the
+plan automatically. Preparation may save an internal authorization binding the
+reviewed card, exact plan and runner checks. Never create a public experiment,
+execute a worker or submit a result during page load. Show the exact plan before the
 creation action. Keep the full confirmed card and preparation notes available
 below it; the outcome and its specific objective remain visible above it.
 Existing experiments come first on return visits. A truncated list does not

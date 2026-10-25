@@ -1,5 +1,7 @@
+import {issue as issuePreparation} from './prepared-plans.mjs';
+import PlanControls from '../../local-plan-controls.js';
 import {loadInputBundle} from './official-inputs.mjs';
-/* Propose a fixed scope extension only. No AI, persistence or execution. */
+/* Propose a fixed scope extension and admission receipt. No AI or target execution. */
 import C from '../../claim-specification.js';
 import L from '../../local-experiment.js';
 import {validateCard} from './idea-relations.mjs';
@@ -15,7 +17,7 @@ async function jsonBody(message,max){
  const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
  const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes);return {value:JSON.parse(text),text};
 }
-export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=20000}={}){
+export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=20000,now=()=>new Date()}={}){
  if(!Number.isFinite(timeoutMs)||timeoutMs<1||timeoutMs>20000)throw Error('Invalid source deadline');
  return async function handle(request,env){
   const allowed=env?.SITE_ORIGIN,headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'};
@@ -113,7 +115,9 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
     if(existing.input_version!==row.input_version)return reply({error:'This computation is already linked to the idea under a different input version. Its association was not changed.'},409);
     return reply({state:'existing-task',...context,taskId:task.taskId,reason:'This experiment already exists. Open it to inspect or run it.'});
    }
-   return reply({state:'plan-ready',...context,inputVersion:row.input_version,task,
+   const controls=await PlanControls.prepare(task,crypto);await PlanControls.validate(controls,task,crypto);
+   const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:row.proposal_id,card,task,inputVersion:row.input_version,parentTaskId:parent.taskId,controls,authority:'remaining-lp2',basis:{kind:'remaining-lp2',parentTaskId:parent.taskId,parentTaskHash:row.task_hash,protocolHash:await digest(signature),coveredPages,remainingPages:ids},createdAt:now().toISOString()});
+   return reply({state:'plan-ready',...context,inputVersion:row.input_version,task,controls,preparation,
     notes:historyStopped?['Earlier tasks used different settings or had no association with this idea. Their pages remain available for this test.']:[],
     purpose:'This extends the page scope beyond the original request. The method is unchanged, and earlier results are kept.'});
   }catch{return reply({error:'Scope extension is temporarily unavailable.'},503);}
