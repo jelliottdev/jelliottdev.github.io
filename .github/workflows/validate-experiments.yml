@@ -97,6 +97,10 @@ jobs:
       - run: node scripts/test_affine_search_clarification.cjs
       - run: node scripts/test_affine_clarification_ui.cjs
       - run: node scripts/test_finite_search_snapshot.cjs
+      - run: node scripts/test_finite_search_download.cjs
+      - run: node scripts/test_finite_search_package.cjs
+      - run: node scripts/test_verified_prefix_evaluation.cjs
+      - run: node --experimental-sqlite scripts/test_prefix_evaluation_sources.mjs
       - run: node scripts/test_keyed_clarification_ui.cjs
       - run: node scripts/test_local_run_package.cjs
       - run: node scripts/test_local_plan_controls.cjs
@@ -188,6 +192,8 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: scripts/requirements-line-gap-measurements.txt
+      - run: python scripts/test_finite_search_audit.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_reproduce_family.py
         if: steps.scope.outputs.science == 'true'
       - run: python -m pip install -r scripts/requirements-line-gap-measurements.txt

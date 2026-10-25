@@ -131,5 +131,17 @@
    'The return page verifies results against this exact task. A matching calculation does not establish a decryption.\n';
   return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],...modelMembers]);
  }
- const api={build,GUARD_SHA256,PLAN_GUARD_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
+ // Whole-search exports audit existing saved computations. They never run missing cases.
+ const FINITE_RUNNER_SHA256='be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61';
+ const FINITE_AUDIT_SHA256='6b09c958c662611b8bc606bee21c64efaae8ad711bce9f9ac9dde63188b64bde';
+ async function buildSnapshot(snapshot,runnerText,auditText){
+  const S=typeof module==='object'&&module.exports?require('./finite-search-snapshot.js'):root.FiniteSearchSnapshot;
+  if(!S?.inspect)throw Error('The verified search snapshot could not be loaded.');
+  const captured=S.inspect(snapshot),body=textBytes(E.stable(captured)+'\n','Search snapshot',S.MAX_BYTES),runner=textBytes(runnerText,'Runner source',MAX_RUNNER),audit=textBytes(auditText,'Search audit source',MAX_RUNNER);
+  if(await digest(runner)!==FINITE_RUNNER_SHA256)throw Error('The fixed search runner source changed.');
+  if(await digest(audit)!==FINITE_AUDIT_SHA256)throw Error('The fixed search audit source changed.');
+  const instructions='Saved finite-search audit\n\nExtract all four files into one folder. Python 3.9 or later and its standard library are sufficient.\n\nRun:\n  python verify_finite_search.py snapshot.json\n\nThis independently replays the saved computations and checks the declared search and its coverage. It does not run missing cases, contact a server or upload anything.\nMissing cases mean absent from these packaged receipts, not that nobody has tried them. A matching opening is not a complete decryption. Original source dates are retained, not independently authenticated.\n';
+  return zip([['snapshot.json',body],['research_runner.py',runner],['verify_finite_search.py',audit],['START.txt',encoder.encode(instructions)]]);
+ }
+ const api={build,buildSnapshot,GUARD_SHA256,PLAN_GUARD_SHA256,FINITE_AUDIT_SHA256,FINITE_RUNNER_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
