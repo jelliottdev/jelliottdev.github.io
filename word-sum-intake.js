@@ -20,10 +20,21 @@
   let phrase=normalize(text).replace(/[.!?]$/,'').trim(),scopePages=null;
   const on=phrase.match(/\s+on\s+(LP[12]-.+)$/i);
   if(on){scopePages=scope(on[1]);if(!scopePages)return null;phrase=phrase.slice(0,on.index);}
-  const m=phrase.match(/^reverse (?:the )?(?:gematria(?: primus)? prime|gematria primus|gematria|GP(?: prime)?) table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
-  if(!m)return null;
-  if(m[1]&&!/^\(\s*F\s*=\s*109\s*,\s*U\s*=\s*107\s*(?:,\s*)?(?:\.{3}|â€¦)?\s*\)$/i.test(m[1]))return null;
-  return {table:'reversed',sourceText:text,...(scopePages?{scopePages}:{})};
+  const reversed=phrase.match(/^reverse (?:the )?(?:gematria(?: primus)? prime|gematria primus|gematria|GP(?: prime)?) table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
+  let table=null;
+  if(reversed){
+   if(reversed[1]&&!/^\(\s*F\s*=\s*109\s*,\s*U\s*=\s*107\s*(?:,\s*)?(?:\.{3}|…)?\s*\)$/i.test(reversed[1]))return null;
+   table='reversed';
+  }else{
+   // A table must be named explicitly. Bare "sum words" or an unspecified GP
+   // table never receives the usual assignments by convention.
+   const direct=/^sum (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime values (?:within|in) each word$/i.test(phrase);
+   const selected=phrase.match(/^use (?:the )?(?:usual|standard|canonical) (?:GP|gematria(?: primus)?) prime table(?:\s*(\([^)]*\)))?\s+(?:and|then)\s+sum (?:the words|each word|words)$/i);
+   if(!direct&&!selected)return null;
+   if(selected?.[1]&&!/^\(\s*F\s*=\s*2\s*,\s*U\s*=\s*3\s*(?:,\s*)?(?:\.{3}|…)?\s*\)$/i.test(selected[1]))return null;
+   table='canonical';
+  }
+  return {table,sourceText:text,...(scopePages?{scopePages}:{})};
  }
  const matches=text=>!!parse(text);
  const acknowledgement=draft=>C.serialize({source:draft.source.text,method:draft.method.value,aim:draft.aim,scope:draft.scope,rules:draft.rules});
@@ -63,10 +74,10 @@
   }catch{return null;}
  }
  function question(draft){
-  if(!inspect(draft)||draft.clarifications.some(c=>[ID,EVALUATION_ID].includes(c.question)&&c.choice==='as-described'&&c.text===acknowledgement(draft)))return null;
+  const candidate=inspect(draft);if(!candidate||draft.clarifications.some(c=>[ID,EVALUATION_ID].includes(c.question)&&c.choice==='as-described'&&c.text===acknowledgement(draft)))return null;
   if(C.normalizeOutcome(draft.aim).id==='decipher'&&!draft.clarifications.some(c=>c.question===EVALUATION_ID&&c.choice==='numeric-ledger'&&c.text===acknowledgement(draft)))return {id:EVALUATION_ID,prompt:'What should the word sums establish?',context:'Adding prime values produces a numeric ledger. It does not test readable text or solve LP2. Your deciphering aim will stay unchanged.',choices:[{id:'numeric-ledger',label:'List numerical word sums',example:'Show each word and its total; do not judge readability or statistical significance.'},{id:'as-described',label:'Keep my intended evaluation'}]};
   return {id:ID,prompt:'Where should each word end?',
-   context:'Use the archived raw rune text and the GP29 alphabet, with its prime values reversed (F=109, U=107, â€¦, EA=2). This lists numeric word sums; it does not decode the text.',
+   context:'Use the archived raw rune text and the GP29 alphabet, with '+(candidate.table==='reversed'?'its prime values reversed (F=109, U=107, \u2026, EA=2)':'the usual prime assignments (F=2, U=3, \u2026, EA=109)')+'. This lists numeric word sums; it does not decode the text.',
    choices:[{id:'hyphen-period',label:'Hyphens and periods end words',example:'F / U-EA gives FU and EA; line breaks continue the word.'},
     {id:'non-rune',label:'Every non-rune ends a word',example:'F / U-EA gives F, U and EA; line breaks also end words.'},
     {id:'as-described',label:'Keep my wording; do not choose word boundaries'}]};
@@ -78,8 +89,8 @@
   }
   const references=[ID,...(draft.method.provenance?.refs||[]),...draft.method.value.operations.flatMap(op=>op.provenance?.refs||[])],provenance={kind:'user_clarification',refs:[...new Set(references)]},field=value=>C.field('specified',value,provenance),rules={};
   for(const [name,value] of Object.entries({representation:'GP29',inputVersion:'raw',wordBoundaries:'preserve',unmapped:'preserve'}))if(draft.rules[name].status==='unspecified')rules[name]=field(value);
-  rules.evaluation=field({kind:'word-prime-sums',table:'reversed',boundaries:choice});
-  const method=field({...draft.method.value,operations:[{id:'word_prime_sums',label:'Word prime sums',table:'reversed',boundaries:choice}]});
+  const table=inspect(draft).table;rules.evaluation=field({kind:'word-prime-sums',table,boundaries:choice});
+  const method=field({...draft.method.value,operations:[{id:'word_prime_sums',label:'Word prime sums',table,boundaries:choice}]});
   const next=C.revise(draft,{method,rules});
   next.clarifications.push({question:ID,choice,revision:next.revision});return next;
  }
