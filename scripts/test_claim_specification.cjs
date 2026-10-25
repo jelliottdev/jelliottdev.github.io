@@ -18,6 +18,33 @@ test('UMD browser and Node expose the same public API without DOM or network',()
  assert.equal(typeof context.ClaimSpecification.confirm,'function');
  assert.equal(context.ClaimSpecification.SCHEMA,C.SCHEMA);
 });
+
+test('plain evaluator choices explain availability and exact scope without changing criteria',()=>{
+ const choices=C.EVALUATION_CHOICES;
+ assert.deepEqual(choices.map(({id,value})=>({id,value})),[
+  {id:'language-samples',value:{kind:'language-score',modelId:'gp29-flores-trigram-v1',modelSha256:'8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4'}},
+  {id:'readable-text',value:{kind:'readability'}},
+  {id:'warning-opening',value:{kind:'exact-prefix',values:[24,7,24,4,9,21,17,18,20,10,18,1]}},
+  {id:'inspect-output',value:'measurement'}
+ ]);
+ const byId=Object.fromEntries(choices.map(choice=>[choice.id,choice]));
+ assert.match(byId['language-samples'].example,/eight fixed language samples/);
+ assert.match(byId['language-samples'].example,/Similarity is not a translation/);
+ assert.match(byId['readable-text'].label,/not available yet/);
+ assert.match(byId['readable-text'].example,/cannot judge readability/);
+ assert.match(byId['warning-opening'].label,/already-decoded opening/);
+ assert.match(byId['warning-opening'].example,/first 12 runes.*decoded Warning passage.*page starts only/);
+ assert.equal(byId['inspect-output'].label,'Show what the rule produces');
+ assert.match(byId['inspect-output'].example,/runes and counts/);
+ for(const choice of choices){
+  assert(C.evaluationText(choice.value).startsWith(choice.label));
+  assert(Object.isFrozen(choice));
+ }
+ assert.match(C.evaluationText(byId['warning-opening'].value),/page starts only/);
+ assert.equal(C.evaluationText(byId['readable-text'].value),byId['readable-text'].label);
+ assert.equal(C.evaluationText({kind:'language-score',modelId:'gp29-flores-trigram-v1',modelSha256:'0'.repeat(64)}),null);
+ assert.equal(C.evaluationText({kind:'exact-prefix',values:[24,7,24]}),null);
+});
 test('source fidelity, metadata-only material and no invented aim/method/GP defaults',()=>{
  const text='  def decode(x):\n    return x[::-1]\n';
  const d=C.fromText(text,[{name:'screenshot.png',bytes:450}]);

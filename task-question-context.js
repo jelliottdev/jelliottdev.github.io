@@ -47,7 +47,8 @@
   const matches=record.browser_followups.filter(recipe=>recipe?.id===origin.followupId);if(matches.length!==1)throw Error('The authored source does not identify one matching check.');
   const recipe=matches[0];if(await hash(new TextEncoder().encode(E.stable(recipe)))!==origin.protocolSha256)throw Error('The authored check changed.');
   if(typeof recipe.question!=='string'||!recipe.question.trim()||Array.from(recipe.question).length>1200||Object.hasOwn(recipe,'motivation')&&!Authored?.valid(recipe.motivation))throw Error('The authored explanation is invalid.');
-  return Object.freeze({question:recipe.question,...(Object.hasOwn(recipe,'motivation')?{motivation:recipe.motivation}:{})});
+  if(Object.hasOwn(recipe,'title')&&(typeof recipe.title!=='string'||recipe.title!==recipe.title.trim()||!recipe.title||Array.from(recipe.title).length>300||/[\p{Cc}\p{Cf}\p{Cs}\p{Zl}\p{Zp}]/u.test(recipe.title)))throw Error('The authored title is invalid.');
+  return Object.freeze({question:recipe.question,...(Object.hasOwn(recipe,'title')?{title:recipe.title}:{}),...(Object.hasOwn(recipe,'motivation')?{motivation:recipe.motivation}:{})});
  }
  function inspect(token){const value=tokens.get(token);if(!value)throw Error('Use independently bound original-question context.');return value;}
  const api={route,href,verify,inspect,readAuthoredContext};if(node)module.exports=api;else root.TaskQuestionContext=api;

@@ -11,9 +11,9 @@ class Element{
  change(){for(const fn of this.listeners)fn();}
 }
 (async()=>{
- const choice=C.EVALUATION_CHOICES.find(c=>c.id==='language-samples');assert(choice);assert.deepEqual(choice.value,O.criterion());assert.equal(choice.label,'Compare with language samples');
+ const choice=C.EVALUATION_CHOICES.find(c=>c.id==='language-samples');assert(choice);assert.deepEqual(choice.value,O.criterion());assert.equal(choice.label,'Compare patterns with language samples');
  assert.deepEqual(C.EVALUATION_CHOICES.find(c=>c.id==='readable-text').value,{kind:'readability'});assert(C.evaluationText({kind:'readability'}).includes('not available'));
- assert(C.evaluationText(choice.value).includes('no decryption verdict'));assert(!C.evaluationText(choice.value).includes('12 runes'));
+ assert(C.evaluationText(choice.value).includes('similarity is not a translation'));assert(!C.evaluationText(choice.value).includes('12 runes'));
  const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']}),draft=C.createDraft({source:{text:'Reverse the runes to decipher LP2.'},aim:known({outcomeId:'decipher',wording:'Decipher LP2'}),method:known({operations:[{id:'reverse_row_runes'}]}),scope:known({pages:['lp2-15']})});
  const clarified=C.clarify(draft,'evaluation','language-samples');assert.deepEqual(clarified.aim,draft.aim);assert.deepEqual(clarified.rules.evaluation.value,O.criterion());assert(!C.evaluationQuestion(clarified));assert.equal(clarified.source.text,draft.source.text);
  // The lightweight intake must not load either model artifact or scorer.

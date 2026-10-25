@@ -106,6 +106,11 @@ class ArchivedRecipePresentationTests(unittest.TestCase):
         self.assertEqual(record['reproduction']['command'],
                          'python scripts/published_program_projection.py --reproduce-archive')
         self.assertIn(record['reproduction']['command'], record['analysis'])
+        workflow = (ROOT / '.github/workflows/validate-experiments.yml').read_text(encoding='utf-8')
+        self.assertIn('run: ' + record['reproduction']['command'], workflow)
+        self.assertIn('run: python scripts/test_archived_recipe_presentation.py', workflow)
+        self.assertNotIn('run: python experiments/records/prepared-opening-evidence-gates/run.py', workflow)
+        self.assertNotIn('run: python experiments/records/prepared-opening-evidence-gates/check.py', workflow)
         self.assertNotIn('python experiments/records/prepared-opening-evidence-gates/run.py --check', record['analysis'])
         inputs = {item['path']: item['sha256'] for item in record['reproduction']['inputs']}
         for name in ['scripts/published_program_projection.py',

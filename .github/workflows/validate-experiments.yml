@@ -123,9 +123,9 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_prefix_evidence_gate.py
         if: steps.scope.outputs.science == 'true'
-      - run: python experiments/records/prepared-opening-evidence-gates/run.py --check
+      - run: python scripts/published_program_projection.py --reproduce-archive
         if: steps.scope.outputs.science == 'true'
-      - run: python experiments/records/prepared-opening-evidence-gates/check.py
+      - run: python scripts/test_archived_recipe_presentation.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_research_questions.py
         if: steps.scope.outputs.science == 'true'

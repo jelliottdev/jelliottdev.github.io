@@ -49,6 +49,21 @@ function documentFixture(){const nodes=new Map(),host={};let markup='';Object.de
  const verifyCoverage=sources=>async(value,inputVersion)=>{proofChecks++;assert.equal(inputVersion,'raw');for(const source of sources)await E.verify(source.task,source.run.result,webcrypto);const actual=await Evidence.compare(value.requestedTask,value.inputVersion,sources,webcrypto);for(const name of ['coveredPages','remainingPages','evidence','exactTaskId'])assert.deepEqual(value[name],actual[name]);return {...value};};
  const covered=await fixture({value:{...plan,coverage:fullCoverage,existingTask:{id:task.taskId,state:'not-run',proposalId}},coverageCheck:verifyCoverage([shared])});
  try{assert(covered.doc.host.innerHTML.includes('href="research.html?contribute=1"'));assert(covered.app.getState().plan.verifiedCoverage);assert.equal(proofChecks,1);assert(covered.doc.host.innerHTML.includes('#task='+sharedTask.taskId));assert(!covered.doc.getElementById('create-followup'));assert(!covered.doc.getElementById('open-followup'),'Shared evidence takes precedence over redundant pending authored task');assert(!covered.doc.host.innerHTML.includes('A failed check stops the run'));assert.deepEqual(covered.app.getState().plan.card,card);assert.equal(covered.calls.length,1);assert.equal(covered.created.length,0);assert.equal(covered.remaining.length,0);}finally{covered.app.destroy();}
+ // Completion must not replace a reader's explanation with the technical question.
+ const explained={...plan,motivation:'Change rune order, then compare the beginning with a passage already decoded.'};
+ for(const finished of [false,true]){
+  const readable=await fixture({value:{...explained,...(finished?{coverage:fullCoverage}:{})},coverageCheck:verifyCoverage([shared])});
+  try{
+   const html=readable.doc.host.innerHTML,details=html.indexOf('<details');
+   assert(html.indexOf(explained.motivation)>0);
+   assert(html.indexOf(explained.motivation)<(finished?html.indexOf('Saved evidence'):html.indexOf('Reviewed raw scope')));
+   assert.equal(html.split(explained.motivation).length-1,1,'Explain the purpose once');
+   if(details>=0)assert(html.indexOf(plan.question)>details,'Exact question belongs with settings');
+   else assert(!html.includes(plan.question),'Completed answer need not repeat the technical question');
+   assert.deepEqual(readable.app.getState().plan.task,task,'Copy never changes the calculation');
+   assert.equal(readable.calls.length,1,'Reading a check never runs or saves it');
+  }finally{readable.app.destroy();}
+ }
  const multiTask=await E.prepare({...task,pages:[...task.pages,{id:'lp2-16',text:'ᚢᚠ'}]},webcrypto),multiCard=structuredClone(card);multiCard.scope.value.pages=['lp2-15','lp2-16'];const partialCoverage=await coverageFor(multiTask,[shared]),partialPlan={...plan,task:multiTask,card:multiCard,coverage:partialCoverage};
  const partial=await fixture({value:partialPlan,coverageCheck:verifyCoverage([shared])});
  try{const html=partial.doc.host.innerHTML;assert(!html.includes('Find another check'),'An exact remaining scope stays primary');assert(html.includes('Review 1 unchecked page'));assert(html.indexOf('Saved evidence')<html.indexOf('id="create-followup"'));assert(html.indexOf('id="create-followup"')<html.indexOf('<details'));assert(html.indexOf('<summary>Original published plan</summary>')<html.indexOf('Reviewed raw scope'));assert.equal((html.match(/<details/g)||[]).length,1);assert(!html.includes('<details class="experiment-details" open'));assert(html.indexOf(plan.question)<html.indexOf('Saved evidence'));assert.deepEqual(partial.app.getState().plan.task,multiTask,'The complete published recipe is retained');assert.deepEqual(partial.app.getState().plan.control,control);await partial.click();assert.equal(partial.created.length,0);assert.deepEqual(partial.remaining,['p_'+await digest(C.serialize(multiCard))]);assert.deepEqual(partial.calls.slice(1).map(c=>c.url),[config.proposalEndpoint,config.researchIdeaEndpoint],'Partial reuse saves only original idea and hands off to generic remaining-page review');assert.deepEqual(H.cardData(C.confirm(H.decode(partial.calls[1].body.fragment).draft,{id:'partial-original',at})),multiCard);assert(!partial.calls.some(c=>c.url===config.localTaskEndpoint),'Never create a full or subset task under the original authored origin');}finally{partial.app.destroy();}
