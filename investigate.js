@@ -193,7 +193,11 @@
   const wordQuestion=WordSums?.question(draft);if(wordQuestion)result.push(wordQuestion);
   const pairQuestion=WordAffine?.question(draft);if(pairQuestion)result.push(pairQuestion);
   const cumulativeQuestion=Cumulative?.question(draft);if(cumulativeQuestion)result.push(cumulativeQuestion);
-  const evaluation=C.evaluationQuestion(draft);if(evaluation)result.push(evaluation);
+  // Comparing prior work does not require the visitor to design a runnable
+  // experiment. A deferral is local to this exact revision; it never supplies
+  // a criterion or authorizes execution, and editing asks the question again.
+  const deferred=draft.clarifications.some(item=>item.question==='evaluation'&&item.choice==='research-first'&&item.revision===draft.revision);
+  const evaluation=C.evaluationQuestion(draft);if(evaluation&&!deferred)result.push({...evaluation,context:'Choose a check if you have one in mind, or find related research first.',choices:[{id:'research-first',label:'Find related research first',example:'Leave this undecided. No experiment will run.'},...evaluation.choices]});
   return result;
  }
  function chosenScope(text){
@@ -250,6 +254,12 @@
   }).join('')+'</div>';
  }
  function answerIntake(draft,id,choice,text=''){
+  if(id==='evaluation'&&choice==='research-first'){
+   if(!intakeQuestions(draft).some(question=>question.id===id&&question.choices.some(option=>option.id===choice)))throw Error('Choose an available answer.');
+   const next=C.revise(draft,{});
+   next.clarifications.push({question:id,choice,revision:next.revision});
+   return next;
+  }
   if(/^cumulative-(?:reset|initial|representation|confirm|interpretation):/.test(id))return Cumulative.clarify(draft,id,choice);
   if(/^word-affine-(?:boundaries|evaluation):/.test(id))return WordAffine.clarify(draft,id,choice);
   if(/^family-(?:method|setting):/.test(id))return answerFamilyMethod(draft,id,choice,text);
@@ -703,7 +713,7 @@
    doc.getElementById('clarification')?.addEventListener('submit',event=>{
     event.preventDefault();const choice=doc.querySelector('input[name=choice]:checked')?.value;if(!choice)return;
     const q=intakeQuestions(draft)[0];if(!q||q.id!==renderedQuestion?.id)return;
-    if(['aim','method','scope'].includes(q.id)||/^family-(?:method|setting):/.test(q.id)||WordSums?.question(draft)?.id===q.id||WordAffine?.question(draft)?.id===q.id||Cumulative?.question(draft)?.id===q.id){
+    if(['aim','method','scope','evaluation'].includes(q.id)||/^family-(?:method|setting):/.test(q.id)||WordSums?.question(draft)?.id===q.id||WordAffine?.question(draft)?.id===q.id||Cumulative?.question(draft)?.id===q.id){
      try{draft=answerIntake(draft,q.id,choice,doc.getElementById('other-detail').value);message='';}catch(e){error=e.message;doc.getElementById('error').textContent=error;return;}
     }else if(choice==='other'){
      const text=doc.getElementById('other-detail').value.trim();if(!text)return;

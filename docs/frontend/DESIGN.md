@@ -19,7 +19,13 @@ The supplied implementation handoff sets the direction for dedicated manuscript 
 
 Idea checking follows input, clarification when necessary, confirmation, and comparison with actual research. Keep original wording separate from the confirmed interpretation. Missing parameters remain unknown, never automatic wildcards. Show findings and meaningful differences before supporting detail. A saved or printed comparison must use the same confirmed idea and evidence snapshot. Do not import prototype example findings as research or advertise attachment interpretation that is not implemented.
 
-The research index remains separate. Optional research maps help discover related approaches; their editorial groupings do not establish that procedures are equivalent or covered. Use current record content even when a map began from an older archive snapshot.
+The Research map is the shared research index. Graph and List traverse the same immediate children, with the same grouping, colors and counts. Grouping helps visitors explore related approaches; it does not establish that procedures are equivalent or covered. Use current record content even when a map began from an older archive snapshot.
+
+### Comparing an idea and defining a check
+
+A visitor may compare prior work before choosing how a future experiment should judge its output. Keep an undecided evaluation unspecified; never turn it into a measurement, language score, wildcard or execution permission. A comparison-first choice applies only to the current draft revision. Consequential interpretation ambiguities still require clarification, and explicit supplied criteria remain intact.
+
+A saved exploratory question is not an experiment waiting to run. For a deciphering question with no evaluation, no calculations and no retained evidence, show its method and offer exploration or deliberate check definition. Do not automatically prepare a task on opening it. Prepared source checks and explicitly specified tests retain their reviewed Run flow. Saving, preparation, execution and scientific support are distinct states.
 
 ### Shared specification vocabulary
 
