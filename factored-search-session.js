@@ -3,6 +3,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,Q=node?require('./factored-finite-question.js'):root.FactoredFiniteQuestion,Client=node?require('./factored-evidence-client.js'):root.FactoredEvidenceClient,Controls=node?require('./local-plan-controls.js'):root.LocalPlanControls,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,Snapshot=node?require('./factored-finite-search-snapshot.js'):root.FactoredFiniteSearchSnapshot,Compiler=node?require('./factored-finite-search-compiler.js'):root.FactoredFiniteSearchCompiler;
+ const sessionBrands=new WeakMap();
  const HEX=/^[a-f0-9]{64}$/,exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k)),capture=v=>J.capture(v,{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000}),freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const sha=async(v,c)=>[...new Uint8Array(await c.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');
  function createSession(options){return session(options,false);}
@@ -106,7 +107,8 @@
   async function buildAudit({signal:exportSignal}={}){return queue(async token=>{const check=()=>{live(token);if(exportSignal?.aborted)throw new DOMException('Saved audit cancelled.','AbortError');};check();const proof=scan.getState().proof;if(!proof?.coveredCases)throw Error('No verified saved checks are available to export.');phase='exporting';emit();let exportToken;try{exportToken=await sourceStore.beginExport(namespace);check();const manifest=await (inspection?Snapshot.buildOutputInspection:output?Snapshot.buildOutputComparison:Snapshot.build)({proposalId:original.id,card:original.card,bundle:sourceBundle,domain,proof,sources:evidenceSources(check),writeChunk:async(path,bytes)=>{check();await sourceStore.writeChunk(exportToken,path,bytes);check();}},crypto);check();await sourceStore.commitExport(exportToken,manifest);check();phase='ready';emit();return {manifest,readChunk:path=>sourceStore.readChunk(exportToken,path),discard:()=>sourceStore.discardExport(exportToken)};}catch(e){if(exportToken)await sourceStore.discardExport(exportToken).catch(()=>{});throw e;}});}
   function destroy(){if(dead)return;dead=true;generation++;controller.abort();scan.cancel();signal?.removeEventListener?.('abort',destroy);}
   if(signal){if(signal.aborted)destroy();else signal.addEventListener('abort',destroy,{once:true});}
-  return {loadBaseline,prepare,createPrepared,coverage,prepareGroups,createPreparedGroups,retainPending,restorePending,discardPending,removePending:discardPending,save,inspectOutput,buildAudit,getState:state,getDomain:()=>domain,destroy};
+  const api={loadBaseline,prepare,createPrepared,coverage,prepareGroups,createPreparedGroups,retainPending,restorePending,discardPending,removePending:discardPending,save,inspectOutput,buildAudit,getState:state,getDomain:()=>domain,destroy};sessionBrands.set(api,Object.freeze({domain,proposalId:original.id,card:freeze(capture(original.card)),getState:state,coverage}));return api;
  }
- const api={createSession,createOutputSession,createInspectionSession};if(node)module.exports=api;else root.FactoredSearchSession=api;
+ function inspect(value){if(!sessionBrands.has(value))throw Error('Use the owned verified finite-search session.');return sessionBrands.get(value);}
+ const api={createSession,createOutputSession,createInspectionSession,inspect};if(node)module.exports=api;else root.FactoredSearchSession=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
