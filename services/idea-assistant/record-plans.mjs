@@ -1,6 +1,7 @@
 /* Authored bounded follow-ups. No inference, persistence or target execution. */
 import L from '../../local-experiment.js';
 import Control from '../../local-control.js';
+import C from '../../claim-specification.js';
 import {validateCard} from './idea-relations.mjs';
 import {planCard} from './prepare-task.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
@@ -69,7 +70,7 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
   if(request.method!=='POST')return reply({error:'Method is not allowed.'},405);
   const rate=env.TASK_LIMIT||env.PROPOSAL_LIMIT;if(!rate?.limit)return reply({error:'Reviewed plans are unavailable.'},503);
   try{if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);}catch{return reply({error:'Reviewed plans are unavailable.'},503);}
-  let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting'),comparisonOptIn=body&&Object.hasOwn(body,'includeBoundaryComparison');if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[]),...(comparisonOptIn?['includeBoundaryComparison']:[])])||optedIn&&body.includeExisting!==true||comparisonOptIn&&(body.includeBoundaryComparison!==true||body.includeExisting!==true)||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
+  let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting'),comparisonOptIn=body&&Object.hasOwn(body,'includeBoundaryComparison'),contextOptIn=body&&Object.hasOwn(body,'includeExistingContext');if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[]),...(comparisonOptIn?['includeBoundaryComparison']:[]),...(contextOptIn?['includeExistingContext']:[])])||optedIn&&body.includeExisting!==true||comparisonOptIn&&(body.includeBoundaryComparison!==true||body.includeExisting!==true)||contextOptIn&&(body.includeExistingContext!==true||body.includeExisting!==true)||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
   let loaded;try{loaded=await loadRecordPlan(body,{fetcher,timeoutMs});}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
   const {snapshot,...plan}=loaded;
   if(body.includeExisting===true){
@@ -83,18 +84,22 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
     plan.coverage={...found,requestedTask:plan.task,inputVersion:plan.inputVersion};
     // The task and recipe must be identical; an unrelated parent-record edit
     // may change recordSha256 without invalidating an immutable saved origin.
-    const row=await env.PROPOSALS.prepare(`SELECT t.id,o.origin_json,
+    const selectedContext=body.includeExistingContext===true,cardJSON=L.stable(plan.card),proposalId=selectedContext?'p_'+await recordPlanDigest(C.serialize(plan.card)):null;
+    const row=await env.PROPOSALS.prepare(`SELECT t.id,o.origin_json${selectedContext?',links.proposal_id,links.input_version,links.parent_task_id,p.card_json':''},
      CASE WHEN EXISTS(SELECT 1 FROM local_task_results r WHERE r.task_id=t.id) THEN 'results-verified' ELSE 'not-run' END AS state
      FROM local_tasks t JOIN local_task_origins o ON o.task_id=t.id
      JOIN local_task_ideas links ON links.task_id=o.task_id AND links.proposal_id=o.proposal_id
      JOIN research_ideas public ON public.proposal_id=links.proposal_id
+     ${selectedContext?'JOIN proposals p ON p.id=links.proposal_id':''}
      WHERE t.id=? AND t.task_hash=? AND t.task_json=? AND links.input_version=?
+     ${selectedContext?'AND links.parent_task_id IS NULL AND links.proposal_id=? AND p.card_json=?':''}
      AND json_extract(o.origin_json,'$.recordId')=? AND json_extract(o.origin_json,'$.followupId')=?
      AND json_extract(o.origin_json,'$.protocolSha256')=? AND o.snapshot_json=?
      ORDER BY links.created_at,links.proposal_id,o.origin_id LIMIT 1`)
      .bind(plan.task.taskId,await recordPlanDigest(L.stable(plan.task)),L.stable(plan.task),plan.inputVersion,
+      ...(selectedContext?[proposalId,cardJSON]:[]),
       plan.origin.recordId,plan.origin.followupId,plan.origin.protocolSha256,L.stable(snapshot)).first();
-    if(row){const savedOrigin=JSON.parse(row.origin_json);if(row.id!==plan.task.taskId||!['not-run','results-verified'].includes(row.state)||!validOrigin(savedOrigin)||savedOrigin.recordId!==plan.origin.recordId||savedOrigin.followupId!==plan.origin.followupId||savedOrigin.protocolSha256!==plan.origin.protocolSha256)throw Error('Saved origin mismatch');plan.existingTask={id:row.id,state:row.state};}
+    if(row){const savedOrigin=JSON.parse(row.origin_json);if(row.id!==plan.task.taskId||!['not-run','results-verified'].includes(row.state)||!validOrigin(savedOrigin)||savedOrigin.recordId!==plan.origin.recordId||savedOrigin.followupId!==plan.origin.followupId||savedOrigin.protocolSha256!==plan.origin.protocolSha256||selectedContext&&(row.proposal_id!==proposalId||row.input_version!==plan.inputVersion||row.parent_task_id!==null||L.stable(validateCard(row.card_json))!==cardJSON))throw Error('Saved origin mismatch');plan.existingTask={id:row.id,state:row.state,...(selectedContext?{proposalId:row.proposal_id}:{})};}
     // New projections are explicit opt-ins so already loaded clients keep
     // their exact supported response shape during staggered deployments.
     if(body.includeBoundaryComparison===true){const comparison=await boundaryComparison({db:env.PROPOSALS,task:plan.task,inputVersion:plan.inputVersion,discoverEvidence});if(comparison)plan.boundaryComparison=comparison;}
