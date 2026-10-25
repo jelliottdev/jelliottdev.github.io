@@ -26,4 +26,7 @@ for(const mutation of [e=>e.verifiedTaskCount=-1,e=>e.verifiedTaskCount=12,e=>e.
  else assert.equal(M.merge(base,[e]).records['idea-'+e.id.slice(2)].title,'<script>opaque</script>');
 }
 const inconsistent=structuredClone(entries[1]);inconsistent.tasks=[{id:'b'.repeat(64),title:'Synthetic pending',state:'not-run'}];inconsistent.taskCount=1;inconsistent.verifiedTaskCount=1;assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[inconsistent],nextCursor:null}));
+const shared=entry(9,{aim:'measure a pattern'});shared.hasSharedComputation=true;const sharedRecord=M.merge(base,[shared]).records['idea-'+shared.id.slice(2)];assert.equal(M.label(sharedRecord),'Computation available');assert.equal(sharedRecord.task_count,0);assert.equal(sharedRecord.verified_task_count,0);assert.deepEqual(sharedRecord.task_summaries,[]);
+const notShared=structuredClone(shared);notShared.hasSharedComputation=false;assert.equal(M.label(M.merge(base,[notShared]).records['idea-'+shared.id.slice(2)]),'Untested idea');
+for(const value of ['true',1,null,{}])assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[{...shared,hasSharedComputation:value}],nextCursor:null}));
 console.log('PASS community map preserves evidence, routes active cards, separates computation state, filters and validates');

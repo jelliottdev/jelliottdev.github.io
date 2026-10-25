@@ -18,7 +18,8 @@
   if(feed.schema!=='liberpedia-community-research-v1'||!Array.isArray(feed.entries)||feed.entries.length>50||!(feed.nextCursor===null||typeof feed.nextCursor==='string'&&/^[-_a-zA-Z0-9]{1,240}$/.test(feed.nextCursor)))throw Error('Invalid community feed.');
   const ids=new Set();
   for(const entry of feed.entries){
-   exact(entry,['id','card','createdAt','tasks','taskCount','verifiedTaskCount']);
+   exact(entry,['id','card','createdAt','tasks','taskCount','verifiedTaskCount','hasSharedComputation']);
+   if(Object.hasOwn(entry,'hasSharedComputation')&&typeof entry.hasSharedComputation!=='boolean')throw Error('Invalid shared computation status.');
    if(!Work.communityTasks(entry))throw Error('Inconsistent community task counts or summaries.');
    if(!Number.isSafeInteger(entry.verifiedTaskCount)||entry.verifiedTaskCount<0||entry.verifiedTaskCount>entry.taskCount)throw Error('Invalid verified task count.');
    if(!IDEA.test(entry.id)||ids.has(entry.id)||!Number.isFinite(Date.parse(entry.createdAt))||!Array.isArray(entry.tasks)||entry.tasks.length>10||!Number.isSafeInteger(entry.taskCount)||entry.taskCount<entry.tasks.length)throw Error('Invalid community entry.');
@@ -49,7 +50,7 @@
    const description=operations.map(o=>o.label||o.sourceText||o.id).join(', then '),letters=Array.from(description),title=description?letters.slice(0,157).join('')+(letters.length>157?'…':''):'Unspecified research method';
    const pages=draft.scope.status==='specified'&&Array.isArray(draft.scope.value.pages)?draft.scope.value.pages:[];
    const record={id,title,question:aim.detail||aim.wording||description,summary:description,community:true,proposal_id:entry.id,
-    evidence_state:entry.verifiedTaskCount>0?'computation-available':'untested',created_at:entry.createdAt,
+    evidence_state:entry.verifiedTaskCount>0||entry.hasSharedComputation===true?'computation-available':'untested',created_at:entry.createdAt,
     outcome:'',record_type:{id:'idea',label:'Community idea'},method_topics:classified.familyIds.map(id=>({id,title:C.METHOD_FAMILIES[id]})),
     pages,scope:{pages,representation:'',procedure:description,parameters:'',exclusions:''},href:'run.html#idea='+entry.id,task_count:entry.taskCount,verified_task_count:entry.verifiedTaskCount,task_summaries:structuredClone(entry.tasks)};
    data.records[id]=record;

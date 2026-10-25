@@ -4,6 +4,8 @@ import E from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
 import Variants from '../../task-variants.js';
 import {validateCard} from './idea-relations.mjs';
+import Evidence from '../../computation-evidence.js';
+import {checkedEvidence} from './task-evidence.mjs';
 
 const HEX=/^[a-f0-9]{64}$/,PREP=/^prep_[a-f0-9]{64}$/,PROPOSAL=/^p_[a-f0-9]{64}$/;
 const exact=(o,ks)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).length===ks.length&&ks.every(k=>Object.hasOwn(o,k));
@@ -48,11 +50,23 @@ async function proposal(db,bound){
 async function basisFor(db,value,bound,authority){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
-  require(exact(basis,['kind','normalizedCard',...(basis.kind==='mapped-card'?['mapping']:[])])
-   &&['compiled-card','mapped-card'].includes(basis.kind),'Invalid idea preparation basis');
-  const normalized=validateCard(basis.normalizedCard);
-  if(basis.kind==='compiled-card')require(C.serialize(normalized)===C.serialize(bound.card),'Compiled basis changed the original card');
-  else require(basis.mapping&&typeof basis.mapping==='object'&&!Array.isArray(basis.mapping),'Mapped basis requires reviewed mapping evidence');
+  const original=basis.kind==='evidence-remainder'?basis.originalBasis:basis;
+  require(exact(original,['kind','normalizedCard',...(original?.kind==='mapped-card'?['mapping']:[])])
+   &&['compiled-card','mapped-card'].includes(original.kind),'Invalid idea preparation basis');
+  const normalized=validateCard(original.normalizedCard);
+  if(original.kind==='compiled-card')require(C.serialize(normalized)===C.serialize(bound.card),'Compiled basis changed the original card');
+  else require(original.mapping&&typeof original.mapping==='object'&&!Array.isArray(original.mapping),'Mapped basis requires reviewed mapping evidence');
+  if(basis.kind==='evidence-remainder'){
+   require(exact(basis,['kind','originalBasis','requestedTaskId','evidence'])&&HEX.test(basis.requestedTaskId),'Invalid evidence remainder basis');
+   const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
+   require(row&&row.input_version===bound.base.inputVersion,'Requested scope is not associated with this idea');
+   const requested=JSON.parse(row.requested_task_json);await E.checkIdentity(requested);
+   require(requested.taskId===basis.requestedTaskId&&await sha(E.stable(requested))===row.requested_task_hash,'Requested scope differs from its immutable inputs');
+   const comparison=await checkedEvidence({db,task:requested,inputVersion:row.input_version,evidence:basis.evidence});
+   require(comparison.coveredPages.length>0&&comparison.remainingPages.length>0,'A remainder needs both covered and open pages');
+   const full=await Evidence.describe(requested,row.input_version),remaining=await Evidence.describe(bound.task,row.input_version);
+   require(full.protocolId===remaining.protocolId&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(page=>comparison.remainingPages.includes(page.id))),'Remainder changed the method, criterion or exact open pages');
+  }
  }else if(authority==='word-boundaries'){
   require(exact(basis,['kind','parentTaskId','parentTaskHash','from','to'])&&basis.kind==='word-boundaries'
    &&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),

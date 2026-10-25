@@ -1,6 +1,7 @@
 /* Explicit normalized-card publication. No original wording, notes or inference. */
 import C from '../../claim-specification.js';
 import {validateCard} from './idea-relations.mjs';
+import {readIdeaEvidence} from './task-evidence.mjs';
 
 const ID=/^p_[a-f0-9]{64}$/,HEX=/^[a-f0-9]{64}$/,MAX_BODY=1024,PAGE_SIZE=50;
 const FIND=`SELECT i.proposal_id,i.created_at,p.card_json,p.card_hash
@@ -79,7 +80,8 @@ export function createCommunityIdeaHandler({now=()=>new Date()}={}){
     if(!iso(entry.created_at)||typeof entry.id!=='string'||!HEX.test(entry.id)||entry.embedded_id!==entry.id||typeof entry.title!=='string'||!entry.title.trim()||Array.from(entry.title).length>300)throw Error('Stored task summary mismatch');
     tasks.push({id:entry.id,title:entry.title,state:entry.has_results?'results-verified':'not-run'});
    }
-   return {id:row.proposal_id,card,createdAt:row.created_at,tasks,tasksTruncated:rows.length>PAGE_SIZE,
+   const coverage=await readIdeaEvidence({db,proposalId:row.proposal_id});
+   return {id:row.proposal_id,card,createdAt:row.created_at,tasks,tasksTruncated:rows.length>PAGE_SIZE,...(coverage?{coverage}:{}),
     nextCursor:rows.length>PAGE_SIZE?encodeCursor(selected.at(-1)):null};
   };
   try{

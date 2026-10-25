@@ -22,11 +22,11 @@ const raw=alphabet.slice(0,3).map(r=>r.rune).join('')+' '+alphabet[0].rune,revie
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
 function card(extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE original idea'},aim:known('solve LP2'),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:known({pages:['lp2-15']}),...extra}),{id:'test',at}));}
 function fixture(data=card(),options={}){
- const sqlite=new DatabaseSync(':memory:');for(const migration of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0008_prepared_plans.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+migration,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');for(const migration of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0008_prepared_plans.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+migration,import.meta.url),'utf8'));
  const cardHash=createHash('sha256').update(C.serialize(data)).digest('hex');id='p_'+cardHash;
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,cardHash,C.serialize(data),'unused',at);
  let reads=0,calls=0;const urls=[],rate=[];
- const env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert(!sql.includes('original_idea'));assert(!sql.includes('proposal_submissions'));return {bind(...args){return {first:async()=>{reads++;return sqlite.prepare(sql).get(...args)||null;}};}};}},PROPOSAL_LIMIT:{limit:async value=>{rate.push(value);return {success:true};}},AI:{run(){throw Error('Planner must not call AI');}}};
+ const env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert(!sql.includes('original_idea'));assert(!sql.includes('proposal_submissions'));return {bind(...args){return {first:async()=>{reads++;return sqlite.prepare(sql).get(...args)||null;},all:async()=>{reads++;return {results:sqlite.prepare(sql).all(...args)};},run:async()=>sqlite.prepare(sql).run(...args)};}};}},PROPOSAL_LIMIT:{limit:async value=>{rate.push(value);return {success:true};}},AI:{run(){throw Error('Planner must not call AI');}}};
  const handle=createPrepareTaskHandler({now:()=>new Date(at),...(options.prepareControls?{prepareControls:options.prepareControls}:{}),fetcher:async(url,options)=>{calls++;urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}});
  return {sqlite,env,handle,urls,rate,get reads(){return reads;},get calls(){return calls;}};
 }

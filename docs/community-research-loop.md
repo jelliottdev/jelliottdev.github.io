@@ -40,6 +40,46 @@ Use user-facing states `Not run`, `Ready to run`, `Results submitted` and
 `Results verified`. Verification means the stated computation was reproduced,
 not that the cipher was solved. Incomplete runs cannot close an entire scope.
 
+## Shared computation across idea entries
+
+Navigation intent and executed work have separate identities. Two confirmed
+cards may retain different wording, outcomes or map placements while requesting
+the same computation. Keep those cards and their original task/result receipts;
+do not copy a saved result onto another task or treat category changes as new
+computational evidence.
+
+`computation-evidence.js` derives a protocol identity from the engine, explicit
+raw/reviewed input version, ordered alphabet, ordered steps and criterion. Each
+page case additionally binds the exact page ID and text. Titles and page-batch
+order do not change these identities. A different key, reset, criterion,
+transcription or page text does. Reuse recognizes these exact supported protocols;
+it does not infer mathematical equivalence, novelty or meaning from prose.
+
+`task-evidence.mjs` finds saved results with a public idea association and the
+same input version, conservatively requiring the source task's original input
+version to agree too. Lookup checks immutable task/result identities and output
+structure without decoding manuscript text again. Result admission remains the
+independent replay performed when a result is submitted. A failed fixed-opening
+test is still tested work; it is not an unrun case.
+
+Coverage is the union of exact matching page cases, with links to their original
+receipts. One compatible source covering the whole requested case set can be
+opened directly. Partial coverage prepares only the remaining pages under the
+same protocol, backed by pinned source receipts checked again at task creation.
+The original confirmed card and its full intended scope remain unchanged.
+
+`idea_computation_evidence` stores that complete frozen requested task and input
+version, including requests with no current coverage. It stores no completion
+flag. Reloading the idea recomputes coverage; the map/feed projects the latest
+request and can show `Computation available` when even part has matching saved
+work. That label neither claims complete coverage nor increases the idea's owned
+task/result counts. Source discovery is bounded to 100 candidates and reports
+truncation; missing evidence is not proof that work has never been done.
+
+The finite family ledger uses family revision plus case ID. Its
+`family_case_results` are not yet consumed by general task-evidence discovery.
+Do not claim that these two stores already provide a unified coverage index.
+
 ## First execution contract
 
 `local-experiment.js` is the shared, deterministic validator/evaluator.

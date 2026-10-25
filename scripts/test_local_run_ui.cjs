@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),{webcrypto,createHash}=require('node:crypto');
-const UI=require('../run.js'),E=require('../local-experiment.js'),C=require('../claim-specification.js'),H=require('../claim-share.js'),PC=require('../local-plan-controls.js'),TV=require('../task-variants.js'),Protocols=require('../experiment-protocols.js');
+const UI=require('../run.js'),E=require('../local-experiment.js'),C=require('../claim-specification.js'),H=require('../claim-share.js'),PC=require('../local-plan-controls.js'),TV=require('../task-variants.js'),Protocols=require('../experiment-protocols.js'),Evidence=require('../computation-evidence.js');
 const alphabet=Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2}));
 const at='2026-10-24T12:00:00.000Z',proposalId='p_'+'1'.repeat(64),endpoint='https://mock.example/tasks',ideaEndpoint='https://mock.example/ideas',prepareEndpoint='https://mock.example/prepare-task';
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b});return{promise,resolve,reject}};
@@ -18,7 +18,7 @@ async function preparationReceipt(value,originalCard=card(),authority='idea'){
  const receipt={version:1,id:'prep_'+'9'.repeat(64),proposalId:value.proposalId,cardHash:hash(canonical),taskId:value.task.taskId,taskHash:hash(value.task),inputVersion:value.inputVersion,parentTaskId:value.parentTaskId,authority,controlsHash:hash(controls)};
  return {...value,controls,preparation:receipt};
 }
-async function fixture({task,hash,config={},get,post,prepare,ideaCard,ideaTasks=[],ideaTruncated=false,waitReady=true,manualControls=false,cryptoAPI=webcrypto,issuePreparations=true,ui=UI}={}){
+async function fixture({task,hash,config={},get,post,prepare,ideaCard,ideaTasks=[],ideaTruncated=false,ideaCoverage,waitReady=true,manualControls=false,cryptoAPI=webcrypto,issuePreparations=true,ui=UI}={}){
  task=task||await makeTask();
  const genericSuite=await PC.prepare(task,webcrypto),genericIds=new Set(genericSuite.cases.map(c=>c.task.taskId));
  const doc=documentFixture(hash||'#task='+task.taskId),requests=[],executions=[],controlExecutions=[],packages=[],downloads=[];
@@ -26,7 +26,7 @@ async function fixture({task,hash,config={},get,post,prepare,ideaCard,ideaTasks=
  const app=ui.createApp(doc,{crypto:cryptoAPI,executor:{start(plan,options){const d=deferred(),e={plan,options,...d,cancel(){this.cancelled=true;}};if(!manualControls&&genericIds.has(plan.taskId)){controlExecutions.push(e);queueMicrotask(()=>e.resolve(E.run(plan)));}else executions.push(e);return{promise:d.promise,cancel:()=>e.cancel()};}},package:{async build(...args){packages.push(args);return Uint8Array.of(80,75,3,4)}},download:(...args)=>downloads.push(args),fetcher:async(url,options={})=>{
   requests.push({url,options});if(url==='data/assistant.json')return Response.json(settings);if(url==='tools/research_runner.py')return new Response('fixed runner');if(url==='tools/verify_controls.py')return new Response('fixed control guard');if(url==='tools/verify_plan_controls.py')return new Response('fixed plan control guard');
   if(options.method==='POST'){const finish=async response=>{if(!issuePreparations||!response.ok)return response;const value=await response.clone().json();if(value.state!=='plan-ready'||Object.hasOwn(value,'preparation'))return response;return Response.json(await preparationReceipt(value,ideaCard||card(),url.endsWith('/variants')?'word-boundaries':url.endsWith('/extensions')?'remaining-lp2':'idea'));};if(url===prepareEndpoint)return finish(Response.json(await prepare?.(JSON.parse(options.body))||{state:'needs-adapter',proposalId,reason:'No supported adapter.'}));return finish(post?await post(url,options):Response.json({taskId:task.taskId,state:'results-verified',latestRun:await receipt(JSON.parse(options.body).result)}));}
-  if(url===ideaEndpoint+'/'+proposalId)return Response.json({id:proposalId,card:ideaCard||card(),createdAt:at,tasks:ideaTasks,tasksTruncated:ideaTruncated});
+  if(url===ideaEndpoint+'/'+proposalId)return Response.json({id:proposalId,card:ideaCard||card(),createdAt:at,tasks:ideaTasks,tasksTruncated:ideaTruncated,...(ideaCoverage===undefined?{}:{coverage:ideaCoverage})});
   return get?get(url,options):Response.json(projection(task));
  }});if(waitReady)await app.ready;return{doc,app,task,requests,executions,controlExecutions,packages,downloads,click:id=>doc.getElementById(id).onclick(),upload:async(result,extra={})=>{const input=doc.getElementById('result-file');input.files=[{name:'results.json',size:10,text:async()=>JSON.stringify(result),...extra}];return input.onchange();}};
 }
@@ -176,6 +176,81 @@ async function authoredControlTests(){
  }
  console.log('PASS authored-origin UI: no auto-execution; control before target; complete-hash/prefix failures, cancel/navigation/destroy preserve selected result and stop target; optional guard fetch and five-argument package.');
 }
+async function crossIdeaCoverageTests(){
+ const requested=await E.prepare({title:'A new question with three pages',alphabet,pages:[{id:'lp2-15',text:'ᚠᚢ-ᚦ'},{id:'lp2-16',text:'ᚩᚱ-ᚳ'},{id:'lp2-17',text:'ᚷᚹ-ᚻ'}],steps:[{op:'reverse',unit:'word'}],criterion:{kind:'measurement'}},webcrypto);
+ const a=await E.prepare({...requested,title:'Earlier check <one>',pages:requested.pages.slice(0,1)},webcrypto),b=await E.prepare({...requested,title:'An unrelated outcome title',pages:requested.pages.slice(1)},webcrypto);
+ const ownCard=structuredClone(card()),sourceCard=structuredClone(card());sourceCard.outcome.value={outcomeId:'measure',detail:'A different research purpose'};
+ const sources=await Promise.all([a,b].map(async task=>({task,inputVersion:'raw',run:await receipt(E.run(task))})));
+ const coverage=async selected=>({requestedTask:requested,inputVersion:'raw',...await Evidence.compare(requested,'raw',selected,webcrypto),truncated:false});
+ const full=await coverage(sources),partial=await coverage(sources.slice(0,1));
+ const sourceGet=async url=>{const source=sources.find(s=>url===endpoint+'/'+s.task.taskId);assert(source,'Only listed original sources should be requested');return Response.json({...projection(source.task,source.run),proposalId:'p_'+'a'.repeat(64),card:sourceCard});};
+ const coveredResponse={state:'scope-covered',proposalId,parentTaskId:null,inputVersion:'raw',coverage:full,notes:[],purpose:'Reuse exact calculations'};
+ const fully=await fixture({hash:'#idea='+proposalId,ideaCard:ownCard,get:sourceGet,prepare:async()=>coveredResponse});
+ try{assert.equal(fully.app.getState().prepared.state,'scope-covered');const html=fully.doc.getElementById('idea-coverage').innerHTML;assert(html.includes('This computation is already covered'));assert(html.includes('#task='+a.taskId));assert(html.includes('#task='+b.taskId));assert(html.includes('Earlier check &lt;one&gt;'));assert(!fully.doc.getElementById('create-experiment'));assert(!fully.doc.getElementById('run-browser'));assert.equal(fully.executions.length,0);assert.equal(fully.requests.filter(r=>r.options.method==='POST'&&r.url!==prepareEndpoint).length,0);assert.deepEqual(fully.app.getState().idea.card,ownCard);}
+ finally{fully.app.destroy();}
+ const remaining=await E.prepare({...requested,title:'Remaining part of this question',pages:requested.pages.slice(1)},webcrypto);
+ let created;
+ const part=await fixture({hash:'#idea='+proposalId,ideaCard:ownCard,get:sourceGet,prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',coverage:partial,task:remaining,notes:[],purpose:'Check only missing pages'}),post:async(url,options)=>{created=JSON.parse(options.body);return Response.json(projection(remaining));}});
+ try{assert.deepEqual(part.app.getState().prepared.task.pages,requested.pages.slice(1));assert(part.doc.getElementById('idea-coverage').innerHTML.includes('1 of 3 pages already checked'));assert(part.doc.getElementById('prepared-plan').innerHTML.includes('Check remaining 2 pages'));assert.equal(part.executions.length,0);assert.deepEqual(part.app.getState().prepared.controls,await PC.prepare(remaining,webcrypto));await part.click('create-experiment');assert.deepEqual(created.task,remaining);assert.deepEqual(part.app.getState().idea.card,ownCard);assert.equal(part.doc.defaultView.location.hash,'#task='+remaining.taskId);}
+ finally{part.app.destroy();}
+ const firstTwo=await E.prepare({...requested,title:'Earlier two-page calculation',pages:requested.pages.slice(0,2)},webcrypto),twoSource={task:firstTwo,inputVersion:'raw',run:await receipt(E.run(firstTwo))},oneCoverage={requestedTask:requested,inputVersion:'raw',...await Evidence.compare(requested,'raw',[twoSource],webcrypto),truncated:false},oneRemaining=await E.prepare({...requested,title:'The one remaining page',pages:requested.pages.slice(2)},webcrypto);
+ const singular=await fixture({hash:'#idea='+proposalId,get:async()=>Response.json(projection(firstTwo,twoSource.run)),prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',coverage:oneCoverage,task:oneRemaining,notes:[],purpose:'Check the missing page'})});
+ try{assert(singular.doc.getElementById('idea-coverage').innerHTML.includes('remaining 1 page.'));assert(singular.doc.getElementById('prepared-plan').innerHTML.includes('Check remaining 1 page</button>'));assert(!(singular.doc.getElementById('idea-coverage').innerHTML+singular.doc.getElementById('prepared-plan').innerHTML).includes('1 pages'));}finally{singular.app.destroy();}
+ for(const savedCoverage of [full,partial]){
+  const restored=await fixture({hash:'#idea='+proposalId,ideaCoverage:savedCoverage,ideaTasks:[{id:a.taskId,title:'Existing linked task',state:'results-verified'}],get:sourceGet});
+  try{assert((restored.doc.host.innerHTML+restored.doc.getElementById('idea-coverage').innerHTML).includes('#task='+a.taskId));assert(restored.doc.host.innerHTML.includes('Existing linked task'));assert.equal(restored.requests.filter(r=>r.options.method==='POST').length,0);assert.equal(restored.executions.length,0);assert.equal(!!restored.doc.getElementById('prepare-experiment').hidden,savedCoverage===full);await restored.app.reload();assert((restored.doc.host.innerHTML+restored.doc.getElementById('idea-coverage').innerHTML).includes('#task='+a.taskId));assert.equal(restored.requests.filter(r=>r.options.method==='POST').length,0);}
+  finally{restored.app.destroy();}
+ }
+ for(const hasExistingTask of [false,true]){
+  let unavailable=true;
+  const recovering=await fixture({hash:'#idea='+proposalId,ideaCoverage:full,ideaTasks:hasExistingTask?[{id:a.taskId,title:'Inspect this existing computation',state:'results-verified'}]:[],get:async url=>{if(unavailable&&url===endpoint+'/'+a.taskId)return Response.json({error:'Source temporarily unavailable'},{status:503});return sourceGet(url);},prepare:async()=>coveredResponse});
+  try{
+   assert(recovering.app.getState().idea,'A source error must not discard the independently valid saved idea');assert.deepEqual(recovering.app.getState().idea.card,ownCard);assert(!recovering.app.getState().prepared);assert(recovering.doc.host.innerHTML.includes('Saved research idea'));assert(!recovering.doc.host.innerHTML.includes('Experiment unavailable'));if(hasExistingTask)assert(recovering.doc.host.innerHTML.includes('#task='+a.taskId));assert(recovering.doc.getElementById('idea-error').textContent.includes('Saved evidence could not be checked'));assert.equal(recovering.doc.getElementById('prepare-experiment').textContent,'Try preparation again');assert.equal(recovering.requests.filter(r=>r.options.method==='POST').length,0,'Failed coverage cannot trigger automatic preparation');assert.equal(recovering.executions.length,0);
+   unavailable=false;await recovering.click('prepare-experiment');assert.equal(recovering.app.getState().prepared.state,'scope-covered');assert(recovering.doc.getElementById('idea-coverage').innerHTML.includes('This computation is already covered'));assert(!recovering.doc.getElementById('create-experiment'));assert.equal(recovering.requests.filter(r=>r.options.method==='POST'&&r.url!==prepareEndpoint).length,0);assert.equal(recovering.executions.length,0);
+  }finally{recovering.app.destroy();}
+ }
+ const malformedCoverage=structuredClone(full);malformedCoverage.coveredPages.reverse();const invalidSaved=await fixture({hash:'#idea='+proposalId,ideaCoverage:malformedCoverage,ideaTasks:[{id:a.taskId,title:'Still inspectable',state:'results-verified'}],get:sourceGet});
+ try{assert(invalidSaved.app.getState().idea);assert(!invalidSaved.app.getState().prepared);assert(invalidSaved.doc.host.innerHTML.includes('Still inspectable'));assert(invalidSaved.doc.getElementById('idea-error').textContent.includes('Saved evidence could not be checked'));assert.equal(invalidSaved.requests.filter(r=>r.options.method==='POST').length,0);assert.equal(invalidSaved.executions.length,0);}finally{invalidSaved.app.destroy();}
+ for(const alter of [v=>v.coverage.coveredPages.reverse(),v=>v.coverage.inputVersion='reviewed',v=>v.coverage.evidence[0].resultId='0'.repeat(64),v=>v.coverage.evidence[0].pages=['lp2-17'],v=>v.controls={},v=>v.coverage.exactTaskId=a.taskId]){
+  const response=structuredClone(coveredResponse);alter(response);const bad=await fixture({hash:'#idea='+proposalId,get:sourceGet,prepare:async()=>response});try{assert(!bad.app.getState().prepared);assert(bad.doc.getElementById('idea-error').textContent);assert(!bad.doc.getElementById('create-experiment'));assert.equal(bad.executions.length,0);}finally{bad.app.destroy();}
+ }
+ for(const alter of [p=>({...p,steps:[{op:'affine',a:1,b:0}]}),p=>({...p,pages:requested.pages}),p=>({...p,pages:[...p.pages].reverse()}),p=>({...p,pages:p.pages.map(page=>({...page,text:page.text+'ᚠ'}))})]){
+  const wrongPlan=await E.prepare(alter(remaining),webcrypto),badSubset=await fixture({hash:'#idea='+proposalId,get:sourceGet,prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',coverage:partial,task:wrongPlan,notes:[],purpose:'Invalid remaining scope'})});
+  try{assert(!badSubset.app.getState().prepared);assert(badSubset.doc.getElementById('idea-error').textContent.includes('remaining pages'));assert.equal(badSubset.executions.length,0);}finally{badSubset.app.destroy();}
+ }
+ for(const forged of ['result','source-bytes','unsaved']){
+  const bad=await fixture({hash:'#idea='+proposalId,prepare:async()=>coveredResponse,get:async url=>{const source=sources.find(s=>url===endpoint+'/'+s.task.taskId),copy=structuredClone(source);if(forged==='result'){copy.run.result.transformed[0].text='wrong';copy.run=await receipt(copy.run.result);}if(forged==='source-bytes'){copy.task=await E.prepare({...copy.task,pages:copy.task.pages.map(p=>({...p,text:p.text+'ᚠ'}))},webcrypto);copy.run=await receipt(E.run(copy.task));}return Response.json(projection(copy.task,forged==='unsaved'?undefined:copy.run));}});
+  try{assert(!bad.app.getState().prepared);assert(bad.doc.getElementById('idea-error').textContent);assert.equal(bad.executions.length,0);}finally{bad.app.destroy();}
+ }
+ const delayed=deferred(),stale=await fixture({hash:'#idea='+proposalId,waitReady:false,prepare:async()=>coveredResponse,get:()=>delayed.promise});
+ try{await until(()=>stale.requests.some(r=>r.url.startsWith(endpoint+'/')));stale.doc.defaultView.location.hash='#task='+requested.taskId;delayed.resolve(await sourceGet(endpoint+'/'+a.taskId));await stale.app.ready;assert(!stale.app.getState().prepared);assert.equal(stale.executions.length,0);assert.equal(stale.doc.getElementById('idea-coverage').innerHTML,'');}
+ finally{stale.app.destroy();}
+ for(const reused of [full,partial]){
+  const pendingTask=await fixture({task:requested,get:async url=>url===endpoint+'/'+requested.taskId?Response.json({...projection(requested),coverage:reused}):sourceGet(url)});
+  try{
+   assert.equal(pendingTask.app.getState().task.state,'not-run');assert.equal(pendingTask.app.getState().saved,null);assert(pendingTask.doc.getElementById('run-browser').hidden);assert(pendingTask.doc.getElementById('run-browser').disabled);assert(pendingTask.doc.host.innerHTML.includes('#task='+a.taskId));assert(pendingTask.doc.host.innerHTML.indexOf('id="task-reused-evidence"')<pendingTask.doc.host.innerHTML.indexOf('id="experiment-details"'));assert.equal(pendingTask.executions.length,0);await pendingTask.doc.getElementById('run-browser').onclick({type:'click'});assert.equal(pendingTask.executions.length,0,'A hidden button or MouseEvent cannot bypass covered-work admission');assert.equal(pendingTask.controlExecutions.length,0);
+   if(reused===partial){assert(pendingTask.doc.host.innerHTML.includes('href="run.html#idea='+proposalId+'">Check remaining pages</a>'));assert(!pendingTask.doc.host.innerHTML.includes('The proposed experiment checks only'),'The pending original is not misrepresented as a prepared subset');}
+   else{assert(pendingTask.doc.host.innerHTML.includes('This computation is already covered'));assert(!pendingTask.doc.host.innerHTML.includes('>Check remaining pages</a>'));}
+   assert(pendingTask.doc.getElementById('reproduce-original'));assert(pendingTask.doc.host.innerHTML.indexOf('id="reproduce-original"')>pendingTask.doc.host.innerHTML.indexOf('<summary>Optional reproduction'));
+   const reproducing=pendingTask.click('reproduce-original');await until(()=>pendingTask.executions.length===1);assert.deepEqual(pendingTask.executions[0].plan,requested);pendingTask.executions[0].resolve(E.run(requested));await reproducing;assert(pendingTask.app.getState().selected);assert.equal(pendingTask.app.getState().saved,null);assert.equal(pendingTask.app.getState().task.state,'not-run');assert.equal(pendingTask.requests.filter(r=>r.options.method==='POST').length,0);
+  }finally{pendingTask.app.destroy();}
+ }
+ for(const badKind of ['different-plan','forged-summary']){
+  const badCoverage=structuredClone(full);if(badKind==='different-plan')badCoverage.requestedTask=await E.prepare({...requested,title:'A different original plan'},webcrypto);else badCoverage.coveredPages.reverse();let broken=true;
+  const retained=await fixture({task:requested,get:async url=>url===endpoint+'/'+requested.taskId?Response.json({...projection(requested),coverage:broken?badCoverage:full}):sourceGet(url)});
+  try{assert(retained.app.getState().task);assert(retained.app.getState().taskCoverageError);assert(retained.doc.host.innerHTML.includes('Saved evidence could not be checked'));assert(retained.doc.host.innerHTML.includes('Ordered steps'));assert(!retained.doc.host.innerHTML.includes('Experiment unavailable'));assert(retained.doc.getElementById('run-browser').hidden);await retained.doc.getElementById('run-browser').onclick({type:'click'});assert.equal(retained.executions.length,0);assert.equal(retained.controlExecutions.length,0);assert.equal(retained.app.getState().selected,null);assert.equal(retained.requests.filter(r=>r.options.method==='POST').length,0);broken=false;await retained.click('retry-evidence');assert(!retained.app.getState().taskCoverageError);assert(retained.app.getState().taskCoverage);assert(retained.doc.host.innerHTML.includes('This computation is already covered'));assert(retained.doc.getElementById('run-browser').hidden);}finally{retained.app.destroy();}
+ }
+ for(const flag of [true,false,'true',null]){
+  let lookupUnavailable=true;
+  const unavailableTask=await fixture({task:requested,get:async url=>url===endpoint+'/'+requested.taskId?Response.json({...projection(requested),...(lookupUnavailable?{coverageUnavailable:flag}:{coverage:full})}):sourceGet(url)});
+  try{
+   assert(unavailableTask.app.getState().task);assert.equal(unavailableTask.app.getState().task.state,'not-run');assert.equal(unavailableTask.app.getState().saved,null);assert(unavailableTask.app.getState().taskCoverageError);assert(unavailableTask.doc.host.innerHTML.includes('Ordered steps'));assert(!unavailableTask.doc.host.innerHTML.includes('Experiment unavailable'));if(flag===true)assert(unavailableTask.doc.host.innerHTML.includes('Saved work could not be checked. Retry before starting another run.'));else assert(unavailableTask.doc.host.innerHTML.includes('lookup status could not be verified'));assert(unavailableTask.doc.getElementById('run-browser').hidden);assert(unavailableTask.doc.getElementById('run-browser').disabled);await unavailableTask.doc.getElementById('run-browser').onclick({type:'click'});assert.equal(unavailableTask.executions.length,0);assert.equal(unavailableTask.controlExecutions.length,0);assert.equal(unavailableTask.requests.filter(r=>r.options.method==='POST').length,0);assert(unavailableTask.doc.getElementById('reproduce-original'),'Explicit optional reproduction remains available for an independently valid plan');assert(unavailableTask.doc.getElementById('retry-evidence'));
+   lookupUnavailable=false;await unavailableTask.click('retry-evidence');assert(!unavailableTask.app.getState().taskCoverageError);assert(unavailableTask.app.getState().taskCoverage);assert(unavailableTask.doc.host.innerHTML.includes('This computation is already covered'));assert(unavailableTask.doc.getElementById('run-browser').hidden);assert.equal(unavailableTask.executions.length,0);assert.equal(unavailableTask.requests.filter(r=>r.options.method==='POST').length,0);
+  }finally{unavailableTask.app.destroy();}
+ }
+ console.log('PASS cross-idea evidence: independently replayed different-title/outcome sources, full union avoids creation, partial creates only unchanged remaining bytes with original card/controls, reload persistence, forged scopes/receipts/input versions and stale navigation rejected.');
+}
+
 (async()=>{
  // A same-document family link must dispatch to the family workspace rather
  // than being parsed as an invalid legacy task. Reload preserves the hash and
@@ -187,6 +262,7 @@ async function authoredControlTests(){
   const requestCount=familyNavigation.requests.length;familyNavigation.doc.defaultView.location.hash='#family=deor-feedback-v1';await familyNavigation.doc.events.hashchange();
   assert.equal(reloads,1);assert.equal(familyNavigation.doc.defaultView.location.hash,'#family=deor-feedback-v1');assert.equal(familyNavigation.requests.length,requestCount);assert(!familyNavigation.doc.host.innerHTML.includes('Experiment unavailable'));
  }finally{familyNavigation?.app.destroy();if(priorFamily===undefined)delete globalThis.FamilyWorkspace;else globalThis.FamilyWorkspace=priorFamily;}
+ await crossIdeaCoverageTests();
  await genericKnownControlTests();
  await controlHandoffRaceTests();
  await preparationBindingTests();

@@ -10,7 +10,7 @@ import {createCommunityFeedHandler} from './community-feed.mjs';
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture({relation=true}={}){
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql',...(relation?['0006_task_ideas.sql']:[])])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql',...(relation?['0006_task_ideas.sql']:[]),'0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  const db={sqlite,queries:[],projected:[],fail:false,prepare(sql){
   assert.match(sql,/^\s*(?:SELECT|WITH)\b/i,'Feed must never issue a write');db.queries.push(sql);
   return {bind(...args){return {all:async()=>{if(db.fail)throw Error('PRIVATE SQL failure');const results=sqlite.prepare(sql).all(...args);db.projected.push(...results);return {results};}};}};
@@ -18,8 +18,8 @@ function fixture({relation=true}={}){
  return {db,env:{SITE_ORIGIN:origin,PROPOSALS:db},handle:createCommunityFeedHandler()};
 }
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
-async function idea(f,index,{published=true,createdAt=at}={}){
- const draft=C.createDraft({source:{text:'PRIVATE original '+index},aim:known('solve LP2'),
+async function idea(f,index,{published=true,createdAt=at,aim='solve LP2'}={}){
+ const draft=C.createDraft({source:{text:'PRIVATE original '+index},aim:known(aim),
   method:known({operations:[{id:'vigenere',label:'Vigenere',key:'KEY'+index,sourceText:'PRIVATE extraction'}]}),scope:known({pages:['lp2-15']})});
  const p=await canonicalProposal({requestId:crypto.randomUUID(),fragment:S.encode(C.confirm(draft,{id:'PRIVATE confirmation',at})),note:'PRIVATE note',originalIdea:'PRIVATE original wording',sourceUrl:'https://github.com/example/source'});
  f.db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(p.id,p.cardHash,p.cardJson,p.fragment,createdAt);
@@ -27,15 +27,16 @@ async function idea(f,index,{published=true,createdAt=at}={}){
  if(published)f.db.sqlite.prepare('INSERT INTO research_ideas(proposal_id,created_at,created_day) VALUES(?,?,?)').run(p.id,createdAt,createdAt.slice(0,10));
  return p;
 }
-async function task(f,p,index,{verified=false,associateTask=true}={}){
- const plan=await L.prepare({title:'Task '+index,alphabet:Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2})),pages:[{id:'lp2-15',text:'ᚠᚢᚦ'}],steps:[],criterion:{kind:'measurement'}});
+async function task(f,p,index,{verified=false,associateTask=true,changes={},inputVersion='raw'}={}){
+ const plan=await L.prepare({title:'Task '+index,alphabet:Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2})),pages:[{id:'lp2-15',text:'ᚠᚢᚦ'}],steps:[],criterion:{kind:'measurement'},...changes});
  const text=L.stable(plan);
- f.db.sqlite.prepare('INSERT INTO local_tasks(id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?,?,?,?,?)').run(plan.taskId,await digest(text),'0'.repeat(64),p.id,p.cardJson,text,'raw',null,at,at.slice(0,10));
- if(associateTask)associate(f,p,plan);
+ f.db.sqlite.prepare('INSERT INTO local_tasks(id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?,?,?,?,?)').run(plan.taskId,await digest(text),'0'.repeat(64),p.id,p.cardJson,text,inputVersion,null,at,at.slice(0,10));
+ if(associateTask)associate(f,p,plan,at,inputVersion);
  if(verified){const result=L.stable(await L.verify(plan,L.run(plan)));f.db.sqlite.prepare('INSERT INTO local_task_results(id,task_id,result_json,created_at,created_day) VALUES(?,?,?,?,?)').run(await digest(result),plan.taskId,result,at,at.slice(0,10));}
  return plan;
 }
-function associate(f,p,plan,createdAt=at){f.db.sqlite.prepare('INSERT INTO local_task_ideas(task_id,proposal_id,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?)').run(plan.taskId,p.id,'raw',null,createdAt,createdAt.slice(0,10));}
+function associate(f,p,plan,createdAt=at,inputVersion='raw'){f.db.sqlite.prepare('INSERT INTO local_task_ideas(task_id,proposal_id,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?)').run(plan.taskId,p.id,inputVersion,null,createdAt,createdAt.slice(0,10));}
+async function cacheRequest(f,p,plan,{inputVersion='raw',createdAt=at}={}){const text=L.stable(plan);f.db.sqlite.prepare('INSERT INTO idea_computation_evidence(proposal_id,requested_task_id,requested_task_json,requested_task_hash,input_version,created_at) VALUES(?,?,?,?,?,?)').run(p.id,plan.taskId,text,await digest(text),inputVersion,createdAt);}
 function request(query='',{method='GET',headers={},path='/community-research'}={}){return new Request('https://worker.example'+path+query,{method,headers:{origin,...headers}});}
 const view=async f=>{const response=await f.handle(request(),f.env);assert.equal(response.status,200);return response.json();};
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
@@ -81,6 +82,32 @@ await test('shared computation counted once per associated public idea and no pr
  const body=await view(f);assert.equal(body.entries.length,2);assert.equal(f.db.queries.length,2);
  for(const entry of body.entries){assert.equal(entry.taskCount,1);assert.equal(entry.verifiedTaskCount,1);assert.deepEqual(entry.tasks,[{id:plan.taskId,title:plan.title,state:'results-verified'}]);}
  assert(!JSON.stringify(body).includes(privateIdea.id));assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);
+});
+await test('shared saved work crosses title/category and partial page batches without inflating owned counts',async()=>{
+ const f=fixture(),owner=await idea(f,'reuse-owner'),other=await idea(f,'reuse-other',{aim:'measure a pattern'}),source=await task(f,owner,170,{verified:true});
+ const requested=await L.prepare({...source,title:'A different title in another category',pages:[...source.pages,{id:'lp2-16',text:'ᚩᚱ'}]});await cacheRequest(f,other,requested);
+ const body=await view(f),entry=body.entries.find(e=>e.id===other.id);assert.equal(entry.hasSharedComputation,true);assert.equal(entry.taskCount,0);assert.equal(entry.verifiedTaskCount,0);assert.deepEqual(entry.tasks,[]);assert.equal(f.db.queries.length,2);
+ assert(!Object.hasOwn(body.entries.find(e=>e.id===owner.id),'hasSharedComputation'),'Legacy cards without a cached request gain no extra field');
+ assert(f.db.projected.every(row=>!Object.hasOwn(row,'task_json')&&!Object.hasOwn(row,'requested_task_json')&&!Object.hasOwn(row,'result_json')));
+ const explain=f.db.sqlite.prepare('EXPLAIN QUERY PLAN '+f.db.queries[0]).all();assert(explain.some(row=>row.detail.includes('local_tasks_protocol_lookup')),'Shared discovery uses the protocol expression index');
+});
+await test('shared status requires exact bytes/criterion/version and a public accepted source',async()=>{
+ for(const variation of ['text','page','criterion','steps','alphabet','private','no-result','version','association-version','origin-version']){
+  const f=fixture(),owner=await idea(f,'source-'+variation,{published:variation!=='private'}),other=await idea(f,'target-'+variation),source=await task(f,owner,180,{verified:variation!=='no-result',inputVersion:variation==='origin-version'?'reviewed':'raw'});
+  const changes={title:'Requested '+variation};if(variation==='text')changes.pages=[{id:'lp2-15',text:'ᚠᚢᚦ '}];if(variation==='page')changes.pages=[{id:'lp2-16',text:'ᚠᚢᚦ'}];if(variation==='criterion')changes.criterion={kind:'exact-prefix',values:[0]};if(variation==='steps')changes.steps=[{op:'affine',a:1,b:1}];if(variation==='alphabet')changes.alphabet=source.alphabet.slice().reverse();
+  if(variation==='association-version')f.db.sqlite.prepare('UPDATE local_task_ideas SET input_version=? WHERE task_id=?').run('reviewed',source.taskId);
+  if(variation==='origin-version')f.db.sqlite.prepare('UPDATE local_task_ideas SET input_version=? WHERE task_id=?').run('raw',source.taskId);
+  await cacheRequest(f,other,await L.prepare({...source,...changes}),{inputVersion:variation==='version'?'reviewed':'raw'});
+  const entry=(await view(f)).entries.find(e=>e.id===other.id);assert(!Object.hasOwn(entry,'hasSharedComputation'),variation);
+ }
+});
+await test('shared projection follows latest frozen request and notices later accepted results',async()=>{
+ const f=fixture(),owner=await idea(f,'latest-owner'),other=await idea(f,'latest-other'),source=await task(f,owner,190),matching=await L.prepare({...source,title:'Initial matching request'});await cacheRequest(f,other,matching);
+ assert(!Object.hasOwn((await view(f)).entries.find(e=>e.id===other.id),'hasSharedComputation'));
+ const result=L.stable(await L.verify(source,L.run(source)));f.db.sqlite.prepare('INSERT INTO local_task_results(id,task_id,result_json,created_at,created_day) VALUES(?,?,?,?,?)').run(await digest(result),source.taskId,result,at,at.slice(0,10));
+ assert.equal((await view(f)).entries.find(e=>e.id===other.id).hasSharedComputation,true);
+ await cacheRequest(f,other,await L.prepare({...source,title:'Latest request is another text',pages:[{id:'lp2-15',text:'ᚦᚢᚠ'}]}),{createdAt:'2026-10-24T13:00:00.000Z'});
+ assert(!Object.hasOwn((await view(f)).entries.find(e=>e.id===other.id),'hasSharedComputation'));
 });
 await test('task order uses association time rather than original computation time',async()=>{
  const f=fixture(),p=await idea(f,'association-order'),plans=[await task(f,p,80),await task(f,p,81)].sort((a,b)=>a.taskId.localeCompare(b.taskId));
@@ -128,9 +155,9 @@ await test('corrupt cards, task identities/titles and SQL failures fail closed w
  for(const mutate of [async(f,p)=>f.db.sqlite.prepare('UPDATE proposals SET card_hash=? WHERE id=?').run('0'.repeat(64),p.id),
   async(f,p)=>{const plan=await task(f,p,4);f.db.sqlite.prepare('UPDATE local_tasks SET task_json=? WHERE id=?').run(JSON.stringify({...plan,taskId:'0'.repeat(64)}),plan.taskId);},
   async(f,p)=>{const plan=await task(f,p,4);f.db.sqlite.prepare('UPDATE local_tasks SET task_json=? WHERE id=?').run(JSON.stringify({...plan,title:'x'.repeat(301)}),plan.taskId);},
-  async(f,p)=>{const plan=await task(f,p,4);f.db.sqlite.prepare('UPDATE local_tasks SET task_json=? WHERE id=?').run('not valid json',plan.taskId);},
+  async(f,p)=>{const plan=await task(f,p,4);f.db.sqlite.exec('DROP INDEX local_tasks_protocol_lookup');f.db.sqlite.prepare('UPDATE local_tasks SET task_json=? WHERE id=?').run('not valid json',plan.taskId);},
   async(f)=>{f.db.fail=true;}]){
   const f=fixture(),p=await idea(f,4);await mutate(f,p);const response=await f.handle(request(),f.env);assert.equal(response.status,503);const body=await response.json();assert(!JSON.stringify(body).includes('PRIVATE'));assert(!Object.hasOwn(body,'entries'));
  }
 });
-console.log('PASS '+groups+' community feed groups: SQLite migrations1–6; read-only batched metadata; no network/model/deploy.');
+console.log('PASS '+groups+' community feed groups: SQLite migrations1–6 and11; read-only indexed shared metadata; no network/model/deploy.');

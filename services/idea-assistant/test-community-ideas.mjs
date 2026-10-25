@@ -11,7 +11,7 @@ const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture(){
  const sqlite=new DatabaseSync(':memory:');
- for(const file of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+file,import.meta.url),'utf8'));
+ for(const file of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+file,import.meta.url),'utf8'));
  const db={sqlite,reads:0,fail:false,queries:[],projected:[],prepare(sql){db.queries.push(sql);return {bind(...args){return {sql,args,
   first:async()=>{db.reads++;return sqlite.prepare(sql).get(...args)||null;},
   all:async()=>{db.reads++;const results=sqlite.prepare(sql).all(...args);db.projected.push(...results);return {results};}};}};},async batch(statements){

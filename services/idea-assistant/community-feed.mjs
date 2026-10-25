@@ -39,8 +39,31 @@ export function createCommunityFeedHandler(){
    const query=(sql,...args)=>env.PROPOSALS.prepare(sql).bind(...args).all();
    const where=cursor?' WHERE (i.created_at<? OR (i.created_at=? AND i.proposal_id<?))':'';
    const args=cursor?[cursor.createdAt,cursor.createdAt,cursor.id]:[];
-   const found=await query(`SELECT i.proposal_id,i.created_at,p.card_json,p.card_hash
-    FROM research_ideas i JOIN proposals p ON p.id=i.proposal_id${where}
+   // Bound the expensive shared-page existence checks to this page, even if
+   // ordering the public idea directory itself needs a temporary sort.
+   const found=await query(`WITH page AS MATERIALIZED (
+    SELECT i.proposal_id,i.created_at FROM research_ideas i${where}
+    ORDER BY i.created_at DESC,i.proposal_id DESC LIMIT 51
+   ) SELECT i.proposal_id,i.created_at,p.card_json,p.card_hash,
+    CASE WHEN request.requested_task_id IS NULL THEN 0 ELSE EXISTS(
+     SELECT 1 FROM local_tasks source
+     WHERE source.input_version=request.input_version
+      AND json_extract(source.task_json,'$.engine')=json_extract(request.requested_task_json,'$.engine')
+      AND json_extract(source.task_json,'$.alphabet')=json_extract(request.requested_task_json,'$.alphabet')
+      AND json_extract(source.task_json,'$.steps')=json_extract(request.requested_task_json,'$.steps')
+      AND json_extract(source.task_json,'$.criterion')=json_extract(request.requested_task_json,'$.criterion')
+      AND EXISTS(SELECT 1 FROM local_task_results accepted WHERE accepted.task_id=source.id)
+      AND EXISTS(SELECT 1 FROM local_task_ideas association JOIN research_ideas public_idea ON public_idea.proposal_id=association.proposal_id
+       WHERE association.task_id=source.id AND association.input_version=request.input_version)
+      AND EXISTS(SELECT 1 FROM json_each(source.task_json,'$.pages') source_page
+       JOIN json_each(request.requested_task_json,'$.pages') requested_page
+        ON json_extract(source_page.value,'$.id')=json_extract(requested_page.value,'$.id')
+        AND json_extract(source_page.value,'$.text')=json_extract(requested_page.value,'$.text'))
+    ) END AS has_shared_computation
+    FROM page i JOIN proposals p ON p.id=i.proposal_id
+    LEFT JOIN idea_computation_evidence request ON request.rowid=(
+     SELECT latest.rowid FROM idea_computation_evidence latest WHERE latest.proposal_id=i.proposal_id
+     ORDER BY latest.created_at DESC,latest.requested_task_id DESC LIMIT 1)
     ORDER BY i.created_at DESC,i.proposal_id DESC LIMIT 51`,...args);
    if(!Array.isArray(found.results)||found.results.length>PAGE_SIZE+1)throw Error('Invalid database response');
    const rows=found.results.slice(0,PAGE_SIZE),entries=[],byId=new Map();
@@ -48,7 +71,8 @@ export function createCommunityFeedHandler(){
     if(typeof row.proposal_id!=='string'||!IDEA.test(row.proposal_id)||!iso(row.created_at)||byId.has(row.proposal_id))throw Error('Invalid idea metadata');
     const card=validateCard(row.card_json),hash=await digest(C.serialize(card));
     if(row.card_hash!==hash||row.proposal_id!=='p_'+hash)throw Error('Stored card identity mismatch');
-    const entry={id:row.proposal_id,card,createdAt:row.created_at,tasks:[],taskCount:0,verifiedTaskCount:0};entries.push(entry);byId.set(entry.id,entry);
+    if(![0,1].includes(row.has_shared_computation))throw Error('Invalid shared computation summary');
+    const entry={id:row.proposal_id,card,createdAt:row.created_at,tasks:[],taskCount:0,verifiedTaskCount:0,...(row.has_shared_computation?{hasSharedComputation:true}:{})};entries.push(entry);byId.set(entry.id,entry);
    }
    if(entries.length){
     // Rank/count small identity columns before extracting JSON. Only the ten
