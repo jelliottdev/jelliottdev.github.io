@@ -113,7 +113,9 @@ def literal(name, value):
         raise ValueError('Unsupported declared parameter')
 
 
-def declaration(card):
+def declaration(card, *, max_cases=4096, check_expanded_budget=True):
+    """Shared declaration grammar; historical v1 budgets remain the defaults."""
+    require(type(max_cases) is int and 1 <= max_cases <= 76800 and type(check_expanded_budget) is bool, 'Invalid audit budgets')
     fields(card, ('version', 'outcome', 'method', 'scope', 'rules', 'unresolved'), 'Original card')
     require(type(card['version']) is int and card['version'] == 1 and len(stable(card).encode('utf-8')) <= 12000, 'Invalid original card version/size')
     for key in ('outcome', 'method', 'scope'):
@@ -159,7 +161,7 @@ def declaration(card):
         count *= len(values)
         require(count <= 1024, 'Too many finite programs')
         normalized.append({'operation': op, 'name': name, 'values': sorted(values, key=lambda v: tuple(v) if isinstance(v, list) else v)})
-    require(count * len(pages) <= 4096, 'Too many page/program cases')
+    require(count * len(pages) <= max_cases, 'Too many page/program cases')
     normalized.sort(key=lambda a: (a['operation'], a['name']))
     declared = {'kind': 'finite-settings', 'version': 1, 'parameters': normalized, 'programCount': count, 'caseCount': count * len(pages)}
     largest = [{'operation': a['operation'], 'name': a['name'], 'value': max(a['values'], key=lambda v: len(stable(v).encode('utf-8')))} for a in normalized]
@@ -167,7 +169,8 @@ def declaration(card):
     member['rules']['searchBounds'] = {'status': 'not_applicable'}
     for setting in largest:
         member['method']['value']['operations'][setting['operation']][setting['name']] = setting['value']
-    require(len(stable({'declaration': declared, 'variants': []}).encode('utf-8')) + count * (len(stable({'settings': largest, 'card': member}).encode('utf-8')) + 1) <= MAX_BYTES, 'Detached member budget exceeded')
+    if check_expanded_budget:
+        require(len(stable({'declaration': declared, 'variants': []}).encode('utf-8')) + count * (len(stable({'settings': largest, 'card': member}).encode('utf-8')) + 1) <= MAX_BYTES, 'Detached member budget exceeded')
     return operations, normalized, count
 
 

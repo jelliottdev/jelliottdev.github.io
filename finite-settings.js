@@ -3,6 +3,7 @@
  'use strict';
  const node=typeof module==='object'&&module.exports,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare;
  const LIMITS=Object.freeze({programs:1024,cases:4096,pages:75,operations:8,parameters:56,expandedBytes:8*1024*1024});
+ const FACTORED_LIMITS=Object.freeze({...LIMITS,cases:76800});
  const NAMES=new Set(['a','b','reset','unit','key','direction','interrupts']);
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(key=>Object.hasOwn(v,key));
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
@@ -46,7 +47,7 @@
  function memberCard(card,settings){
   const member=clone(card);member.rules.searchBounds={status:'not_applicable'};for(const setting of settings)member.method.value.operations[setting.operation][setting.name]=clone(setting.value);return canonical(member);
  }
- function parse(input){
+ function parse(input,limits=LIMITS){
   const card=canonical(input),bound=card.rules.searchBounds;
   if(bound.status!=='specified'||!exact(bound.value,['kind','version','parameters'])||bound.value.kind!=='finite-settings'||bound.value.version!==1)throw Error('Declare a version 1 finite-settings search bound.');
   if(card.method.status!=='specified'||!Array.isArray(card.method.value.operations)||!card.method.value.operations.length||card.method.value.operations.length>LIMITS.operations)throw Error('Finite settings need one to eight ordered method operations.');
@@ -60,7 +61,7 @@
    const values=axis.values.map(value=>literal(axis.name,value)),identities=new Set(values.map(stable));if(identities.size!==values.length)throw Error('A finite parameter repeats an alternative.');values.sort(compare);
    programCount*=values.length;if(programCount>LIMITS.programs)throw Error('Finite settings exceed 1024 programs; no alternatives were truncated.');return {operation:axis.operation,name:axis.name,values};
   }).sort((a,b)=>a.operation-b.operation||(a.name<b.name?-1:a.name>b.name?1:0));
-  const caseCount=programCount*card.scope.value.pages.length;if(caseCount>LIMITS.cases)throw Error('Finite settings exceed 4096 program-page cases; no cases were truncated.');
+  const caseCount=programCount*card.scope.value.pages.length;if(caseCount>limits.cases)throw Error('Finite settings exceed '+limits.cases+' program-page cases; no cases were truncated.');
   const declaration={kind:'finite-settings',version:1,parameters,programCount,caseCount};
   // Measure one maximum-size member before allocating a Cartesian expansion.
   // This upper bound includes settings, cards, separators and the declaration.
@@ -69,8 +70,8 @@
   return {card,declaration};
  }
  function inspect(card){return freeze(parse(card).declaration);}
- function expand(input){
-  const {card,declaration}=parse(input),variants=[];
+ function expand(input,limits=LIMITS){
+  const {card,declaration}=parse(input,limits),variants=[];
   function visit(index,settings){
    if(index<declaration.parameters.length){const axis=declaration.parameters[index];for(const value of axis.values)visit(index+1,[...settings,{operation:axis.operation,name:axis.name,value}]);return;}
    // Reuse the canonical card boundary, not a parallel operation compiler.
@@ -78,8 +79,8 @@
   }
   visit(0,[]);return freeze({declaration,variants});
  }
- function member(input,supplied){
-  const {card,declaration}=parse(input),assignments=capture(supplied);
+ function member(input,supplied,limits=LIMITS){
+  const {card,declaration}=parse(input,limits),assignments=capture(supplied);
   if(!Array.isArray(assignments)||assignments.length!==declaration.parameters.length)throw Error('Select exactly one value for every declared finite parameter.');
   const selected=new Map(),axes=new Map(declaration.parameters.map(axis=>[axis.operation+'|'+axis.name,axis]));
   for(const setting of assignments){
@@ -90,5 +91,6 @@
   const settings=declaration.parameters.map(axis=>({operation:axis.operation,name:axis.name,value:clone(selected.get(axis.operation+'|'+axis.name))}));
   return freeze({declaration,settings,card:memberCard(card,settings)});
  }
- const api={inspect,expand,member,LIMITS};if(node)module.exports=api;else root.FiniteSettings=api;
+ const factored=Object.freeze({inspect:card=>freeze(parse(card,FACTORED_LIMITS).declaration),expand:card=>expand(card,FACTORED_LIMITS),member:(card,settings)=>member(card,settings,FACTORED_LIMITS),LIMITS:FACTORED_LIMITS});
+ const api={inspect,expand:card=>expand(card),member:(card,settings)=>member(card,settings),factored,LIMITS};if(node)module.exports=api;else root.FiniteSettings=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

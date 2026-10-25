@@ -1,0 +1,21 @@
+/* One bounded local ZIP part at a time. No network, target work or archive-wide buffering. */
+(function(root){
+ 'use strict';
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,S=node?require('./factored-finite-search-snapshot.js'):root.FactoredFiniteSearchSnapshot,Zip=node?require('./local-run-package.js'):root.LocalRunPackage;
+ const RAW_PART_BYTES=16*1024*1024,ZIP_PART_BYTES=32*1024*1024,encoder=new TextEncoder(),SOURCE_SHA256=Object.freeze({runner:'be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61',auditV1:'35f765cdd9879c6590b0a255dcb7fe18da1a5ce7fd95c2872ca872a9ba75d1ce',auditV2:'e559c8322d57f6f3441123ca1dfe824d7b93ed11b680fb4720d8f74c7c3af684'});
+ const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
+ const digest=async(bytes,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');
+ function parts(snapshot){S.inspect(snapshot);const groups=[];let current={index:0,chunkPaths:[],rawChunkBytes:0};for(const ref of snapshot.evidence.chunks){if(ref.bytes>RAW_PART_BYTES)throw Error('A whole original receipt chunk exceeds one part.');if(current.chunkPaths.length&&current.rawChunkBytes+ref.bytes>RAW_PART_BYTES){groups.push(current);current={index:groups.length,chunkPaths:[],rawChunkBytes:0};}current.chunkPaths.push(ref.path);current.rawChunkBytes+=ref.bytes;}groups.push(current);return freeze(groups);}
+ async function buildPart(snapshot,index,options,crypto=root.crypto){
+  S.inspect(snapshot);if(!options||typeof options.readChunk!=='function')throw Error('Supply a local original-chunk reader.');const groups=parts(snapshot);if(!Number.isSafeInteger(index)||index<0||index>=groups.length)throw Error('Choose one declared audit part.');
+  const textSources=[['research_runner.py','runner',options.runnerText],['verify_finite_search.py','auditV1',options.auditV1Text],['verify_factored_finite_search.py','auditV2',options.auditV2Text]],files=[];
+  for(const [name,key,text]of textSources){if(typeof text!=='string'||!text.length||text.length>100000)throw Error('The pinned audit source is unavailable.');const bytes=encoder.encode(text);if(bytes.byteLength>100000||await digest(bytes,crypto)!==SOURCE_SHA256[key])throw Error('The pinned '+name+' source changed.');files.push([name,bytes]);}
+  const manifest=encoder.encode(E.stable(snapshot)+'\n');if(manifest.byteLength>S.LIMITS.manifestBytes)throw Error('The complete manifest exceeds its byte bound.');
+  const instructions='Saved search audit — '+groups.length+' ZIP '+(groups.length===1?'part':'parts')+'\n\nExtract ALL parts into the SAME folder. Each contains the identical snapshot and audit scripts; keep their shared names. A single part may omit required original receipts and is not a complete audit.\n\nAfter extracting every part, run with Python 3.9 or later:\n  python verify_factored_finite_search.py snapshot.json\n\nThe audit requires every advertised chunk. It independently replays the packaged saved computations, checks the complete declared search and verifies its coverage. It does not run missing cases, contact a server or upload anything. Missing cases are absent from these receipts; they are not established as new work. A matching opening is not a complete reading. Original dates are retained, not authenticated.\n';
+  files.push(['snapshot.json',manifest],['START.txt',encoder.encode(instructions)]);
+  const references=new Map(snapshot.evidence.chunks.map(ref=>[ref.path,ref]));
+  for(const name of groups[index].chunkPaths){const ref=references.get(name),supplied=await options.readChunk(name);if(!ArrayBuffer.isView(supplied)||Object.prototype.toString.call(supplied)!=='[object Uint8Array]'||supplied.byteLength!==ref.bytes)throw Error('An original chunk is missing or changed.');const bytes=new Uint8Array(supplied);if(await digest(bytes,crypto)!==ref.sha256)throw Error('An original chunk digest changed.');files.push([name,bytes]);}
+  return Zip.zipFiles(files,{maxBytes:ZIP_PART_BYTES});
+ }
+ const api={parts,buildPart,SOURCE_SHA256,RAW_PART_BYTES,ZIP_PART_BYTES};if(node)module.exports=api;else root.FactoredFiniteSearchPackage=api;
+})(typeof globalThis!=='undefined'?globalThis:this);

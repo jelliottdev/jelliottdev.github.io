@@ -1,0 +1,30 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),{webcrypto}=require('node:crypto'),C=require('../claim-specification.js'),H=require('../claim-share.js'),E=require('../local-experiment.js'),Settings=require('../finite-settings.js'),Q=require('../factored-finite-question.js'),Compiler=require('../factored-finite-search-compiler.js'),Legacy=require('../finite-search-compiler.js');
+const clone=v=>JSON.parse(JSON.stringify(v)),known=value=>C.field('specified',value,{kind:'supplied',refs:['visitor:original']}),bundle=()=>JSON.parse(fs.readFileSync('data/local-run-inputs.json','utf8'));
+function card(pages=['lp2-15']){return H.cardData(C.confirm(C.createDraft({source:{text:'Try all explicitly declared affine settings against my specified opening.'},aim:known('Solve LP2'),method:known({operations:[{id:'affine',label:'Affine substitution'}]}),scope:known({pages}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known({kind:'exact-prefix',values:[0,1]}),searchBounds:known({kind:'finite-settings',version:1,parameters:[{operation:0,name:'a',values:Array.from({length:28},(_,i)=>i+1)},{operation:0,name:'b',values:Array.from({length:29},(_,i)=>i)}]})}}),{id:'visitor',at:'2026-10-25T12:00:00.000Z'}));}
+(async()=>{let count=0;async function test(name,fn){await fn();count++;console.log('PASS '+name);}
+ await test('the full812by56 declaration keeps every page and setting in shared immutable inputs without target execution',async()=>{
+  const original=card(Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0'))),source=bundle(),before=clone({original,source}),run=E.run;E.run=()=>{throw Error('Compilation must not execute targets');};let output;
+  try{output=await Compiler.compile(original,source,webcrypto);}finally{E.run=run;}
+  assert.equal(output.declaration.programCount,812);assert.equal(output.declaration.caseCount,45472);assert.equal(output.domain.totalCases,45472);assert.equal(output.domain.pages.length,56);assert.equal(output.members.length,812);assert(!output.domain.cases);assert(output.domain.programs.every(p=>!Object.hasOwn(p,'task')));assert(Buffer.byteLength(E.stable(output))<1024*1024);assert.deepEqual({original,source},before);assert(Object.isFrozen(output.domain.pages));
+  const last=await Q.cases(output.domain,{cursor:45460,limit:12});assert.equal(last.nextCursor,null);const selected=await Q.select(output.domain,last.cases);assert.equal(selected.cases.length,12);assert(selected.cases.every(c=>c.task.pages.length===1));
+ });
+ await test('legacy settings and compiler retain their original bounds; expanded policy is explicit',async()=>{
+  const original=card(Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')));assert.throws(()=>Settings.inspect(original),/4096/);await assert.rejects(()=>Legacy.compile(original,bundle(),webcrypto),/4096/);assert.equal(Settings.factored.inspect(original).caseCount,45472);assert.equal(Settings.LIMITS.cases,4096);assert.equal(Settings.factored.LIMITS.cases,76800);
+ });
+ await test('small factored cases preserve original ordinary program and page identities',async()=>{
+  const input=card(['lp2-15','lp2-16']);input.rules.searchBounds.value.parameters[0].values=[1,2];input.rules.searchBounds.value.parameters[1].values=[0,1];const source=bundle(),a=await Compiler.compile(input,source,webcrypto),b=await Legacy.compile(input,source,webcrypto),refs=(await Q.cases(a.domain,{cursor:0,limit:8})).cases;assert.deepEqual(refs.map(c=>c.id).sort(),b.domain.cases.map(c=>c.id).sort());
+  const chosen=await Q.select(a.domain,refs);for(const c of chosen.cases){const old=b.domain.programs.find(p=>p.id===c.programId);const task=await E.prepare({...old.task,pages:old.task.pages.filter(p=>p.id===c.pageId)},webcrypto);assert.deepEqual(c.task,task);}
+ });
+ await test('scope holes and axis ordering do not become accidental sampling or extra pages',async()=>{
+  const a=card(['lp2-00','lp2-15','lp2-55']),b=clone(a);a.rules.searchBounds.value.parameters[0].values=[1,2];b.rules.searchBounds.value.parameters[0].values=[2,1];a.rules.searchBounds.value.parameters[1].values=[0,1];b.rules.searchBounds.value.parameters[1].values=[1,0];b.rules.searchBounds.value.parameters.reverse();const x=await Compiler.compile(a,bundle(),webcrypto),y=await Compiler.compile(b,bundle(),webcrypto);assert.equal(x.domain.id,y.domain.id);assert.deepEqual(x.domain.pages.map(p=>p.id),['lp2-00','lp2-15','lp2-55']);assert.equal(x.domain.totalCases,12);
+ });
+ await test('unknown source version criterion adapter or unavailable reviewed page fails the entire declaration',async()=>{
+  for(const change of [c=>c.rules.inputVersion={status:'unspecified'},c=>c.rules.evaluation=known('measurement'),c=>c.rules.inputVersion=known('reviewed'),c=>c.method.value.operations[0].id='described_method']){const input=card(['lp2-15','lp2-16']);change(input);await assert.rejects(()=>Compiler.compile(input,bundle(),webcrypto));}
+ });
+ await test('source capture rejects getters before invocation and asynchronous mutation cannot change the bound scope',async()=>{
+  const bad=card();let accesses=0;Object.defineProperty(bad.scope.value,'pages',{enumerable:true,get(){accesses++;return ['lp2-15'];}});await assert.rejects(()=>Compiler.compile(bad,bundle(),webcrypto));assert.equal(accesses,0);
+  const original=card();original.rules.searchBounds.value.parameters[0].values=[1];original.rules.searchBounds.value.parameters[1].values=[0];const source=bundle(),expected=source.pages.find(p=>p.id==='lp2-15').raw;let release,started=false;const gate=new Promise(resolve=>release=resolve),crypto={subtle:{async digest(...args){if(!started){started=true;await gate;}return webcrypto.subtle.digest(...args);}}};const pending=Compiler.compile(original,source,crypto);assert(started);source.pages.find(p=>p.id==='lp2-15').raw='changed';original.scope.value.pages=['lp2-00'];release();const output=await pending;assert.equal(output.domain.pages[0].id,'lp2-15');assert.equal(output.domain.pages[0].text,expected);
+ });
+ console.log(count+' factored finite compiler groups passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

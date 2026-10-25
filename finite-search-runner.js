@@ -1,7 +1,7 @@
 /* Controls-first local execution for a bound finite question. No saved receipts or writes. */
 (function(root){
  'use strict';
- const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,F=node?require('./finite-program-question.js'):root.FiniteProgramQuestion,C=node?require('./local-plan-controls.js'):root.LocalPlanControls,X=node?require('./local-run-executor.js'):root.LocalRunExecutor,JSONData=node?require('./finite-json.js'):root.FiniteJSON;
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,F=node?require('./finite-program-question.js'):root.FiniteProgramQuestion,Factored=node?require('./factored-finite-question.js'):root.FactoredFiniteQuestion,C=node?require('./local-plan-controls.js'):root.LocalPlanControls,X=node?require('./local-run-executor.js'):root.LocalRunExecutor,JSONData=node?require('./finite-json.js'):root.FiniteJSON;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value'));
  const copy=v=>JSON.parse(E.stable(v));
  function freeze(value){if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
@@ -16,14 +16,14 @@
    const promise=new Promise((yes,no)=>{resolve=yes;reject=no;}),finish=(fn,value)=>{if(settled)return;settled=true;fn(value);};
    const live=()=>{if(aborted)throw new DOMException('Run cancelled.','AbortError');};
    const progress=(phase,completed,total)=>{live();try{onProgress?.({phase,completed,total});}catch{}live();};
-   let ids,controls;
-   try{F.inspect(domain);domainId=domain.id;ids=JSONData.capture(suppliedIds,{maxBytes:4096,maxDepth:2,maxNodes:13});controls=JSONData.capture(suppliedControls);}catch(error){finish(reject,error);return {promise,cancel(){},getCheckpoint};}
+   let ids,controls,question=F;
+   try{try{F.inspect(domain);}catch(legacyError){if(!Factored)throw legacyError;Factored.inspect(domain);question=Factored;}domainId=domain.id;ids=JSONData.capture(suppliedIds,question===F?{maxBytes:4096,maxDepth:2,maxNodes:13}:{maxBytes:8192,maxDepth:3,maxNodes:60});controls=JSONData.capture(suppliedControls);}catch(error){finish(reject,error);return {promise,cancel(){},getCheckpoint};}
    async function execute(task){
     live();current=executor.start(copy(task));if(!current||typeof current.cancel!=='function'||!current.promise)throw Error('The local executor is unavailable.');
     const output=await current.promise;live();current=null;const checked=await E.verify(task,output,cryptoAPI);live();return checked;
    }
    (async()=>{
-    const selection=await F.select(domain,ids,cryptoAPI);live();
+    const selection=await question.select(domain,ids,cryptoAPI);live();
     if(!Array.isArray(controls)||controls.length!==selection.cases.length||controls.some((item,i)=>!exact(item,['caseId','suite'])||item.caseId!==selection.cases[i].id))throw Error('Controls must match every selected case in canonical order.');
     // Finish admission for the entire batch before starting its first worker.
     for(let i=0;i<selection.cases.length;i++){await E.checkIdentity(selection.cases[i].task,cryptoAPI);live();await C.validate(controls[i].suite,selection.cases[i].task,cryptoAPI);live();}
