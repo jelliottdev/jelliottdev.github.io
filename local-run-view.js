@@ -3,14 +3,14 @@
  'use strict';
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const bindings=new WeakMap();
+ const bindings=new WeakMap(),languageComparisons=new WeakMap();
  const LANGUAGE_REFERENCES=[['eng_Latn','English'],['cym_Latn','Welsh'],['deu_Latn','German'],['fra_Latn','French'],['spa_Latn','Spanish'],['ita_Latn','Italian'],['por_Latn','Portuguese'],['fin_Latn','Finnish']];
  function languageDescriptor(task){
   const registry=typeof module==='object'&&module.exports?require('./output-evaluators.js'):root.OutputEvaluators;
   const descriptor=registry?.describe(task.criterion);if(!descriptor)throw Error('The language comparison is not supported by this view.');return descriptor;
  }
- function languagePage(task,result,id){
-  const page=result.languageScore.pages.find(p=>p.page===id),output=result.transformed.find(p=>p.page===id),characters=Array.from(output.text),excerpt=characters.slice(0,120).join('');
+ function languagePage(task,result,id,comparison=null){
+  const page=comparison||result.languageScore.pages.find(p=>p.page===id),output=result.transformed.find(p=>p.page===id),characters=Array.from(output.text),excerpt=characters.slice(0,120).join('');
   const introduction='<h3>After the method · '+esc(id.toUpperCase())+'</h3><p class="run-text-note">Rune labels, not a translation.'+(characters.length>120?' First 120 characters; inspect the complete text below.':'')+'</p><pre class="run-language-excerpt">'+esc(transliteration(excerpt,task.alphabet,true))+(characters.length>120?'…':'')+'</pre>';
   if(page.status==='insufficient')return introduction+'<h3>Too little text to compare</h3><p>This page has '+page.runes+' runes. This comparison needs at least 40. No language scores were calculated.</p><p>Inspect the output directly, or separately review a longer passage to check.</p>';
   return introduction+'<h3>Compared with rearranged text</h3><p>For each reference, the bar counts how many of 32 rearrangements scored at least as high as this output. Every rearrangement keeps the same runes and length.</p><p class="run-language-caution"><strong>A short bar is not evidence of readable text.</strong> Unreadable outputs can also score above all 32 rearrangements. These rows do not identify the language.</p><ul class="run-language-comparisons" aria-label="Language reference comparisons">'+LANGUAGE_REFERENCES.map(([id,label])=>{const model=page.models.find(m=>m.id===id);if(!model)throw Error('A language reference is missing.');return '<li><div class="run-language-row"><span>'+label+'</span><span>'+model.shuffledAtOrAbove+' of 32</span></div><div class="run-language-track" role="img" aria-label="'+label+': '+model.shuffledAtOrAbove+' of 32 rearrangements scored at least as high as the output"><span style="width:'+(model.shuffledAtOrAbove/32*100)+'%"></span></div></li>';}).join('')+'</ul><p class="run-text-note">References stay in a fixed order. Each compares groups of three runes after the same spelling conversion. Counts describe these 32 rearrangements, not confidence in a language.</p><details class="run-language-values"><summary>Exact comparison values</summary><div class="run-language-table-wrap"><table><thead><tr><th>Reference</th><th>Output score</th><th>Rearranged range</th></tr></thead><tbody>'+LANGUAGE_REFERENCES.map(([id,label])=>{const model=page.models.find(m=>m.id===id);return '<tr><th scope="row">'+label+'</th><td>'+model.total+'</td><td>'+model.shuffledMin+' to '+model.shuffledMax+'</td></tr>';}).join('')+'</tbody></table></div><p class="run-text-note">Scores are model-specific integer totals. Compare each output with its own rearrangements, not raw scores across languages.</p></details>';
@@ -19,11 +19,11 @@
   const descriptor=languageDescriptor(task),first=task.pages[0].id;
   return '<section class="run-language" data-run-language>'+ (task.pages.length>1?'<label class="run-language-page">Page<select data-run-language-page>'+task.pages.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.id.toUpperCase())+'</option>').join('')+'</select></label>':'')+'<div data-run-language-content>'+languagePage(task,result,first)+'</div><section class="run-language-next"><h3>What to check next</h3><p>'+esc(descriptor.next)+'</p><p>'+esc(descriptor.limit)+'</p></section></section>';
  }
- function bindLanguage(host,task,result){
+ function bindLanguage(host,task,result,initialPage){
   const panel=host.querySelector?.('[data-run-language]'),select=panel?.querySelector('[data-run-language-page]'),content=panel?.querySelector('[data-run-language-content]');
   if(!select||!content)return ()=>{};
   const change=()=>{if(task.pages.some(p=>p.id===select.value))content.innerHTML=languagePage(task,result,select.value);};
-  select.addEventListener('change',change);return ()=>select.removeEventListener?.('change',change);
+  if(initialPage){select.value=initialPage;change();}select.addEventListener('change',change);return ()=>select.removeEventListener?.('change',change);
  }
  function outputExcerpt(task,result,id){
   const output=result.transformed.find(page=>page.page===id),chars=Array.from(output.text),excerpt=chars.slice(0,120).join('');
@@ -124,7 +124,7 @@
  function bind(host,task,result,options={}){
   bindings.get(host)?.();
   E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result})),initialPage=options.pageId===undefined?snapshot.task.pages[0].id:options.pageId;if(!snapshot.task.pages.some(p=>p.id===initialPage))throw Error('Choose a page in the original output.');
-  const sumsCleanup=task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
+  const sumsCleanup=task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
   const panel=host.querySelector?.('.run-text-inspector');if(!panel){bindings.set(host,sumsCleanup);return sumsCleanup;}
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
   const original=panel.querySelector('[data-run-original]'),after=panel.querySelector('[data-run-after]');
@@ -158,5 +158,17 @@
   if(criterion?.kind!=='exact-prefix'||!Array.isArray(criterion.values)||criterion.values.length<1||criterion.values.length>256||criterion.values.some(v=>!Number.isInteger(v)||v<0||v>28)||!task.pages.some(p=>p.id===pageId)||!result.transformed.some(p=>p.page===pageId))throw Error('Use an explicit opening and an original output page.');
   return prefixAlignment(task,result,pageId,'runes',criterion.values);
  }
- const api={render,bind,pageLabel,renderPrefixComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ async function prepareLanguageComparison(task,result,criterion,pageId,crypto=root.crypto){
+  const node=typeof module==='object'&&module.exports,J=node?require('./finite-json.js'):root.FiniteJSON,S=node?require('./language-score.js'):root.RuneLanguageScore;
+  const captured=J.capture({task,result,criterion,pageId},{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});S.validateCriterion(captured.criterion);
+  if(!captured.task.pages?.some(page=>page.id===captured.pageId))throw Error('Choose an original output page.');
+  const verified=await E.verify(captured.task,captured.result,crypto),output=verified.transformed.find(page=>page.page===captured.pageId);if(!output)throw Error('The original output page is missing.');
+  const indices=new Map(captured.task.alphabet.map((entry,i)=>[entry.rune,i])),values=Array.from(output.text).filter(ch=>indices.has(ch)).map(ch=>indices.get(ch)),comparison=S.evaluate(values),descriptor=languageDescriptor({criterion:captured.criterion}),token=Object.freeze({});
+  languageComparisons.set(token,{task:captured.task,result:verified,pageId:captured.pageId,comparison,descriptor});return token;
+ }
+ function renderLanguageComparison(token){
+  const value=languageComparisons.get(token);if(!value)throw Error('Prepare the original verified output comparison before displaying it.');
+  return '<section class="run-language">'+languagePage(value.task,value.result,value.pageId,value.comparison)+'<section class="run-language-next"><h3>What to check next</h3><p>'+esc(value.descriptor.next)+'</p><p>'+esc(value.descriptor.limit)+'</p></section></section>';
+ }
+ const api={render,bind,pageLabel,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

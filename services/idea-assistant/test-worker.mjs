@@ -236,7 +236,7 @@ assert.equal((await production.fetch(new Request('https://fixture.workers.dev/pr
  method:'GET',headers:{Origin:origin}
 }),proposalEnv)).status,405,'Pending proposals have no public list endpoint');
 console.log('PASS: production proposal routing is isolated from inference and fails closed without storage.');
-for(const [route,method]of [['/factored-search/p_'+'a'.repeat(64)+'/evidence','POST'],['/finite-search/p_'+'a'.repeat(64)+'/evidence','POST'],['/community-research','GET'],['/tasks/'+'a'.repeat(64)+'/extensions','POST'],['/ideas','POST'],['/ideas/p_'+'a'.repeat(64),'GET'],['/prepare-task','POST'],['/tasks','POST'],['/tasks/'+'a'.repeat(64),'GET'],['/tasks/'+'a'.repeat(64)+'/results','POST']]){
+for(const [route,method]of [['/factored-output-search/p_'+'a'.repeat(64)+'/evidence','POST'],['/factored-search/p_'+'a'.repeat(64)+'/evidence','POST'],['/finite-search/p_'+'a'.repeat(64)+'/evidence','POST'],['/community-research','GET'],['/tasks/'+'a'.repeat(64)+'/extensions','POST'],['/ideas','POST'],['/ideas/p_'+'a'.repeat(64),'GET'],['/prepare-task','POST'],['/tasks','POST'],['/tasks/'+'a'.repeat(64),'GET'],['/tasks/'+'a'.repeat(64)+'/results','POST']]){
  assert.equal((await production.fetch(new Request('https://fixture.workers.dev'+route,{
   method,headers:{Origin:origin,'Content-Type':'application/json'},...(method==='POST'?{body:'{}'}:{})
  }),proposalEnv)).status,503,'Task routes must use storage, never inference');

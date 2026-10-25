@@ -7,6 +7,7 @@ import {validateCard} from './idea-relations.mjs';
 import Evidence from '../../computation-evidence.js';
 import {checkedEvidence} from './task-evidence.mjs';
 import Settings from '../../finite-settings.js';
+import Policy from '../../finite-question-policy.js';
 import Compiler from '../../fixed-plan-compiler.js';
 import {storageLimits as checkedStorageLimits} from './storage-limits.mjs';
 
@@ -53,12 +54,12 @@ async function proposal(db,bound){
 async function basisFor(db,value,bound,authority){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
-  if(basis.kind==='finite-settings'||basis.kind==='factored-finite-settings'){
+  if(basis.kind==='finite-settings'||basis.kind==='factored-finite-settings'||basis.kind==='factored-output-settings'){
    require(exact(basis,['kind','settings','caseId'])&&HEX.test(basis.caseId)&&bound.base.parentTaskId===null,'Invalid finite-settings preparation basis');
-   const settingsAPI=basis.kind==='factored-finite-settings'?Settings.factored:Settings;
+   const settingsAPI=basis.kind!=='finite-settings'?Settings.factored:Settings;
    const member=settingsAPI.member(bound.card,basis.settings),plan=Compiler.compile(member.card);
    require(!plan.reason&&Array.isArray(plan.steps)&&bound.card.rules.inputVersion.status==='specified'&&['raw','reviewed'].includes(bound.card.rules.inputVersion.value)
-    &&bound.card.rules.evaluation.status==='specified'&&bound.card.rules.evaluation.value?.kind==='exact-prefix','Finite settings do not compile to one explicit opening check');
+    &&bound.card.rules.evaluation.status==='specified'&&(basis.kind==='factored-output-settings'?Policy.describe(bound.card.rules.evaluation.value).id==='language-reference-comparison-v1':bound.card.rules.evaluation.value?.kind==='exact-prefix'),'Finite settings do not compile to the explicit maintained evaluation');
    require(E.stable(basis.settings)===E.stable(member.settings)&&plan.inputVersion===bound.base.inputVersion&&plan.inputVersion===bound.card.rules.inputVersion.value
     &&E.stable(plan.criterion)===E.stable(bound.card.rules.evaluation.value)&&E.stable(bound.task.criterion)===E.stable(plan.criterion)&&E.stable(bound.task.steps)===E.stable(plan.steps)
     &&E.stable(plan.pages)===E.stable(bound.card.scope.value.pages)&&bound.task.pages.length===1&&plan.pages.includes(bound.task.pages[0].id),'Finite settings changed the declared parameters, pages or common rules');

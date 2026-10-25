@@ -17,14 +17,22 @@
   if(!Array.isArray(value.sourceLinks)||value.sourceLinks.length>75||value.sourceLinks.some(s=>!s||Object.keys(s).length!==2||!text(s.label,300)||!href(s.href)))throw Error('Invalid source link.');
   return freeze(JSON.parse(JSON.stringify(value)));
  }
+ function validateOutput(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))throw Error('A comparison summary is required.');
+  const {complete,usableCases,insufficientCases,...common}=value;
+  if(Object.hasOwn(common,'answer')||typeof complete!=='boolean'||!Number.isSafeInteger(usableCases)||usableCases<0||!Number.isSafeInteger(insufficientCases)||insufficientCases<0||usableCases+insufficientCases!==value.coveredCases||complete!==(value.remainingCases===0))throw Error('Inconsistent comparison counts.');
+  validate({...common,answer:complete?'not-found':null});
+  return freeze(JSON.parse(JSON.stringify(value)));
+ }
  function pageLabel(ids){const grouped=[];for(let i=0;i<ids.length;i++){let end=i;while(end+1<ids.length&&ids[end+1].slice(0,4)===ids[i].slice(0,4)&&Number(ids[end+1].slice(4))===Number(ids[end].slice(4))+1)end++;grouped.push(ids[i].toUpperCase()+(end>i?'–'+ids[end].slice(4):''));i=end;}return grouped.join(', ');}
  const number=n=>n.toLocaleString('en-US');
  function action(model){return model.answer?'inspect':!model.lookupComplete?'retry':'check';}
- function markup(m,level,busy=false,error='',checkLabel='Continue checking'){
-  const kind=action(m),label=kind==='inspect'?'Inspect output':kind==='retry'?'Retry saved evidence':checkLabel;
-  return '<section class="finite-search"><h'+level+'>Does any setting meet this check?</h'+level+'><p class="finite-search-finding" role="status">'+esc(m.finding)+'</p><p class="finite-search-limit">'+esc(m.limit)+'</p><dl class="finite-search-summary"><div><dt>Method</dt><dd>'+esc(m.method)+'</dd></div><div><dt>Settings</dt><dd>'+number(m.programCount)+' '+(m.programCount===1?'setting':'settings')+'</dd></div><div><dt>Pages</dt><dd>'+esc(pageLabel(m.pageIds))+'</dd></div><div><dt>Check</dt><dd>'+esc(m.check)+'</dd></div></dl>'+(!m.answer?'<p class="finite-search-progress">'+number(m.coveredCases)+' of '+number(m.totalCases)+' checks saved and verified.'+(!m.lookupComplete?' Saved evidence has not been fully checked.':'')+'</p>':'')+'<div class="finite-search-actions"><button type="button" data-finite-action="'+kind+'"'+(busy?' disabled aria-busy="true"':'')+'>'+esc(label)+'</button></div>'+(error?'<p class="finite-search-error" role="alert">'+esc(error)+'</p>':'')+(m.sourceLinks.length?(m.sourceLinks.length>1?'<details class="finite-search-source-disclosure"><summary>Sources used ('+m.sourceLinks.length+')</summary>':'')+'<ul class="finite-search-sources">'+m.sourceLinks.map(s=>'<li><a href="'+esc(s.href)+'">'+esc(s.label)+'</a></li>').join('')+'</ul>'+(m.sourceLinks.length>1?'</details>':''):'')+'</section>';
+ function markup(m,level,busy=false,error='',checkLabel='Continue checking',output=false){
+  const kind=output?(m.complete?'inspect':!m.lookupComplete?'retry':'check'):action(m),label=kind==='inspect'?'Inspect output':kind==='retry'?'Retry saved evidence':checkLabel;
+  return '<section class="finite-search"><h'+level+'>'+(output?'Compare these outputs':'Does any setting meet this check?')+'</h'+level+'><p class="finite-search-finding" role="status">'+(output?number(m.usableCases)+' compared · '+number(m.insufficientCases)+' too short · '+number(m.remainingCases)+' unchecked.':esc(m.finding))+'</p><p class="finite-search-limit">'+esc(m.limit)+'</p><dl class="finite-search-summary"><div><dt>Method</dt><dd>'+esc(m.method)+'</dd></div><div><dt>Settings</dt><dd>'+number(m.programCount)+' '+(m.programCount===1?'setting':'settings')+'</dd></div><div><dt>Pages</dt><dd>'+esc(pageLabel(m.pageIds))+'</dd></div><div><dt>Check</dt><dd>'+esc(m.check)+'</dd></div></dl>'+(output?'<p class="finite-search-progress">'+esc(m.finding)+(!m.lookupComplete?' Saved evidence has not been fully checked.':'')+'</p>':!m.answer?'<p class="finite-search-progress">'+number(m.coveredCases)+' of '+number(m.totalCases)+' checks saved and verified.'+(!m.lookupComplete?' Saved evidence has not been fully checked.':'')+'</p>':'')+'<div class="finite-search-actions"><button type="button" data-finite-action="'+kind+'"'+(busy?' disabled aria-busy="true"':'')+'>'+esc(label)+'</button>'+(output&&m.coveredCases&&kind!=='inspect'?'<button type="button" data-finite-work="inspect">Inspect checked output</button>':'')+'</div>'+(error?'<p class="finite-search-error" role="alert">'+esc(error)+'</p>':'')+(m.sourceLinks.length?(m.sourceLinks.length>1?'<details class="finite-search-source-disclosure"><summary>Sources used ('+m.sourceLinks.length+')</summary>':'')+'<ul class="finite-search-sources">'+m.sourceLinks.map(s=>'<li><a href="'+esc(s.href)+'">'+esc(s.label)+'</a></li>').join('')+'</ul>'+(m.sourceLinks.length>1?'</details>':''):'')+'</section>';
  }
  function render(model,{headingLevel=2,checkLabel='Continue checking'}={}){if(!text(checkLabel,80))throw Error('Invalid check action label.');return markup(validate(model),[2,3,4].includes(headingLevel)?headingLevel:2,false,'',checkLabel);}
+ function renderOutput(model,{headingLevel=2,checkLabel='Continue comparing'}={}){if(!text(checkLabel,80))throw Error('Invalid check action label.');return markup(validateOutput(model),[2,3,4].includes(headingLevel)?headingLevel:2,false,'',checkLabel,true);}
  function mount(host,model,options={}){
   if(!host||typeof host.addEventListener!=='function'||typeof host.removeEventListener!=='function')throw Error('A view host is required.');
   let captured=validate(model);mounts.get(host)?.destroy();let dead=false,generation=0,pending=false,controller=null;
@@ -39,5 +47,5 @@
   host.addEventListener('click',click);const handle={update(next){const checked=validate(next);if(dead)return;generation++;controller?.abort();controller=null;pending=false;captured=checked;draw();},destroy(){if(dead)return;dead=true;generation++;controller?.abort();host.removeEventListener('click',click);if(mounts.get(host)===handle)mounts.delete(host);}};
   mounts.set(host,handle);draw();return handle;
  }
- const api={validate,render,mount};if(typeof module==='object'&&module.exports)module.exports=api;else root.FiniteSearchView=api;
+ const api={validate,render,validateOutput,renderOutput,mount};if(typeof module==='object'&&module.exports)module.exports=api;else root.FiniteSearchView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

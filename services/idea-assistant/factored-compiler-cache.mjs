@@ -9,7 +9,7 @@ import Share from '../../claim-share.js';
 export const LIMITS=Object.freeze({entries:3,bytes:8*1024*1024});
 const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Reflect.ownKeys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key))&&Object.values(Object.getOwnPropertyDescriptors(value)).every(d=>d.enumerable&&Object.hasOwn(d,'value'));
 const bytes=value=>new TextEncoder().encode(value).byteLength;
-export function createFactoredCompiler({crypto=globalThis.crypto,maxEntries=LIMITS.entries,maxBytes=LIMITS.bytes}={}){
+function createCompiler(compileMethod,{crypto=globalThis.crypto,maxEntries=LIMITS.entries,maxBytes=LIMITS.bytes}={}){
  if(!crypto?.subtle||!Number.isSafeInteger(maxEntries)||maxEntries<0||maxEntries>LIMITS.entries||!Number.isSafeInteger(maxBytes)||maxBytes<0||maxBytes>LIMITS.bytes)throw Error('Invalid factored compiler cache budget.');
  const entries=[];let retainedBytes=0;
  async function compile(options){
@@ -20,7 +20,7 @@ export function createFactoredCompiler({crypto=globalThis.crypto,maxEntries=LIMI
   const signature=E.stable({card,bundle}),digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(signature)))].map(n=>n.toString(16).padStart(2,'0')).join('');
   const index=entries.findIndex(entry=>entry.digest===digest&&entry.signature===signature);
   if(index!==-1){const [entry]=entries.splice(index,1);entries.push(entry);return entry.compiled;}
-  const compiled=await Compiler.compile(card,bundle,crypto),weight=bytes(signature)+bytes(E.stable(compiled))+bytes(digest)+128;
+  const compiled=await compileMethod(card,bundle,crypto),weight=bytes(signature)+bytes(E.stable(compiled))+bytes(digest)+128;
   // No pending promise or failed compile is retained. A too-large successful
   // compilation remains usable in full; it simply does not enter the memo.
   if(maxEntries&&weight<=maxBytes){
@@ -35,3 +35,6 @@ export function createFactoredCompiler({crypto=globalThis.crypto,maxEntries=LIMI
  }
  return Object.freeze({compile});
 }
+
+export const createFactoredCompiler=options=>createCompiler(Compiler.compile,options);
+export const createFactoredOutputCompiler=options=>createCompiler(Compiler.compileLanguageComparison,options);

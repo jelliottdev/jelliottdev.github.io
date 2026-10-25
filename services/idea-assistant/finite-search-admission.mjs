@@ -4,6 +4,7 @@ import Share from '../../claim-share.js';
 import Json from '../../finite-json.js';
 import Settings from '../../finite-settings.js';
 import Compiler from '../../fixed-plan-compiler.js';
+import Policy from '../../finite-question-policy.js';
 import E from '../../local-experiment.js';
 import Evidence from '../../computation-evidence.js';
 import Controls from '../../local-plan-controls.js';
@@ -17,22 +18,23 @@ const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).for
 const captureCard=card=>Json.capture(card,{maxBytes:Share.MAX_BYTES,maxDepth:16,maxNodes:6000});
 
 const checkedSettings=api=>{if(api!==Settings&&api!==Settings.factored)throw Error('Unsupported finite settings policy.');return api;};
-export function compileFiniteMember(card,settings,settingsAPI=Settings){
+export function compileFiniteMember(card,settings,settingsAPI=Settings,questionPolicy){
+ if(questionPolicy!==undefined&&(questionPolicy!=='language-reference-comparison-v1'||settingsAPI!==Settings.factored))throw Error('Unsupported finite evaluation policy.');
  const original=captureCard(card),member=checkedSettings(settingsAPI).member(original,settings),plan=Compiler.compile(member.card);
  if(plan.reason||!Array.isArray(plan.steps))throw Error('The selected finite setting needs an execution adapter: '+(plan.reason||'unsupported program'));
- if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value)||original.rules.evaluation.status!=='specified'||original.rules.evaluation.value?.kind!=='exact-prefix'
-  ||plan.inputVersion!==original.rules.inputVersion.value||E.stable(plan.pages)!==E.stable(original.scope.value.pages)||E.stable(plan.criterion)!==E.stable(original.rules.evaluation.value))throw Error('Finite cases need the unchanged explicit text version, page scope and opening check.');
+ if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value)||original.rules.evaluation.status!=='specified'||(questionPolicy?Policy.describe(original.rules.evaluation.value).id!==questionPolicy:original.rules.evaluation.value?.kind!=='exact-prefix')
+  ||plan.inputVersion!==original.rules.inputVersion.value||E.stable(plan.pages)!==E.stable(original.scope.value.pages)||E.stable(plan.criterion)!==E.stable(original.rules.evaluation.value))throw Error('Finite cases need the unchanged explicit text version, page scope and '+(questionPolicy?'pinned language comparison.':'opening check.'));
  return freeze({declaration:member.declaration,settings:member.settings,plan});
 }
 
-export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto:cryptoAPI=globalThis.crypto,createdAt=new Date().toISOString(),prepareControls=Controls.prepare,settingsAPI=Settings,signal}={}){
+export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto:cryptoAPI=globalThis.crypto,createdAt=new Date().toISOString(),prepareControls=Controls.prepare,settingsAPI=Settings,questionPolicy,signal}={}){
  const original=captureCard(card),selection=Json.capture(cases,{maxBytes:LIMITS.selectionBytes,maxDepth:16,maxNodes:6000}),source=parseInputBundle(Json.capture(bundle,{maxBytes:LIMITS.sourceBytes,maxDepth:16,maxNodes:6000}));
  const declaration=checkedSettings(settingsAPI).inspect(original);
  if(typeof proposalId!=='string'||proposalId!=='p_'+await hash(C.serialize(original),cryptoAPI))throw Error('The finite request does not match its original confirmed idea.');
  if(!Array.isArray(selection)||!selection.length||selection.length>LIMITS.cases||selection.some(item=>!exact(item,['settings','pageId'])||typeof item.pageId!=='string'))throw Error('Select one to twelve declared settings/page cases.');
  const seen=new Set(),compiled=new Map(),prepared=[];let inputVersion;
  for(const selected of selection){
-  const key=E.stable(selected.settings);let member=compiled.get(key);if(!member){member=compileFiniteMember(original,selected.settings,settingsAPI);compiled.set(key,member);}
+  const key=E.stable(selected.settings);let member=compiled.get(key);if(!member){member=compileFiniteMember(original,selected.settings,settingsAPI,questionPolicy);compiled.set(key,member);}
   if(!member.plan.pages.includes(selected.pageId))throw Error('A selected page is outside the original finite question.');
   const row=source.pages.get(selected.pageId),version=member.plan.inputVersion,text=version==='raw'?row?.raw:row?.reviewed_text;
   if(typeof text!=='string')throw Error('A selected page has no text in the declared version.');
@@ -46,6 +48,6 @@ export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto
  for(const item of prepared){item.controls=await prepareControls(item.task,cryptoAPI);await Controls.validate(item.controls,item.task,cryptoAPI);}
  prepared.sort((a,b)=>a.caseId.localeCompare(b.caseId));
  if(new TextEncoder().encode(E.stable(prepared)).length>LIMITS.batchBytes)throw Error('The selected cases exceed the bounded batch size. No preparations were issued.');
- for(const item of prepared){if(signal?.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});item.preparation=await issue({db,proposalId,card:original,task:item.task,inputVersion,parentTaskId:null,controls:item.controls,authority:'idea',basis:{kind:settingsAPI===Settings.factored?'factored-finite-settings':'finite-settings',settings:item.settings,caseId:item.caseId},createdAt});}
+ for(const item of prepared){if(signal?.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});item.preparation=await issue({db,proposalId,card:original,task:item.task,inputVersion,parentTaskId:null,controls:item.controls,authority:'idea',basis:{kind:questionPolicy?'factored-output-settings':settingsAPI===Settings.factored?'factored-finite-settings':'finite-settings',settings:item.settings,caseId:item.caseId},createdAt});}
  return freeze({declaration,inputVersion,cases:prepared});
 }

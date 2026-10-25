@@ -21,8 +21,8 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
  if(settingsAPI!==Settings&&settingsAPI!==Settings.factored)throw Error('Unsupported finite search policy.');
  const factored=settingsAPI===Settings.factored;
  if(factored&&typeof authorizeDomain!=='function'||!factored&&authorizeDomain!==undefined)throw Error('A factored search needs its maintained domain authority.');
- if(routePrefix!==undefined&&(routePrefix!=='factored-prefix-search'||!factored))throw Error('Unsupported finite search route.');
- if(routePrefix==='factored-prefix-search'?typeof reuseCasesBeforeCreate!=='function':reuseCasesBeforeCreate!==undefined)throw Error('Unsupported create reuse policy.');
+ if(routePrefix!==undefined&&(!['factored-prefix-search','factored-output-search'].includes(routePrefix)||!factored))throw Error('Unsupported finite search route.');
+ if(routePrefix!==undefined?typeof reuseCasesBeforeCreate!=='function':reuseCasesBeforeCreate!==undefined)throw Error('Unsupported create reuse policy.');
  const route=factored?(routePrefix||'factored-search'):'finite-search',routePattern=new RegExp('^/'+route+'/(p_[a-f0-9]{64})/(evidence|prepare|create|results)$');
  return async(request,env)=>{
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers}),url=new URL(request.url),match=url.pathname.match(routePattern);
@@ -80,8 +80,8 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
      if(!exact(item,['task','inputVersion','parentTaskId','preparationId'])||item.parentTaskId!==null||item.inputVersion!==card.rules.inputVersion.value||seen.has(item.task?.taskId))throw Error('The reviewed cases changed.');seen.add(item.task.taskId);
      await E.checkIdentity(item.task);const controls=await Controls.prepare(item.task);if(!await authorize({db,proposalId,card,...item,controls}))return reply({error:'A case needs its original reviewed preparation.'},409);
      const issued=await query('SELECT basis_json FROM prepared_plans WHERE id=? AND proposal_id=?',item.preparationId,proposalId).first(),basis=issued&&JSON.parse(issued.basis_json);
-     if(!exact(basis,['kind','settings','caseId'])||basis.kind!==(factored?'factored-finite-settings':'finite-settings'))return reply({error:'A case needs its declared finite-settings preparation.'},409);
-     const member=compileFiniteMember(card,basis.settings,settingsAPI),descriptor=await Evidence.describe(item.task,item.inputVersion);
+     if(!exact(basis,['kind','settings','caseId'])||basis.kind!==(routePrefix==='factored-output-search'?'factored-output-settings':factored?'factored-finite-settings':'finite-settings'))return reply({error:'A case needs its declared finite-settings preparation.'},409);
+     const member=compileFiniteMember(card,basis.settings,settingsAPI,routePrefix==='factored-output-search'?'language-reference-comparison-v1':undefined),descriptor=await Evidence.describe(item.task,item.inputVersion);
      if(factored&&(item.task.engine!==currentDomain.domain.engine||E.stable(item.task.alphabet)!==E.stable(currentDomain.domain.alphabet)||item.task.pages.some(page=>!currentDomain.domain.pages.some(actual=>actual.id===page.id&&actual.text===page.text))))return reply({error:'A reviewed case uses an earlier source version. Prepare it again.'},409);
      if(item.task.pages.length!==1||!member.plan.pages.includes(item.task.pages[0].id)||E.stable(item.task.steps)!==E.stable(member.plan.steps)||E.stable(item.task.criterion)!==E.stable(member.plan.criterion)||member.plan.inputVersion!==item.inputVersion||descriptor.pages[0].caseId!==basis.caseId)return reply({error:'A case is outside the declared finite search.'},409);
      reviewed.push({id:basis.caseId,programId:descriptor.protocolId,pageId:item.task.pages[0].id,task:item.task,settings:basis.settings,request:item});
@@ -89,7 +89,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
     const reuse=reuseCasesBeforeCreate?await reuseCasesBeforeCreate({db,proposalId,currentDomain,body,env,request,cases:reviewed}):null;
     const toCreate=reuse?reviewed.filter(item=>reuse.missing.some(missing=>missing.pageId===item.pageId&&E.stable(missing.settings)===E.stable(item.settings))).map(item=>item.request):body.cases;
     const tasks=[];for(const item of toCreate){if(request.signal.aborted)return reply({error:'The request was cancelled; any created cases are retained.'},499);tasks.push(await invoke('/tasks',{proposalId,...item}));}
-    if(reuse)return reply({schema:'liberpedia-factored-prefix-search-tasks-v1',proposalId,tasks,sources:reuse.sources,sourceLinks:reuse.sourceLinks});
+    if(reuse)return reply({schema:routePrefix==='factored-output-search'?'liberpedia-factored-output-search-tasks-v1':'liberpedia-factored-prefix-search-tasks-v1',proposalId,tasks,sources:reuse.sources,sourceLinks:reuse.sourceLinks});
     return reply({schema:'liberpedia-finite-search-tasks-v1',proposalId,tasks});
    }
    if((!factored&&!exact(body,['results']))||!Array.isArray(body.results)||!body.results.length||body.results.length>12)return reply({error:'Submit one to twelve completed cases.'},400);

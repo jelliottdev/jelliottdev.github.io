@@ -8,6 +8,7 @@ import Json from '../../finite-json.js';
 import {findEvidence} from './task-evidence.mjs';
 import {resolveFamilyEvidence} from './family-evidence.mjs';
 import {resolvePublishedEvidence} from './published-evidence.mjs';
+import {readFactoredOutputEvidencePage} from './factored-output-evidence.mjs';
 import {readFactoredPrefixEvidencePage} from './factored-prefix-evidence.mjs';
 const MAX=8*1024*1024,enc=new TextEncoder();
 const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
@@ -48,13 +49,13 @@ export async function findSelectedFactoredEvidence({db,domain,cases,crypto=globa
 
 // New policy only: refresh the selected work from unchanged original outputs,
 // independent of their former prefix. Never scan the entire original domain.
-export async function findSelectedFactoredPrefixEvidence({db,proposalId,domain,cases,cursorKey,now=Date.now(),crypto=globalThis.crypto}){
+async function findSelectedOutputEvidence(output,{db,proposalId,domain,cases,cursorKey,now=Date.now(),crypto=globalThis.crypto}){
  const d=Q.inspect(domain);if(!Array.isArray(cases)||!cases.length||cases.length>12)throw fail('Select a bounded batch.',400);
  const checked=await Q.select(d,cases.map(item=>({id:item.id,programId:item.programId,pageId:item.pageId})),crypto);
  if(checked.cases.some(item=>E.stable(item.task)!==E.stable(cases.find(c=>c.id===item.id)?.task)))throw fail('A selected case changed its exact reviewed computation.',400);
- const programIds=new Set(cases.map(item=>item.programId)),pageIds=new Set(cases.map(item=>item.pageId)),selected=await Q.bind({engine:d.engine,inputVersion:d.inputVersion,alphabet:d.alphabet,criterion:d.criterion,programs:d.programs.filter(p=>programIds.has(p.id)),pages:d.pages.filter(p=>pageIds.has(p.id))},crypto),sources=[],sourceLinks=[],covered=new Set(),seen=new Set();let cursor=null,complete=false;
+ const programIds=new Set(cases.map(item=>item.programId)),pageIds=new Set(cases.map(item=>item.pageId)),selected=await (output?Q.bindLanguageComparison:Q.bind)({engine:d.engine,inputVersion:d.inputVersion,alphabet:d.alphabet,criterion:d.criterion,programs:d.programs.filter(p=>programIds.has(p.id)),pages:d.pages.filter(p=>pageIds.has(p.id))},crypto),sources=[],sourceLinks=[],covered=new Set(),seen=new Set();let cursor=null,complete=false;
  for(let page=0;page<4;page++){
-  const out=await readFactoredPrefixEvidencePage({db,proposalId,domain:selected,inputVersion:d.inputVersion,cursor,cursorKey,now,crypto});
+  const out=await (output?readFactoredOutputEvidencePage:readFactoredPrefixEvidencePage)({db,proposalId,domain:selected,inputVersion:d.inputVersion,cursor,cursorKey,now,crypto});
   for(const source of out.sources){const relevant=cases.filter(item=>!covered.has(item.id)&&source.inputVersion===d.inputVersion&&E.stable(source.task.steps)===E.stable(item.task.steps)&&source.task.pages.some(p=>p.id===item.pageId&&p.text===item.task.pages[0].text));if(!relevant.length)continue;
    const key=E.stable([source.task.taskId,source.run.id,source.run.createdAt,source.inputVersion]);if(!seen.has(key)){const link=out.sourceLinks.find(link=>link.taskId===source.task.taskId);if(!link)throw fail('A selected original source location is unavailable.');seen.add(key);sources.push(source);sourceLinks.push(link);}for(const item of relevant)covered.add(item.id);
   }
@@ -64,3 +65,6 @@ export async function findSelectedFactoredPrefixEvidence({db,proposalId,domain,c
  if(sources.length>12||enc.encode(E.stable({sources,sourceLinks})).byteLength>MAX-65536)throw fail('Selected original outputs exceed the bounded response size.',413);
  return {sources,sourceLinks,missing:cases.filter(item=>!covered.has(item.id)).map(item=>({settings:item.settings,pageId:item.pageId}))};
 }
+
+export const findSelectedFactoredPrefixEvidence=options=>findSelectedOutputEvidence(false,options);
+export const findSelectedFactoredOutputEvidence=options=>findSelectedOutputEvidence(true,options);

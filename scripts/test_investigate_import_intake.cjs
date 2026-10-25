@@ -21,8 +21,9 @@ function documentFor(hash){
  },querySelector(selector){if(selector==='input[name=choice]:checked')return this.selectedChoice?{value:this.selectedChoice}:null;return selector.startsWith('#')?this.getElementById(selector.slice(1)):null;}};return doc;
 }
 function original(fields={}){return C.confirm(C.createDraft({source:{text:'Reverse the runes in each line.'},method:known({operations:[{id:'reverse_runes',label:'Reverse rune order within each line',unit:'line'}]}),rules:{inputVersion:known('raw'),evaluation:known('measurement')},...fields}),{id:'original',at:'2026-10-24T12:00:00Z'});}
-async function fixture(card){
+async function fixture(card,{recovery}={}){
  const hash=H.encode(card),decoded=H.decode(hash).draft,doc=documentFor(hash),requests=[];
+ if(recovery){const entry=JSON.stringify({search:'',fragment:hash}),body=JSON.stringify({version:1,entry,at:Date.now(),raw:recovery.source.text,stage:'review',draft:recovery,editing:false,baseline:null,overlay:{}});doc.defaultView.sessionStorage={getItem:key=>key==='liberpedia-idea-draft-v1'?body:null,setItem(){},removeItem(){}};}
  const app=I.createApp(doc,{fetcher:async(url,options)=>{
   requests.push({url,method:options?.method||'GET'});
   if(options?.method==='POST'||url.includes('private.invalid'))throw Error('Unexpected AI/save/run');
@@ -36,6 +37,9 @@ function choose(f,value){f.doc.selectedChoice=value;f.doc.getElementById('clarif
  const first=await fixture(original());
  assert.deepEqual(first.app.getSnapshot().draft,first.decoded,'Import preserves all decoded fields without fabricated clarification provenance');
  assert.deepEqual(I.intakeQuestions(first.app.getSnapshot().draft).map(q=>q.id),['aim','scope']);
+ assert(first.doc.host.html.includes('<strong>Method:</strong> Reverse rune order within each line'));
+ assert(!first.doc.host.html.match(/<p class="idea-wording">([\s\S]*?)<\/p>/)[1].includes('Outcome: Unspecified'));
+ assert(first.doc.host.html.includes('<summary>Original idea</summary><pre>Shared standardized idea'));
  assert(first.doc.host.html.includes('What outcome are you looking for?'));assert.equal(first.doc.getElementById('confirm'),null);
  choose(first,'undecided');assert(first.doc.host.html.includes('Which material should this apply to?'));assert.equal(first.doc.getElementById('confirm'),null);
  assert.equal(first.app.getSnapshot().draft.clarifications.length,1);assert.equal(first.app.getSnapshot().draft.clarifications[0].question,'aim');
@@ -48,5 +52,7 @@ function choose(f,value){f.doc.selectedChoice=value;f.doc.getElementById('clarif
  for(const [fields,expected]of [[{aim:known('Find readable text')},'scope'],[{scope:known({pages:['lp2-15']})},'aim']]){
   const f=await fixture(original(fields));assert.deepEqual(I.intakeQuestions(f.app.getSnapshot().draft).map(q=>q.id),[expected]);assert.equal(f.doc.getElementById('confirm'),null);assert.deepEqual(f.app.getSnapshot().draft,f.decoded);f.app.destroy();
  }
+ const selected=await fixture(original());choose(selected,'decipher');assert(selected.doc.host.html.includes('Which material should this apply to?'));const context=selected.doc.host.html.match(/<p class="idea-wording">([\s\S]*?)<\/p>/)[1];assert(!context.includes('Unspecified'));assert(context.includes('Reverse rune order'));assert.equal(C.normalizeOutcome(selected.app.getSnapshot().draft.aim).id,'decipher');assert.equal(selected.doc.getElementById('confirm'),null);assert.deepEqual(selected.app.getSnapshot().draft.source,selected.decoded.source);assert(selected.requests.every(r=>r.method==='GET'));selected.app.destroy();
+ const prose='Keep <all> source wording intact. '+('A long natural method clause. '.repeat(20)),natural=I.initialDraft(prose),long=await fixture(original(),{recovery:natural});const wording=long.doc.host.html.match(/<p class="idea-wording">([\s\S]*?)<\/p>/)[1];assert(wording.length<300);assert(wording.endsWith('…'));assert(wording.includes('&lt;all&gt;'));assert(long.doc.host.html.includes('<summary>Original idea</summary><pre>'+prose.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</pre>'));assert.equal(long.app.getSnapshot().draft.source.text,prose);assert(long.requests.every(r=>r.method==='GET'));long.app.destroy();
  console.log('PASS imported intake: aim then scope; explicit undecided only after choice; supplied fields/source retained; no AI/save/run before confirmation; complete cards do not reask.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
