@@ -1,6 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),{webcrypto,createHash}=require('node:crypto');
 const L=require('../local-experiment.js'),C=require('../computation-evidence.js'),clone=v=>JSON.parse(JSON.stringify(v));
+const Language=require('../language-score.js');
 const alphabet=JSON.parse(fs.readFileSync('data/local-run-inputs.json','utf8')).alphabet;
 const digest=v=>createHash('sha256').update(L.stable(v)).digest('hex');
 async function task(overrides={}){return L.prepare({title:'An authored title',alphabet,pages:[{id:'lp2-00',text:'ᚠᚢ-ᚦ\nᚩᚱ'},{id:'lp2-01',text:'ᚠᚠ.ᚢᚩ'}],steps:[{op:'keyed-shift',key:[23,18,3,4],mode:'repeat',direction:'subtract',reset:'page'}],criterion:{kind:'exact-prefix',values:[24,7,24]},...overrides},webcrypto);}
@@ -34,6 +35,24 @@ function source(t,inputVersion='raw'){const result=L.run(t);return {task:clone(t
   for(const [t,s] of measurements)assert.equal((await C.compare(t,'raw',[s],webcrypto)).coveredPages.length,2);
  }finally{L.run=oldRun;}
  for(const [t,s] of measurements.slice(1)){const corrupt=clone(s);if(corrupt.run.result.wordSums)corrupt.run.result.wordSums.pages.reverse();else corrupt.run.result.wordPairs.pages.reverse();corrupt.run.id=digest(corrupt.run.result);await assert.rejects(C.compare(t,'raw',[corrupt],webcrypto));}
- const context={LocalExperiment:L,TextEncoder,crypto:webcrypto};vm.createContext(context);vm.runInContext(fs.readFileSync('computation-evidence.js','utf8'),context);assert.equal(L.stable(await context.ComputationEvidence.describe(first,'raw',webcrypto)),L.stable(a));
+ // Memoize mathematical language inputs only within one compare. Different
+ // source titles, page IDs and separators can share the same exact rune vector;
+ // their receipts, geometry, metrics and claimed scores still validate separately.
+ const textA='ᚠᚢᚦᚩᚱᚳᚷᚹ'.repeat(8),textB='ᚢᚦᚩᚱᚳᚷᚹᚠ'.repeat(8),textC='ᚦᚩᚱᚳᚷᚹᚠᚢ'.repeat(8),lang=await task({title:'Language source A',steps:[],criterion:Language.criterion(),pages:[{id:'lp2-00',text:textA},{id:'lp2-01',text:textB}]}),langOther=await task({...lang,title:'A different aim and wording'}),langChanged=await task({...lang,title:'A different rune vector',pages:[{id:'lp2-00',text:textC},{id:'lp2-01',text:textB}]}),langSource=source(lang),langOtherSource=source(langOther),langChangedSource=source(langChanged),originalEvaluate=Language.evaluate;
+ let evaluated=0;Language.evaluate=(...args)=>{evaluated++;return originalEvaluate(...args);};
+ try{
+  const compared=await C.compare(lang,'raw',[langSource,langOtherSource],webcrypto);assert.equal(evaluated,2,'Two distinct vectors are each evaluated once across different full-scope witnesses');assert.equal(compared.evidence.length,2);
+  evaluated=0;await C.compare(lang,'raw',[langSource,langOtherSource,langChangedSource],webcrypto);assert.equal(evaluated,3,'A changed rune vector requires a separate evaluation');
+  const poisoned=clone(langOtherSource);poisoned.run.result.languageScore.pages[0].models[0].total++;poisoned.run.id=digest(poisoned.run.result);evaluated=0;await assert.rejects(C.compare(lang,'raw',[langSource,poisoned],webcrypto),/language comparison is inconsistent/);assert.equal(evaluated,2,'A memo hit never authorizes another source’s claimed totals');
+  evaluated=0;await C.compare(lang,'raw',[langSource],webcrypto);assert.equal(evaluated,2,'A later request starts without prior mathematical evaluations');
+  const wrongModel=clone(langOtherSource);wrongModel.task.criterion.modelSha256='f'.repeat(64);wrongModel.task.taskId=await L.identity(wrongModel.task,webcrypto);wrongModel.run.result.taskId=wrongModel.task.taskId;wrongModel.run.result.languageScore.modelSha256='f'.repeat(64);wrongModel.run.id=digest(wrongModel.run.result);await assert.rejects(C.compare(lang,'raw',[langSource,wrongModel],webcrypto));
+  const badGeometry=clone(langOtherSource);badGeometry.run.result.transformed[0].text+=' ';badGeometry.run.id=digest(badGeometry.run.result);await assert.rejects(C.compare(lang,'raw',[langSource,badGeometry],webcrypto),/geometry/);
+  const badHash=clone(langOtherSource);badHash.run.id='f'.repeat(64);await assert.rejects(C.compare(lang,'raw',[langSource,badHash],webcrypto),/identity/);
+ }finally{Language.evaluate=originalEvaluate;}
+ // Reaching the 20,000-rune memo budget computes additional distinct inputs
+ // normally. It never rejects an otherwise valid receipt or drops validation.
+ const largeA=await task({...lang,title:'First large vector',pages:[{id:'lp2-00',text:'ᚠ'.repeat(11000)}]}),largeB=await task({...lang,title:'Uncached large vector',pages:[{id:'lp2-00',text:'ᚢ'.repeat(11000)}]}),largeB2=await task({...largeB,title:'Another uncached witness'}),largeSources=[source(largeA),source(largeB),source(largeB2)];evaluated=0;Language.evaluate=(...args)=>{evaluated++;return originalEvaluate(...args);};
+ try{assert.equal((await C.compare(largeA,'raw',largeSources,webcrypto)).evidence.length,1);assert.equal(evaluated,3,'Inputs beyond the memo budget are recomputed, not trusted or rejected');}finally{Language.evaluate=originalEvaluate;}
+ const context={LocalExperiment:L,TextEncoder,crypto:webcrypto,RuneLanguageScore:Language};vm.createContext(context);vm.runInContext(fs.readFileSync('computation-evidence.js','utf8'),context);assert.equal(L.stable(await context.ComputationEvidence.describe(first,'raw',webcrypto)),L.stable(a));assert.equal(L.stable(await context.ComputationEvidence.compare(lang,'raw',[langSource,langOtherSource],webcrypto)),L.stable(await C.compare(lang,'raw',[langSource,langOtherSource],webcrypto)));
  console.log('PASS exact protocol/page reuse independent of title and batching, honest failed-test coverage, source/result tamper rejection, measurement shapes and no target lookup execution');
 })().catch(error=>{console.error(error);process.exitCode=1;});

@@ -177,8 +177,10 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(!saved){await db.batch([query(`INSERT INTO local_task_results (id,task_id,result_json,created_at,created_day)
     SELECT ?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_results WHERE created_day=?)<50 ON CONFLICT(id) DO NOTHING`,runId,row.id,resultJson,at,day,day)]);saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();}
    if(!saved)return reply({error:'The daily result limit has been reached.'},429);
-   const savedResult=await L.verify(task,JSON.parse(saved.result_json));
-   if(saved.task_id!==row.id||await digest(L.stable(savedResult))!==saved.id)throw Error('Stored result mismatch');
+   // Admission already independently replayed this exact result above. Read
+   // back the committed bytes, not another execution of the same calculation.
+   if(saved.task_id!==row.id||saved.id!==runId||saved.result_json!==resultJson)throw Error('Stored result mismatch');
+   const savedResult=result;
    return reply({taskId:row.id,state:'results-verified',latestRun:{id:saved.id,createdAt:saved.created_at,result:savedResult},...(controls?{controls}:{}),verification:NOTICE});
   }catch{return reply({error:'Local experiments are temporarily unavailable.'},503);}
  };

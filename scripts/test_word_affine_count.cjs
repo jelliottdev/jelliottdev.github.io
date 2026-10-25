@@ -68,7 +68,7 @@ async function main(){
   for(const change of [x=>x.wordPairs.matches++,x=>x.wordPairs.expected.numerator='3',x=>x.wordPairs.expected.denominator='6',x=>x.wordPairs.pages.reverse().push(x.wordPairs.pages[0]),x=>x.wordPairs.extra=1,x=>delete x.wordPairs]){
    const forged=structuredClone(r);change(forged);await assert.rejects(E.verify(t,forged,webcrypto));
   }
-  verified.wordPairs.matches++;assert.throws(()=>E.summary(t,verified));
+  assert.throws(()=>{verified.wordPairs.matches++;},TypeError);assert.deepEqual(E.summary(t,verified),s);
  });
  await test('legacy result fields stay exact and absent measurement field cannot be forged',async()=>{
   const t=await task(encode([0,0,1]));t.criterion={kind:'measurement'};t.taskId=await E.identity(t,webcrypto);accepted.push(t);

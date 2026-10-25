@@ -15,7 +15,7 @@
   return {protocolId,pages};
  }
  function rational(value){return exact(value,['numerator','denominator'])&&typeof value.numerator==='string'&&typeof value.denominator==='string'&&/^(?:0|[1-9][0-9]{0,99})$/.test(value.numerator)&&/^[1-9][0-9]{0,99}$/.test(value.denominator);}
- function resultShape(task,result){
+ function resultShape(task,result,languageMemo){
   const kind=task.criterion.kind,extra=kind==='word-prime-sums'?['wordSums']:kind==='word-affine-count'?['wordPairs']:kind==='language-score'?['languageScore']:[];
   if(!exact(result,['schema','taskId','engine','runnerVersion','metrics','matches','transformed',...extra])||result.schema!=='liberpedia-local-result-v1'||result.taskId!==task.taskId||result.engine!==task.engine||result.runnerVersion!=='1'||!Array.isArray(result.transformed)||result.transformed.length!==task.pages.length||!Array.isArray(result.matches))throw Error('The saved computation result has an invalid envelope.');
   const index=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),counts=Array(29).fill(0);let runeCount=0,adjacent=0,equal=0;
@@ -31,7 +31,17 @@
    const scorer=typeof module==='object'&&module.exports?require('./language-score.js'):root.RuneLanguageScore;
    if(!scorer)throw Error('The pinned language comparison could not be loaded.');
    scorer.validateCriterion(task.criterion);
-   const expected={modelId:task.criterion.modelId,modelSha256:task.criterion.modelSha256,pages:result.transformed.map(output=>({page:output.page,...scorer.evaluate(Array.from(output.text).filter(ch=>index.has(ch)).map(ch=>index.get(ch)))}))};
+   const criterion=L.stable(task.criterion),evaluate=values=>{
+    const key=criterion+':'+values.join(',');
+    if(languageMemo.values.has(key))return languageMemo.values.get(key);
+    const evaluated=scorer.evaluate(values);
+    // Reuse only identical mathematical inputs within this compare call. Every
+    // envelope, page geometry, claimed score and result digest is still checked.
+    // Once full, retain existing entries but compute other inputs normally.
+    if(languageMemo.runes+values.length<=20000){languageMemo.values.set(key,evaluated);languageMemo.runes+=values.length;}
+    return evaluated;
+   };
+   const expected={modelId:task.criterion.modelId,modelSha256:task.criterion.modelSha256,pages:result.transformed.map(output=>({page:output.page,...evaluate(Array.from(output.text).filter(ch=>index.has(ch)).map(ch=>index.get(ch)))}))};
    if(L.stable(result.languageScore)!==L.stable(expected))throw Error('The saved language comparison is inconsistent with its output.');
   }
   const metrics=result.metrics,ioc=runeCount>1?counts.reduce((s,n)=>s+n*(n-1),0)/(runeCount*(runeCount-1)):0;
@@ -52,12 +62,13 @@
  }
  async function compare(requestedTask,requestedVersion,sources,cryptoAPI=root.crypto){
   const requested=clone(requestedTask),saved=clone(sources);if(!Array.isArray(saved))throw Error('Saved computation sources must be an array.');
+  const languageMemo={values:new Map(),runes:0};
   const wanted=await describe(requested,requestedVersion,cryptoAPI),wantedCases=new Map(wanted.pages.map(p=>[p.caseId,p.id])),covered=new Set(),seen=new Map(),evidence=[],exactTasks=[];
   for(const source of saved){
    if(!exact(source,['task','inputVersion','run'])||!exact(source.run,['id','createdAt','result'])||typeof source.run.id!=='string'||!HEX.test(source.run.id)||typeof source.run.createdAt!=='string'||!Number.isFinite(Date.parse(source.run.createdAt)))throw Error('The saved evidence receipt is invalid.');
    const described=await describe(source.task,source.inputVersion,cryptoAPI),signature=L.stable(source);
    if(seen.has(source.task.taskId)){if(seen.get(source.task.taskId)!==signature)throw Error('Conflicting saved evidence for one task.');continue;}seen.set(source.task.taskId,signature);
-   resultShape(source.task,source.run.result);if(await hash(source.run.result,cryptoAPI)!==source.run.id)throw Error('The saved result identity does not match its bytes.');
+   resultShape(source.task,source.run.result,languageMemo);if(await hash(source.run.result,cryptoAPI)!==source.run.id)throw Error('The saved result identity does not match its bytes.');
    if(described.protocolId!==wanted.protocolId)continue;
    const pages=described.pages.filter(p=>wantedCases.has(p.caseId)).map(p=>wantedCases.get(p.caseId));if(!pages.length)continue;
    pages.sort((a,b)=>requested.pages.findIndex(p=>p.id===a)-requested.pages.findIndex(p=>p.id===b));pages.forEach(id=>covered.add(id));

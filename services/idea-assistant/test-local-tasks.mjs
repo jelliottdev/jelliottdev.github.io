@@ -297,4 +297,16 @@ await test('large-scope source verification uses one aggregate and preserves exa
   const response=await handle(request('/tasks','POST',await approved(f,{...body(t),inputVersion:version})),f.env);assert.equal(response.status,422,failure);assert.equal(calls,1,'Invalid bundle cannot trigger individual-page fallback');assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
  }
 });
+await test('submission verifies once and checks exact committed bytes without a second replay',async()=>{
+ const f=fixture(),t=await task();assert.equal((await preparedCall(f,'/tasks','POST',body(t))).status,200);
+ const result=L.run(t),original=L.verify;let replays=0;
+ try{
+  L.verify=async(...args)=>{if(args[0].taskId===t.taskId)replays++;return original(...args);};
+  const first=await call(f,'/tasks/'+t.taskId+'/results','POST',{result});assert.equal(first.status,200);assert.equal(replays,1);
+  const saved=await first.json();assert.deepEqual(saved.latestRun.result,result);
+  const retry=await call(f,'/tasks/'+t.taskId+'/results','POST',{result});assert.equal(retry.status,200);assert.equal(replays,2,'Every submitted result is still independently replayed');
+  f.db.sqlite.prepare('UPDATE local_task_results SET result_json=? WHERE id=?').run(JSON.stringify({...result,metrics:{...result.metrics,runes:999}}),saved.latestRun.id);
+  const corrupt=await call(f,'/tasks/'+t.taskId+'/results','POST',{result});assert.equal(corrupt.status,503);assert.equal(replays,3,'A corrupt stored receipt cannot bypass fresh admission or be projected as verified');
+ }finally{L.verify=original;}
+});
 console.log('PASS '+count+' SQLite-backed local-task groups; all official-source fetches injected, no execution of external code.');

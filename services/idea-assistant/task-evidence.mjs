@@ -13,8 +13,14 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
  // Keep title and batch scope out of the protocol lookup. Both the origin and
  // public association must name this input version; otherwise omit the source
  // conservatively rather than repurpose its provenance.
- const value=await db.prepare(`SELECT t.id AS task_id,t.task_hash,t.task_json,t.input_version,
-   r.id AS result_id,r.result_json,r.created_at
+ // Discover only identity and exact page intersections. Duplicate full payloads
+ // can be large; they are not needed to choose a bounded authoritative proof.
+ const value=await db.prepare(`SELECT t.id AS task_id,t.task_hash,r.id AS result_id,r.created_at,
+   json_array_length(t.task_json,'$.pages') AS source_page_count,
+   (SELECT json_group_array(json_extract(requested.value,'$.id')) FROM json_each(?) requested
+    WHERE EXISTS(SELECT 1 FROM json_each(t.task_json,'$.pages') saved
+     WHERE json_extract(saved.value,'$.id')=json_extract(requested.value,'$.id')
+      AND json_extract(saved.value,'$.text')=json_extract(requested.value,'$.text'))) AS matching_pages
   FROM local_tasks t JOIN local_task_results r ON r.id=(
    SELECT latest.id FROM local_task_results latest WHERE latest.task_id=t.id
    ORDER BY latest.created_at DESC,latest.id DESC LIMIT 1)
@@ -24,19 +30,44 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
    AND EXISTS(SELECT 1 FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=t.id AND links.input_version=?)
   ORDER BY r.created_at DESC,r.id DESC,t.id ASC LIMIT 101`)
- .bind(inputVersion,task.engine,E.stable(task.alphabet),E.stable(task.steps),E.stable(task.criterion),inputVersion).all();
+ .bind(E.stable(task.pages),inputVersion,task.engine,E.stable(task.alphabet),E.stable(task.steps),E.stable(task.criterion),inputVersion).all();
  const rows=value?.results;if(!Array.isArray(rows)||rows.length>101)throw Error('Stored computation candidates are malformed.');
+ const requestedIds=new Set(task.pages.map(page=>page.id)),seenMetadata=new Set();
+ const metadata=rows.slice(0,100).map(row=>{
+  if(!row||!HEX.test(row.task_id)||!HEX.test(row.task_hash)||seenMetadata.has(row.task_id)||!HEX.test(row.result_id)||typeof row.created_at!=='string'||!Number.isFinite(Date.parse(row.created_at))||!Number.isInteger(row.source_page_count)||row.source_page_count<1||row.source_page_count>75||typeof row.matching_pages!=='string')throw Error('Stored computation candidate identity is malformed.');
+  seenMetadata.add(row.task_id);const pages=JSON.parse(row.matching_pages);
+  if(!Array.isArray(pages)||pages.length>task.pages.length||new Set(pages).size!==pages.length||pages.some(id=>!requestedIds.has(id)))throw Error('Stored computation page intersections are malformed.');
+  return {taskId:row.task_id,taskHash:row.task_hash,resultId:row.result_id,createdAt:row.created_at,pages,exact:pages.length===task.pages.length&&row.source_page_count===task.pages.length};
+ });
+ metadata.sort((a,b)=>Number(b.exact)-Number(a.exact)||a.taskId.localeCompare(b.taskId)||a.resultId.localeCompare(b.resultId));
+ const coveredMetadata=new Set(),selected=[];
+ for(const item of metadata)if(item.pages.some(id=>!coveredMetadata.has(id))){selected.push(item);item.pages.forEach(id=>coveredMetadata.add(id));}
  const sources=[],seen=new Set();let bytes=0;
- for(const row of rows.slice(0,100)){
-  if(!row||!HEX.test(row.task_id)||seen.has(row.task_id)||!HEX.test(row.task_hash)||!HEX.test(row.result_id)||row.input_version!==inputVersion||typeof row.task_json!=='string'||typeof row.result_json!=='string')throw Error('Stored computation evidence identity is malformed.');
-  seen.add(row.task_id);bytes+=row.task_json.length+row.result_json.length;if(bytes>16000000)throw Error('Stored computation evidence exceeds the bounded lookup size.');
-  const saved=JSON.parse(row.task_json),result=JSON.parse(row.result_json);
-  if(saved.taskId!==row.task_id||await digest(saved,cryptoAPI)!==row.task_hash)throw Error('Stored computation task differs from its immutable identity.');
-  sources.push({task:saved,inputVersion:row.input_version,run:{id:row.result_id,createdAt:row.created_at,result}});
+ if(selected.length){
+  // Pin the selected result/date, not a second latest-result lookup. Concurrent
+  // submissions must not silently replace the receipt chosen above.
+  const fetched=await db.prepare(`SELECT t.id AS task_id,t.task_hash,t.task_json,t.input_version,
+    r.id AS result_id,r.result_json,r.created_at
+   FROM json_each(?) proof JOIN local_tasks t ON t.id=json_extract(proof.value,'$.taskId') AND t.task_hash=json_extract(proof.value,'$.taskHash')
+   JOIN local_task_results r ON r.task_id=t.id AND r.id=json_extract(proof.value,'$.resultId')
+    AND r.created_at=json_extract(proof.value,'$.createdAt')
+   WHERE t.input_version=? AND EXISTS(SELECT 1 FROM local_task_ideas links
+    JOIN research_ideas public ON public.proposal_id=links.proposal_id WHERE links.task_id=t.id AND links.input_version=?)`)
+   .bind(E.stable(selected.map(({taskId,taskHash,resultId,createdAt})=>({taskId,taskHash,resultId,createdAt}))),inputVersion,inputVersion).all();
+  if(!Array.isArray(fetched?.results)||fetched.results.length!==selected.length)throw Error('Selected public computation receipts are unavailable.');
+  for(const row of fetched.results){
+   const pin=selected.find(item=>item.taskId===row?.task_id);
+   if(!pin||seen.has(row.task_id)||row.result_id!==pin.resultId||row.created_at!==pin.createdAt||!HEX.test(row.task_hash)||row.input_version!==inputVersion||typeof row.task_json!=='string'||typeof row.result_json!=='string')throw Error('Stored computation evidence identity is malformed.');
+   seen.add(row.task_id);bytes+=row.task_json.length+row.result_json.length;if(bytes>16000000)throw Error('Stored computation evidence exceeds the bounded lookup size.');
+   const saved=JSON.parse(row.task_json),result=JSON.parse(row.result_json);
+   if(saved.taskId!==row.task_id||await digest(saved,cryptoAPI)!==row.task_hash)throw Error('Stored computation task differs from its immutable identity.');
+   sources.push({task:saved,inputVersion:row.input_version,run:{id:row.result_id,createdAt:row.created_at,result}});
+  }
  }
  const family=await findFamilyEvidence({db,task,inputVersion,crypto:cryptoAPI}),familySources=[];
  for(const source of family.sources)if(!seen.has(source.task.taskId)){seen.add(source.task.taskId);sources.push(source);familySources.push(family.familySources.find(item=>item.taskId===source.task.taskId));}
  const comparison=await Evidence.compare(task,inputVersion,sources,cryptoAPI);
+ for(const pin of selected){const receipt=comparison.evidence.find(item=>item.taskId===pin.taskId);if(!receipt||E.stable(receipt.pages)!==E.stable(pin.pages))throw Error('Selected computation evidence changed its exact page coverage.');}
  // Retain a bounded proof, rather than every duplicate title/batch that repeats
  // it. Prefer one exact whole-task witness; otherwise each retained source must
  // add at least one requested page, so there can be at most 75 receipts.
@@ -44,7 +75,11 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
  const candidates=comparison.evidence.slice().sort((a,b)=>Number(b.taskId===comparison.exactTaskId)-Number(a.taskId===comparison.exactTaskId)||a.taskId.localeCompare(b.taskId)||a.resultId.localeCompare(b.resultId));
  for(const item of candidates)if(item.pages.some(id=>!represented.has(id))){proof.push(item);item.pages.forEach(id=>represented.add(id));}
  const retained=new Set(proof.map(item=>item.taskId));
- const canonicalProof=await Evidence.compare(task,inputVersion,sources.filter(item=>retained.has(item.task.taskId)),cryptoAPI);
+ // Project only this lookup's already validated comparison. The greedy proof
+ // retains its complete page union, so scoring retained sources again adds no
+ // validation. Do not cache source identities or accept a supplied comparison.
+ if(represented.size!==comparison.coveredPages.length||comparison.coveredPages.some(id=>!represented.has(id)))throw Error('The retained computation proof changed its covered pages.');
+ const canonicalProof={...comparison,evidence:comparison.evidence.filter(item=>retained.has(item.taskId)),exactTaskId:retained.has(comparison.exactTaskId)?comparison.exactTaskId:null};
  const retainedFamilies=familySources.filter(item=>retained.has(item.taskId)).sort((a,b)=>a.taskId.localeCompare(b.taskId));
  return {...canonicalProof,truncated:rows.length===101||family.truncated,...(retainedFamilies.length?{familySources:retainedFamilies}:{})};
 }

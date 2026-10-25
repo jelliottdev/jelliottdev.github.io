@@ -229,16 +229,55 @@
   if(typeof expected==='object')return !Array.isArray(actual)&&Object.keys(actual).length===Object.keys(expected).length&&Object.keys(expected).every(k=>own(actual,k)&&sameResult(actual[k],expected[k]));
   return actual===expected;
  }
+ // Only our independently computed result is trusted for later display. All
+ // descendants are data objects created by run(), so freezing leaves no caller
+ // owned task, submitted result or nested input behind a mutable trusted handle.
+ function freezeResult(value){
+  if(value&&typeof value==='object'){for(const child of Object.values(value))freezeResult(child);Object.freeze(value);}
+  return value;
+ }
+ function plainObjectPrototype(proto){
+  if(proto===Object.prototype)return true;
+  if(!proto||Object.getPrototypeOf(proto)!==null)return false;
+  const ctor=Object.getOwnPropertyDescriptor(proto,'constructor');
+  return ctor&&own(ctor,'value')&&typeof ctor.value==='function'&&ctor.value.prototype===proto
+   &&Function.prototype.toString.call(ctor.value)===Function.prototype.toString.call(Object)
+   &&Reflect.ownKeys(proto).every(key=>typeof key==='string')
+   &&JSON.stringify(Object.getOwnPropertyNames(proto).sort())===JSON.stringify(Object.getOwnPropertyNames(Object.prototype).sort());
+ }
+ function plainArrayPrototype(proto){
+  if(proto===Array.prototype)return true;
+  if(!Array.isArray(proto)||!plainObjectPrototype(Object.getPrototypeOf(proto)))return false;
+  const ctor=Object.getOwnPropertyDescriptor(proto,'constructor');
+  return ctor&&own(ctor,'value')&&typeof ctor.value==='function'&&ctor.value.prototype===proto
+   &&Function.prototype.toString.call(ctor.value)===Function.prototype.toString.call(Array)
+   &&JSON.stringify(Object.getOwnPropertyNames(proto).sort())===JSON.stringify(Object.getOwnPropertyNames(Array.prototype).sort())
+   &&Reflect.ownKeys(proto).filter(key=>typeof key==='symbol').length===Reflect.ownKeys(Array.prototype).filter(key=>typeof key==='symbol').length;
+ }
+ function plainTaskData(value){
+  if(!value||typeof value!=='object')return;
+  if(!(Array.isArray(value)?plainArrayPrototype(Object.getPrototypeOf(value)):plainObjectPrototype(Object.getPrototypeOf(value))))throw Error('Experiment data must use plain objects.');
+  for(const key of Reflect.ownKeys(value)){
+   if(typeof key!=='string')throw Error('Experiment data must use ordinary fields.');
+   const field=Object.getOwnPropertyDescriptor(value,key);
+   if(!own(field,'value')||(!field.enumerable&&!(Array.isArray(value)&&key==='length')))throw Error('Experiment fields must contain plain data.');
+   plainTaskData(field.value);
+  }
+ }
  async function verify(task,result,cryptoAPI=root.crypto){
+  plainTaskData(task);const signature=stable(task);
   await checkIdentity(task,cryptoAPI);
+  plainTaskData(task);if(stable(task)!==signature)throw Error('The experiment changed during verification.');
   const expected=run(task);
   if(!sameResult(result,expected))throw Error('The returned results do not match this exact experiment.');
-  verifiedResults.set(expected,stable(task));
+  freezeResult(expected);
+  verifiedResults.set(expected,{signature,baseline:null});
   return expected;
  }
  function summary(task,result){
-  validateTask(task);
-  if(!result||verifiedResults.get(result)!==stable(task)||!sameResult(result,run(task)))throw Error('Results must be verified before display.');
+  plainTaskData(task);validateTask(task);
+  const receipt=result&&verifiedResults.get(result);
+  if(!receipt||receipt.signature!==stable(task))throw Error('Results must be verified before display.');
   if(task.criterion.kind==='language-score'){
    const compared=result.languageScore.pages.filter(page=>page.status==='compared').length,short=result.languageScore.pages.length-compared;
    return {finding:compared+' '+(compared===1?'page compared':'pages compared')+' with eight rune-language references.'+(short?' '+short+' '+(short===1?'page has':'pages have')+' fewer than 40 runes and was not scored.':''),comparison:[],limit:'These scores compare rune order with fixed reference models and 32 shuffled orders. They do not identify a language, establish readability or show a decryption. Shuffle counts are not p-values.'};
@@ -253,7 +292,7 @@
     comparison:[{label:'Observed matches',value:p.matches,total:p.opportunities},{label:'Word-shuffle expectation',value:Number.isFinite(approx)?approx:0,total:p.opportunities}],
     limit:'This comparison does not tell us how unlikely the count is. It does not account for choosing the rule, spacing or word boundaries after seeing the data, and it does not identify a cipher.'};
   }
-  const baseline=run({...task,steps:[],criterion:{kind:'measurement'}}).metrics;
+  const baseline=receipt.baseline||(receipt.baseline=freezeResult(run({...task,steps:[],criterion:{kind:'measurement'}}).metrics));
   const matched=result.matches.filter(v=>v.matched).length;
   return {finding:task.criterion.kind==='measurement'
    ?(baseline.equalAdjacentPairs===result.metrics.equalAdjacentPairs
