@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {STORAGE_LIMITS,storageLimits} from '../services/idea-assistant/storage-limits.mjs';
+assert.deepEqual(STORAGE_LIMITS,{tasks:5000,results:5000,taskIdeaLinks:10000,preparations:10000});
+assert(Object.isFrozen(STORAGE_LIMITS));
+const cases=28*29;
+for(const key of ['tasks','results','taskIdeaLinks','preparations'])assert(STORAGE_LIMITS[key]>=cases,'One explicitly declared 812-case domain fits the daily '+key+' ceiling');
+assert.deepEqual(storageLimits(),STORAGE_LIMITS);
+assert.deepEqual(storageLimits({tasks:2}),{...STORAGE_LIMITS,tasks:2});
+for(const value of [null,[],1,{unknown:1},{tasks:0},{results:1.5},{taskIdeaLinks:Infinity},{preparations:10001},{tasks:undefined}])assert.throws(()=>storageLimits(value));
+let getters=0;const unsafe={};Object.defineProperty(unsafe,'tasks',{enumerable:true,get(){getters++;return 2;}});assert.throws(()=>storageLimits(unsafe));assert.equal(getters,0);
+const overrides={tasks:2},captured=storageLimits(overrides);overrides.tasks=1;assert.equal(captured.tasks,2);assert(Object.isFrozen(captured));
+console.log('PASS bounded production storage capacity supports 812 cases; lower-only overrides are strict, detached and immutable');

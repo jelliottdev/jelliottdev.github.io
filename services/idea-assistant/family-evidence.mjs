@@ -15,6 +15,8 @@ async function checked(row,cryptoAPI){
  if(row.matched!==Number(result.matches[0].matched))throw Error('The saved family verdict changed.');
  return {source,familySource:{taskId:row.task_id,familyId:FAMILY,revision:row.revision,caseId:row.case_id}};
 }
+// The finite-domain lookup applies the same receipt checks after one bulk query.
+export const validateFamilyReceipt=checked;
 export async function readFamilyEvidence({db,familyId,revision,caseId,taskId,resultId,crypto:cryptoAPI=globalThis.crypto}){
  if(typeof db?.prepare!=='function'||familyId!==FAMILY||!HEX.test(revision)||typeof caseId!=='string'||caseId.length>200||taskId!==undefined&&!HEX.test(taskId)||resultId!==undefined&&!HEX.test(resultId))throw Error('The family evidence reference is invalid.');
  const row=await db.prepare('SELECT * FROM family_case_results WHERE family_id=? AND revision=? AND case_id=?').bind(familyId,revision,caseId).first();if(!row)return null;

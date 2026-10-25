@@ -6,6 +6,9 @@ import Variants from '../../task-variants.js';
 import {validateCard} from './idea-relations.mjs';
 import Evidence from '../../computation-evidence.js';
 import {checkedEvidence} from './task-evidence.mjs';
+import Settings from '../../finite-settings.js';
+import Compiler from '../../fixed-plan-compiler.js';
+import {storageLimits as checkedStorageLimits} from './storage-limits.mjs';
 
 const HEX=/^[a-f0-9]{64}$/,PREP=/^prep_[a-f0-9]{64}$/,PROPOSAL=/^p_[a-f0-9]{64}$/;
 const exact=(o,ks)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).length===ks.length&&ks.every(k=>Object.hasOwn(o,k));
@@ -50,6 +53,18 @@ async function proposal(db,bound){
 async function basisFor(db,value,bound,authority){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
+  if(basis.kind==='finite-settings'){
+   require(exact(basis,['kind','settings','caseId'])&&HEX.test(basis.caseId)&&bound.base.parentTaskId===null,'Invalid finite-settings preparation basis');
+   const member=Settings.member(bound.card,basis.settings),plan=Compiler.compile(member.card);
+   require(!plan.reason&&Array.isArray(plan.steps)&&bound.card.rules.inputVersion.status==='specified'&&['raw','reviewed'].includes(bound.card.rules.inputVersion.value)
+    &&bound.card.rules.evaluation.status==='specified'&&bound.card.rules.evaluation.value?.kind==='exact-prefix','Finite settings do not compile to one explicit opening check');
+   require(E.stable(basis.settings)===E.stable(member.settings)&&plan.inputVersion===bound.base.inputVersion&&plan.inputVersion===bound.card.rules.inputVersion.value
+    &&E.stable(plan.criterion)===E.stable(bound.card.rules.evaluation.value)&&E.stable(bound.task.criterion)===E.stable(plan.criterion)&&E.stable(bound.task.steps)===E.stable(plan.steps)
+    &&E.stable(plan.pages)===E.stable(bound.card.scope.value.pages)&&bound.task.pages.length===1&&plan.pages.includes(bound.task.pages[0].id),'Finite settings changed the declared parameters, pages or common rules');
+   const described=await Evidence.describe(bound.task,bound.base.inputVersion);
+   require(described.pages.length===1&&described.pages[0].caseId===basis.caseId,'Finite settings case differs from the exact prepared page and program');
+   return {text:data.text,hash:await sha(data.text)};
+  }
   const original=basis.kind==='evidence-remainder'?basis.originalBasis:basis;
   require(exact(original,['kind','normalizedCard',...(original?.kind==='mapped-card'?['mapping']:[])])
    &&['compiled-card','mapped-card'].includes(original.kind),'Invalid idea preparation basis');
@@ -127,7 +142,8 @@ async function checked(row,bound){
  }catch{return null;}
  return p;
 }
-export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString()}){
+export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits}){
+ const limits=checkedStorageLimits(storageLimits);
  const bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});
  require(await proposal(db,bound),'Confirmed proposal is unavailable or changed');
  if(parentTaskId!==null)require(await query(db,'SELECT t.id FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',parentTaskId,proposalId),
@@ -140,8 +156,8 @@ export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,c
   &&Number.isFinite(Date.parse(createdAt))&&new Date(createdAt).toISOString()===createdAt,'Invalid preparation date');
  const b=bound.base,day=createdAt.slice(0,10);
  await query(db,`INSERT INTO prepared_plans(id,binding_hash,proposal_id,card_hash,task_id,task_hash,input_version,parent_task_id,authority,controls_hash,basis_hash,basis_json,created_at,created_day)
-  SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM prepared_plans WHERE created_day=?)<500
-  ON CONFLICT(id) DO NOTHING RETURNING id`,id,bound.bindingHash,proposalId,b.cardHash,b.taskId,b.taskHash,inputVersion,parentTaskId,authority,b.controlsHash,source.hash,source.text,createdAt,day,day);
+  SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM prepared_plans WHERE created_day=?)<?
+  ON CONFLICT(id) DO NOTHING RETURNING id`,id,bound.bindingHash,proposalId,b.cardHash,b.taskId,b.taskHash,inputVersion,parentTaskId,authority,b.controlsHash,source.hash,source.text,createdAt,day,day,limits.preparations);
  row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
  if(!row){const error=Error('The daily prepared-plan limit has been reached');error.code='preparation-limit';throw error;}
  const receipt=await checked(row,bound);require(receipt,'Prepared plan could not be verified');return receipt;

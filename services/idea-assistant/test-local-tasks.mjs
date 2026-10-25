@@ -10,6 +10,7 @@ import PlanControls from '../../local-plan-controls.js';
 import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 import {planCard} from './prepare-task.mjs';
+import {STORAGE_LIMITS} from './storage-limits.mjs';
 let proposalId;
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const alphabet=Array.from({length:29},(_,i)=>({rune:String.fromCharCode(65+i),latin:'R'+i,prime:i+2}));
@@ -25,7 +26,7 @@ function adapter({publicOriginal=true}={}){
 function fixture(options){
  const db=adapter(options),urls=[],rates=[];let date=at,fetchFailure=false;
  const env={SITE_ORIGIN:origin,PROPOSALS:db,PROPOSAL_LIMIT:{limit:async value=>{rates.push(value);return {success:true};}}};
- const handle=createLocalTaskHandler({now:()=>new Date(date),fetcher:async(url,options)=>{urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);if(fetchFailure)throw Error('Offline');return Response.json(source);}});
+ const handle=createLocalTaskHandler({storageLimits:{tasks:50,results:50,taskIdeaLinks:50},now:()=>new Date(date),fetcher:async(url,options)=>{urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);if(fetchFailure)throw Error('Offline');return Response.json(source);}});
  return {db,env,handle,urls,rates,setDate:value=>date=value,setFetchFailure:value=>fetchFailure=value};
 }
 async function task(title='Reverse rows',version='raw',extra={}){return L.prepare({title,pages:[{id:source.id,text:version==='raw'?source.raw:source.reviewed_text}],alphabet,steps:[{op:'reverse',unit:'line'}],criterion:{kind:'measurement'},...extra});}
@@ -173,7 +174,7 @@ await test('streamed body limits, rate limits and storage errors cannot write pa
  assert.equal((await f.handle(oversized,f.env)).status,400);
  f.db.fail=true;assert.equal((await preparedCall(f,'/tasks','POST',body(t))).status,503);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
 });
-await test('atomic task cap50/day, concurrent retries, and next-day restoration',async()=>{
+await test('injected atomic task cap50/day, concurrent retries, and next-day restoration',async()=>{
  const f=fixture(),tasks=await Promise.all(Array.from({length:60},(_,i)=>task('Task '+i)));
  const responses=await Promise.all(tasks.map(t=>preparedCall(f,'/tasks','POST',body(t))));assert.equal(responses.filter(r=>r.status===200).length,50);assert.equal(responses.filter(r=>r.status===429).length,10);
  assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,50);
@@ -181,7 +182,7 @@ await test('atomic task cap50/day, concurrent retries, and next-day restoration'
  f.setDate('2026-10-25T00:00:00.000Z');assert.equal((await preparedCall(f,'/tasks','POST',body(tasks[59]))).status,200);
  const g=fixture(),t=await task();const dup=await Promise.all(Array.from({length:5},()=>preparedCall(g,'/tasks','POST',body(t))));assert(dup.every(r=>r.status===200));assert.equal(g.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);
 });
-await test('atomic distinct result cap50/day retains duplicate retries without consuming quota',async()=>{
+await test('injected atomic distinct result cap50/day retains duplicate retries without consuming quota',async()=>{
  const f=fixture(),tasks=[];
  for(let i=0;i<51;i++){if(i===50)f.setDate('2026-10-25T00:00:00.000Z');const t=await task('Result '+i);tasks.push(t);assert.equal((await preparedCall(f,'/tasks','POST',body(t))).status,200);}
  f.setDate('2026-10-26T00:00:00.000Z');
@@ -190,6 +191,17 @@ await test('atomic distinct result cap50/day retains duplicate retries without c
  assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,50);
  assert.equal((await call(f,'/tasks/'+tasks[0].taskId+'/results','POST',{result:L.run(tasks[0])})).status,200);
  f.setDate('2026-10-27T00:00:00.000Z');assert.equal((await call(f,'/tasks/'+tasks[50].taskId+'/results','POST',{result:L.run(tasks[50])})).status,200);
+});
+await test('production defaults bind the larger budgets in actual atomic task/link/result statements',async()=>{
+ const f=fixture(),batches=[],originalBatch=f.db.batch;
+ f.db.batch=async statements=>{batches.push(...statements);return originalBatch(statements);};
+ const handle=createLocalTaskHandler({now:()=>new Date(at),fetcher:async()=>Response.json(source)}),t=await task('Production default quotas');
+ assert.equal((await handle(request('/tasks','POST',await approved(f,body(t))),f.env)).status,200);
+ assert.equal((await handle(request('/tasks/'+t.taskId+'/results','POST',{result:L.run(t)}),f.env)).status,200);
+ const tasks=batches.find(s=>s.sql.includes('INSERT INTO local_tasks ')),links=batches.find(s=>s.sql.includes('INSERT INTO local_task_ideas ')),results=batches.find(s=>s.sql.includes('INSERT INTO local_task_results '));
+ assert.deepEqual(tasks.args.slice(-4),[at.slice(0,10),STORAGE_LIMITS.tasks,at.slice(0,10),STORAGE_LIMITS.taskIdeaLinks]);
+ assert.equal(links.args.at(-1),STORAGE_LIMITS.taskIdeaLinks);assert.equal(results.args.at(-1),STORAGE_LIMITS.results);
+ assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,1);
 });
 await test('migration backfills original task provenance without changing it',async()=>{
  const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));

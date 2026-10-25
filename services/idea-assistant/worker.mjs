@@ -13,6 +13,7 @@ import {createTaskExtensionHandler} from './task-extensions.mjs';
 import {createTaskVariantHandler} from './task-variants.mjs';
 import {createRecordPlanHandler} from './record-plans.mjs';
 import {createFamilyRunHandler} from './family-runs.mjs';
+import {createFiniteSearchHandler} from './finite-search.mjs';
 import {createPublishedEvidenceHandler} from './published-evidence.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
@@ -183,8 +184,10 @@ const taskExtensions=createTaskExtensionHandler();
 const taskVariants=createTaskVariantHandler();
 const familyRuns=createFamilyRunHandler();
 const publishedEvidence=createPublishedEvidenceHandler();
+const finiteSearch=createFiniteSearchHandler();
 export default {fetch(request,env,ctx){
   const path=new URL(request.url).pathname;
+  if(path.startsWith('/finite-search/'))return finiteSearch(request,env);
   if(path.startsWith('/published-evidence/'))return publishedEvidence(request,env);
   if(path.startsWith('/families/'))return familyRuns(request,env);
   if(path==='/community-research')return communityFeed(request,env);

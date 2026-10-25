@@ -9,6 +9,7 @@ import E from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
 import Variants from '../../task-variants.js';
 import {issue,authorize} from './prepared-plans.mjs';
+import {STORAGE_LIMITS} from './storage-limits.mjs';
 const at='2026-10-24T12:00:00.000Z',sha=v=>createHash('sha256').update(v).digest('hex');
 const alphabet=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const f=value=>C.field('specified',value);
@@ -20,7 +21,7 @@ async function fixture(includeV9=true){
  const db={prepare(sql){return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}},card=makeCard(),cardHash=sha(C.serialize(card)),proposalId='p_'+cardHash;
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,cardHash,C.serialize(card),'unused',at);
  const task=await E.prepare({title:'Synthetic prepared target',alphabet,pages:[{id:'lp2-15',text:'ᚠᚢ-ᚦ'}],steps:[{op:'affine',a:7,b:7}],criterion:{kind:'measurement'}});
- const controls=await Controls.prepare(task),args={db,proposalId,card,task,inputVersion:'raw',parentTaskId:null,controls,authority:'idea',basis:{kind:'compiled-card',normalizedCard:card},createdAt:at};
+ const controls=await Controls.prepare(task),args={db,proposalId,card,task,inputVersion:'raw',parentTaskId:null,controls,authority:'idea',basis:{kind:'compiled-card',normalizedCard:card},createdAt:at,storageLimits:{preparations:4}};
  return {sqlite,db,args};
 }
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
@@ -36,14 +37,27 @@ await test('exact issued binding, timestamp-independent retries and no task/resu
 await test('genuine concurrent issuance is idempotent and cannot exceed the global daily cap',async()=>{
  const {sqlite,args}=await fixture(),receipts=await Promise.all(Array.from({length:12},()=>issue(args)));
  assert(receipts.every(r=>r.id===receipts[0].id));assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,1);
- // Seed unrelated immutable rows to exercise the SQL cap without running 499
+ // Seed unrelated immutable rows to exercise the injected SQL cap without running
  // irrelevant control suites. The real receipt remains unchanged and valid.
  const row=sqlite.prepare('SELECT * FROM prepared_plans').get(),keys=Object.keys(row),insert=sqlite.prepare('INSERT INTO prepared_plans('+keys.join(',')+') VALUES('+keys.map(()=>'?').join(',')+')');
- for(let n=0;n<499;n++)insert.run(...keys.map(k=>k==='id'?'prep_'+String(n).padStart(64,'0'):row[k]));
+ for(let n=0;n<3;n++)insert.run(...keys.map(k=>k==='id'?'prep_'+String(n).padStart(64,'0'):row[k]));
  assert.deepEqual(await issue(args),receipts[0],'Exact retries survive a full issuance day');
  const task=await E.prepare({...args.task,title:'Another bounded task'}),controls=await Controls.prepare(task),changed={...args,task,controls};
- await assert.rejects(issue(changed),e=>e.code==='preparation-limit');assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,500);
+ await assert.rejects(issue(changed),e=>e.code==='preparation-limit');assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,4);
  assert(await issue({...changed,createdAt:'2026-10-25T00:00:00.000Z'}));
+});
+await test('distinct concurrent preparations cannot overshoot an injected boundary and exact retries survive it',async()=>{
+ const {sqlite,args}=await fixture(),requests=[];
+ for(let i=0;i<6;i++){const task=await E.prepare({...args.task,title:'Concurrent preparation '+i}),controls=await Controls.prepare(task);requests.push({...args,task,controls,storageLimits:{preparations:3}});}
+ const outcomes=await Promise.allSettled(requests.map(issue));assert.equal(outcomes.filter(r=>r.status==='fulfilled').length,3);assert(outcomes.filter(r=>r.status==='rejected').every(r=>r.reason.code==='preparation-limit'));
+ assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,3);
+ const accepted=outcomes.findIndex(r=>r.status==='fulfilled');assert.deepEqual(await issue(requests[accepted]),outcomes[accepted].value);
+});
+await test('production preparation capacity is bound in SQL without manufacturing thousands of receipts',async()=>{
+ const {sqlite,args}=await fixture(),statements=[],db={prepare(sql){return {bind(...values){statements.push({sql,values});return {first:async()=>sqlite.prepare(sql).get(...values)||null};}};}};
+ await issue({...args,db,storageLimits:undefined});
+ assert.equal(statements.find(s=>s.sql.startsWith('INSERT INTO prepared_plans')).values.at(-1),STORAGE_LIMITS.preparations);
+ assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,1);
 });
 await test('unissued, stale and altered bindings never authorize or mutate storage',async()=>{
  const {sqlite,args}=await fixture();assert.equal(await authorize(args),null);const receipt=await issue(args),before=sqlite.prepare('SELECT total_changes() n').get().n;

@@ -7,6 +7,7 @@ import {validateCard} from './idea-relations.mjs';
 import {loadRecordPlan,validOrigin as validRecordedOrigin} from './record-plans.mjs';
 import {findEvidence} from './task-evidence.mjs';
 import {boundaryComparison} from './boundary-comparison.mjs';
+import {storageLimits as checkedStorageLimits} from './storage-limits.mjs';
 const MAX_BODY=2*1024*1024, HEX=/^[a-f0-9]{64}$/, PROPOSAL=/^p_[a-f0-9]{64}$/;
 const NOTICE='Verified computation only; this does not establish a correct reading or scientific conclusion.';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -29,7 +30,8 @@ function projection(row,task,run,context){
   inputVersion:context.input_version,parentTaskId:context.parent_task_id,createdAt:context.created_at,
   state:run?'results-verified':'not-run',...(run?{latestRun:run}:{}),verification:NOTICE};
 }
-export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence}={}){
+export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,storageLimits}={}){
+ const limits=checkedStorageLimits(storageLimits);
  return async function handle(request,env){
   const allowed=env?.SITE_ORIGIN,origin=request.headers.get('origin');
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'};
@@ -150,13 +152,13 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     finally{clearTimeout(sourceTimer);}
     }
     await db.batch([query(`INSERT INTO local_tasks (id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day)
-     SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<50
-     AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<50 ON CONFLICT(id) DO NOTHING`,
-     task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day,day),
+     SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<?
+     AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<? ON CONFLICT(id) DO NOTHING`,
+     task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day,limits.tasks,day,limits.taskIdeaLinks),
      query(`INSERT INTO local_task_ideas (task_id,proposal_id,input_version,parent_task_id,created_at,created_day)
       SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_tasks WHERE id=? AND task_hash=? AND task_json=?)
-      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<50 ON CONFLICT(task_id,proposal_id) DO NOTHING`,
-      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day)]);
+      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<? ON CONFLICT(task_id,proposal_id) DO NOTHING`,
+      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks)]);
     existing=await find(task.taskId);const accepted=await association();
     if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.'},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
@@ -178,7 +180,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    const resultJson=L.stable(result),runId=await digest(resultJson);
    let saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();
    if(!saved){await db.batch([query(`INSERT INTO local_task_results (id,task_id,result_json,created_at,created_day)
-    SELECT ?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_results WHERE created_day=?)<50 ON CONFLICT(id) DO NOTHING`,runId,row.id,resultJson,at,day,day)]);saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();}
+    SELECT ?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_results WHERE created_day=?)<? ON CONFLICT(id) DO NOTHING`,runId,row.id,resultJson,at,day,day,limits.results)]);saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();}
    if(!saved)return reply({error:'The daily result limit has been reached.'},429);
    // Admission already independently replayed this exact result above. Read
    // back the committed bytes, not another execution of the same calculation.
