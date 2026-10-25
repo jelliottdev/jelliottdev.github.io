@@ -122,6 +122,7 @@ test('numeric comparison keeps browser and Worker source order and legacy browse
  assert.equal(JSON.stringify(browser.RecordedComparison.compare({snapshot,documents})),JSON.stringify(result));
  const legacy={ClaimSpecification:C};vm.runInNewContext(fs.readFileSync(require.resolve('../recorded-comparison.js'),'utf8'),legacy);
  assert.equal(legacy.RecordedComparison.compare({snapshot,documents}),null);assert(legacy.RecordedComparison.compare({snapshot:make(),documents:[doc()]}),'Old reverse comparison remains usable without optional numeric dependencies');
+ const duplicate=compare(snapshot,[documents[0],documents[0]]);assert(duplicate);assert.equal(duplicate.sources.length,1,'A duplicate record is one source, never two independent pieces of evidence');assert.deepEqual(M.citationNumbers(duplicate.answer,1),[1]);
  const competing=sumDoc('same-table','reversed');assert.equal(compare(snapshot,[...documents,competing]).sources[0],competing,'Same S.select table preference supplies deterministic answer citations');
 });
 console.log(`PASS ${groups} recorded-comparison groups; no AI, network, static record-ID gates or experiment execution.`);

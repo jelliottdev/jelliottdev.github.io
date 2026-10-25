@@ -90,8 +90,9 @@
   if(C.RULES.filter(k=>!own(specified,k)&&k!=='evaluation').some(k=>!['unspecified','not_applicable'].includes(s.rules[k]?.status)))return null;
   const prepared=Research.prepare(s),hint=prepared.discovery.steps[0]?.operation;
   if(prepared.discovery.steps.length!==1||!hint||hint.action!=='sum'||hint.operand!=='prime-values'||hint.within!=='word'||hint.table!==op.table)return null;
-  const selected=Search.select(documents,prepared.query,prepared.pages,prepared.discovery).filter(d=>d.kind==='experiment').slice(0,2),sources=[],lines=[],tables=[];let size=0;
+  const selected=Search.select(documents,prepared.query,prepared.pages,prepared.discovery).filter(d=>d.kind==='experiment').slice(0,2),sources=[],lines=[],tables=[],ids=new Set();let size=0;
   for(const doc of selected){
+   if(ids.has(doc?.id))continue;
    if(!object(doc)||typeof doc.id!=='string'||!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(doc.id)||doc.href!=='#/experiments/'+doc.id||typeof doc.text!=='string')continue;
    const d=doc.discovery;
    if(!keys(d,['operations','evaluation'])||!Array.isArray(d.operations)||d.operations.length!==1||!Array.isArray(d.evaluation)||d.evaluation.length!==1||d.evaluation[0]!=='numeric-sums')continue;
@@ -102,7 +103,7 @@
    const recordedPages=C.pages(evidence.scope.pages);
    if(!recordedPages.length||C.serialize(recordedPages)!==C.serialize(evidence.scope.pages))continue;
    if(size+doc.text.length>9000){if(!sources.length)return null;break;}
-   size+=doc.text.length;sources.push(doc);tables.push(actual.table);const citation=' ['+sources.length+'].';
+   size+=doc.text.length;ids.add(doc.id);sources.push(doc);tables.push(actual.table);const citation=' ['+sources.length+'].';
    const unit=actual.within==='word'?'words':actual.within==='row'?'rows':'windows';
    lines.push('Prime values summed within '+unit+' on '+pageLabel(recordedPages)+' ('+(actual.table==='canonical'?'usual':'reversed')+' table)'+citation);
   }
