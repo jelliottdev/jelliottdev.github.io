@@ -158,6 +158,11 @@ async function authoredControlTests(){
   finally{old.app.destroy();}
  }
  console.log('PASS zero-task idea preparation: read-only auto-plan, existing-task and missing-endpoint skips, hidden busy/ready action, retry, duplicate activation and stale/destroy safety; creation/run remain explicit.');
+ // Essential arithmetic must be visible even when supplementary preparation notes are empty.
+ const cumulativePlan=await E.prepare({title:'Synthetic cumulative plan',alphabet,pages:[{id:'lp2-15',text:'ᚠᚢ-ᚦ'}],steps:[{op:'cumulative-difference',reset:'word'}],criterion:{kind:'measurement'}},webcrypto);
+ const cumulativeIdea=await fixture({hash:'#idea='+proposalId,prepare:async()=>({state:'plan-ready',proposalId,parentTaskId:null,inputVersion:'raw',task:cumulativePlan,notes:[],purpose:'Measure the declared method'})});
+ try{const html=cumulativeIdea.doc.getElementById('prepared-plan').innerHTML,beforeCreate=html.slice(0,html.indexOf('id="create-experiment"'));assert(beforeCreate.length>0);assert(/earlier decoded/i.test(beforeCreate),'Preview must describe the decoded accumulator, not ciphertext history');assert(/modulo 29/i.test(beforeCreate));assert(/zero/i.test(beforeCreate),'Zero initial accumulator cannot be hidden in optional notes');assert(/word/i.test(beforeCreate));assert(beforeCreate.includes('All runes in this text are included.'));assert(beforeCreate.includes('Each page starts fresh.'));assert(!beforeCreate.includes('<details'),'The essential cumulative method must be visible before Create');assert.equal(cumulativeIdea.executions.length,0);assert.equal(cumulativeIdea.requests.filter(r=>r.options.method==='POST'&&r.url!==prepareEndpoint).length,0);}
+ finally{cumulativeIdea.app.destroy();}
  // Shared computation retains its original provenance, while this POST binds
  // the reviewed association independently (including a different input version).
  for(const wrongField of [null,'linkedProposalId','linkedInputVersion','linkedParentTaskId']){
