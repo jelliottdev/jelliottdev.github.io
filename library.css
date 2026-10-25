@@ -100,3 +100,8 @@ dialog{color:var(--ink);background:#fff;border:1px solid var(--line);border-radi
 .record-panel .record-followups select:focus-visible{outline:2px solid #3263a1;outline-offset:3px}
 .record-panel .record-followups p{margin:0 0 10px}
 .record-panel .record-followups a{display:inline-flex;align-items:center;min-height:44px;text-underline-offset:.2em}
+
+/* Small comparisons wrap in the reading column; wide data tables retain scrolling. */
+.record-panel .experiment-compact-table{overflow:visible}
+.record-panel .experiment-compact-table table{width:100%;table-layout:fixed}
+.record-panel .experiment-compact-table th,.record-panel .experiment-compact-table td{min-width:0;overflow-wrap:anywhere;padding:10px 8px}

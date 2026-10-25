@@ -70,6 +70,26 @@ class ContentTests(unittest.TestCase):
         before = self.files(); build(self.root); bundle(self.root, records[0])
         self.assertEqual(before, self.files())
 
+    def test_finding_sections_are_selected_from_one_authored_account(self):
+        raw = self.source()
+        raw['analysis'] = '## Visible evidence\n\n| Rule | First mismatch |\n| --- | --- |\n| Fixed rule | Rune 2 |\n\n## Detailed method\n\n' + 'Technical details remain here. ' * 10
+        raw['presentation'] = {'finding_sections': ['Visible evidence']}
+        self.write(raw)
+        record = build(self.root)[0]
+        self.assertEqual(record['reader_sections'], ['Visible evidence'])
+        self.assertEqual(record['article'], raw['analysis'])
+        self.assertNotIn('presentation', record)
+        for sections in [['Missing heading'], ['Visible evidence', 'Visible evidence'], [' Visible evidence'], ['x' * 121], [None]]:
+            raw['presentation']['finding_sections'] = sections
+            self.write(raw)
+            before = self.files()
+            with self.subTest(sections=sections), self.assertRaises(ValueError):
+                build(self.root)
+            self.assertEqual(before, self.files())
+        raw['presentation'] = {'unregistered': []}
+        with self.assertRaises(ValueError):
+            compile_content(raw)
+
     def test_duplicate_and_invalid_sources_fail_before_writes(self):
         for key in ('finding', 'reader_finding', 'reader_limit', 'summary', 'article'):
             raw = self.source(); raw[key] = 'Conflicting second version'; self.write(raw)

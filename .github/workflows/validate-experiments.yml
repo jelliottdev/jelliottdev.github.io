@@ -223,6 +223,12 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_new_experiment.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_prefix_evidence_gate.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python experiments/records/prepared-opening-evidence-gates/run.py --check
+        if: steps.scope.outputs.science == 'true'
+      - run: python experiments/records/prepared-opening-evidence-gates/check.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_research_questions.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py

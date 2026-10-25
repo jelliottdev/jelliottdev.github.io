@@ -6118,7 +6118,8 @@
   ],
   &quot;related&quot;: [
     &quot;linear-ciphertext-feedback&quot;,
-    &quot;ea-difference-independence&quot;
+    &quot;ea-difference-independence&quot;,
+    &quot;prepared-opening-evidence-gates&quot;
   ],
   &quot;visuals&quot;: [
     {
@@ -7307,12 +7308,34 @@
       }
     }
   ],
+  &quot;research_questions&quot;: [
+    {
+      &quot;id&quot;: &quot;warning-word-reset&quot;,
+      &quot;question&quot;: &quot;Can restarting the cumulative rule at each word recover the Warning opening?&quot;,
+      &quot;state&quot;: &quot;tested&quot;,
+      &quot;note&quot;: &quot;No. The saved feedback-census prefixes already disagree on all 55 rune pages, before the prepared word-reset rule could change them. LP2-01 and LP2-54 disagree at rune two; the other 53 disagree at rune one. This excludes this fixed opening, not other plaintexts.&quot;,
+      &quot;records&quot;: [
+        &quot;prepared-opening-evidence-gates&quot;
+      ],
+      &quot;followup&quot;: &quot;cumulative-word-reset-warning&quot;
+    },
+    {
+      &quot;id&quot;: &quot;warning-line-reset&quot;,
+      &quot;question&quot;: &quot;Can restarting the cumulative rule at each line recover the Warning opening?&quot;,
+      &quot;state&quot;: &quot;tested&quot;,
+      &quot;note&quot;: &quot;No. The saved feedback-census prefixes disagree before the prepared line-reset rule could affect them on all 55 rune pages. LP2-01 and LP2-54 disagree at rune two; the other 53 disagree at rune one. Other settings and plaintexts remain outside this result.&quot;,
+      &quot;records&quot;: [
+        &quot;prepared-opening-evidence-gates&quot;
+      ],
+      &quot;followup&quot;: &quot;cumulative-line-reset-warning&quot;
+    }
+  ],
   &quot;finding&quot;: &quot;Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.&quot;,
   &quot;summary&quot;: &quot;Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.&quot;,
   &quot;reader_finding&quot;: &quot;Reversing the specified cumulative-sum rule did not establish a readable message. The transformed text still had much flatter rune frequencies than the established LP1 readings.&quot;,
   &quot;limitations&quot;: &quot;This was a frequency comparison, not a complete decryption test. Extra keys, skipped runes, other alphabets and plaintext languages were not tested.&quot;,
   &quot;reader_limit&quot;: &quot;This was a frequency comparison, not a complete decryption test. Extra keys, skipped runes, other alphabets and plaintext languages were not tested.&quot;,
-  &quot;next_steps&quot;: &quot;Specify a complete additional layer or a held-out plaintext prediction before broadening this rule.&quot;,
+  &quot;next_steps&quot;: &quot;The exact word-reset and line-reset Warning-opening proposals are excluded by prepared-opening-evidence-gates, using saved feedback-census prefixes before any differing reset could act. Other additional layers or plaintext predictions need separately specified tests.&quot;,
   &quot;article&quot;: &quot;## Finding\n\nThe proposed cumulative rule has no adjustable key: it turns into a difference between neighboring ciphertext runes. Applied separately to every nonempty page of LP2-00–55, its **12,956 output runes remain nearly flat**. Their index of coincidence is **0.035319**, close to the raw LP2 stream&#x27;s **0.034478** and far below the **0.061139** measured from the site&#x27;s 2,797 decoded LP1 runes. That comparison does not prove LP2 uses English or the same spelling conventions as LP1, but it supplies no positive reading under the literal rule.\n\n![F-rune rates for the literal output, solved LP1 readings and raw LP2 ciphertext.](experiments/records/cumulative-autokey-literal/f-rate.svg)\n\nThe output has **88 F runes (0.68%)**. This number is forced by **86 repeated adjacent ciphertext runes** plus the first rune of each of two pages. The LP1 reading control has **44 F runes among 2,797 (1.57%)**. The chart is descriptive: the corpora differ in length, topic and cipher history.\n\n## Rule tested\n\nThe reported formula is `P[k] = C[k] − sum(P[0] ... P[k−1]) mod 29`. We start the sum at zero at the beginning of each page. It follows algebraically that `P[0] = C[0]` and `P[k] = C[k] − C[k−1] mod 29` afterward. The program also re-sums every output prefix and verifies that it reconstructs the exact input rune. This is the literal formula, not a search for primers or a plaintext-feedback Fibonacci recurrence.\n\n## How to reproduce\n\nFrom the repository root, run `python experiments/records/cumulative-autokey-literal/run.py --check`. The saved [29-value distributions and per-page first-rune ledger](experiments/records/cumulative-autokey-literal/results.json) include hashes for every transcription and reading file used.\n\nThis result covers page-local starts and the archived 29-rune transcription. A rule that carries state between pages, skips a rune, adds another key layer, or changes its alphabet is a different test. The known LP1 readings serve only as a transparent comparison, not a formal null distribution for every possible plaintext.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/cumulative-autokey-literal/article.md&quot;,
   &quot;script_sha256&quot;: &quot;01d12871d4e3a9986d74a8731d2ce73b2f93eadc9a3727e536f4cf407fb7ba96&quot;,
@@ -53760,7 +53783,7 @@
   &quot;outcome&quot;: &quot;not-supported&quot;,
   &quot;finding&quot;: &quot;None of 880 routes matched any of nine known passage openings. An independent source-position check reproduced every output.&quot;,
   &quot;limitations&quot;: &quot;Only the first 12 runes were compared. Other beginnings, routes and columns aligned by image position remain untested.&quot;,
-  &quot;next_steps&quot;: &quot;Declare new physical alignment, region or route rules as variants. Keep full output-to-source traces and an explicit success criterion.&quot;,
+  &quot;next_steps&quot;: &quot;The fixed line-reversal plus Atbash Warning opening is already excluded by saved prefixes; see prepared-opening-evidence-gates. Physical alignment, other regions or different routes remain distinct proposals and need declared rules and evaluation criteria.&quot;,
   &quot;family&quot;: {
     &quot;id&quot;: &quot;archived-layout-reading-routes&quot;,
     &quot;title&quot;: &quot;Reading routes through archived rune layouts&quot;,
@@ -54082,7 +54105,8 @@
     }
   ],
   &quot;related&quot;: [
-    &quot;lp2-alphabet-warning-prefix&quot;
+    &quot;lp2-alphabet-warning-prefix&quot;,
+    &quot;prepared-opening-evidence-gates&quot;
   ],
   &quot;visuals&quot;: [
     {
@@ -54778,6 +54802,18 @@
         },
         &quot;expected_result_sha256&quot;: &quot;3fad1273ab65def674f5623f3fe7ae7cd98be6d98c1568d2890ab1f04e8e9a99&quot;
       }
+    }
+  ],
+  &quot;research_questions&quot;: [
+    {
+      &quot;id&quot;: &quot;warning-row-reversal-atbash&quot;,
+      &quot;question&quot;: &quot;Does reversing each line and applying Atbash recover the Warning opening?&quot;,
+      &quot;state&quot;: &quot;tested&quot;,
+      &quot;note&quot;: &quot;No. The saved prefixes already disagree on all 55 rune pages: 54 at the first rune, and LP2-31 at the third. A longer opening cannot repair an earlier mismatch. This excludes this fixed opening under this route, not every possible row or column method.&quot;,
+      &quot;records&quot;: [
+        &quot;prepared-opening-evidence-gates&quot;
+      ],
+      &quot;followup&quot;: &quot;row-reversal-atbash-warning&quot;
     }
   ],
   &quot;article&quot;: &quot;# Simple row and column transposition routes\n\n## Why this test?\n\nReading a page backwards or down its columns is a natural first attempt. But “try transposition” leaves many decisions unstated: the alignment of uneven rows, which corner to start from, whether direction alternates, and whether symbols are also substituted.\n\nThis record tests a small, explicit set of pure rearrangements. Its success criterion is exact agreement with one of nine known 12-rune openings at the start of the output. It does not score English or assume every valid plaintext must reuse an existing opening.\n\n## Plan and input layout\n\nThe plan and runner were committed as `26802b6` before execution. Use all archived LP2-00–55 text, retaining recognized runes and grouping them by source line. Headings remain included. Non-rune characters and lines without runes are ignored. LP2-50 remains an explicit zero-rune page and produces no routes.\n\nRows are left-aligned by rune ordinal, not by measured image coordinates. The first rune of every nonempty line is in ordinal column zero. Short rows remain short; missing cells are skipped, not padded. This convention can differ from the manuscript&#x27;s physical column alignment.\n\n## The sixteen route choices\n\n| Choice | Options | Meaning |\n| --- | --- | --- |\n| Main axis | Rows / columns | Visit a complete row or ordinal column at a time |\n| Outer direction | Forward / reversed | Top-to-bottom versus bottom-to-top rows; left-to-right versus right-to-left columns |\n| Initial inner direction | Forward / reversed | Left-to-right versus right-to-left within a row; top-to-bottom versus bottom-to-top within a column |\n| Alternate inner direction | No / yes | Keep the same direction, or reverse it on every other visited row/column |\n\nThe product is 2 × 2 × 2 × 2 = 16 parameter routes per nonempty page. Alternation begins with the selected initial direction and changes by visited-group ordinal, not by the original printed row number. Some routes or output strings can coincide; 16 is a parameter count, not a claim of 16 distinct texts on every page.\n\nOne of these routes reverses the runes within every archived row while keeping row order unchanged, including on [LP2-15](#/page/lp2-15). A schematic example is `ABC / DE → CBA / ED`, where `/` separates rows; these letters are invented, not manuscript text. Keeping rune values unchanged means their order may change; it does not mean their positions stay fixed. No substitution, fixed shift or repeating key is applied.\n\n## Hand-checkable ragged-row controls\n\nFor the invented rows `ABC`, `DE`, `F`, ordinary column-first reading gives `ADFBEC`. Row-first reading with alternating directions gives `ABCEDF`. These are implementation controls only, not manuscript inputs or results.\n\nThe independent checker verifies those controls and constructs every real route by sorting source coordinates with a separate ordering-key implementation. It checks that each saved route is a complete permutation and every output index comes from its declared source position.\n\n## Results and limits\n\nAll 880 parameter routes completed across the 55 pages with eligible runes. No output&#x27;s first 12 indices matched any of the nine fixed known-reading openings. There are 7920 exact opening comparisons in total.\n\nThe nine opening vectors come from Warning, Welcome, Some Wisdom, first koan, Loss of Divinity, second koan, Instruction, LP2-56 and LP2-57. Their exact values and source-trace hashes are recorded in the plan. They were fixed before this search.\n\nThis negative result is limited to those openings, these routes and the archived layout convention. It does not rule out other beginnings, arbitrary column permutations, spirals, rectangular reflow, physical coordinate alignment, a different region, or transposition combined with substitution. There is no probability claim or general readability score.\n\n## Follow an output back to its source\n\nEach page has a `source_positions` array. Every entry gives its zero-based source ordinal, one-based archived line, one-based rune position within that line, and alphabet index. Each candidate&#x27;s `source_ordinals` array is the output-to-input mapping: its first number tells you which original position supplied output position zero.\n\nThe accompanying `output_indices` array contains the corresponding rune indices. The `alphabet` list maps indices back to rune symbols. Original whitespace and punctuation are not part of the permutation.\n\nThe diagram shows the first six positions of the ordinary column-first route on LP2-31. It is extracted from the saved result, not an invented grid. All 269 positions are retained in that route&#x27;s complete trace.\n\n## Reproduce\n\nUse Python 3.12.10 and the repository checkout. No third-party package or network service is required.\n\n```\npython experiments/records/lp2-row-column-routes/run.py --check\npython experiments/records/lp2-row-column-routes/check.py\n```\n\nThe first command regenerates and compares every source position, route, output index and match decision. The second uses the independent ordering-key checker. Both reject discrepancies rather than silently replacing the saved result.\n\n[Download all routes and source traces](experiments/records/lp2-row-column-routes/results.json). To save another report, run the main script with `--output my-routes.json`; it refuses an existing filename. The plot script reads the saved result and draws one trace without searching again.\n\n## Verification\n\nOn 20 October 2026, a complete rerun reproduced all 880 saved candidates. A separate ordering-key implementation checked every route against its source positions. The route rules, layout convention, opening vectors and matching criterion stayed fixed after the first run. The checker and diagram were added afterward to make the result easier to verify.\n\n## Related work and next variants\n\nThe [fixed-alphabet experiment](#/experiments/lp2-alphabet-warning-prefix) includes whole-stream reversal with shifts and a different opening criterion. The [transposition guide](#/wiki/transposition) explains the documented historical 14-column permutation. Neither record establishes that every transposition on an unsolved page has been searched.\n\nA physically aligned column model, a justified spiral, a new region or an added substitution needs a separately planned variant. Preserve its source-coordinate trace so another reader can tell exactly which operation was performed.\n&quot;,
@@ -58795,7 +58831,7 @@
   &quot;outcome&quot;: &quot;not-supported&quot;,
   &quot;finding&quot;: &quot;All 110 cases completed with zero exact opening matches in 990 comparisons. Independent regex/reflection checks and a full rerun agree on every output.&quot;,
   &quot;limitations&quot;: &quot;Transcription-defined segments are not established plaintext words. Only nine fixed beginnings are tested; other beginnings and combined ciphers remain untested. Human review pending.&quot;,
-  &quot;next_steps&quot;: &quot;Declare word-order reversal, heading removal or additional substitutions separately. Broader language criteria require a specified scoring and evaluation procedure.&quot;,
+  &quot;next_steps&quot;: &quot;The fixed word-reversal plus Atbash Warning opening is excluded by saved first-rune mismatches; see prepared-opening-evidence-gates. Word-order reversal, heading removal, different boundaries or additional substitutions require separate definitions; broader readability requires an explicit evaluation procedure.&quot;,
   &quot;family&quot;: {
     &quot;id&quot;: &quot;archived-layout-reading-routes&quot;,
     &quot;title&quot;: &quot;Reading routes through archived rune layouts&quot;,
@@ -59143,7 +59179,8 @@
   ],
   &quot;related&quot;: [
     &quot;lp2-row-column-routes&quot;,
-    &quot;lp2-alphabet-warning-prefix&quot;
+    &quot;lp2-alphabet-warning-prefix&quot;,
+    &quot;prepared-opening-evidence-gates&quot;
   ],
   &quot;visuals&quot;: [
     {
@@ -59757,6 +59794,18 @@
         },
         &quot;expected_result_sha256&quot;: &quot;d30e47366ca5941c8420343e8d718a475928538c0e94c7ce7435a3665ac435c0&quot;
       }
+    }
+  ],
+  &quot;research_questions&quot;: [
+    {
+      &quot;id&quot;: &quot;warning-word-reversal-atbash&quot;,
+      &quot;question&quot;: &quot;Does reversing runes inside each word and applying Atbash recover the Warning opening?&quot;,
+      &quot;state&quot;: &quot;tested&quot;,
+      &quot;note&quot;: &quot;No. Every one of the 55 rune pages disagrees at the first output rune in the saved prefixes. This rules out the fixed 24-rune opening with transcription-word boundaries, not all possible plaintexts or other boundary rules.&quot;,
+      &quot;records&quot;: [
+        &quot;prepared-opening-evidence-gates&quot;
+      ],
+      &quot;followup&quot;: &quot;word-reversal-atbash-warning&quot;
     }
   ],
   &quot;article&quot;: &quot;# Reversing runes within word-like segments\n\nA natural first idea is to read each word backwards while keeping the words in their original order. On an unsolved page, however, the archive gives us separators and line markers—not independently established plaintext words. This experiment makes that distinction explicit.\n\nIt tests two precise interpretations of the archived boundaries on LP2-00–55. All 110 cases completed and produced 110 distinct full page outputs. None matched any of the nine declared 12-rune openings. LP2-50 contains no recognized runes and contributes no candidates.\n\n## What counts as a segment?\n\nBoth conventions include headings, preserve segment order, and reverse rune positions inside each segment. Neither changes the rune alphabet.\n\n| Convention | Rule | Consequence |\n| --- | --- | --- |\n| Split lines | Every non-rune ends the current segment. | A slash or newline ends a segment even without a word separator. |\n| Join lines | Remove slash, carriage return and newline before finding maximal rune segments. Every other non-rune still ends a segment. | Runes across a line boundary join unless another delimiter intervenes. |\n\nHyphens and periods remain boundaries under both conventions. Spaces and other non-rune characters also remain boundaries. No inference about the author&#x27;s intended word division is made.\n\nIn this invented example, letters stand for single rune symbols:\n\n```text\nInput: AB/C-D\n       EF.\n\nSplit lines: BA | C | D | FE  -&gt; BACDFE\nJoin lines:  CBA | FED       -&gt; CBAFED\n```\n\nThe slash and newline are archive boundaries. The vertical bars in the output explanation show the segments; they are not additional input characters. A hyphen before a line break would still prevent joining.\n\n## Difference from the row and column experiment\n\nThe [row and column baseline](#/experiments/lp2-row-column-routes) traverses rows or ordinal columns as whole groups. Here the groups are maximal rune segments under one of the two boundary rules. This is a separate experiment in the same reading-route family.\n\nMore than one scope field changes: the grouping representation, traversal procedure, number of configurations and exclusions. The comparison is not an attempt to isolate one numerical parameter. The family comparison lists these differences explicitly.\n\nWhole-page reversal, reversing the order of words, alphabet substitution after reversal, and arbitrarily regrouping runes are not tested here.\n\n## Inspect a real source trace\n\n![The first six LP2-31 output positions where splitting and joining lines produce different source-position traces.](experiments/records/lp2-word-reversal/boundary-trace.svg)\n\nThe diagram reads positions from the saved result. Each number identifies a rune in the original page stream, counted from zero. The full report also retains zero-based Unicode character offsets into the exact UTF-8-decoded source file. Character offsets are not byte offsets: a rune occupies more than one UTF-8 byte.\n\nBoth permutations use every source rune exactly once. Consequently, they preserve rune counts, whole-stream IoC and single-rune entropy. Those measurements cannot choose between these two outputs; see [cipher invariants](#/wiki/cipher-invariants).\n\n## What the result establishes\n\n| Quantity | Recorded result |\n| --- | --- |\n| Declared pages | 56, including the zero-rune LP2-50 |\n| Nonempty pages | 55 |\n| Boundary conventions per nonempty page | 2 |\n| Candidate configurations | 110 |\n| Distinct full page outputs, counted within page | 110 |\n| Exact opening comparisons | 990 |\n| Matching cases | 0 |\n\nThe nine reference beginnings are Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. The plan stores the exact first twelve decoded rune indices and the hashes of their source traces.\n\nThis result excludes only those beginnings under the stated rules. A genuine reading beginning differently would fail this test. No general English score, later-position search or statistical significance calculation was used. The [candidate-reading guide](#/wiki/candidate-readings) explains why a failed opening test is not a general rejection of a cipher idea.\n\n## Controls and retest\n\nThe plan and runner were committed as `9b081f6` before the full page search. Neither the boundary conventions nor the acceptance rule changed after inspecting outputs.\n\nThe runner groups positions with a character-by-character scan. The checker independently locates segments with regular expressions after the declared normalization, then calculates reflected source positions for every segment. It compares every saved permutation, output and match decision, checks source hashes and opening vectors, and verifies the complete case set. The small example above also checks the production segmenter directly.\n\nA complete second execution reproduces the saved result. This is computational review by Codex; human review remains pending.\n\n## Reproduce and inspect\n\nFrom the repository root with Python 3:\n\n```sh\npython experiments/records/lp2-word-reversal/run.py --check\npython experiments/records/lp2-word-reversal/check.py\n```\n\nSave a fresh full result without overwriting the reviewed file:\n\n```sh\npython experiments/records/lp2-word-reversal/run.py --output word-reversal-rerun.json\n```\n\nThe destination must not already exist. All commands use the standard library and local files. Each page has a `cases` array containing the boundary convention, segment lengths, source ordinals, character offsets, complete output indices and any matching opening IDs.\n\nTo regenerate the diagram:\n\n```sh\npython experiments/records/lp2-word-reversal/plot.py\n```\n\n## Useful follow-ups\n\nA proposal to reverse word order, omit headings or add a substitution is a new scope. Specify its boundaries and acceptance rule before inspecting results, and retain the full traces. A broader language-ranking test needs a declared corpus, scoring rule and evaluation procedure; it should not silently replace this record&#x27;s fixed-opening criterion.\n&quot;,
@@ -69894,6 +69943,488 @@
         &quot;nth prime&quot;,
         &quot;prime ordinal&quot;,
         &quot;prime indexing&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="prepared-opening-evidence-gates"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;prepared-opening-evidence-gates&quot;,
+  &quot;title&quot;: &quot;Four Warning-opening tests already settled by saved evidence&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do saved prefixes already exclude four prepared 24-rune Warning-opening proposals under their exact reversal or cumulative-reset rules?&quot;,
+  &quot;tags&quot;: [
+    &quot;Warning opening&quot;,
+    &quot;saved prefixes&quot;,
+    &quot;bounded exclusion&quot;,
+    &quot;Atbash&quot;,
+    &quot;word reversal&quot;,
+    &quot;line reversal&quot;,
+    &quot;cumulative autokey&quot;,
+    &quot;reset boundaries&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;representation&quot;: &quot;Canonical GP29 indices from pinned raw LP2-00–49 and LP2-51–55 text, headings retained; 55 nonempty rune pages. LP2-50 is outside the opening denominator because it has no runes.&quot;,
+    &quot;procedure&quot;: &quot;Reuse saved row-reversal and word-reversal prefix arrays, applying the inverse-Atbash condition to the fixed Warning vector. For cumulative resets, reuse saved first-difference census prefix bounds only before the first differing reset. Verify every witness against source positions and pinned recipe identities. No complete new target decode.&quot;,
+    &quot;parameters&quot;: &quot;Four fixed prepared recipes; one fixed 24-rune page-start Warning vector; canonical alphabet indices 0–28; Atbash a=28,b=28; cumulative initial sum zero; every-non-rune word resets or CR/LF line resets. All four recipes excluded on each of 55 nonempty pages.&quot;,
+    &quot;exclusions&quot;: &quot;Other plaintexts/openings, later start positions, general readability, corrected text, heading removal, extra keys, other reset or reversal conventions, null distributions and a full LP2 decryption claim.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;classification&quot;: {
+    &quot;kind&quot;: &quot;audit&quot;,
+    &quot;methods&quot;: [
+      &quot;feedback&quot;,
+      &quot;transposition&quot;,
+      &quot;invariants&quot;
+    ],
+    &quot;map_parent&quot;: &quot;method:cipher-models&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/prepared-opening-evidence-gates/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library. Independent check: python experiments/records/prepared-opening-evidence-gates/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/prepared-opening-evidence-gates/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;9cac549e1800d25c9ac9075464df5abf83b407d938facdd7290e90dd6dfccc26&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/warning.csv&quot;,
+        &quot;sha256&quot;: &quot;ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/cumulative-autokey-literal/results.json&quot;,
+        &quot;sha256&quot;: &quot;2419f760faa7cf58695c917cefa142cdc05e5717c93aee4fe63ff06d9e377767&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/suites/feedback-opening-census/manifest.json&quot;,
+        &quot;sha256&quot;: &quot;fcfeaf271d76c37f2c5eca5a74d8949496e7638387fb80d69c50c6931e6db225&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/suites/feedback-opening-census/cases.json&quot;,
+        &quot;sha256&quot;: &quot;1d2093c638ae46c0a9af2ea7c6369e3dbcceb974ccd42c6c92bcbb354c0e2b42&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/suites/feedback-opening-census/results.json&quot;,
+        &quot;sha256&quot;: &quot;6a7c5bd0adfd94af6c75a5455b50da76de0f676c0e9ed9292e32171020be3022&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-column-routes/results.json&quot;,
+        &quot;sha256&quot;: &quot;819dfe8eac592d9f10bede0675aae11020a14a3f962cdeb74e90ce13a0ce8d50&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-column-routes/plan.json&quot;,
+        &quot;sha256&quot;: &quot;6aa1c4b82e176e47a94dd0fd344166a664001336bb2765a879eff9397d69ae3b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-word-reversal/results.json&quot;,
+        &quot;sha256&quot;: &quot;6889f6f4c691bf2a3968f1a65ac14eb9691b9b8c5bc551e786579e0d96784556&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-word-reversal/plan.json&quot;,
+        &quot;sha256&quot;: &quot;95a91100b6b3d0d3ab10d823640fbb79d75d64b975390e6aa69881c4be1dc9ad&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/prepared-opening-evidence-gates/plan.json&quot;,
+        &quot;sha256&quot;: &quot;599a0d2d8f4f86d9df931a832c6de9b3471e3b9a869bfd69ad20a77589417cf3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/prepared-opening-evidence-gates/check.py&quot;,
+        &quot;sha256&quot;: &quot;1c8253bf799a45be6837b4b03c06162b2cd8ffc21c149741e14df0b68dd9431d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/prefix_evidence_gate.py&quot;,
+        &quot;sha256&quot;: &quot;4791ae5fb6d8328070c7359fde304fc0b816c0764a97cd8336f102f257eafa15&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/cumulative-autokey-literal/record.json&quot;,
+        &quot;sha256&quot;: &quot;d7125ef57d8bf906c3f2b95077fc558b465b80bad8ee367c8ecf670191b85048&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-column-routes/record.json&quot;,
+        &quot;sha256&quot;: &quot;27a2ca1079a2b44c1aa31845fea454f89952b7ac6367e132918022613253e5eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-word-reversal/record.json&quot;,
+        &quot;sha256&quot;: &quot;a87027a97fac6d585a67c95ec5dbf7d76ae7ffd1062aec6ccf4e07d21fc4f53f&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/prepared-opening-evidence-gates/results.json&quot;,
+        &quot;sha256&quot;: &quot;e665db6ae6edac4faac013d0582f2221b95daf53c8c7f05907787f801589b453&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent prefix and boundary checker&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-24&quot;,
+    &quot;kind&quot;: &quot;Saved-array, source-position and causal-prefix proof audit with known-answer and boundary counterexamples. No complete new target decoding.&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Saved feedback-opening census&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/experiments/suites/feedback-opening-census/results.json&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Saved line-route prefixes&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/experiments/records/lp2-row-column-routes/results.json&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Saved word-reversal prefixes&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/experiments/records/lp2-word-reversal/results.json&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Documented Warning reading trace&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/exports/readings/warning.csv&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;cumulative-autokey-literal&quot;,
+    &quot;feedback-opening-census&quot;,
+    &quot;lp2-row-column-routes&quot;,
+    &quot;lp2-word-reversal&quot;,
+    &quot;lp2-alphabet-warning-prefix&quot;,
+    &quot;known-key-reset-prefix-gate&quot;
+  ],
+  &quot;materials&quot;: {
+    &quot;summary&quot;: &quot;Four sets of 55 source-linked mismatch witnesses settle the exact prepared Warning-opening claims.&quot;,
+    &quot;reuse&quot;: &quot;Inspect the saved prefixes and the first position where a different reset could act before scheduling more computation.&quot;,
+    &quot;limits&quot;: &quot;Exact raw-input, page-start Warning hypotheses only; these witnesses do not exclude other plaintexts or full method families.&quot;,
+    &quot;evidence&quot;: [
+      &quot;experiments/records/prepared-opening-evidence-gates/results.json&quot;,
+      &quot;experiments/records/prepared-opening-evidence-gates/plan.json&quot;,
+      &quot;experiments/records/prepared-opening-evidence-gates/check.py&quot;
+    ]
+  },
+  &quot;reader_sections&quot;: [
+    &quot;What the earlier results already settle&quot;
+  ],
+  &quot;finding&quot;: &quot;Saved evidence rules out all four fixed Warning-opening proposals on all 55 rune pages. The mismatch appears at rune one, two or three, before any changed reset could repair it. No complete new manuscript decode is needed.&quot;,
+  &quot;summary&quot;: &quot;Saved evidence rules out all four fixed Warning-opening proposals on all 55 rune pages. The mismatch appears at rune one, two or three, before any changed reset could repair it. No complete new manuscript decode is needed.&quot;,
+  &quot;reader_finding&quot;: &quot;Saved evidence rules out all four fixed Warning-opening proposals on all 55 rune pages. The mismatch appears at rune one, two or three, before any changed reset could repair it. No complete new manuscript decode is needed.&quot;,
+  &quot;limitations&quot;: &quot;This excludes one specified page-start opening under four exact rules, not the cipher families or other plaintexts. It is a retrospective evidence audit, not an independent statistical discovery. LP2-50 has no runes and is excluded from the denominator.&quot;,
+  &quot;reader_limit&quot;: &quot;This excludes one specified page-start opening under four exact rules, not the cipher families or other plaintexts. It is a retrospective evidence audit, not an independent statistical discovery. LP2-50 has no runes and is excluded from the denominator.&quot;,
+  &quot;next_steps&quot;: &quot;Treat these exact prepared recipes as reproductions. A different opening, start position, boundary rule or decoding layer needs its own explicit definition and evidence; repeating a longer version cannot repair an earlier mismatch.&quot;,
+  &quot;article&quot;: &quot;## What the earlier results already settle\n\nThese four prepared tests ask whether a fixed rule produces the first **24 runes of the Warning reading** at the start of an LP2 page. Saved results already contain an incorrect rune before any new rule could repair it. None of these exact opening claims needs another full manuscript decode.\n\n| Rule | First wrong rune |\n| --- | --- |\n| Reverse each word, then Atbash | Rune 1 on every page |\n| Reverse each line, then Atbash | Rune 1; LP2-31 fails at rune 3 |\n| Cumulative rule with word resets | Rune 1; LP2-01 and 54 fail at rune 2 |\n| Cumulative rule with line resets | Rune 1; LP2-01 and 54 fail at rune 2 |\n\nThe table covers **55 rune-bearing pages**, LP2-00–49 and LP2-51–55. LP2-50 has no runes and is not a failed opening test. The four rows concern the same pages and related operations; they are not 220 independent scientific trials.\n\n## Why a short mismatch settles a longer opening\n\nAn exact opening must agree at every position. If rune one or three is already wrong, computing another 21 runes cannot turn that prefix into a match. This excludes the specified opening under the specified rule. It does not exclude other plaintexts, different rules or an entire cipher family.\n\n### Reversal followed by Atbash\n\nThe earlier [line-route experiment](#/experiments/lp2-row-column-routes) and [word-reversal experiment](#/experiments/lp2-word-reversal) saved output indices and their source positions. This audit selects the exact route used by each prepared recipe. For words, it selects the rule in which every non-rune ends a segment; for lines, it selects original line order with the runes inside each line reversed.\n\nAtbash maps an index `x` to `28 − x` modulo 29. The Warning opening begins **24, 7, 24**. Its required input before Atbash therefore begins **4, 21, 4**. Compare this required input with the saved reversal prefixes. Every word-reversal prefix fails at its first rune. Every line-reversal prefix also fails at its first rune except LP2-31, whose saved prefix is **4, 21, 9**: its third rune is wrong. The audit checks the retained source positions against the pinned raw text; it does not decode complete Atbash target outputs.\n\n### Cumulative decoding with resets\n\nThe specified cumulative rule is `P[k] = C[k] − sum(P[0] … P[k−1])` modulo 29, with initial sum zero and the declared reset policy. Within an uninterrupted segment this is equivalent to first differencing: the first output is the first ciphertext rune; later outputs are `C[k] − C[k−1]` modulo 29.\n\nThe [feedback-opening census](#/experiments/feedback-opening-census) already saved the exact Warning-prefix agreement bounds for that first-difference rule. Its word-reset baseline restarts at **hyphens and periods**; the prepared word recipe restarts at **every non-rune**. The saved continuous baseline ignores separators; the prepared line recipe restarts at **CR or LF**. These are different policies, so the audit locates the first position at which each new policy could change a saved output.\n\nOn 53 pages the first rune is already wrong; a later reset cannot affect it. LP2-01 and LP2-54 start with Warning&#x27;s first rune, but the saved census proves that the second rune disagrees. Those disagreements occur strictly before the first differing reset under both prepared policies. Consequently the saved mismatch remains valid on all 55 pages. A mismatch **at** or **after** the changed reset would not justify this conclusion; the synthetic counterexamples check that distinction.\n\n## What this leaves open\n\nThese are four narrow exclusions of one fixed **24-rune, page-start Warning opening**, using raw text, retained headings and the canonical 29-rune alphabet. The audit does not evaluate general readability, other openings, later start positions, corrected transcriptions, extra keys or other reset conventions. It does not show that any broader method is impossible. Re-running the prepared recipes can reproduce these exclusions, but does not constitute a new scope.\n\n## Evidence and independent checks\n\nThe frozen plan pins source text, alphabet, Warning reading trace, saved reports and exact prepared recipe identities. Each page has a retained mismatch witness with source offsets. No complete new target output is decoded. The producer checks known-answer inverse-Atbash cases and reset-boundary counterexamples before inspecting the saved manuscript evidence. A separate checker uses independent equations and source-position checks rather than importing the producer&#x27;s proof helper.\n\nThe [machine-readable report](experiments/records/prepared-opening-evidence-gates/results.json) keeps all four sets of 55 page witnesses. The [plan](experiments/records/prepared-opening-evidence-gates/plan.json) states the exact inputs and exclusions. This is a retrospective audit of saved evidence, not a prospective chance test or a newly discovered decoding.\n\n## Reproduce\n\nFrom the repository or extracted bundle root, run:\n\n```text\npython experiments/records/prepared-opening-evidence-gates/run.py --check\npython experiments/records/prepared-opening-evidence-gates/check.py\n```\n\nBoth use Python&#x27;s standard library and pinned local files. The first rebuilds the evidence report; the second independently verifies the source links, mismatch witnesses and strict reset conditions.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/prepared-opening-evidence-gates/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;9cac549e1800d25c9ac9075464df5abf83b407d938facdd7290e90dd6dfccc26&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;feedback&quot;,
+      &quot;title&quot;: &quot;Autokey and ciphertext feedback&quot;,
+      &quot;aliases&quot;: [
+        &quot;autokey&quot;,
+        &quot;feedback&quot;,
+        &quot;ciphertext feedback&quot;,
+        &quot;plaintext autokey&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;transposition&quot;,
+      &quot;title&quot;: &quot;Transposition and permutations&quot;,
+      &quot;aliases&quot;: [
+        &quot;reverse&quot;,
+        &quot;columns&quot;,
+        &quot;permutation&quot;,
+        &quot;read backwards&quot;,
+        &quot;transposition&quot;,
+        &quot;anagram&quot;,
+        &quot;anagrams&quot;,
+        &quot;rearrange letters&quot;,
+        &quot;rearrange runes&quot;,
+        &quot;column permutation&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;invariants&quot;,
+      &quot;title&quot;: &quot;Invariants and bounded exclusions&quot;,
+      &quot;aliases&quot;: [
+        &quot;proof&quot;,
+        &quot;exclusion&quot;,
+        &quot;invariant&quot;
       ]
     }
   ]

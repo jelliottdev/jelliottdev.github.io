@@ -77,7 +77,7 @@ data.records[selectedId]={...originalRecord};delete data.records[selectedId].bro
 // The new availability filter intersects the shared selector on both views.
 const allBefore=JSON.stringify(data.records),F=require('../record-followup-view.js');
 Object.assign(requested,{branch:'',record:'',q:'',type:'',method:'',family:'',result:'',page:'',mode:'graph',followups:'1'});c.render();
-const eligible=Index.select(Object.values(data.records),{sort:requested.sort}).allRecords.filter(r=>!r.community&&F.recipes(data.records[r.id]).length).map(r=>r.id).sort();
+const eligible=Index.select(Object.values(data.records),{sort:requested.sort}).allRecords.filter(r=>!r.community&&F.available(data.records[r.id]).length).map(r=>r.id).sort();
 assert(eligible.length>0);assert.deepEqual([...c.matching].sort(),eligible);assert.equal(vm.runInContext('count(focus)',c),eligible.length);
 assert.equal(c.passesRecordFilters({...data.records[eligible[0]],community:true}),false,'A community entry cannot borrow canonical follow-up availability');
 const unsafeId='invalid-followup-filter-fixture';data.records[unsafeId]={id:unsafeId,pages:['lp2-00'],browser_followups:[{id:'../unsafe',title:'Invalid',scope_change:'Not a usable recipe'}]};assert.equal(c.passesRecordFilters(data.records[unsafeId]),false,'Invalid declarations do not produce a runnable branch');delete data.records[unsafeId];

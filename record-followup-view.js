@@ -16,17 +16,20 @@
    seen.add(item.id);return true;
   });
  }
+ const model=typeof module==='object'&&module.exports?require('./record-question-model.js'):root.RecordQuestionModel;
+ function completed(record){const items=recipes(record);return new Set((model?.questions(record,items)||[]).filter(q=>q.state==='tested'&&Object.hasOwn(q,'followup')).map(q=>q.followup));}
+ function available(record){const items=recipes(record);if(Object.hasOwn(record||{},'research_questions')&&!(model?.questions(record,items)||[]).length)return [];const done=completed(record);return items.filter(item=>!done.has(item.id));}
  const href=(record,item)=>'run.html#record='+record.id+'&followup='+item.id;
  function render(record,{headingLevel=3,selectId='prepared-followup-setting'}={}){
-  const items=recipes(record);if(!items.length)return '';
+  const items=recipes(record);if(!items.length)return '';const done=completed(record),allDone=items.every(item=>done.has(item.id));
   const level=[2,3,4].includes(headingLevel)?headingLevel:3,id=/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(selectId)?selectId:'prepared-followup-setting',first=items[0];
-  return '<section class="record-followups"><h'+level+'>Try a follow-up</h'+level+'>'+(items.length>1?'<label for="'+id+'">Setting</label><select id="'+id+'" data-prepared-setting>'+items.map(item=>'<option value="'+item.id+'">'+esc(item.title)+'</option>').join('')+'</select>':'<p class="followup-title"><strong>'+esc(first.title)+'</strong></p>')+'<p data-prepared-scope>'+esc(first.scope_change)+'</p><a data-prepared-link href="'+esc(href(record,first))+'">Review follow-up</a></section>';
+  return '<section class="record-followups"><h'+level+'>'+(allDone?'Reproduce a comparison':'Try a follow-up')+'</h'+level+'>'+(items.length>1?'<label for="'+id+'">Setting</label><select id="'+id+'" data-prepared-setting>'+items.map(item=>'<option value="'+item.id+'">'+esc(item.title)+'</option>').join('')+'</select>':'<p class="followup-title"><strong>'+esc(first.title)+'</strong></p>')+'<p data-prepared-scope>'+esc(first.scope_change)+'</p><a data-prepared-link href="'+esc(href(record,first))+'">'+(done.has(first.id)?'Review reproduction':'Review follow-up')+'</a></section>';
  }
  function bind(container,record){
   const select=container?.querySelector('[data-prepared-setting]');if(!select)return;
   const items=recipes(record),scope=container.querySelector('[data-prepared-scope]'),link=container.querySelector('[data-prepared-link]');if(!scope||!link||items.length<2)return;
   let selected=items[0].id;
-  select.onchange=()=>{const item=items.find(item=>item.id===select.value);if(!item){select.value=selected;return;}selected=item.id;scope.textContent=item.scope_change;link.href=href(record,item);};
+  select.onchange=()=>{const item=items.find(item=>item.id===select.value);if(!item){select.value=selected;return;}selected=item.id;scope.textContent=item.scope_change;link.href=href(record,item);link.textContent=completed(record).has(item.id)?'Review reproduction':'Review follow-up';};
  }
- const api={recipes,render,bind};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordFollowupView=api;
+ const api={recipes,available,render,bind};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordFollowupView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

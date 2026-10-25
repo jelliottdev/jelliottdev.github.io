@@ -1,0 +1,441 @@
+{
+  "schema": "liberpedia-experiment-v2",
+  "id": "prepared-opening-evidence-gates",
+  "title": "Four Warning-opening tests already settled by saved evidence",
+  "status": "published",
+  "question": "Do saved prefixes already exclude four prepared 24-rune Warning-opening proposals under their exact reversal or cumulative-reset rules?",
+  "tags": [
+    "Warning opening",
+    "saved prefixes",
+    "bounded exclusion",
+    "Atbash",
+    "word reversal",
+    "line reversal",
+    "cumulative autokey",
+    "reset boundaries"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "Canonical GP29 indices from pinned raw LP2-00–49 and LP2-51–55 text, headings retained; 55 nonempty rune pages. LP2-50 is outside the opening denominator because it has no runes.",
+    "procedure": "Reuse saved row-reversal and word-reversal prefix arrays, applying the inverse-Atbash condition to the fixed Warning vector. For cumulative resets, reuse saved first-difference census prefix bounds only before the first differing reset. Verify every witness against source positions and pinned recipe identities. No complete new target decode.",
+    "parameters": "Four fixed prepared recipes; one fixed 24-rune page-start Warning vector; canonical alphabet indices 0–28; Atbash a=28,b=28; cumulative initial sum zero; every-non-rune word resets or CR/LF line resets. All four recipes excluded on each of 55 nonempty pages.",
+    "exclusions": "Other plaintexts/openings, later start positions, general readability, corrected text, heading removal, extra keys, other reset or reversal conventions, null distributions and a full LP2 decryption claim."
+  },
+  "outcome": "supported",
+  "result": {
+    "finding": "Saved evidence rules out all four fixed Warning-opening proposals on all 55 rune pages. The mismatch appears at rune one, two or three, before any changed reset could repair it. No complete new manuscript decode is needed.",
+    "limits": "This excludes one specified page-start opening under four exact rules, not the cipher families or other plaintexts. It is a retrospective evidence audit, not an independent statistical discovery. LP2-50 has no runes and is excluded from the denominator.",
+    "next_steps": "Treat these exact prepared recipes as reproductions. A different opening, start position, boundary rule or decoding layer needs its own explicit definition and evidence; repeating a longer version cannot repair an earlier mismatch."
+  },
+  "analysis": "## What the earlier results already settle\n\nThese four prepared tests ask whether a fixed rule produces the first **24 runes of the Warning reading** at the start of an LP2 page. Saved results already contain an incorrect rune before any new rule could repair it. None of these exact opening claims needs another full manuscript decode.\n\n| Rule | First wrong rune |\n| --- | --- |\n| Reverse each word, then Atbash | Rune 1 on every page |\n| Reverse each line, then Atbash | Rune 1; LP2-31 fails at rune 3 |\n| Cumulative rule with word resets | Rune 1; LP2-01 and 54 fail at rune 2 |\n| Cumulative rule with line resets | Rune 1; LP2-01 and 54 fail at rune 2 |\n\nThe table covers **55 rune-bearing pages**, LP2-00–49 and LP2-51–55. LP2-50 has no runes and is not a failed opening test. The four rows concern the same pages and related operations; they are not 220 independent scientific trials.\n\n## Why a short mismatch settles a longer opening\n\nAn exact opening must agree at every position. If rune one or three is already wrong, computing another 21 runes cannot turn that prefix into a match. This excludes the specified opening under the specified rule. It does not exclude other plaintexts, different rules or an entire cipher family.\n\n### Reversal followed by Atbash\n\nThe earlier [line-route experiment](#/experiments/lp2-row-column-routes) and [word-reversal experiment](#/experiments/lp2-word-reversal) saved output indices and their source positions. This audit selects the exact route used by each prepared recipe. For words, it selects the rule in which every non-rune ends a segment; for lines, it selects original line order with the runes inside each line reversed.\n\nAtbash maps an index `x` to `28 − x` modulo 29. The Warning opening begins **24, 7, 24**. Its required input before Atbash therefore begins **4, 21, 4**. Compare this required input with the saved reversal prefixes. Every word-reversal prefix fails at its first rune. Every line-reversal prefix also fails at its first rune except LP2-31, whose saved prefix is **4, 21, 9**: its third rune is wrong. The audit checks the retained source positions against the pinned raw text; it does not decode complete Atbash target outputs.\n\n### Cumulative decoding with resets\n\nThe specified cumulative rule is `P[k] = C[k] − sum(P[0] … P[k−1])` modulo 29, with initial sum zero and the declared reset policy. Within an uninterrupted segment this is equivalent to first differencing: the first output is the first ciphertext rune; later outputs are `C[k] − C[k−1]` modulo 29.\n\nThe [feedback-opening census](#/experiments/feedback-opening-census) already saved the exact Warning-prefix agreement bounds for that first-difference rule. Its word-reset baseline restarts at **hyphens and periods**; the prepared word recipe restarts at **every non-rune**. The saved continuous baseline ignores separators; the prepared line recipe restarts at **CR or LF**. These are different policies, so the audit locates the first position at which each new policy could change a saved output.\n\nOn 53 pages the first rune is already wrong; a later reset cannot affect it. LP2-01 and LP2-54 start with Warning's first rune, but the saved census proves that the second rune disagrees. Those disagreements occur strictly before the first differing reset under both prepared policies. Consequently the saved mismatch remains valid on all 55 pages. A mismatch **at** or **after** the changed reset would not justify this conclusion; the synthetic counterexamples check that distinction.\n\n## What this leaves open\n\nThese are four narrow exclusions of one fixed **24-rune, page-start Warning opening**, using raw text, retained headings and the canonical 29-rune alphabet. The audit does not evaluate general readability, other openings, later start positions, corrected transcriptions, extra keys or other reset conventions. It does not show that any broader method is impossible. Re-running the prepared recipes can reproduce these exclusions, but does not constitute a new scope.\n\n## Evidence and independent checks\n\nThe frozen plan pins source text, alphabet, Warning reading trace, saved reports and exact prepared recipe identities. Each page has a retained mismatch witness with source offsets. No complete new target output is decoded. The producer checks known-answer inverse-Atbash cases and reset-boundary counterexamples before inspecting the saved manuscript evidence. A separate checker uses independent equations and source-position checks rather than importing the producer's proof helper.\n\nThe [machine-readable report](experiments/records/prepared-opening-evidence-gates/results.json) keeps all four sets of 55 page witnesses. The [plan](experiments/records/prepared-opening-evidence-gates/plan.json) states the exact inputs and exclusions. This is a retrospective audit of saved evidence, not a prospective chance test or a newly discovered decoding.\n\n## Reproduce\n\nFrom the repository or extracted bundle root, run:\n\n```text\npython experiments/records/prepared-opening-evidence-gates/run.py --check\npython experiments/records/prepared-opening-evidence-gates/check.py\n```\n\nBoth use Python's standard library and pinned local files. The first rebuilds the evidence report; the second independently verifies the source links, mismatch witnesses and strict reset conditions.\n",
+  "classification": {
+    "kind": "audit",
+    "methods": [
+      "feedback",
+      "transposition",
+      "invariants"
+    ],
+    "map_parent": "method:cipher-models"
+  },
+  "reproduction": {
+    "command": "python experiments/records/prepared-opening-evidence-gates/run.py --check",
+    "environment": "Python 3.12 standard library. Independent check: python experiments/records/prepared-opening-evidence-gates/check.py",
+    "script": "experiments/records/prepared-opening-evidence-gates/run.py",
+    "script_sha256": "9cac549e1800d25c9ac9075464df5abf83b407d938facdd7290e90dd6dfccc26",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "experiments/records/cumulative-autokey-literal/results.json",
+        "sha256": "2419f760faa7cf58695c917cefa142cdc05e5717c93aee4fe63ff06d9e377767"
+      },
+      {
+        "path": "experiments/suites/feedback-opening-census/manifest.json",
+        "sha256": "fcfeaf271d76c37f2c5eca5a74d8949496e7638387fb80d69c50c6931e6db225"
+      },
+      {
+        "path": "experiments/suites/feedback-opening-census/cases.json",
+        "sha256": "1d2093c638ae46c0a9af2ea7c6369e3dbcceb974ccd42c6c92bcbb354c0e2b42"
+      },
+      {
+        "path": "experiments/suites/feedback-opening-census/results.json",
+        "sha256": "6a7c5bd0adfd94af6c75a5455b50da76de0f676c0e9ed9292e32171020be3022"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/results.json",
+        "sha256": "819dfe8eac592d9f10bede0675aae11020a14a3f962cdeb74e90ce13a0ce8d50"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/plan.json",
+        "sha256": "6aa1c4b82e176e47a94dd0fd344166a664001336bb2765a879eff9397d69ae3b"
+      },
+      {
+        "path": "experiments/records/lp2-word-reversal/results.json",
+        "sha256": "6889f6f4c691bf2a3968f1a65ac14eb9691b9b8c5bc551e786579e0d96784556"
+      },
+      {
+        "path": "experiments/records/lp2-word-reversal/plan.json",
+        "sha256": "95a91100b6b3d0d3ab10d823640fbb79d75d64b975390e6aa69881c4be1dc9ad"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/prepared-opening-evidence-gates/plan.json",
+        "sha256": "599a0d2d8f4f86d9df931a832c6de9b3471e3b9a869bfd69ad20a77589417cf3"
+      },
+      {
+        "path": "experiments/records/prepared-opening-evidence-gates/check.py",
+        "sha256": "1c8253bf799a45be6837b4b03c06162b2cd8ffc21c149741e14df0b68dd9431d"
+      },
+      {
+        "path": "scripts/prefix_evidence_gate.py",
+        "sha256": "4791ae5fb6d8328070c7359fde304fc0b816c0764a97cd8336f102f257eafa15"
+      },
+      {
+        "path": "experiments/records/cumulative-autokey-literal/record.json",
+        "sha256": "d7125ef57d8bf906c3f2b95077fc558b465b80bad8ee367c8ecf670191b85048"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/record.json",
+        "sha256": "27a2ca1079a2b44c1aa31845fea454f89952b7ac6367e132918022613253e5eb"
+      },
+      {
+        "path": "experiments/records/lp2-word-reversal/record.json",
+        "sha256": "a87027a97fac6d585a67c95ec5dbf7d76ae7ffd1062aec6ccf4e07d21fc4f53f"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/prepared-opening-evidence-gates/results.json",
+        "sha256": "e665db6ae6edac4faac013d0582f2221b95daf53c8c7f05907787f801589b453"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Independent prefix and boundary checker",
+    "retested_on": "2026-10-24",
+    "kind": "Saved-array, source-position and causal-prefix proof audit with known-answer and boundary counterexamples. No complete new target decoding.",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Saved feedback-opening census",
+      "url": "https://jelliottdev.github.io/experiments/suites/feedback-opening-census/results.json"
+    },
+    {
+      "label": "Saved line-route prefixes",
+      "url": "https://jelliottdev.github.io/experiments/records/lp2-row-column-routes/results.json"
+    },
+    {
+      "label": "Saved word-reversal prefixes",
+      "url": "https://jelliottdev.github.io/experiments/records/lp2-word-reversal/results.json"
+    },
+    {
+      "label": "Documented Warning reading trace",
+      "url": "https://jelliottdev.github.io/exports/readings/warning.csv"
+    }
+  ],
+  "related": [
+    "cumulative-autokey-literal",
+    "feedback-opening-census",
+    "lp2-row-column-routes",
+    "lp2-word-reversal",
+    "lp2-alphabet-warning-prefix",
+    "known-key-reset-prefix-gate"
+  ],
+  "materials": {
+    "summary": "Four sets of 55 source-linked mismatch witnesses settle the exact prepared Warning-opening claims.",
+    "reuse": "Inspect the saved prefixes and the first position where a different reset could act before scheduling more computation.",
+    "limits": "Exact raw-input, page-start Warning hypotheses only; these witnesses do not exclude other plaintexts or full method families.",
+    "evidence": [
+      "experiments/records/prepared-opening-evidence-gates/results.json",
+      "experiments/records/prepared-opening-evidence-gates/plan.json",
+      "experiments/records/prepared-opening-evidence-gates/check.py"
+    ]
+  },
+  "presentation": {
+    "finding_sections": [
+      "What the earlier results already settle"
+    ]
+  }
+}

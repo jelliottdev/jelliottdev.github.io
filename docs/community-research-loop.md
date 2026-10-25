@@ -316,3 +316,12 @@ question. `tested` is not proof or universal coverage, and `open` is not a claim
 that a browser plan exists. Runnable follow-ups remain separate validated
 declarations. When evidence changes, update the originating question and its
 links deliberately, preserving the historical experiment and its exact bounds.
+
+An optional `followup` names one existing browser recipe owned by the same record.
+An open question links to plan review; a tested question links to reproduction
+and must also cite the completed evidence in `records`. A recipe may appear in
+only one question, so conflicting open/tested states are rejected. These links
+do not change the pinned recipe or task identity. `record-question-model.js`
+provides the common question state used by the record view, recipe actions and
+available-work filter. Tested reproductions remain directly accessible but are
+not counted as new prepared follow-up work.

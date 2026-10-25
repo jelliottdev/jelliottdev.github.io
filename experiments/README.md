@@ -63,6 +63,8 @@ The new format uses `schema: "liberpedia-experiment-v2"`:
 - `scope`, `reproduction`, `review`, `visuals`, `sources`: exact bounds and evidence, as before.
 - `classification`: the existing record kind, method-family IDs and research-map parent branch. The build updates those indexes from this field; no separate assignment-file edit is needed. Unknown categories or branches are rejected.
 
+An optional `presentation: {"finding_sections": ["Exact analysis heading"]}` shows up to three authored H2 sections beside the finding. Use it for a short explanatory table or evidence example. The builder requires each heading to occur exactly once; the same content is removed from the remaining analysis so it is never written or displayed twice.
+
 Write the result once. The page, graph preview, search index, checker evidence and ZIP instructions use that same finding and limit. Technical detail belongs in `analysis`; short result fields are limited to 700 characters and are never silently truncated. Duplicate fields such as `reader_finding`, `summary` or a second top-level `finding` are rejected. CI requires the new format for added records and newly published drafts, and prevents downgrading a converted record. `article.md` is a generated compatibility file; do not edit it.
 
 1. Before running, record the hypothesis, exact inputs, bounds, success criterion, controls and stopping rule. Keep the record a draft.
@@ -226,3 +228,12 @@ For new-format records, do not separately edit `families[].related` or `record_k
 Before choosing a source test, compare the pinned ledger entry and decoding rule with both published records and unfinished record directories. Claim its exact source ID with the integrating agent; a shared source file is not sufficient to establish equivalence. Keep work in a separate directory and leave `status` as `draft` until the calculation, independent checker and interpretation are ready. The integrating agent publishes completed records together and owns shared indexes and builds. Before handoff, run `python scripts/preflight_experiments.py your-record-id` (or several IDs together). It uses the publication validators on drafts without changing status, generating site files or executing scripts. It checks declared bytes, plan/report provenance, related IDs and exact family differences; it does not certify the scientific result.
 
 Use LF newlines for newly generated text. Preserve archived source bytes with explicit Git attributes when their exact hashes matter. After staging a release, run `python scripts/check_staged_catalog.py --all` before committing. This reads all indexed blobs in one Git process and catches files whose working bytes match the catalog but whose published bytes were normalized. Run `git diff --cached --check` and review the staged file list; do not stage another agent's unfinished directory.
+
+An optional `followup` names one existing browser recipe owned by the same record.
+An open question links to plan review; a tested question links to reproduction
+and must also cite the completed evidence in `records`. A recipe may appear in
+only one question, so conflicting open/tested states are rejected. These links
+do not change the pinned recipe or task identity. `record-question-model.js`
+provides the common question state used by the record view, recipe actions and
+available-work filter. Tested reproductions remain directly accessible but are
+not counted as new prepared follow-up work.

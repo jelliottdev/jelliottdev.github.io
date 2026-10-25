@@ -95,3 +95,8 @@ test('visitor limits strip only the trailing editorial review suffix',()=>{
  for(const caveat of ['Not independently checked.','The reading remains uncertain.','Human review pending. This is an authored quotation.','No complete recovery; review still needed.'])assert.equal(L.readerLimit(caveat),caveat);
  assert.equal(L.readerLimit('Human review pending.'),'');
 });
+
+test('small evidence tables wrap while wide data tables retain scroll navigation',()=>{
+ const compact=L.renderMarkdown('| Rule | First wrong rune |\n| --- | --- |\n| Word reversal | Rune 1 |');assert(compact.includes('experiment-compact-table'));assert(!compact.includes('Scroll table sideways'));
+ const wide=L.renderMarkdown('| A | B | C |\n| --- | --- | --- |\n| 1 | 2 | 3 |');assert(wide.includes('Scroll table sideways'));assert(wide.includes('tabindex="0"'));
+});

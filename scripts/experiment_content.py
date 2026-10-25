@@ -44,6 +44,18 @@ def compile_content(raw):
         if len(value) > 700 or '\n' in value or '\r' in value:
             raise ValueError('V2 result.' + name + ' must be one paragraph of at most 700 characters; put technical detail in analysis')
     account = article_bytes(raw).decode('utf-8')
+    if 'presentation' in record:
+        presentation = record.pop('presentation')
+        if not isinstance(presentation, dict) or set(presentation) != {'finding_sections'}:
+            raise ValueError('V2 presentation supports finding_sections only')
+        sections = presentation['finding_sections']
+        if (not isinstance(sections, list) or len(sections) > 3
+                or any(not isinstance(title, str) or not title or title != title.strip()
+                       or len(title) > 120 or re.search(r'[\r\n<>]', title) for title in sections)
+                or len(set(sections)) != len(sections)):
+            raise ValueError('V2 finding_sections needs up to three distinct short heading titles')
+        # The registry validator checks that each names one unambiguous authored H2.
+        record['reader_sections'] = sections
     record.pop('schema')
     record.pop('result')
     record.pop('analysis')

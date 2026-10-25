@@ -31,6 +31,7 @@ def validate_research_questions(value, record):
     """Validate local shape and owned recipe names; never read or write files."""
     require(isinstance(value, list) and 1 <= len(value) <= 12, 'expected 1..12 questions')
     seen = set()
+    linked = set()
     recipes = {recipe['id'] for recipe in record.get('browser_followups', [])}
     for question in value:
         require(isinstance(question, dict), 'question must be an object')
@@ -50,9 +51,10 @@ def validate_research_questions(value, record):
         require(record['id'] not in references, identifier + ': self reference')
         require(state != 'tested' or references, identifier + ': tested question needs a record link')
         if 'followup' in question:
-            require(state == 'open' and slug(question['followup'], 100)
-                    and question['followup'] in recipes,
-                    identifier + ': followup must name an owned recipe on an open question')
+            require(slug(question['followup'], 100)
+                    and question['followup'] in recipes and question['followup'] not in linked,
+                    identifier + ': followup must name one unique owned recipe')
+            linked.add(question['followup'])
 
 
 def validate_research_question_refs(records, by_id):

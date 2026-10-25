@@ -15,7 +15,7 @@ test('only missing typed questions permit legacy fallback',()=>{
  assert.equal(V.render(null),'');assert.equal(V.render({},{}),'');
 });
 test('reject malformed questions rather than advertise partial or invented work',()=>{
- const invalid=[{...open,id:'../bad'},{...open,question:''},{...open,question:'x'.repeat(301)},{...open,note:'x'.repeat(701)},{...open,state:'proven'},{...open,records:['../bad']},{...open,records:[record.id]},{...open,records:['same','same']},{...open,followup:'not-declared'},{...open,extra:true},{...tested,records:[]},{...tested,followup:open.followup}];
+ const invalid=[{...open,id:'../bad'},{...open,question:''},{...open,question:'x'.repeat(301)},{...open,note:'x'.repeat(701)},{...open,state:'proven'},{...open,records:['../bad']},{...open,records:[record.id]},{...open,records:['same','same']},{...open,followup:'not-declared'},{...open,extra:true},{...tested,records:[]},{...tested,records:[],followup:open.followup}];
  for(const item of invalid)assert.equal(V.render({...record,research_questions:[item]}),'',JSON.stringify(item));
  assert.equal(V.render({...record,research_questions:[open,open]}),'');
  assert.equal(V.render({...record,id:'../unsafe',research_questions:[open]}),'');
@@ -35,6 +35,13 @@ test('plain-text contract matches builder limits, trimming and own fields',()=>{
  const inheritedAction={...open};delete inheritedAction.followup;Object.setPrototypeOf(inheritedAction,{followup:'unsafe'});assert(!V.render({...record,research_questions:[inheritedAction]}).includes('run.html'));assert(!V.coversFollowups({...record,research_questions:[inheritedAction]}));
  assert(V.render({...record,research_questions:[{...open,question:'😀'.repeat(150)}]}));assert.equal(V.render({...record,research_questions:[{...open,question:'😀'.repeat(151)}]}),'');
  assert(V.coversFollowups({...record,research_questions:[open]}));assert(!V.coversFollowups({...record,research_questions:[tested]}));assert(!V.coversFollowups(record));
+});
+
+test('completed owned recipes remain reproducible without advertising open work',()=>{
+ const F=require('../record-followup-view.js'),r={...record,research_questions:[{...tested,followup:open.followup}]};
+ const html=V.render(r);assert(html.includes('Review reproduction'));assert(!html.includes('Review follow-up'));assert(html.indexOf('Read completed test')<html.indexOf('Review reproduction'));assert(V.coversFollowups(r));
+ assert.equal(F.available(r).length,0);assert.equal(F.recipes(r).length,record.browser_followups.length);assert(F.render(r).includes('Reproduce a comparison'));
+ const conflict={...r,research_questions:[...r.research_questions,{...open,id:'conflicting-state'}]};assert.equal(V.render(conflict),'');assert.equal(F.available(conflict).length,0);
 });
 
 test('generated completed-test links select actual production experiment routes',()=>{

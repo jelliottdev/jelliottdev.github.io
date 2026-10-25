@@ -29,6 +29,7 @@ class QuestionShapeTests(unittest.TestCase):
         self.check([question(followup='section-shuffle')],
                    browser_followups=[{'id': 'section-shuffle'}])
         self.check([question(state='tested', records=['other-record'])])
+        self.check([question(state='tested', records=['other-record'], followup='section-shuffle')], browser_followups=[{'id': 'section-shuffle'}])
         self.check([question(id='q' + 'a' * 99, question='x' * 300, note='y' * 700,
                              records=['record-' + str(n) for n in range(12)])])
         self.check([question(id='question-' + str(n)) for n in range(12)])
@@ -43,7 +44,8 @@ class QuestionShapeTests(unittest.TestCase):
                  [question(records=['r' * 101])],
                  [question(records=['record-' + str(n) for n in range(13)])],
                  [question(followup='missing')], [question(followup=None)],
-                 [question(state='tested', records=['other-record'], followup='section-shuffle')]]
+                 [question(state='tested', records=[], followup='section-shuffle')]]
+        cases.append([question(followup='section-shuffle'), question(id='other-question', state='tested', records=['other-record'], followup='section-shuffle')])
         missing = question(); del missing['note']; cases.append([missing])
         for value in cases:
             with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'research_questions'):

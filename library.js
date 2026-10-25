@@ -54,7 +54,8 @@ function renderExperimentMarkdown(markdown,files=[],articleLinks={},shownVisuals
         rows.push('<tr>'+headers.map((_,column)=>'<td>'+inline(values[column]||'')+'</td>').join('')+'</tr>');
       }
       if(!valid){html.push('<p class="small muted">Table shown as text because its column counts differ.</p>'+codeBlock(raw));continue;}
-      html.push('<p class="table-scroll-hint">Scroll table sideways for all columns →</p><div class="table-wrap" role="region" aria-label="Scrollable experiment data table" tabindex="0"><table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
+      const compact=headers.length<=2;
+      html.push((compact?'<div class="table-wrap experiment-compact-table">':'<p class="table-scroll-hint">Scroll table sideways for all columns →</p><div class="table-wrap" role="region" aria-label="Scrollable experiment data table" tabindex="0">')+'<table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
       continue;
     }
     const item=line.match(/^(?:([-*])|\d+\.) (.+)$/);
@@ -142,7 +143,7 @@ if(typeof window!=='undefined')window.LibraryView=LibraryView;
   const doc=new DOMParser().parseFromString(html,'text/html');doc.querySelectorAll('script,iframe,object,embed,base').forEach(el=>el.remove());doc.querySelectorAll('*').forEach(el=>{for(const a of [...el.attributes])if(/^on/i.test(a.name)||a.name==='srcdoc'||['href','src','xlink:href'].includes(a.name)&&/^\s*(?:javascript|vbscript):/i.test(a.value))el.removeAttribute(a.name)});
   doc.querySelectorAll('a[href]').forEach(anchor=>anchor.setAttribute('href',rewriteHref(anchor.getAttribute('href'),guideId)));
   doc.querySelectorAll('img[src]').forEach(img=>img.setAttribute('src',rewriteHref(img.getAttribute('src'))));
-  doc.querySelectorAll('table').forEach(table=>{if(!table.parentElement.classList.contains('table-wrap')){const wrap=doc.createElement('div');wrap.className='table-wrap';table.before(wrap);wrap.append(table)}table.parentElement.tabIndex=0;table.parentElement.setAttribute('role','region');table.parentElement.setAttribute('aria-label',table.caption?.textContent||'Scrollable data table')});
+  doc.querySelectorAll('table').forEach(table=>{if(!table.parentElement.classList.contains('table-wrap')){const wrap=doc.createElement('div');wrap.className='table-wrap';table.before(wrap);wrap.append(table)}if(!table.parentElement.classList.contains('experiment-compact-table')){table.parentElement.tabIndex=0;table.parentElement.setAttribute('role','region');table.parentElement.setAttribute('aria-label',table.caption?.textContent||'Scrollable data table')}});
   return doc.body.innerHTML;
  }
  function headerActive(kind){document.querySelectorAll('[data-nav]').forEach(anchor=>{if(anchor.dataset.nav===kind)anchor.setAttribute('aria-current','page');else anchor.removeAttribute('aria-current')})}

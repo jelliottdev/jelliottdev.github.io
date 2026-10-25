@@ -80,7 +80,7 @@
   "outcome": "not-supported",
   "finding": "All 110 cases completed with zero exact opening matches in 990 comparisons. Independent regex/reflection checks and a full rerun agree on every output.",
   "limitations": "Transcription-defined segments are not established plaintext words. Only nine fixed beginnings are tested; other beginnings and combined ciphers remain untested. Human review pending.",
-  "next_steps": "Declare word-order reversal, heading removal or additional substitutions separately. Broader language criteria require a specified scoring and evaluation procedure.",
+  "next_steps": "The fixed word-reversal plus Atbash Warning opening is excluded by saved first-rune mismatches; see prepared-opening-evidence-gates. Word-order reversal, heading removal, different boundaries or additional substitutions require separate definitions; broader readability requires an explicit evaluation procedure.",
   "family": {
     "id": "archived-layout-reading-routes",
     "title": "Reading routes through archived rune layouts",
@@ -428,7 +428,8 @@
   ],
   "related": [
     "lp2-row-column-routes",
-    "lp2-alphabet-warning-prefix"
+    "lp2-alphabet-warning-prefix",
+    "prepared-opening-evidence-gates"
   ],
   "visuals": [
     {
@@ -1042,6 +1043,18 @@
         },
         "expected_result_sha256": "d30e47366ca5941c8420343e8d718a475928538c0e94c7ce7435a3665ac435c0"
       }
+    }
+  ],
+  "research_questions": [
+    {
+      "id": "warning-word-reversal-atbash",
+      "question": "Does reversing runes inside each word and applying Atbash recover the Warning opening?",
+      "state": "tested",
+      "note": "No. Every one of the 55 rune pages disagrees at the first output rune in the saved prefixes. This rules out the fixed 24-rune opening with transcription-word boundaries, not all possible plaintexts or other boundary rules.",
+      "records": [
+        "prepared-opening-evidence-gates"
+      ],
+      "followup": "word-reversal-atbash-warning"
     }
   ]
 }

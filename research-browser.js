@@ -116,7 +116,7 @@
    '<section class="record-scope"><h3>Tested bounds</h3><p>'+esc(pageRanges(record.pages))+'</p>'+(parameters?'<p>'+esc(parameters)+'</p>':'')+'</section>'+
    (excluded||next?'<section class="record-open-questions"><h3>Further checks</h3>'+(excluded?'<p><strong>Not tested:</strong> '+esc(excluded)+'</p>':'')+(next?'<p><strong>Next check:</strong> '+esc(next)+'</p>':'')+'</section>':'');
  }
- function previewFollowupsHTML(record){return globalThis.RecordFollowupView?.render(record)||'';}
+ function previewFollowupsHTML(record){return globalThis.RecordQuestionView?.coversFollowups(record)?'':globalThis.RecordFollowupView?.render(record)||'';}
  function bindPreviewFollowups(record){globalThis.RecordFollowupView?.bind(panel,record);}
  function showInspector(){
   const record=data.records[state.record];panel.hidden=!record;updatePreviewMode();if(!record)return;

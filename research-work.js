@@ -25,7 +25,7 @@
    return {kind:'unfinished',count:work.pendingCount,label:work.pendingCount===1?'1 unfinished experiment':work.pendingCount+' unfinished experiments',
     href:first?'run.html#task='+first.id:'run.html#idea='+record.proposal_id};
   }
-  const recipes=Followups.recipes(record);if(!recipes.length)return null;
+  const recipes=Followups.available(record);if(!recipes.length)return null;
   return {kind:'prepared',count:recipes.length,label:recipes.length===1?'1 prepared follow-up':recipes.length+' prepared follow-ups',href:'run.html#record='+record.id+'&followup='+recipes[0].id};
  }
  function matches(record,filter){
