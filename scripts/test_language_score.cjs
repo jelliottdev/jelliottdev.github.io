@@ -1,0 +1,20 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),{createHash}=require('node:crypto'),{spawnSync}=require('node:child_process');
+const S=require('../language-score.js'),data=require('../language-model-data.js');
+const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}':JSON.stringify(v);
+const hash=v=>createHash('sha256').update(stable(v)).digest('hex'),clone=v=>JSON.parse(JSON.stringify(v));
+assert.equal(data.sha256,hash(data.payload));assert.equal(S.criterion().modelSha256,data.sha256);assert.deepEqual(S.criterion(),{kind:'language-score',modelId:'gp29-flores-trigram-v1',modelSha256:data.sha256});
+assert.equal(data.payload.models.length,8);assert.deepEqual(data.payload.models.map(m=>m.id),['eng_Latn','cym_Latn','deu_Latn','fra_Latn','spa_Latn','ita_Latn','por_Latn','fin_Latn']);assert(data.payload.models.every(m=>m.scores.length===29**3));assert.equal(data.payload.training.split,'dev');assert.equal(data.payload.attribution.license,'CC-BY-SA-4.0');
+for(const model of data.payload.models)assert.equal(model.trainingSentences,997);
+assert.equal(S.data,data);assert(Object.isFrozen(data));assert(Object.isFrozen(data.payload.models[0].scores));assert.throws(()=>{data.payload.models[0].scores[0]=1;});
+for(const n of [0,1,2,39])assert.deepEqual(S.evaluate(Array(n).fill(0)),{runes:n,windows:Math.max(0,n-2),status:'insufficient',models:[]});
+const constant=S.evaluate(Array(40).fill(0));assert.equal(constant.status,'compared');for(const row of constant.models){assert.equal(row.shuffledMin,row.total);assert.equal(row.shuffledMax,row.total);assert.equal(row.shuffledAtOrAbove,32);}
+const values=Array.from({length:240},(_,i)=>(i*i+13*i+7)%29),copy=values.slice(),result=S.evaluate(values);assert.deepEqual(values,copy);assert.deepEqual(S.evaluate(Uint8Array.from(values)),result);assert.deepEqual(S.evaluate(values),result);assert(result.models.every(m=>Number.isSafeInteger(m.total)&&m.shuffledMin<=m.shuffledMax&&m.shuffledAtOrAbove>=0&&m.shuffledAtOrAbove<=32));
+for(const value of [null,'runes',{},[29],[-1],[1.5],[NaN],[Infinity],Array(20001).fill(0),new DataView(new ArrayBuffer(4))])assert.throws(()=>S.evaluate(value));
+for(const value of [null,{}, {...S.criterion(),extra:true},{...S.criterion(),modelId:'english-only'},{...S.criterion(),modelSha256:'0'.repeat(64)}])assert.throws(()=>S.validateCriterion(value));assert.deepEqual(S.validateCriterion(S.criterion()),S.criterion());
+const code=fs.readFileSync('language-score.js','utf8'),context={RuneLanguageModelData:clone(data),TextEncoder};vm.createContext(context);vm.runInContext(code,context);assert.equal(stable(context.RuneLanguageScore.evaluate(values)),stable(result));
+for(const mutate of [d=>d.sha256='0'.repeat(64),d=>d.payload.minimumRunes=39,d=>d.payload.models[0].scores[0]--,d=>d.payload.shuffle.replicates=31]){const altered=clone(data);mutate(altered);const ctx={RuneLanguageModelData:altered,TextEncoder};vm.createContext(ctx);assert.throws(()=>vm.runInContext(code,ctx),/unavailable or changed/);}
+const fixtures=[[],Array(39).fill(0),Array(40).fill(0),values,...[40,80,160,240,277].map(n=>Array.from({length:n},(_,i)=>(17*i+i*i)%29))];
+const python=spawnSync('python',['scripts/calibrate_language_score.py','--parity'],{input:JSON.stringify(fixtures),encoding:'utf8',maxBuffer:2*1024*1024});assert.equal(python.status,0,python.stderr);assert.deepEqual(JSON.parse(python.stdout),fixtures.map(S.evaluate));
+const build=spawnSync('python',['scripts/build_language_model.py'],{encoding:'utf8',maxBuffer:2*1024*1024});assert.equal(build.status,0,build.stderr);
+console.log('PASS pinned eight-language data/hash/freeze, insufficiency/ties, criterion bounds, browser parity, independent Python shuffle-score parity and frozen dev-only rebuild');

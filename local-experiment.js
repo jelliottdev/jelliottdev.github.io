@@ -11,6 +11,12 @@
   if(keys.some(k=>!own(value,k)))throw Error('Missing experiment fields.');
  }
  function integer(v,min,max){if(!Number.isInteger(v)||v<min||v>max)throw Error('Experiment number is outside its bounds.');}
+ function languageScorer(){
+  // Old computations do not parse or hash the optional model asset.
+  const scorer=typeof module==='object'&&module.exports?require('./language-score.js'):root.RuneLanguageScore;
+  if(!scorer?.validateCriterion||!scorer?.evaluate||!scorer?.data)throw Error('The pinned rune-language comparison could not be loaded.');
+  return scorer;
+ }
  function stable(value){
   if(Array.isArray(value))return '['+value.map(stable).join(',')+']';
   if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stable(value[k])).join(',')+'}';
@@ -92,6 +98,9 @@
    let opportunities=0;
    for(const page of task.pages)for(const word of measurementWords(page.text,runes,task.criterion.boundaries))opportunities+=Math.max(0,word.length-task.criterion.lag);
    if(opportunities>2000000)throw Error('The word-pair measurement exceeds its work limit.');
+  }else if(task.criterion?.kind==='language-score'){
+   const scorer=languageScorer();scorer.validateCriterion(task.criterion);
+   if(stable(task.alphabet.map(entry=>entry.latin))!==stable(scorer.data.payload.alphabet))throw Error('The rune-language comparison needs the canonical GP29 alphabet order.');
   }else throw Error('Choose a supported result criterion.');
   if(new TextEncoder().encode(stable(task)).length>2000000)throw Error('The task exceeds the local runner file limit.');
   return task;
@@ -184,13 +193,14 @@
  function run(task,{onProgress}={}){
   validateTask(task);
   const index=new Map(task.alphabet.map((r,i)=>[r.rune,i])),frequencies=Array(29).fill(0);
-  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[],wordPages=[];let wordExpected=[0n,1n],wordOpportunities=0,wordMatches=0;const sumPages=[];let sumWords=0,sumTotal=0;
+  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[],wordPages=[],languagePages=[];let wordExpected=[0n,1n],wordOpportunities=0,wordMatches=0;const sumPages=[];let sumWords=0,sumTotal=0;
   for(const page of task.pages){
    const text=transform(page.text,task.steps,task.alphabet),values=Array.from(text).filter(ch=>index.has(ch)).map(ch=>index.get(ch));
    values.forEach(v=>frequencies[v]++);runes+=values.length;adjacentPairs+=Math.max(0,values.length-1);
    for(let i=1;i<values.length;i++)if(values[i]===values[i-1])equalAdjacentPairs++;
    transformed.push({page:page.id,text});
    if(task.criterion.kind==='exact-prefix')matches.push({page:page.id,matched:task.criterion.values.every((v,i)=>values[i]===v)});
+   if(task.criterion.kind==='language-score')languagePages.push({page:page.id,...languageScorer().evaluate(values)});
    if(task.criterion.kind==='word-affine-count'){
     const measured=countWordPairs(text,index,task.criterion);
     wordPages.push({page:page.id,opportunities:measured.opportunities,matches:measured.matches,expected:rationalJSON(measured.expected)});
@@ -209,6 +219,7 @@
    metrics:{pages:task.pages.length,runes,adjacentPairs,equalAdjacentPairs,ioc:runes>1?frequencies.reduce((s,n)=>s+n*(n-1),0)/(runes*(runes-1)):0},matches,transformed};
   if(task.criterion.kind==='word-affine-count')result.wordPairs={opportunities:wordOpportunities,matches:wordMatches,expected:rationalJSON(wordExpected),pages:wordPages};
   if(task.criterion.kind==='word-prime-sums')result.wordSums={words:sumWords,total:sumTotal,pages:sumPages};
+  if(task.criterion.kind==='language-score')result.languageScore={modelId:task.criterion.modelId,modelSha256:task.criterion.modelSha256,pages:languagePages};
   return result;
  }
  function sameResult(actual,expected){
@@ -228,6 +239,10 @@
  function summary(task,result){
   validateTask(task);
   if(!result||verifiedResults.get(result)!==stable(task)||!sameResult(result,run(task)))throw Error('Results must be verified before display.');
+  if(task.criterion.kind==='language-score'){
+   const compared=result.languageScore.pages.filter(page=>page.status==='compared').length,short=result.languageScore.pages.length-compared;
+   return {finding:compared+' '+(compared===1?'page compared':'pages compared')+' with eight rune-language references.'+(short?' '+short+' '+(short===1?'page has':'pages have')+' fewer than 40 runes and was not scored.':''),comparison:[],limit:'These scores compare rune order with fixed reference models and 32 shuffled orders. They do not identify a language, establish readability or show a decryption. Shuffle counts are not p-values.'};
+  }
   if(task.criterion.kind==='word-prime-sums')return {
    finding:result.wordSums.words.toLocaleString('en-US')+' words measured with the '+task.criterion.table+' prime table.',
    comparison:[],limit:'These sums use only the declared prime table and word boundaries. They are not a decoding or a statistical test.'};

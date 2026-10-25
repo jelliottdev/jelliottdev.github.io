@@ -18,6 +18,7 @@
   const OUTCOMES=Object.freeze({decipher:'Decipher the text',measure:'Test a pattern',
     reproduce:'Reproduce a result',explain:'Explain a feature',verify_source:'Verify source material'});
   const EVALUATION_CHOICES=freeze([
+    {id:'language-samples',label:'Compare with language samples',example:'Compare rune order with eight language samples. This does not identify a language or prove a decryption.',value:{kind:'language-score',modelId:'gp29-flores-trigram-v1',modelSha256:'8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4'}},
     {id:'readable-text',label:'Readable text',example:'Automatic scoring is not available yet.',value:{kind:'readability'}},
     {id:'warning-opening',label:'Known Warning opening (12 runes)',example:'Compare only the first 12 runes with that known opening.',value:{kind:'exact-prefix',values:[24,7,24,4,9,21,17,18,20,10,18,1]}},
     {id:'inspect-output',label:'Inspect transformed text',example:'Show output and counts without judging readability.',value:'measurement'}
@@ -25,7 +26,7 @@
   function evaluationText(value){
     const choice=EVALUATION_CHOICES.find(item=>stable(item.value)===stable(value));
     if(!choice)return null;
-    return choice.label+(choice.id==='readable-text'?' — automatic evaluation is not available yet.':choice.id==='inspect-output'?' — no readability decision.':' — all 12 runes at the page start.');
+    return choice.label+(choice.id==='language-samples'?' — eight fixed references; no decryption verdict.':choice.id==='readable-text'?' — automatic evaluation is not available yet.':choice.id==='inspect-output'?' — no readability decision.':' — all 12 runes at the page start.');
   }
   function evaluationQuestion(spec){
     if(normalizeOutcome(spec.aim).id!=='decipher'||spec.method?.status!=='specified'||!['unspecified','not_applicable','unrestricted'].includes(spec.rules?.evaluation?.status))return null;

@@ -218,4 +218,13 @@ await test('large exact scopes use one aggregate fetch and preserve raw/reviewed
   const response=await handle(request(),f.env),value=await response.json();assert.equal(response.status,422,failure);assert(!value.task);assert.equal(calls,1,'Rejected aggregate never falls back to individual pages');assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
  }
 });
+await test('explicit language comparison preserves decipher aim and compiles without measurement substitution',async()=>{
+ const evaluator=(await import('../../output-evaluators.js')).default,criterion=evaluator.criterion();
+ const input=card({rules:{evaluation:known(criterion)}}),before=structuredClone(input),plan=planCard(input);
+ assert.deepEqual(plan.criterion,criterion);assert.deepEqual(plan.steps,[{op:'reverse',unit:'line'}]);assert.deepEqual(input,before);
+ assert(plan.notes.some(note=>note.includes('does not identify the language')));
+ const f=fixture(input),{response,value}=await submit(f);assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.deepEqual(value.task.criterion,criterion);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+ await PlanControls.validate(value.runnerControls||value.controls,value.task);
+ const changed=card({rules:{evaluation:known({...criterion,modelSha256:'0'.repeat(64)})}});assert.equal(planCard(changed).state,'needs-adapter');
+});
 console.log('PASS '+count+' deterministic prepare-task groups; all source fetches mocked, no AI/task writes/deployment.');

@@ -48,15 +48,36 @@
  function rational(n,d){const factor=gcd(n,d);return [n/factor,d/factor];}
  function add(a,b){return rational(a[0]*b[1]+b[0]*a[1],a[1]*b[1]);}
  const fraction=value=>({numerator:value[0].toString(),denominator:value[1].toString()});
+ function referenceLanguage(values){
+  // Share immutable reference tables only. This arithmetic deliberately does
+  // not call the production scorer or copy its typed-array implementation.
+  const data=(typeof module==='object'&&module.exports?require('./language-score.js'):root.RuneLanguageScore)?.data?.payload;
+  if(!data)throw Error('The fixed rune-language tables could not be loaded for the independent checks.');
+  const base={runes:values.length,windows:Math.max(0,values.length-2)};
+  if(values.length<data.minimumRunes)return {...base,status:'insufficient',models:[]};
+  const score=(sequence,table)=>{let amount=0;for(let offset=0;offset+2<sequence.length;offset++)amount+=table[841*sequence[offset]+29*sequence[offset+1]+sequence[offset+2]];return amount;};
+  const totals=data.models.map(model=>score(values,model.scores)),samples=data.models.map(()=>[]),mask=0xffffffffn;
+  for(let replicate=1;replicate<=32;replicate++){
+   let state=Number((0x33010000n^(BigInt(values.length)*0x9e3779b1n&mask)^(BigInt(replicate)*0x85ebca6bn&mask))&mask)||1;
+   const shuffled=Array.from(values);
+   for(let cursor=shuffled.length-1;cursor>=1;cursor--){
+    state=((state<<13)^state)>>>0;state=((state>>>17)^state)>>>0;state=((state<<5)^state)>>>0;
+    const other=state%(cursor+1);[shuffled[cursor],shuffled[other]]=[shuffled[other],shuffled[cursor]];
+   }
+   data.models.forEach((model,i)=>samples[i].push(score(shuffled,model.scores)));
+  }
+  return {...base,status:'compared',models:data.models.map((model,i)=>({id:model.id,total:totals[i],shuffledMin:Math.min(...samples[i]),shuffledMax:Math.max(...samples[i]),shuffledAtOrAbove:samples[i].filter(amount=>amount>=totals[i]).length}))};
+ }
  function referenceResult(task){
   const names=task.alphabet.map(v=>v.rune),counts=Array(29).fill(0),transformed=[],matches=[];
   let runeCount=0,pairCount=0,repeats=0,opportunities=0,affineMatches=0,expected=[0n,1n],sumWords=0,sumTotal=0;
-  const pairPages=[],sumPages=[],criterion=task.criterion;
+  const pairPages=[],sumPages=[],languagePages=[],criterion=task.criterion;
   for(const page of task.pages){
    const text=referenceText(page.text,task.steps,task.alphabet),values=Array.from(text).filter(ch=>names.includes(ch)).map(ch=>names.indexOf(ch));
    for(let i=0;i<values.length;i++){counts[values[i]]++;runeCount++;if(i){pairCount++;if(values[i]===values[i-1])repeats++;}}
    transformed.push({page:page.id,text});
    if(criterion.kind==='exact-prefix')matches.push({page:page.id,matched:criterion.values.every((value,i)=>values[i]===value)});
+   if(criterion.kind==='language-score')languagePages.push({page:page.id,...referenceLanguage(values)});
    if(criterion.kind==='word-affine-count'){
     let localOpportunities=0,localMatches=0,localExpected=[0n,1n];
     for(const word of words(text,names,criterion.boundaries)){
@@ -81,12 +102,13 @@
   const result={schema:E.RESULT,taskId:task.taskId,engine:E.ENGINE,runnerVersion:'1',metrics:{pages:task.pages.length,runes:runeCount,adjacentPairs:pairCount,equalAdjacentPairs:repeats,ioc:runeCount>1?counts.reduce((sum,n)=>sum+n*(n-1),0)/(runeCount*(runeCount-1)):0},matches,transformed};
   if(criterion.kind==='word-affine-count')result.wordPairs={opportunities,matches:affineMatches,expected:fraction(expected),pages:pairPages};
   if(criterion.kind==='word-prime-sums')result.wordSums={words:sumWords,total:sumTotal,pages:sumPages};
+  if(criterion.kind==='language-score')result.languageScore={modelId:criterion.modelId,modelSha256:criterion.modelSha256,pages:languagePages};
   return result;
  }
  function fixtureText(target,reverse,pageIndex){
   const finite=target.steps.filter(step=>step.op==='finite-shift'),positions=finite.map(()=>0);
   // Reach a repeating/autokey seed boundary when finite keys permit it.
-  const longest=Math.max(12,target.criterion.kind==='word-affine-count'?target.criterion.lag+3:0,...target.steps.filter(s=>s.op==='keyed-shift'||s.op==='interrupted-keyed-shift').map(s=>s.key.length+3));
+  const longest=Math.max(12,target.criterion.kind==='language-score'?45:0,target.criterion.kind==='word-affine-count'?target.criterion.lag+3:0,...target.steps.filter(s=>s.op==='keyed-shift'||s.op==='interrupted-keyed-shift').map(s=>s.key.length+3));
   const values=Array.from({length:longest},(_,i)=>mod((reverse?28-i:i)*7+pageIndex*11));
   const chunks=[values,[0,0,28,1],[27,4,16,0],[1,28,0,3],[8,8,9]];
   const separators=[' /💡\r\n','-','.\r','\n'];let source='';

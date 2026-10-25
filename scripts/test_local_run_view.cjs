@@ -25,6 +25,12 @@ function hostFor(multiple=true,withPrefix=false,single=false){
  const first='<img src=x onerror=alert(1)>ᚠᚢ  ᚦ\r\nᚩ\tᚱ',second='ᚦᛡ, ᚠ\nᚢ';
  const task=await E.prepare({title:'Exact text inspection',alphabet,pages:[{id:'lp2-15',text:first},{id:'lp2-17',text:second}],steps:[{op:'reverse',unit:'line'}],criterion:{kind:'measurement'}}),result=await E.verify(task,E.run(task)),html=V.render(task,result);
  assert(html.indexOf('run-text-inspector')>html.indexOf('run-scope'));
+ assert(html.includes('What the method produced'));assert(html.indexOf('data-run-output-content')<html.indexOf('<details'),'The requested transformed output is visible before any disclosure');assert(html.indexOf('Rune counts')>html.indexOf('run-text-inspector'),'Repeat counts are supporting detail for direct inspection');
+ const previewPanel=new Element(),previewSelect=new Element(),previewContent=new Element();previewContent.innerHTML='';previewPanel.querySelector=selector=>({'[data-run-output-page]':previewSelect,'[data-run-output-content]':previewContent}[selector]||null);
+ const previewHost={querySelector:selector=>selector==='[data-run-output-preview]'?previewPanel:null},previewCleanup=V.bind(previewHost,task,result);
+ previewSelect.value='lp2-17';previewSelect.fire('change');assert(previewContent.innerHTML.includes('LP2-17'));assert(previewContent.innerHTML.includes('FIA, TH'));
+ const selectedPreview=previewContent.innerHTML;previewSelect.value='unknown';previewSelect.fire('change');assert.equal(previewContent.innerHTML,selectedPreview);previewCleanup();previewSelect.value='lp2-15';previewSelect.fire('change');assert.equal(previewContent.innerHTML,selectedPreview,'Disposed previews have no active handlers');
+
  assert(html.includes('<summary>Inspect the text</summary>'));assert(html.includes('not a translation'));assert(html.includes('middle dot'));
  assert(html.includes('&lt;img src=x onerror=alert(1)&gt;'));assert(!html.includes('<img src=x'));
  assert.equal((html.match(/data-run-original/g)||[]).length,1);assert.equal((html.match(/data-run-after/g)||[]).length,1);

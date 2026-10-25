@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import C from '../../claim-specification.js';
 import S from '../../claim-share.js';
 import L from '../../local-experiment.js';
 import {canonicalProposal} from './proposals.mjs';
+import {issue as issuePreparation} from './prepared-plans.mjs';
+import Family from '../../research-family.js';
 import {createTaskExtensionHandler} from './task-extensions.mjs';
 
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
@@ -15,9 +17,9 @@ const pageIds=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')
 const sourceBundle=(letters=alphabet)=>({schema:'liberpedia-local-inputs-v1',alphabet:letters.map(entry=>({...entry})),pages:pageIds.map(sourcePage)});
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 function fixture({fetcher,timeoutMs=20000}={}){
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0008_prepared_plans.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');for(const name of readdirSync(new URL('./migrations/',import.meta.url)).filter(name=>name.endsWith('.sql')).sort())sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  const queries=[],calls=[],rates=[];let aiCalls=0,bundleAlphabet=alphabet;
- const db={prepare(sql){assert.match(sql,/^\s*(?:SELECT\b|INSERT INTO prepared_plans\b)/i,'Extension may only issue an admission receipt');queries.push(sql);return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null};}};}};
+ const db={prepare(sql){assert.match(sql,/^\s*(?:SELECT\b|INSERT INTO (?:prepared_plans|idea_computation_evidence)\b)/i,'Extension may only issue an admission receipt');queries.push(sql);return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null,all:async()=>({results:sqlite.prepare(sql).all(...args)}),run:async()=>sqlite.prepare(sql).run(...args)};}};}};
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async value=>{rates.push(value);return {success:true};}},AI:{run(){aiCalls++;throw Error('No AI allowed');}}};
  const handle=createTaskExtensionHandler({timeoutMs,fetcher:async(url,options)=>{
   calls.push({url,options});assert(url===bundleURL||/^https:\/\/jelliottdev\.github\.io\/data\/pages\/lp2-(?:[0-4]\d|5[0-5])\.json$/.test(url));assert.equal(options.redirect,'manual');
@@ -29,7 +31,7 @@ function fixture({fetcher,timeoutMs=20000}={}){
 }
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
 async function proposal(f,name='public',published=true){
- const card=C.createDraft({source:{text:'PRIVATE original '+name},aim:known(name==='private'?'Find readable text':'Measure repeat counts'),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:known({pages:['lp2-15']})});
+ const card=C.createDraft({source:{text:'PRIVATE original '+name},aim:known(name==='private'?'Find readable text':name==='public'?'Measure repeat counts':'Measure repeat counts: '+name),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:known({pages:['lp2-15']})});
  const p=await canonicalProposal({requestId:crypto.randomUUID(),fragment:S.encode(C.confirm(card,{id:name,at}))});
  f.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at)VALUES(?,?,?,?,?)').run(p.id,p.cardHash,p.cardJson,p.fragment,at);
  if(published)f.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(p.id,at,at.slice(0,10));return p;
@@ -98,7 +100,7 @@ await test('source and final runner bounds fail closed without altering parent o
 });
 await test('already-associated exact child opens existing task without relabeling old parent edge',async()=>{
  const f=fixture(),p=await proposal(f),t=await parent(f,p),planned=await ready(f,t),oldParent=await parent(f,p,{title:'Earlier different parent'});
- await insertTask(f,p,planned.task,{version:'reviewed',parentTaskId:oldParent.taskId});const before=f.sqlite.prepare('SELECT * FROM local_task_ideas WHERE task_id=?').get(planned.task.taskId);
+ await insertTask(f,p,planned.task,{version:'reviewed',parentTaskId:oldParent.taskId,verified:false});const before=f.sqlite.prepare('SELECT * FROM local_task_ideas WHERE task_id=?').get(planned.task.taskId);
  const existing=await ready(f,t);assert.deepEqual(Object.keys(existing).sort(),['coveredPages','parentTaskId','plannedPages','proposalId','reason','state','taskId']);assert.equal(existing.state,'existing-task');assert.deepEqual(existing.coveredPages,['lp2-15']);assert.equal(existing.parentTaskId,t.taskId);assert.equal(existing.taskId,planned.task.taskId);assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_task_ideas WHERE task_id=?').get(planned.task.taskId),before);
  f.sqlite.prepare('UPDATE local_task_ideas SET input_version=? WHERE task_id=?').run('raw',planned.task.taskId);assert.equal((await f.handle(req(t.taskId),f.env)).status,409);
 });
@@ -169,6 +171,39 @@ await test('cyclic, corrupt and excessive same-idea ancestry fails before source
  const f=fixture(),p=await proposal(f);let previous=null,last;
  for(let i=0;i<76;i++){last=await L.prepare({title:'Chain '+i,pages:[{id:'lp2-15',text:'ᚠ'}],alphabet,steps:[],criterion:{kind:'measurement'}});await insertTask(f,p,last,{parentTaskId:previous});previous=last.taskId;}
  assert.equal((await f.handle(req(last.taskId),f.env)).status,503);assert.equal(f.calls.length,0);
+});
+await test('global public exact evidence removes duplicate page work and freezes verifiable provenance',async()=>{
+ const f=fixture(),p=await proposal(f),other=await proposal(f,'Different scientific wording'),t=await parent(f,p);
+ const shared=await L.prepare({...t,title:'A different public experiment',pages:[{id:'lp2-16',text:sourcePage('lp2-16').reviewed_text}]});await insertTask(f,other,shared);
+ const out=await ready(f,t);
+ assert.deepEqual(out.coveredPages,['lp2-15','lp2-16']);assert(!out.task.pages.some(page=>page.id==='lp2-16'));assert(out.plannedPages.includes('lp2-16'));
+ assert.deepEqual(out.coverage.coveredPages,['lp2-16']);assert.equal(out.coverage.evidence[0].taskId,shared.taskId);assert.equal(out.coverage.inputVersion,'reviewed');
+ const basis=JSON.parse(f.sqlite.prepare('SELECT basis_json FROM prepared_plans WHERE id=?').get(out.preparation.id).basis_json);
+ assert.equal(basis.requestedTaskId,out.coverage.requestedTask.taskId);assert.deepEqual(basis.evidence,out.coverage.evidence);
+ const args={db:f.env.PROPOSALS,proposalId:p.id,card:JSON.parse(p.cardJson),task:out.task,inputVersion:'reviewed',parentTaskId:t.taskId,controls:out.controls,authority:'remaining-lp2',createdAt:at};
+ for(const bad of [{...basis,evidence:[]},{...basis,requestedTaskId:'0'.repeat(64)},{...basis,evidence:basis.evidence.map(ref=>({...ref,resultId:'0'.repeat(64)}))},{...basis,requestedTaskId:undefined}])await assert.rejects(()=>issuePreparation({...args,basis:bad}));
+ assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,2);assert(!JSON.stringify(out).includes(other.id));
+});
+await test('public evidence with different criterion, source version, exact text or settings cannot exclude work',async()=>{
+ for(const damage of ['criterion','version','text','steps','private','unsaved']){
+  const f=fixture(),p=await proposal(f),other=await proposal(f,'Different '+damage,damage!=='private'),t=await parent(f,p);
+  const body={...t,title:'Separate '+damage,pages:[{id:'lp2-16',text:sourcePage('lp2-16').reviewed_text}]};
+  if(damage==='criterion')body.criterion={kind:'measurement'};if(damage==='steps')body.steps=[{op:'reverse',unit:'line'}];if(damage==='text')body.pages[0].text+='ᚠ';
+  const source=await L.prepare(body);await insertTask(f,other,source,{version:damage==='version'?'raw':'reviewed',verified:damage!=='unsaved'});
+  const out=await ready(f,t);assert.deepEqual(out.coveredPages,['lp2-15']);assert(out.task.pages.some(page=>page.id==='lp2-16'));assert(!Object.hasOwn(out,'coverage'));
+ }
+});
+await test('corrupt shared result fails closed without issuing a new extension receipt',async()=>{
+ const f=fixture(),p=await proposal(f),other=await proposal(f,'Corrupt public source'),t=await parent(f,p),source=await L.prepare({...t,title:'Corrupt shared',pages:[{id:'lp2-16',text:sourcePage('lp2-16').reviewed_text}]});await insertTask(f,other,source);
+ f.sqlite.prepare('UPDATE local_task_results SET result_json=? WHERE task_id=?').run('{}',source.taskId);const before=f.sqlite.prepare('SELECT total_changes() n FROM local_tasks').get().n;
+ assert.equal((await f.handle(req(t.taskId),f.env)).status,503);assert.equal(f.sqlite.prepare('SELECT total_changes() n FROM local_tasks').get().n,before);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);
+});
+await test('global family receipts prevent duplicate generic extension work without copying task records',async()=>{
+ const bundle=JSON.parse(readFileSync(new URL('../../data/local-run-inputs.json',import.meta.url),'utf8')),factory=await Family.createPreparer(bundle),plan=await factory.prepare(['plaintext-autokey--subtract--word--lp2-16']),item=plan.cases[0],result=L.run(item.task),resultId=await digest(L.stable(result));
+ const f=fixture({fetcher:async url=>{assert.equal(url,bundleURL);return Response.json(bundle);}}),p=await proposal(f);
+ const t=await L.prepare({...item.task,title:'Different generic proposal',pages:[{id:'lp2-15',text:bundle.pages.find(page=>page.id==='lp2-15').raw}]});await insertTask(f,p,t,{version:'raw'});
+ f.sqlite.prepare('INSERT INTO family_case_results VALUES(?,?,?,?,?,?,?,?,?,?)').run(plan.familyId,plan.revision,item.id,item.task.taskId,L.stable(item.task),resultId,L.stable(result),Number(result.matches[0].matched),at,at.slice(0,10));
+ const out=await ready(f,t);assert.deepEqual(out.coveredPages,['lp2-15','lp2-16']);assert(!out.task.pages.some(page=>page.id==='lp2-16'));assert.equal(out.coverage.familySources[0].caseId,item.id);assert.equal(out.coverage.evidence[0].resultId,resultId);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);
 });
 await test('strict origin/body/routes/methods, rate-before-DB and unavailable bindings',async()=>{
  const f=fixture(),p=await proposal(f),t=await parent(f,p);

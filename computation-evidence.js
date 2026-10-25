@@ -16,7 +16,7 @@
  }
  function rational(value){return exact(value,['numerator','denominator'])&&typeof value.numerator==='string'&&typeof value.denominator==='string'&&/^(?:0|[1-9][0-9]{0,99})$/.test(value.numerator)&&/^[1-9][0-9]{0,99}$/.test(value.denominator);}
  function resultShape(task,result){
-  const kind=task.criterion.kind,extra=kind==='word-prime-sums'?['wordSums']:kind==='word-affine-count'?['wordPairs']:[];
+  const kind=task.criterion.kind,extra=kind==='word-prime-sums'?['wordSums']:kind==='word-affine-count'?['wordPairs']:kind==='language-score'?['languageScore']:[];
   if(!exact(result,['schema','taskId','engine','runnerVersion','metrics','matches','transformed',...extra])||result.schema!=='liberpedia-local-result-v1'||result.taskId!==task.taskId||result.engine!==task.engine||result.runnerVersion!=='1'||!Array.isArray(result.transformed)||result.transformed.length!==task.pages.length||!Array.isArray(result.matches))throw Error('The saved computation result has an invalid envelope.');
   const index=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),counts=Array(29).fill(0);let runeCount=0,adjacent=0,equal=0;
   for(let p=0;p<task.pages.length;p++){
@@ -27,6 +27,13 @@
    if(kind==='exact-prefix'){const match=result.matches[p];if(!exact(match,['page','matched'])||match.page!==input.id||typeof match.matched!=='boolean'||match.matched!==task.criterion.values.every((v,i)=>values[i]===v))throw Error('The saved opening result is inconsistent.');}
   }
   if(result.matches.length!==(kind==='exact-prefix'?task.pages.length:0))throw Error('The saved matches do not cover the task.');
+  if(kind==='language-score'){
+   const scorer=typeof module==='object'&&module.exports?require('./language-score.js'):root.RuneLanguageScore;
+   if(!scorer)throw Error('The pinned language comparison could not be loaded.');
+   scorer.validateCriterion(task.criterion);
+   const expected={modelId:task.criterion.modelId,modelSha256:task.criterion.modelSha256,pages:result.transformed.map(output=>({page:output.page,...scorer.evaluate(Array.from(output.text).filter(ch=>index.has(ch)).map(ch=>index.get(ch)))}))};
+   if(L.stable(result.languageScore)!==L.stable(expected))throw Error('The saved language comparison is inconsistent with its output.');
+  }
   const metrics=result.metrics,ioc=runeCount>1?counts.reduce((s,n)=>s+n*(n-1),0)/(runeCount*(runeCount-1)):0;
   if(!exact(metrics,['pages','runes','adjacentPairs','equalAdjacentPairs','ioc'])||metrics.pages!==task.pages.length||metrics.runes!==runeCount||metrics.adjacentPairs!==adjacent||metrics.equalAdjacentPairs!==equal||!Number.isFinite(metrics.ioc)||metrics.ioc<0||metrics.ioc>1||Math.abs(metrics.ioc-ioc)>1e-12)throw Error('The saved output metrics are inconsistent.');
   if(kind==='word-prime-sums'){

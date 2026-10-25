@@ -1,5 +1,6 @@
 import {issue as issuePreparation} from './prepared-plans.mjs';
 import PlanControls from '../../local-plan-controls.js';
+import {findEvidence,rememberEvidence} from './task-evidence.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 /* Propose a fixed scope extension and admission receipt. No AI or target execution. */
 import C from '../../claim-specification.js';
@@ -83,7 +84,7 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
     await addEvidence(task,ancestor.has_results);ancestorId=ancestor.parent_task_id;
    }
    const pendingTasks=pendingCandidates.filter(candidate=>candidate.inputs.some(identity=>!verifiedAllPages.has(identity))).map(candidate=>candidate.metadata);
-   const coveredPages=UNSOLVED.filter(id=>verified.has(id)),plannedPages=UNSOLVED.filter(id=>planned.has(id)),ids=UNSOLVED.filter(id=>!verified.has(id));
+   let coveredPages=UNSOLVED.filter(id=>verified.has(id)),plannedPages=UNSOLVED.filter(id=>planned.has(id)),ids=UNSOLVED.filter(id=>!verified.has(id));
    const context={proposalId:row.proposal_id,parentTaskId:parent.taskId,coveredPages,plannedPages};
    if(pendingTasks.length)return reply({state:'runs-pending',...context,pendingTasks,reason:'These linked experiments still need saved results.'});
    if(!ids.length)return reply({state:'scope-covered',...context,reason:'Saved runs cover all 56 LP2 pages for this method and these inputs.'});
@@ -108,6 +109,20 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
    let task;
    try{task=await L.prepare({title,pages,alphabet:parent.alphabet,steps:parent.steps,criterion:parent.criterion});}
    catch{return reply({error:'The remaining-page plan exceeds the supported runner bounds. No plan was saved.'},422);}
+   // A different public idea can already have run these exact page bytes and
+   // settings. Classification and titles do not define computation coverage.
+   const requestedTask=task,found=await findEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:row.input_version});
+   let coverage,basisEvidence={};
+   if(found.coveredPages.length){
+    coverage={...found,requestedTask,inputVersion:row.input_version};
+    await rememberEvidence({db:env.PROPOSALS,proposalId:row.proposal_id,task:requestedTask,inputVersion:row.input_version,coverage,createdAt:now().toISOString()});
+    for(const id of found.coveredPages){verified.add(id);planned.add(id);}
+    coveredPages=UNSOLVED.filter(id=>verified.has(id));plannedPages=UNSOLVED.filter(id=>planned.has(id));ids=found.remainingPages;
+    Object.assign(context,{coveredPages,plannedPages,coverage});
+    if(!ids.length)return reply({state:'scope-covered',...context,reason:'Saved public runs cover all 56 LP2 pages for this method and these inputs.'});
+    task=await L.prepare({...requestedTask,pages:requestedTask.pages.filter(page=>ids.includes(page.id))});
+    basisEvidence={requestedTaskId:requestedTask.taskId,evidence:found.evidence};
+   }
    const existing=await query(`SELECT links.input_version,t.task_hash,t.task_json FROM local_task_ideas links
     JOIN local_tasks t ON t.id=links.task_id WHERE links.task_id=? AND links.proposal_id=?`,task.taskId,row.proposal_id);
    if(existing){
@@ -116,7 +131,7 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
     return reply({state:'existing-task',...context,taskId:task.taskId,reason:'This experiment already exists. Open it to inspect or run it.'});
    }
    const controls=await PlanControls.prepare(task,crypto);await PlanControls.validate(controls,task,crypto);
-   const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:row.proposal_id,card,task,inputVersion:row.input_version,parentTaskId:parent.taskId,controls,authority:'remaining-lp2',basis:{kind:'remaining-lp2',parentTaskId:parent.taskId,parentTaskHash:row.task_hash,protocolHash:await digest(signature),coveredPages,remainingPages:ids},createdAt:now().toISOString()});
+   const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:row.proposal_id,card,task,inputVersion:row.input_version,parentTaskId:parent.taskId,controls,authority:'remaining-lp2',basis:{kind:'remaining-lp2',parentTaskId:parent.taskId,parentTaskHash:row.task_hash,protocolHash:await digest(signature),coveredPages,remainingPages:ids,...basisEvidence},createdAt:now().toISOString()});
    return reply({state:'plan-ready',...context,inputVersion:row.input_version,task,controls,preparation,
     notes:historyStopped?['Earlier tasks used different settings or had no association with this idea. Their pages remain available for this test.']:[],
     purpose:'This extends the page scope beyond the original request. The method is unchanged, and earlier results are kept.'});

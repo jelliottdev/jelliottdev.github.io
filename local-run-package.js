@@ -58,7 +58,7 @@
  // limitation}] projection. Nonempty origins require the exact fixed guard
  // source fetched from tools/verify_controls.py; empty origins need no fetch
  // and preserve the original three-member archive byte for byte.
- async function build(task,runnerText,returnURL,origins=[],guardText,runnerControls=null){
+ async function build(task,runnerText,returnURL,origins=[],guardText,runnerControls=null,languageModelText=null){
   // Snapshot before awaiting identity: later caller edits cannot change members.
   E.validateTask(task);
   const snapshot=JSON.parse(JSON.stringify(task)),savedOrigins=originSnapshot(origins);
@@ -68,6 +68,13 @@
   await E.checkIdentity(snapshot);
   const address=returnAddress(returnURL,snapshot.taskId),runner=textBytes(runnerText,'Runner source',MAX_RUNNER);
   const taskBytes=textBytes(E.stable(snapshot)+'\n','Task',MAX_TASK);
+  const modelMembers=[];
+  if(snapshot.criterion.kind==='language-score'){
+   textBytes(languageModelText,'Language reference model',MAX_TASK);let model;
+   try{model=JSON.parse(languageModelText);}catch{throw Error('The language reference model is malformed.');}
+   if(!exact(model,['payload','sha256'])||model.sha256!==snapshot.criterion.modelSha256||await digest(encoder.encode(E.stable(model.payload)))!==snapshot.criterion.modelSha256)throw Error('The pinned language reference model changed.');
+   modelMembers.push(['language-model.json',encoder.encode(E.stable(model)+'\n')]);
+  }else if(languageModelText!==null)throw Error('This experiment does not use a language reference model.');
   if(savedOrigins.length){
    if(!['measurement','exact-prefix','word-affine-count','word-prime-sums'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
    const guard=textBytes(guardText,'Control guard source',MAX_RUNNER);
@@ -102,7 +109,7 @@
    const guard=textBytes(guardText,'Runner check guard source',MAX_RUNNER);
    if(await digest(guard)!==PLAN_GUARD_SHA256)throw Error('The fixed runner check guard source changed.');
    const instructions='Local rune experiment with runner checks\n\nTask ID: '+snapshot.taskId+'\n\n'+
-    'Extract all five files into one folder. Review task.json, runner-controls.json and the Python files before running.\n'+
+    (modelMembers.length?'Extract every file into one folder, including language-model.json. The model contains derived FLORES-200 statistics under CC BY-SA 4.0; its source attribution and spelling conversion are recorded inside it.\n':'Extract all five files into one folder. Review task.json, runner-controls.json and the Python files before running.\n')+
     'Python 3.9 or later is required. Only the Python standard library is used; nothing is installed.\n\n'+
     'Run:\n  python verify_plan_controls.py --task task.json --controls runner-controls.json --out results.json\n\n'+
     'Two small synthetic inputs check the exact ordered method against independently calculated outputs before manuscript pages run.\n'+
@@ -112,17 +119,17 @@
     'Return manually and select the results file at:\n  '+address+'\n\n'+
     'These checks verify the stated computation on small inputs, not a decryption or statistical conclusion.\n';
    return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],
-    ['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',guard]]);
+    ['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',guard],...modelMembers]);
   }
   const instructions='Local rune experiment\n\nTask ID: '+snapshot.taskId+'\n\n'+
-   'Extract all three files into one folder. Review task.json and research_runner.py before running.\n'+
+   (modelMembers.length?'Extract every file into one folder, including language-model.json. The model contains derived FLORES-200 statistics under CC BY-SA 4.0; its source attribution and spelling conversion are recorded inside it.\n':'Extract all three files into one folder. Review task.json and research_runner.py before running.\n')+
    'Python 3.9 or later is required. Only the Python standard library is used; nothing is installed.\n\n'+
    'From that folder, run:\n  python research_runner.py --task task.json --out results.json\n\n'+
    'The runner refuses to overwrite an existing results.json. Keep task.json and the runner unchanged.\n'+
    'This local calculation makes no network calls and uploads nothing automatically.\n'+
    'To return manually and select your results file, open:\n  '+address+'\n\n'+
    'The return page verifies results against this exact task. A matching calculation does not establish a decryption.\n';
-  return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)]]);
+  return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],...modelMembers]);
  }
  const api={build,GUARD_SHA256,PLAN_GUARD_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

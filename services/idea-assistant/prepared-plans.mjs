@@ -79,7 +79,7 @@ async function basisFor(db,value,bound,authority){
   require(variant&&variant.from===basis.from&&variant.to===basis.to,'Word-boundary basis differs from the fixed comparison');
   await Variants.validate(parent,bound.task);
  }else{
-  require(authority==='remaining-lp2'&&exact(basis,['kind','parentTaskId','parentTaskHash','protocolHash','coveredPages','remainingPages'])
+  require(authority==='remaining-lp2'&&exact(basis,['kind','parentTaskId','parentTaskHash','protocolHash','coveredPages','remainingPages',...(Object.hasOwn(basis,'requestedTaskId')||Object.hasOwn(basis,'evidence')?['requestedTaskId','evidence']:[])])
    &&basis.kind==='remaining-lp2'&&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),
    'Invalid remaining-scope preparation basis');
   require(typeof basis.protocolHash==='string'&&basis.protocolHash===await sha(E.stable({steps:bound.task.steps,criterion:bound.task.criterion,alphabet:bound.task.alphabet})),
@@ -90,6 +90,18 @@ async function basisFor(db,value,bound,authority){
    &&E.stable(remaining)===E.stable(bound.task.pages.map(p=>p.id)),'Invalid exact remaining-page scope');
   const parent=await query(db,'SELECT t.task_hash FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',basis.parentTaskId,bound.base.proposalId);
   require(parent?.task_hash===basis.parentTaskHash,'Extension parent is not associated with this idea');
+  if(Object.hasOwn(basis,'requestedTaskId')){
+   require(HEX.test(basis.requestedTaskId),'Invalid extension evidence request');
+   const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
+   require(row&&row.input_version===bound.base.inputVersion,'Extension request is not associated with this idea');
+   const requested=JSON.parse(row.requested_task_json);await E.checkIdentity(requested);
+   require(requested.taskId===basis.requestedTaskId&&await sha(E.stable(requested))===row.requested_task_hash,'Extension request differs from its immutable inputs');
+   const comparison=await checkedEvidence({db,task:requested,inputVersion:row.input_version,evidence:basis.evidence});
+   require(comparison.coveredPages.length>0&&comparison.remainingPages.length>0&&comparison.coveredPages.every(id=>covered.includes(id)),'Extension evidence does not support its covered pages');
+   const full=await Evidence.describe(requested,row.input_version),open=await Evidence.describe(bound.task,row.input_version);
+   require(full.protocolId===open.protocolId&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(page=>comparison.remainingPages.includes(page.id))),'Extension evidence changed the method, criterion or exact open pages');
+  }
+
  }
  return {text:data.text,hash:await sha(data.text)};
 }

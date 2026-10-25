@@ -2,6 +2,7 @@ import {issue as issuePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 import PlanControls from '../../local-plan-controls.js';
 import Protocols from '../../experiment-protocols.js';
+import Evaluators from '../../output-evaluators.js';
 import {findEvidence,rememberEvidence} from './task-evidence.mjs';
 /* Source-bound proposed plans; inference can map wording, never execute code. */
 import L from '../../local-experiment.js';
@@ -20,7 +21,7 @@ function evaluationIssue(card){
  const value=evaluation.value;
  if(value==='readability'||value&&typeof value==='object'&&value.kind==='readability')return {state:'needs-adapter',field:'evaluation',reason:'Readable-text evaluation is not available yet. This idea has not been tested for readable text.'};
  const prefix=value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===2&&value.kind==='exact-prefix'&&Array.isArray(value.values)&&value.values.length>=1&&value.values.length<=256&&value.values.every(n=>Number.isInteger(n)&&n>=0&&n<=28);
- if(value!=='measurement'&&!prefix&&!Protocols.identify(value))return {state:'needs-adapter',field:'evaluation',reason:'The requested evaluation needs an adapter.'};
+ if(value!=='measurement'&&!prefix&&!Protocols.identify(value)&&!Evaluators.identify(value))return {state:'needs-adapter',field:'evaluation',reason:'The requested evaluation needs an adapter.'};
  return null;
 }
 export function planCard(input){
@@ -47,6 +48,7 @@ export function planCard(input){
   if(value==='measurement')criterion={kind:'measurement'};
   else if(value&&typeof value==='object'&&value.kind==='exact-prefix'&&Object.keys(value).length===2&&Object.hasOwn(value,'values'))criterion={kind:value.kind,values:value.values};
   else if(Protocols.identify(value))criterion={...value};
+  else if(Evaluators.identify(value)){criterion=Evaluators.criterion();notes.push(Evaluators.describe(value).plan,Evaluators.describe(value).limit);}
   else return fail('The requested evaluation needs an adapter.');
  }else notes.push('Proposed evaluation: measure rune frequencies and adjacent repeats; no readability decision.');
  for(const key of ['searchBounds','searchProtocol','exceptionalCases'])if(specified(key))return fail('The specified '+key+' condition needs an adapter.');

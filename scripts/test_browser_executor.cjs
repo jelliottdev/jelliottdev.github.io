@@ -4,10 +4,10 @@ const E=require('../local-experiment.js'),{createExecutor}=require('../local-run
 const root=path.resolve(__dirname,'..'),engine=fs.readFileSync(path.join(root,'local-experiment.js'),'utf8'),workerSource=fs.readFileSync(path.join(root,'local-run-worker.js'),'utf8');
 const workers=[];
 class WorkerFixture{
- constructor(url){assert.equal(url,'local-run-worker.js?v=20261024-word-sums');this.stopped=false;workers.push(this);
+ constructor(url){assert.equal(url,'local-run-worker.js?v=20261025-language');this.stopped=false;workers.push(this);
   const self={postMessage:data=>{if(!this.stopped)this.onmessage?.({data:structuredClone(data)});}};
   const context=vm.createContext({self,crypto:webcrypto,TextEncoder,structuredClone});
-  context.importScripts=url=>{assert.equal(url,'local-experiment.js?v=20261024-word-sums');vm.runInContext(engine,context);};
+  this.imports=[];context.importScripts=(...urls)=>{for(const url of urls){assert(['local-experiment.js?v=20261025-language','language-model-data.js?v=20261025-language','language-score.js?v=20261025-language'].includes(url));this.imports.push(url);vm.runInContext(url.startsWith('local-experiment')?engine:fs.readFileSync(path.join(root,url.split('?')[0]),'utf8'),context);}};
   vm.runInContext(workerSource,context);this.receive=self.onmessage;
  }
  postMessage(data){this.message=structuredClone(data);queueMicrotask(()=>{if(!this.stopped)Promise.resolve(this.receive({data:this.message})).catch(()=>this.onerror?.({preventDefault(){}}));});}
@@ -68,6 +68,12 @@ let groups=0;async function test(name,fn){await fn();console.log('PASS '+name);g
   const invalid=await task();invalid.taskId='a'.repeat(64);await assert.rejects(createExecutor({WorkerClass:WorkerFixture}).start(invalid).promise,/could not run/);
   class BrokenWorker{constructor(){throw Error('Worker blocked');}}
   await assert.rejects(createExecutor({WorkerClass:BrokenWorker}).start(await task()).promise,/Worker blocked/);
+ });
+ await test('language tasks load only fixed pinned assets inside the real worker',async()=>{
+ const alphabet=JSON.parse(fs.readFileSync(path.join(root,'data/local-run-inputs.json'),'utf8')).alphabet;
+ const input=await E.prepare({title:'Browser language fixture',alphabet,pages:[{id:'lp2-15',text:alphabet.map(a=>a.rune).join('').repeat(2)}],steps:[],criterion:require('../output-evaluators.js').criterion()},webcrypto);
+ const result=await createExecutor({WorkerClass:WorkerFixture}).start(input).promise;assert.deepEqual(await E.verify(input,result,webcrypto),E.run(input));assert.equal(workers.at(-1).imports.length,3);
+ const plain=await createExecutor({WorkerClass:WorkerFixture}).start(await task()).promise;assert(plain);assert.deepEqual(workers.at(-1).imports,['local-experiment.js?v=20261025-language']);
  });
  console.log('PASS '+groups+' browser execution groups; fixed worker/engine, no network or generated-code execution');
 })().catch(error=>{console.error(error);process.exitCode=1;});

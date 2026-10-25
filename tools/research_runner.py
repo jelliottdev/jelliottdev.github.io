@@ -15,6 +15,9 @@ TASK_SCHEMA = 'liberpedia-local-task-v1'
 RESULT_SCHEMA = 'liberpedia-local-result-v1'
 ENGINE = 'rune-program-v1'
 MAX_FILE_BYTES = 2_000_000
+LANGUAGE_MODEL_ID = 'gp29-flores-trigram-v1'
+LANGUAGE_MODEL_SHA256 = '8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4'
+_LANGUAGE_MODEL = None
 
 
 def require(condition, message):
@@ -38,6 +41,68 @@ def canonical(value):
 
 def task_identity(task):
     return hashlib.sha256(canonical({k: v for k, v in task.items() if k != 'taskId'})).hexdigest()
+
+
+def language_model():
+    """Load only this reviewed adjacent asset, and only for its criterion."""
+    global _LANGUAGE_MODEL
+    if _LANGUAGE_MODEL is None:
+        path = Path(__file__).with_name('language-model.json')
+        with path.open('rb') as source:
+            raw = source.read(MAX_FILE_BYTES + 1)
+        require(len(raw) <= MAX_FILE_BYTES, 'Rune-language model exceeds its byte limit')
+        data = json.loads(raw.decode('utf-8'), object_pairs_hook=unique_object,
+                          parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Invalid model number')))
+        fields(data, ('payload', 'sha256'), 'Rune-language model')
+        payload = data['payload']
+        require(data['sha256'] == LANGUAGE_MODEL_SHA256 and
+                hashlib.sha256(canonical(payload)).hexdigest() == LANGUAGE_MODEL_SHA256,
+                'The pinned rune-language model changed')
+        require(payload['schema'] == 'liberpedia-language-model-v1'
+                and payload['modelId'] == LANGUAGE_MODEL_ID and payload['scoreVersion'] == 1
+                and payload['minimumRunes'] == 40 and payload['shuffle']['replicates'] == 32
+                and payload['scoring']['gramOrder'] == 3 and payload['scoring']['scale'] == 1000
+                and len(payload['alphabet']) == 29 and len(payload['models']) == 8,
+                'The rune-language protocol is invalid')
+        for model in payload['models']:
+            require(isinstance(model['id'], str) and len(model['scores']) == 29 ** 3
+                    and all(integer(score, -32768, 0) for score in model['scores']),
+                    'A rune-language table is invalid')
+        _LANGUAGE_MODEL = payload
+    return _LANGUAGE_MODEL
+
+
+def language_evaluate(values):
+    require(isinstance(values, list) and len(values) <= 20000
+            and all(integer(value, 0, 28) for value in values), 'Invalid language-comparison rune indices')
+    model = language_model()
+    base = {'runes': len(values), 'windows': max(0, len(values) - 2)}
+    if len(values) < model['minimumRunes']:
+        return {**base, 'status': 'insufficient', 'models': []}
+
+    def score(sequence, table):
+        return sum(table[a * 841 + b * 29 + c]
+                   for a, b, c in zip(sequence, sequence[1:], sequence[2:]))
+
+    rows = [{'id': reference['id'], 'total': score(values, reference['scores']),
+             'shuffledMin': None, 'shuffledMax': None, 'shuffledAtOrAbove': 0}
+            for reference in model['models']]
+    for replicate in range(32):
+        sequence = values[:]
+        state = (0x33010000 ^ (len(values) * 0x9E3779B1) ^ ((replicate + 1) * 0x85EBCA6B)) & 0xFFFFFFFF
+        state = state or 1
+        for position in range(len(sequence) - 1, 0, -1):
+            state = (state ^ (state << 13)) & 0xFFFFFFFF
+            state = (state ^ (state >> 17)) & 0xFFFFFFFF
+            state = (state ^ (state << 5)) & 0xFFFFFFFF
+            other = state % (position + 1)
+            sequence[position], sequence[other] = sequence[other], sequence[position]
+        for row, reference in zip(rows, model['models']):
+            total = score(sequence, reference['scores'])
+            row['shuffledMin'] = total if row['shuffledMin'] is None else min(row['shuffledMin'], total)
+            row['shuffledMax'] = total if row['shuffledMax'] is None else max(row['shuffledMax'], total)
+            row['shuffledAtOrAbove'] += total >= row['total']
+    return {**base, 'status': 'compared', 'models': rows}
 
 
 def validate(task):
@@ -137,6 +202,12 @@ def validate(task):
         opportunities = sum(max(0, len(word) - criterion['lag']) for page in pages
                             for word in measurement_words(page['text'], runes, criterion['boundaries']))
         require(opportunities <= 2_000_000, 'Word-pair measurement exceeds its work limit')
+    elif criterion.get('kind') == 'language-score':
+        fields(criterion, ('kind', 'modelId', 'modelSha256'), 'Rune-language criterion')
+        require(criterion['modelId'] == LANGUAGE_MODEL_ID and criterion['modelSha256'] == LANGUAGE_MODEL_SHA256,
+                'Choose the pinned rune-language comparison criterion')
+        require([entry['latin'] for entry in alphabet] == language_model()['alphabet'],
+                'Rune-language comparison needs the canonical GP29 alphabet order')
     else:
         fields(criterion, ('kind',), 'Measurement criterion')
         require(criterion['kind'] == 'measurement', 'Unsupported criterion')
@@ -277,6 +348,7 @@ def run(task):
     word_opportunities = word_matches = 0
     word_expected = Fraction(0)
     sum_pages = []
+    language_pages = []
     sum_words = sum_total = 0
     for page in task['pages']:
         text = page['text']
@@ -291,6 +363,8 @@ def run(task):
         if task['criterion']['kind'] == 'exact-prefix':
             prefix = task['criterion']['values']
             matches.append({'page': page['id'], 'matched': values[:len(prefix)] == prefix})
+        if task['criterion']['kind'] == 'language-score':
+            language_pages.append({'page': page['id'], **language_evaluate(values)})
         if task['criterion']['kind'] == 'word-affine-count':
             opportunities, matched, expected = count_word_pairs(text, indices, task['criterion'])
             word_pages.append({'page': page['id'], 'opportunities': opportunities,
@@ -317,6 +391,9 @@ def run(task):
                                'expected': rational_json(word_expected), 'pages': word_pages}
     if task['criterion']['kind'] == 'word-prime-sums':
         result['wordSums'] = {'words': sum_words, 'total': sum_total, 'pages': sum_pages}
+    if task['criterion']['kind'] == 'language-score':
+        result['languageScore'] = {'modelId': task['criterion']['modelId'],
+                                   'modelSha256': task['criterion']['modelSha256'], 'pages': language_pages}
     return result
 
 

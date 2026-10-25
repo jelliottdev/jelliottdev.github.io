@@ -1,0 +1,48 @@
+Language-pattern comparison
+
+Question: does the order of these runes resemble reference prose more than
+32 rearrangements of the same runes? This is a diagnostic, not a readable-text
+verdict, language identification or decryption test.
+
+Eight ordinary references: English, Welsh, German, French, Spanish, Italian,
+Portuguese and Finnish. Each model uses the same 997 FLORES dev sentences.
+Each scores groups of three rune units, including groups across word breaks
+but not across pages. Scores must not be compared directly across languages.
+The fixed tables, spelling conversion, source hashes and license attribution
+are in language-model.json. Derived statistics are CC BY-SA 4.0.
+
+Reference spelling conversion
+Latin references are uppercased and accents removed. Internal apostrophes
+are removed; other non-A-Z characters separate words. K and Q become C,
+V becomes U, and Z becomes S. The declared greedy groups map to GP29 units;
+ING becomes NG and IO becomes IA. Words are then joined before scoring.
+This mechanical conversion is not a phonetic transcription. It can distort
+languages differently. Native manuscript rune outputs need no re-encoding.
+
+What the controls showed
+Held-out material uses eight disjoint source-article groups from FLORES
+devtest, at lengths 40, 80, 160 and 240. No source URL occurs in both training
+and devtest. Nine known LP readings are additional checks, not training data.
+Correct texts outscored all 795 paired wrong-key outputs under the intended
+reference. However, 88 of 768 wrong FLORES outputs and 4 of 27 wrong LP
+outputs beat all 32 rearrangements under at least one reference. A low bar
+in the interface therefore does not establish that output is readable.
+
+The wrong-key controls cover only three errors in one encryption family.
+They do not estimate the false-positive rate of a large key search. The
+modern translated prose, small set of articles and spelling conversion limit
+what these comparisons can establish. Forty runes is a declared minimum,
+not a proven reliability threshold. Thirty-two rearrangements give coarse
+counts, not probabilities, and do not account for selecting the best of
+many attempted rules. A promising result needs coherent extended output and
+a separately specified check on material not used to select the rule.
+
+Reproduction from the repository
+python scripts/build_language_model.py
+node scripts/test_language_score.cjs
+python scripts/calibrate_language_score.py --output PATH_TO_NEW_REPORT.json
+
+language-reference-calibration.json retains the protocol, source/script
+hashes and summary counts. The command above reproduces the full per-sample
+report. Browser result packages contain the exact pinned language-model.json
+and an independent Python implementation; downloading is optional.
