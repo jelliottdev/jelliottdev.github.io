@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
                   'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
                   'article', 'method_topics', 'reader_finding', 'reader_limit', 'materials', 'discovery',
-                  'recorded_comparison', 'research_questions', 'reader_test')
+                  'recorded_comparison', 'research_questions', 'reader_test', 'reader_title', 'reader_intro', 'reader_question')
 
 
 def checker_payload(records, registry_bytes):
@@ -535,6 +535,7 @@ def build(root=ROOT):
                                 encoding='utf-8', newline='\n')
         discovery.append({
             'id': identifier, 'title': record['title'], 'question': record['question'],
+            **{key: record[key] for key in ('reader_title', 'reader_intro', 'reader_question') if key in record},
             'summary': record['summary'], 'tags': record['tags'],
             'finding': record.get('reader_finding') or record['finding'],
             'scope': record['scope'], 'limitations': record['limitations'],

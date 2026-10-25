@@ -11,6 +11,7 @@
       "id": "a03-haplography-source-gate",
       "title": "Does the A-03 image audit bound missed doubled runes?",
       "question": "Does the source's preserved image-count audit satisfy its declared controls and justify K≤26 missed doublets?",
+      "reader_question": "Could missed doubled runes explain the repeat deficit?",
       "summary": "The published counts and arithmetic reproduce, but the source misses its image agreement gate and its arithmetic-only planted control does not measure image detection. The observed excess of 26 pairs is not an upper bound on hidden merges.",
       "tags": [
         "source audit",
@@ -156,6 +157,9 @@
       "id": "alternating-alphabet-interruption-clocks",
       "title": "Alternating alphabets with two interruption clocks",
       "question": "Do two known keys, alternating GP/reversed-GP cipher alphabets and either of two ciphertext-F pause rules recover a declared page opening?",
+      "reader_title": "Can switching alphabets and pausing at F recover a known opening?",
+      "reader_intro": "Uses two keys from solved passages while switching between the normal and reversed rune alphabets, testing whether F pauses the key position alone or also pauses the alphabet switch.",
+      "reader_question": "Could F pause the key, the alphabet, or both?",
       "summary": "Neither F-clock rule recovered a declared twelve-rune opening in 55 LP2 pages.",
       "tags": [
         "alternating alphabets",
@@ -358,6 +362,7 @@
       "id": "artifact-stream-skip-grid",
       "title": "Puzzle numbers and sequences as keys",
       "question": "Do the source numeric2 Part A streams pass its two-stage LP2 score gates under conditional key skipping?",
+      "reader_question": "Can numbers from the puzzle act as keys when key values may be skipped?",
       "summary": "23,100 short screens produce 194 whole-page checks; none passes the final source gate. A separate post-target audit of all retained terminal hypotheses also finds no final-gate crossing.",
       "tags": [
         "numeric keys",
@@ -544,6 +549,7 @@
       "id": "autokey-skip-family",
       "title": "Autokey with skipped key positions",
       "question": "Does the complete source autokey-with-skips grid produce a full-page candidate above its English-score gate?",
+      "reader_question": "Can recovered or encrypted runes continue a key when positions may be skipped?",
       "summary": "No candidate crossed the source English-score threshold in 9,900 full-page decodes. The source encoder and decoder follow different future-key rules in 247 of 360 known-message tests, limiting the result.",
       "tags": [
         "autokey",
@@ -724,6 +730,7 @@
       "id": "b04-source-seeds-opening-cribs",
       "title": "B-04 cryptographic seed streams against fixed LP2 openings",
       "question": "Do the published B-04 cryptographic seed keystreams produce a fixed known-reading opening on any included LP2 page under the source key-skip rule?",
+      "reader_question": "Were the published cryptographic seed streams checked against LP2 openings?",
       "summary": "Across 1,385,600 source-defined keystream configurations, none can produce any of nine fixed 12-rune known-reading openings at the start of one of 55 nonempty LP2-00–55 pages under the stated key-skip rule.",
       "tags": [
         "B-04",
@@ -900,6 +907,7 @@
       "id": "block-boundary-doublets",
       "title": "LP2 doublets at proposed block boundaries",
       "question": "Do the 86 adjacent repeats collect at block boundaries for sizes five, seven or thirteen, or at any selected periodic offset?",
+      "reader_question": "Do repeated neighboring runes mark the ends of fixed-size blocks?",
       "summary": "For page-anchored sizes 5, 7 and 13 the boundary counts are 18, 13 and 6, close to conditional expectations. The best of 434 size/phase placements is ordinary under the same search on fixed-count controls.",
       "tags": [
         "block cipher doublets",
@@ -1073,6 +1081,7 @@
       "id": "block-lookahead-feedback",
       "title": "Block-start lookahead feedback: zero-key completion",
       "question": "Does the future-plaintext block-start feedback rule, completed with zero key and terminal zero, produce a reproducible LP2 reading for block sizes five or seven?",
+      "reader_question": "Does feedback from the next block reveal a known opening?",
       "summary": "Both specified decoders round-trip 15 planted known-reading pages. Neither produces any of 15 fixed known openings at the start of 55 nonempty LP2 pages, and the decoded rune distributions remain flat. The source key was not specified.",
       "tags": [
         "block feedback",
@@ -1243,6 +1252,7 @@
       "id": "c2-extension-generator-controls",
       "title": "Does a matching decoder recover the planted message?",
       "question": "Do matching source decoder rules recover known planted text across the eight C2-EXT generator-and-plant pairs when supplied the correct key?",
+      "reader_question": "Can a decoding tool miss the right message even with the right key?",
       "summary": "Matching the decoder to the planted rule raises median recovery from 10–33% to 98–100% across eight source generator-and-plant pairs. All source recovery gates pass.",
       "tags": [
         "source control",
@@ -1419,6 +1429,7 @@
       "id": "cc-section-representation-census",
       "title": "Numerical matrix lengths across LP2 sections",
       "question": "Which proposed section-size grids follow from archived rune and digit counts, and how often do square lengths occur in contiguous page ranges?",
+      "reader_question": "Do the proposed numerical matrices fit the manuscript's section lengths?",
       "summary": "Recounts eleven supplied LP2 section groups under four rune-to-number representations and compares square lengths across every contiguous page interval from LP2-00 to LP2-39.",
       "tags": [
         "numerical matrix",
@@ -1563,6 +1574,7 @@
       "id": "compass-shared-radii",
       "title": "LP2-33 and LP2-39: shared three-circle radii at native scale",
       "question": "Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?",
+      "reader_question": "Can the same three compass radii locate a point on both LP2-33 and LP2-39?",
       "summary": "Fresh dot measurements at three thresholds and exact rational bounds exclude shared ordered radii at native scale. Page-specific radii and rescaling remain outside the test.",
       "tags": [
         "compass",
@@ -1808,6 +1820,7 @@
       "id": "crib-difference-stream-search",
       "title": "LP2-39: do crib-difference triplets recur elsewhere?",
       "question": "Do fixed GP-index differences from proposed LP2-39 red-header cribs match other LP rune streams more often than page-preserving shuffles?",
+      "reader_question": "Can differences from a guessed header word point to a key elsewhere in Liber Primus?",
       "summary": "Seventeen fixed three-rune candidates yield nine exact source hits across 71 other text pages, below the 10.615 mean in 2,000 within-page shuffles.",
       "tags": [
         "crib difference",
@@ -1880,6 +1893,7 @@
       "id": "crib-inferred-feedback-table",
       "title": "What a crib fixes in a feedback table",
       "question": "How many arbitrary 29-entry feedback substitution tables remain compatible with each fixed 12-rune opening at an LP2 page start?",
+      "reader_question": "Does a short feedback-table fit actually constrain the key?",
       "summary": "A handful of proposed openings are internally consistent with arbitrary feedback tables, but each leaves at least 18 of the 29 table entries free.",
       "tags": [
         "feedback cipher",
@@ -2532,6 +2546,7 @@
       "id": "d04-remaining-page-feedback",
       "title": "Can earlier ciphertext runes supply the key?",
       "question": "Does the source constant-seed ciphertext-feedback coefficient grid produce a supported full-page English output on the remaining 52 nonempty LP2 pages?",
+      "reader_question": "Do weighted earlier runes turn the remaining pages into English?",
       "summary": "No tested rule reaches the source signal line across the 52 additional pages. Known Warning controls recover correctly inside the complete search.",
       "tags": [
         "ciphertext feedback",
@@ -2701,6 +2716,7 @@
       "id": "d4v1-column-unigram-key-recovery",
       "title": "A column solver with a short-key limit",
       "question": "Does the pinned source’s automatic column-frequency solver produce English-like LP2 pages with fixed repeating-key lengths 2, 3 or 5?",
+      "reader_question": "Has a program tried to infer a short repeating key from rune frequencies?",
       "summary": "A pinned C++ solver discards hard-coded possible interrupter positions, infers one shift per Vigenère column from solved-rune frequencies, then decrypts the unfiltered page. We replayed its direct numeric preview for three fixed short key lengths and added controlled whole-page English scoring.",
       "tags": [
         "LP2",
@@ -2875,6 +2891,7 @@
       "id": "d4v1-missing-prime-anchor-gate",
       "title": "Missing-prime keys and routes: checking the score",
       "question": "Do the pinned missing-prime anchor trigger and the resulting source score pass known-text and shuffled-text controls before applying them to unsolved pages?",
+      "reader_question": "Can the missing-prime and grid-key score distinguish a reading from shuffled text?",
       "summary": "A source program launches two numeric keys and route searches after three consecutive missing-prime word sums. Its unigram score passes every one of 199 shuffled controls for both keys on a known reading, and route order cannot change that score.",
       "tags": [
         "source audit",
@@ -2961,6 +2978,7 @@
       "id": "d4v1-positional-totient-streams",
       "title": "Positional totient shifts on complete LP2 pages",
       "question": "Do any of the source-defined 100 positional totient shifts yield English-like complete LP2 pages?",
+      "reader_question": "Has a totient shift based on each rune’s position been checked?",
       "summary": "A pinned public C++ proposal subtracts φ(position+offset) modulo 29. We screened offsets 0–99 on all 55 rune-bearing unsolved pages with a controlled English whole-page scorer.",
       "tags": [
         "LP2",
@@ -3264,6 +3282,7 @@
       "id": "decimal-chain-opening-cribs",
       "title": "Five-digit chain-addition keys",
       "question": "Does any five-digit decimal chain-addition primer recover one of nine fixed 12-rune openings at an unsolved LP2 page start?",
+      "reader_question": "Could a five-digit chain-addition key reveal a known opening?",
       "summary": "All 100,000 decimal primers under both signs give zero exact matches to nine known openings on 55 page starts.",
       "tags": [
         "Gromark-style",
@@ -3533,6 +3552,7 @@
       "id": "direct-hill-key-feasibility",
       "title": "Direct Hill keys at LP2 page starts",
       "question": "Can any invertible direct 2×2 or 3×3 Hill matrix over the GP29 indices recover a fixed 12-rune known-reading opening at an LP2 page start?",
+      "reader_question": "Could a single Hill-cipher key turn a page opening into a known passage?",
       "summary": "A complete matrix-feasibility check finds no direct Hill key for any of 990 fixed page-opening cases.",
       "tags": [
         "Hill cipher",
@@ -3702,6 +3722,7 @@
       "id": "direct-polynomial-streams",
       "title": "LP2-00–55: direct polynomial streams, degree at most eight",
       "question": "Can a fixed-modulus integer polynomial of degree at most eight directly generate each page, in index or prime coordinates?",
+      "reader_question": "Could a low-degree polynomial directly produce a page’s rune values?",
       "summary": "All 880 page/representation/degree checks have difference gcd 1, excluding this direct-output model for every modulus greater than one. Polynomial keys mixed with plaintext are not tested.",
       "tags": [
         "polynomial",
@@ -3945,6 +3966,7 @@
       "id": "dot-constellation-candidate-fit",
       "title": "Five-star catalogue patterns against the five dots",
       "question": "How closely do the fixed five-brightest-catalogue-entry patterns in all 88 IAU constellations match the existing LP2 five-dot geometry under the frozen similarity grid?",
+      "reader_question": "Do fixed five-star patterns match the five dots?",
       "summary": "Volans is closest in the fixed 88-pattern library, with RMS distance 34.9 pixels from LP2-07 dot centres. Orion, Aquila and Bootes rank 69, 72 and 24. Full-selection geometric references sometimes match this closely.",
       "tags": [
         "five dots",
@@ -4558,6 +4580,7 @@
       "id": "doublet-event-lags",
       "title": "LP2-00–55: distances between doublet events",
       "question": "Do the specified event extraction and lags reproduce the reported lag-one mean and lag-three +4 rate?",
+      "reader_question": "Do the extracted repeat symbols reproduce the claimed number pattern?",
       "summary": "86 doublet events give a lag-one mean of 8.6353 and ten lag-three +4 matches out of 83 comparisons (12.05%). Reported values differ; no p-value is adopted.",
       "tags": [
         "doublets",
@@ -5259,6 +5282,7 @@
       "id": "doublet-section-residues",
       "title": "Do doublets fall at particular section positions?",
       "question": "Do the 86 unsolved-text doublets cluster by their section-relative positions modulo two through eight?",
+      "reader_question": "Do repeated neighboring runes favor a position within manuscript sections?",
       "summary": "The seven source residue vectors reproduce, but 4,316 of 5,000 section-conditioned controls show at least as much selected modulo concentration.",
       "tags": [
         "doublets",
@@ -5425,6 +5449,7 @@
       "id": "doublet-sentence-residues",
       "title": "Do doublets favor positions within sentences?",
       "question": "Do the 86 LP2 doublets cluster by sentence-relative rune position modulo two through eight?",
+      "reader_question": "Do repeated neighboring runes favor a position within sentences?",
       "summary": "All seven public sentence-relative residue counts reproduce from pinned punctuation boundaries, but 2,068 of 5,000 section-preserving controls show a best pattern at least as strong.",
       "tags": [
         "doublets",
@@ -5490,6 +5515,7 @@
       "id": "dukotah-b04-full-source-replay",
       "title": "Cryptographic seed streams across the unsolved pages",
       "question": "Does the pinned B04 dictionary and skip-aware decoder find a source-scored English reading in the unsolved manuscript?",
+      "reader_question": "Can a short Cicada-related seed generate the manuscript's key?",
       "summary": "Full pinned B04 A/B/C search plus D follow-up, with planted-message gate and original-decoder crosschecks.",
       "tags": [
         "B-04",
@@ -5686,6 +5712,9 @@
       "id": "dukotah-book-matrix-hill",
       "title": "Number panels as Hill-cipher keys",
       "question": "Do six pinned number-panel matrices, or the corrected LP2-15 panel, decode complete LP2 pages by fixed Hill blocks?",
+      "reader_title": "Can the number squares decode groups of runes?",
+      "reader_intro": "Treats six proposed number squares, plus a correction to the page 15 square, as keys that mix groups of rune numbers, then checks their complete-page outputs.",
+      "reader_question": "Could the manuscript’s number panels be matrices that decrypt the runes?",
       "summary": "The archived six-matrix source replay matches. None of its 1,344 page-or-book outputs passes the declared English-score flag. The LP2-15 4×4 array miscopies one printed cell; correcting that cell also produces no flagged output.",
       "tags": [
         "LP2",
@@ -5894,6 +5923,7 @@
       "id": "dukotah-c8-timestamp-join",
       "title": "Do archived LP2 texts supply signature dates for a public pad?",
       "question": "Does C8 Step 0 find a PGP signature creation time attached to each LP2 decrypt target in its two preserved textual inputs?",
+      "reader_question": "Do these archived texts give a signature date for each encrypted page?",
       "summary": "All eight signature blocks occur in LP1. Neither the LP2 Markdown portion nor the 57-segment runic transcription contains signature armor, so these texts supply no per-target-page timestamp join.",
       "tags": [
         "source audit",
@@ -5965,6 +5995,7 @@
       "id": "dukotah-ciphertext-feedback-coefficients",
       "title": "Do ciphertext-feedback coefficients decode these pages?",
       "question": "Does the pinned three-page short-history coefficient search recover its in-domain plants and produce an English-score hit on LP2?",
+      "reader_question": "Could earlier ciphertext runes supply the next key?",
       "summary": "The source's 60,864 full-page decodes yield no score near its signal bar on LP2-00, LP2-05 or LP2-20. Two additional plants within the default seed grid recover perfectly; two published prose maxima do not match the current pinned executable.",
       "tags": [
         "ciphertext feedback",
@@ -6046,6 +6077,7 @@
       "id": "dukotah-fixed-numeric-keys",
       "title": "Rotation, hash and cuneiform keys",
       "question": "Do the three pinned Campaign VII numeric-key groups produce English-scoring complete LP2 outputs under their exact additive GP29 transforms?",
+      "reader_question": "Could the rotation sequence, LP2-56 hash or cuneiform numbers serve as keys?",
       "summary": "Three archived searches over 12 named numeric streams and 5,376 complete settings reproduce; none clears their −5.2 English-score bar. Planted controls show 285 of 288 exact constructed messages clear that bar, so the result is scoped to the named keys and source rules.",
       "tags": [
         "LP2",
@@ -6272,6 +6304,7 @@
       "id": "dukotah-g02-signature-corpus",
       "title": "Which archived Cicada signatures verify?",
       "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
+      "reader_question": "Which archived messages have a valid Cicada signature?",
       "summary": "GnuPG verifies 115 signatures in the pinned 133-file corpus. The source program reported 114 because it missed one signature embedded in a PGP MESSAGE; its older and newer tables still agree on their 123 shared paths.",
       "tags": [
         "Cicada 3301",
@@ -6352,6 +6385,7 @@
       "id": "dukotah-g3-pointer-framings",
       "title": "Base32 and coordinate pointer checks",
       "question": "Does the pinned G3 base32 and coordinate-pointer program flag any of three LP2 number streams beyond its shuffled controls?",
+      "reader_question": "Do rune-derived number streams reveal an address?",
       "summary": "The source’s repeated-symbol pointer flag is reproducibly negative for all three streams. Its base32 match counts depend only on stream length, and its latitude/longitude regex cannot match a digit-only string.",
       "tags": [
         "LP2",
@@ -6551,6 +6585,7 @@
       "id": "dukotah-grid-as-key-campaign7",
       "title": "Grid and onion bytes as LP2 keys",
       "question": "Do the Campaign VII A2 and B2 grid-byte and 2014 onion streams yield English under their fixed repeating-key rules?",
+      "reader_question": "Could the LP2 number grid or 2014 onion hex be the key to the runic pages?",
       "summary": "Three pinned programs replay across 14,784 fixed candidate outputs. No candidate passes their English-score flag. Eight constructed-message controls validate the declared operators, with literal-F substitutions disclosed.",
       "tags": [
         "LP2",
@@ -6761,6 +6796,7 @@
       "id": "dukotah-grid-cell-adjudication",
       "title": "Which bytes are printed in the base-60 grid?",
       "question": "Do the exact LP2-49–51 images reproduce six source-disputed base-60 token readings and the source pixel controls?",
+      "reader_question": "Can we check the disputed bytes against the printed cells?",
       "summary": "The original image crops and pinned source pixel matcher reproduce six token readings; the source blind-read history cannot be independently recreated.",
       "tags": [
         "base 60",
@@ -6851,6 +6887,7 @@
       "id": "dukotah-grid-token-roles",
       "title": "Grid bytes as ciphertext or rune pointers",
       "question": "Do two pinned interpretations of the LP2-49–51 grid reveal text under the archived and image-audited byte readings?",
+      "reader_question": "Could the grid bytes themselves be encrypted, or point to runes elsewhere in the book?",
       "summary": "The archived byte-cipher and rune-pointer searches reproduce. Neither their original 256-byte list nor two later image-audited readings passes the source’s fixed ASCII or English-score screen.",
       "tags": [
         "LP2",
@@ -6944,6 +6981,7 @@
       "id": "dukotah-h02-raw-whitespace-census",
       "title": "Which archived signed bodies retain trailing whitespace?",
       "question": "What trailing space/tab patterns survive in the preserved raw clear-signed corpus, and do copies agree?",
+      "reader_question": "Do archived signed messages preserve the same invisible whitespace?",
       "summary": "A strict 111-file subset contains 67 exact bodies and 54 canonical message groups. Sixteen exact bodies carry trailing whitespace; 13 canonical groups have copies with different suffix counts. Valid signatures do not authenticate those bytes.",
       "tags": [
         "source audit",
@@ -7026,6 +7064,7 @@
       "id": "dukotah-h03-onion-cookie-xor",
       "title": "Do the onion cookies reveal text by XOR?",
       "question": "Does the exact source-executed cookie-to-blob XOR grid produce any 32-byte output with at least 80% printable ASCII?",
+      "reader_question": "Have the 2013 onion cookies been XORed against the grid and later blobs?",
       "summary": "The executable 64-case source grid reproduces a null at its printable threshold; the written plan describes additional cases and checks that this executable did not run.",
       "tags": [
         "XOR",
@@ -7097,6 +7136,7 @@
       "id": "dukotah-held-corpus-skeleton-replay",
       "title": "Matching manuscript word lengths to archived texts",
       "question": "Do these available texts contain the manuscript’s sequence of word lengths?",
+      "reader_question": "Do any of these texts match the manuscript’s word lengths?",
       "summary": "No complete pattern matched in 84 eligible texts from 94 available files. The unchanged source scan compared a 2,928-word pattern and two fixed prefixes; it did not replay the historical 224-text corpus.",
       "tags": [
         "word lengths",
@@ -7163,6 +7203,7 @@
       "id": "dukotah-homophonic-recovery-control",
       "title": "Homophonic search: synthetic recovery controls",
       "question": "Does the recovered P6 homophonic partition search recover and detect these three known synthetic inputs?",
+      "reader_question": "Can this search recover the known hidden classes?",
       "summary": "Three synthetic controls missed complete recovery and both source detection gates. No manuscript target was scored.",
       "tags": [
         "homophonic substitution",
@@ -7218,6 +7259,7 @@
       "id": "dukotah-image-template-rebuild",
       "title": "Can the archived LP2 image read be rebuilt from the original pages?",
       "question": "Do the pinned four-stage image-template programs reproduce their archived line, shape and count-alignment outputs from the 56 original LP2 JPEGs?",
+      "reader_question": "Was the manuscript transcription checked directly against its images?",
       "summary": "The original code runs on all 56 byte-matched JPEGs. Geometry counts match, but the fresh run finds 229 shape classes versus 226 archived and 233 count-matching lines versus 232. Its reported rune agreement is fitted and scored on the same LP2 lines.",
       "tags": [
         "transcription",
@@ -7308,6 +7350,7 @@
       "id": "dukotah-line-geometry-channel-replay",
       "title": "Do LP2's lines carry another message?",
       "question": "Do the pinned image-row measurements yield a decoded data channel, and can the source detector recover planted messages?",
+      "reader_question": "Could line spacing or layout hide a message?",
       "summary": "The source's layout measurements and bit searches reproduce, but its planted-message controls do not establish enough recovery power for a broad negative verdict.",
       "tags": [
         "line layout",
@@ -7496,6 +7539,7 @@
       "id": "dukotah-longkey-skip-beam",
       "title": "Long-key search with optional skipped positions",
       "question": "Does a pinned beam search over three long candidate keys recover complete text from six unsolved LP2 pages?",
+      "reader_question": "Could a long running key stay hidden by skipping key positions?",
       "summary": "The archived 54-case beam search reproduces and finds no score above its −5 bar. In 18 planted collision-skip cases with the correct key, all scores clear that bar but none recover the exact text, so the source screen cannot exclude the proposed mechanism.",
       "tags": [
         "LP2",
@@ -7600,6 +7644,7 @@
       "id": "dukotah-mdl-order-profile",
       "title": "Does LP2's rune order reveal a generator?",
       "question": "Does a published first-order entropy dip survive a control that matches the manuscript's scarce adjacent repeats?",
+      "reader_question": "Does an entropy dip reveal how LP2 was made?",
       "summary": "The published 40-control entropy anomaly reproduces exactly, but it lies inside a new 1,000-stream control range after matching LP2's 86 adjacent repeats.",
       "tags": [
         "entropy",
@@ -7815,6 +7860,7 @@
       "id": "dukotah-nonenglish-control-gate",
       "title": "Two language-scoring controls missed their frozen rules",
       "question": "Did two archived language-scoring searches satisfy their own frozen positive-control rules?",
+      "reader_question": "Did these language searches validate their scoring controls?",
       "summary": "Both sources report 20,480 manuscript decodes, but neither saved control meets its preregistered advantage-over-English test. Each program used a different comparison to proceed.",
       "tags": [
         "language models",
@@ -7900,6 +7946,7 @@
       "id": "dukotah-offset-model-integrity",
       "title": "The offset screen changes when training books are missing",
       "question": "Do matching planted-control totals mean a fallback prefilter selects the same key offsets as the pinned four-book source model?",
+      "reader_question": "Can two screens pass the same number of tests but choose different key positions?",
       "summary": "Yes. Both kept 26 of 40 planted true offsets, but five individual trial rankings changed; the first-ranked count was 21 versus 22, and one full million-offset target unit chose a different best position.",
       "tags": [
         "source input",
@@ -7994,6 +8041,7 @@
       "id": "dukotah-ornament-component-recount",
       "title": "What does the low-n ornament filter count?",
       "question": "Do fresh image component counts reproduce the stored counts in the 30 ornament boxes selected by n <= 16?",
+      "reader_question": "Do the thirty low-n ornament boxes contain at most sixteen glyphs?",
       "summary": "Exact-image recount reproduces all 30 stored component counts. The old n <= 16 selection does not mean at most sixteen glyphs.",
       "tags": [
         "ornament bands",
@@ -8107,6 +8155,7 @@
       "id": "dukotah-ornament-fresh-reader-gate",
       "title": "Can the rebuilt reader inspect ornament bands?",
       "question": "Does the fresh 229-class image reader pass the source's direct solved-page control before it is used on artwork-adjacent bands?",
+      "reader_question": "Can this reader reliably read rune bands in the artwork?",
       "summary": "The fresh image reader reaches 83.4% agreement on two held-out solved LP2 pages, below the source's 90% calibration gate. Ornament content was not evaluated with it.",
       "tags": [
         "ornament bands",
@@ -8180,6 +8229,7 @@
       "id": "dukotah-payload-key-skip",
       "title": "Number-grid bytes as a key with skipped positions",
       "question": "Do either pinned 256-byte LP2-49–51 grid reading, in either order, sign and Atbash orientation, yield a complete English-scoring LP2 page under the Campaign XVIII collision-constrained key-skip decoder?",
+      "reader_question": "Could the number-grid bytes be a key whose positions sometimes get skipped?",
       "summary": "The exact published page search scores 880 fixed settings; none clears its −5.5 screen. The same decoder exactly recovers 16 of 16 planted complete known readings. The result concerns this byte-to-key rule and the executable source padding behavior.",
       "tags": [
         "LP2",
@@ -8384,6 +8434,7 @@
       "id": "dukotah-payload-varint-matrix",
       "title": "Do LP2 grid bytes track doublet gaps? Source varint matrix",
       "question": "Does the exact source-defined 24-comparison varint grid show strong rank alignment with adjacent repeated-rune distances?",
+      "reader_question": "Have the LP2 grid's byte versions been read as base-128 gap sequences?",
       "summary": "The complete source E-02v varint matrix reproduces: all 24 comparisons stay below the stated 0.5 rank-correlation gate.",
       "tags": [
         "LP2-49",
@@ -8470,6 +8521,7 @@
       "id": "dukotah-reading-direction-cipher-grid",
       "title": "Reading directions followed by simple ciphers",
       "question": "Do five archived line-reading directions followed by 37 fixed cipher settings reveal a complete LP2 page?",
+      "reader_question": "Has changing the reading direction and then trying familiar ciphers worked?",
       "summary": "A complete pinned Campaign VII route-and-cipher replay found no unsolved output above the source’s fixed −5 quadgram-score threshold. The best LP2 score was lower than 40 of 49 whole-search shuffled maxima.",
       "tags": [
         "LP2",
@@ -8687,6 +8739,7 @@
       "id": "dukotah-t2-fresh-controls",
       "title": "Do T2's image controls pass with the fresh template bank?",
       "question": "With exact original LP2 images and the fresh 229-class bank, what do the pinned T2 physical-splice, planted length-error and separator programs measure?",
+      "reader_question": "How well can the image method notice a planted wrong rune?",
       "summary": "The T2 source programs recover all 545 valid rune splices and localize 598/604 planted missing runes and 588/604 planted extra runes. They flag 26 unplanted lines; a component-count rule labels those segmentation cases, but it does not prove there are no real transcription errors. The registered separator deletion control was not implemented.",
       "tags": [
         "transcription",
@@ -8764,6 +8817,7 @@
       "id": "dukotah-t2-fresh-template-loo",
       "title": "Does a fresh image-template bank change T2's rune choices?",
       "question": "When the pinned T2 single-substitution probe uses freshly rebuilt 229-class templates, does it select the same runes as its archived output on all mapped LP2 lines?",
+      "reader_question": "Can the image check find a different rune on a manuscript page?",
       "summary": "On 604 mapped lines, the fresh bank makes exactly the same best rune choices as the archived T2 output. Its costs and selected pixel positions differ, and its comparison uses the reference reading around each tested rune.",
       "tags": [
         "transcription",
@@ -8833,6 +8887,7 @@
       "id": "dukotah-word-boundary-key-clocks",
       "title": "Word boundaries as key clocks",
       "question": "Do archived separator and word-prime key schedules recover a complete unsolved LP2 page?",
+      "reader_question": "Could spaces or punctuation tell the cipher when to advance or restart its key?",
       "summary": "Three pinned source branches reproduced across 55 rune-bearing unsolved pages. The best combined manuscript score was matched or exceeded by 44 of 49 whole-search shuffled controls; an archived known-page opening matches 56 of 85 runes, not the full reading.",
       "tags": [
         "LP2",
@@ -9500,6 +9555,8 @@
       "id": "emerson-running-key",
       "title": "Emerson as an additive LP2 running key",
       "question": "Does the preserved Self-Reliance text, mapped A=0 through Z=25 and subtracted modulo 29 at any contiguous offset, produce strong 96-rune LP2 openings and held-out continuations on three fixed pages?",
+      "reader_title": "Can an essay decode the beginnings of three pages?",
+      "reader_intro": "Uses letter values from Ralph Waldo Emerson's essay Self-Reliance as a key, trying every starting place and checking whether the best-scoring beginning continues into the next 96 runes.",
       "summary": "The planted LP1 control is recovered at its exact offset. Best Emerson openings on LP2-00, 31 and 54 score near full-search shuffled-source maxima, and their continuations remain much lower than the known-reading control.",
       "tags": [
         "running key",
@@ -9655,6 +9712,9 @@
       "id": "eternalth-f-preserving-vigenere",
       "title": "Fixed-key F-preserving Vigenère on LP2",
       "question": "Can the pinned AIRAUMFERAE Vigenère operators explain complete LP2 pages when applied to a fixed 26-letter GP transliteration?",
+      "reader_title": "Can a repeating key leave F unchanged and still produce the manuscript?",
+      "reader_intro": "Checks whether a fixed key that leaves input F unchanged could produce the pages' Latin rune labels, and separately tests ordinary decoding with the same key; this uses 26 Latin letters, not 29 rune values.",
+      "reader_question": "Has the AIRAUMFERAE key and F-preserving rule been checked on full pages?",
       "summary": "With one explicit 26-letter conversion and page-local key reset, 53 of 55 LP2 pages contain output letters forbidden by the source F-preserving operator. The ordinary invertible branch has no English-like complete-page output.",
       "tags": [
         "LP2",
@@ -9832,6 +9892,7 @@
       "id": "f-delete-lag13",
       "title": "Delete F runes, then test lag-13 repeats",
       "question": "Does deleting every F reveal excess exact two-rune repetition at lag 13?",
+      "reader_question": "Does skipping F reveal a lag-13 pattern?",
       "summary": "After deleting all F runes, 18 exact lag-13 two-rune repeats occur; 104 of 499 page-preserving shuffles have at least 18.",
       "tags": [
         "F skip",
@@ -9995,6 +10056,7 @@
       "id": "f-interrupter-gap-direct-read",
       "title": "Direct GP readings of gaps between F runes",
       "question": "Can every consecutive F gap on LP2-00–55 map literally to one GP index or prime value without reduction or omissions?",
+      "reader_question": "Could the spacing between F runes spell a separate message?",
       "summary": "Pins all 458 F positions and tests four literal gap-to-GP interpretations under both joined-page and within-page boundaries.",
       "tags": [
         "F interrupter",
@@ -10173,6 +10235,7 @@
       "id": "feedback-opening-census",
       "title": "Feedback ciphers with fixed starting values",
       "question": "Do scalar-primed feedback rules recover a known 12-rune opening at an unsolved LP2 page start?",
+      "reader_question": "Could an earlier ciphertext or plaintext rune supply the key for a familiar opening?",
       "summary": "Neither feedback rule recovers a known opening across 1,856 fixed configurations on 55 pages. Different openings and other starting sequences remain untested.",
       "tags": [
         "autokey",
@@ -10420,6 +10483,7 @@
       "id": "fibonacci-stream-skip-grid",
       "title": "Fibonacci streams with conditional key skips",
       "question": "Does the complete fixed Fibonacci seed grid clear the source LP2 score gates when conditional key skips are permitted?",
+      "reader_question": "Do Fibonacci sequences work as keys when key values may be skipped?",
       "summary": "An exact phase/sign reduction turns 925,100 source labels into 92,510 canonical screens.900 settings receive complete-page decoding; none passes the source final gate or the separate retained-terminal normalized audit.",
       "tags": [
         "Fibonacci",
@@ -10608,6 +10672,7 @@
       "id": "fixed-step-position-extraction",
       "title": "Reading every nth rune",
       "question": "Does any fixed step from 2 to 29, with any starting phase and either page-local or joined position counting, produce English-like LP2 text?",
+      "reader_question": "Has taking every nth rune at different starting points been tried?",
       "summary": "A complete 868-setting fixed-step search found no output that stood out against matched full searches on shuffled pages.",
       "tags": [
         "every nth rune",
@@ -10793,6 +10858,7 @@
       "id": "four-phase-ioc",
       "title": "Four alternating rune streams: concentration check",
       "question": "Do the four position-modulo-four streams in the unsolved LP2 rune sequence retain unusually high rune concentration?",
+      "reader_question": "If the runes are split into four alternating messages, does each stream show the letter imbalance expected from a simple fixed substitution?",
       "summary": "Each of the four manuscript phases has an ordinary collision rate under page-preserving shuffles. A planted four-stream substitution example is clearly detected.",
       "tags": [
         "four-way interleaving",
@@ -10969,6 +11035,9 @@
       "id": "gp-prime-plaintext-feedback",
       "title": "GP prime values as a plaintext autokey",
       "question": "Do page-local plaintext-rune GP prime values, used one step back or as a running sum, yield unusually English-like complete LP2 pages?",
+      "reader_title": "Can decoded runes supply the next numerical key?",
+      "reader_intro": "Tests two ways to use each proposed decoded rune's assigned prime number as the next key: the previous rune's value or a running total, restarting on each page.",
+      "reader_question": "What happens if each decoded rune's prime value supplies the next key?",
       "summary": "Neither of two fixed plaintext-prime feedback rules stood out in a whole-page LP2 search: 144 of 199 matched shuffled searches scored at least as high as the best observed candidate.",
       "tags": [
         "gematria",
@@ -11579,6 +11648,7 @@
       "id": "grid-payload-prf-contested-masks",
       "title": "Do alternate grid bytes change the payload-derived key?",
       "question": "Does any of the 64 two-witness readings of six contested payload bytes pass the B-05 English-score screen?",
+      "reader_question": "Could six uncertain numbers in the grid hide the right key?",
       "summary": "All 64 documented byte combinations were screened across 15 generators, both reductions and signs. None of 3,840 decoder calls passed the fixed English-score requirement.",
       "tags": [
         "256-byte payload",
@@ -11653,6 +11723,9 @@
       "id": "grid-payload-prf-opening-cribs",
       "title": "Page 49–51 payload PRF keys against fixed LP2 openings",
       "question": "Can any pinned B-05 payload-derived key produce one of nine fixed 12-rune known-reading openings at an LP2 page start under the source key-skip rule?",
+      "reader_title": "Can keys from the number grid recover a known beginning?",
+      "reader_intro": "Tests fixed key sequences generated from the data in the page 49-51 number grid, allowing the source's limited key skips, against nine known twelve-rune beginnings on 55 page starts.",
+      "reader_question": "Were the page 49–51 payload-derived keys checked against LP2 openings?",
       "summary": "All 70,680 published B-05 source configurations were checked against nine 12-rune openings at 55 nonempty LP2-00–55 page starts. None produced a complete opening under the source key-skip rule.",
       "tags": [
         "page 49–51",
@@ -11840,6 +11913,7 @@
       "id": "grid-payload-prf-seed-corner",
       "title": "Can the number-grid payload seed a rune key?",
       "question": "Do the two canonical 256-byte grid payloads yield an English-scoring LP2 key under four named PRFs at offset zero?",
+      "reader_question": "If we stretch the hidden 256-byte grid into a key, does it reveal the opening runes?",
       "summary": "The best of 32 fixed payload-derived keys stayed below the predeclared English and shuffled-text thresholds. Four planted controls passed the same decoder.",
       "tags": [
         "256-byte payload",
@@ -11916,6 +11990,7 @@
       "id": "grid-payload-prf-source-grid",
       "title": "Can the 256-byte grid generate a reading key?",
       "question": "Do any of the published B-05 payload-derived keystream searches pass the fixed English-score screen?",
+      "reader_question": "Could the hidden number grid generate the key for Liber Primus?",
       "summary": "We reproduced the source's complete 70,680-case first-400-rune screen across the main grid, constant shifts, and byte variants. None passed its fixed English-score requirement.",
       "tags": [
         "256-byte payload",
@@ -12090,6 +12165,7 @@
       "id": "grid-prefix-split-openings",
       "title": "Grid prefix channels as repeating rune keys",
       "question": "Do suffix streams split by the grid's leading digit recover a known 12-rune opening at an LP2 page start?",
+      "reader_question": "Have the five grid-prefix groups been tried as separate keys?",
       "summary": "Five suffix channels, three declared value mappings, both Vigenère signs and every real key phase gave no exact known opening at the start of any of 55 nonempty LP2 pages.",
       "tags": [
         "LP2-49",
@@ -12616,6 +12692,7 @@
       "id": "grouped-key-advance-openings",
       "title": "Fixed-size grouped key advance",
       "question": "Can holding one key rune for two to five ciphertext runes recover a known LP2 page opening?",
+      "reader_question": "Would a key rune shared by several ciphertext runes reveal a familiar opening?",
       "summary": "Grouped key advance gave no exact known opening across 4,326 settings and 55 pages.",
       "tags": [
         "grouped key",
@@ -12810,6 +12887,7 @@
       "id": "h03-ps-layout-replay",
       "title": "2012 P.S. digit-block layout readings",
       "question": "Do the fixed column and line readings of the 2012 P.S. digit block reveal printable pair-ASCII text or a pinned longer constant?",
+      "reader_question": "Does turning the 2012 P.S. number block into columns reveal a message?",
       "summary": "Six bare-block and four indented-layout readings of the original 131 digits all fail the calibrated text-shape and pinned-constant screens. Two four-digit motifs appear only in separate indented routes.",
       "tags": [
         "2012",
@@ -12875,6 +12953,7 @@
       "id": "haplography-diagonal-bound",
       "title": "Can missing duplicate runes hide an autokey pattern?",
       "question": "Can twenty missed adjacent duplicate runes restore the nonzero difference-diagonal unevenness predicted by one ciphertext-autokey rule?",
+      "reader_question": "Could missing repeated runes be hiding an autokey pattern in LP2?",
       "summary": "For exact adjacent duplicate insertions, all 28 nonzero rune-difference counts are unchanged. Even an artificial 20-count allowance reaches CV 0.066 against the source's 0.40 signal bar.",
       "tags": [
         "LP2",
@@ -13042,6 +13121,7 @@
       "id": "heldout-rune-prediction",
       "title": "Predicting runes against filtered-random controls",
       "question": "Do held-out rune predictors, compression and balance measurements reveal structure beyond a fixed repeat-suppressed random model?",
+      "reader_question": "Can other segments help predict the next rune?",
       "summary": "None of 26 fixed measurements crossed its predeclared threshold. The joint comparison ranked 35 of 1,000 filtered-random controls at least as strongly as the manuscript; two KT orders beat uniform prediction only slightly.",
       "tags": [
         "held-out prediction",
@@ -13263,6 +13343,7 @@
       "id": "historical-prime-and-ps-keys",
       "title": "Earlier puzzle numbers as LP2 rune keys",
       "question": "Do the 2012 P.S., 2013 telnet missing primes, and message-space sequences decode the unsolved rune text under source B3 rules?",
+      "reader_question": "Could unused numbers from earlier Cicada puzzles be LP2 keys?",
       "summary": "Replays the published B3 search of nine historical numeric streams against 55 unsolved rune segments and their joined text, with all 4,032 cases independently scored.",
       "tags": [
         "historical artifact",
@@ -13457,6 +13538,7 @@
       "id": "im-near-f-markers",
       "title": "I/M rune proximity to F interruptions",
       "question": "Are I or M runes unusually close to F runes under a fixed local-marker reading?",
+      "reader_question": "Are I or M runes unusually close to F runes under a fixed local-marker reading?",
       "summary": "132 of 458 F runes have I or M within two positions; the count is near the upper edge of page-preserving shuffles, but the interpretation was selected after viewing the text.",
       "tags": [
         "F rune",
@@ -14018,6 +14100,7 @@
       "id": "keyword-skip-family",
       "title": "Keyword search with skipped key positions",
       "question": "Does the complete source keyword-with-skips grid produce a candidate above its English-score gates?",
+      "reader_question": "Can these repeating keyword keys decode pages when key positions may be skipped?",
       "summary": "None of 619,080 short screens passed the first source gate, so no full-page target decode ran. Controls passed scores more often than they recovered the correct text.",
       "tags": [
         "keyword keys",
@@ -14480,6 +14563,7 @@
       "id": "l7-score-recovery-controls",
       "title": "Can one score cutoff judge every decode?",
       "question": "Under the original source beam and English model, how do planted recovery, text register and length/beam setting affect the interpretation of a fixed −5.5 cutoff?",
+      "reader_question": "Could a good-looking score hide an incorrect decode?",
       "summary": "Four of 28 synthetic decodes pass the English-score cutoff while recovering less than 90% of the planted text. Five source text registers and three fresh conditional-null settings show why the same cutoff needs matched controls.",
       "tags": [
         "source controls",
@@ -14940,6 +15024,7 @@
       "id": "layout-count-streams",
       "title": "Do line or word lengths carry a message?",
       "question": "Do the ordered rune counts per physical line or visible word produce direct English as GP symbols?",
+      "reader_question": "Have we tried reading the line and word lengths as a message?",
       "summary": "Eight direct GP readings of manuscript line and word lengths did not stand out against matched shuffled-count searches.",
       "tags": [
         "line lengths",
@@ -15139,6 +15224,7 @@
       "id": "leo-chain-key-alignment",
       "title": "Do number sequences fit the rune-difference chain?",
       "question": "Do source-defined numerical sequence keys produce a reliable 28-state LP2 chain signal after searching all mappings, offsets, signs and doublet clocks?",
+      "reader_question": "Did primes or Fibonacci numbers reveal the rune chain?",
       "summary": "All nine source best settings reproduce. The largest source-selected section score, 1.146, is near the 39-shuffle complete-grid median of 1.147; 20 shuffles match or exceed it.",
       "tags": [
         "sequence keys",
@@ -15207,6 +15293,7 @@
       "id": "leo-chain-sequence-keys",
       "title": "Number-sequence keys in direct and chain views",
       "question": "Do source-defined integer sequences produce unusually concentrated output under direct or chain-increment decoding of nine LP2 sections?",
+      "reader_question": "Could prime, Fibonacci or totient numbers be the key?",
       "summary": "The full published source grid reproduces, but its selected coincidence peaks remain compatible with matched shuffled sections once section choice is included.",
       "tags": [
         "number sequence",
@@ -15275,6 +15362,7 @@
       "id": "leo-cipher-model-fingerprints",
       "title": "Can a simple cipher imitate LP2's rare repeated runes?",
       "question": "Which of 23 source-specified synthetic encryptions of a fixed solved passage resemble LP2 in adjacent repeats, coincidence and rune balance?",
+      "reader_question": "Does a matching repeat rate reveal the cipher?",
       "summary": "All 23 source model rows reproduce. One chain matches LP2's rare adjacent repeats, but that count equals the frequency of one rune in the chosen solved plaintext by construction.",
       "tags": [
         "cipher models",
@@ -15353,6 +15441,7 @@
       "id": "leo-shared-key-differences",
       "title": "Do LP2 sections share a running key?",
       "question": "Does the source difference-IoC cross-section scan reveal an alignment that survives a complete-search control?",
+      "reader_question": "Do two LP2 sections appear to share a running key?",
       "summary": "A planted shared key is detectable, but the strongest distinct LP2 section alignment is near the shuffled-search median. The saved source score disagrees with the pinned current formula at a tested alignment.",
       "tags": [
         "running key",
@@ -15418,6 +15507,7 @@
       "id": "leo-transform-periodic-profile",
       "title": "Do transformed LP2 runes show a reliable period?",
       "question": "Does the reported period-238 coincidence peak survive a source-bound replay and controls that select the best transform and period?",
+      "reader_question": "Is the period 238 signal a useful clue?",
       "summary": "A published period-238 peak reproduces. A planted 13-cycle yields a multiple of 13 under the same search, but its selected score is lower than most shuffle maxima.",
       "tags": [
         "periodic coincidence",
@@ -15494,6 +15584,7 @@
       "id": "leo-word-pattern-dictionary",
       "title": "Can LP2 words be shifted dictionary words?",
       "question": "Do complete LP2 words of four to eight runes match a pinned dictionary under Caesar or affine word-level maps more often than uniform-random rune words?",
+      "reader_question": "Could each LP2 word simply be a shifted dictionary word?",
       "summary": "A pinned source replay finds no Caesar-pattern matches among 628 LP2 words of six to eight runes; short-word and affine matches are common under the source's random-word comparison.",
       "tags": [
         "word patterns",
@@ -15557,6 +15648,7 @@
       "id": "line-initial-layout-control",
       "title": "Do positional runes in LP2 hide a message?",
       "question": "Do fixed rune positions or line boundaries reveal deliberate ciphertext forcing beyond the effects of physical line layout?",
+      "reader_question": "Do the first runes of lines, or other fixed positions, hide a message?",
       "summary": "One of 21 position and boundary checks flags line initials against a flat shuffle. Reflowing shuffled text by fitted glyph widths makes that apparent anomaly ordinary; six bounded English reading families and the other checks find no supported message.",
       "tags": [
         "LP2",
@@ -15757,6 +15849,8 @@
       "id": "linear-ciphertext-feedback",
       "title": "Additive, Beaufort and subtractive ciphertext feedback",
       "question": "Which literal feedback recurrences tie a ciphertext doublet to a zero plaintext value?",
+      "reader_title": "Do repeated encrypted runes require a zero in the message?",
+      "reader_intro": "Compares three ways to add or subtract the previous encrypted rune, checking when two identical encrypted runes imply a message value of zero; no recovered message is claimed.",
       "summary": "Additive and Beaufort inverses have identical zero positions, exactly the 86 ciphertext doublets. The subtractive inverse has 437 zero outputs at a different set of positions.",
       "tags": [
         "additive ciphertext autokey",
@@ -16745,6 +16839,7 @@
       "id": "lp2-00-02-lag35-selection",
       "title": "The LP2 opening section’s lag-35 peak",
       "question": "Does the strongest equality-at-lag peak in LP2-00–02 remain unusual after choosing among lags 1–242?",
+      "reader_question": "Is the 35-rune repetition gap on the opening pages a real periodic clue?",
       "summary": "Lag 35 has 42/694 equal pairs and z=3.759, but 82 of 999 step-shuffled controls reach at least that high a maximum after the same 242-lag scan.",
       "tags": [
         "lag 35",
@@ -16805,6 +16900,8 @@
       "id": "lp2-15-mobius-panel",
       "title": "Arithmetic Möbius values of the LP2-15 panel",
       "question": "What does the arithmetic Möbius function return for all sixteen printed LP2-15 panel numbers?",
+      "reader_title": "Turning the number square into zeros and signs",
+      "reader_intro": "Apply the arithmetic Mobius function to all sixteen printed numbers on LP2-15. It uses each number's prime factors to assign 0, +1 or -1; this checks that numerical result without turning it into a decoding key.",
       "summary": "The complete printed panel maps to twelve zeros and the second row −1, −1, −1, +1. The source discussion's output image is absent, and no rune operation was specified.",
       "tags": [
         "LP2-15",
@@ -16989,6 +17086,7 @@
       "id": "lp2-23-red-sum-claim",
       "title": "LP2-23: does the red opening sum to 691?",
       "question": "Does the archived red opening on LP2-23 share the GP sum 691 with TEST THE KNOWLEDGE?",
+      "reader_question": "Does the red text on page 23 give TEST THE KNOWLEDGE?",
       "summary": "The stored 16-rune red opening totals 786, not 691. TEST THE KNOWLEDGE totals 691 with one TH rune and GP C for K; this does not decode the heading.",
       "tags": [
         "LP2-23",
@@ -17059,6 +17157,8 @@
       "id": "lp2-31-periodic-ioc",
       "title": "LP2-31: periodic IoC for periods 2-20",
       "question": "Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?",
+      "reader_title": "Does page 31 show a repeating-key pattern?",
+      "reader_intro": "Group every second rune together, then every third, and so on up to every twentieth rune on LP2-31. Compare the strongest repeat pattern with 999 rearrangements of the same runes.",
       "summary": "Period 13 is the observed peak, but 213 of 999 shuffled maxima are at least as large; corrected Monte Carlo p=0.214.",
       "tags": [
         "periodic IoC",
@@ -17118,6 +17218,8 @@
       "id": "lp2-31-row-shuffle-ioc",
       "title": "LP2-31: periodic IoC with within-row shuffles",
       "question": "Does the largest pooled column IoC over periods 2–20 exceed shuffles that preserve every archived row’s rune multiset?",
+      "reader_title": "Does page 31's repeat pattern stand out against row-by-row shuffles?",
+      "reader_intro": "Tests repeats at distances two through twenty against 999 copies with rune order rearranged inside each original row, so row boundaries and every row's rune counts stay unchanged.",
       "summary": "The observed period-13 peak is unchanged. With within-row shuffling, 245 of 999 null maxima meet or exceed it; corrected Monte Carlo p = 0.246.",
       "tags": [
         "periodic IoC",
@@ -17308,6 +17410,7 @@
       "id": "lp2-43-egalitarianism-compatibility",
       "title": "EGALITARIANISM on LP2-43",
       "question": "Do the two fixed GP encodings of EGALITARIANISM fit the inferred LP2-43 slot [37,51) under one bijective substitution or any of 812 invertible affine decoders?",
+      "reader_question": "Can one fixed alphabet turn this LP2-43 word into EGALITARIANISM?",
       "summary": "The 13-rune encoding has the wrong length. The 14-rune encoding requires the same ciphertext F to mean G and T; none of 812 affine decoders fits.",
       "tags": [
         "LP2-43",
@@ -17393,6 +17496,7 @@
       "id": "lp2-53-red-equality-invariants",
       "title": "Equality structure of the LP2-53 red passage",
       "question": "Does the 51-rune red passage on LP2-53 have the equality structure of archived decoded GP passages, and does it differ from the same page’s black text?",
+      "reader_question": "Is the red passage statistically different from the rest of its page?",
       "summary": "The 51 red runes are flatter than every matched decoded-reading window but fall within the same-page black-text range.",
       "tags": [
         "LP2-53",
@@ -17476,6 +17580,7 @@
       "id": "lp2-53-red-known-keys",
       "title": "LP2-53’s red passage under two documented keys",
       "question": "Does the 51-rune red passage on LP2-53 read as English under either of the two documented LP1 Vigenère keys, any key phase and either direction?",
+      "reader_question": "Has the long red passage on LP2-53 been attacked separately?",
       "summary": "The red passage is 51 runes, beginning with the last rune on line 6. Neither documented key yielded an English-like result in 42 key/phase/sign settings, despite successful same-length reading and planted-key controls.",
       "tags": [
         "LP2-53",
@@ -17763,6 +17868,7 @@
       "id": "lp2-54-header-dictionary",
       "title": "LP2-54: dictionary check for simple autokey cribs",
       "question": "Do A, I or O at the start of the LP2-54 red header yield an eight-rune dictionary word under either literal one-step autokey feedback rule?",
+      "reader_question": "Does a simple autokey turn the LP2-54 red header into an English word?",
       "summary": "None of the six fixed outputs matches the pinned eight-rune word corpus; two planted controls recover.",
       "tags": [
         "LP2-54",
@@ -17999,6 +18105,7 @@
       "id": "lp2-56-aligned-digest-blocks",
       "title": "Aligned digest blocks in the 256-byte grid payload",
       "question": "Does any digest of the frozen artifact corpus equal a complete aligned block of the resolved 256-byte grid payload?",
+      "reader_question": "Could the 256-byte grid contain hashes of known puzzle files or text?",
       "summary": "Checks the frozen artifact corpus against every complete byte-zero-aligned 16-, 32- and 64-byte block under seven digest algorithms.",
       "tags": [
         "grid payload",
@@ -18059,6 +18166,7 @@
       "id": "lp2-56-four-md5-target-blocks",
       "title": "Four MD5 blocks in the printed LP2-56 target",
       "question": "Does any preserved puzzle artifact's exact MD5 digest equal a complete 16-byte block of the printed 64-byte LP2-56 target?",
+      "reader_question": "Could the LP2-56 number be four MD5 hashes?",
       "summary": "Splits the printed LP2-56 64-byte value into four aligned 16-byte blocks and compares each with MD5 of the fixed preserved-artifact corpus.",
       "tags": [
         "LP2-56",
@@ -18120,6 +18228,7 @@
       "id": "lp2-56-internal-artifact-hashes",
       "title": "LP2-56: hashes of preserved manuscript artifacts",
       "question": "Does the LP2-56 512-bit value equal a hash of a declared preserved image, text or grid payload?",
+      "reader_question": "Have we tried hashing the original manuscript files against page 56?",
       "summary": "No exact match among 1,236 SHA-512, SHA3-512 and BLAKE2b-512 comparisons of 412 declared byte variants.",
       "tags": [
         "LP2-56",
@@ -18182,6 +18291,7 @@
       "id": "lp2-56-whirlpool-stribog",
       "title": "LP2-56: Whirlpool and Streebog-512 artifact hashes",
       "question": "Do Whirlpool or Streebog-512 digests of the previously frozen artifact bytes equal the complete LP2-56 value?",
+      "reader_question": "Have Whirlpool and Streebog been checked against page 56?",
       "summary": "Both algorithms passed published 512-bit test vectors; neither matched LP2-56 for any of 412 frozen artifact-byte variants.",
       "tags": [
         "LP2-56",
@@ -18594,6 +18704,7 @@
       "id": "lp2-filter-fingerprint-models",
       "title": "Does the missing-doublet pattern resemble a lag-one filter?",
       "question": "Does the unsolved LP2 stream distinguish a continuous lag-one repeat filter from tested recency, rebalancing and line-reset controls calibrated to the same repeat rate?",
+      "reader_question": "Was the repeat-avoidance rule applied to the whole rune stream?",
       "summary": "The 86 residual adjacent repeats match a continuous lag-one-only filter better than the tested recency/rebalancing or line-reset controls. The comparison cannot distinguish computer code from a person applying the identical rule to otherwise machine-like symbols.",
       "tags": [
         "LP2",
@@ -18950,6 +19061,7 @@
       "id": "lp2-pad-payload-target",
       "title": "Using LP2 as a key for the 256-byte payload",
       "question": "Can the unsolved LP2 rune stream decode the 256-byte payload from pages 49–51 when the running key may skip positions?",
+      "reader_question": "Can the manuscript itself unlock the payload from pages 49–51?",
       "summary": "Adds the previously skipped pages 49–51 payload to the LP2-as-key search. No tested setting produces a qualifying reading, but a known-message check shows why this cannot rule out the method.",
       "tags": [
         "running key",
@@ -19295,6 +19407,7 @@
       "id": "lp2-page-pair-alignment",
       "title": "One LP2 page as another page’s key",
       "question": "Does aligning any two LP2 ciphertext pages from rune zero and adding or subtracting their GP29 indices produce an unusually concentrated stream?",
+      "reader_question": "Can one ciphertext page act as another page’s key?",
       "summary": "Across 2,970 direct page-pair sums and differences, the strongest rune concentration is weaker than a typical maximum from the shuffled control.",
       "tags": [
         "ciphertext page as key",
@@ -19492,6 +19605,7 @@
       "id": "lp2-page-pair-english",
       "title": "Can one LP2 page decode another?",
       "question": "Do zero-offset addition or subtraction streams of two ciphertext pages yield English-like GP labels?",
+      "reader_question": "Have we tried using another LP2 page as the key?",
       "summary": "A complete 4,455-stream zero-offset page-pair arithmetic search found no English score above matched whole-grid shuffled-page controls.",
       "tags": [
         "page as key",
@@ -20201,6 +20315,7 @@
       "id": "lp2-row-column-english",
       "title": "Do simple row or column routes reveal text?",
       "question": "Does any complete archived-row or ordinal-column route make a whole LP2 page English-like without changing rune values?",
+      "reader_question": "Have we tried reading the full pages by rows and columns?",
       "summary": "The whole-output English-score comparison is inconclusive: 16 of 256 shuffled full searches matched or exceeded the highest observed score, from LP2-22.",
       "tags": [
         "row route",
@@ -21092,6 +21207,7 @@
       "id": "lp2-shifted-page-pair-differences",
       "title": "One page as another's key, at every long overlap",
       "question": "Does any forward page-pair difference at a relative offset with at least 120 overlapping runes show exceptional symbol concentration?",
+      "reader_question": "Do any two pages become unusually patterned when one is shifted and subtracted from the other?",
       "summary": "Across 331,908 page-pair alignments, the strongest difference concentration is exceeded or matched by 77 of 128 shuffled search maxima.",
       "tags": [
         "page-pair differences",
@@ -21267,6 +21383,7 @@
       "id": "lp2-shifted-page-pair-english",
       "title": "Do shifted pages produce English?",
       "question": "Do any forward page-pair sums or differences at relative shifts with at least 120 overlapping runes score like English under the fixed GP-label quadgram model?",
+      "reader_question": "Do shifted sums or differences of two pages score like English?",
       "summary": "None of 995,724 shifted arithmetic readings reaches the fixed English-recognition gate. The strongest score is ordinary among the shuffled search maxima.",
       "tags": [
         "page-pair arithmetic",
@@ -22375,6 +22492,7 @@
       "id": "magic-square-freedom",
       "title": "Magic squares: does one fixed entry determine the rest?",
       "question": "Do fixed line sums and half-turn symmetry make either LP1 five-by-five square unique once one entry is fixed?",
+      "reader_question": "Does one fixed number determine either LP1 magic square?",
       "summary": "No: five rational degrees of freedom remain after fixing any one entry. Fifty positive-integer counterexamples preserve the chosen cell and all required sums and symmetry.",
       "tags": [
         "magic square",
@@ -22438,6 +22556,7 @@
       "id": "mixed-alphabet-key-openings",
       "title": "Keyword-mixed GP alphabets",
       "question": "Can one of 43 archived words reorder the GP alphabet to recover a known LP2 page opening?",
+      "reader_question": "Does moving keyword runes to the start of the alphabet change the result?",
       "summary": "Keyword-mixed GP alphabets produced no exact known opening across 309 key phases and 55 pages.",
       "tags": [
         "keyword alphabet",
@@ -22754,6 +22873,7 @@
       "id": "monoalphabetic-crib-capacity",
       "title": "Simple substitution and page-opening cribs",
       "question": "Can a fixed twelve-rune known-reading opening fit an unsolved LP2 page under one bijective rune substitution, and what does that fit actually predict?",
+      "reader_question": "Does a phrase that fits a simple substitution tell us what comes next?",
       "summary": "Only one of 495 fixed page/crib pairs has a compatible equality pattern, and that fit still leaves 19! complete keys.",
       "tags": [
         "LP2",
@@ -23129,6 +23249,7 @@
       "id": "mutated-dictionary-key-openings",
       "title": "One-rune changes to public dictionary keys",
       "question": "Can replacing one GP rune position or one repeated rune type in the 43 published keys recover a fixed known reading at an LP2 page start?",
+      "reader_question": "What happens if a likely key has one wrong rune?",
       "summary": "9,856 distinct altered keys and every key phase produce no exact match to nine specified openings across 55 rune-bearing pages and two GP29 arithmetic directions.",
       "tags": [
         "Vigenère",
@@ -23440,6 +23561,7 @@
       "id": "numeric-stream-skip-grid",
       "title": "Numeric keys with conditional skips",
       "question": "Do the source no-Fibonacci numeric streams produce complete LP2 outputs above their original English score gate when conditional key skips are permitted?",
+      "reader_question": "Can these numeric keys decode pages when key positions may be skipped?",
       "summary": "The 33 fixed numeric streams received 36,300 short screens. Of 322 selected complete-page decodes, none cleared the source −5.5 score bar. Known-text controls expose imperfect exact recovery despite passing score gates.",
       "tags": [
         "LP2",
@@ -23627,6 +23749,7 @@
       "id": "oae-uniform-remapping",
       "title": "What if O, A and AE were treated as one rune?",
       "question": "How much do repeat counts and IoC change under every uniform remapping within the O/A/AE family, and are the source’s before-and-after scales identical?",
+      "reader_question": "Could confusing O, A and AE explain the repeat counts?",
       "summary": "All 27 uniform assignments reproduce the source’s family-collapse arithmetic. Complete merging raises equal neighbors from 89 to 192 and fixed-scale IoC from 1.00 to 1.22; the source’s 1.14 uses a different multiplier after merging.",
       "tags": [
         "O A AE",
@@ -23852,6 +23975,7 @@
       "id": "obscura-sum-collision-control",
       "title": "OBSCURA word-sum matches in LP2",
       "question": "How selective are the sixteen supplied OBSCURA candidate-word GP totals when matched against visible LP2 words?",
+      "reader_question": "If an LP2 word has the same rune sum as an OBSCURA candidate, does that narrow the choice much?",
       "summary": "The 13 distinct candidate totals match 104 of 2,928 LP2 words. Page-wise rune shuffles average 95.2 matches and commonly reach 104; the sum alone is a weak selection rule.",
       "tags": [
         "OBSCURA",
@@ -24779,6 +24903,7 @@
       "id": "page-number-prime-skip-grid",
       "title": "Keys based on page order",
       "question": "Do the exact source page-number ramp keys pass their fixed English-score gates when conditional key skips are permitted?",
+      "reader_question": "Can keys derived from page order decode the text?",
       "summary": "Seven complete-page outputs selected from 660 short trials all fail the source final score gate. A separate audit of every retained final candidate also finds no gate crossing.",
       "tags": [
         "page-number keys",
@@ -25398,6 +25523,7 @@
       "id": "payload-ciphertext-skip-replay",
       "title": "Number-grid bytes as an encrypted message",
       "question": "Do the two source number-grid payload readings decode above the fixed English-score gate under the twelve finite source keys and conditional skips?",
+      "reader_question": "Could the number-grid bytes be an encrypted message under these keys?",
       "summary": "None of 96 complete payload decodes passed the English-score threshold. The known-message controls recovered 137 of 144 readings despite all 144 passing scores; seven wrong outputs outranked retained correct readings.",
       "tags": [
         "number grid",
@@ -25564,6 +25690,7 @@
       "id": "payload-phase-skip-grid",
       "title": "Moving the number-grid key's starting position",
       "question": "Do the exact source numeric2 Part B payload phases produce complete-page outputs above its fixed English gate under conditional skips?",
+      "reader_question": "Does moving the number-grid key help decode a page?",
       "summary": "30,112 short checks select 234 complete-page decodes; none clears the source English-score bar. The new grid extends the earlier zero-start payload test with bounded nonzero phases.",
       "tags": [
         "LP2",
@@ -25753,6 +25880,7 @@
       "id": "periodic-affine-crib-capacity",
       "title": "How many periodic affine keys can fit a twelve-rune opening?",
       "question": "For nine fixed known-reading openings and periods 1–8, how many invertible affine keys fit the first twelve runes of each LP2 page, and how much of the following text is determined?",
+      "reader_question": "Can I make a periodic affine key fit an opening, and would that fit mean anything?",
       "summary": "Period-specific affine constraints were counted exactly across 3,960 fixed page, opening and period combinations, then checked for how many following positions a fit forces.",
       "tags": [
         "LP2",
@@ -25944,6 +26072,7 @@
       "id": "pgp-packet-keys",
       "title": "PGP packet bytes as repeating LP2 keys",
       "question": "Do the preserved Cicada PGP primary/subkey packet bytes or their fingerprints act as a simple repeating GP29 additive key for an unsolved LP2 page?",
+      "reader_question": "Have the Cicada public-key bytes been tried as a rune key?",
       "summary": "Four packet/fingerprint key streams produced no English-like complete page across 119,900 fixed settings; the best is weaker than most full-search shuffled controls.",
       "tags": [
         "LP2",
@@ -26618,6 +26747,7 @@
       "id": "prime-fibonacci-position-extraction",
       "title": "Runes at prime and Fibonacci positions",
       "question": "Do forward, one-based prime or Fibonacci rune positions yield English-like text when applied per page or across the joined LP2 pages?",
+      "reader_question": "What happens if we read only the prime- or Fibonacci-numbered runes?",
       "summary": "Three long-enough direct extractions did not outperform the best of the same methods on page-preserving shuffled controls; the book-wide Fibonacci stream was too short to assess.",
       "tags": [
         "prime positions",
@@ -26810,6 +26940,7 @@
       "id": "prime-lag-autokey-openings",
       "title": "Prime-lag autokey against fixed opening cribs",
       "question": "Do the declared prime-lag CT/PT autokey rules with one-rune primers recover any of nine fixed 12-rune page-start openings?",
+      "reader_question": "Do any prime-delayed autokey settings produce one of the nine proposed openings?",
       "summary": "No exact opening matches occur. The 638 settings give 315 distinct 12-rune prefix predictions on 53 pages and 316 on 2 pages; longer lags do not reach feedback inside those prefixes.",
       "tags": [
         "LP2",
@@ -26979,6 +27110,7 @@
       "id": "public-circumference-substitutions",
       "title": "Public 2πR rune substitutions",
       "question": "Do the index- and prime-radius 2πR transforms reproduce archived outputs, and does the stated rounding rule match the archive?",
+      "reader_question": "What happens when each rune is transformed using the circumference formula?",
       "summary": "Archived output uses truncation despite the README saying round. Both truncated variants reproduce all 57 complete archived page outputs; prime-radius maps reach only 18 of 29 runes.",
       "tags": [
         "2πR",
@@ -27145,6 +27277,7 @@
       "id": "public-deepweb-jpeg-hashes",
       "title": "Do the manuscript JPEGs hash to the deep-web target?",
       "question": "Does full-file SHA-512 or BLAKE2b-512 of the 75 source JPEGs, or a separately pinned 58-file archive, equal the LP2-56 target?",
+      "reader_question": "Have we tried hashing the manuscript images against LP2-56?",
       "summary": "The published 75-image source set is recovered exactly and has no target match. A separately pinned 58-image seventh-onion byte set also has no target match under the same two algorithms.",
       "tags": [
         "LP2-56",
@@ -27215,6 +27348,7 @@
       "id": "public-kdf-seed-stretch",
       "title": "Password-derived key streams against the LP2 opening",
       "question": "Do 534 source-defined secrets passed through 27 key-derivation configurations yield an English reading of the first 120 unsolved runes?",
+      "reader_question": "Could a short password be stretched into Liber Primus's key?",
       "summary": "Replays the pinned Round 16 KDF screen with both positive gates and the full 692,064-case LP2 Stage A grid.",
       "tags": [
         "key derivation",
@@ -27277,6 +27411,7 @@
       "id": "public-keyed-columnar-word-counts",
       "title": "Source keyword columns at the printed word alignment",
       "question": "What fixed-dictionary word counts follow the source 45 keyword-selected column permutations on original LP2 pages?",
+      "reader_question": "Do keyword-selected column orders reveal words at the printed alignment?",
       "summary": "The maximum 126 dictionary hits lies within the 128-trial shuffled full-search baseline: 90 maxima are at least as high. All 45 planted Warning score controls rank the true map first; the post-target comparison remains exploratory.",
       "tags": [
         "LP2",
@@ -27451,6 +27586,7 @@
       "id": "public-lp2-as-pad",
       "title": "LP2 as a running key for shorter Cicada texts",
       "question": "Does the unsolved LP2 rune stream, used as a skip-aware key, recover English from five specified Cicada objects?",
+      "reader_question": "Could Liber Primus itself be the key to a shorter message?",
       "summary": "Replays the pinned F-01 inversion: five targets, four LP2 key forms, two signs, and a planted skip-aware control.",
       "tags": [
         "running key",
@@ -27627,6 +27763,7 @@
       "id": "public-multihistory-feedback",
       "title": "Two-to-six-rune feedback and autokey screen",
       "question": "Do seven fixed multi-rune history functions under ciphertext, plaintext or mixed feedback yield an English-like LP2 reading in the published finite grid?",
+      "reader_question": "Could each rune be decoded using a key derived from the preceding runes?",
       "summary": "The 23,520-setting source sweep found no convincing English reading. A separate power check shows its actual all-equal-seed search misses its own plaintext- and mixed-history plants.",
       "tags": [
         "autokey",
@@ -27800,6 +27937,7 @@
       "id": "public-nskips-crossover",
       "title": "Skip-count signal across planted message lengths",
       "question": "At what tested length does the correct-key skip count of a planted message separate from random ciphertext and key pairs under the source's exact decoder?",
+      "reader_question": "How much text is needed before a skip-count clue becomes useful?",
       "summary": "Replays a published ten-length instrument experiment with a planted skip cipher, 300 same-length random pairs per decoder mode and a fixed 1% comparison bar.",
       "tags": [
         "key skips",
@@ -27866,6 +28004,7 @@
       "id": "public-p20-static-boundary",
       "title": "A bounded test of the P20 boundary model",
       "question": "Do the supplied numeric P20 boundary states support a single static affine rule modulo 83?",
+      "reader_question": "Has the proposed P20 static boundary rule been checked?",
       "summary": "The pinned source's finite calculation reproduces on its bundled numeric menus. Six lower-complexity model classes have no complete fit; five saturated fits are ordinary under its exact conditioned comparison.",
       "tags": [
         "public-source replay",
@@ -27941,6 +28080,7 @@
       "id": "public-prng-seed-sweep",
       "title": "Seven seeded generator streams against LP2",
       "question": "Do any of seven source-defined pseudorandom keystreams, under 1,877 fixed seeds and four sign/direction settings, give the LP2 opening a convincing English score?",
+      "reader_question": "Could the LP2 key stream come from a seeded random-number generator?",
       "summary": "A replay of a pinned public seven-generator sweep tested 52,556 120-rune decodes. None reached the source's fixed English score bar; a planted control did.",
       "tags": [
         "PRNG",
@@ -28002,6 +28142,7 @@
       "id": "public-rsa-payload-e01",
       "title": "Whole grid payload under public RSA moduli",
       "question": "Does the entire 256-byte LP2-49–51 payload produce a valid PKCS#1 or PSS frame when raised to candidate public exponents under Cicada PGP moduli?",
+      "reader_question": "Could the number-grid bytes be an RSA block?",
       "summary": "The exact public-source E-01 replay found no structure in 162 valid checks under two 4096-bit PGP moduli. The 2013 modulus is too small for a whole 256-byte input.",
       "tags": [
         "number grid",
@@ -28070,6 +28211,7 @@
       "id": "public-wordlist-vigenere",
       "title": "Public 43-key Vigenère sweep",
       "question": "Do the 43 archived wordlist keys reproduce the public GP Vigenère outputs and recover any of nine fixed known-reading openings on LP2-00–55?",
+      "reader_question": "Did the public wordlist Vigenère sweep turn any unsolved page start into a known reading?",
       "summary": "All 2,494 complete archived page–key output strings reproduce. None of the nine fixed 12-rune openings matches the 2,365 rune-bearing unsolved-page starts.",
       "tags": [
         "Vigenère",
@@ -28237,6 +28379,7 @@
       "id": "py27-prior-front-opening-cribs",
       "title": "Python 2.7 priority seeds against fixed LP2 openings",
       "question": "Can any of R21-L3's 45,975 priority seed words, under its four Python 2.7 generator settings and keyskip1 decoder rule, produce one of nine fixed 12-rune openings at an LP2 page start?",
+      "reader_question": "Could the Python 2.7 priority seeds produce a familiar LP2 opening?",
       "summary": "Across 183,900 generated seed-and-setting cases, none produces any of nine fixed 12-rune openings at the start of 55 nonempty LP2 pages. The closest reaches five runes.",
       "tags": [
         "R21-L3",
@@ -28313,6 +28456,7 @@
       "id": "py27-reducer-sweep-source-audit",
       "title": "Python 2.7 reducer sweep: source and control audit",
       "question": "Does the pinned four-configuration Python 2.7 keystream sweep provide an independently reproducible negative with a validated screening gate?",
+      "reader_question": "Were the Python 2.7 random reducers tried on LP2?",
       "summary": "The source reports 884,000 screened words and saves 95 promotions with no final-bar clearance. Those rows reconcile, but the original scoring model is unavailable and the planted controls bypass the sweep's first gate.",
       "tags": [
         "PRNG",
@@ -28445,6 +28589,9 @@
       "id": "quagmirror-variant-continuations",
       "title": "Three QuagMirror drafts and their actual stopping points",
       "question": "What do the pinned original, version-4 and WIP QuagMirror scripts output under their own fixed rules, and how much of LP2-00–02 does each process?",
+      "reader_title": "How far three mirror-alphabet programs actually read",
+      "reader_intro": "Run three drafts of QuagMirror, a method that uses tables of rearranged runes to change each input rune. Compare their outputs and where each program stops on the same 729 runes from LP2-00 to LP2-02.",
+      "reader_question": "Do the other QuagMirror drafts continue into a complete reading?",
       "summary": "Runs three pinned public QuagMirror scripts unchanged and compares their numeric and Latin output streams with the exact LP2-00–02 input.",
       "tags": [
         "QuagMirror",
@@ -28517,6 +28664,7 @@
       "id": "r18-drift-ladder-replay",
       "title": "Can skipped key draws shift a page start?",
       "question": "When earlier runes consume extra key draws, does a drift-corrected offset recover a planted key and improve previously reported keys on LP2?",
+      "reader_question": "Could we miss a correct key by starting too early?",
       "summary": "A planted key is recovered only after correcting for skipped draws. Replaying 1,371,030 real-page decodes over 230 previously ranked candidate keys yields no supported reading under the source score gate.",
       "tags": [
         "key skipping",
@@ -28713,6 +28861,7 @@
       "id": "r18-entropy-budget-replay",
       "title": "What can an entropy budget tell us?",
       "question": "Do the published Round 18 corpus cross-entropy and output-entropy values justify labeling short-seed key hypotheses determined?",
+      "reader_question": "Do the missing repeats give enough information to solve LP2?",
       "summary": "The pinned corpus and entropy calculation reproduces exactly, but its small-seed determinacy labels reuse an output-entropy law from a different key model and omit possible filter randomness. A negative arithmetic difference does not prove unique plaintext.",
       "tags": [
         "entropy",
@@ -28908,6 +29057,7 @@
       "id": "r18-filter-locus-replay",
       "title": "Where could a repeat filter act?",
       "question": "Does the pinned seven-model source comparison distinguish filtering the ciphertext, keystream or plaintext from LP2 rune structure?",
+      "reader_question": "Could a filter explain LP2’s scarce repeated runes?",
       "summary": "The exact seven-model, 200-replicate source run reproduces. Two output-stage rules remain hard to distinguish; several narrowly specified alternatives miss the manuscript measurements.",
       "tags": [
         "doublets",
@@ -29103,6 +29253,7 @@
       "id": "r18-keyskip-drift-power",
       "title": "Can a correct key survive skipped draws?",
       "question": "Under the pinned key-skip simulation, can a skip-aware decoder recover a planted correct key as the text grows to full LP2 length?",
+      "reader_question": "Could key skipping make a correct key look wrong?",
       "summary": "In a source-backed plant-and-recover test, rigid alignment fails quickly while the skip-aware beam retains a planted correct key through 12,956 runes. This checks decoder power under a synthetic model, not a real LP2 key.",
       "tags": [
         "key skipping",
@@ -29178,6 +29329,7 @@
       "id": "r18-skip-channel-power",
       "title": "Can inferred key skips distinguish a correct key?",
       "question": "Does the source's full-book beam-inferred skip count separate a planted correct key and rank previously selected LP2 candidates beyond wrong-key controls?",
+      "reader_question": "Do the missing repeats reveal which key is right?",
       "summary": "The known planted key has 362 inferred skips versus 240–348 for forty wrong keys on its synthetic text. The best of twenty real LP2 candidates has 353, within the 260–357 wrong-key range, and produces no supported reading.",
       "tags": [
         "key skipping",
@@ -29358,6 +29510,7 @@
       "id": "r21-fold-tail-scope-controls",
       "title": "Which part of a decode does the fold check verify?",
       "question": "Does the source fold proxy compare disjoint held-out complements or overlapping right-hand tails?",
+      "reader_question": "Can a consistency check leave part of a decoded page unverified?",
       "summary": "Six known-key plants show the fold helper checks overlapping tails and omits its final fold. Changing the first 40 comparison indices leaves all measured agreements unchanged.",
       "tags": [
         "decoder control",
@@ -29422,6 +29575,7 @@
       "id": "r26-derived-generators-opening-cribs",
       "title": "Older random generators against fixed LP2 openings",
       "question": "Can any source-defined R26-A Perl, TeX or Python 2.7 keystream produce a predeclared 12-rune known-reading opening at the start of an LP2 page under either source key-skip rule?",
+      "reader_question": "Have the proposed older random generators been checked against familiar openings?",
       "summary": "No source-defined R26-A key stream and skip-rule pairing reaches any of nine fixed 12-rune openings across 55 nonempty LP2 page starts. The closest reaches four runes.",
       "tags": [
         "R26-A",
@@ -29499,6 +29653,7 @@
       "id": "r28-c-generator-port-controls",
       "title": "Finite checks of the C generator ports",
       "question": "Does the compiled generator region match independent finite stream expectations?",
+      "reader_question": "Does the C port generate the same keys as the reference models?",
       "summary": "Nine compiled generator modes match 144,000 finite model symbols and 8,192 archived Round 27 vector symbols exactly.",
       "tags": [
         "generator control",
@@ -29558,6 +29713,7 @@
       "id": "rail-fence-visible-words",
       "title": "Rail-fence readings of visible LP2 words",
       "question": "Do conventional two- through ten-rail fence decodings improve English word matches at the printed LP2 word alignment?",
+      "reader_question": "Does writing each page into a rail-fence zigzag reveal English words?",
       "summary": "The best rail count matches 70 fixed-dictionary words; 195 of 199 page-rotated, best-of-nine controls match at least 70.",
       "tags": [
         "rail fence",
@@ -29728,6 +29884,7 @@
       "id": "red-initial-presence-order",
       "title": "LP2 red initials: corrected page-order test",
       "question": "Do the pages bearing large red initials have unusual spacing compared with a uniform 13-of-58 page placement?",
+      "reader_question": "Once pages with ordinary red text are removed, is the pattern of pages with large red initials unusually spaced?",
       "summary": "The corrected 13-page list has ordinary spacing under four specified measures; one compressed-bit measure has almost no resolving power at this length.",
       "tags": [
         "red initials",
@@ -29924,6 +30081,7 @@
       "id": "rejection-channel-information",
       "title": "What a collision filter reveals under a random key",
       "question": "Under an independent uniform key, does the visible output of a rune-collision filter depend on the plaintext rune?",
+      "reader_question": "Do the missing doublets point toward plaintext?",
       "summary": "Exact conditional comparison of two collision filters fitted to LP2's adjacent-repeat count; independent finite-field oracle and source formula checks.",
       "tags": [
         "doublets",
@@ -30001,6 +30159,7 @@
       "id": "relikd-autokey-interrupt-database",
       "title": "Saved autokey scores with selectable interruptions",
       "question": "Do the eight pinned LiberPrayground autokey-interruption database scores reproduce under the source's starting-value and skip rules, and can the variants recover a known message?",
+      "reader_question": "Did the saved autokey and interruption scores decode a passage?",
       "summary": "All 2,412 saved candidate scores reproduce to source display precision. Eight planted known-message rules recover all 96 runes when interruption positions are supplied; the archive alone does not establish an LP2 reading.",
       "tags": [
         "LP2",
@@ -30121,6 +30280,7 @@
       "id": "relikd-interrupt-db-keyfit",
       "title": "Interrupt-key fits needed a stronger known-text check",
       "question": "Can the saved LiberPrayground interrupt positions support complete Vigenère or affine key recovery?",
+      "reader_question": "Did removing selected F runes reveal a readable key or message?",
       "summary": "The original interrupt-key branch was unreachable. Running its nine saved candidates through both source fitters yields 13 passing similarity scores, but none of six comparable known-text controls recovers a complete message.",
       "tags": [
         "LP2",
@@ -30235,6 +30395,7 @@
       "id": "relikd-interrupt-pattern-database",
       "title": "Mirror and alternating-group interrupt scores",
       "question": "Do the committed LiberPrayground mirror and modulo interrupt scores reproduce, and can their structural scores identify a known period?",
+      "reader_question": "Did the saved mirror and alternating-group scores uncover a message?",
       "summary": "All 7,407 committed candidate scores reproduce to displayed precision. On a planted known reading, the true period leads 22 of 24 source-rule checks, but these scores neither discover skip positions nor decode LP2.",
       "tags": [
         "LP2",
@@ -30417,6 +30578,7 @@
       "id": "relikd-rotated-key-source-gate",
       "title": "A rotating-key search stopped at its first screen",
       "question": "Does the explicitly repaired LiberPrayground rotated-column search find source-defined candidate keys in its nine LP2 sections?",
+      "reader_question": "Did this rotating-key search produce any candidate readings?",
       "summary": "The original script errors before its first section. With one explicit generator-argument repair, none of its 17,424 declared LP2 settings reaches the source's first repeat-frequency gate; a clean known-text plant does.",
       "tags": [
         "LP2",
@@ -30555,6 +30717,7 @@
       "id": "relikd-trigram-shift-control",
       "title": "Three-rune shift display: recovery control",
       "question": "Does a locally ranked three-rune shift display recover known decoded pages strongly enough to justify a later LP2 screen?",
+      "reader_question": "If fragments look like English, did the method recover the page?",
       "summary": "The highest-scoring displayed row beat all 49 shuffled searches but recovered only 129 of 207 known runes. The recovery gate failed; no unsolved LP2 page was screened.",
       "tags": [
         "source method",
@@ -30659,6 +30822,7 @@
       "id": "repeated-long-ngrams",
       "title": "Are the long LP2 rune repeats unusual?",
       "question": "Do the published repeated five- and six-rune sequence counts exceed section-matched adjacent-step controls?",
+      "reader_question": "Does the repeated DJUBEI sequence point to a repeating key?",
       "summary": "The published six five-rune repeats and one six-rune repeat reproduce; 361 of 999 section-matched step-shuffle controls reach either selected threshold.",
       "tags": [
         "repeated runes",
@@ -30826,6 +30990,7 @@
       "id": "rotating-folded-key-openings",
       "title": "Rotating and folded wordlist keys",
       "question": "Can rotating or folded expansions of 43 archived keys recover a known LP2 page opening?",
+      "reader_question": "Could changing the key as it repeats reveal a familiar opening?",
       "summary": "Rotating/folded schedules produced no exact known opening across 6,272 settings and 55 pages.",
       "tags": [
         "rotating key",
@@ -31008,6 +31173,7 @@
       "id": "round19-decoder-baseline-control",
       "title": "When a pair-skip decoder loses a known key",
       "question": "Can a decoder built for paired skipped draws recover text encrypted with the source's one-draw skip rule, even when it has the correct key?",
+      "reader_question": "Could the wrong skip rule make a correct key look wrong?",
       "summary": "In 336 source-defined planted decodes, the matched decoder recovers all runes at the stated baseline while the pair-skip decoder loses most of them despite receiving the same correct key. This is a decoder-power control, not a test of LP2's cipher.",
       "tags": [
         "decoder alignment",
@@ -31090,6 +31256,7 @@
       "id": "round19-decoder-null-bars",
       "title": "When wrong keys cross a language-score line",
       "question": "Does one language-score cutoff retain the same meaning across the source's different skip decoders?",
+      "reader_question": "Could a wrong key look convincing just because the decoder has more freedom?",
       "summary": "The same −5.5 score line is crossed by 500 of 500 wrong keys in one permissive decoder setting, but by none of 2,000 in the repository setting. Replaying all 26 source fits confirms decoder-specific score bars; extrapolated million-trial bars remain unvalidated.",
       "tags": [
         "wrong-key scores",
@@ -31175,6 +31342,7 @@
       "id": "round19-decoder-repair-controls",
       "title": "Can a correct key look wrong to the decoder?",
       "question": "Across the pinned Round 19 skip and drift constructions, which decoders can recover known text when given the correct key?",
+      "reader_question": "Could a decoder mistake the right key for a failed decryption?",
       "summary": "With the same planted message and correct key, the original beam can lose most runes while a permissive drift decoder recovers them. The repaired source control grid reproduces its gate decisions, with tiny score-rounding differences that fail the frozen bit-exact acceptance condition.",
       "tags": [
         "decoder alignment",
@@ -31257,6 +31425,7 @@
       "id": "round19-full-book-decoder-power",
       "title": "Can the decoder follow a known key through a full book?",
       "question": "Do the exact and permissive Round 19 decoders recover source-defined planted text at 12,956 runes when given the correct key, and separate one wrong-key control per mode?",
+      "reader_question": "Can this decoder stay aligned with a correct key over a full book?",
       "summary": "Across eight exact source-defined full-book decodes, both decoders recovered over 99.8% of planted runes with the correct key and less than 5% under their wrong-key controls; all non-timing fields matched the archived source output. This is a decoder-power control, not an LP2 solve test.",
       "tags": [
         "decoder alignment",
@@ -31339,6 +31508,7 @@
       "id": "round19-rsa-key-provenance",
       "title": "Round 19 RSA key scan: source replay and provenance",
       "question": "Does the source's expanded 23-modulus RSA scan yield a padding match, and are all 23 keys actually Cicada keys?",
+      "reader_question": "Did the larger RSA scan test more Cicada keys?",
       "summary": "All 738 source settings reproduce, with no structural match. The expanded set contains 20 unrelated archived PGP packets, so its larger count does not establish wider Cicada-key coverage.",
       "tags": [
         "number grid",
@@ -31407,6 +31577,7 @@
       "id": "round20-sieve-register-gate",
       "title": "Does the sieve's pass gate require every register?",
       "question": "Does the Round-20 P1 decision require measurements of all nine named registers before its full PASS?",
+      "reader_question": "Can a filter pass a test when some required measurements are missing?",
       "summary": "The source gate passes all 510 incomplete high-survival register subsets. Replaying its four saved pilots exactly preserves their original INFEASIBLE decision.",
       "tags": [
         "source control",
@@ -31494,6 +31665,7 @@
       "id": "rsa-window-54-source-replay",
       "title": "RSA structure in 54-byte payload windows",
       "question": "Do contiguous 54-byte windows of the LP2-49–51 grid payload contain a PKCS#1- or PSS-shaped block under the published 2013 modulus?",
+      "reader_question": "Could the grid payload hide a 432-bit RSA block inside one short stretch?",
       "summary": "All 203 contiguous 54-byte positions were checked in both byte orders across three pinned payload readings. None passed the fixed strict RSA-structure screen; planted examples did.",
       "tags": [
         "LP2-49",
@@ -31559,6 +31731,7 @@
       "id": "rune-direct-byte-packing",
       "title": "LP2 runes packed directly as bytes",
       "question": "Do simple fixed byte encodings of LP2 rune indices or GP primes produce whole-stream printable text or a recognizable file beginning?",
+      "reader_question": "If we turn the runes into bytes without changing their order, do we get text or the start of a file?",
       "summary": "Three declared encodings across each nonempty LP2-00–55 page and the joined stream produced no complete printable text or selected file header in 168 streams.",
       "tags": [
         "LP2",
@@ -31627,6 +31800,7 @@
       "id": "rune-direct-compression",
       "title": "Complete compression decodes of directly packed LP2 runes",
       "question": "Do any of the 168 fixed LP2 rune-to-byte streams decode as complete zlib, gzip, raw DEFLATE, bzip2 or XZ data?",
+      "reader_question": "Could directly packed LP2 runes be compressed data?",
       "summary": "Runs five bounded, full-stream compression decoders on the exact byte streams from the direct rune-packing experiment.",
       "tags": [
         "compression",
@@ -31803,6 +31977,7 @@
       "id": "rune-matched-scorer-calibration",
       "title": "Does a rune-matched scorer improve candidate screening?",
       "question": "Does the pinned rune-matched quadgram model measurably improve known-reading separation and tighten 200 wrong-key scores?",
+      "reader_question": "Would scoring rune output differently help recognize a real LP reading?",
       "summary": "Across five known readings the transformed scorer improves scores, but its 200 wrong-key controls have slightly wider rather than narrower spread. Its measured separation gain is 3.6%, not the earlier proposed 18%.",
       "tags": [
         "scorer calibration",
@@ -31862,6 +32037,7 @@
       "id": "rune-reading-sensitivity-t3",
       "title": "How disputed rune readings change the measurements",
       "question": "If the 450 located O/A/AE machine disagreements were read differently, which manuscript statistics move, and how does one known-key decoder respond to separately simulated transcription errors?",
+      "reader_question": "How much could disputed rune readings change what we measure?",
       "summary": "Hypothetically replacing all 450 source-suggested O/A/AE alternatives raises joined-stream adjacent repeats from 86 (0.664%) to 103 (0.795%), below the source comparison floor of 126, but shifts normalized IoC from 0.999874 to 1.013823. Known-key LP1 decoder fixtures degrade with separate random ciphertext errors. The reader controls reuse global canonical labels and do not establish independent transcription accuracy. A separately recovered exact KJV input also permits the source's six-level full-book decoder replay; its results are fixture-specific.",
       "tags": [
         "LP2",
@@ -32343,6 +32519,7 @@
       "id": "sectionwise-rune-profile",
       "title": "LP2 sections: rune collisions and adjacent repeats",
       "question": "Are LP2-54–55 rune collision and doublet rates outside the equal-length variation seen in LP2-40–53?",
+      "reader_question": "Do the last two pages look statistically different from the preceding section?",
       "summary": "The two ending-page measures fall within the middle 95% of equal-length windows from LP2-40–53. This does not establish a shared cipher.",
       "tags": [
         "section comparison",
@@ -32661,6 +32838,7 @@
       "id": "semantic-seed-screen-gate-audit",
       "title": "Semantic-seed sweep: an unreachable screen gate",
       "question": "Could candidates in the published R26-C semantic-seed sweep reach its full hit test?",
+      "reader_question": "Did this seed search actually let promising answers through to its final check?",
       "summary": "The pinned sweep reproduced 4,274 screening rows, but none could reach its full test: the code requires a score of +5 from a log-probability measure that cannot exceed zero.",
       "tags": [
         "semantic seeds",
@@ -32831,6 +33009,7 @@
       "id": "short-text-prefix-extension",
       "title": "Word-length prefixes in previously omitted short texts",
       "question": "Do the previously omitted short texts match either fixed manuscript word-length prefix?",
+      "reader_question": "Do shorter archived texts match either word-length prefix?",
       "summary": "The previously omitted short texts produced no complete prefix match and did not improve the earlier maxima. The best counts were 87/400 and 37/120 compatible word-length positions.",
       "tags": [
         "word lengths",
@@ -32897,6 +33076,7 @@
       "id": "short-window-lag13",
       "title": "Short-window repeated rune patterns at lag 13",
       "question": "Do exact two-rune patterns recur at lag 13 within 15-rune windows more often than page-preserving shuffles produce?",
+      "reader_question": "Are the reported short lag-13 repeats unusual?",
       "summary": "One exact two-rune interpretation gives 17 windows against 14.1 expected under page shuffling; 111 of 499 shuffles yield at least 17. The reported original windows were not supplied.",
       "tags": [
         "lag 13",
@@ -33245,6 +33425,7 @@
       "id": "solved-reading-running-key",
       "title": "Solved manuscript readings as a running key",
       "question": "Does any complete unsolved LP2 page decode under a contiguous offset of the established GP29 readings?",
+      "reader_question": "Could the solved pages be a key for the unsolved pages?",
       "summary": "The highest-scoring whole-page output is not readable English. It exceeds the limited control scores but does not establish a decryption.",
       "tags": [
         "running key",
@@ -33413,6 +33594,7 @@
       "id": "solved-text-selection-source-gate",
       "title": "Solved-text selections: what the source controls prove",
       "question": "Did published selection and printed-line acrostic searches validate their final decision rule on planted messages?",
+      "reader_question": "Have people tried finding a message hidden in the already-decoded pages?",
       "summary": "Two source sweeps replayed: 3,508 character/rune selections and 48 line/word reads. Zero final hits, but the planted controls only passed an earlier length-specific threshold, not the final rule.",
       "tags": [
         "acrostics",
@@ -33523,6 +33705,7 @@
       "id": "source-independent-key-floor-audit",
       "title": "Does the doublet floor rule out every independent key?",
       "question": "Does the pinned D2 source computation establish the claim that LP2's low doublet rate excludes the entire plaintext-independent additive-key class?",
+      "reader_question": "Do the missing repeats prove that an independent key cannot work?",
       "summary": "D2's control and manuscript counts reproduce, but its code does not compute the cited English floor. The required corpus texts are absent, and the floor is an expectation under a model rather than an absolute limit on each finite output.",
       "tags": [
         "doublets",
@@ -33954,6 +34137,8 @@
       "id": "totient-map-route",
       "title": "LP2-00–02: 27 × 27 totient-map route replay",
       "question": "Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?",
+      "reader_title": "Following a proposed route through a rune grid",
+      "reader_intro": "Arrange the 729 runes from LP2-00 to LP2-02 in a 27-by-27 grid, then replay the proposed path and number keys. This checks the supplied selections; it does not discover a route automatically.",
       "summary": "Reproduces the selected words and 16 transition fits; measures coverage, compares three SOON nodes, and checks mirror abundance against shuffled maps.",
       "tags": [
         "27x27",
@@ -34135,6 +34320,7 @@
       "id": "turtle-shape-refinement-replay",
       "title": "The six refined turtle-shape checks",
       "question": "Do the six source-selected turtle diagnostics pass their combined 2,000-shuffle empirical and Gaussian-tail gates?",
+      "reader_question": "Do rune-driven drawings stand out from shuffled text?",
       "summary": "Four shared surrogate series reproduce all six empirical tails and no selected diagnostic passes both source gates. A zero observed tail frequency is a sampling floor, not probability zero.",
       "tags": [
         "turtle graphics",
@@ -34302,6 +34488,7 @@
       "id": "two-rune-feedback-family",
       "title": "Two-rune feedback with every starting pair",
       "question": "Do any two-rune starting keys pass the fixed source-family English-score gates?",
+      "reader_question": "Can any starting pair make these two-rune feedback rules yield a strong English score?",
       "summary": "No candidate passed the frozen score rules; 35 of 49 shuffled whole-family searches scored at least as highly. Known-input controls also show that the top-scoring output is not always the complete true text.",
       "tags": [
         "autokey",
@@ -34480,6 +34667,7 @@
       "id": "two-rune-primer-extension",
       "title": "All two-rune starts for one feedback rule",
       "question": "Can searching every pair of starting key values, including unequal values, reveal an English-like reading under the two-rune plaintext-sum feedback rule?",
+      "reader_question": "Could two unequal starting values reveal an English-like page under this feedback rule?",
       "summary": "All 841 starts on 55 pages produced no candidate above the fixed English-score gate. Both known control passages were recovered under each of three unequal starts; 40 of 49 shuffled whole searches scored at least as highly as the manuscript.",
       "tags": [
         "autokey",
@@ -34655,6 +34843,7 @@
       "id": "typed-seed-random-opening-cribs",
       "title": "Typed seeds and Python Random streams at LP2 page openings",
       "question": "Can the pinned typed-seed Python Random streams produce one of nine fixed known-reading openings at an LP2 page start under the source's F-rune interruption choices?",
+      "reader_question": "Were words, dates and numbers tried as Python random seeds?",
       "summary": "The pinned source's 15,408 typed-seed PRNG configurations were checked across four F-rune masks, 55 nonempty LP2-00–55 page starts and nine fixed 12-rune openings. None matched all 12 runes.",
       "tags": [
         "typed seeds",
@@ -35016,6 +35205,7 @@
       "id": "url-marker-affine-census",
       "title": "Literal web markers under every fixed affine rune map",
       "question": "Which literal WWW, HTTP, HTTPS and ONION rune markers occur at any within-page position under the 812 invertible GP29 affine maps?",
+      "reader_question": "Do fixed affine rune maps produce a literal web marker?",
       "summary": "One map produces HTTPS at one position on LP2-36; HTTP is its prefix. WWW and ONION have no matches. The short marker establishes neither a URL nor confirmed plaintext.",
       "tags": [
         "LP2",
@@ -35194,6 +35384,7 @@
       "id": "wholepage-affine-gp29",
       "title": "Every static affine map on complete LP2 pages",
       "question": "Does any invertible affine transformation of the 29 GP rune indices yield English-like complete text on an unsolved LP2 page?",
+      "reader_question": "Have Caesar, Atbash and the other fixed affine substitutions been checked on whole LP2 pages?",
       "summary": "All 812 invertible GP29 affine maps were scored over all 55 rune-bearing LP2-00–55 pages, with solved-reading controls and a full-search shuffled baseline.",
       "tags": [
         "LP2",
@@ -35361,6 +35552,7 @@
       "id": "wholepage-known-vigenere-keys",
       "title": "Two known LP1 keys across complete LP2 pages",
       "question": "Do the Welcome or second-koan repeating keys produce English-like whole-page text on any unsolved LP2 page under either arithmetic sign and every phase?",
+      "reader_question": "Have the two known keys been checked on whole unsolved pages, not just opening words?",
       "summary": "All 55 rune-bearing LP2-00–55 pages were decoded under 42 documented-key settings each. None approached the known English readings under the pinned quadgram score.",
       "tags": [
         "LP2",
@@ -35526,6 +35718,7 @@
       "id": "wholepage-progressive-caesar",
       "title": "Progressive Caesar shifts on complete LP2 pages",
       "question": "Does a fixed-rate rotating shift of the GP29 rune alphabet produce English-like whole-page text on any unsolved LP2 page?",
+      "reader_question": "Have progressive Caesar or Trithemius-style shifts been tested on whole LP2 pages?",
       "summary": "Every nonconstant page-local linear shift was scored across 55 rune-bearing LP2 pages, with whole-reading controls and a complete-search shuffled baseline.",
       "tags": [
         "LP2",
@@ -35705,6 +35898,7 @@
       "id": "wholepage-public-wordlist",
       "title": "Public wordlist keys on complete LP2 pages",
       "question": "Do the 43 fixed public rune keys, at any phase in either GP29 Vigenère direction, produce an English-like complete unsolved page?",
+      "reader_question": "Do the public dictionary keys decode a complete LP2 page?",
       "summary": "Across 33,990 complete-page outputs, none reached the predeclared English-score threshold. The best score was exceeded by 105 of 199 full-search shuffle controls.",
       "tags": [
         "Vigenère",
@@ -35941,6 +36135,9 @@
       "id": "word-internal-affine-all-lags",
       "title": "LP2: affine patterns across twelve distances",
       "question": "Does the strongest word-internal affine relation across distances one through twelve exceed a full shuffled-word search?",
+      "reader_title": "Which patterns stand out inside words?",
+      "reader_intro": "Check 841 number rules at each of twelve rune distances inside words on the 56 unsolved LP2 pages. Repeat the complete search on 999 rearranged versions to see whether its strongest pattern stands out.",
+      "reader_question": "If we try many rune distances and formulas, does the strongest pattern still stand out?",
       "summary": "The strongest of 10,092 measured relations is a same-rune repeat five places apart: 102 matches versus 60.6 expected. Four of 999 complete shuffled-word searches reached its standardized score. The proposed six-rune formula is not the strongest.",
       "tags": [
         "affine relation",
@@ -36128,6 +36325,7 @@
       "id": "word-internal-affine-lags",
       "title": "LP2: a six-rune pattern inside words",
       "question": "Does c′ = 24 − 2c (mod 29) recur unusually often six runes later inside visible words?",
+      "reader_question": "When two runes are six places apart inside a word, do they follow a specific rule more often than we would expect by chance?",
       "summary": "The archived LP2-00–55 transcription has 77 matches in 1,267 word-internal opportunities. It leads 841 affine maps at lag six; three of 2,000 within-word shuffles reach its count after choosing the best map.",
       "tags": [
         "lag-six affine relation",
@@ -36574,6 +36772,9 @@
       "id": "wulfic-adfgvx-fractionation",
       "title": "Does the fractionation reversal undo its own shuffle?",
       "question": "What do the archived 6×5 keyword-grid routes produce on six intended LP2 pages, and does the archived columnar reversal invert its forward transform?",
+      "reader_title": "Can a rune grid and rearranged coordinates decode six pages?",
+      "reader_intro": "Uses a keyword to arrange the rune alphabet in a six-by-five grid, replaces each rune with its row and column numbers, and tests ways to rearrange or shift those numbers, including whether a shuffle can be undone.",
+      "reader_question": "Does this grid-and-shuffle method work on LP2?",
       "summary": "The archived reversal fails 476 of 588 planted round trips. A repaired inverse passes all 588, but neither route yields a verified page reading under the source’s limited keyword and width grid.",
       "tags": [
         "LP2",
@@ -36583,7 +36784,7 @@
         "columnar transposition",
         "source audit"
       ],
-      "finding": "The source names 1,260 settings; its own length rule skips 336, and 2 of the remaining 924 cross its vocabulary-score gate. Its raw IoC is bounded by 1, so the IoC >1.3 gate cannot fire. A separately labeled exact inverse produces 2 score-gated rows among 588 settings. Every gated setting has invalid grid cells. The correction repairs a transposition inverse; it does not identify the manuscript cipher.",
+      "finding": "Repairing the shuffle reversal restored all planted messages, but the manuscript outputs that passed the word screen still contained invalid grid cells; none supplies a verified reading.",
       "scope": {
         "pages": [
           "lp2-21",
@@ -36672,6 +36873,7 @@
       "id": "wulfic-advanced-running-keys",
       "title": "Four archived texts as running keys",
       "question": "Does the source’s adaptive four-text running-key search identify a supported output on its 18 priority pages?",
+      "reader_question": "Could Liber AL, solved text, Emerson or Deor be the key to these pages?",
       "summary": "The best source result was matched or beaten by 41 of 49 complete shuffled searches. The adaptive selector recovered a complete known message at a sampled offset but missed it between sampling points.",
       "tags": [
         "LP2",
@@ -36788,6 +36990,9 @@
       "id": "wulfic-autokey-seed-families",
       "title": "Short seeds for autokey ciphers",
       "question": "Do the pinned source keyword, two-rune, or three-rune autokey seeds pass their one-rune and IoC screens on the selected LP2 pages?",
+      "reader_title": "Can earlier runes extend a short starting key?",
+      "reader_intro": "Tries named words and two- or three-rune starting keys that grow using earlier encrypted or recovered runes, plus a separate four-rune key spelling DEOR, not the text of the Old English poem.",
+      "reader_question": "Could a short word or rune seed drive an autokey cipher?",
       "summary": "Four related archived search branches were replayed on verified LP2 page streams. None passed the source-defined hit screen; the gate and ciphertext-feedback design sharply limit what that result can exclude.",
       "tags": [
         "LP2",
@@ -36918,6 +37123,7 @@
       "id": "wulfic-cicada-byte-key-phases",
       "title": "Archived Cicada numbers and byte streams as LP2 keys",
       "question": "Do 25 archived number or byte sources recover LP2 under the pinned phase-averaged stay/advance/skip key detector?",
+      "reader_question": "Do Cicada number and byte streams work as LP2 keys?",
       "summary": "Exact accelerated replay of the pinned Stage R source grid finds no candidate above its declared +30 line; all planted controls pass.",
       "tags": [
         "LP2",
@@ -37101,6 +37307,7 @@
       "id": "wulfic-crib-lfsr-recurrence",
       "title": "Can a guessed word seed a short feedback key?",
       "question": "Does a source-defined crib-derived GF(29) linear recurrence predict a language-like 128-rune continuation on 11 named unsolved LP2 pages when the key phase and J-rune parsing are corrected?",
+      "reader_question": "Could a guessed word reveal the key for the following runes?",
       "summary": "The corrected crib rule produced 13 two-rune-validated candidate fits, but its best 128-rune continuation scored 18; 126 of 199 complete shuffled searches did at least as well. A separate post-result known-reading plant ranked first across a mixed 11-page search in all 12 mode/order cases, showing this exact screen can detect a clean positive.",
       "tags": [
         "LP2",
@@ -37210,6 +37417,9 @@
       "id": "wulfic-deor-interlocking-streams",
       "title": "Deor and interlocking rune streams",
       "question": "Does the archived prime-index split and Deor-to-derived-key sequence produce a distinctive second-stream IoC on current LP2-03?",
+      "reader_title": "Can one group of runes supply the key for another?",
+      "reader_intro": "Splits page 3 into two groups, tries the Old English poem Deor as a key for the first, then uses that group's strongest-scoring output as a repeating key for the second.",
+      "reader_question": "Can Deor unlock one stream and use it to unlock the rest?",
       "summary": "The original source hit thresholds are impossible for its raw score. A separately normalized whole-procedure control finds no distinctive final-stage peak in this bounded test.",
       "tags": [
         "LP2",
@@ -37219,7 +37429,7 @@
         "index of coincidence",
         "impossible source gate"
       ],
-      "finding": "The original hit conditions cannot be satisfied: raw IoC is at most 1, while the program requires more than 1.3 or 1.5. On LP2-03, its selected first-stage candidate adds Deor at offset 47 and scores 0.0649; the second subtracts the selected key at offset 31 and scores 0.0404. A separate normalized comparison gives a second-stage maximum of 1.173, reached or exceeded by 110 of 199 whole-procedure shuffles. The first-stage maximum is 1.882, reached by 18 of 199 shuffles.",
+      "finding": "The original program's success threshold was impossible to reach; a separate corrected comparison found that decoding the second rune group scored no better than many shuffled-page searches.",
       "scope": {
         "pages": [
           "lp2-03"
@@ -37290,6 +37500,7 @@
       "id": "wulfic-doublet-leak-h-o",
       "title": "What separates LP2’s surviving doublets?",
       "question": "Do six source-defined difference, boundary, periodic, clustering, key-switch or skip-next tests distinguish the 86 surviving LP2 doublets?",
+      "reader_question": "Do the surviving repeated runes reveal how LP2 was encrypted?",
       "summary": "Pinned H/O source tests and independent pair-by-pair replay find no declared H concentration; two named key switches and a specific skip-next rule fail their source comparisons.",
       "tags": [
         "LP2",
@@ -37484,6 +37695,7 @@
       "id": "wulfic-early-keyspace-diagnostics",
       "title": "Four early keyspace checks on LP2",
       "question": "Do Wulfic's specified running-key, small-key, ciphertext-autokey and selected-alphabet diagnostics find their expected LP2 signal?",
+      "reader_question": "Do LP2 rune patterns fit these running-key or autokey models?",
       "summary": "Pinned J/K/L source controls pass; two pooled unigram models fail their source line and two within-section lag searches find no corrected detection.",
       "tags": [
         "LP2",
@@ -37678,6 +37890,7 @@
       "id": "wulfic-grid-compression-source-replay",
       "title": "Complete-stream decompression of the LP2 number grid",
       "question": "Do the printed number-grid bytes form a complete raw DEFLATE, zlib, gzip, bzip2 or LZMA stream in any of four fixed routes?",
+      "reader_question": "Does the number grid decompress as a complete stream?",
       "summary": "Exact Wulfic Stage X4 component replay and an independent checker find no end-of-stream across five decoders and four full-grid routes.",
       "tags": [
         "LP2",
@@ -37759,6 +37972,7 @@
       "id": "wulfic-grid-long-byte-sources",
       "title": "Archived byte streams against the LP2 number grid",
       "question": "Can any cyclic phase of six archived byte streams turn the LP2 number grid into a low-diversity byte block under four routes and four byte operations?",
+      "reader_question": "Do archived byte streams reveal a low-diversity grid message?",
       "summary": "Exact Wulfic Stage Y replay finds no source/route/operation cell meeting its distinct-byte threshold after all cyclic phases; full controls pass.",
       "tags": [
         "LP2",
@@ -37845,6 +38059,7 @@
       "id": "wulfic-grid-native-keys",
       "title": "Cicada-derived keys against the LP2 grid",
       "question": "Do Wulfic's fixed earlier-Cicada key streams make the 256-cell LP2 grid pass its byte or GP29 reading screens?",
+      "reader_question": "Do known Cicada numbers unlock the 256-cell grid?",
       "summary": "Exact Stage N replay finds no source-screen hit among 456 settings: 72 byte-key operations and 384 GP29 readings. The screens have only post-replay synthetic detector diagnostics.",
       "tags": [
         "LP2",
@@ -37921,6 +38136,7 @@
       "id": "wulfic-grid-periodic-byte-invariant",
       "title": "Repeating-byte-alphabet invariant on the LP2 grid",
       "question": "Do equal-byte pairs in the LP2 grid support a periodically repeated one-to-one byte alphabet?",
+      "reader_question": "Could a repeating byte alphabet explain the number grid?",
       "summary": "Exact Stage X2 replay checks both grid routes and every period 1–128. No period exceeds the uniform-null maximum; conditional plaintext-control exclusions range from 78 to 247 of 256 cells.",
       "tags": [
         "LP2",
@@ -38001,6 +38217,7 @@
       "id": "wulfic-grid-rsa-modulus-screen",
       "title": "Raw grid bytes and RSA-modulus readings",
       "question": "Do seven byte statistics reject a uniform reference, and can four literal grid integers be conventional RSA-2048 moduli?",
+      "reader_question": "What can the raw grid bytes tell us?",
       "summary": "All seven raw-byte statistics remain within the source uniform-reference rule. Four row/column integer readings have exact small prime divisors, so they fail the conventional large-prime RSA-modulus interpretation.",
       "tags": [
         "number grid",
@@ -38083,6 +38300,7 @@
       "id": "wulfic-keyed-transposition-cohort",
       "title": "Archived keyword-and-route transposition search",
       "question": "What did the pinned ten-page keyword and rearrangement program actually test, and did its own scoring rule recognize words?",
+      "reader_question": "Does rearranging these keyed pages produce a reading?",
       "summary": "The pinned program scores 585 selected route rows on its actual LP2-04–13 inputs. Every row has zero word matches; the higher values are bigram scores on unbroken text.",
       "tags": [
         "LP2",
@@ -38166,6 +38384,7 @@
       "id": "wulfic-keyword-lfsr",
       "title": "Keyword-seeded register shifts",
       "question": "Do the archived ten page keywords, register lengths and tap patterns produce a source-reported candidate?",
+      "reader_question": "Could an archived keyword seed a feedback shift register that decrypts these pages?",
       "summary": "None of 400 source settings on LP2-04–13 passed the program’s normalized coincidence cutoff; a complete known-reading plant passed and recovered exactly.",
       "tags": [
         "LP2",
@@ -38263,6 +38482,9 @@
       "id": "wulfic-keyword-prime-layer-grid",
       "title": "Keywords paired with prime-derived streams",
       "question": "Does any source-specified keyword and prime-derived stream combination lift LP2 page text above the archived IoC candidate screen?",
+      "reader_title": "Can combining a keyword and a number sequence decode the pages?",
+      "reader_intro": "Adds or subtracts a repeating keyword together with one of 103 fixed number sequences, including primes, counting and Fibonacci numbers, then checks how often the output runes repeat.",
+      "reader_question": "Could a keyword and a prime stream remove two cipher layers?",
       "summary": "An adapted test of a pinned archived source grid found no setting above its IoC screen on the correctly mapped LP2 pages.",
       "tags": [
         "LP2",
@@ -38428,6 +38650,7 @@
       "id": "wulfic-keyword-quagmire-models",
       "title": "Named keyword Quagmire alphabets on LP2",
       "question": "Do the source's named keyword alphabets and six key distributions produce LP2's whole-book rune frequencies?",
+      "reader_question": "Do named keyword alphabets fit LP2's rune frequencies?",
       "summary": "Exact Stage V replay checks 68 named alphabets in all source-defined triples against six key-value distributions. No combination reaches the source's positive-lead threshold.",
       "tags": [
         "LP2",
@@ -38627,6 +38850,7 @@
       "id": "wulfic-keyword-ramp",
       "title": "A keyword that shifts with each rune",
       "question": "Do the archived page keywords plus any of nine fixed position steps produce a supported reading on the ten named pages?",
+      "reader_question": "Could a page keyword change its shift at every rune?",
       "summary": "The strongest source word score was 86; 10 of 199 complete shuffled searches scored at least as high. A full known-reading plant recovered exactly and ranked first.",
       "tags": [
         "LP2",
@@ -38741,6 +38965,7 @@
       "id": "wulfic-lag-reuse-models",
       "title": "Distant key reuse and ciphertext autokeys",
       "question": "Do fixed shifted or reflected key-reuse laws, or LP2 ciphertext used as its own key, produce a calibrated whole-lag or reused-stretch signal?",
+      "reader_question": "Could a key or ciphertext segment repeat elsewhere in LP2?",
       "summary": "Amended-source replay of two complete forward/reverse lag searches finds no +30 detection under either declared model, with original controls and null gates passing.",
       "tags": [
         "LP2",
@@ -38931,6 +39156,7 @@
       "id": "wulfic-letter-encoding-bounds",
       "title": "Two letter-encoding bounds on LP2",
       "question": "Do visible rune repeats mark one plaintext rune, or can a fixed set of dedicated homophones explain LP2 rune frequencies?",
+      "reader_question": "Could simple rules for repeated runes or homophones explain LP2?",
       "summary": "Two source-defined rules make predictions about visible runes; neither fits under its stated assumptions.",
       "tags": [
         "LP2",
@@ -39127,6 +39353,9 @@
       "id": "wulfic-lfsr-singleton-constraints",
       "title": "Can single-rune words pin down an LFSR key?",
       "question": "Do source-defined GF(29) linear-feedback streams of lengths one through five make every visible one-rune word on LP2-28, LP2-24 and LP2-21 read I or A?",
+      "reader_title": "Can one-rune words narrow down a number-generated key?",
+      "reader_intro": "Generates each new key value from one to five earlier values and checks whether every visible one-rune word on three pages becomes I or A, without treating a fit as a complete reading.",
+      "reader_question": "Can one-rune words reveal the key stream?",
       "summary": "The source's exact I/A singleton constraints admit four five-state Beaufort settings on LP2-28, about 27,400 settings on LP2-24 and 5.8 million on LP2-21. These are crib fits, not readings.",
       "tags": [
         "LP2",
@@ -39136,7 +39365,7 @@
         "crib constraints",
         "search bounds"
       ],
-      "finding": "Across all 29^L feedback tuples for each L=1–5, no selected page has a complete singleton fit at L1–2. At L5, the source's first-L invertible search yields four LP2-28 Beaufort fits, 27,424 combined subtraction/Beaufort fits on LP2-24 and 5,808,457 on LP2-21. Addition has exact signed-state symmetry with subtraction and is not counted again in that comparison. All four LP2-28 full-page example decodes have normalized IoC below the source's 1.3 shortcut; no full-page English selection claim is made.",
+      "finding": "Using one or two previous key values could not satisfy every I/A word guess; allowing five values gave anything from four to millions of fits, none an established reading.",
       "scope": {
         "pages": [
           "lp2-21",
@@ -39227,6 +39456,9 @@
       "id": "wulfic-liber-al-offset-sweep",
       "title": "Liber AL offset search on LP2-08",
       "question": "Does the pinned Liber AL key conversion and adaptive offset search make the corrected archive page_25 (LP2-08) stand out under its own common-trigram score?",
+      "reader_title": "Can The Book of the Law supply a key for page 8?",
+      "reader_intro": "Turns Liber AL, also called The Book of the Law, into rune values, searches selected starting places in that text, and compares the best output with searches on rearranged copies of page 8.",
+      "reader_question": "Does the Book of the Law unlock this page?",
       "summary": "The full source offset search produces an ordinary common-trigram score on LP2-08. It also misses a planted message at an offset the coarse stage does not promote.",
       "tags": [
         "LP2",
@@ -39285,6 +39517,7 @@
       "id": "wulfic-local-codebook-invariants",
       "title": "Fixed local codebooks and repeat preservation",
       "question": "Do source-defined fixed context, word and aligned-block encoders preserve more repeated units than LP2 contains?",
+      "reader_question": "Could a fixed local rule have produced the sparse repeats in LP2?",
       "summary": "Exact Wulfic Stage AA/Z replay excludes short fixed contexts, repeated-word codebooks and shorter aligned-block codebooks under its controls. Longer contexts and blocks lack power for a verdict.",
       "tags": [
         "LP2",
@@ -39483,6 +39716,7 @@
       "id": "wulfic-native-key-streams",
       "title": "Prime, solved-text and grid streams as LP2 keys",
       "question": "Do six source-defined streams of primes, solved LP1 values and number-grid values yield LP2 readings under a drift-tolerant GP29 decoder?",
+      "reader_question": "What happens when Cicada's own numbers are used as a key?",
       "summary": "All 5,742 source settings reproduce with no reading-threshold hit. Several keys end before the tested text does, so those scores cannot establish whole-section failure.",
       "tags": [
         "LP2",
@@ -39668,6 +39902,7 @@
       "id": "wulfic-number-key-streams",
       "title": "Mathematical digit streams as LP2 keys",
       "question": "Do the specified base-29 mathematical streams decode LP2 under a drift-tolerant starting-position search?",
+      "reader_question": "Could a mathematical constant or totient sequence be the key?",
       "summary": "Pinned public Stages AG and AH test 21 distinct number streams across LP2 sections with a drift-tolerant key start; none reaches the source's reading threshold.",
       "tags": [
         "LP2",
@@ -39860,6 +40095,7 @@
       "id": "wulfic-p08-hint-grid-keys",
       "title": "Keys from LP1-08’s hidden grid",
       "question": "Do the fixed, repeated keys derived from the solved P08 hint grid pass the source's frequency screen on LP2 pages?",
+      "reader_question": "Can the earlier hint grid serve as a repeating key for Liber Primus?",
       "summary": "The source's grid matches the saved LP1-08 OutGuess payload. Its old page range includes nine solved LP1 pages, where 99 of 103 phase-sweep threshold hits occur. Four hits on LP2-32 reduce to two frequency relations and no independently checked reading.",
       "tags": [
         "LP2",
@@ -40016,6 +40252,7 @@
       "id": "wulfic-p20-prime-position-routes",
       "title": "Prime-position route search on LP2-03",
       "question": "What does the pinned P20 prime-position split and 58-route search produce on its actual source page?",
+      "reader_question": "Does the prime-position route give a reading?",
       "summary": "The strongest route has six source-style trigram hits; 57 of 199 complete rune-shuffle searches reach at least six.",
       "tags": [
         "LP2",
@@ -40106,6 +40343,9 @@
       "id": "wulfic-p21-literal-f-masks",
       "title": "Pausing the key at selected F runes",
       "question": "Does the pinned second-layer program find any fixed-key F-skip mask that satisfies all its singleton I/A constraints?",
+      "reader_title": "Can leaving selected F runes unchanged fix keyword decoding?",
+      "reader_intro": "Tries each choice of F runes to leave unchanged while pausing the key, using one assigned keyword per page, and checks whether every one-rune word becomes I or A.",
+      "reader_question": "Can treating selected F runes as literal fix these keyword decodes?",
       "summary": "None of 27,402 source-defined F masks across ten exact pages passes all one-rune-word checks; the program falls back to choosing a mask by frequency score.",
       "tags": [
         "LP2",
@@ -40115,7 +40355,7 @@
         "singleton words",
         "selection effect"
       ],
-      "finding": "Exact pinned Wulfic pages 21–30 align to LP2-04–13. The unmodified source enumerates 27,402 literal-F masks, and no page has a mask satisfying all of its singleton I/A constraints. Its 45 fixed second-layer rune routes per page on the unmasked decode also print zero gate-passing rows. Nineteen whole-selection shuffled searches likewise have zero gated pages, so this gate does not distinguish the manuscript from the stated shuffle control.",
+      "finding": "No choice of F pauses made every one-rune word read I or A on the ten tested pages; shuffled pages failed the same test, so this result does not establish whether F is an interruption.",
       "scope": {
         "pages": [
           "lp2-04",
@@ -40196,6 +40436,7 @@
       "id": "wulfic-p21-rearrangement-routes",
       "title": "Keyword decryption and rearrangement",
       "question": "What changes under the exact 45 keyword-then-rearrangement routes in the archived P21–30 program, and does its best word score stand out from complete shuffled searches?",
+      "reader_question": "Could rearranging these keyword-decoded pages reveal a reading?",
       "summary": "The top source word score, 111, was met or beaten by 85 of 199 complete shuffled searches. Most routes cannot change the metric used to judge them: complete permutations preserve coincidence, word-order changes preserve word score, and the source scores character routes without spaces.",
       "tags": [
         "LP2",
@@ -40328,6 +40569,9 @@
       "id": "wulfic-p21-running-key-layers",
       "title": "Deor and Emerson as running keys on ten pages",
       "question": "Do the archived Deor and Self-Reliance running-key or assigned-keyword-plus-running-key sweeps clear their own coincidence gate on LP2-04–13?",
+      "reader_title": "Can a poem or essay supply a decoding key?",
+      "reader_intro": "Turns Deor, an Old English poem, and Self-Reliance, Ralph Waldo Emerson's essay, into number keys for ten pages, testing each text alone and combined with an assigned keyword.",
+      "reader_question": "Did those two texts work as keys for these pages?",
       "summary": "None of 24,639 source-defined settings passed the program’s normalized coincidence gate. The same gate recovered planted complete messages, including a later independent-key known-reading check.",
       "tags": [
         "LP2",
@@ -40338,7 +40582,7 @@
         "Self-Reliance",
         "index of coincidence"
       ],
-      "finding": "Neither Deor nor Self-Reliance produced a candidate that passed the program’s first language screen on LP2-04–13. The complete replay checked 24,639 combinations of page, text offset and decoding rule. Planted messages could pass the screen, but the manuscript behaved like the shuffled-page controls.",
+      "finding": "Neither text passed the program’s first check, so it produced no candidate reading. Hidden test messages could pass, while rearranged manuscript pages failed in the same way.",
       "scope": {
         "pages": [
           "lp2-04",
@@ -40431,6 +40675,7 @@
       "id": "wulfic-page24-prime-columnar",
       "title": "Prime positions and column readings on LP2-07",
       "question": "Does the archived zero-based prime extraction followed by column reading and GP29 shifts yield an unusual trigram score on LP2-07?",
+      "reader_question": "What if we take prime-indexed runes, rearrange them, then shift the alphabet?",
       "summary": "The complete 377-setting archived page-specific grid found no distinctive score: 222 of 256 full-search shuffles equaled or exceeded its best result.",
       "tags": [
         "LP2-07",
@@ -40525,6 +40770,7 @@
       "id": "wulfic-periodic-alphabet-lags",
       "title": "Repeating-alphabet periods across LP2",
       "question": "At which periods does LP2 preserve the rune agreement expected when the same bijective alphabet repeats?",
+      "reader_question": "Could a repeating alphabet explain the rune patterns?",
       "summary": "An exact source replay checks all 12,935 periods. Under its controlled equality model, 10,030 are excluded, including 1033, 1729 and 3301; 2,905 remain open and none is positively detected.",
       "tags": [
         "LP2",
@@ -40709,6 +40955,7 @@
       "id": "wulfic-periodic-word-crib-votes",
       "title": "Can word cribs predict a periodic key?",
       "question": "Does the source word-vote solver at its page_30/period-17 and page_27/period-43 examples recover exact words it did not use to infer the key?",
+      "reader_question": "Can familiar words reveal a repeating key?",
       "summary": "The archived word-vote solver produces no exact dictionary words in any untouched LP2 fold. It also fails the predeclared known-message gate, so this result does not rule out periodic-key ciphers.",
       "tags": [
         "LP2",
@@ -40784,6 +41031,7 @@
       "id": "wulfic-position-alphabet-flatness-bound",
       "title": "Random-alphabet flatness bound on LP2",
       "question": "How many independent substitution alphabets per key class are needed before LP2's rune frequencies cease to contradict that model?",
+      "reader_question": "Can LP2's flat rune counts rule out small sets of random alphabets?",
       "summary": "Exact Stage T replay reproduces a conditional lower-tail bound: at the source threshold, up to 168 effective key classes are excluded for one alphabet set, or up to 174 when each selected section gets a fresh set.",
       "tags": [
         "LP2",
@@ -40980,6 +41228,7 @@
       "id": "wulfic-position-alphabet-long-keys",
       "title": "Long byte keys as position alphabets on LP2",
       "question": "Do five specified source byte streams serve as synchronized substitution-alphabet labels for LP2?",
+      "reader_question": "Could these byte streams select the alphabet at each rune?",
       "summary": "Exact Stage W replay finds no hit among 50 long-byte-key/section settings; 12 are excluded by powered controls and 38 remain untestable under the source rule.",
       "tags": [
         "LP2",
@@ -41176,6 +41425,7 @@
       "id": "wulfic-prime-keyword-stream-families",
       "title": "Prime and keyword stream families",
       "question": "Do three archived keyword and prime-stream searches yield a distinctive, source-defined reading on their selected LP2 pages?",
+      "reader_question": "Can a word or prime sequence act as the missing key?",
       "summary": "Three complete pinned source grids were replayed together. Their screens do not establish a reading; a prime-stream IoC peak is an unresolved lead under a coarse 49-control comparison.",
       "tags": [
         "LP2",
@@ -41279,6 +41529,9 @@
       "id": "wulfic-quagmire-random-alphabets",
       "title": "Random Quagmire alphabet families on LP2",
       "question": "Do the specified random-alphabet Quagmire mixtures yield rune counts as even as LP2's under six key-value distributions?",
+      "reader_title": "Can shuffled cipher alphabets explain the even rune counts?",
+      "reader_intro": "Generate the specified Quagmire cipher models with shuffled alphabets and six ways of choosing key values. Compare their rune counts with the 56 unsolved LP2 pages; this tests frequency patterns, not decoded text.",
+      "reader_question": "Do random Quagmire alphabets fit LP2's rune frequencies?",
       "summary": "Exact Stage U replay finds 20 powered exclusions and four untestable settings across six key-value distributions, tied/independent alphabet variants and pooled/sectioned analyses.",
       "tags": [
         "LP2",
@@ -41478,6 +41731,7 @@
       "id": "wulfic-separator-clock-alberti",
       "title": "A rotating alphabet with a separator clock",
       "question": "Does the archived two-clock progressive alphabet reach its own frequency gate on its named LP2 targets?",
+      "reader_question": "Could the word separators tell a rotating alphabet when to turn?",
       "summary": "No source-selected LP2 page reaches the archived program's 1.4 IoC gate under either its literal parser or a declared corrected-rune variant.",
       "tags": [
         "LP2",
@@ -41584,6 +41838,7 @@
       "id": "wulfic-session17-period-detectors",
       "title": "Two checks for a repeating key length",
       "question": "Do source Test8 known-text key inference and Test9 split-column/Kasiski checks identify a repeat period across their named LP2 pages?",
+      "reader_question": "Do these pages show a repeating key length?",
       "summary": "The source known-text check produced no report over its 25% line. The split-column check flagged 29 of 34 pages, the same as the middle complete shuffled search.",
       "tags": [
         "LP2",
@@ -41720,6 +41975,7 @@
       "id": "wulfic-square-title-vocabulary",
       "title": "LP2-15 square-derived title keys",
       "question": "Do five specified number sequences from the LP2-15 square turn its nine-rune heading into two complete words under fixed GP29 arithmetic?",
+      "reader_question": "Does the LP2-15 square decode its short heading?",
       "summary": "Exact Stage I title replay checks 30 complete two-word outputs from five square-derived key sequences, both directions and three arithmetic signs; none passes the source vocabulary gate.",
       "tags": [
         "LP2-15",
@@ -41799,6 +42055,7 @@
       "id": "wulfic-stage-ab-reset-alphabets",
       "title": "Restarted alphabets at five LP2 boundaries",
       "question": "Would a shared substitution alphabet at each position after a section, paragraph, clause, line or page restart leave more same-position repeats than LP2 shows?",
+      "reader_question": "Could the key restart on each page or line?",
       "summary": "A pinned public source test of five restart boundaries was reproduced byte-for-byte; LP2 same-position repeats fall below both planted-control ranges under its exact model.",
       "tags": [
         "LP2",
@@ -41997,6 +42254,7 @@
       "id": "wulfic-stage-af-unit-shifts",
       "title": "Unit shifts in a restarted LP2 key",
       "question": "If a position key restarts and each unit gets a separate additive shift, do within-unit ciphertext differences recur across LP2 units as the model predicts?",
+      "reader_question": "What if a page or line key restarts with a different shift?",
       "summary": "A pinned public follow-up allowed a different shift per unit; its difference invariant still missed LP2 at all five tested boundaries.",
       "tags": [
         "LP2",
@@ -42196,6 +42454,9 @@
       "id": "wulfic-structural-pip-ps-normalized",
       "title": "Prime-indexed-prime and P.S. keys with a corrected IoC screen",
       "question": "When the archived program’s unreachable raw-IoC gate is explicitly corrected to 29×raw IoC >1.3, what do its called PIP and P.S. key grids yield on their verified page inputs?",
+      "reader_title": "Can fixed number sequences supply a decoding key?",
+      "reader_intro": "Tests primes selected at prime-numbered positions and three encodings of a fixed long number, after correcting the source program's impossible screening threshold.",
+      "reader_question": "Can prime-derived numerical keys decode these pages?",
       "summary": "The source gate raw IoC >1.3 is impossible. Under a separately frozen normalized-IoC amendment, the complete 102,036-setting source grid produces no score over 1.3; 157 of 199 full-search shuffles reach at least the observed maximum.",
       "tags": [
         "LP2-04–37",
@@ -42353,6 +42614,7 @@
       "id": "wulfic-systematic-stream-source",
       "title": "Prime streams and a short feedback key",
       "question": "Do the exact executed prime-derived and two-value feedback searches in archived stream_cipher_attack.py provide a distinctive LP2 reading under the source's own score?",
+      "reader_question": "Could a prime sequence or short feedback key decode these pages?",
       "summary": "The full pinned source searches produce many threshold hits, but complete searches on 19 shuffled versions do too. The score does not establish a reading.",
       "tags": [
         "LP2",
@@ -42507,6 +42769,7 @@
       "id": "wulfic-two-time-pad-premise",
       "title": "Do the proposed two-time-pad regions match?",
       "question": "Do the six fixed aligned-copy regions in three pinned Wulfic legacy scripts exist on their verified LP2 input, and what does the separate page-pair difference screen show?",
+      "reader_question": "Do the claimed identical rune spans actually occur?",
       "summary": "The three scripts’ specific identical-span premises fail on their committed source pages; a separate page-pair frequency screen does not establish key reuse.",
       "tags": [
         "LP2",

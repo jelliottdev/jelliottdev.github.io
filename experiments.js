@@ -213,7 +213,7 @@ function experimentFamilyMembers(r,catalog){
  if(!members.some(record=>record.id===r.id))members.push(r);
  if(members.length===1)return '<p>No other completed variant in this group yet.</p>';
  members.sort((a,b)=>Number(b.id===r.family.baseline)-Number(a.id===r.family.baseline)||a.id.localeCompare(b.id));
- return `<ul class="experiment-related-list">${members.map(record=>`<li><a href="#/experiments/${record.id}" ${record.id===r.id?'aria-current="page"':''}>${esc(record.variant?.label||record.variant_label||record.title)}</a><p>${esc(record.reader_finding||record.finding)}</p></li>`).join('')}</ul>`;
+ return `<ul class="experiment-related-list">${members.map(record=>`<li><a href="#/experiments/${record.id}" ${record.id===r.id?'aria-current="page"':''}>${esc(record.variant?.label||record.variant_label||globalThis.RecordTestView?.title(record)||record.title)}</a><p>${esc(record.reader_finding||record.finding)}</p></li>`).join('')}</ul>`;
 }
 function experimentFamily(r,catalog=experimentRecords){
  if(!r.family)return '';
@@ -555,11 +555,11 @@ function experimentArticle(r,catalog=experimentRecords){
   const readerSections=experimentReaderSections(r.article,r.reader_sections);
   const shownVisuals=(r.visuals||[]).map(visual=>visual.path);
   const checked=esc(r.scope_summary||`${experimentTargetSummary(r)}. ${r.bounds_note||r.scope.parameters}`);
-  return head(r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
-    <p class="lede">${esc(r.reader_question||r.question)}</p>
+  return head(globalThis.RecordTestView?.title(r)||r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
+    <p class="lede">${esc(r.reader_intro||r.reader_question||r.question)}</p>
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
-    ${globalThis.RecordTestView?.render(r,{headingLevel:2})||''}
-    <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">What we found</h2><div class="experiment-finding">${findingHTML}</div>
+    ${r.reader_intro?'':globalThis.RecordTestView?.render(r,{headingLevel:2})||''}
+    <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">What we found</h2><div class="experiment-finding">${findingHTML}</div>${r.reader_intro?globalThis.RecordTestView?.render(r,{headingLevel:2})||'':''}
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}${r.id==='parallel-language-blocks'?languageBlockFigure():''}
       ${r.reader_note?`<div class="experiment-meaning"><h3>What it means</h3><p>${esc(r.reader_note)}</p></div>`:''}
       <p id="experiment-scope" class="experiment-checked"><strong>Checked:</strong> ${checked}</p>

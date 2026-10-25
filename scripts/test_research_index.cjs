@@ -158,10 +158,7 @@ const lifecycleGuard=setTimeout(()=>{console.error('Research lifecycle test did 
   await context.experimentsPage(published[0].id,1);
   assert(html.includes('id="experiment-finding"'));assert(html.includes('downloads/experiments/'+published[0].id+'.zip'));
   await assert.rejects(context.experimentsPage('missing-record-fixture',1),/no published record/);
-  const discovery=published.map(record=>({id:record.id,title:record.title,summary:record.summary,tags:record.tags,
-    family:record.family,outcome:record.outcome,finding:record.reader_finding||record.finding,
-    record_type:record.record_type,method_topics:record.method_topics,pages:record.scope.pages,artifacts:record.scope.artifacts,
-    retested_on:record.review.retested_on,scope:record.scope,limitations:record.limitations}));
+  const discovery=JSON.parse(fs.readFileSync(require.resolve('../data/experiment-index.json'),'utf8')).records;
   const clearCaches=()=>vm.runInContext('experimentRecords=undefined;experimentRecordsPromise=null;researchRecords=undefined;researchRecordsPromise=null;',context);
   clearCaches();const requests=[];
   context.fetch=async url=>{requests.push(url);return {ok:true,json:async()=>({records:discovery})}};

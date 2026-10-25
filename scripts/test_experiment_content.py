@@ -33,6 +33,30 @@ class ContentTests(unittest.TestCase):
     def files(self):
         return {str(p.relative_to(self.root)): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
 
+    def test_reader_navigation_fields_are_strict_authored_and_schema_independent(self):
+        for version in ('legacy', 'v2'):
+            raw = copy.deepcopy(self.record) if version == 'legacy' else self.source()
+            before = copy.deepcopy(raw)
+            raw['reader_title'] = 'Use another passage as a decoding key'
+            raw['reader_intro'] = 'Change each rune using the next letter from a fixed passage.'
+            compiled = compile_content(raw)
+            self.assertEqual(compiled['reader_title'], raw['reader_title'])
+            self.assertEqual(compiled['reader_intro'], raw['reader_intro'])
+            self.assertEqual(compiled['title'], before['title'])
+            self.assertEqual(compiled['finding'], before.get('finding', before.get('result', {}).get('finding')))
+            for key, limit in [('reader_title', 110), ('reader_intro', 280)]:
+                for value in ['', ' padded ', 'x' * (limit + 1), '<b>name</b>', 'line\nbreak',
+                              'hidden\u200btext', '\ud800', None, 42, {}]:
+                    invalid = copy.deepcopy(raw)
+                    invalid[key] = value
+                    with self.subTest(version=version, field=key, value=repr(value)):
+                        with self.assertRaises(ValueError):
+                            compile_content(invalid)
+                edge = copy.deepcopy(raw)
+                edge[key] = '\U0001f4a1' * limit
+                self.assertEqual(compile_content(edge)[key], edge[key])
+            self.assertEqual(raw['title'], before['title'])
+
     def test_preflight_without_derived_article_is_read_only(self):
         raw = self.source()
         p = self.write(raw)
@@ -44,7 +68,10 @@ class ContentTests(unittest.TestCase):
         self.assertEqual(before, self.files())
 
     def test_single_edit_reaches_indexes_account_and_archive(self):
-        raw = self.source(); self.write(raw)
+        raw = self.source()
+        raw['reader_title'] = 'A clear research name'
+        raw['reader_intro'] = 'Try the stated rule on the stated pages.'
+        self.write(raw)
         records = build(self.root)
         (self.root / 'scripts').mkdir()
         (self.root / 'scripts/verify_bundle.py').write_text('# Fixture verifier')
@@ -60,6 +87,8 @@ class ContentTests(unittest.TestCase):
             exported = json.loads((self.root / file).read_bytes())
             row = exported['records'][0] if 'records' in exported else exported
             self.assertEqual(row['finding'], raw['result']['finding'])
+            self.assertEqual(row['reader_title'], raw['reader_title'])
+            self.assertEqual(row['reader_intro'], raw['reader_intro'])
         self.assertNotIn('analysis', r)
         self.assertNotIn('result', r)
         self.assertEqual((self.root / r['article_path']).read_bytes(), raw['analysis'].encode())

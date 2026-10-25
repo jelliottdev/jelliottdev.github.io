@@ -38,6 +38,13 @@ def article_bytes(raw):
 
 def compile_content(raw):
     record = copy.deepcopy(raw)
+    for key, limit in [('reader_title', 110), ('reader_intro', 280)]:
+        if key in record:
+            value = record[key]
+            if (not isinstance(value, str) or not value or value != value.strip()
+                    or len(value) > limit or re.search(r'[<>]', value)
+                    or any(unicodedata.category(ch) in {'Cc', 'Cf', 'Cs', 'Zl', 'Zp'} for ch in value)):
+                raise ValueError(key + ' needs one plain trimmed paragraph of at most ' + str(limit) + ' characters')
     if 'reader_test' in record:
         validate_reader_test(record['reader_test'])
     if 'schema' not in record:

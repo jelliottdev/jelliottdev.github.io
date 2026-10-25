@@ -48,9 +48,11 @@
     }).trim();
     return {text,pages:[...new Set(pages)]};
   }
+  const readerTitle=record=>(typeof module==='object'&&module.exports?require('./record-test-view.js'):root.RecordTestView)?.title(record)||record.title;
+  const readerIntro=record=>(typeof module==='object'&&module.exports?require('./record-test-view.js'):root.RecordTestView)?.renderIntro(record)||'';
   function recordText(record){
     const pages=(record.scope?.pages||[]).flatMap(id=>[id,`${id.slice(0,3)} page ${Number(id.slice(4))}`]);
-    return [record.title,record.summary,record.reader_finding||record.finding,record.family?.title,
+    return [record.title,record.reader_title,record.reader_intro,record.reader_question,record.summary,record.reader_finding||record.finding,record.family?.title,
       ...(record.tags||[]),...(record.method_topics||[]).flatMap(topic=>[topicId(topic),topic?.title,...(topic?.aliases||[])]),...pages].join(' ');
   }
   function detailFields(record){
@@ -92,7 +94,7 @@
       (!value.method||(record.method_topics||[]).some(topic=>topicId(topic)===value.method))&&
       (!value.family||record.family?.id===value.family)&&(!value.outcome||record.outcome===value.outcome)&&
       query.pages.every(id=>(record.scope?.pages||[]).includes(id))&&search.has([recordText(record),...detailFields(record).map(([,text])=>text)].join(' '),query.text));
-    const byTitle=(a,b)=>collator.compare(a.title,b.title)||a.id.localeCompare(b.id);
+    const byTitle=(a,b)=>collator.compare(readerTitle(a),readerTitle(b))||a.id.localeCompare(b.id);
     matches.sort((a,b)=>value.sort==='recent'?
       (checked(a)&&checked(b)?checked(b).localeCompare(checked(a)):checked(a)?-1:checked(b)?1:0)||byTitle(a,b):
       value.sort==='title-desc'?-byTitle(a,b):byTitle(a,b));
@@ -129,7 +131,7 @@
     return `<ol class="research-records" start="${result.start+1}">${result.records.map(record=>{
       const date=checked(record),recent=result.state.sort==='recent'&&date;
       const query=pageQuery(result.state.q||'').text,details=matchingDetails(record,query);
-      return `<li><article class="research-record"><h2><a href="${record.community?esc(record.href):'#/experiments/'+esc(record.id)}">${esc(record.title)}</a></h2>
+      return `<li><article class="research-record"><h2><a href="${record.community?esc(record.href):'#/experiments/'+esc(record.id)}">${esc(readerTitle(record))}</a></h2>${readerIntro(record)}
         <p class="research-record-meta">${esc(record.record_type?.label||'Research record')} · ${esc(pageLabel(record))} · ${esc(record.community?(root.CommunityResearch?.label(record)||'Untested idea'):outcomes[record.outcome]||'Finding not classified')}${recent?' · Checked '+esc(date):''}</p>
         <p class="research-record-finding">${esc(excerpt(record.reader_finding||record.finding||record.summary))}</p>
         ${details.map(([label,text,section])=>`<p class="research-match"><a href="#/experiments/${esc(record.id)}?section=${section}">${label==='Not tested'?'Mentioned under “Not tested”':'Matches '+esc(label.toLowerCase())}</a>: ${esc(matchExcerpt(text,query))}</p>`).join('')}

@@ -181,3 +181,29 @@ it checked. Author this once as reader_test in the canonical record and reuse it
 in the record page and map preview. It describes the original experiment, never
 a different prepared follow-up. Keep exact methods and bounds available; do not
 invent a simplified description when source-authored text is absent.
+
+### Research discovery language
+
+Visitors should recognize a question before learning a cipher name. Keep one
+research object across Graph, List, search and its full page. Source-authored
+`reader_title` and `reader_intro` supply its plain name and a short account of
+what was tried. Preserve the technical title, source names, exact procedure and
+original findings; search both names. Never derive an explanation from a title
+or turn a broad family label into a claim of coverage.
+
+List introduces each record before its page/status metadata. A record with an
+authored introduction shows that introduction, then the finding; the complete
+Used/Tried/Checked description follows rather than delaying the finding. Avoid
+deictic introductions such as “those texts” and define unfamiliar source names
+where they first appear. Stable branch IDs keep their hierarchy and colors while
+the visible label describes the action in ordinary words.
+
+The product path is recognize a question, understand the test, inspect its result,
+and choose a useful next check. Consistent interactions and honest saved state
+serve that path; additional terminology, controls or explanation must earn their
+space. Keep technical depth available without making it the entrance exam.
+
+Research browsing starts in List for a first visit so every immediate option is
+named. Explicit links and saved Graph/List preferences retain priority. Both
+views traverse the same branches, membership and colors; Graph remains available
+without forcing visitors to identify unlabeled points before choosing a question.

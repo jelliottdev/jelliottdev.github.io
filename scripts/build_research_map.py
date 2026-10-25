@@ -178,6 +178,7 @@ def build():
                          if fields.get(k) != sha(canonical(record[k]))) if fields else []
         changed += sorted(set(fields) - set(record))
         records[rid] = {'id': rid, 'title': record['title'],
+                        **{key: record[key] for key in ('reader_title', 'reader_intro', 'reader_question') if key in record},
                         'question': record.get('reader_question') or record['question'],
                         'finding': record.get('reader_finding') or record['finding'],
                         'limitations': record.get('reader_limit') or record['limitations'],
