@@ -3,7 +3,7 @@
  'use strict';
  const Context=typeof module==='object'&&module.exports?require('./followup-context.js'):root.FollowupContext;
  const node=typeof module==='object'&&module.exports;
- const C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,E=node?require('./local-experiment.js'):root.LocalExperiment,Control=node?require('./local-control.js'):root.LocalControl;
+ const C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,E=node?require('./local-experiment.js'):root.LocalExperiment,Control=node?require('./local-control.js'):root.LocalControl,Evaluators=node?require('./output-evaluators.js'):root.OutputEvaluators;
  const Protocols=node?require('./experiment-protocols.js'):root.ExperimentProtocols,View=node?require('./local-run-view.js'):root.LocalRunView;
  const HEX=/^[a-f0-9]{64}$/,SLUG='[a-z0-9]+(?:-[a-z0-9]+)*',ID=new RegExp('^'+SLUG+'$');
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
@@ -35,7 +35,7 @@
  function cardProgram(card){
   const snapshot=cardSnapshot(card),draft=snapshot,rules=draft.rules,known=k=>rules[k].status==='specified';
   if(draft.unresolved.length||draft.method.status!=='specified'||draft.scope.status!=='specified'||!exact(draft.scope.value,['pages'])||!Array.isArray(draft.scope.value.pages)||!draft.scope.value.pages.length||Object.values(rules).some(v=>v.status==='unrestricted'))throw Error('The published idea is not a fixed complete-page experiment.');
-  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||rules.evaluation.value?.kind==='exact-prefix'||Protocols.identify(rules.evaluation.value)))throw Error('The published input and evaluation must be explicit.');
+  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||rules.evaluation.value?.kind==='exact-prefix'||Evaluators.identify(rules.evaluation.value)||Protocols.identify(rules.evaluation.value)))throw Error('The published input and evaluation must be explicit.');
   for(const k of ['searchBounds','searchProtocol','exceptionalCases'])if(known(k))throw Error('The published conditions need an execution adapter.');
   if(known('unmapped')&&rules.unmapped.value!=='preserve'||known('wordBoundaries')&&rules.wordBoundaries.value!=='preserve')throw Error('The published separator rule needs an adapter.');
   const measurementIds=new Set(Protocols.list().map(d=>d.operation.id));
@@ -46,7 +46,7 @@
    if(operations.length!==1||!expected||!Protocols.identify(evaluation)||!same(evaluation,expected)||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The published measurement settings and evaluation must agree.');
    return {snapshot,steps:[],pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:evaluation};
   }
-  if(rules.evaluation.value!=='measurement'&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');
+  if(rules.evaluation.value!=='measurement'&&!Evaluators.identify(rules.evaluation.value)&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');
   const modes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};let reversed=false,cumulative=false,resetUsed=false;
   const steps=draft.method.value.operations.map(op=>{
    const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:op.id==='interrupted_repeating_key'?['key','direction','reset','interrupts']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];
@@ -107,7 +107,7 @@
   async function load(preserve=false){cleanupReuse();const previous=preserve===true?plan:null,token=++version;if(previous){busy=true;status('Checking the saved comparison…');}else host.innerHTML='<h1>Published follow-up</h1><p role="status">Loading the reviewed plan…</p>';try{
    if(!ref||!endpoint(config?.recordPlanEndpoint,'record-plans'))throw Error('Published follow-up plans are not available here yet.');
    const checked=await validatePlan(await json(config.recordPlanEndpoint,{recordId:ref.recordId,followupId:ref.followupId,includeExisting:true,includeExistingContext:true,includeBoundaryComparison:true,includeMotivation:true,...((typeof checkAuthoredReuse==='function'||typeof checkAuthoredPrefixReuse==='function')?{includeDerivedPrefixEvidence:true}:{})}),ref,cryptoAPI);if(!live(token))return;
-   const reuseChecker=['measurement','word-affine-count','word-prime-sums','exact-prefix'].includes(checked.task.criterion.kind)&&typeof checkAuthoredReuse==='function'?checkAuthoredReuse:checked.task.criterion.kind==='exact-prefix'&&typeof checkAuthoredPrefixReuse==='function'?checkAuthoredPrefixReuse:null;
+   const reuseChecker=['measurement','word-affine-count','word-prime-sums','exact-prefix','language-score'].includes(checked.task.criterion.kind)&&typeof checkAuthoredReuse==='function'?checkAuthoredReuse:checked.task.criterion.kind==='exact-prefix'&&typeof checkAuthoredPrefixReuse==='function'?checkAuthoredPrefixReuse:null;
    if(Object.hasOwn(checked,'coverage')){
     if(typeof checkedCoverage!=='function'||typeof coverageHTML!=='function')throw Error('Saved evidence could not be checked. Reload before starting new work.');
     const reused=await checkedCoverage(checked.coverage,checked.inputVersion);if(!live(token))return;

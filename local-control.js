@@ -1,13 +1,13 @@
 /* Success properties for replayed synthetic controls, never target verdicts. */
 (function(root){
  'use strict';
- const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
+ const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment,Evaluators=typeof module==='object'&&module.exports?require('./output-evaluators.js'):root.OutputEvaluators;
  // Compare validated programs; callers verify complete task identities separately.
  function compatible(control,target){
   if(!Array.isArray(control?.alphabet)||!Array.isArray(target?.alphabet)||!Array.isArray(control?.steps)||!Array.isArray(target?.steps)||E.stable(control.alphabet)!==E.stable(target.alphabet)||E.stable(control.steps)!==E.stable(target.steps))return false;
   const c=control.criterion,t=target.criterion;
   const runes=new Set(control.alphabet.map(v=>v.rune)),count=Array.isArray(control.pages)?control.pages.reduce((n,page)=>n+Array.from(page.text||'').filter(ch=>runes.has(ch)).length,0):0;
-  if(t?.kind==='measurement')return Object.keys(t).length===1&&c?.kind==='exact-prefix'&&Object.keys(c).length===2&&Array.isArray(c.values)&&c.values.length>0&&c.values.length<=256&&c.values.length===count&&c.values.every(v=>Number.isInteger(v)&&v>=0&&v<=28);
+  if(t?.kind==='measurement'||Evaluators?.identify(t))return (Evaluators?.identify(t)||Object.keys(t).length===1)&&c?.kind==='exact-prefix'&&Object.keys(c).length===2&&Array.isArray(c.values)&&c.values.length>0&&c.values.length<=256&&c.values.length===count&&c.values.every(v=>Number.isInteger(v)&&v>=0&&v<=28);
   return ['exact-prefix','word-affine-count','word-prime-sums'].includes(t?.kind)&&E.stable(c)===E.stable(t);
  }
  function passed(task,result){

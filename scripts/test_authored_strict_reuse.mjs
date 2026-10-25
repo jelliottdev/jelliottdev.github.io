@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import C from '../claim-specification.js';
 import E from '../local-experiment.js';
+import Evaluators from '../output-evaluators.js';
 import {fixture as databaseFixture} from './test_ordinary_prefix_reuse.mjs';
 import {fixture as prefixFixture} from './test_authored_prefix_reuse.mjs';
 import {loadRecordPlan,recordPlanDigest as sha} from '../services/idea-assistant/record-plans.mjs';
@@ -16,8 +17,9 @@ const references={count:{recordId:'word-internal-affine-lags',followupId:'lag-si
 async function own(f,card){const hash=await sha(C.serialize(card)),id='p_'+hash;f.sqlite.prepare('INSERT OR IGNORE INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,hash,E.stable(card),'private strict fixture',at);f.sqlite.prepare('INSERT OR IGNORE INTO research_ideas VALUES(?,?,?)').run(id,at,at.slice(0,10));return {id,card};}
 async function fixture(kind='count'){
  let f,reference,fetcher,record;
- if(kind==='measurement'){
-  f=await prefixFixture();reference={recordId:f.record.id,followupId:f.recipe.id};record=f.record;record.browser_followups[0].card.rules.evaluation.value='measurement';fetcher=f.fetcher;
+ if(kind==='measurement'||kind==='language'){
+  f=await prefixFixture();reference={recordId:f.record.id,followupId:f.recipe.id};record=f.record;record.browser_followups[0].card.rules.evaluation.value=kind==='language'?Evaluators.criterion():'measurement';fetcher=f.fetcher;
+  if(kind==='language'){for(const id of f.recipe.inputs.pages.map(p=>p.id))f.raw.set(id,('ᚠᚢᚦᚩᚱᚳᚷᚹ ᚻᚾᛁᛄᛇᛈᛉᛋ-').repeat(4));for(const pin of f.recipe.inputs.pages)pin.text_sha256=await sha(f.raw.get(pin.id));}
  }else{
   f=databaseFixture();reference=references[kind];record=JSON.parse(readFileSync(new URL('../experiments/records/'+reference.recordId+'/record.json',import.meta.url),'utf8'));
   fetcher=async url=>{assert.equal(new URL(url).origin,origin);return new URL(url).pathname==='/experiments/records/'+reference.recordId+'/record.json'?Response.json(record):Response.json(JSON.parse(readFileSync(new URL('..'+new URL(url).pathname,import.meta.url),'utf8')));};

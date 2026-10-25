@@ -247,6 +247,28 @@ Existing exact-prefix and word-pair tests still require identical control and
 target criteria. The controls run before any manuscript computation. Findings
 for a descriptive target remain measurements, with no readability verdict.
 
+### Authored language comparisons
+
+Use `scripts/browser_followups.py::construct_language_followup` to author a
+fixed comparison once. It accepts explicit operations, pages and independently
+specified synthetic input/output. The maintained three-field `language-score`
+criterion is pinned; custom models, thresholds and unrecorded search settings
+are rejected. A source should explain why these exact settings are worth
+checking and distinguish an extension from its earlier tested bounds.
+
+The full synthetic output verifies the transformation. Two independently
+calculated runner checks verify the language arithmetic before target pages run.
+Neither requires readable output or a high language score. Browser execution,
+remaining-page execution, saved charts and offline reproduction retain both
+checks and the same model identity. Ordinary measurement checks do not download
+the model. The offline authored command is `verify_authored_language.py`; exact
+remaining-page packages retain `verify_subset_controls.py` and include the model.
+
+This adapter supports fixed plans, not an inferred exhaustive parameter family.
+Do not split every key phase into separate research records or claim a language
+comparison establishes decipherment. A complete finite family still needs its
+explicit case definition and evidence for every claimed case.
+
 ### Word prime-value ledgers
 
 `word-prime-sums` measures word values without claiming a decoding rule. It uses

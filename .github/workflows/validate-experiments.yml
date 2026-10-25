@@ -103,6 +103,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_direct_reading_followups.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_authored_language_followups.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_browser_followups_finite.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_research_runner.py

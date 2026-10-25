@@ -81,7 +81,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,MIN(o.created_at),o.origin_id LIMIT 11)`,row.id,preferredOriginId).first();
    const savedOrigins=JSON.parse(originRows?.entries||'[]'),origins=[];
    for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,relation=await scopeRelation(task,s);origins.push({origin:saved.origin,control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
-   const controls=origins.length&&!origins.some(item=>item.scopeRelation)?null:await controlsFor(task);
+   const controls=origins.length&&!origins.some(item=>item.scopeRelation)&&task.criterion.kind!=='language-score'?null:await controlsFor(task);
    let selectedRecordOrigin=null;if(selectedOriginRow){const candidate=JSON.parse(selectedOriginRow.origin_json);if(!origins.some(item=>L.stable(item.origin)===L.stable(candidate)))throw Error('Selected authored context is not included in the validated origins');selectedRecordOrigin=candidate;}
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
    let shared=null,coverageUnavailable=false;
@@ -196,7 +196,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     exact(body,['result']);
     const authored=await query('SELECT COUNT(*) AS count FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=?',row.id).first();
     if(!Number.isSafeInteger(authored?.count)||authored.count<0)throw Error('Invalid reviewed origin count');
-    if(!authored.count)controls=await controlsFor(task);
+    if(!authored.count||task.criterion.kind==='language-score')controls=await controlsFor(task);
     result=await L.verify(task,body.result);
    }catch{return reply({error:'The implementation controls or results do not match this exact experiment.'},422);}
    const resultJson=L.stable(result),runId=await digest(resultJson);

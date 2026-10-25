@@ -5,8 +5,9 @@
  const encoder=new TextEncoder(),MAX_RUNNER=100000,MAX_TASK=2000000;
  const Control=typeof module==='object'&&module.exports?require('./local-control.js'):root.LocalControl;
  const Checks=typeof module==='object'&&module.exports?require('./local-plan-controls.js'):root.LocalPlanControls;
- const GUARD_SHA256='71fea900922eab1963af3e4230e47512929d673267180e4740aeee165bd48b2f';
+ const GUARD_SHA256='378f13633d46c18d940b4d5c71b3d2508558e9dd9714eeca22c6bf1a6819059d';
  const SUBSET_GUARD_SHA256='0c3379bedb4b3c3e5e0eb35adf1a0e01d0be94a8b09f0e84d2d2570ff834bd48';
+ const AUTHORED_LANGUAGE_GUARD_SHA256='eab2836a1fa76b0cff973cb26a8b227a730e30844207345ae32249852533dd75';
  const PLAN_GUARD_SHA256='36b01527be08f0594c2eb94f8bf5390015a7dedbef98657e80f5ab0af9953b95';
  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(k=>Object.hasOwn(value,k));
  const hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
@@ -70,7 +71,7 @@
  // limitation}] projection. Nonempty origins require the exact fixed guard
  // source fetched from tools/verify_controls.py; empty origins need no fetch
  // and preserve the original three-member archive byte for byte.
- async function build(task,runnerText,returnURL,origins=[],guardText,runnerControls=null,languageModelText=null,subsetOptions=null){
+ async function build(task,runnerText,returnURL,origins=[],guardText,runnerControls=null,languageModelText=null,subsetOptions=null,languageOptions=null){
   // Snapshot before awaiting identity: later caller edits cannot change members.
   E.validateTask(task);
   const snapshot=JSON.parse(JSON.stringify(task)),savedOrigins=originSnapshot(origins);
@@ -79,7 +80,11 @@
    if(runnerControls===null)throw Error('Remaining-page checks require both control suites.');
    if(!exact(subsetOptions,['subsetGuardText','planGuardText'])||Object.values(Object.getOwnPropertyDescriptors(subsetOptions)).some(d=>!Object.hasOwn(d,'value')))throw Error('Remaining-page checks require the fixed subset and runner guards.');subsetOptions={subsetGuardText:subsetOptions.subsetGuardText,planGuardText:subsetOptions.planGuardText};
   }else if(subsetOptions!==null)throw Error('Only remaining-page origins use subset guards.');
-  if(runnerControls!==null&&savedOrigins.length&&!subsets.length)throw Error('Choose the authored controls or the generic runner checks, not both.');
+  if(runnerControls!==null&&savedOrigins.length&&!subsets.length&&snapshot.criterion.kind!=='language-score')throw Error('Choose the authored controls or the generic runner checks, not both.');
+  const authoredLanguage=savedOrigins.length&&snapshot.criterion.kind==='language-score';
+  if(authoredLanguage&&runnerControls===null)throw Error('Authored language comparisons require independent scorer checks.');
+  if(authoredLanguage&&!subsets.length){if(!exact(languageOptions,['authoredLanguageGuardText','planGuardText']))throw Error('Authored language comparisons require both fixed guards.');languageOptions={...languageOptions};}
+  else if(languageOptions!==null)throw Error('Only full authored language comparisons use a language guard.');
   if(runnerControls!==null&&!Checks?.validate)throw Error('Runner checks could not be loaded.');
   const savedChecks=runnerControls===null?null:await Checks.validate(runnerControls,snapshot,root.crypto);
   await E.checkIdentity(snapshot);
@@ -93,7 +98,7 @@
    modelMembers.push(['language-model.json',encoder.encode(E.stable(model)+'\n')]);
   }else if(languageModelText!==null)throw Error('This experiment does not use a language reference model.');
   if(savedOrigins.length){
-   if(!['measurement','exact-prefix','word-affine-count','word-prime-sums'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
+   if(!['measurement','exact-prefix','word-affine-count','word-prime-sums','language-score'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
    const guard=textBytes(guardText,'Control guard source',MAX_RUNNER);
    if(await digest(guard)!==GUARD_SHA256)throw Error('The fixed control guard source changed.');
    const controls=new Map();
@@ -110,7 +115,13 @@
     const subsetGuard=textBytes(subsetOptions.subsetGuardText,'Subset control guard source',MAX_RUNNER),planGuard=textBytes(subsetOptions.planGuardText,'Runner guard source',MAX_RUNNER);
     if(await digest(subsetGuard)!==SUBSET_GUARD_SHA256||await digest(planGuard)!==PLAN_GUARD_SHA256)throw Error('The fixed remaining-page control guards changed.');
     const instructions='Remaining pages from a declared check\n\nTask ID: '+snapshot.taskId+'\n\nExtract every file, including the controls folder. Review task.json, origins.json, runner-controls.json and the fixed Python files.\nPython 3.9 or later and its standard library are sufficient.\n\nRun:\n  python verify_subset_controls.py --task task.json --origins origins.json --controls runner-controls.json --out results.json\n\nBoth the original authored known-answer controls and the task-bound runner checks must pass before any target page runs. A failure writes no target result. The command refuses to overwrite results.json.\nThe scope relation names only these remaining pages; it does not reproduce or claim results for other declared pages. Published provenance is preserved, not independently authenticated offline.\nNo network calls or automatic uploads occur.\nReturn manually to inspect or select results at:\n  '+address+'\n';
-    return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],['origins.json',textBytes(E.stable({version:1,origins:savedOrigins})+'\n','Authored origins',MAX_TASK)],['verify_controls.py',guard],...Array.from(controls.entries()).sort((a,b)=>a[0].localeCompare(b[0])).map(([id,task])=>['controls/'+id+'.json',textBytes(E.stable(task)+'\n','Synthetic control',MAX_TASK)]),['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',planGuard],['verify_subset_controls.py',subsetGuard]]);
+    return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],['origins.json',textBytes(E.stable({version:1,origins:savedOrigins})+'\n','Authored origins',MAX_TASK)],['verify_controls.py',guard],...Array.from(controls.entries()).sort((a,b)=>a[0].localeCompare(b[0])).map(([id,task])=>['controls/'+id+'.json',textBytes(E.stable(task)+'\n','Synthetic control',MAX_TASK)]),['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',planGuard],['verify_subset_controls.py',subsetGuard],...modelMembers]);
+   }
+   if(authoredLanguage){
+    const languageGuard=textBytes(languageOptions.authoredLanguageGuardText,'Authored language guard source',MAX_RUNNER),planGuard=textBytes(languageOptions.planGuardText,'Runner guard source',MAX_RUNNER);
+    if(await digest(languageGuard)!==AUTHORED_LANGUAGE_GUARD_SHA256||await digest(planGuard)!==PLAN_GUARD_SHA256)throw Error('The fixed authored language guards changed.');
+    const instructions='Authored language comparison\n\nExtract every file, including the controls folder and language-model.json. Python 3.9 or later and the standard library are sufficient. The model contains derived FLORES-200 statistics under CC BY-SA 4.0; its attribution and conversion are recorded inside it.\n\nRun:\n  python verify_authored_language.py --task task.json --origins origins.json --controls runner-controls.json --out results.json\n\nThe complete synthetic transform witness and both independent scorer checks must pass before target pages run. No score threshold is a success condition. A failed check writes no target result. No network calls or automatic uploads occur. The command refuses to overwrite results.json. Published provenance is retained, not independently authenticated offline. A score does not identify a language or establish a decryption.\n\nReturn manually to inspect results at:\n  '+address+'\n';
+    return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],['origins.json',textBytes(E.stable({version:1,origins:savedOrigins})+'\n','Authored origins',MAX_TASK)],['verify_controls.py',guard],...Array.from(controls.entries()).sort((a,b)=>a[0].localeCompare(b[0])).map(([id,task])=>['controls/'+id+'.json',textBytes(E.stable(task)+'\n','Synthetic control',MAX_TASK)]),['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',planGuard],['verify_authored_language.py',languageGuard],...modelMembers]);
    }
    const instructions='Local rune experiment with authored controls\n\nTask ID: '+snapshot.taskId+'\n\n'+
     'Extract every file, including the controls folder. Review task.json, origins.json and the Python files before running.\n'+
@@ -166,5 +177,5 @@
   const instructions='Saved finite-search audit\n\nExtract all four files into one folder. Python 3.9 or later and its standard library are sufficient.\n\nRun:\n  python verify_finite_search.py snapshot.json\n\nThis independently replays the saved computations and checks the declared search and its coverage. It does not run missing cases, contact a server or upload anything.\nMissing cases mean absent from these packaged receipts, not that nobody has tried them. A matching opening is not a complete decryption. Original source dates are retained, not independently authenticated.\n';
   return zip([['snapshot.json',body],['research_runner.py',runner],['verify_finite_search.py',audit],['START.txt',encoder.encode(instructions)]]);
  }
- const api={build,buildSnapshot,zipFiles,GUARD_SHA256,PLAN_GUARD_SHA256,SUBSET_GUARD_SHA256,FINITE_AUDIT_SHA256,FINITE_RUNNER_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
+ const api={build,buildSnapshot,zipFiles,GUARD_SHA256,AUTHORED_LANGUAGE_GUARD_SHA256,PLAN_GUARD_SHA256,SUBSET_GUARD_SHA256,FINITE_AUDIT_SHA256,FINITE_RUNNER_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

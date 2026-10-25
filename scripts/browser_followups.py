@@ -23,6 +23,10 @@ OUTCOMES = ('decipher', 'measure', 'reproduce', 'explain', 'verify_source', 'unc
 RECIPE_FIELDS = {'id', 'title', 'question', 'scope_change', 'limitation', 'card', 'inputs', 'control'}
 KEY = [0, 10, 4, 0, 1, 19, 0, 18, 4, 18, 9, 0, 18]
 WARNING12 = [24, 7, 24, 4, 9, 21, 17, 18, 20, 10, 18, 1]
+LANGUAGE_CRITERION = {
+    'kind': 'language-score', 'modelId': 'gp29-flores-trigram-v1',
+    'modelSha256': '8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4',
+}
 
 
 def require(condition, message):
@@ -126,6 +130,9 @@ def compile_card(card):
         return {'pages': scope['pages'], 'steps': [], 'criterion': criterion, 'inputVersion': values['inputVersion']}
     if criterion == 'measurement':
         criterion = {'kind': 'measurement'}
+    elif isinstance(criterion, dict) and criterion.get('kind') == 'language-score':
+        fields(criterion, LANGUAGE_CRITERION, 'language evaluation')
+        require(criterion == LANGUAGE_CRITERION, 'choose the maintained pinned language evaluation')
     else:
         fields(criterion, ('kind', 'values'), 'evaluation')
         require(criterion['kind'] == 'exact-prefix', 'explicit evaluation required')
@@ -245,11 +252,11 @@ def validate_followups(value, root, known_pages=None):
         runner.validate(task)
         require(task['alphabet'] == ordered_alphabet and task['steps'] == plan['steps'],
                 'control differs from proposed target program')
-        if plan['criterion']['kind'] == 'measurement':
-            require(task['criterion']['kind'] == 'exact-prefix', 'measurement target requires an exact synthetic control')
+        if plan['criterion']['kind'] in ('measurement', 'language-score'):
+            require(task['criterion']['kind'] == 'exact-prefix', 'descriptive target requires an exact synthetic control')
             control_runes = {entry['rune'] for entry in ordered_alphabet}
             require(all(sum(ch in control_runes for ch in page['text']) == len(task['criterion']['values'])
-                        for page in task['pages']), 'measurement control must check every synthetic output rune')
+                        for page in task['pages']), 'descriptive control must check every synthetic output rune')
         else:
             require(task['criterion'] == plan['criterion'], 'control differs from proposed target criterion')
         result = runner.run(task)
@@ -638,6 +645,30 @@ def construct_measurement_followup(root, *, identifier, title, question, scope_c
               'inputs': {'version': input_version, 'alphabet_sha256': digest(ordered_alphabet), 'pages': pins},
               'control': {'label': 'Recover every independently specified output rune in a synthetic control',
                           'task': task, 'expected_result_sha256': digest(result)}}
+    validate_followups([recipe], root)
+    return recipe
+
+
+def construct_language_followup(root, *, identifier, title, question, scope_change,
+                                limitation, operations, pages, control_cipher,
+                                control_plain, input_version='raw'):
+    """Pin the maintained language comparison, never a selected score threshold.
+
+    The explicit independent witness checks the complete transformed output;
+    it tests implementation, not whether a language score establishes a reading.
+    Only synthetic controls are executed. Manuscript target text is hash-pinned.
+    """
+    recipe = construct_measurement_followup(
+        root, identifier=identifier, title=title, question=question,
+        scope_change=scope_change, limitation=limitation, operations=operations,
+        pages=pages, control_cipher=control_cipher, control_plain=control_plain,
+        input_version=input_version)
+    recipe['card']['rules']['evaluation'] = {'status': 'specified',
+                                           'value': copy.deepcopy(LANGUAGE_CRITERION)}
+    recipe['card']['outcome']['value']['detail'] = (
+        'Compare the complete declared output with the maintained language samples '
+        'and rearrangements of its own runes; no language identity, reading, '
+        'or significance threshold is inferred.')
     validate_followups([recipe], root)
     return recipe
 

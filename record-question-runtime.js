@@ -2,7 +2,7 @@
 (function(root){
  'use strict';
  const stages=[
-  [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity']],
+  [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity'],['output-evaluators.js','OutputEvaluators','identify']],
   [['computation-evidence.js','ComputationEvidence','compare'],['experiment-protocols.js','ExperimentProtocols','describe'],['research-family.js','ResearchFamily','snapshot'],['question-protocols.js','QuestionProtocols','definition'],['claim-specification.js','ClaimSpecification','createDraft'],['local-control.js','LocalControl','compatible']],
   [['question-evidence.js','QuestionEvidence','summarize'],['family-question-evidence.js','FamilyQuestionEvidence','summarize'],['verified-evidence-client.js','VerifiedEvidenceClient','create'],['claim-share.js','ClaimShare','cardData']],
   [['question-decisions.js','QuestionDecisions','finite'],['record-followups.js','RecordFollowups','describeCard']],
@@ -10,15 +10,15 @@
   [['record-question-live.js','RecordQuestionLive','createController']]
  ];
  const readinessStages=[
-  [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity']],
+  [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity'],['output-evaluators.js','OutputEvaluators','identify']],
   [['computation-evidence.js','ComputationEvidence','compare'],['experiment-protocols.js','ExperimentProtocols','describe'],['claim-specification.js','ClaimSpecification','createDraft'],['local-control.js','LocalControl','compatible'],['output-evaluators.js','OutputEvaluators','identify'],['local-input-bundle.js','LocalInputBundle','parse']],
   [['claim-share.js','ClaimShare','cardData'],['verified-evidence-client.js','VerifiedEvidenceClient','create'],['verified-prefix-evaluation.js','VerifiedPrefixEvaluation','evaluate']],
   [['record-followups.js','RecordFollowups','describeCard'],['fixed-plan-compiler.js','FixedPlanCompiler','compile']],
   [['ordinary-prefix-evidence-client.js','OrdinaryPrefixEvidenceClient','verify']],
   [['followup-readiness.js','FollowupReadiness','createController']]
  ];
- const version='20261025-evidence-reuse',scripts=new Map();let pending=null,readinessPending=null;
- const ready=([,name,method])=>root[name]&&typeof root[name][method]==='function';
+ const version='20261025-authored-language',scripts=new Map();let pending=null,readinessPending=null;
+ const ready=([,name,method])=>root[name]&&(method==='payload'?typeof root[name][method]==='object':typeof root[name][method]==='function');
  function ensure(definition){
   const [file,name]=definition;if(ready(definition))return Promise.resolve(root[name]);
   if(scripts.has(file))return scripts.get(file);
@@ -37,7 +37,8 @@
   if(pending)return pending;
   pending=(async()=>{for(const stage of stages)await Promise.all(stage.map(ensure));return root.RecordQuestionLive;})().catch(error=>{pending=null;throw error;});return pending;
  }
- function loadReadiness(){
+ async function loadReadiness({language=false}={}){
+  if(language){try{await ensure(['language-model-data.js','RuneLanguageModelData','payload']);await ensure(['language-score.js','RuneLanguageScore','evaluate']);}catch(error){if(!root.RuneLanguageScore){scripts.delete('language-model-data.js');delete root.RuneLanguageModelData;}throw error;}}
   if(ready(readinessStages.at(-1)[0]))return Promise.resolve(root.FollowupReadiness);
   if(readinessPending)return readinessPending;
   readinessPending=(async()=>{for(const stage of readinessStages)await Promise.all(stage.map(ensure));return root.FollowupReadiness;})().catch(error=>{readinessPending=null;throw error;});return readinessPending;

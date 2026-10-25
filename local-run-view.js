@@ -197,7 +197,7 @@
  async function prepareMeasurementComparison(value,crypto=root.crypto){
   const node=typeof module==='object'&&module.exports,J=node?require('./finite-json.js'):root.FiniteJSON,R=node?require('./computation-evidence.js'):root.ComputationEvidence,Q=node?require('./question-evidence.js'):root.QuestionEvidence;
   const captured=J.capture(value,{maxBytes:16*1024*1024,maxDepth:24,maxNodes:1000000});
-  if(!captured||Object.keys(captured).length!==3||!['task','inputVersion','sources'].every(key=>Object.hasOwn(captured,key))||!['measurement','word-affine-count','word-prime-sums'].includes(captured.task?.criterion?.kind)||!Array.isArray(captured.sources)||captured.sources.length>75)throw Error('Use bounded original saved measurements for this exact question.');
+  if(!captured||Object.keys(captured).length!==3||!['task','inputVersion','sources'].every(key=>Object.hasOwn(captured,key))||!['measurement','word-affine-count','word-prime-sums','language-score'].includes(captured.task?.criterion?.kind)||!Array.isArray(captured.sources)||captured.sources.length>75)throw Error('Use bounded original saved measurements for this exact question.');
   const comparison=await R.compare(captured.task,captured.inputVersion,captured.sources,crypto),verified=new Map();
   // Verify whole original receipts, including pages outside the requested subset.
   for(const source of captured.sources){const result=await E.verify(source.task,source.run.result,crypto);verified.set(source.task.taskId,{...source,run:{...source.run,result}});}
@@ -208,6 +208,7 @@
   if(captured.task.criterion.kind==='word-prime-sums'){
    const sums=pages.map(page=>witnesses.get(page.id).run.result.wordSums.pages.find(row=>row.page===page.id));data.wordSums={pages:sums,words:sums.reduce((n,page)=>n+page.words.length,0),total:sums.reduce((n,page)=>n+page.words.reduce((m,word)=>m+word.sum,0),0)};
   }
+  if(captured.task.criterion.kind==='language-score')data.languageScore={modelId:captured.task.criterion.modelId,modelSha256:captured.task.criterion.modelSha256,pages:pages.map(page=>verified.get(witnesses.get(page.id).task.taskId).run.result.languageScore.pages.find(row=>row.page===page.id))};
   const token=Object.freeze({});measurementComparisons.set(token,data);return token;
  }
  function renderMeasurementComparison(token){
@@ -216,10 +217,11 @@
   let body;
   if(task.criterion.kind==='word-affine-count')body='<h3>Saved within-word pair counts</h3>'+wordPairChart(task,{wordPairs:data.wordPairs})+'<p class="run-limit">This is an exact rearrangement average, not a significance test or evidence of a decipherment.</p>';
   else if(task.criterion.kind==='word-prime-sums')body='<h3>Saved word totals</h3><p>'+data.wordSums.words.toLocaleString('en-US')+' measured words; combined total '+data.wordSums.total.toLocaleString('en-US')+'.</p>'+wordSumsView(task,{wordSums:data.wordSums})+'<p class="run-limit">These totals do not decode the text or establish that a pattern is meaningful.</p>';
+  else if(task.criterion.kind==='language-score')body='<h3>Saved language comparisons</h3>'+languageView(task,{transformed:data.outputs,languageScore:data.languageScore});
   else body=outputPreview(task,{transformed:data.outputs})+'<p>'+data.runes.toLocaleString('en-US')+' runes in the saved output.</p>';
   return '<section class="measurement-comparison">'+scope+body+'</section>';
  }
- function bindMeasurementComparison(host,token){const data=measurementData(token);if(!data.coveredPages.length)return ()=>{};return data.task.criterion.kind==='word-prime-sums'?bindWordSums(host,data.task,{wordSums:data.wordSums}):data.task.criterion.kind==='measurement'?bindOutputPreview(host,data.task,{transformed:data.outputs}):()=>{};}
+ function bindMeasurementComparison(host,token){const data=measurementData(token);if(!data.coveredPages.length)return ()=>{};return data.task.criterion.kind==='word-prime-sums'?bindWordSums(host,data.task,{wordSums:data.wordSums}):data.task.criterion.kind==='language-score'?bindLanguage(host,data.task,{transformed:data.outputs,languageScore:data.languageScore}):data.task.criterion.kind==='measurement'?bindOutputPreview(host,data.task,{transformed:data.outputs}):()=>{};}
  function continuationHTML({verified=false,unsaved=false,hasNext=false}={}){
   if(verified!==true||unsaved!==false||hasNext!==false)return '';
   return '<p class="research-continuation"><a href="research.html?contribute=1">Find another check <span aria-hidden="true">→</span></a></p>';

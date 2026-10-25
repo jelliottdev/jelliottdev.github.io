@@ -18,7 +18,7 @@
     emit({state:'loading'});
     pending=new Promise(resolve=>{queue.push(async()=>{try{
      if(dead||closed)return resolve(null);
-     const tools=await load();if(dead||closed)return resolve(null);
+     const tools=await load({language:check?.card?.rules?.evaluation?.value?.kind==='language-score'});if(dead||closed)return resolve(null);
      if(!controller)controller=tools.createController({record,check,onState:emit,fetcher,pageURL,loadConfig:()=>source('data/assistant.json'),loadInputs:()=>source('data/local-run-inputs.json')});
      resolve(await (retry?controller.retry():controller.activate()));
     }catch{emit({state:'unavailable'});resolve(null);}finally{pending=null;}});drain();});return pending;

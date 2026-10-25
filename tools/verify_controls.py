@@ -77,7 +77,7 @@ def verified_controls(task, document, folder):
     runner.require(type(document['version']) is int and document['version'] == 1
                    and isinstance(document['origins'], list) and 1 <= len(document['origins']) <= 10,
                    'Unsupported or empty origins document')
-    runner.require(task['criterion']['kind'] in ('measurement', 'exact-prefix', 'word-affine-count', 'word-prime-sums'), 'Controls require supported evaluation')
+    runner.require(task['criterion']['kind'] in ('measurement', 'exact-prefix', 'word-affine-count', 'word-prime-sums', 'language-score'), 'Controls require supported evaluation')
     checked = set()
     for value in document['origins']:
         control = validate_origin(value)
@@ -90,12 +90,12 @@ def verified_controls(task, document, folder):
                        'Synthetic control exceeds its bound')
         for key in ('steps', 'alphabet'):
             runner.require(fixture[key] == task[key], 'Control uses a different ' + key)
-        if task['criterion']['kind'] == 'measurement':
+        if task['criterion']['kind'] in ('measurement', 'language-score'):
             runner.require(fixture['criterion']['kind'] == 'exact-prefix'
                            and bool(fixture['criterion']['values'])
                            and len(fixture['criterion']['values']) == sum(
                                ch in control_runes for ch in fixture['pages'][0]['text']),
-                           'Measurement target requires a complete synthetic exact-prefix control')
+                           'Output comparison requires a complete synthetic exact-prefix control')
         else:
             runner.require(fixture['criterion'] == task['criterion'], 'Control uses a different criterion')
         saved = read_json(folder / 'controls' / (fixture['taskId'] + '.json'))
@@ -125,6 +125,8 @@ def main():
         runner.require(output not in (target, origins, Path(__file__).resolve(), Path(runner.__file__).resolve()),
                        'Output cannot overwrite packaged inputs or runner')
         task = read_json(target)
+        runner.require(task['criterion']['kind'] != 'language-score',
+                       'Use verify_authored_language.py or verify_subset_controls.py so both control suites run')
         count = verified_controls(task, read_json(origins), target.parent)
         # No target transformation occurs before every control has passed.
         result = runner.run(task)

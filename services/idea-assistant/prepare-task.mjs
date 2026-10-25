@@ -52,7 +52,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    const card=validateCard(row.card_json);let plan=planCard(card),interpretationNotes=[],basis={kind:'compiled-card',normalizedCard:card};
    let authored=null;if(body.recordOrigin){
     if(plan.criterion?.kind==='exact-prefix'&&body.includeDerivedPrefixEvidence!==true)return reply({error:'Authored opening preparation requires the explicit saved-output review.'},400);
-    try{const {loadRecordPlan}=await import('./record-plans.mjs');authored=await loadRecordPlan(body.recordOrigin,{fetcher});if(L.stable(authored.origin)!==L.stable(body.recordOrigin)||L.stable(authored.card)!==L.stable(card)||plan.reason||!['exact-prefix','measurement','word-affine-count','word-prime-sums'].includes(plan.criterion.kind))throw Error();}catch{return reply({error:'The authored question or its pinned source changed. Review the published check again.'},422);}
+    try{const {loadRecordPlan}=await import('./record-plans.mjs');authored=await loadRecordPlan(body.recordOrigin,{fetcher});if(L.stable(authored.origin)!==L.stable(body.recordOrigin)||L.stable(authored.card)!==L.stable(card)||plan.reason||!['exact-prefix','measurement','word-affine-count','word-prime-sums','language-score'].includes(plan.criterion.kind))throw Error();}catch{return reply({error:'The authored question or its pinned source changed. Review the published check again.'},422);}
    }
    // Choosing a check is a research decision. Neither the planner nor its AI
    // wording adapter may silently replace it with descriptive measurements.
