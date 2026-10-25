@@ -154,3 +154,17 @@ answers take priority, with this background in the original-plan details.
 This text is editorial context, not a task condition, calculation or result.
 It must not enter immutable task/origin/receipt schemas. The service returns it
 only to clients that explicitly request the optional projection.
+
+### Review and contribution completion
+
+Saved-idea workspaces name the current action: reviewing a runnable check,
+choosing missing settings, continuing existing work, or inspecting saved results.
+Storage is not a workflow stage. Only verified complete evidence or an answered
+opening check permits the saved-results heading; an existing task alone does not.
+Keep the heading node stable through asynchronous preparation and inline errors.
+
+After a local calculation, show its unsaved state and explicit Save action before
+the detailed findings. State the actual executed pages and what saving contributes.
+A failed save retains local results and the retry action. Source questions and
+scientific limits remain available; never make a visitor judge significance before
+they can contribute a calculation.
