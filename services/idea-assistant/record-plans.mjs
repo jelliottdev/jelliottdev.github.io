@@ -7,6 +7,7 @@ import {planCard} from './prepare-task.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 import {findEvidence} from './task-evidence.mjs';
 import {boundaryComparison} from './boundary-comparison.mjs';
+import {discoverOrdinaryPrefixEvidence} from './ordinary-prefix-evidence.mjs';
 const BASE='https://jelliottdev.github.io',HEX=/^[a-f0-9]{64}$/,ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 export const recordPlanDigest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',typeof text==='string'?new TextEncoder().encode(text):text))].map(v=>v.toString(16).padStart(2,'0')).join('');
@@ -60,7 +61,7 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
  };
  try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Official source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}
 }
-export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=20000,discoverEvidence=findEvidence}={}){
+export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=20000,discoverEvidence=findEvidence,discoverPrefixEvidence=discoverOrdinaryPrefixEvidence}={}){
  return async(request,env)=>{
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',Vary:'Origin'},reply=(v,status=200)=>new Response(JSON.stringify(v),{status,headers});
   const allowed=env?.SITE_ORIGIN;try{if(new URL(allowed).origin!==allowed||!['http:','https:'].includes(new URL(allowed).protocol))throw Error();}catch{return reply({error:'Reviewed plans are unavailable.'},503);}
@@ -70,7 +71,7 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
   if(request.method!=='POST')return reply({error:'Method is not allowed.'},405);
   const rate=env.TASK_LIMIT||env.PROPOSAL_LIMIT;if(!rate?.limit)return reply({error:'Reviewed plans are unavailable.'},503);
   try{if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);}catch{return reply({error:'Reviewed plans are unavailable.'},503);}
-  let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting'),comparisonOptIn=body&&Object.hasOwn(body,'includeBoundaryComparison'),contextOptIn=body&&Object.hasOwn(body,'includeExistingContext');if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[]),...(comparisonOptIn?['includeBoundaryComparison']:[]),...(contextOptIn?['includeExistingContext']:[])])||optedIn&&body.includeExisting!==true||comparisonOptIn&&(body.includeBoundaryComparison!==true||body.includeExisting!==true)||contextOptIn&&(body.includeExistingContext!==true||body.includeExisting!==true)||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
+  let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting'),flags=['includeBoundaryComparison','includeExistingContext','includeDerivedPrefixEvidence'].filter(key=>body&&Object.hasOwn(body,key));if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[]),...flags])||optedIn&&body.includeExisting!==true||flags.some(key=>body[key]!==true||body.includeExisting!==true)||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
   let loaded;try{loaded=await loadRecordPlan(body,{fetcher,timeoutMs});}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
   const {snapshot,...plan}=loaded;
   if(body.includeExisting===true){
@@ -82,6 +83,10 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
     const found=await discoverEvidence({db:env.PROPOSALS,task:plan.task,inputVersion:plan.inputVersion});
     if(found.truncated&&found.remainingPages.length)throw Error('Computation coverage could not be checked completely.');
     plan.coverage={...found,requestedTask:plan.task,inputVersion:plan.inputVersion};
+    if(body.includeDerivedPrefixEvidence===true&&plan.task.criterion.kind==='exact-prefix'&&found.remainingPages.length){
+     try{plan.derivedCoverage=(await discoverPrefixEvidence({db:env.PROPOSALS,task:plan.task,inputVersion:plan.inputVersion})).wire;}
+     catch{return reply({state:'coverage-unavailable',coverageUnavailable:true,coverage:plan.coverage,error:'Saved output could not be checked. Retry before creating more work.'},503);}
+    }
     // The task and recipe must be identical; an unrelated parent-record edit
     // may change recordSha256 without invalidating an immutable saved origin.
     const selectedContext=body.includeExistingContext===true,cardJSON=L.stable(plan.card),proposalId=selectedContext?'p_'+await recordPlanDigest(C.serialize(plan.card)):null;
@@ -105,6 +110,7 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
     if(body.includeBoundaryComparison===true){const comparison=await boundaryComparison({db:env.PROPOSALS,task:plan.task,inputVersion:plan.inputVersion,discoverEvidence});if(comparison)plan.boundaryComparison=comparison;}
    }catch{return reply({state:'coverage-unavailable',coverageUnavailable:true,error:'Existing computation evidence could not be checked. Please retry before creating this experiment.'},503);}
   }
+  if(body.includeDerivedPrefixEvidence===true&&new TextEncoder().encode(JSON.stringify(plan)).length>8*1024*1024)return reply({state:'coverage-unavailable',coverageUnavailable:true,coverage:plan.coverage,error:'Saved output exceeds the bounded evidence response. No experiment was created.'},503);
   return reply(plan);
  };
 }

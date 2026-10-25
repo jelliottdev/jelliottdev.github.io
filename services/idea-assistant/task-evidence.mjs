@@ -126,7 +126,7 @@ export async function readIdeaEvidence({db,proposalId,taskId,crypto:cryptoAPI=gl
 
 /* Recheck the precise immutable source receipts named by a preparation basis.
  * Newer unrelated results cannot silently replace these pinned sources. */
-export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryptoAPI=globalThis.crypto}){
+export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryptoAPI=globalThis.crypto,includeSources=false}){
  await Evidence.describe(task,inputVersion,cryptoAPI);
  if(typeof db?.prepare!=='function'||!Array.isArray(evidence)||evidence.length>75)throw Error('The pinned computation evidence is malformed.');
  const sources=[],seen=new Set();
@@ -150,5 +150,5 @@ export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryp
  const comparison=await Evidence.compare(task,inputVersion,sources,cryptoAPI);
  const sorted=evidence.slice().sort((a,b)=>a.taskId.localeCompare(b.taskId)||a.resultId.localeCompare(b.resultId));
  if(E.stable(comparison.evidence)!==E.stable(sorted))throw Error('The pinned evidence claims different covered pages.');
- return comparison;
+ return includeSources?{comparison,sources}:comparison;
 }

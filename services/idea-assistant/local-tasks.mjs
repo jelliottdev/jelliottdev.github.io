@@ -8,6 +8,7 @@ import {loadRecordPlan,validOrigin as validRecordedOrigin} from './record-plans.
 import {findEvidence} from './task-evidence.mjs';
 import {boundaryComparison} from './boundary-comparison.mjs';
 import {storageLimits as checkedStorageLimits} from './storage-limits.mjs';
+import {scopeRelation} from './authored-prefix-remainder.mjs';
 const MAX_BODY=2*1024*1024, HEX=/^[a-f0-9]{64}$/, PROPOSAL=/^p_[a-f0-9]{64}$/;
 const NOTICE='Verified computation only; this does not establish a correct reading or scientific conclusion.';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -72,18 +73,21 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
    const publicIds=JSON.parse(publicRows?.ids||'[]');
+   const selectedOriginRow=linkedProposalId?await query(`SELECT o.origin_id,o.origin_json FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=? AND o.proposal_id=? ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,o.created_at,o.origin_id LIMIT 1`,row.id,linkedProposalId,preferredOriginId).first():null;
+   if(selectedOriginRow)preferredOriginId=selectedOriginRow.origin_id;
    const originRows=await query(`SELECT json_group_array(json_object('origin',json(origin_json),'snapshot',json(snapshot_json))) AS entries FROM (
     SELECT o.origin_json,o.snapshot_json FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id
     WHERE o.task_id=? GROUP BY o.origin_id,o.origin_json,o.snapshot_json
     ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,MIN(o.created_at),o.origin_id LIMIT 11)`,row.id,preferredOriginId).first();
    const savedOrigins=JSON.parse(originRows?.entries||'[]'),origins=[];
-   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot;origins.push({origin:saved.origin,control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation});}
-   const controls=origins.length?null:await controlsFor(task);
+   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,relation=await scopeRelation(task,s);origins.push({origin:saved.origin,control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
+   const controls=origins.length&&!origins.some(item=>item.scopeRelation)?null:await controlsFor(task);
+   let selectedRecordOrigin=null;if(selectedOriginRow){const candidate=JSON.parse(selectedOriginRow.origin_json);if(!origins.some(item=>L.stable(item.origin)===L.stable(candidate)))throw Error('Selected authored context is not included in the validated origins');selectedRecordOrigin=candidate;}
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
    let shared=null,coverageUnavailable=false;
    if(!run){try{shared=await discoverEvidence({db,task,inputVersion:context.input_version});if(shared.truncated&&shared.remainingPages.length)coverageUnavailable=true;}catch{coverageUnavailable=true;}}
    const coverage=shared?.coveredPages.length?{...shared,requestedTask:task,inputVersion:context.input_version}:null;
-   return {...projection(row,task,run,context),origins,...(coverage?{coverage}:{}),...(coverageUnavailable?{coverageUnavailable:true}:{}),...(controls?{controls}:{}),...(savedOrigins.length>10?{originsTruncated:true}:{}),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
+   return {...projection(row,task,run,context),origins,...(selectedRecordOrigin?{selectedRecordOrigin}:{}),...(coverage?{coverage}:{}),...(coverageUnavailable?{coverageUnavailable:true}:{}),...(controls?{controls}:{}),...(savedOrigins.length>10?{originsTruncated:true}:{}),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
   };
   try{
    let body;
@@ -130,16 +134,17 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
      // A previously linked pending task is not permission to bypass the new
      // reviewed prefix-evidence snapshot. Legacy idempotent links stay unchanged.
-     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&JSON.parse(prepared.basis_json).kind==='ordinary-derived-prefix-remainder-v1'){
+     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
       let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
+      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
      }}
      existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
     }
     if(!reviewed){
      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls});
+     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher});
      if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
+     if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
     }
     // Identical bytes under the same already-verified input version can be reused.
     // A different version must independently match that version's official source.

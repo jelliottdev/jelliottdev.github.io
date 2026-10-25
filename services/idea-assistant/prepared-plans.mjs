@@ -11,6 +11,7 @@ import Settings from '../../finite-settings.js';
 import Policy from '../../finite-question-policy.js';
 import Compiler from '../../fixed-plan-compiler.js';
 import {storageLimits as checkedStorageLimits} from './storage-limits.mjs';
+import {checkedRecordRemainder,strictPrefixMatch} from './authored-prefix-remainder.mjs';
 
 const HEX=/^[a-f0-9]{64}$/,PREP=/^prep_[a-f0-9]{64}$/,PROPOSAL=/^p_[a-f0-9]{64}$/;
 const exact=(o,ks)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).length===ks.length&&ks.every(k=>Object.hasOwn(o,k));
@@ -52,9 +53,16 @@ async function proposal(db,bound){
  if(!row)return false;
  try{return row.card_hash===bound.base.cardHash&&C.serialize(validateCard(row.card_json))===C.serialize(bound.card);}catch{return false;}
 }
-async function basisFor(db,value,bound,authority,fresh=false){
+async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
+  if(basis.kind==='record-derived-prefix-remainder-v1'){
+   await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,fetcher});
+   await basisFor(db,basis.remainderBasis,bound,authority,fresh,fetcher);
+   const requestedRow=await query(db,'SELECT requested_task_json FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.remainderBasis.requestedTaskId);
+   require(!await strictPrefixMatch({db,task:JSON.parse(requestedRow.requested_task_json),inputVersion:bound.base.inputVersion,evidence:basis.remainderBasis.strictEvidence}),'The authored opening is already found');
+   return {text:data.text,hash:await sha(data.text)};
+  }
   if(basis.kind==='factored-page-group-v1'){
    require(exact(basis,['kind','domainId','settings','caseIds'])&&typeof basis.domainId==='string'&&HEX.test(basis.domainId)&&Array.isArray(basis.caseIds)&&basis.caseIds.length>=1&&basis.caseIds.length<=75&&basis.caseIds.every(id=>typeof id==='string'&&HEX.test(id))&&new Set(basis.caseIds).size===basis.caseIds.length&&bound.base.parentTaskId===null,'Invalid reviewed page-group basis');
    const member=Settings.factored.member(bound.card,basis.settings),plan=Compiler.compile(member.card),evaluation=bound.card.rules.evaluation.value==='measurement'?{kind:'measurement'}:bound.card.rules.evaluation.value;
@@ -163,14 +171,14 @@ async function checked(row,bound){
  }catch{return null;}
  return p;
 }
-export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits}){
+export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits,fetcher=globalThis.fetch}){
  const limits=checkedStorageLimits(storageLimits);
  const bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});
  require(await proposal(db,bound),'Confirmed proposal is unavailable or changed');
  if(parentTaskId!==null)require(await query(db,'SELECT t.id FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',parentTaskId,proposalId),
   'Prepared parent is not associated with this idea');
  require(['idea','remaining-lp2','word-boundaries'].includes(authority),'Invalid prepared authority');
- const source=await basisFor(db,basis,bound,authority),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
+ const source=await basisFor(db,basis,bound,authority,false,fetcher),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
  let row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
  if(row){const receipt=await checked(row,bound);require(receipt,'Stored preparation differs from its binding');return receipt;}
  require(typeof createdAt==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(createdAt)
@@ -183,7 +191,7 @@ export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,c
  if(!row){const error=Error('The daily prepared-plan limit has been reached');error.code='preparation-limit';throw error;}
  const receipt=await checked(row,bound);require(receipt,'Prepared plan could not be verified');return receipt;
 }
-export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls}){
+export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls,fetcher=globalThis.fetch}){
  let bound;
  try{if(preparationId!==undefined)require(typeof preparationId==='string'&&PREP.test(preparationId),'Invalid preparation ID');
   bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});}catch{return null;}
@@ -192,6 +200,6 @@ export async function authorize({db,preparationId,proposalId,card,task,inputVers
   await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
   await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
  const receipt=await checked(row,bound);if(!receipt)return null;
- try{const basis=JSON.parse(row.basis_json);if(basis.kind==='ordinary-derived-prefix-remainder-v1')await basisFor(db,basis,bound,row.authority,true);}catch{return null;}
+ try{const basis=JSON.parse(row.basis_json);if(['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher);if(basis.kind==='record-derived-prefix-remainder-v1')return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
  return receipt;
 }
