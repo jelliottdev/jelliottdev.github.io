@@ -177,6 +177,16 @@ async function authoredControlTests(){
  console.log('PASS authored-origin UI: no auto-execution; control before target; complete-hash/prefix failures, cancel/navigation/destroy preserve selected result and stop target; optional guard fetch and five-argument package.');
 }
 (async()=>{
+ // A same-document family link must dispatch to the family workspace rather
+ // than being parsed as an invalid legacy task. Reload preserves the hash and
+ // lets the normal browser boot select the correct workspace.
+ const priorFamily=globalThis.FamilyWorkspace;globalThis.FamilyWorkspace={route:hash=>hash==='#family=deor-feedback-v1'};
+ let familyNavigation;
+ try{
+  familyNavigation=await fixture();let reloads=0;familyNavigation.doc.defaultView.location.reload=()=>reloads++;
+  const requestCount=familyNavigation.requests.length;familyNavigation.doc.defaultView.location.hash='#family=deor-feedback-v1';await familyNavigation.doc.events.hashchange();
+  assert.equal(reloads,1);assert.equal(familyNavigation.doc.defaultView.location.hash,'#family=deor-feedback-v1');assert.equal(familyNavigation.requests.length,requestCount);assert(!familyNavigation.doc.host.innerHTML.includes('Experiment unavailable'));
+ }finally{familyNavigation?.app.destroy();if(priorFamily===undefined)delete globalThis.FamilyWorkspace;else globalThis.FamilyWorkspace=priorFamily;}
  await genericKnownControlTests();
  await controlHandoffRaceTests();
  await preparationBindingTests();

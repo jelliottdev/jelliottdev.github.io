@@ -45,6 +45,10 @@ jobs:
       - run: node services/idea-assistant/test-prepared-plans.mjs
       - run: node services/idea-assistant/test-prepare-task.mjs
       - run: node scripts/test_browser_executor.cjs
+      - run: node scripts/test_research_family.cjs
+      - run: node scripts/test_family_runner.cjs
+      - run: node scripts/test_family_runs.mjs
+      - run: node scripts/test_family_workspace.cjs
       - run: node scripts/test_local_experiment.cjs
       - run: node scripts/test_finite_shift.cjs
       - run: node scripts/test_interrupted_keyed_shift.cjs
@@ -143,6 +147,8 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: scripts/requirements-line-gap-measurements.txt
+      - run: python scripts/test_reproduce_family.py
+        if: steps.scope.outputs.science == 'true'
       - run: python -m pip install -r scripts/requirements-line-gap-measurements.txt
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/check_recorded_row_routes.py --self-test

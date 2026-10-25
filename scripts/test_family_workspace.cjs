@@ -1,0 +1,32 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),{webcrypto}=require('node:crypto');
+const UI=require('../family-workspace.js'),F=require('../research-family.js'),E=require('../local-experiment.js'),C=require('../local-plan-controls.js');
+const bundle=JSON.parse(fs.readFileSync('data/local-run-inputs.json','utf8'));
+class Element{constructor(){this.innerHTML='';this.textContent='';this.disabled=false;this.hidden=false;this.value='';}focus(){this.focused=true;}appendChild(child){this.child=child;}}
+function documentFixture(){const elements=new Map(),win={location:{href:'http://127.0.0.1:60990/run.html#family=deor-feedback-v1',hash:'#family=deor-feedback-v1',reload(){}},setTimeout,clearTimeout,addEventListener(){},removeEventListener(){}};return {defaultView:win,getElementById(id){if(!elements.has(id))elements.set(id,new Element());return elements.get(id);},createElement(){return new Element();}};}
+async function fixture({saveError=false,readError=false,runner,wrongPreparedCases=false}={}){
+ const doc=documentFixture(),snapshot=await F.snapshot(bundle,webcrypto),saved={completed:[],matched:[]},requests=[],runs=[];
+ const fetch=async(url,init={})=>{requests.push({url,init});if(url==='data/assistant.json')return Response.json({localTaskEndpoint:'http://127.0.0.1:60991/tasks'});if(url==='data/local-run-inputs.json')return Response.json(bundle);
+  if(url.endsWith('/prepare')){const body=JSON.parse(init.body),caseIds=wrongPreparedCases?F.caseIds(snapshot).filter(id=>!body.caseIds.includes(id)).slice(-body.caseIds.length):body.caseIds,plan=await F.prepare(bundle,caseIds,webcrypto);return Response.json({plan,controls:await Promise.all(plan.cases.map(async c=>({caseId:c.id,suite:await C.prepare(c.task,webcrypto)})))});}
+  if(url.endsWith('/results')){if(saveError)return Response.json({error:'Offline fixture'},{status:503});const body=JSON.parse(init.body);saved.completed.push(...body.plan.cases.map(c=>c.id));saved.matched.push(...body.results.filter(r=>r.result.matches[0].matched).map(r=>r.caseId));return Response.json({familyId:snapshot.id,revision:snapshot.revision,accepted:body.plan.cases.map(c=>c.id),matched:[...saved.matched]});}
+  if(readError)return Response.json({error:'Offline fixture'},{status:503});return Response.json({family:snapshot,coverage:saved});
+ };
+ const defaultRunner={start(plan,controls,options){runs.push(plan);options.onProgress({phase:'cases',completed:0,total:plan.cases.length});return{promise:Promise.resolve({plan,results:plan.cases.map(c=>({caseId:c.id,result:E.run(c.task)})),controls:[]}),cancel(){}};}};
+ const app=UI.createApp(doc,{window:doc.defaultView,fetch,crypto:webcrypto,runner:runner||defaultRunner});await app.ready;return{app,doc,saved,requests,runs,click:id=>doc.getElementById(id).onclick()};
+}
+(async()=>{
+ let clicked,focused=false,prevented=false;require('../run.js').bindSkip({querySelector(){return {addEventListener(type,fn){assert.equal(type,'click');clicked=fn;}};},getElementById(){return {focus(){focused=true;},scrollIntoView(){}};}});clicked({preventDefault(){prevented=true;}});assert(focused&&prevented,'skip link must preserve route hash');
+ const snapshot=await F.snapshot(bundle,webcrypto),ids=F.caseIds(snapshot),configuration=snapshot.configurations[0].id;
+ assert(UI.route('#family=deor-feedback-v1'));assert(!UI.route('#family=other'));
+ assert.throws(()=>UI.coverage({completed:[ids[0],ids[0]],matched:[]},snapshot));assert.throws(()=>UI.coverage({completed:[],matched:[ids[0]]},snapshot));assert.throws(()=>UI.coverage({completed:['unknown'],matched:[]},snapshot));
+ const all=F.caseIds(snapshot).filter(id=>id.startsWith(configuration+'--'));assert.equal(UI.nextCases(snapshot,{completed:[]},configuration).length,12);assert.equal(UI.nextCases(snapshot,{completed:all},configuration).length,0);
+ const f=await fixture();assert(f.doc.getElementById('task-workspace').innerHTML.includes('0 of 990'));assert.equal(f.requests.filter(r=>r.init.method==='POST').length,0);
+ await f.click('family-review');assert.equal(f.runs.length,0,'review never starts a target');await f.click('family-run');assert.equal(f.saved.completed.length,0,'local results never close coverage');
+ const local=f.doc.getElementById('family-results').innerHTML;assert(local.includes('No Warning opening found'),'nonempty matches array with matched:false must not become a match');assert(!local.includes('An opening matched'));assert(f.doc.getElementById('family-review').disabled);
+ await f.click('family-save');assert.equal(f.saved.completed.length,12);assert(f.doc.getElementById('task-workspace').innerHTML.includes('12 of 990'));await f.click('family-review');await f.click('family-run');assert(f.runs[1].cases.every(c=>!f.runs[0].cases.some(first=>first.id===c.id)),'next visitor/batch must not repeat covered cases');f.app.destroy();
+ const fail=await fixture({saveError:true});await fail.click('family-review');await fail.click('family-run');await fail.click('family-save');assert.equal(fail.saved.completed.length,0);assert(fail.doc.getElementById('family-results').innerHTML.includes('Save these results'));assert(fail.doc.getElementById('family-error').textContent.includes('Retry'));assert(!fail.doc.getElementById('family-save').disabled);fail.app.destroy();
+ const unavailable=await fixture({readError:true});assert(unavailable.doc.getElementById('task-workspace').innerHTML.includes('family-retry'));unavailable.app.destroy();
+ const wrong=await fixture({wrongPreparedCases:true});await wrong.click('family-review');assert.equal(wrong.runs.length,0);assert(wrong.doc.getElementById('family-error').textContent.includes('differs from the requested pages'));assert(!wrong.doc.getElementById('family-plan').innerHTML.includes('Run in browser'),'A fully valid but unrequested family batch must never be offered for execution');assert.equal(wrong.saved.completed.length,0);assert.equal(wrong.requests.filter(r=>r.url.endsWith('/results')).length,0);wrong.app.destroy();
+ let release,cancelled=false;const pending=await fixture({runner:{start(){return{promise:new Promise(resolve=>{release=resolve;}),cancel(){cancelled=true;}};}}});await pending.click('family-review');const work=pending.click('family-run');pending.app.destroy();assert(cancelled);release({});await work;assert.equal(pending.saved.completed.length,0);
+ console.log('Family workspace: coverage validation, review/run/save/next, honest no-match, retry, and stale result checks passed');
+})().catch(error=>{console.error(error);process.exitCode=1;});

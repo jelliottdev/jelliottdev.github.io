@@ -12,6 +12,7 @@ import {createCommunityFeedHandler} from './community-feed.mjs';
 import {createTaskExtensionHandler} from './task-extensions.mjs';
 import {createTaskVariantHandler} from './task-variants.mjs';
 import {createRecordPlanHandler} from './record-plans.mjs';
+import {createFamilyRunHandler} from './family-runs.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
@@ -179,8 +180,10 @@ const communityIdeas=createCommunityIdeaHandler();
 const communityFeed=createCommunityFeedHandler();
 const taskExtensions=createTaskExtensionHandler();
 const taskVariants=createTaskVariantHandler();
+const familyRuns=createFamilyRunHandler();
 export default {fetch(request,env,ctx){
   const path=new URL(request.url).pathname;
+  if(path.startsWith('/families/'))return familyRuns(request,env);
   if(path==='/community-research')return communityFeed(request,env);
   if(/^\/tasks\/[a-f0-9]{64}\/extensions$/.test(path))return taskExtensions(request,env);
   if(/^\/tasks\/[a-f0-9]{64}\/variants$/.test(path))return taskVariants(request,env);
