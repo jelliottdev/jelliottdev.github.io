@@ -202,6 +202,7 @@
    const current=knownDocuments.find(d=>d.id===source.id&&d.href===source.href);
    if(source.text!==current.text)throw Error('The source record changed while this comparison was prepared. Reload the research and try again.');
    if(data.kind==='recorded-overlap'&&C.serialize(source.recordedComparison)!==C.serialize(current.recordedComparison))throw Error('The recorded execution metadata changed while this comparison was prepared. Reload the research and try again.');
+   if(data.kind==='recorded-overlap'&&C.serialize(source.discovery)!==C.serialize(current.discovery))throw Error('The recorded method metadata changed while this comparison was prepared. Reload the research and try again.');
    seen.add(source.id);
   }
   const citations=M.citationNumbers(data.answer,data.sources.length);

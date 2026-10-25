@@ -80,4 +80,48 @@ test('at most two distinct sources, finite answer budget and deterministic brows
  const browser={ClaimSpecification:C};vm.runInNewContext(fs.readFileSync(require.resolve('../recorded-comparison.js'),'utf8'),browser);
  assert.equal(JSON.stringify(browser.RecordedComparison.compare({snapshot:make(),documents})),JSON.stringify(result));
 });
+const Research=require('../claim-research.js'),Search=require('../assistant-search.js');
+function sumSnapshot(table='reversed',extra={}){return make({aim:known({outcomeId:'measure',detail:'Inspect numeric structure'}),
+ method:known({operations:[{id:'word_prime_sums',label:'Word prime sums',table,boundaries:'hyphen-period'}]}),
+ rules:{representation:known('GP29'),inputVersion:known('raw'),wordBoundaries:known('preserve'),unmapped:known('preserve'),evaluation:known({kind:'word-prime-sums',table,boundaries:'hyphen-period'})},...extra});}
+function sumDoc(id='arbitrary-word-sums',table='canonical',within='word',target=['lp1-05']){return doc(id,undefined,{recordType:'measurement',
+ discovery:{operations:[{action:'sum',operand:'prime-values',within,table}],evaluation:['numeric-sums']},
+ text:JSON.stringify({record_type:{id:'measurement'},scope:{pages:target,procedure:'Complete source procedure retained',exclusions:'No boundary or prime-table transfer'},finding:{result:'Scoped source finding'}})});}
+test('numeric records deterministically describe related table and actual page scope without inferred equivalence',()=>{
+ const documents=[sumDoc(),sumDoc('another-word-sum','canonical','word',['lp2-00','lp2-01'])],snapshot=sumSnapshot(),before=C.serialize(snapshot),result=compare(snapshot,documents);
+ assert(result);assert.equal(result.kind,'recorded-overlap');assert.deepEqual(result.sources,Search.select(documents,Research.prepare(snapshot).query,Research.prepare(snapshot).pages,Research.prepare(snapshot).discovery));
+ assert.equal(C.serialize(snapshot),before);assert.equal(result.sources[0],documents[0]);assert(result.answer.includes('(usual table)'));assert(result.answer.includes('Your idea uses the reversed prime table'));assert(!result.answer.includes('canonical'));
+ assert(result.answer.includes('on LP1-05 (usual table)'));assert(result.answer.includes('on LP2-00–01 (usual table)'));
+ assert(result.answer.includes('related work, not the same test'));assert(result.answer.includes('do not establish that your chosen word boundaries or way of evaluating the sums were tested'));
+ assert(!/directly tests|selectivity|significant|p.value|algorithm|caus|decrypt|failed|unreadable|solved/i.test(result.answer));assert.deepEqual(M.citationNumbers(result.answer,2),[1,2]);assert(result.answer.split(/\s+/).length<=100,'Numeric explanation stays concise');
+ assert.equal(result.sources[0].text,documents[0].text);assert.equal(JSON.parse(result.sources[0].text).scope.exclusions,'No boundary or prime-table transfer');
+ const same=compare(sumSnapshot('canonical'),[documents[0]]);assert(same.answer.includes('use the usual prime table too'));assert(same.answer.includes('a shared summation step, not the same test'));assert(same.answer.includes('do not establish that your chosen word boundaries'));
+ const row=compare(snapshot,[sumDoc('row-source','canonical','row',['lp2-15'])]);assert(row.answer.includes('within rows'));assert(row.answer.includes('these records use the usual table'));
+});
+test('numeric authored metadata and requested scope rules must be complete strict and source bound',()=>{
+ const snapshot=sumSnapshot(),base=sumDoc();
+ for(const change of [d=>delete d.discovery,d=>d.discovery.extra=true,d=>d.discovery.evaluation=['english-readability'],
+  d=>d.discovery.operations[0].table='digits',d=>d.discovery.operations[0].extra=true,d=>d.discovery.operations[0].within='page',
+  d=>d.href='#/experiments/wrong',d=>d.recordType='audit',d=>d.text='{broken',d=>d.text=JSON.stringify({record_type:{id:'measurement'},scope:{pages:[]}}),
+  d=>d.text=JSON.stringify({record_type:{id:'measurement'},scope:{pages:['lp2-15','lp2-15']}}),
+  d=>d.text=JSON.stringify({record_type:{id:'measurement'},scope:{pages:['lp2-17','lp2-15']}})]){
+  const bad=structuredClone(base);change(bad);assert.equal(compare(snapshot,[bad]),null);
+ }
+ for(const change of [s=>s.rules.inputVersion=known('reviewed'),s=>s.rules.representation=known('latin'),s=>s.rules.searchBounds=known('up to 10'),
+  s=>s.rules.reset=known('word'),s=>s.rules.evaluation=known({kind:'word-prime-sums',table:'canonical',boundaries:'hyphen-period'}),
+  s=>s.method.value.operations[0].label='Word prime sums then Atbash',s=>s.method.value.operations[0].declaredFamilyId='feedback',
+  s=>s.method.value.operations.push({id:'atbash',label:'Atbash'}),s=>s.unresolved.push({kind:'source_note',text:'retain'}),
+  s=>s.scope=known({pages:['lp2-15'],description:'only a heading'})]){
+  const draft=C.revise(snapshot,{});change(draft);assert.equal(compare(C.confirm(draft,{id:'unsupported-numeric',at}),[base]),null);
+ }
+ const huge={...base,text:base.text+' '.repeat(9001)};assert.equal(compare(snapshot,[huge]),null,'Never truncate leading complete source evidence');
+});
+test('numeric comparison keeps browser and Worker source order and legacy browser dependency fallback',()=>{
+ const snapshot=sumSnapshot(),documents=[sumDoc('second-source','canonical','word',['lp2-17']),sumDoc('first-source','canonical','word',['lp1-05'])],result=compare(snapshot,documents);
+ const browser={ClaimSpecification:C,ClaimResearch:Research,AssistantSearch:Search};vm.runInNewContext(fs.readFileSync(require.resolve('../recorded-comparison.js'),'utf8'),browser);
+ assert.equal(JSON.stringify(browser.RecordedComparison.compare({snapshot,documents})),JSON.stringify(result));
+ const legacy={ClaimSpecification:C};vm.runInNewContext(fs.readFileSync(require.resolve('../recorded-comparison.js'),'utf8'),legacy);
+ assert.equal(legacy.RecordedComparison.compare({snapshot,documents}),null);assert(legacy.RecordedComparison.compare({snapshot:make(),documents:[doc()]}),'Old reverse comparison remains usable without optional numeric dependencies');
+ const competing=sumDoc('same-table','reversed');assert.equal(compare(snapshot,[...documents,competing]).sources[0],competing,'Same S.select table preference supplies deterministic answer citations');
+});
 console.log(`PASS ${groups} recorded-comparison groups; no AI, network, static record-ID gates or experiment execution.`);

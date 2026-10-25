@@ -1,7 +1,9 @@
 /* Pure authored operation comparison. No inference, discovery or coverage verdict. */
 (function(root){
  'use strict';
- const C=typeof module==='object'&&module.exports?require('./claim-specification.js'):root.ClaimSpecification;
+ const node=typeof module==='object'&&module.exports;
+ const C=node?require('./claim-specification.js'):root.ClaimSpecification;
+ const Research=node?require('./claim-research.js'):root.ClaimResearch,Search=node?require('./assistant-search.js'):root.AssistantSearch;
  const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
  const object=value=>value&&typeof value==='object'&&!Array.isArray(value);
  const keys=(value,expected)=>object(value)&&Object.keys(value).sort().join('|')===[...expected].sort().join('|');
@@ -73,8 +75,51 @@
   const answer='Reversing the runes within each row, while keeping rows in place, was tested on '+pageLabel(target)+' ['+citations+']. This matches the reversal step; other unspecified settings may differ.\n\n'+sentences.map(entry=>entry.text+' ['+entry.citations.join(', ')+']').join(' ');
   return answer.split(/\s+/).length<=180?answer:null;
  }
+ function numericRelated(snapshot,documents){
+  if(!Research?.prepare||!Search?.select||!Array.isArray(documents)||documents.length>5000)return null;
+  const s=C.validateConfirmed(snapshot);
+  if(s.unresolved.length||s.aim.status!=='specified'||s.scope.status!=='specified'||!keys(s.scope.value,['pages'])||!pages(s.scope.value.pages)||
+    s.method.status!=='specified'||!keys(s.method.value,['operations'])||s.method.value.operations.length!==1)return null;
+  const op=s.method.value.operations[0];
+  if(!keys(op,['id','label','table','boundaries',...(own(op,'declaredFamilyId')?['declaredFamilyId']:[])])||
+    op.id!=='word_prime_sums'||op.label!=='Word prime sums'||!['canonical','reversed'].includes(op.table)||
+    !['non-rune','hyphen-period'].includes(op.boundaries)||own(op,'declaredFamilyId')&&op.declaredFamilyId!=='prime-indices')return null;
+  const specified={representation:'GP29',inputVersion:'raw',wordBoundaries:'preserve',unmapped:'preserve'};
+  if(Object.entries(specified).some(([k,v])=>s.rules[k]?.status!=='specified'||s.rules[k].value!==v))return null;
+  if(s.rules.evaluation?.status!=='specified'||C.serialize(s.rules.evaluation.value)!==C.serialize({kind:'word-prime-sums',table:op.table,boundaries:op.boundaries}))return null;
+  if(C.RULES.filter(k=>!own(specified,k)&&k!=='evaluation').some(k=>!['unspecified','not_applicable'].includes(s.rules[k]?.status)))return null;
+  const prepared=Research.prepare(s),hint=prepared.discovery.steps[0]?.operation;
+  if(prepared.discovery.steps.length!==1||!hint||hint.action!=='sum'||hint.operand!=='prime-values'||hint.within!=='word'||hint.table!==op.table)return null;
+  const selected=Search.select(documents,prepared.query,prepared.pages,prepared.discovery).filter(d=>d.kind==='experiment').slice(0,2),sources=[],lines=[],tables=[];let size=0;
+  for(const doc of selected){
+   if(!object(doc)||typeof doc.id!=='string'||!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(doc.id)||doc.href!=='#/experiments/'+doc.id||typeof doc.text!=='string')continue;
+   const d=doc.discovery;
+   if(!keys(d,['operations','evaluation'])||!Array.isArray(d.operations)||d.operations.length!==1||!Array.isArray(d.evaluation)||d.evaluation.length!==1||d.evaluation[0]!=='numeric-sums')continue;
+   const actual=d.operations[0];
+   if(!keys(actual,['action','operand','within','table'])||actual.action!=='sum'||actual.operand!=='prime-values'||!['word','row','window'].includes(actual.within)||!['canonical','reversed'].includes(actual.table))continue;
+   let evidence;try{evidence=JSON.parse(doc.text);}catch{continue;}
+   if(!object(evidence)||!['method','replay','measurement','control'].includes(evidence.record_type?.id)||doc.recordType&&doc.recordType!==evidence.record_type.id||!Array.isArray(evidence.scope?.pages))continue;
+   const recordedPages=C.pages(evidence.scope.pages);
+   if(!recordedPages.length||C.serialize(recordedPages)!==C.serialize(evidence.scope.pages))continue;
+   if(size+doc.text.length>9000){if(!sources.length)return null;break;}
+   size+=doc.text.length;sources.push(doc);tables.push(actual.table);const citation=' ['+sources.length+'].';
+   const unit=actual.within==='word'?'words':actual.within==='row'?'rows':'windows';
+   lines.push('Prime values summed within '+unit+' on '+pageLabel(recordedPages)+' ('+(actual.table==='canonical'?'usual':'reversed')+' table)'+citation);
+  }
+  if(!sources.length)return null;
+  const compose=()=>{
+   const requested=op.table==='canonical'?'usual':'reversed',different=tables.some(table=>table!==op.table);
+   const used=[...new Set(tables)],actual=used.length===1?'the '+(used[0]==='canonical'?'usual':'reversed')+' table':'both the usual and reversed tables';
+   const lead=different?'Your idea uses the '+requested+' prime table; these records use '+actual+'. They are related work, not the same test.':'These records use the '+requested+' prime table too. That establishes a shared summation step, not the same test.';
+   return lead+'\n\n'+lines.join(' ')+' They do not establish that your chosen word boundaries or way of evaluating the sums were tested.';
+  };
+  let answer=compose();
+  if(answer.split(/\s+/).length>180&&sources.length===2){sources.pop();lines.pop();tables.pop();answer=compose();}
+  return answer.split(/\s+/).length<=180?{answer,sources,kind:'recorded-overlap'}:null;
+ }
  function compare({snapshot,documents}={}){
   try{
+   const numeric=numericRelated(snapshot,documents);if(numeric)return numeric;
    const target=supported(snapshot);if(!target||!Array.isArray(documents)||documents.length>5000)return null;
    const sources=[],metadata=[],ids=new Set();
    for(const doc of documents){
