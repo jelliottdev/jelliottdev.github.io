@@ -2,11 +2,23 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,Relations=node?require('./computation-evidence.js'):root.ComputationEvidence,JSONData=node?require('./finite-json.js'):root.FiniteJSON;
- const domains=new WeakSet(),proofs=new WeakMap(),MAX_PROGRAMS=1024,MAX_CASES=4096,MAX_BYTES=8*1024*1024,MAX_RUNE_WORK=2000000;
+ const domains=new WeakSet(),proofs=new WeakMap(),verificationMemos=new WeakMap(),MAX_PROGRAMS=1024,MAX_CASES=4096,MAX_BYTES=8*1024*1024,MAX_RUNE_WORK=2000000;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value'));
  function freeze(v){if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
  async function hash(v,cryptoAPI){return [...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
  function inspect(domain){if(!domains.has(domain))throw Error('Use a bound finite question domain.');return domain;}
+ function createVerificationMemo(){const token=Object.freeze({});verificationMemos.set(token,{entries:new Map(),bytes:0,active:true});return token;}
+ function clearVerificationMemo(token){const memo=verificationMemos.get(token);if(!memo)throw Error('Use an opaque finite verification memo.');memo.entries.clear();memo.bytes=0;memo.active=false;}
+ function evidenceOptions(options){
+  const keys=['lookupComplete','verificationMemo'].filter(key=>Object.hasOwn(options||{},key));
+  if(!exact(options,keys))throw Error('Invalid finite evidence options.');
+  const raw=Object.hasOwn(options,'verificationMemo')?Object.getOwnPropertyDescriptor(options,'verificationMemo').value:null,memo=raw===null?null:verificationMemos.get(raw);
+  if(Object.hasOwn(options,'verificationMemo')&&(!memo||!memo.active))throw Error('Use an active opaque finite verification memo.');
+  const descriptors=Object.getOwnPropertyDescriptors(options);delete descriptors.verificationMemo;
+  const clean=JSONData.capture(Object.create(Object.getPrototypeOf(options),descriptors),{maxBytes:100,maxDepth:2,maxNodes:2});
+  const lookupComplete=Object.hasOwn(clean,'lookupComplete')?clean.lookupComplete:true;
+  if(typeof lookupComplete!=='boolean')throw Error('Invalid finite lookup status.');return {lookupComplete,memo};
+ }
  async function bind(options,cryptoAPI=root.crypto){
   options=JSONData.capture(options,{maxBytes:MAX_BYTES,maxDepth:20,maxNodes:500000});
   if(!exact(options,['programs','inputVersion'])||!['raw','reviewed'].includes(options.inputVersion)||!Array.isArray(options.programs)||!options.programs.length||options.programs.length>MAX_PROGRAMS)throw Error('A finite question needs explicit programs and an input version.');
@@ -37,7 +49,7 @@
   return freeze({domainId:domain.id,cases});
  }
  async function summarize(domain,sources,options={},cryptoAPI=root.crypto){
-  options=JSONData.capture(options,{maxBytes:100,maxDepth:2,maxNodes:2});if(!exact(options,[])&&!exact(options,['lookupComplete']))throw Error('Invalid finite evidence options.');const lookupComplete=Object.hasOwn(options,'lookupComplete')?options.lookupComplete:true;
+  const {lookupComplete,memo}=evidenceOptions(options);
   inspect(domain);if(typeof lookupComplete!=='boolean'||!Array.isArray(sources)||sources.length>MAX_CASES)throw Error('Finite evidence needs bounded sources and a lookup status.');
   const captured=JSONData.capture(sources,{maxBytes:MAX_BYTES,maxDepth:20,maxNodes:500000}),programs=new Map(domain.programs.map(p=>[p.id,p.task])),caseIndex=new Map(domain.cases.map(c=>[c.programId+'--'+c.pageId,c])),claims=new Map(),receipts=new Set();
   for(const source of captured){
@@ -48,7 +60,13 @@
    if(receipts.has(receiptKey))continue;receipts.add(receiptKey);
    // Relations validates full hashes/envelopes; execution independently checks
    // the actual transformation. A metadata flag alone never covers a case.
-   const verified=await E.verify(source.task,source.run.result,cryptoAPI);
+   // The lookup, original envelope/hash/criterion and exact page intersection
+   // above remain fresh. Memoize only a successful independent replay of these
+   // exact captured task/result bytes, never coverage or receipt provenance.
+   const memoKey=source.task.taskId+'--'+source.run.id,signature=memo?E.stable([source.task,source.run.result]):null,cached=memo?.active?memo.entries.get(memoKey):null;
+   if(cached!==undefined&&cached!==null&&cached!==signature)throw Error('Conflicting exact bytes for a memoized computation.');
+   const verified=memo?.active&&typeof cached==='string'&&cached===signature?source.run.result:await E.verify(source.task,source.run.result,cryptoAPI);
+   if(memo?.active&&cached!==signature){const size=new TextEncoder().encode(signature).byteLength+memoKey.length+128;if(memo.bytes+size<=MAX_BYTES){memo.entries.set(memoKey,signature);memo.bytes+=size;}}
    for(const pageId of comparison.coveredPages){
     const entry=caseIndex.get(described.protocolId+'--'+pageId),matched=verified.matches.find(m=>m.page===pageId).matched,text=verified.transformed.find(p=>p.page===pageId).text,value=E.stable({matched,text});
     const prior=claims.get(entry.id);if(prior&&prior.value!==value)throw Error('Conflicting verified evidence for the same finite case.');
@@ -67,5 +85,5 @@
   if(!proof.lookupComplete)return freeze({...base,state:'unavailable',answer:null,next:{kind:'retry-evidence'}});
   return freeze({...base,state:'missing-evidence',answer:null,next:{kind:'run-missing-evidence',caseIds:proof.missingCaseIds.slice(0,12)}});
  }
- const api={bind,inspect,select,summarize,inspectEvidence,decision};if(node)module.exports=api;else root.FiniteProgramQuestion=api;
+ const api={bind,inspect,select,summarize,inspectEvidence,decision,createVerificationMemo,clearVerificationMemo};if(node)module.exports=api;else root.FiniteProgramQuestion=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -22,7 +22,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers}),url=new URL(request.url),match=url.pathname.match(/^\/finite-search\/(p_[a-f0-9]{64})\/(evidence|prepare|create|results)$/);
   let allowed=false;try{allowed=typeof env?.SITE_ORIGIN==='string'&&new URL(env.SITE_ORIGIN).origin===env.SITE_ORIGIN&&['http:','https:'].includes(new URL(env.SITE_ORIGIN).protocol);}catch{}
   if(!allowed)return reply({error:'Batch research is unavailable.'},503);
-  if(request.headers.get('origin')!==env.SITE_ORIGIN)return reply({error:'Request is not allowed.'},403);headers['Access-Control-Allow-Origin']=env.SITE_ORIGIN;
+  if(request.headers.get('origin')!==env.SITE_ORIGIN)return reply({error:'Request is not allowed.'},403);headers['Access-Control-Allow-Origin']=env.SITE_ORIGIN;headers['Access-Control-Expose-Headers']='Retry-After';
   if(!match||url.search)return reply({error:'Not found.'},404);
   if(request.method==='OPTIONS'){
    const keys=(request.headers.get('access-control-request-headers')||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
@@ -31,10 +31,10 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
   }
   if(request.method!=='POST')return reply({error:'Method is not allowed.'},405);
   if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Batch research is unavailable.'},503);
-  const [,proposalId,action]=match,db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args);
+  const [,proposalId,action]=match,db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args);let quotaDay=null;
   try{
    const body=await readFiniteJSON(request,action==='evidence'?1000:MAX);
-   if(!(await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);
+   if(!(await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success){headers['Retry-After']='60';return reply({error:'Please wait before trying again.',code:'rate-limited',retryAfterSeconds:60},429);}quotaDay=now().toISOString().slice(0,10);
    const row=await query('SELECT card_json FROM proposals WHERE id=?',proposalId).first();if(!row)return reply({error:'Confirmed idea not found.'},404);
    const card=validateCard(row.card_json);Settings.inspect(card);
    if(request.signal.aborted)return reply({error:'The request was cancelled.'},499);
@@ -46,14 +46,18 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
     if(action==='evidence'){
      const found=await discoverEvidence({db,card,bundle});return reply({schema:'liberpedia-finite-search-evidence-v1',proposalId,inputVersion:body.inputVersion,...found});
     }
-    const prepared=await prepareCases({db,proposalId,card,cases:body.cases,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},crypto:globalThis.crypto,createdAt:now().toISOString()});
+    const preparedAt=now().toISOString();quotaDay=preparedAt.slice(0,10);
+    const prepared=await prepareCases({db,proposalId,card,cases:body.cases,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},crypto:globalThis.crypto,createdAt:preparedAt});
     return reply({schema:'liberpedia-finite-search-preparation-v1',proposalId,inputVersion:prepared.inputVersion,cases:prepared.cases});
    }
    // Outer admission/rate check covers this bounded batch. Internal calls use
    // the unchanged task/result handlers; there is no externally trusted bypass.
    const innerEnv={...env,TASK_LIMIT:{limit:async()=>({success:true})}},invoke=async(path,data)=>{
     const response=await taskHandler(new Request(new URL(path,url),{method:'POST',headers:{origin:env.SITE_ORIGIN,'Content-Type':'application/json'},body:JSON.stringify(data),signal:request.signal}),innerEnv),value=await response.json();
-    if(!response.ok){const error=Error(value.error||'The batch could not be saved.');error.status=response.status;throw error;}return value;
+    if(!response.ok){const error=Error(value.error||'The batch could not be saved.');error.status=response.status;
+     if(response.status===429&&value.code==='daily-quota'){error.code='daily-quota';if(typeof value.retryAt==='string'&&/^\d{4}-\d{2}-\d{2}T00:00:00\.000Z$/.test(value.retryAt)&&Number.isFinite(Date.parse(value.retryAt)))error.retryAt=value.retryAt;}
+     if(response.status===429&&value.code==='rate-limited'){error.code='rate-limited';if(Number.isSafeInteger(value.retryAfterSeconds)&&value.retryAfterSeconds>0&&value.retryAfterSeconds<=86400)error.retryAfterSeconds=value.retryAfterSeconds;}
+     throw error;}return value;
    };
    if(action==='create'){
     if(!exact(body,['cases'])||!Array.isArray(body.cases)||!body.cases.length||body.cases.length>12)return reply({error:'Select one to twelve reviewed cases.'},400);
@@ -76,6 +80,10 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    }
    const receipts=[];for(const item of body.results){if(request.signal.aborted)return reply({error:'The request was cancelled; any saved results are retained.'},499);const saved=await invoke('/tasks/'+item.taskId+'/results',{result:item.result});receipts.push({taskId:saved.taskId,state:saved.state,latestRun:saved.latestRun});}
    return reply({schema:'liberpedia-finite-search-results-v1',proposalId,receipts});
-  }catch(error){return reply({error:error.status?error.message:'The batch could not be checked. Retry; your original idea is unchanged.'},error.status||503);}
+  }catch(error){
+   if(error.code==='preparation-limit'&&quotaDay){const retryAt=new Date(Date.parse(quotaDay+'T00:00:00.000Z')+86400000).toISOString();return reply({error:'The daily prepared-plan limit has been reached.',code:'daily-quota',retryAt},429);}
+   const details={};if(error.status===429&&['daily-quota','rate-limited'].includes(error.code)){details.code=error.code;if(error.retryAt)details.retryAt=error.retryAt;if(error.retryAfterSeconds){details.retryAfterSeconds=error.retryAfterSeconds;headers['Retry-After']=String(error.retryAfterSeconds);}}
+   return reply({error:error.status?error.message:'The batch could not be checked. Retry; your original idea is unchanged.',...details},error.status||503);
+  }
  };
 }

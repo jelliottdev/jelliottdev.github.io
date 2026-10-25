@@ -166,7 +166,7 @@ await test('failed, stale or tampered server-derived controls prevent writes and
 await test('streamed body limits, rate limits and storage errors cannot write partial tasks',async()=>{
  const f=fixture(),t=await task(),reads=f.db.reads;
  const denied={...f.env,PROPOSAL_LIMIT:{limit:async()=>({success:false})}};
- assert.equal((await f.handle(request('/tasks','POST',body(t)),denied)).status,429);assert.equal(f.db.reads,reads);
+ const rateLimited=await f.handle(request('/tasks','POST',body(t)),denied);assert.equal(rateLimited.status,429);assert.deepEqual(await rateLimited.json(),{error:'Please wait before trying again.',code:'rate-limited',retryAfterSeconds:60});assert.equal(rateLimited.headers.get('Retry-After'),'60');assert.equal(rateLimited.headers.get('Access-Control-Expose-Headers'),'Retry-After');assert.equal(f.db.reads,reads);
  assert.equal((await preparedCall(f,'/tasks','POST',body(t),{'content-type':'text/plain'})).status,400);
  assert.equal((await preparedCall(f,'/tasks','POST',body(t),{'content-length':'2097153'})).status,400);
  const chunks=new ReadableStream({start(controller){controller.enqueue(new Uint8Array(2097153));controller.close();}});
@@ -177,7 +177,7 @@ await test('streamed body limits, rate limits and storage errors cannot write pa
 await test('injected atomic task cap50/day, concurrent retries, and next-day restoration',async()=>{
  const f=fixture(),tasks=await Promise.all(Array.from({length:60},(_,i)=>task('Task '+i)));
  const responses=await Promise.all(tasks.map(t=>preparedCall(f,'/tasks','POST',body(t))));assert.equal(responses.filter(r=>r.status===200).length,50);assert.equal(responses.filter(r=>r.status===429).length,10);
- assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,50);
+ assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,50);for(const response of responses.filter(r=>r.status===429)){const value=await response.json();assert.equal(value.code,'daily-quota');assert.equal(value.retryAt,'2026-10-25T00:00:00.000Z');assert.equal(response.headers.get('Retry-After'),null);assert(!Object.hasOwn(value,'retryAfterSeconds'));}
  assert.equal((await preparedCall(f,'/tasks','POST',body(tasks[0]))).status,200);
  f.setDate('2026-10-25T00:00:00.000Z');assert.equal((await preparedCall(f,'/tasks','POST',body(tasks[59]))).status,200);
  const g=fixture(),t=await task();const dup=await Promise.all(Array.from({length:5},()=>preparedCall(g,'/tasks','POST',body(t))));assert(dup.every(r=>r.status===200));assert.equal(g.db.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);
@@ -188,7 +188,7 @@ await test('injected atomic distinct result cap50/day retains duplicate retries 
  f.setDate('2026-10-26T00:00:00.000Z');
  const responses=await Promise.all(tasks.map(t=>call(f,'/tasks/'+t.taskId+'/results','POST',{result:L.run(t)})));
  assert.equal(responses.filter(r=>r.status===200).length,50);assert.equal(responses.filter(r=>r.status===429).length,1);
- assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,50);
+ assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,50);const blocked=responses.find(r=>r.status===429);assert.equal((await blocked.json()).code,'daily-quota');assert.equal(blocked.headers.get('Retry-After'),null);
  assert.equal((await call(f,'/tasks/'+tasks[0].taskId+'/results','POST',{result:L.run(tasks[0])})).status,200);
  f.setDate('2026-10-27T00:00:00.000Z');assert.equal((await call(f,'/tasks/'+tasks[50].taskId+'/results','POST',{result:L.run(tasks[50])})).status,200);
 });

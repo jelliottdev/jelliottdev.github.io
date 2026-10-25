@@ -4,15 +4,20 @@
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,F=node?require('./finite-program-question.js'):root.FiniteProgramQuestion,C=node?require('./local-plan-controls.js'):root.LocalPlanControls,X=node?require('./local-run-executor.js'):root.LocalRunExecutor,JSONData=node?require('./finite-json.js'):root.FiniteJSON;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value'));
  const copy=v=>JSON.parse(E.stable(v));
+ function freeze(value){if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
  async function digest(v,cryptoAPI){return [...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
  function createRunner({executor=X.createExecutor(),crypto:cryptoAPI=root.crypto}={}){
   function start(domain,suppliedIds,suppliedControls,{onProgress}={}){
-   let current=null,aborted=false,settled=false,resolve,reject;
+   let current=null,aborted=false,settled=false,resolve,reject,domainId=null;
+   const checkpointResults=[],checkpointMatches=[];
+   // Local verified output only: this is neither a saved receipt nor a public
+   // question decision. Each read is detached from runner and caller state.
+   const getCheckpoint=()=>freeze(copy({schema:'liberpedia-finite-local-checkpoint-v1',domainId,results:checkpointResults,completedCaseIds:checkpointResults.map(item=>item.caseId),matchingCaseIds:checkpointMatches}));
    const promise=new Promise((yes,no)=>{resolve=yes;reject=no;}),finish=(fn,value)=>{if(settled)return;settled=true;fn(value);};
    const live=()=>{if(aborted)throw new DOMException('Run cancelled.','AbortError');};
    const progress=(phase,completed,total)=>{live();try{onProgress?.({phase,completed,total});}catch{}live();};
    let ids,controls;
-   try{F.inspect(domain);ids=JSONData.capture(suppliedIds,{maxBytes:4096,maxDepth:2,maxNodes:13});controls=JSONData.capture(suppliedControls);}catch(error){finish(reject,error);return {promise,cancel(){}};}
+   try{F.inspect(domain);domainId=domain.id;ids=JSONData.capture(suppliedIds,{maxBytes:4096,maxDepth:2,maxNodes:13});controls=JSONData.capture(suppliedControls);}catch(error){finish(reject,error);return {promise,cancel(){},getCheckpoint};}
    async function execute(task){
     live();current=executor.start(copy(task));if(!current||typeof current.cancel!=='function'||!current.promise)throw Error('The local executor is unavailable.');
     const output=await current.promise;live();current=null;const checked=await E.verify(task,output,cryptoAPI);live();return checked;
@@ -26,13 +31,13 @@
     progress('controls',0,total);
     for(const item of controls){const checked=[];for(const fixture of item.suite.cases){const result=await execute(fixture.task);if(await digest(result,cryptoAPI)!==fixture.expectedResultSha256)throw Error('An independent known-answer control failed. No target cases will run.');live();checked.push({id:fixture.id,result});progress('controls',++completed,total);}controlResults.push({caseId:item.caseId,results:checked});}
     progress('cases',0,selection.cases.length);
-    for(const item of selection.cases){const result=await execute(item.task);live();results.push({caseId:item.id,result});if(result.matches.some(match=>match.matched))matchingCaseIds.push(item.id);progress('cases',results.length,selection.cases.length);if(matchingCaseIds.length)break;}
+    for(const item of selection.cases){const result=await execute(item.task);live();results.push({caseId:item.id,result});checkpointResults.push({caseId:item.id,result});if(result.matches.some(match=>match.matched)){matchingCaseIds.push(item.id);checkpointMatches.push(item.id);}progress('cases',results.length,selection.cases.length);if(matchingCaseIds.length)break;}
     live();const completedCaseIds=results.map(item=>item.caseId),done=new Set(completedCaseIds);
     // These are local outputs, not public evidence. The caller must save real
     // verified receipts before constructing a shared question decision.
     return {domainId:domain.id,selection,results,controls:controlResults,selectedCaseIds:selection.cases.map(item=>item.id),completedCaseIds,missingCaseIds:selection.cases.filter(item=>!done.has(item.id)).map(item=>item.id),matchingCaseIds,stopped:matchingCaseIds.length?'prefix-found':'batch-complete'};
    })().then(value=>finish(resolve,value),error=>{try{current?.cancel();}catch{}current=null;finish(reject,error);});
-   return {promise,cancel(){if(settled)return;aborted=true;try{current?.cancel();}catch{}current=null;finish(reject,new DOMException('Run cancelled.','AbortError'));}};
+   return {promise,getCheckpoint,cancel(){if(settled)return;aborted=true;try{current?.cancel();}catch{}current=null;finish(reject,new DOMException('Run cancelled.','AbortError'));}};
   }
   return {start};
  }

@@ -58,6 +58,27 @@ async function source(t){const result=E.run(t);return {task:t,inputVersion:'raw'
   const options={};Object.defineProperty(options,'lookupComplete',{enumerable:true,get(){calls++;return true;}});await assert.rejects(()=>F.summarize(domain,[],options));
   const sparse=Array(1);await assert.rejects(()=>F.select(domain,sparse));assert.equal(calls,0);
  });
+ await test('opaque per-workspace memo reuses only independently replayed exact task/result bytes',async()=>{
+  const memo=F.createVerificationMemo(),first=await source(a),second=await source(b),verify=E.verify,calls=[];E.verify=async(t,r,...args)=>{calls.push(t.taskId);return verify(t,r,...args);};
+  try{const one=await F.summarize(domain,[first],{verificationMemo:memo}),again=await F.summarize(domain,[clone(first)],{verificationMemo:memo,lookupComplete:false});assert.equal(calls.length,1);assert.deepEqual(one.coveredCaseIds,again.coveredCaseIds);assert.equal(again.lookupComplete,false);await F.summarize(domain,[first,second],{verificationMemo:memo});assert.equal(calls.length,2);await F.summarize(domain,[first]);assert.equal(calls.length,3,'Default independent snapshot verification never uses a memo');const other=F.createVerificationMemo();await F.summarize(domain,[first],{verificationMemo:other});assert.equal(calls.length,4,'Fresh workspace has no prior proof');F.clearVerificationMemo(other);}finally{E.verify=verify;F.clearVerificationMemo(memo);}
+ });
+ await test('date changes retain genuine receipt provenance while cached math never caches coverage or lookup state',async()=>{
+  const memo=F.createVerificationMemo(),s=await source(a),verify=E.verify;let calls=0;E.verify=async(...args)=>{calls++;return verify(...args);};
+  try{await F.summarize(domain,[s],{verificationMemo:memo});const dated=clone(s);dated.run.createdAt='2026-10-26T12:00:00.000Z';const fresh=await F.summarize(domain,[dated],{verificationMemo:memo});assert.equal(calls,1);assert(fresh.evidence.every(ref=>ref.createdAt===dated.run.createdAt));const empty=await F.summarize(domain,[],{verificationMemo:memo,lookupComplete:false});assert.equal(empty.coveredCaseIds.length,0);assert.equal(F.decision(empty).state,'unavailable');const reviewed=await F.bind({programs:[a,b],inputVersion:'reviewed'}),differentVersion=await F.summarize(reviewed,[s],{verificationMemo:memo});assert.equal(differentVersion.coveredCaseIds.length,0);const renamed=await source(await task([],pages,'Different exact task body'));await F.summarize(domain,[renamed],{verificationMemo:memo});assert.equal(calls,2);}finally{E.verify=verify;F.clearVerificationMemo(memo);}
+ });
+ await test('cached receipts still reject changed hashes, geometry, criterion, malicious output and invented trust flags',async()=>{
+  const memo=F.createVerificationMemo(),s=await source(a);await F.summarize(domain,[s],{verificationMemo:memo});
+  for(const mutate of [x=>x.run.id='0'.repeat(64),x=>x.run.result.metrics.runes++,x=>x.run.result.transformed[0].text='malicious',x=>x.task.title='changed',x=>x.task.criterion.values=[28],x=>x.run.createdAt='invalid']){const changed=clone(s);mutate(changed);await assert.rejects(()=>F.summarize(domain,[changed],{verificationMemo:memo}));}
+  const forged=clone(s),wrong=E.run(await task(b.steps));forged.run.result={...wrong,taskId:a.taskId};forged.run.id=hash(forged.run.result);await assert.rejects(()=>F.summarize(domain,[forged],{verificationMemo:memo}));
+  for(const options of [{verificationMemo:{}},{verificationMemo:{verified:true}},{verificationMemo:memo,verified:true}])await assert.rejects(()=>F.summarize(domain,[s],options));
+  let getters=0;const options={};Object.defineProperty(options,'verificationMemo',{enumerable:true,get(){getters++;return memo;}});await assert.rejects(()=>F.summarize(domain,[s],options));assert.equal(getters,0);F.clearVerificationMemo(memo);await assert.rejects(()=>F.summarize(domain,[s],{verificationMemo:memo}),/active opaque/);
+ });
+ await test('memo admission budget falls back to replay without evicting or trusting uncached large receipts',async()=>{
+  const longPages=[{id:'lp2-15',text:' '.repeat(299996)+runes([0,1,2,3])}],base=await task([],longPages),bounded=await F.bind({programs:[base],inputVersion:'raw'}),memo=F.createVerificationMemo(),receipts=[];
+  for(let i=0;i<15;i++)receipts.push(await source(await task([],longPages,'Large original source '+i)));
+  const verify=E.verify;let calls=0;E.verify=async(...args)=>{calls++;return verify(...args);};
+  try{for(const receipt of receipts)await F.summarize(bounded,[receipt],{verificationMemo:memo});assert.equal(calls,15);await F.summarize(bounded,[receipts[0]],{verificationMemo:memo});assert.equal(calls,15,'Early cached proof remains bounded and reusable');await F.summarize(bounded,[receipts.at(-1)],{verificationMemo:memo});assert.equal(calls,16,'Over-budget source is independently replayed again');}finally{E.verify=verify;F.clearVerificationMemo(memo);}
+ });
  await test('UMD browser entry uses the same pure fixed engine and identities',async()=>{
   const context=vm.createContext({LocalExperiment:E,ComputationEvidence:require('../computation-evidence.js'),FiniteJSON:require('../finite-json.js'),crypto:webcrypto,TextEncoder,Uint8Array});vm.runInContext(fs.readFileSync('finite-program-question.js','utf8'),context);const browser=await context.FiniteProgramQuestion.bind({programs:[b,a],inputVersion:'raw'});assert.equal(browser.id,domain.id);assert.equal(context.FiniteProgramQuestion.decision(await context.FiniteProgramQuestion.summarize(browser,[])).state,'missing-evidence');
  });

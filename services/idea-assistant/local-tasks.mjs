@@ -39,7 +39,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
   let validOrigin=false;try{validOrigin=typeof allowed==='string'&&new URL(allowed).origin===allowed&&['http:','https:'].includes(new URL(allowed).protocol);}catch{}
   if(!validOrigin)return reply({error:'Local experiments are unavailable.'},503);
   if(origin!==allowed)return reply({error:'Request is not allowed.'},403);
-  headers['Access-Control-Allow-Origin']=allowed;
+  headers['Access-Control-Allow-Origin']=allowed;headers['Access-Control-Expose-Headers']='Retry-After';
   const url=new URL(request.url),path=url.pathname,match=path.match(/^\/tasks\/([a-f0-9]{64})(\/results|\/boundary-comparison)?$/),create=path==='/tasks',comparisonRoute=match?.[2]==='/boundary-comparison';
   if(!create&&!match)return reply({error:'Not found.'},404);
   if(comparisonRoute&&url.search)return reply({error:'Not found.'},404);
@@ -85,9 +85,9 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(method==='POST'){
     try{body=await boundedJSON(request);}catch{return reply({error:'The experiment file could not be read.'},400);}
     const limit=await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'});
-    if(!limit?.success)return reply({error:'Please wait before trying again.'},429);
+    if(!limit?.success){headers['Retry-After']='60';return reply({error:'Please wait before trying again.',code:'rate-limited',retryAfterSeconds:60},429);}
    }
-   const at=now().toISOString(),day=at.slice(0,10);
+   const at=now().toISOString(),day=at.slice(0,10),retryAt=new Date(Date.parse(day+'T00:00:00.000Z')+86400000).toISOString();
    if(create){
     let task,taskJson,taskHash,createHash;
     try{
@@ -160,7 +160,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
       AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<? ON CONFLICT(task_id,proposal_id) DO NOTHING`,
       task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks)]);
     existing=await find(task.taskId);const accepted=await association();
-    if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.'},429);
+    if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.',code:'daily-quota',retryAt},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
     await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
    }
@@ -181,7 +181,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    let saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();
    if(!saved){await db.batch([query(`INSERT INTO local_task_results (id,task_id,result_json,created_at,created_day)
     SELECT ?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_results WHERE created_day=?)<? ON CONFLICT(id) DO NOTHING`,runId,row.id,resultJson,at,day,day,limits.results)]);saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();}
-   if(!saved)return reply({error:'The daily result limit has been reached.'},429);
+   if(!saved)return reply({error:'The daily result limit has been reached.',code:'daily-quota',retryAt},429);
    // Admission already independently replayed this exact result above. Read
    // back the committed bytes, not another execution of the same calculation.
    if(saved.task_id!==row.id||saved.id!==runId||saved.result_json!==resultJson)throw Error('Stored result mismatch');
