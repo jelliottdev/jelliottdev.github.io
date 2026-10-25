@@ -103,7 +103,7 @@ Computational review is complete; human review is pending. The scripts and fixed
 
 ## Related questions remain separate
 
-A within-section shuffle is a natural sensitivity test: preserve each section's length distribution while changing its internal order. Other variants can compare section orders, widths or removal rules, with a declared selection procedure.
+Three related comparisons are complete: [section-preserving shuffles](#/experiments/lp1-section-balance), [all 24 section orders](#/experiments/lp1-section-order), and [six declared widths](#/experiments/lp1-width-selection). They test different choices in the same selected word object and are not independent confirmations. Preserving sentence structure remains a separate comparison requiring an explicit protocol.
 
 Section-contribution ledgers, sentence-removal scans, unchanged-rune grilles and the proposed 928-word carrier answer different questions. They are not findings of this record. In particular, 464 is a word count and 1,796 is a rune count; subtracting a count of unchanged runes from 464 would mix units.
 

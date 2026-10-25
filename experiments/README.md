@@ -74,6 +74,8 @@ Write the result once. The page, graph preview, search index, checker evidence a
    python scripts/preflight_experiments.py your-short-id
    ```
 
+Before proposing or publishing follow-up work, search the current registry for the same operation, scope and control model, including sibling records. Earlier `next_steps` text is a historical suggestion, not proof that work remains open. When a follow-up is published, update the parent’s current next steps and reciprocal `related` links to the completed record. Preserve frozen plans, historical scope exclusions and variant comparisons; a completed narrower test does not close broader variants.
+
 4. Set `classification` using existing kinds, methods and the closest existing map branch. Change status to `published` only when the reviewed record is ready.
 5. Build all derived views once:
 

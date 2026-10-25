@@ -38,7 +38,7 @@
   "outcome": "supported",
   "finding": "All 464 word lengths reproduce from the archived runes. The sixteen column averages are unusually even under the stated shuffle model: their variance is 25.15% of its expectation. Only 54 of 49,999 shuffles were at least as even (corrected lower-tail p=0.0011). A full rerun and independent checks agree.",
   "limitations": "This is an explored, selected arrangement. The p-value does not adjust for the original search and is not the probability of coincidence or intent. Unrestricted shuffling destroys sentence and section structure; it is not a coherent-prose comparison. Reported corpus and carrier findings remain unverified. Human review pending.",
-  "next_steps": "Treat within-section shuffles as a family variant. Declare width/order selection before scanning; separately reproduce corpus conversion, sentence-removal and carrier claims with exact inputs and bounds.",
+  "next_steps": "Section-preserving shuffles, all 24 section orders and a six-width search are published as lp1-section-balance, lp1-section-order and lp1-width-selection. Sentence-preserving comparisons, corpus conversion, sentence-removal and carrier claims require separately frozen inputs and procedures.",
   "family": {
     "id": "lp1-word-length-balance",
     "title": "LP1 word lengths and column balance",
@@ -143,7 +143,11 @@
       "url": "https://jelliottdev.github.io/#/wiki/search-space"
     }
   ],
-  "related": [],
+  "related": [
+    "lp1-section-balance",
+    "lp1-section-order",
+    "lp1-width-selection"
+  ],
   "visuals": [
     {
       "path": "experiments/records/lp1-word-length-balance/column-means.svg",
