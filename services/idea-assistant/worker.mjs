@@ -14,6 +14,7 @@ import {createTaskVariantHandler} from './task-variants.mjs';
 import {createRecordPlanHandler} from './record-plans.mjs';
 import {createFamilyRunHandler} from './family-runs.mjs';
 import {createFiniteSearchHandler} from './finite-search.mjs';
+import {createFactoredSearchHandler} from './factored-search.mjs';
 import {createPublishedEvidenceHandler} from './published-evidence.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
@@ -185,8 +186,10 @@ const taskVariants=createTaskVariantHandler();
 const familyRuns=createFamilyRunHandler();
 const publishedEvidence=createPublishedEvidenceHandler();
 const finiteSearch=createFiniteSearchHandler();
+const factoredSearch=createFactoredSearchHandler();
 export default {fetch(request,env,ctx){
   const path=new URL(request.url).pathname;
+  if(path.startsWith('/factored-search/'))return factoredSearch(request,env);
   if(path.startsWith('/finite-search/'))return finiteSearch(request,env);
   if(path.startsWith('/published-evidence/'))return publishedEvidence(request,env);
   if(path.startsWith('/families/'))return familyRuns(request,env);

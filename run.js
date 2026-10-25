@@ -15,7 +15,7 @@
  const Questions=typeof module==='object'&&module.exports?require('./question-evidence.js'):root.QuestionEvidence;
  const Decisions=typeof module==='object'&&module.exports?require('./question-decisions.js'):root.QuestionDecisions;
  const EvidenceClient=typeof module==='object'&&module.exports?require('./verified-evidence-client.js'):root.VerifiedEvidenceClient;
- const FiniteWorkspace=typeof module==='object'&&module.exports?require('./finite-search-workspace.js'):root.FiniteSearchWorkspace;
+ const FiniteWorkspace=typeof module==='object'&&module.exports?require('./finite-workspace-router.js'):(root.FiniteWorkspaceRouter||root.FiniteSearchWorkspace);
  const MethodChoices=typeof module==='object'&&module.exports?require('./keyed-method-clarification.js'):root.KeyedMethodClarification;
  const AffineChoices=typeof module==='object'&&module.exports?require('./affine-search-clarification.js'):root.AffineSearchClarification;
  const HEX=/^[a-f0-9]{64}$/,MAX=2*1024*1024;
@@ -214,7 +214,7 @@
     host.innerHTML='<nav class="run-links"><a href="research.html?v=record-panel-20261024#mode=list">Back to research map</a><a href="'+esc(ideaHref(idea.card))+'">Review this idea</a></nav><h1>Saved research idea</h1><p>'+esc(rows.find(row=>row[0]==='Outcome')?.[1]||'')+'</p><section id="finite-search-workspace"></section><details class="experiment-details"><summary>Confirmed idea</summary><dl class="plan-summary">'+rows.map(([label,text])=>'<dt>'+esc(label)+'</dt><dd>'+esc(text).replace(/\n/g,'<br>')+'</dd>').join('')+'</dl></details>';
     if(!FiniteWorkspace?.createWorkspace)throw Error('The finite search controls could not be loaded. Reload this page.');
     finiteWorkspace=FiniteWorkspace.createWorkspace(doc,$('finite-search-workspace'),{idea,config,request:(url,init,ms)=>request(url,init,ms,true),validEndpoint:endpointFor,checkPreparation,projection,crypto:cryptoAPI,...(options.finiteRunner?{runner:options.finiteRunner}:{}),isLive:()=>live(token,id)});
-    await finiteWorkspace.ready;return;
+    await finiteWorkspace.ready.catch(()=>{});return;
    }
    let reused=null,coverageError=null;
    if(value.coverage!==undefined)try{reused=await checkedCoverage(value.coverage,token,id);}catch(error){coverageError=error;}
@@ -269,7 +269,7 @@
     }
     if(!response.ok)throw Error('The request could not be completed. Please retry.');if(value.proposalId!==id)throw Error('The proposed plan belongs to another idea.');
     if(value.state==='needs-adapter'){if(typeof value.reason!=='string'||!value.reason.trim()||value.reason.length>700||['task','controls','preparation'].some(key=>Object.hasOwn(value,key)))throw Error('The preparation response is invalid.');preparationOutcome={state:value.state,reason:value.reason};set('idea-status','Your idea is saved. It cannot run in the browser yet. '+value.reason);return;}
-    if(value.state==='needs-clarification'&&value.field==='method'){const engine=value.clarification?.kind==='affine-search'?AffineChoices:MethodChoices;const session=await engine.verify(idea.card,value,cryptoAPI);if(!live(token,id))return;methodEngine=engine;methodSession=methodInitial=session;methodError='';preparationOutcome={state:value.state,field:value.field,reason:value.reason};set('idea-status','');showMethodChoices();$('method-heading')?.focus?.();return;}
+    if(value.state==='needs-clarification'&&value.field==='method'){const engine=value.clarification?.kind==='affine-search'?AffineChoices:MethodChoices;const session=await engine.verify(idea.card,value,cryptoAPI,...(engine===AffineChoices?[{factored:endpointFor(config?.factoredSearchEndpoint,'factored-search')}]:[]));if(!live(token,id))return;methodEngine=engine;methodSession=methodInitial=session;methodError='';preparationOutcome={state:value.state,field:value.field,reason:value.reason};set('idea-status','');showMethodChoices();$('method-heading')?.focus?.();return;}
     if(value.state==='needs-clarification'){if(value.field!=='evaluation'||typeof value.reason!=='string'||!value.reason.trim()||value.reason.length>700||['task','controls','preparation'].some(key=>Object.hasOwn(value,key)))throw Error('The clarification response is invalid.');preparationOutcome={state:value.state,reason:value.reason,field:value.field};set('idea-status',value.reason+' Use “Review this idea” to choose what to check.');return;}
     if(!['plan-ready','scope-covered'].includes(value.state)||value.parentTaskId!==null||!['raw','reviewed'].includes(value.inputVersion)||!Array.isArray(value.notes)||value.notes.some(n=>typeof n!=='string')||typeof value.purpose!=='string')throw Error('The proposed plan is invalid.');
     const coverage=value.coverage===undefined?null:await checkedCoverage(value.coverage,token,id,value.inputVersion);if(!live(token,id))return;

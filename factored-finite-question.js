@@ -80,6 +80,13 @@
   const proof=freeze({schema:'liberpedia-factored-finite-evidence-v2',domainId:d.id,totalCases:d.totalCases,coveredCases:covered.size,matchingCases:matching,remainingCases:d.totalCases-covered.size,coverageSha256,matchingSha256,lookupComplete:v.lookupComplete,complete,nextCases,decision});proofs.add(proof);return proof;
  }
  function inspectEvidence(proof){if(!proofs.has(proof))throw Error('Use independently verified factored evidence.');return proof;}
+ async function coverage(token,refs){
+  const s=state(token),selected=await select(s.domain,refs,s.crypto),coveredCaseIds=[],missingCaseIds=[],matchingCaseIds=[];
+  for(const item of selected.cases){const pi=s.domain.programs.findIndex(p=>p.id===item.programId),pageIndex=s.domain.pages.findIndex(p=>p.id===item.pageId),position=pi*s.domain.pages.length+pageIndex;
+   (s.owners.has(position)?coveredCaseIds:missingCaseIds).push(item.id);if(s.matches.has(position))matchingCaseIds.push(item.id);
+  }
+  return freeze({domainId:s.domain.id,coveredCaseIds,missingCaseIds,matchingCaseIds});
+ }
  function evidence(token,options={cursor:0,limit:12}){const s=state(token),keys=s.receiptKeys||(s.receiptKeys=[...s.receipts.keys()].sort()),{cursor,limit}=paging(options,keys.length),out=keys.slice(cursor,cursor+limit).map(key=>{const r=s.receipts.get(key);return {...r.reference,programId:r.programId,pageIds:[...r.positions].sort((a,b)=>a-b).map(n=>s.domain.pages[n%s.domain.pages.length].id)};});return freeze({sources:out,nextCursor:cursor+out.length<keys.length?cursor+out.length:null});}
- const api={bind,inspect,cases,select,createAccumulator,prepareAccept,inspectPrepared,commitAccept,accept,summarize,inspectEvidence,evidence,LIMITS};if(node)module.exports=api;else root.FactoredFiniteQuestion=api;
+ const api={bind,inspect,cases,select,createAccumulator,prepareAccept,inspectPrepared,commitAccept,accept,summarize,inspectEvidence,coverage,evidence,LIMITS};if(node)module.exports=api;else root.FactoredFiniteQuestion=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -6,14 +6,15 @@
  const copy=v=>JSON.parse(E.stable(v));
  function freeze(value){if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
  async function digest(v,cryptoAPI){return [...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
- function createRunner({executor=X.createExecutor(),crypto:cryptoAPI=root.crypto}={}){
+ function createRunner({executor:suppliedExecutor,crypto:cryptoAPI=root.crypto,reuseWorker=false}={}){
   function start(domain,suppliedIds,suppliedControls,{onProgress}={}){
    let current=null,aborted=false,settled=false,resolve,reject,domainId=null;
+   const batchExecutor=!suppliedExecutor&&reuseWorker===true?X.createBatchExecutor():null,executor=suppliedExecutor||batchExecutor||X.createExecutor();
    const checkpointResults=[],checkpointMatches=[];
    // Local verified output only: this is neither a saved receipt nor a public
    // question decision. Each read is detached from runner and caller state.
    const getCheckpoint=()=>freeze(copy({schema:'liberpedia-finite-local-checkpoint-v1',domainId,results:checkpointResults,completedCaseIds:checkpointResults.map(item=>item.caseId),matchingCaseIds:checkpointMatches}));
-   const promise=new Promise((yes,no)=>{resolve=yes;reject=no;}),finish=(fn,value)=>{if(settled)return;settled=true;fn(value);};
+   const promise=new Promise((yes,no)=>{resolve=yes;reject=no;}),finish=(fn,value)=>{if(settled)return;settled=true;batchExecutor?.close();fn(value);};
    const live=()=>{if(aborted)throw new DOMException('Run cancelled.','AbortError');};
    const progress=(phase,completed,total)=>{live();try{onProgress?.({phase,completed,total});}catch{}live();};
    let ids,controls,question=F;

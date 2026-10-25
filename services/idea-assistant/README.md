@@ -294,3 +294,29 @@ extends the receipt authority set while preserving earlier authorizations.
 Apply it before deploying the variant-dependent Worker and frontend. The shared
 `experiment-protocols.js` definitions supply the measurement constraints and
 presentation; the numerical engine and independent controls remain separate.
+
+## Full finite searches
+
+`/factored-search/:proposalId/{evidence,prepare,create,results}` preserves the
+complete confirmed question while preparing at most twelve ordinary cases at
+a time. The browser checks one paged evidence snapshot, then asks for fresh
+evidence only for its next selected cases. Original result receipts remain
+the evidence; local progress and stored checkpoints are not public results.
+
+Apply `0013_finite_evidence_epoch.sql` and install the dedicated Worker secret
+`FACTORED_EVIDENCE_CURSOR_KEY` before deploying this route. Configure the
+frontend's `factoredSearchEndpoint` only after that deployment. The original
+finite route and its admission limits remain available for existing clients.
+The results route accepts previously admitted immutable tasks even if current
+source text changes; preparation requires a fresh matching snapshot.
+
+The browser uses IndexedDB for bounded original receipts and pending output.
+Storage failure stops the full search visibly rather than dropping cases.
+Large offline audits are downloaded as bounded ZIP parts; every advertised
+part is required for the independent Python check. No missing cases run during
+export or audit.
+
+Checks: `scripts/test_factored_search_http.mjs` (Node SQLite),
+`scripts/test_factored_search_session_adversarial.cjs`,
+`scripts/test_factored_finite_workspace.cjs`, and
+`scripts/test_factored_finite_workspace_adversarial.cjs`.
