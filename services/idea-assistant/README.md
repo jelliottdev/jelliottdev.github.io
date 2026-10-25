@@ -329,4 +329,9 @@ old origin bytes and the existing response shape. Local SQLite and private
 browser QA cover migration compatibility, quotas, tampering, source changes and
 save/reload. An initial October 25 attempt stopped at Cloudflare authorization
 error 7403. A later read-only connection check succeeded and migration 0014 was
-applied remotely. Worker deployment remains a separate release step.
+applied remotely. Worker version `8b8131e8-6a7b-4716-a800-acb4b89132b0`
+was then deployed after all 42 indexed receipt files were published and their
+byte counts and SHA-256 values matched. Read-only hosted checks loaded the first
+and last indexed program with the expected immutable task/result IDs and all
+56 pages. This does not verify a public finite-recipe run/save/reload journey;
+no finite source recipe is published yet.
