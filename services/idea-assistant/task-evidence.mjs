@@ -15,6 +15,9 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
  // conservatively rather than repurpose its provenance.
  // Discover only identity and exact page intersections. Duplicate full payloads
  // can be large; they are not needed to choose a bounded authoritative proof.
+ // Filter exact page/text intersections before the recency limit: newer runs
+ // over unrelated scopes must not hide an older relevant receipt. The filter
+ // uses a short-circuit existence check; no result payload is loaded here.
  const value=await db.prepare(`SELECT t.id AS task_id,t.task_hash,r.id AS result_id,r.created_at,
    json_array_length(t.task_json,'$.pages') AS source_page_count,
    (SELECT json_group_array(json_extract(requested.value,'$.id')) FROM json_each(?) requested
@@ -29,8 +32,11 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
    AND json_extract(t.task_json,'$.criterion')=?
    AND EXISTS(SELECT 1 FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=t.id AND links.input_version=?)
+   AND EXISTS(SELECT 1 FROM json_each(?) requested_scope JOIN json_each(t.task_json,'$.pages') stored_scope
+    ON json_extract(stored_scope.value,'$.id')=json_extract(requested_scope.value,'$.id')
+     AND json_extract(stored_scope.value,'$.text')=json_extract(requested_scope.value,'$.text'))
   ORDER BY r.created_at DESC,r.id DESC,t.id ASC LIMIT 101`)
- .bind(E.stable(task.pages),inputVersion,task.engine,E.stable(task.alphabet),E.stable(task.steps),E.stable(task.criterion),inputVersion).all();
+ .bind(E.stable(task.pages),inputVersion,task.engine,E.stable(task.alphabet),E.stable(task.steps),E.stable(task.criterion),inputVersion,E.stable(task.pages)).all();
  const rows=value?.results;if(!Array.isArray(rows)||rows.length>101)throw Error('Stored computation candidates are malformed.');
  const requestedIds=new Set(task.pages.map(page=>page.id)),seenMetadata=new Set();
  const metadata=rows.slice(0,100).map(row=>{

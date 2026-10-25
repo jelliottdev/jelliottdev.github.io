@@ -75,9 +75,20 @@ await test('bounded candidate discovery reports truncation and deterministically
  for(let i=0;i<102;i++)sources.push(await source(f,await task({title:'Historical candidate '+i,pages:['lp2-00']}),{date:new Date(Date.UTC(2026,9,24,0,0,i)).toISOString()}));
  const value=await inspect(f,t);assert.equal(value.truncated,true);assert.equal(value.evidence.length,1,'duplicate coverage retains one bounded proof');assert(!value.evidence.some(e=>e.taskId===sources[0].task.taskId||e.taskId===sources[1].task.taskId));assert.equal(value.exactTaskId,value.evidence[0].taskId);assert.deepEqual(await inspect(f,t),value);
 });
+await test('older exact witness survives more than100 newer unrelated scopes and different page bytes',async()=>{
+ const f=fixture(),requested=await task(),older=await source(f,await task({title:'Older exact relevant witness'}),{date:'2026-10-23T12:00:00.000Z'});
+ for(let i=0;i<105;i++)await source(f,await task({title:'Newer unrelated scope '+i,pages:i<102?['lp2-03']:['lp2-00','lp2-01'],...(i<102?{}:{text:'ᚦᚩ-ᚱᚳ\nᚷ'})}),{date:new Date(Date.UTC(2026,9,24,0,0,i)).toISOString()});
+ let metadataRows=0,payloadRows=0;f.setReadHook(({sql,results})=>{if(sql.includes('AS matching_pages'))metadataRows+=results.length;if(sql.includes('FROM json_each(?) proof JOIN local_tasks'))payloadRows+=results.length;});
+ const coverage=await inspect(f,requested);assert.equal(coverage.exactTaskId,older.task.taskId);assert.deepEqual(coverage.coveredPages,['lp2-00','lp2-01']);assert.deepEqual(coverage.remainingPages,[]);assert.equal(coverage.evidence[0].resultId,older.run.id);assert.equal(coverage.truncated,false,'Only relevant receipts count toward the candidate bound');assert.equal(metadataRows,1);assert.equal(payloadRows,1);
+});
+await test('genuinely truncated relevant search exposes its unresolved coverage without claiming exhaustion',async()=>{
+ const f=fixture(),requested=await task();await source(f,await task({title:'Older other relevant page',pages:['lp2-01']}),{date:'2026-10-23T12:00:00.000Z'});
+ for(let i=0;i<102;i++)await source(f,await task({title:'Newer duplicate relevant page '+i,pages:['lp2-00']}),{date:new Date(Date.UTC(2026,9,24,0,0,i)).toISOString()});
+ const coverage=await inspect(f,requested);assert.equal(coverage.truncated,true);assert.deepEqual(coverage.coveredPages,['lp2-00']);assert.deepEqual(coverage.remainingPages,['lp2-01']);assert.equal(coverage.exactTaskId,null);assert(coverage.evidence.every(ref=>ref.pages.join(',')==='lp2-00'));
+});
 await test('protocol expression index covers historical immutable rows without backfill',async()=>{
  const f=fixture(),t=await task();await source(f,t);const before=f.sqlite.prepare('SELECT task_json,task_hash,id FROM local_tasks').all();await inspect(f,t);
- const lookup=f.queries.findLast(sql=>sql.includes('FROM local_tasks t JOIN local_task_results')),plan=f.sqlite.prepare('EXPLAIN QUERY PLAN '+lookup).all(L.stable(t.pages),'raw',t.engine,L.stable(t.alphabet),L.stable(t.steps),L.stable(t.criterion),'raw');assert(plan.some(row=>String(row.detail).includes('local_tasks_protocol_lookup')));assert.deepEqual(f.sqlite.prepare('SELECT task_json,task_hash,id FROM local_tasks').all(),before);
+ const lookup=f.queries.findLast(sql=>sql.includes('FROM local_tasks t JOIN local_task_results')),plan=f.sqlite.prepare('EXPLAIN QUERY PLAN '+lookup).all(L.stable(t.pages),'raw',t.engine,L.stable(t.alphabet),L.stable(t.steps),L.stable(t.criterion),'raw',L.stable(t.pages));assert(plan.some(row=>String(row.detail).includes('local_tasks_protocol_lookup')));assert.deepEqual(f.sqlite.prepare('SELECT task_json,task_hash,id FROM local_tasks').all(),before);
 });
 await test('frozen requested computation survives reload while coverage is derived afresh',async()=>{
  const f=fixture(),t=await task(),idea=await source(f,await task({title:'Unrun idea anchor'}),{result:false});f.setWrites(true);

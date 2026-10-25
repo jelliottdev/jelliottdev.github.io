@@ -18,7 +18,7 @@ async function jsonBody(message,max){
  const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
  const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes);return {value:JSON.parse(text),text};
 }
-export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=20000,now=()=>new Date()}={}){
+export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=20000,now=()=>new Date(),discoverEvidence=findEvidence}={}){
  if(!Number.isFinite(timeoutMs)||timeoutMs<1||timeoutMs>20000)throw Error('Invalid source deadline');
  return async function handle(request,env){
   const allowed=env?.SITE_ORIGIN,headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'};
@@ -111,8 +111,13 @@ export function createTaskExtensionHandler({fetcher=globalThis.fetch,timeoutMs=2
    catch{return reply({error:'The remaining-page plan exceeds the supported runner bounds. No plan was saved.'},422);}
    // A different public idea can already have run these exact page bytes and
    // settings. Classification and titles do not define computation coverage.
-   const requestedTask=task,found=await findEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:row.input_version});
+   const requestedTask=task,found=await discoverEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:row.input_version});
    let coverage,basisEvidence={};
+   if(found.truncated&&found.remainingPages.length){
+    coverage={...found,requestedTask,inputVersion:row.input_version};
+    await rememberEvidence({db:env.PROPOSALS,proposalId:row.proposal_id,task:requestedTask,inputVersion:row.input_version,coverage,createdAt:now().toISOString()});
+    return reply({state:'coverage-unavailable',coverageUnavailable:true,...context,coverage,error:'Saved evidence was only partly checked. Please retry before preparing the remaining pages.'},503);
+   }
    if(found.coveredPages.length){
     coverage={...found,requestedTask,inputVersion:row.input_version};
     await rememberEvidence({db:env.PROPOSALS,proposalId:row.proposal_id,task:requestedTask,inputVersion:row.input_version,coverage,createdAt:now().toISOString()});

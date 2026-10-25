@@ -21,6 +21,24 @@ async function task(criterion,steps=[]){return E.prepare({title:'Synthetic bound
  }
  for(const criterion of [{kind:'measurement'},{kind:'exact-prefix',values:[0]}])assert.equal(V.inspect(await task(criterion)),null);
  const transformed=await task({kind:'word-prime-sums',table:'canonical',boundaries:'non-rune'},[{op:'affine',a:1,b:0}]);assert.equal(V.inspect(transformed),null);await assert.rejects(V.prepare(transformed,webcrypto));assert.equal(V.inspect({}),null);
+ // Decisions use real independently verified outputs, including a non-monotone null.
+ const examples={
+  'neither-above':'ᚦᚦᚦ ᚠᚠᚢ ᚩᚦᚦ ᚦᚢᚦ',
+  'excess-in-both':'ᚠᚦᚠ ᚦᚩᚦ ᚦᚩᚠ ᚠᚠᚠ',
+  'excess-joined-only':'ᚠᚩᚦ ᚦᚦᚦ ᚠᚦᚩ ᚠᚠᚢ',
+  'excess-separate-only':'ᚦᚠᚠ ᚩᚢᚩ ᚩᚠᚩ ᚩᚠᚠ',
+  'insufficient-pairs':'ᚠ ᚢ ᚦ'
+ };
+ for(const [expected,text] of Object.entries(examples)){
+  const parent=await E.prepare({title:'Boundary decision control',pages:[{id:'lp2-15',text}],alphabet,steps:[],criterion:{kind:'word-affine-count',lag:2,a:1,b:0,boundaries:'non-rune'}},webcrypto);
+  const child=await V.prepare(parent,webcrypto),raw=E.run(parent),before=await E.verify(parent,raw,webcrypto),after=await E.verify(child,E.run(child),webcrypto);
+  const decision=V.decision(parent,before,child,after);
+  assert.equal(decision.id,expected);assert.deepEqual(V.decision(child,after,parent,before),decision);
+  assert.match(decision.limit,/not a significance test/);assert.match(decision.limit,/not a significance test or independent confirmation/);
+  assert.throws(()=>V.decision(parent,raw,child,after),/verified/);
+  const different=await E.prepare({...child,pages:[{id:'lp2-15',text:text+'ᚠ'}]},webcrypto),differentResult=await E.verify(different,E.run(different),webcrypto);
+  assert.throws(()=>V.decision(parent,before,different,differentResult),/same text and rule/);
+ }
  const context={LocalExperiment:E,ExperimentProtocols:require('../experiment-protocols.js')};vm.createContext(context);vm.runInContext(fs.readFileSync('task-variants.js','utf8'),context);assert.equal(typeof context.TaskVariants.prepare,'function');
  console.log('PASS '+checked+' fixed boundary variants, exact invariants, unsupported exclusions, browser export and no target preparation execution');
 })().catch(error=>{console.error(error);process.exitCode=1;});

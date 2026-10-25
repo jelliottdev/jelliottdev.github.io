@@ -13,6 +13,7 @@ import {createCommunityFeedHandler} from '../services/idea-assistant/community-f
 import {issue} from '../services/idea-assistant/prepared-plans.mjs';
 import Controls from '../local-plan-controls.js';
 import Family from '../research-family.js';
+import {findEvidence} from '../services/idea-assistant/task-evidence.mjs';
 const origin='https://jelliottdev.github.io',at='2026-10-25T12:00:00.000Z',sha=v=>createHash('sha256').update(L.stable(v)).digest('hex');
 const alphabet=JSON.parse(readFileSync(new URL('../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']}),criterion={kind:'exact-prefix',values:[28,28]};
@@ -23,7 +24,7 @@ function fixture(){
  const raw=new Map(['lp2-01','lp2-02','lp2-03'].map((id,i)=>[id,alphabet.slice(i,i+4).map(a=>a.rune).join('')+' '+alphabet[i].rune]));
  const fetcher=async url=>{const id=/\/data\/pages\/(lp2-\d{2})\.json$/.exec(url)?.[1];assert(raw.has(id));return Response.json({id,raw:raw.get(id),reviewed_text:null});};
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async()=>({success:true})},AI:{run(){throw Error('No model during exact reuse');}}};
- return {sqlite,db,raw,env,prepare:createPrepareTaskHandler({fetcher,now:()=>new Date(at)}),tasks:createLocalTaskHandler({fetcher,now:()=>new Date(at)}),ideas:createCommunityIdeaHandler({now:()=>new Date(at)}),feed:createCommunityFeedHandler()};
+ return {sqlite,db,raw,env,fetcher,prepare:createPrepareTaskHandler({fetcher,now:()=>new Date(at)}),tasks:createLocalTaskHandler({fetcher,now:()=>new Date(at)}),ideas:createCommunityIdeaHandler({now:()=>new Date(at)}),feed:createCommunityFeedHandler()};
 }
 function idea(f,pages,aim='Solve LP2',evaluation=criterion,publish=true,operations=[{id:'reverse_runes',label:'Reverse rune order within each word',unit:'word'}]){
  const card=H.cardData(C.confirm(C.createDraft({source:{text:'Original wording stays outside the computation identity'},aim:known(aim),method:known({operations}),scope:known({pages}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(evaluation)}}),{id:'fixture',at})),hash=sha(card),id='p_'+hash;
@@ -100,5 +101,27 @@ await test('different bytes or success criteria retain genuinely new work; priva
  const changed=await prepare(f,incoming);assert.equal(changed.state,'plan-ready');assert.equal(changed.coverage,undefined);assert.equal(changed.task.pages[0].text,f.raw.get('lp2-01'));
  const alternate=idea(f,['lp2-01'],'Solve LP2',{kind:'exact-prefix',values:[0,1]});assert.equal((await prepare(f,alternate)).coverage,undefined);
  const privateFixture=fixture(),hidden=idea(privateFixture,['lp2-01'],'Measure rune frequencies',criterion,false);await seed(privateFixture,hidden,['lp2-01'],'Hidden fixture');const publicIdea=idea(privateFixture,['lp2-01']);assert.equal((await prepare(privateFixture,publicIdea)).coverage,undefined);
+});
+await test('bounded incomplete discovery preserves known witnesses and the full request but issues no remainder plan',async()=>{
+ const f=fixture(),old=idea(f,['lp2-01'],'Measure rune frequencies'),incoming=idea(f,['lp2-01','lp2-02']);await seed(f,old,['lp2-01'],'Known exact page');
+ f.prepare=createPrepareTaskHandler({fetcher:f.fetcher,now:()=>new Date(at),discoverEvidence:async args=>({...await findEvidence(args),truncated:true}),prepareControls:async()=>{throw Error('Incomplete coverage must stop before controls');}});
+ const response=await f.prepare(new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId:incoming.id,parentTaskId:null})}),f.env);assert.equal(response.status,503);const value=await response.json();
+ assert.equal(value.state,'coverage-unavailable');assert.equal(value.coverageUnavailable,true);assert.deepEqual(value.coverage.coveredPages,['lp2-01']);assert.deepEqual(value.coverage.remainingPages,['lp2-02']);assert.equal(value.coverage.evidence.length,1);assert.deepEqual(value.coverage.requestedTask.pages.map(p=>p.id),['lp2-01','lp2-02']);assert(!Object.hasOwn(value,'task'));assert(!Object.hasOwn(value,'preparation'));
+ assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);
+ const saved=JSON.parse(f.sqlite.prepare('SELECT requested_task_json FROM idea_computation_evidence WHERE proposal_id=?').get(incoming.id).requested_task_json);assert.deepEqual(saved,value.coverage.requestedTask);
+});
+await test('over100 newer duplicate sources cannot turn an older covered page into new runnable work',async()=>{
+ const f=fixture(),old=idea(f,['lp2-02'],'Measure rune frequencies'),recent=idea(f,['lp2-01'],'Reproduce the transformation'),incoming=idea(f,['lp2-01','lp2-02']);
+ const earlier=await seed(f,old,['lp2-02'],'Older covered second page');f.sqlite.prepare('UPDATE local_task_results SET created_at=? WHERE task_id=?').run('2026-10-24T12:00:00.000Z',earlier.task.taskId);
+ for(let i=0;i<101;i++)await seed(f,recent,['lp2-01'],'New repeated page '+i);
+ const before=f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,response=await f.prepare(new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId:incoming.id,parentTaskId:null})}),f.env),value=await response.json();
+ if(response.status===200){assert.equal(value.state,'scope-covered');assert.deepEqual(value.coverage.coveredPages,['lp2-01','lp2-02']);}else{assert.equal(response.status,503);assert.equal(value.coverageUnavailable,true);assert.equal(value.state,'coverage-unavailable');assert(value.coverage.truncated);}
+ assert(!Object.hasOwn(value,'task'));assert(!Object.hasOwn(value,'preparation'));assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,before);
+});
+await test('pending-task projection retains partial proof while making incomplete coverage unavailable',async()=>{
+ const f=fixture(),incoming=idea(f,['lp2-01','lp2-02']),prepared=await prepare(f,incoming),created=await call(f,'tasks','/tasks',{proposalId:incoming.id,task:prepared.task,inputVersion:prepared.inputVersion,parentTaskId:null,preparationId:prepared.preparation.id});
+ const old=idea(f,['lp2-01'],'Measure rune frequencies');await seed(f,old,['lp2-01'],'Shared first page');
+ f.tasks=createLocalTaskHandler({fetcher:f.fetcher,now:()=>new Date(at),discoverEvidence:async args=>({...await findEvidence(args),truncated:true})});
+ const projection=await call(f,'tasks','/tasks/'+created.id);assert.equal(projection.coverageUnavailable,true);assert.deepEqual(projection.coverage.coveredPages,['lp2-01']);assert.equal(projection.coverage.evidence.length,1);assert.deepEqual(projection.coverage.remainingPages,['lp2-02']);assert.equal(projection.state,'not-run');assert.equal(projection.latestRun,undefined);
 });
 console.log('Cross-idea planning: '+groups+' end-to-end SQLite groups passed; no hosted writes.');

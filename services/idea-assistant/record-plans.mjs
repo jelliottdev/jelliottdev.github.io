@@ -4,6 +4,7 @@ import Control from '../../local-control.js';
 import {validateCard} from './idea-relations.mjs';
 import {planCard} from './prepare-task.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
+import {findEvidence} from './task-evidence.mjs';
 const BASE='https://jelliottdev.github.io',HEX=/^[a-f0-9]{64}$/,ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 export const recordPlanDigest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',typeof text==='string'?new TextEncoder().encode(text):text))].map(v=>v.toString(16).padStart(2,'0')).join('');
@@ -57,7 +58,7 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
  };
  try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Official source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}
 }
-export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=20000}={}){
+export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=20000,discoverEvidence=findEvidence}={}){
  return async(request,env)=>{
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',Vary:'Origin'},reply=(v,status=200)=>new Response(JSON.stringify(v),{status,headers});
   const allowed=env?.SITE_ORIGIN;try{if(new URL(allowed).origin!==allowed||!['http:','https:'].includes(new URL(allowed).protocol))throw Error();}catch{return reply({error:'Reviewed plans are unavailable.'},503);}
@@ -70,8 +71,15 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
   let body;try{body=(await readJSON(request,1024)).value;const optedIn=body&&Object.hasOwn(body,'includeExisting');if(!exact(body,['recordId','followupId',...(optedIn?['includeExisting']:[])])||optedIn&&body.includeExisting!==true||![body.recordId,body.followupId].every(v=>typeof v==='string'&&v.length<=100&&ID.test(v)))throw Error();}catch{return reply({error:'The reviewed plan request is invalid.'},400);}
   let loaded;try{loaded=await loadRecordPlan(body,{fetcher,timeoutMs});}catch(error){return reply({state:'not-runnable',reason:error.message},422);}
   const {snapshot,...plan}=loaded;
-  if(body.includeExisting===true&&env.PROPOSALS?.prepare){
+  if(body.includeExisting===true){
    try{
+    if(!env.PROPOSALS?.prepare)throw Error('Computation evidence storage is unavailable.');
+    // Evidence is independent of this recipe's title and origin. Keep the
+    // complete authored plan immutable: a partial remainder is reviewed through
+    // the ordinary saved-card planner, never relabeled as this full recipe.
+    const found=await discoverEvidence({db:env.PROPOSALS,task:plan.task,inputVersion:plan.inputVersion});
+    if(found.truncated&&found.remainingPages.length)throw Error('Computation coverage could not be checked completely.');
+    plan.coverage={...found,requestedTask:plan.task,inputVersion:plan.inputVersion};
     // The task and recipe must be identical; an unrelated parent-record edit
     // may change recordSha256 without invalidating an immutable saved origin.
     const row=await env.PROPOSALS.prepare(`SELECT t.id,o.origin_json,
@@ -86,7 +94,7 @@ export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=2000
      .bind(plan.task.taskId,await recordPlanDigest(L.stable(plan.task)),L.stable(plan.task),plan.inputVersion,
       plan.origin.recordId,plan.origin.followupId,plan.origin.protocolSha256,L.stable(snapshot)).first();
     if(row){const savedOrigin=JSON.parse(row.origin_json);if(row.id!==plan.task.taskId||!['not-run','results-verified'].includes(row.state)||!validOrigin(savedOrigin)||savedOrigin.recordId!==plan.origin.recordId||savedOrigin.followupId!==plan.origin.followupId||savedOrigin.protocolSha256!==plan.origin.protocolSha256)throw Error('Saved origin mismatch');plan.existingTask={id:row.id,state:row.state};}
-   }catch{return reply({error:'Existing research entries could not be checked. Please retry.'},503);}
+   }catch{return reply({state:'coverage-unavailable',coverageUnavailable:true,error:'Existing computation evidence could not be checked. Please retry before creating this experiment.'},503);}
   }
   return reply(plan);
  };

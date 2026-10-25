@@ -28,7 +28,7 @@ function projection(row,task,run,context){
   inputVersion:context.input_version,parentTaskId:context.parent_task_id,createdAt:context.created_at,
   state:run?'results-verified':'not-run',...(run?{latestRun:run}:{}),verification:NOTICE};
 }
-export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare}={}){
+export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence}={}){
  return async function handle(request,env){
   const allowed=env?.SITE_ORIGIN,origin=request.headers.get('origin');
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'};
@@ -72,7 +72,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    const controls=origins.length?null:await controlsFor(task);
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
    let shared=null,coverageUnavailable=false;
-   if(!run){try{shared=await findEvidence({db,task,inputVersion:context.input_version});}catch{coverageUnavailable=true;}}
+   if(!run){try{shared=await discoverEvidence({db,task,inputVersion:context.input_version});if(shared.truncated&&shared.remainingPages.length)coverageUnavailable=true;}catch{coverageUnavailable=true;}}
    const coverage=shared?.coveredPages.length?{...shared,requestedTask:task,inputVersion:context.input_version}:null;
    return {...projection(row,task,run,context),origins,...(coverage?{coverage}:{}),...(coverageUnavailable?{coverageUnavailable:true}:{}),...(controls?{controls}:{}),...(savedOrigins.length>10?{originsTruncated:true}:{}),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
   };

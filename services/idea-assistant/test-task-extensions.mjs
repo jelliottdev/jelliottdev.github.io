@@ -8,6 +8,7 @@ import {canonicalProposal} from './proposals.mjs';
 import {issue as issuePreparation} from './prepared-plans.mjs';
 import Family from '../../research-family.js';
 import {createTaskExtensionHandler} from './task-extensions.mjs';
+import {findEvidence} from './task-evidence.mjs';
 
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const alphabet=Array.from('ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ').map((rune,i)=>({rune,latin:'R'+i,prime:i+2}));
@@ -16,12 +17,12 @@ const sourcePage=id=>({id,raw:id==='lp2-50'?'':alphabet[Number(id.slice(4))%29].
 const pageIds=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))];
 const sourceBundle=(letters=alphabet)=>({schema:'liberpedia-local-inputs-v1',alphabet:letters.map(entry=>({...entry})),pages:pageIds.map(sourcePage)});
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
-function fixture({fetcher,timeoutMs=20000}={}){
+function fixture({fetcher,timeoutMs=20000,discoverEvidence}={}){
  const sqlite=new DatabaseSync(':memory:');for(const name of readdirSync(new URL('./migrations/',import.meta.url)).filter(name=>name.endsWith('.sql')).sort())sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  const queries=[],calls=[],rates=[];let aiCalls=0,bundleAlphabet=alphabet;
  const db={prepare(sql){assert.match(sql,/^\s*(?:SELECT\b|INSERT INTO (?:prepared_plans|idea_computation_evidence)\b)/i,'Extension may only issue an admission receipt');queries.push(sql);return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null,all:async()=>({results:sqlite.prepare(sql).all(...args)}),run:async()=>sqlite.prepare(sql).run(...args)};}};}};
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async value=>{rates.push(value);return {success:true};}},AI:{run(){aiCalls++;throw Error('No AI allowed');}}};
- const handle=createTaskExtensionHandler({timeoutMs,fetcher:async(url,options)=>{
+ const handle=createTaskExtensionHandler({timeoutMs,discoverEvidence,fetcher:async(url,options)=>{
   calls.push({url,options});assert(url===bundleURL||/^https:\/\/jelliottdev\.github\.io\/data\/pages\/lp2-(?:[0-4]\d|5[0-5])\.json$/.test(url));assert.equal(options.redirect,'manual');
   if(fetcher)return fetcher(url,options);
   if(url===bundleURL)return Response.json(sourceBundle(bundleAlphabet));
@@ -63,6 +64,13 @@ await test('exact remaining-only plan preserves scientific inputs, publishes not
  assert(output.task.pages.every(page=>page.text===alphabet[(Number(page.id.slice(4))+1)%29].rune));await L.checkIdentity(output.task);assert.notEqual(output.task.taskId,t.taskId);
  assert.match(output.purpose,/beyond the original request/);assert(!JSON.stringify(output).includes('PRIVATE'));
  assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert(f.calls.every(c=>c.options.signal===f.calls[0].options.signal));assert.equal(f.aiCalls,0);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,changes+1);assert.match(output.preparation.id,/^prep_[a-f0-9]{64}$/);assert.equal(output.preparation.authority,'remaining-lp2');assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_tasks').all(),before);
+});
+await test('incomplete shared lookup retains known proof and frozen scope without preparing uncertain pages',async()=>{
+ const f=fixture({discoverEvidence:async args=>({...await findEvidence(args),truncated:true})}),p=await proposal(f),t=await parent(f,p),other=await proposal(f,'other');
+ const shared=await L.prepare({...t,title:'Another idea has checked page01',pages:[{id:'lp2-01',text:sourcePage('lp2-01').reviewed_text}]});await insertTask(f,other,shared);
+ const before=f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,response=await f.handle(req(t.taskId),f.env);assert.equal(response.status,503);const value=await response.json();
+ assert.equal(value.state,'coverage-unavailable');assert.equal(value.coverageUnavailable,true);assert.equal(value.coverage.truncated,true);assert.deepEqual(value.coverage.coveredPages,['lp2-01']);assert.equal(value.coverage.evidence.length,1);assert.equal(value.coverage.requestedTask.pages.length,55);assert(value.coverage.remainingPages.includes('lp2-02'));assert(!Object.hasOwn(value,'task'));assert(!Object.hasOwn(value,'preparation'));assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,before);
+ const saved=JSON.parse(f.sqlite.prepare('SELECT requested_task_json FROM idea_computation_evidence WHERE proposal_id=?').get(p.id).requested_task_json);assert.deepEqual(saved,value.coverage.requestedTask);
 });
 await test('large55-page scopes use one exact aggregate fetch with raw/reviewed bytes and no fallback',async()=>{
  for(const version of ['raw','reviewed']){const f=fixture(),p=await proposal(f),t=await parent(f,p,{version}),out=await ready(f,t);assert.equal(out.task.pages.length,55);assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,bundleURL);assert.deepEqual(out.task.pages,out.task.pages.map(page=>({id:page.id,text:sourcePage(page.id)[version==='raw'?'raw':'reviewed_text']})));assert.equal(out.task.pages.find(page=>page.id==='lp2-50').text,version==='raw'?'':sourcePage('lp2-50').reviewed_text);if(version==='raw')assert(out.task.pages.find(page=>page.id==='lp2-00').text.endsWith(' /\r\n'));await L.checkIdentity(out.task);}

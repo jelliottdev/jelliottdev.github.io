@@ -169,6 +169,10 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch(error){return reply({state:'needs-adapter',reason:String(error?.message||'').startsWith('The finite key stream is shorter')?'The supplied finite stream is too short for a complete page segment. Supply enough values or specify a different reset.':'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
    const requestedTask=task,found=await discoverEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:plan.inputVersion});
    const coverage={...found,requestedTask,inputVersion:plan.inputVersion};
+   if(found.truncated&&found.remainingPages.length){
+    await remember({db:env.PROPOSALS,proposalId:body.proposalId,task:requestedTask,inputVersion:plan.inputVersion,coverage,createdAt:now().toISOString()});
+    return reply({state:'coverage-unavailable',coverageUnavailable:true,coverage,error:'Saved computation evidence could not be checked completely. Please retry before creating more work.'},503);
+   }
    if(!found.remainingPages.length){
    await remember({db:env.PROPOSALS,proposalId:body.proposalId,task:requestedTask,inputVersion:plan.inputVersion,coverage,createdAt:now().toISOString()});
    return reply({state:'scope-covered',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,coverage,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});}
