@@ -48,11 +48,24 @@
   }
   return terms;
  }
+ function wordSumOperation(snapshot,op,index,classified){
+  if(op.id!=='word_prime_sums'||op.label!=='Word prime sums'||
+    Object.keys(op).some(k=>!['id','label','table','boundaries','declaredFamilyId'].includes(k))||
+    !['canonical','reversed'].includes(op.table)||!['non-rune','hyphen-period'].includes(op.boundaries)||
+    classified[index]?.familyId!=='prime-indices'||own(op,'declaredFamilyId')&&op.declaredFamilyId!=='prime-indices')return null;
+  const rules=snapshot.rules,e=rules.evaluation;
+  if(e.status!=='specified'||!e.value||C.serialize(e.value)!==C.serialize({kind:'word-prime-sums',table:op.table,boundaries:op.boundaries}))return null;
+  if(rules.representation.status==='specified'&&rules.representation.value!=='GP29'||
+    rules.wordBoundaries.status==='specified'&&rules.wordBoundaries.value!=='preserve'||
+    ['boundaryMode','reset','initialState'].some(k=>rules[k].status==='specified')||
+    Object.values(rules).some(r=>r.status==='unrestricted'))return null;
+  return {action:'sum',operand:'prime-values',within:'word',table:op.table};
+ }
  function discoveryHints(snapshot){
   const labels=C.reviewRows(snapshot).find(row=>row.label==='Method').tags;
   const classified=C.classifyMethod(snapshot.method).operations;
   return {steps:snapshot.method.value.operations.map((op,index)=>{
-   const query=[labels[index]?.text,...parameterTerms({method:{value:{operations:[op]}}})].filter(Boolean).join('. ');
+   let query=[labels[index]?.text,...parameterTerms({method:{value:{operations:[op]}}})].filter(Boolean).join('. ');
    // Only a supported, positive canonical operation supplies these hints.
    // Opaque wording and family labels remain lexical leads, not guessed rules.
    let operation;
@@ -61,6 +74,8 @@
     const mode=boundary.status==='specified'?boundary.value:null;
     operation={action:'reverse',operand:mode==='word_blocks'?'word-order':'rune-order',within:mode==='within_words'?'word':'row'};
    }
+   const sums=wordSumOperation(snapshot,op,index,classified);
+   if(sums){operation=sums;query='Sum GP prime values within each word using the '+op.table+' prime table. '+(op.boundaries==='non-rune'?'Every non-rune character ends a word.':'Only hyphens and periods end a word; layout marks are joined.');}
    return {query,...(operation?{operation}:{})};
   })};
  }
@@ -90,13 +105,14 @@
   }
   const compact=C.retrievalQuery(ranking,{maxLength:MAX_QUERY});
   if(!compact.query)failure('query-too-long','The complete retrieval wording exceeds 1,500 characters.');
-  const query=[compact.query,...parameterTerms(snapshot)].filter(Boolean).join('. ');
+  const discovery=discoveryHints(snapshot);
+  const query=discovery.steps.some(step=>step.operation?.action==='sum')?discovery.steps.map(step=>step.query).join('. '):[compact.query,...parameterTerms(snapshot)].filter(Boolean).join('. ');
   if(query.length>MAX_QUERY)failure('query-too-long','The complete method and parameters exceed 1,500 retrieval characters.');
   const full=C.queryForResearch(snapshot,{maxLength:MAX_CONTEXT});
   if(!full.query)failure('context-too-long','The complete confirmed idea exceeds 6,000 comparison characters. Shorten the idea before comparing.');
   const confirmedQuery=full.query+'\nUnresolved constraints (not executed rules): '+C.serialize(snapshot.unresolved);
   if(confirmedQuery.length>MAX_CONTEXT)failure('context-too-long','The complete confirmed idea exceeds 6,000 comparison characters. Shorten the idea before comparing.');
-  return {request,snapshot,query,confirmedQuery,pages:full.pages,discovery:discoveryHints(snapshot)};
+  return {request,snapshot,query,confirmedQuery,pages:full.pages,discovery};
  }
  function prepare(snapshot){
   const s=C.validateConfirmed(snapshot);

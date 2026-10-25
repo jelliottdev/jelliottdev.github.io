@@ -52,6 +52,7 @@ async function fixture(session,backend,options={}){
   if(url==='https://mock.example/interpret')return require('./mock_interpretation_response.cjs')(request);
   if(url.endsWith('/proposals'))return backend.fetch(JSON.parse(request.body));
   if(url.endsWith('/ideas')){entries.push(JSON.parse(request.body));if(options.communityFailure&&entries.length===1)return Response.json({error:'Temporary failure'},{status:503});return Response.json({id:entries.at(-1).proposalId,card:H.cardData(app.getSnapshot().confirmed)});}
+  if(options.comparisonFailure)return Response.json({error:'Temporary comparison failure'},{status:503});
   return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  }});await app.ready;return {doc,app,entries};
 }
@@ -64,7 +65,7 @@ async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementB
 }
 async function confirm(f){assert(f.doc.getElementById('confirm'));f.doc.getElementById('confirm').fire('click');await turn();await turn();}
 async function main(){
- const communityBackend=server(),community=await fixture(storage(),communityBackend,{community:true,communityFailure:true});
+ const communityBackend=server(),community=await fixture(storage(),communityBackend,{community:true,communityFailure:true,comparisonFailure:true});
  await submit(community,'Use Vigenere on LP2-15');
  assert(community.doc.host.html.includes('Your confirmed card becomes a shared research entry.'));
  assert.equal(community.entries.length,0,'An unconfirmed draft cannot publish an entry');
@@ -75,6 +76,14 @@ async function main(){
  assert.equal(communityBackend.posts.length,1,'Entry retry does not resubmit the original contribution');
  assert.equal(community.entries.length,2);assert.equal(community.doc.getElementById('open-research-entry').hidden,false);
  assert.equal(community.doc.getElementById('open-research-entry').href,'run.html#idea='+community.entries[0].proposalId);
+ assert(community.doc.host.html.includes('View idea and experiments'));
+ const closedCard=community.doc.host.html.indexOf('</details>',community.doc.host.html.indexOf('<details class="confirmed">'));
+ assert(community.doc.host.html.indexOf('id="idea-save"')>closedCard,'The saved action must remain outside the closed idea disclosure');
+ assert.equal(community.app.getSnapshot().stage,'research','Saving must not navigate or run the experiment');
+ assert(community.doc.host.html.includes('Research is temporarily unavailable'),'Comparison failure is independent of a usable saved-entry action');
+ assert(community.doc.host.html.indexOf('id="error"')<community.doc.host.html.indexOf('id="idea-save"'),'Comparison errors must be visible before saved actions and long related records');
+ assert.equal((community.doc.host.html.match(/id="error"/g)||[]).length,1,'There is one current error region');
+
  community.app.destroy();
  console.log('PASS public entry: explicit confirmation, private source omitted, separate retry and confirmed-card link.');
  for(const value of ['ᚠ'.repeat(1500),'  example("<&+#%?");\n\treturn "字";\n ']){

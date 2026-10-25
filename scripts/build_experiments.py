@@ -72,18 +72,27 @@ def validate_discovery(discovery):
             'discovery.operations: expected 1..8 unique operations')
     seen = set()
     for operation in operations:
-        require(isinstance(operation, dict) and set(operation) == {'action', 'operand', 'within'},
-                'discovery operation: unexpected fields')
-        require(operation['action'] == 'reverse'
-                and operation['operand'] in ('rune-order', 'word-order')
-                and operation['within'] in ('row', 'word', 'page'),
-                'discovery operation: invalid controlled value')
-        signature = tuple(operation[key] for key in ('action', 'operand', 'within'))
+        require(isinstance(operation, dict), 'discovery operation: expected an object')
+        if operation.get('action') == 'sum':
+            require(set(operation) == {'action', 'operand', 'within', 'table'},
+                    'discovery sum operation: unexpected fields')
+            require(operation['operand'] == 'prime-values'
+                    and operation['within'] in ('word', 'row', 'window')
+                    and operation['table'] in ('canonical', 'reversed'),
+                    'discovery sum operation: invalid controlled value')
+        else:
+            require(set(operation) == {'action', 'operand', 'within'},
+                    'discovery operation: unexpected fields')
+            require(operation['action'] == 'reverse'
+                    and operation['operand'] in ('rune-order', 'word-order')
+                    and operation['within'] in ('row', 'word', 'page'),
+                    'discovery operation: invalid controlled value')
+        signature = tuple(sorted(operation.items()))
         require(signature not in seen, 'discovery.operations: duplicate operation')
         seen.add(signature)
     evaluation = discovery['evaluation']
     require(isinstance(evaluation, list) and 1 <= len(evaluation) <= 4
-            and all(value in ('known-opening', 'english-readability') for value in evaluation)
+            and all(value in ('known-opening', 'english-readability', 'numeric-sums') for value in evaluation)
             and len(set(evaluation)) == len(evaluation),
             'discovery.evaluation: expected unique controlled evaluations')
 

@@ -216,8 +216,10 @@
     return addPageContext(selected,documents,query,pages,selected.reduce((sum,item)=>sum+item.text.length,0));
   }
   function validOperation(value) {
-    return value&&typeof value==='object'&&!Array.isArray(value)&&
-      Object.keys(value).length===3&&value.action==='reverse'&&
+    if(!value||typeof value!=='object'||Array.isArray(value))return false;
+    if(value.action==='sum')return Object.keys(value).length===4&&Object.keys(value).every(k=>['action','operand','within','table'].includes(k))&&value.operand==='prime-values'&&
+      ['word','row','window'].includes(value.within)&&['canonical','reversed'].includes(value.table);
+    return Object.keys(value).length===3&&value.action==='reverse'&&
       ['rune-order','word-order'].includes(value.operand)&&['row','word','page'].includes(value.within);
   }
   function discoveryOperations(document) {
@@ -225,7 +227,7 @@
     if(!d||Object.keys(d).some(key=>!['operations','evaluation'].includes(key))||
       !Array.isArray(d.operations)||!d.operations.length||d.operations.length>8||!d.operations.every(validOperation)||
       !Array.isArray(d.evaluation)||!d.evaluation.length||d.evaluation.length>4||
-      !d.evaluation.every(value=>['known-opening','english-readability'].includes(value)))return [];
+      !d.evaluation.every(value=>['known-opening','english-readability','numeric-sums'].includes(value)))return [];
     return d.operations;
   }
   function structuredSelection(documents,query,pages,discovery) {
@@ -251,6 +253,13 @@
       const sameExtent=matches.filter(document=>discoveryOperations(document).some(item=>
         item.action===op.action&&item.operand===op.operand&&item.within===op.within));
       if(sameExtent.length)matches=sameExtent;
+      // Related canonical sums remain leads for a reversed-table request when
+      // no exact table exists at the preferred extent. Never rewrite evidence.
+      if(op.action==='sum'){
+        const sameTable=matches.filter(document=>discoveryOperations(document).some(item=>
+          matchesOperation(item,op)&&item.table===op.table&&(!sameExtent.length||item.within===op.within)));
+        if(sameTable.length)matches=sameTable;
+      }
       const ranked=rankedRecords(matches,step.query,pages).map(hit=>hit.document);
       return [...ranked,...matches.filter(document=>!ranked.includes(document))];
     });

@@ -78,4 +78,49 @@ for(const label of ['Do not reverse each row','Reverse each row only if the supp
  const negative=C.confirm(C.createDraft({source:{text:label},method:f({operations:[{id:'reverse_row_runes',label}]})}),{id:'unsafe-canonical',at:'2026-10-24'});
  assert(!R.prepare(negative).discovery.steps[0].operation,'A canonical ID cannot override negative, conditional or compound active wording: '+label);
 }
+// Direct numeric operations use exact maintained metadata, never generic rule boilerplate.
+const numericIds=['lp2-row-prime-sums','mixed-square-word-sums','obscura-sum-collision-control'];
+const numericMetadata=new Map(numericIds.map(id=>[id,JSON.parse(fs.readFileSync(path.join(root,'experiments/records',id,'record.json'),'utf8')).discovery]));
+for(const [id,d]of numericMetadata){assert(d?.operations.some(op=>op.action==='sum'&&op.operand==='prime-values'),id);assert(d.evaluation.includes('numeric-sums'));}
+// Read current canonical metadata without regenerating any public artifact.
+const withNumeric=records=>records.map(record=>numericMetadata.has(record.id)?{...record,discovery:numericMetadata.get(record.id)}:record);
+const numericFull=S.experimentDocs(withNumeric(full.records)),numericCompact=S.experimentDocs(withNumeric(compact.records));
+function sumsCard(table='reversed',tail=[],patch={}){
+ const operations=[{id:'word_prime_sums',label:'Word prime sums',table,boundaries:'hyphen-period',...patch},...tail];
+ return C.confirm(C.createDraft({source:{text:'Reverse the GP prime assignments and sum words'},aim:f({outcomeId:'measure',detail:'Inspect numerical structure'}),
+  method:f({operations}),scope:f(scope),rules:{representation:f('GP29'),wordBoundaries:f('preserve'),inputVersion:f('raw'),unmapped:f('preserve'),
+   evaluation:f({kind:'word-prime-sums',table,boundaries:'hyphen-period'})}}),{id:'numeric-discovery',at:'2026-10-24'});
+}
+const sums=prepare(sumsCard());
+assert.deepEqual(sums.discovery.steps[0].operation,{action:'sum',operand:'prime-values',within:'word',table:'reversed'});
+assert.match(sums.query,/Sum GP prime values within each word using the reversed prime table/);
+for(const noise of ['hyphen-period','wordBoundaries','boundaryMode','evaluation','reset','unmapped'])assert(!sums.query.includes(noise),'Ranking uses readable method terms, not rule vocabulary: '+noise);
+assert(sums.confirmedQuery.includes('hyphen-period'),'Exact constraints remain in comparison evidence');
+const numericFound=S.select(numericFull,sums.query,sums.pages,sums.discovery);
+assert(numericFound.length>0);assert(numericFound.filter(d=>d.kind==='experiment').every(d=>['mixed-square-word-sums','obscura-sum-collision-control'].includes(d.id)),'Word sums lead ahead of row sums or unrelated clocks');
+assert.deepEqual(S.select(numericCompact,sums.query,sums.pages,sums.discovery),numericFound,'Current full/compact evidence has identical numeric retrieval');
+assert.equal(JSON.stringify(browser.AssistantSearch.select(numericFull,sums.query,sums.pages,sums.discovery)),JSON.stringify(numericFound));
+for(const doc of numericFound)assert.equal(doc.text,numericFull.find(d=>d.id===doc.id).text,'Canonical evidence retains actual table, targets and limitations for a reversed-table lead');
+const researchBrowser={TextEncoder,TextDecoder,btoa,atob};for(const name of ['claim-specification.js','claim-share.js','claim-research.js'])vm.runInNewContext(fs.readFileSync(path.join(root,name),'utf8'),researchBrowser);
+researchBrowser.requestJSON=JSON.stringify(sums.request);assert.equal(vm.runInNewContext('JSON.stringify(ClaimResearch.validate(JSON.parse(requestJSON)))',researchBrowser),JSON.stringify(R.validate(sums.request)),'Browser and Worker derive the same immutable numeric request and hints');
+const exactWord={...numericFound[0],id:'synthetic-reversed-word',title:'Reversed word prime sums',discovery:{operations:[{action:'sum',operand:'prime-values',within:'word',table:'reversed'}],evaluation:['numeric-sums']}};
+const exactRow={...exactWord,id:'synthetic-reversed-row',discovery:{operations:[{action:'sum',operand:'prime-values',within:'row',table:'reversed'}],evaluation:['numeric-sums']}};
+assert.equal(S.select([...numericFull,exactWord],sums.query,sums.pages,sums.discovery)[0].id,exactWord.id,'Exact table wins at the preferred extent');
+assert(!S.select([...numericFull,exactRow],sums.query,sums.pages,sums.discovery).some(d=>d.id===exactRow.id),'Word extent takes priority over an exact-table row record');
+const huge={...exactWord,text:exactWord.text+'x'.repeat(9001)};assert.deepEqual(S.select([...numericFull,huge],sums.query,sums.pages,sums.discovery),[],'Oversized exact leading evidence cannot be replaced by a weaker table or shorter scope');
+const sumsCompound=prepare(sumsCard('reversed',[{id:'described_method',label:'Apply Vigenere with key ABC',key:'ABC'}])),sumsCombined=S.select(numericFull,sumsCompound.query,sumsCompound.pages,sumsCompound.discovery);
+assert(sumsCombined.some(d=>['mixed-square-word-sums','obscura-sum-collision-control'].includes(d.id)));assert(sumsCombined.some(d=>/vigen[eè]re/i.test(d.title+' '+d.text)),'Compound numeric and cipher steps each retain a lead');
+assert(sumsCombined.filter(d=>d.kind==='experiment').reduce((n,d)=>n+d.text.length,0)<=9000);
+for(const patch of [{label:'Do not sum words'},{label:'Word prime sums then Atbash'},{label:'Word prime sums only if a match appears'},
+ {table:'reverse-digits'},{boundaries:'guess'},{declaredFamilyId:'feedback'},{key:'DOG'}]){
+ const prepared=R.prepare(sumsCard('reversed',[],patch));assert(!prepared.discovery.steps[0].operation,'Invalid or qualified numeric operation cannot activate a hint: '+JSON.stringify(patch));
+}
+for(const change of [d=>d.rules.evaluation=f({kind:'word-prime-sums',table:'canonical',boundaries:'hyphen-period'}),d=>d.rules.representation=f('latin'),d=>d.rules.reset=f('word')]){
+ const draft=C.revise(sumsCard(),{});change(draft);const prepared=R.prepare(C.confirm(draft,{id:'conflicting-numeric',at:'2026-10-24'}));assert(!prepared.discovery.steps[0].operation);
+}
+for(const operation of [{action:'sum',operand:'prime-values',within:'word'},{action:'sum',operand:'prime-values',within:'word',table:'reversed',extra:true},
+ {action:'sum',operand:'digits',within:'word',table:'reversed'},{action:'sum',operand:'prime-values',within:'page',table:'reversed'}]){
+ const discovery={steps:[{query:raw,operation}]};assert.deepEqual(S.select(numericFull,raw,scope.pages,discovery),S.select(numericFull,raw,scope.pages),'Malformed sum hints retain lexical fallback');
+}
+console.log('PASS numeric sum discovery: strict positive word/table/boundary semantics, canonical related leads retain actual evidence, extent then table preference, full/compact/browser/Worker parity, compound slots, budget and invalid fallback.');
 console.log('PASS canonical discovery: operand distinctions, row English follow-up, ordered compound leads, exact scope/limits, full/compact/browser parity, no external overrides and malformed fallback. No coverage or novelty verdicts.');

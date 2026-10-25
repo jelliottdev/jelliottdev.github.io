@@ -1,6 +1,6 @@
 'use strict';
 // Layout adapted from the supplied complete-current handoff; data is live.
-function readerLimit(value){return String(value??'').replace(/\s*(?:;\s*)?human review(?: is)? pending\.?\s*$/i,'').trim();}
+function readerLimit(value){return String(value??'').replace(/\s*(?:Computational review\s*;\s*)?human review(?: is)? pending\.?\s*$/i,'').replace(/[;\s]+$/,'').trim();}
 function libraryEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function renderExperimentMarkdown(markdown,files=[],articleLinks={},shownVisuals=[]){
   const safeLink=href=>/^https:\/\/[^\s<>"']+$/.test(href)||

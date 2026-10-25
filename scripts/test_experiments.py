@@ -119,6 +119,29 @@ class RegistryTests(unittest.TestCase):
             with self.subTest(changed=changed), self.assertRaises(ValueError):
                 self.run_build({**record, 'discovery': changed})
 
+    def test_numeric_sum_discovery_is_explicit_strict_and_preserved(self):
+        operation = {'action': 'sum', 'operand': 'prime-values', 'within': 'word', 'table': 'canonical'}
+        hint = {'operations': [operation], 'evaluation': ['numeric-sums']}
+        for within in ('word', 'row', 'window'):
+            for table in ('canonical', 'reversed'):
+                valid = {**hint, 'operations': [{**operation, 'within': within, 'table': table}]}
+                actual = self.run_build({**self.record, 'discovery': valid})[0]
+                self.assertEqual(actual['discovery'], valid)
+                checker = json.loads((self.root / 'data/checker-records.json').read_text())
+                self.assertEqual(checker['records'][0]['discovery'], valid)
+        # Different tables remain distinguishable; neither is implied by the other.
+        both = {**hint, 'operations': [operation, {**operation, 'table': 'reversed'}]}
+        self.assertEqual(self.run_build({**self.record, 'discovery': both})[0]['discovery'], both)
+        for invalid in [
+                {**operation, 'operand': 'rune-order'}, {**operation, 'within': 'page'},
+                {**operation, 'table': 'reverse-digits'}, {**operation, 'table': None},
+                {**operation, 'extra': True}, {k: v for k, v in operation.items() if k != 'table'},
+                {'action': 'reverse', 'operand': 'rune-order', 'within': 'row', 'table': 'reversed'}]:
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                self.run_build({**self.record, 'discovery': {**hint, 'operations': [invalid]}})
+        with self.assertRaises(ValueError):
+            self.run_build({**self.record, 'discovery': {**hint, 'operations': [operation, operation]}})
+
     def test_article_link_permissions_are_derived_not_imported(self):
         record = copy.deepcopy(self.record)
         record['article_links'] = {'invented.json': 'research/unreviewed.json'}

@@ -242,7 +242,7 @@
  function methodText(spec){return C.reviewRows(spec).find(r=>r.label==='Method').tags.map(t=>t.text).join('; then ');}
  const nativeLinks=html=>html.replace(/<a /g,'<a target="_blank" rel="noopener" ').replace(/title="([^"]*)"/g,'title="$1 (opens in a new tab)"').replace(/href="#\//g,'href="index.html#/');
  // Editorial status belongs to the record workflow; preserve substantive uncertainty.
- function readerLimit(record){return String(record.reader_limit||record.limitations||'').replace(/\s*Human review pending\.?\s*$/i,'').trim();}
+ function readerLimit(record){return String(record.reader_limit||record.limitations||'').replace(/\s*(?:Computational review\s*;\s*)?Human review(?: is)? pending\.?\s*$/i,'').replace(/[;\s]+$/,'').trim();}
  function observedFindingsHTML(docs){
   const findings=docs.flatMap((doc,index)=>{
    if(doc.kind!=='experiment'||typeof doc.text!=='string')return [];
@@ -256,7 +256,16 @@
   if(!findings.length)return '';
   return '<h2>What the records found</h2>'+findings.map(({doc,index,record})=>'<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">['+(index+1)+'] '+esc(doc.title)+'</a></h3><p>'+esc(record.reader_finding||record.finding)+'</p>'+(readerLimit(record)?'<p class="source-limit"><strong>Limit:</strong> '+esc(readerLimit(record))+'</p>':'')+'</section>').join('');
  }
- function sourceHTML(doc,records,{packet=false,preview=false}={}){
+ function numericLeadDifference(record,discovery){
+  const target=discovery?.steps?.length===1?discovery.steps[0].operation:null,ops=record.discovery?.operations;
+  const valid=op=>op&&typeof op==='object'&&!Array.isArray(op)&&Object.keys(op).length===4&&['action','operand','within','table'].every(k=>Object.hasOwn(op,k))&&op.action==='sum'&&op.operand==='prime-values'&&['word','row','window'].includes(op.within)&&['canonical','reversed'].includes(op.table);
+  if(!valid(target)||!Array.isArray(ops)||ops.length!==1||!valid(ops[0]))return '';
+  const actual=ops[0],notes=[];
+  if(actual.table!==target.table)notes.push(actual.table==='canonical'?'Uses the usual prime values; your idea reverses them.':'Uses reversed prime values; your idea uses the usual table.');
+  if(actual.within!==target.within){const names={word:'words',row:'rows',window:'fixed-length rune groups'};notes.push('It sums '+names[actual.within]+' rather than '+names[target.within]+'.');}
+  return notes.join(' ');
+ }
+ function sourceHTML(doc,records,{packet=false,preview=false,discovery=null}={}){
   const record=records.find(r=>r.id===doc.id);
   const heading='<section class="source"><h3><a target="_blank" rel="noopener" title="Open source in a new tab" href="index.html'+esc(doc.href)+'">'+esc(doc.title)+'</a></h3>';
   if(!record)return heading+'<p>Supporting manuscript context, not evidence that the idea was tested.</p></section>';
@@ -265,7 +274,8 @@
   const facts=[['Page scope',pages],['Method',scope.procedure],['Input',scope.representation],['Bounds',scope.parameters],['Not tested',scope.exclusions]];
   if(record.materials)facts.push(['Saved results',[record.materials.summary,record.materials.reuse,record.materials.limits].join(' ')]);
   if(packet)facts.push(['Run',record.reproduction?.command],['Inputs',(record.reproduction?.inputs||[]).map(f=>f.path).join(', ')]);
-  return heading+(preview&&finding?'<p>'+esc(finding)+'</p>':'')+
+  const difference=preview?numericLeadDifference(record,discovery):'';
+  return heading+(difference?'<p class="source-difference">'+esc(difference)+'</p>':'')+(preview&&finding?'<p>'+esc(finding)+'</p>':'')+
    (preview?'':'<dl class="source-facts">'+facts.filter(([,value])=>value).map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>')+
    (preview&&limit?'<p class="source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
  }
@@ -411,6 +421,7 @@
     host.innerHTML='<h1>Have we tried it?</h1><p>Describe the idea or paste the rule you want to check.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><div class="actions"><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form>';
    }else{
     host.innerHTML='<button class="back" id="back" type="button">'+(pending?'Edit idea':'Back to idea')+'</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+(pending?'<p class="idea-wording">'+esc(draft.source.text)+'</p>':'')+
+     (stage==='research'?'<p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>':'')+
      (pending?'':(stage==='research'?'<section class="confirmed-card"><button id="share-idea" class="share-icon" type="button" aria-label="Share confirmed idea" title="Share idea"'+(shareBusy?' disabled':'')+'><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-4 4 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/></svg></button><details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
      '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>'+intakeHTML()+'<p id="share-status" class="small" role="status">'+esc(shareNotice)+'</p><div id="share-fallback"></div></section>':'</section>')+
      '')+(editing?editorHTML():questionsHTML())+
@@ -419,7 +430,7 @@
      (stage==='review'&&!editing&&!intakeQuestions(draft).length&&draft.method.status==='specified'?'<p id="collection-notice" class="small"'+(intakeEndpoint?'':' hidden')+'>'+(ideaEndpoint?'Your confirmed card becomes a shared research entry.':intakeEndpoint?'Confirmed ideas are saved for research review.':'')+'</p>'+'<div class="actions"><button class="primary" id="confirm" '+(!loaded?'disabled':'')+' type="button">Confirm and find research</button></div>':'')+
      (stage==='research'?researchHTML()+'<details><summary>Original idea</summary><pre>'+esc(draft.source.text)+'</pre></details>':'');
    }
-   host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p><p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>'+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
+   host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p>'+(stage==='research'?'':'<p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>')+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
    bind();
    if(stage==='input')updateInterpretationInput();
    if(restoringOverlay){restoreFields(restoringOverlay);restoringOverlay=null;}
@@ -431,7 +442,7 @@
   }
   function intakeHTML(){
    if(!intakeEndpoint||!intake||intake.snapshot!==confirmed)return '';
-   return '<div class="idea-save" id="idea-save"><span id="idea-save-status" class="small" role="status" tabindex="-1">'+intakeStatus()+'</span><button id="retry-save" type="button"'+(intake.error||intake.entryError?'':' hidden')+'>'+(intake.entryError?'Retry creating entry':'Retry saving')+'</button><a id="open-research-entry"'+(intake.entrySaved?' href="run.html#idea='+esc(intake.receipt.id)+'"':' hidden')+'>Open research entry</a></div>';
+   return '<div class="idea-save" id="idea-save"><span id="idea-save-status" class="small" role="status" tabindex="-1">'+intakeStatus()+'</span><button id="retry-save" type="button"'+(intake.error||intake.entryError?'':' hidden')+'>'+(intake.entryError?'Retry creating entry':'Retry saving')+'</button><a class="idea-next-action" id="open-research-entry"'+(intake.entrySaved?' href="run.html#idea='+esc(intake.receipt.id)+'"':' hidden')+'>View idea and experiments</a></div>';
   }
   function intakeStatus(){return intake.busy?(intake.saved&&ideaEndpoint?'Creating research entry…':'Saving idea…'):intake.entrySaved?'Research entry saved.':intake.entryError?'Idea saved. The research entry could not be created.':intake.saved?'Saved.':intake.error?"Couldn’t save this idea.":'';}
   function updateIntake(){
@@ -558,7 +569,7 @@
    if(result)return observedFindingsHTML(result.sources)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="research.html#mode=list" target="_blank" rel="noopener">Browse research</a></p>')+controls;
    let q,scope;try{if(cardContract){const prepared=R.prepare(confirmed);q={query:prepared.query};scope=prepared;}else{q=C.retrievalQuery(confirmed);scope=C.queryForResearch(confirmed,{maxLength:6000});}}catch{q={};scope={};}
    const related=q.query?S.select(documents,q.query,scope.pages||[],scope.discovery).filter(d=>d.kind==='experiment'):[];
-   return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true})).join(''):'');
+   return (busy?'<p aria-live="polite">Comparing the confirmed idea with published research…</p>':'')+controls+(related.length?'<h2>Related records</h2>'+related.map(d=>sourceHTML(d,records,{preview:true,discovery:scope.discovery})).join(''):'');
   }
   function bind(){
    doc.getElementById('retry-save')?.addEventListener('click',()=>saveIntake());
