@@ -30,12 +30,33 @@ let groups=0;async function test(name,fn){await fn();console.log('PASS '+name);g
 await test('authored source, exact pins and synthetic control prepare without AI or target evaluation',async()=>{
  const f=await fixture(),before=structuredClone(f.record),response=await createRecordPlanHandler({fetcher:f.fetcher})(request(args),env),plan=await response.json();assert.equal(response.status,200);assert.equal(plan.state,'plan-ready');assert.deepEqual(plan.card,f.card);assert.deepEqual(plan.control,f.recipe.control);assert.equal(plan.origin.protocolSha256,await sha(L.stable(f.recipe)));assert.equal(plan.origin.recordSha256,await sha(JSON.stringify(f.record)));assert(!('snapshot'in plan));assert.deepEqual(plan.task.steps,f.recipe.control.task.steps);assert.equal(plan.inputVersion,'raw');assert.equal(f.calls.length,3);assert.deepEqual(f.record,before);await L.checkIdentity(plan.task);
 });
+await test('optional source motivation projects exact plain Unicode without changing computation or legacy wire',async()=>{
+ const f=await fixture(),legacy=await loadRecordPlan(args,{fetcher:f.fetcher}),before=structuredClone(f.recipe),result=L.run(legacy.task),db=database(),handle=createRecordPlanHandler({fetcher:f.fetcher});
+ assert(!Object.hasOwn(legacy,'motivation'));
+ const oldWire=await (await createRecordPlanHandler({fetcher:f.fetcher})(request(args),env)).json();assert.equal(Object.keys(oldWire).length,9);
+ for(const motivation of ['Explain why this exact comparison is useful.','🧩'.repeat(500)]){
+  f.recipe.motivation=motivation;const plan=await loadRecordPlan(args,{fetcher:f.fetcher});
+  assert.equal(plan.motivation,motivation);assert.equal(plan.snapshot.motivation,motivation);
+  assert.deepEqual(plan.task,legacy.task);assert.deepEqual(L.run(plan.task),result);assert.deepEqual(plan.card,legacy.card);assert.deepEqual(plan.control,legacy.control);
+  assert.equal(plan.origin.protocolSha256,await sha(L.stable(f.recipe)));assert.notEqual(plan.origin.protocolSha256,legacy.origin.protocolSha256);assert.notEqual(plan.origin.recordSha256,legacy.origin.recordSha256);
+  assert(!Object.hasOwn(plan.origin,'motivation'));assert(!Object.hasOwn(plan.task,'motivation'));assert(!Object.hasOwn(plan.card,'motivation'));
+  const oldClient=await (await handle(request(args),env)).json();assert(!Object.hasOwn(oldClient,'motivation'));assert.deepEqual(Object.keys(oldClient),Object.keys(oldWire));
+  const oldCoverageClient=await (await handle(request({...args,includeExisting:true}),{...env,PROPOSALS:db})).json();assert(!Object.hasOwn(oldCoverageClient,'motivation'));
+  const response=await handle(request({...args,includeExisting:true,includeMotivation:true}),{...env,PROPOSALS:db});assert.equal(response.status,200);const wire=await response.json();assert.equal(wire.motivation,motivation);assert(!Object.hasOwn(wire,'snapshot'));
+ }
+ delete f.recipe.motivation;assert.deepEqual(f.recipe,before);assert.deepEqual(await (await createRecordPlanHandler({fetcher:f.fetcher})(request(args),env)).json(),oldWire);
+ const absent=await (await handle(request({...args,includeExisting:true,includeMotivation:true}),{...env,PROPOSALS:db})).json();assert(!Object.hasOwn(absent,'motivation'),'Opt-in cannot invent motivation for a legacy source');db.sqlite.close();
+ for(const motivation of [null,false,1,[],{},'',' ',' padded','padded ','x'.repeat(501),'🧩'.repeat(501),'<b>why</b>','[link](url)','`code`','*bold*','one\ntwo','one\rtwo','one\ttwo','one\0two','one\x7ftwo','one\x85two','one\u2028two','one\u2029two','\ud800']){
+  f.recipe.motivation=motivation;await assert.rejects(()=>loadRecordPlan(args,{fetcher:f.fetcher}),/motivation/);
+ }
+});
 await test('strict route/origin/method/body and rate guard run before all source access',async()=>{
  const f=await fixture(),handle=createRecordPlanHandler({fetcher:f.fetcher});
  assert.equal((await handle(request(args,{origin:'https://evil.example'}),env)).status,403);
  assert.equal((await handle(request(args),{...env,TASK_LIMIT:null})).status,503);
  assert.equal((await handle(request(args),{...env,TASK_LIMIT:{limit:async()=>({success:false})}})).status,429);
  for(const body of [{...args,extra:true},{recordId:'../secret',followupId:args.followupId},{...args,followupId:'x'.repeat(101)},... [false,null,0,1,'true',{}].map(includeExisting=>({...args,includeExisting})),{...args,includeExisting:true,extra:true},{...args,includeBoundaryComparison:true},... [false,null,0,1,'true',{},[]].map(includeBoundaryComparison=>({...args,includeExisting:true,includeBoundaryComparison})),{...args,includeExisting:false,includeBoundaryComparison:true}])assert.equal((await handle(request(body),env)).status,400);
+ for(const body of [{...args,includeMotivation:true},{...args,includeExisting:false,includeMotivation:true},...[false,null,0,1,'true',{},[]].map(includeMotivation=>({...args,includeExisting:true,includeMotivation}))])assert.equal((await handle(request(body),env)).status,400);
  assert.equal((await handle(request({padding:'x'.repeat(1024)}),env)).status,400);
  assert.equal((await handle(new Request('https://worker.example/record-plans',{headers:{origin}}),env)).status,405);
  assert.equal((await handle(new Request('https://worker.example/record-plans?x=1',{headers:{origin}}),env)).status,404);
@@ -146,6 +167,8 @@ await test('existing public task lookup is read-only, origin-bound, private-safe
  const legacyNoDB=await lookup(request(args),{...env,PROPOSALS:{prepare(){throw Error('Legacy clients must never touch storage');}}});assert.equal(legacyNoDB.status,200);assert.equal(Object.keys(await legacyNoDB.json()).length,9);
  const snapshots=db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all();f.record.summary='An unrelated parent record clarification';value=await check();assert.notEqual(value.origin.recordSha256,plan.origin.recordSha256);assert.deepEqual(value.existingTask,{id:plan.task.taskId,state:'results-verified'});assert.deepEqual(db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all(),snapshots,'Old origin snapshot is not rebound');
  f.recipe.limitation+=' A revised protocol.';const revised=await check();assert(!('existingTask'in revised),'Changed origin cannot inherit authored provenance');assert.deepEqual(revised.coverage.coveredPages,['lp2-15'],'Unchanged execution evidence survives an editorial origin change');f.recipe.limitation=plan.limitation;
+ f.recipe.motivation='Check whether the same declared rule is sensitive to word boundaries.';
+ const editorialResponse=await lookup(request({...args,includeExisting:true,includeMotivation:true}),taskEnv);assert.equal(editorialResponse.status,200);const editorial=await editorialResponse.json();assert.equal(editorial.motivation,f.recipe.motivation);assert.notEqual(editorial.origin.protocolSha256,plan.origin.protocolSha256);assert(!Object.hasOwn(editorial,'existingTask'),'An old recipe origin is not rebound after an editorial change');assert.deepEqual(editorial.task,plan.task);assert.deepEqual(editorial.coverage.coveredPages,['lp2-15']);assert.equal(editorial.coverage.exactTaskId,plan.task.taskId);assert.deepEqual(editorial.coverage.evidence,value.coverage.evidence);assert.deepEqual(db.sqlite.prepare('SELECT origin_json,snapshot_json FROM local_task_origins ORDER BY proposal_id').all(),snapshots);delete f.recipe.motivation;
  const oldHash=await sha(L.stable(plan.task));db.sqlite.prepare('UPDATE local_tasks SET task_hash=?').run('0'.repeat(64));const corrupted=await lookup(request({...args,includeExisting:true}),taskEnv);assert.equal(corrupted.status,503,'Corrupt evidence must stop creation rather than appear untested');assert.equal((await corrupted.json()).coverageUnavailable,true);db.sqlite.prepare('UPDATE local_tasks SET task_hash=?').run(oldHash);
  f.recipe.inputs.pages[0].text_sha256='0'.repeat(64);const before=sql.length;assert.equal((await lookup(request({...args,includeExisting:true}),taskEnv)).status,422);assert.equal(sql.length,before,'Changed input pins fail before lookup');
  const broken=await fixture(),failed=await createRecordPlanHandler({fetcher:broken.fetcher})(request({...args,includeExisting:true}),{...env,PROPOSALS:{prepare(){throw Error('Storage offline');}}});assert.equal(failed.status,503);assert.equal((await failed.json()).state,'coverage-unavailable');

@@ -407,6 +407,7 @@
   "browser_followups": [
     {
       "id": "lag-five-equality-non-rune-boundaries",
+      "motivation": "The earlier search selected a five-position repeat in words that could continue across spaces, slashes and line breaks. This check ends words at every non-rune character to see whether that same selected pattern persists without those joins.",
       "title": "Check the five-position repeat without joining layout marks",
       "question": "Does the already selected five-position repeat remain elevated against its word-shuffle mean when every non-rune ends a word?",
       "scope_change": "Keep the published winning relation: the same rune five positions later. Change only word boundaries on LP2-00 to LP2-55: slashes, line breaks and every other non-rune now end a word instead of allowing continuation until a hyphen or period. Pages remain separate.",

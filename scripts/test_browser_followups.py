@@ -26,6 +26,30 @@ class BrowserFollowups(unittest.TestCase):
     def changed(self):
         return copy.deepcopy(self.recipe)
 
+    def test_optional_motivation_is_editorial_and_plain_unicode(self):
+        legacy = self.changed()
+        legacy.pop('motivation', None)
+        self.assertEqual(self.validate(legacy), [legacy])
+        before = copy.deepcopy(legacy)
+        for motivation in ('Explain why this exact comparison is useful.', '\U0001f9e9' * 500):
+            recipe = copy.deepcopy(legacy)
+            recipe['motivation'] = motivation
+            self.assertEqual(self.validate(recipe), [recipe])
+            self.assertEqual(recipe['motivation'], motivation)
+            self.assertEqual(compile_card(recipe['card']), compile_card(legacy['card']))
+            self.assertEqual(recipe['control'], legacy['control'])
+            self.assertNotEqual(digest(recipe), digest(legacy))
+        self.assertEqual(legacy, before)
+        invalid = (None, False, 1, [], {}, '', ' ', ' padded', 'padded ', 'x' * 501,
+                   '\U0001f9e9' * 501, '<b>why</b>', '[link](url)', '`code`', '*bold*',
+                   'one\ntwo', 'one\rtwo', 'one\ttwo', 'one\x00two', 'one\x7ftwo',
+                   'one\x85two', 'one\u2028two', 'one\u2029two', '\ud800')
+        for motivation in invalid:
+            recipe = copy.deepcopy(legacy)
+            recipe['motivation'] = motivation
+            with self.assertRaisesRegex(ValueError, 'motivation'):
+                self.validate(recipe)
+
     def construct(self, operations, **extra):
         return construct_followup(ROOT, identifier='synthetic-constructor-test',
                                   title='Synthetic constructor test', question='Does the fixed Warning beginning match?',
@@ -145,7 +169,9 @@ for(const f of recipes){assert.deepEqual(validateCard(f.card),f.card);const plan
         self.assertEqual(json.loads(completed.stdout)['count'], len(families))
 
     def test_constructor_reproduces_exact_authored_recipe_without_targets(self):
-        self.assertEqual(construct_second_koan_word_reset(ROOT), self.recipe)
+        numerical_recipe = self.changed()
+        numerical_recipe.pop('motivation', None)
+        self.assertEqual(construct_second_koan_word_reset(ROOT), numerical_recipe)
         before = copy.deepcopy(self.recipe)
         self.assertEqual(self.validate(self.recipe), [before])
         self.assertEqual(self.recipe, before)

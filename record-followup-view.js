@@ -1,6 +1,7 @@
 /* Shared record actions. This view links to plan review; the plan loader verifies execution readiness. */
 (function(root){
  'use strict';
+ const Context=typeof module==='object'&&module.exports?require('./followup-context.js'):root.FollowupContext;
  const slug=value=>typeof value==='string'&&value.length<=100&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
  const text=(value,max)=>typeof value==='string'&&value.trim().length>0&&Array.from(value).length<=max;
  const object=value=>value&&typeof value==='object'&&!Array.isArray(value);
@@ -10,6 +11,7 @@
   if(!object(record)||!slug(record.id)||!Array.isArray(record.browser_followups)||record.browser_followups.length>8)return [];
   const seen=new Set();return record.browser_followups.filter(item=>{
    if(!object(item)||!slug(item.id)||seen.has(item.id)||!text(item.title,300)||!text(item.scope_change,1200)||!text(item.question,1200)||!text(item.limitation,1200))return false;
+   if(Object.hasOwn(item,'motivation')&&!Context?.valid(item.motivation))return false;
    const pins=item.inputs,control=item.control,task=control?.task;
    if(!object(item.card)||item.card.version!==1||!object(pins)||!['raw','reviewed'].includes(pins.version)||!hash(pins.alphabet_sha256)||!Array.isArray(pins.pages)||!pins.pages.length||pins.pages.length>75||pins.pages.some(p=>!object(p)||!/^lp[12]-\d{2}$/.test(p.id)||!hash(p.text_sha256))||new Set(pins.pages.map(p=>p.id)).size!==pins.pages.length)return false;
    if(!object(control)||!text(control.label,300)||!hash(control.expected_result_sha256)||!object(task)||task.schema!=='liberpedia-local-task-v1'||task.engine!=='rune-program-v1'||!hash(task.taskId)||!Array.isArray(task.steps)||!Array.isArray(task.alphabet)||task.alphabet.length!==29||!['exact-prefix','word-affine-count','word-prime-sums'].includes(task.criterion?.kind)||task.criterion.kind==='exact-prefix'&&(!Array.isArray(task.criterion.values)||!task.criterion.values.length))return false;

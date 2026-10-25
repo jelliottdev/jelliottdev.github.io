@@ -122,3 +122,15 @@ small rune strip or word calculation before Run. Derive its numbers from the
 reviewed criterion and alphabet; label it as an illustration and keep it
 distinct from manuscript results. Preserve the exact rule, word boundaries and
 limit before Run. Do not add another review step or a separate lesson panel.
+
+### Why a prepared check matters
+
+An authored browser follow-up may declare `motivation`: a short, plain-language
+explanation of earlier work and the question this check changes. Store it once
+in the experiment source. The chooser and unfinished plan review use that exact
+text; the original technical question stays with the full plan. Completed
+answers take priority, with this background in the original-plan details.
+
+This text is editorial context, not a task condition, calculation or result.
+It must not enter immutable task/origin/receipt schemas. The service returns it
+only to clients that explicitly request the optional projection.

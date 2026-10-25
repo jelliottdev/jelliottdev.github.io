@@ -212,7 +212,13 @@ def validate_followups(value, root, known_pages=None):
     ordered_alphabet = alphabet(root)
     seen = set()
     for recipe in value:
-        fields(recipe, RECIPE_FIELDS, 'recipe')
+        fields(recipe, RECIPE_FIELDS | ({'motivation'} if isinstance(recipe, dict) and 'motivation' in recipe else set()), 'recipe')
+        if 'motivation' in recipe:
+            motivation = recipe['motivation']
+            require(isinstance(motivation, str) and motivation == motivation.strip()
+                    and 1 <= len(motivation) <= 500
+                    and not re.search(r'[<>\[\]`*\\\x00-\x1f\x7f-\x9f\u2028\u2029\ud800-\udfff]', motivation),
+                    'motivation: invalid plain text')
         identifier = recipe['id']
         require(isinstance(identifier, str) and re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)
                 and len(identifier) <= 100 and identifier not in seen, 'invalid or duplicate id')
