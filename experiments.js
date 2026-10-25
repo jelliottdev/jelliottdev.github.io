@@ -1,12 +1,12 @@
  'use strict';
 let experimentRecords, experimentRecordsPromise, assistantConfig, assistantConfigPromise, experimentRequest, ideaCoverageRecords=[], ideaCoverageUnavailable=false, methodFamilyRecords=[], methodFamilyUnavailable=false, reportedAttemptRecords=[], reportedAttemptsUnavailable=false;
-let experimentSupportStarted=false;
+let experimentSupportStarted=false,experimentQuestionMount=null;
 let ideaCoveragePending=true,methodFamilyPending=true,reportedAttemptsPending=true;
 let methodRecordKinds={}, methodRecordKindById={};
 let researchRecords,researchRecordsPromise,checkerRecords,checkerRecordsPromise;
 const experimentRecordCache=new Map(),experimentRecordLoads=new Map();
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
-function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
+function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;experimentQuestionMount?.destroy();experimentQuestionMount=null;}
 const assistantEndpoint=()=>typeof assistantConfig?.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
 function refreshExperimentSupportUI(){
  const slot=document.getElementById('experiment-method-guides');
@@ -125,6 +125,7 @@ async function experimentsPage(id, version, query='') {
     if (version !== renderId) return;
     const catalog=experimentRecords||researchRecords||checkerRecords;
     main.innerHTML = experimentArticle(record,catalog);
+    experimentQuestionMount=globalThis.RecordQuestionView?.mount?.(main,record);
     bindExperimentRelated(record,version,catalog);
     bindRouteIllustration();
     bindLanguageBlockFigure();

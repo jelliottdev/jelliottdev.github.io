@@ -7,7 +7,8 @@ import unittest
 import test_experiments as fixtures
 from build_experiments import build, validate_record
 from experiment_content import SCHEMA
-from research_questions import validate_research_questions, validate_research_question_refs
+from research_questions import validate_research_questions, validate_research_question_refs, protocol_reference
+from pathlib import Path
 from preflight_experiments import preflight
 
 
@@ -18,6 +19,40 @@ def question(**changes):
 
 
 class QuestionShapeTests(unittest.TestCase):
+    def test_maintained_protocols_resolve_owned_inputs_without_editorial_answers(self):
+        root = Path(__file__).resolve().parents[1]
+        for identifier in ('word-internal-affine-lags', 'wulfic-autokey-seed-families'):
+            record = json.loads((root / 'experiments/records' / identifier / 'record.json').read_text(encoding='utf-8'))
+            before = copy.deepcopy(record)
+            validate_research_questions(record['research_questions'], record)
+            source = record['research_questions'][0]
+            resolved = protocol_reference(source, record)
+            self.assertEqual(record, before)
+            self.assertNotIn('state', resolved)
+            if identifier == 'word-internal-affine-lags':
+                recipe = record['browser_followups'][0]
+                self.assertEqual(resolved['inputs'], recipe['inputs'])
+                self.assertEqual(resolved['parameters'], {'lag': 6, 'a': 27, 'b': 24})
+                source['state'], source['records'] = 'tested', ['another-published-record']
+                self.assertEqual(protocol_reference(source, record), resolved)
+                for mutate in (lambda r: r['research_questions'][0]['protocol'].update(id='unknown'),
+                               lambda r: r['research_questions'][0]['protocol'].update(version=True),
+                               lambda r: r['research_questions'][0]['protocol'].update(parameters={}),
+                               lambda r: r['research_questions'][0].pop('followup'),
+                               lambda r: r['browser_followups'][0]['card']['rules']['evaluation']['value'].update(a=26),
+                               lambda r: r['browser_followups'][0]['card']['method']['value']['operations'].append({'id': 'reverse_runes'}),
+                               lambda r: r['browser_followups'][0]['inputs']['pages'][0].update(text_sha256='bad'),
+                               lambda r: r['browser_followups'][0]['card']['scope']['value']['pages'].pop(),
+                               lambda r: r['browser_followups'][0]['card']['rules'].update(reset={'status': 'specified', 'value': 'word'})):
+                    bad = copy.deepcopy(before); mutate(bad)
+                    with self.assertRaisesRegex(ValueError, 'research_questions'):
+                        validate_research_questions(bad['research_questions'], bad)
+            else:
+                self.assertEqual(resolved, {'id': 'deor-warning-opening', 'version': 1, 'familyId': 'deor-feedback-v1'})
+                source['followup'] = 'another-rule'
+                with self.assertRaises(ValueError):
+                    protocol_reference(source, record)
+
     def check(self, questions, **changes):
         record = {'id': 'source-record', **changes}
         before = copy.deepcopy((questions, record))

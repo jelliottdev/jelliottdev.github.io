@@ -1,10 +1,21 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const V=require('../record-question-view.js'),L=require('../library.js');
+const M=require('../record-question-model.js');
 const record=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/lp2-known-vigenere-keys/record.json'),'utf8'));
 const open={id:'another-boundary',question:'Does another boundary change the result?',state:'open',note:'Keep the same key and pages.',records:[],followup:record.browser_followups[0].id};
 const tested={id:'completed-comparison',question:'Has the fixed comparison been checked?',state:'tested',note:'The comparison was completed; it does not prove a cipher.',records:['lp1-section-balance']};
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name)}
+
+test('maintained protocol references derive exact recipe inputs and ignore editorial completion',()=>{
+ const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/word-internal-affine-lags/record.json'),'utf8')),before=JSON.stringify(r),q=r.research_questions[0],resolved=M.protocolReference(r,q.id);
+ assert.equal(M.questions(r,r.browser_followups).length,1);assert.deepEqual(resolved,{id:'word-boundary-sensitivity',version:1,followupId:q.followup,parameters:{lag:6,a:27,b:24},inputs:r.browser_followups[0].inputs});assert.equal(JSON.stringify(r),before);
+ const tested=structuredClone(r);tested.research_questions[0].state='tested';tested.research_questions[0].records=['another-record'];assert.deepEqual(M.protocolReference(tested,q.id),resolved);
+ resolved.inputs.pages[0].id='mutated';assert.notEqual(r.browser_followups[0].inputs.pages[0].id,'mutated');
+ for(const mutate of [x=>x.research_questions[0].protocol.id='unknown',x=>x.research_questions[0].protocol.version=true,x=>x.research_questions[0].protocol.parameters={},x=>delete x.research_questions[0].followup,x=>x.browser_followups[0].card.rules.evaluation.value.a=26,x=>x.browser_followups[0].card.method.value.operations.push({id:'reverse_runes'}),x=>x.browser_followups[0].inputs.pages[0].text_sha256='bad',x=>x.browser_followups[0].card.scope.value.pages.pop(),x=>x.browser_followups[0].card.rules.reset={status:'specified',value:'word'}]){const bad=structuredClone(r);mutate(bad);assert.deepEqual(M.questions(bad,bad.browser_followups),[]);assert.equal(M.protocolReference(bad,q.id),null);}
+ const deor=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/wulfic-autokey-seed-families/record.json'),'utf8'));assert.deepEqual(M.protocolReference(deor,deor.research_questions[0].id),{id:'deor-warning-opening',version:1,familyId:'deor-feedback-v1'});
+ const bad=structuredClone(deor);bad.research_questions[0].followup=record.browser_followups[0].id;bad.browser_followups=record.browser_followups;assert.deepEqual(M.questions(bad,bad.browser_followups),[]);
+});
 test('open questions precede completed comparisons without mutation',()=>{
  const r={...record,research_questions:[tested,open]},before=JSON.stringify(r),html=V.render(r);
  assert.equal(JSON.stringify(r),before);assert.equal(V.questions(r)[0].state,'open');assert(html.indexOf(open.question)<html.indexOf(tested.question));assert.equal((html.match(/id="experiment-remaining"/g)||[]).length,1);assert.match(html,/<h2>Questions to explore<\/h2>/);assert.match(html,/Tested<\/span>/);assert.match(html,/library\.html#\/experiment\/lp1-section-balance/);assert.match(html,new RegExp('run.html#record='+record.id+'&amp;followup='+open.followup));assert(!/Run now|Create experiment|Proven|<details|<button/.test(html));

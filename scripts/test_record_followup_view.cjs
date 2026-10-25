@@ -25,7 +25,7 @@ test('authored text is escaped and setting updates stay text-only and within val
 });
 test('full record shows the shared action after finding and figures, before extra detail',()=>{
  const source=fs.readFileSync(path.join(__dirname,'../library.js'),'utf8'),html=fs.readFileSync(path.join(__dirname,'../library.html'),'utf8');const overview=source.slice(source.indexOf(' function overview('),source.indexOf(' function scope('));
- assert.ok(overview.indexOf('id="experiment-finding"')<overview.indexOf('RecordFollowupView?.render'));assert.ok(overview.indexOf('source-visual')<overview.indexOf('RecordFollowupView?.render'));assert.ok(overview.indexOf('RecordFollowupView?.render')<overview.indexOf('reader-sections'));assert.match(source,/if\(tab==='overview'\)globalThis\.RecordFollowupView\?\.bind\(main,record\)/);assert.ok(html.indexOf('record-followup-view.js')<html.indexOf('src="library.js'));
+ assert.ok(overview.indexOf('id="experiment-finding"')<overview.indexOf('RecordFollowupView?.render'));assert.ok(overview.indexOf('source-visual')<overview.indexOf('RecordFollowupView?.render'));assert.ok(overview.indexOf('RecordFollowupView?.render')<overview.indexOf('reader-sections'));assert.match(source,/if\(tab==='overview'\)\{globalThis\.RecordFollowupView\?\.bind\(main,record\)/);assert.ok(html.indexOf('record-followup-view.js')<html.indexOf('src="library.js'));
 });
 test('map and full record use the same component and load it before their controllers',()=>{
  const source=fs.readFileSync(path.join(__dirname,'../research-browser.js'),'utf8'),html=fs.readFileSync(path.join(__dirname,'../research.html'),'utf8');

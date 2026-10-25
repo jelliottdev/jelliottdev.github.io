@@ -8,7 +8,7 @@
  const outcomes={supported:'Supported within scope','not-supported':'Not supported within scope',inconclusive:'Inconclusive'},resultColours={supported:'#138575','not-supported':'#7b899b',inconclusive:'#75649a'};
  let publishedBaseline=null,communityEntries=[],communityCursor=null,communityEndpoint=null,communityBusy=false,communityError='',communityPendingRender=false;
  let data,state,nodes,focus,layout=new Map(),camera={x:0,y:0,k:1},cameraViewport=null,previous='',previousRecord='',resizeTimer,dialogReturn=null,worldHeight=600,worldBounds={x:0,y:0,width:600,height:600},labelNodes=[],indexResult,matching=new Set(),lastGraphKey='',preferredMode='graph';
- const listPositions=new Map();let listKey='';try{preferredMode=localStorage.getItem('liberpedia-research-mode')==='list'?'list':'graph'}catch{}
+ const listPositions=new Map();let listKey='',questionMount=null;try{preferredMode=localStorage.getItem('liberpedia-research-mode')==='list'?'list':'graph'}catch{}
  const activePointers=new Map();let gesture=null,moved=false;
  const url=next=>'#'+new URLSearchParams(Object.entries(next).filter(([,v])=>v));
  function read(){return ResearchBrowserModel.read(location.hash,preferredMode,ResearchIndex.state)}
@@ -119,10 +119,11 @@
  function previewFollowupsHTML(record){return globalThis.RecordQuestionView?.coversFollowups(record)?'':globalThis.RecordFollowupView?.render(record)||'';}
  function bindPreviewFollowups(record){globalThis.RecordFollowupView?.bind(panel,record);}
  function showInspector(){
+  questionMount?.destroy();questionMount=null;
   const record=data.records[state.record];panel.hidden=!record;updatePreviewMode();if(!record)return;
   const labels={supported:'Supported within this test','not-supported':'Not supported by this test',inconclusive:'Inconclusive'};
   panel.innerHTML=`<div class="inspector-top"><button type="button" class="preview-back" aria-label="Back to map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>Back to map</button></div><div class="inspector-scroll"><h2 id="preview-title" tabindex="-1">${esc(record.title)}</h2><p class="preview-status">${esc(labels[record.outcome]||record.outcome)}</p><h3 class="preview-heading">Result</h3><p class="record-finding">${esc(record.reader_finding||record.finding)}</p>${previewFollowupsHTML(record)}${previewScopeHTML(record)}</div><a class="record-open" href="${esc(recordHref(record))}">${record.community?(workFor(record)?.href.startsWith('run.html#task=')?'Open unfinished experiment':'Open saved idea'):'Read full record'} ${arrow}</a>`;
-  bindPreviewFollowups(record);panel.querySelector('.preview-back').onclick=()=>navigate({record:''},true);panel.onkeydown=event=>{if(event.key==='Escape'){event.preventDefault();navigate({record:''},true)}};
+  bindPreviewFollowups(record);questionMount=globalThis.RecordQuestionView?.mount?.(panel,record);panel.querySelector('.preview-back').onclick=()=>navigate({record:''},true);panel.onkeydown=event=>{if(event.key==='Escape'){event.preventDefault();navigate({record:''},true)}};
  }
  function pageRanges(pages){
   if(!pages.length)return 'Source material';const ranges=[];
