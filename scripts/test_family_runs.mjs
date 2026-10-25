@@ -3,6 +3,7 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync,readdirSync} from 'node:fs';
 import F from '../research-family.js';
 import L from '../local-experiment.js';
+import Q from '../family-question-evidence.js';
 import {createFamilyRunHandler} from '../services/idea-assistant/family-runs.mjs';
 
 const origin='https://jelliottdev.github.io',path='/families/deor-feedback-v1',at='2026-10-24T12:00:00.000Z';
@@ -44,6 +45,17 @@ await test('complete batch is independently verified, saved atomically and idemp
   await call(f,'results',body);assert.equal(count(f),2);assert.equal(replays,4);
  }finally{L.verify=original;}
 });
+await test('question evidence is one read-only source-bound lookup, independently verifiable by the browser',async()=>{
+ const f=fixture(),p=await prepared(f),body=submission(p);await call(f,'results',body);
+ const original=L.verify;let proof;L.verify=async()=>{throw Error('Question discovery must not execute targets');};
+ try{proof=await call(f,'question');assert.equal(proof.lookupComplete,true);assert.equal(proof.sources.length,2);assert.equal(count(f),2);assert.equal(proof.revision,p.plan.revision);}
+ finally{L.verify=original;}
+ const normalized=Q.unpack(proof),checked=await Q.summarize({snapshot:await F.snapshot(f.bundle),bundle:f.bundle,sources:normalized.sources,lookupComplete:normalized.lookupComplete});
+ assert.deepEqual(checked.verifiedCaseIds,p.plan.cases.map(item=>item.id).sort());assert.equal(checked.foundCaseIds.length,0);assert(checked.missingCaseIds.length>0);
+ await call(f,'question?revision='+p.plan.revision,undefined,404);
+ f.sqlite.prepare('UPDATE family_case_results SET result_hash=? WHERE case_id=?').run('0'.repeat(64),p.plan.cases[0].id);
+ await call(f,'question',undefined,503);assert.equal(count(f),2);
+});
 await test('tampered target, controls, missing cases or extra fields never create partial coverage',async()=>{
  for(const mutate of [b=>{b.results[1].result.transformed[0].text+='ᚠ';},b=>{b.controls[1].results[0].result.metrics.runes++;},b=>{b.controls[1].results[1]=b.controls[1].results[0];},b=>{b.results.pop();},b=>{b.results[1].caseId=b.results[0].caseId;},b=>{b.plan.cases[0].task.title='Changed';}]){
   const f=fixture(),body=submission(await prepared(f));mutate(body);await call(f,'results',body,422);assert.equal(count(f),0);
@@ -65,6 +77,7 @@ await test('individual saved work covers family cases and preserves original sou
  try{
   const view=await call(f,'');assert.deepEqual(view.coverage.completed,[base.id,other.id].sort());assert.equal(count(f),0,'No copied family results');
   const read=await call(f,'cases/'+base.id+'?revision='+p.plan.revision);assert.deepEqual(read.source.task,task);assert.deepEqual(read.source.run.result,result);assert.equal(read.source.run.id,resultId);assert.equal(read.task,undefined,'Original receipt remains intact');
+  const proof=await call(f,'question');assert.equal(proof.sources.length,1);assert.equal(proof.cases.length,2);assert(Q.unpack(proof).sources.every(s=>s.source.run.id===resultId));assert.equal(count(f),0);
   await call(f,'prepare',{revision:p.plan.revision,caseIds:[base.id]},409);assert.equal(count(f),0);
  }finally{L.verify=original;}
 });
@@ -122,5 +135,23 @@ await test('origin, method, CORS, body bounds, rate limits and unavailable sourc
  const large=new Request('https://worker.example'+path+'/results',{method:'POST',headers:{origin,'content-type':'application/json','content-length':'2097153'},body:'{}'});assert.equal((await f.handle(large,f.env)).status,400);
  f.env.TASK_LIMIT.limit=async()=>({success:false});await call(f,'',undefined,429);assert.equal(f.calls,0);
  const bad=createFamilyRunHandler({fetcher:async()=>new Response('',{status:503})});assert.equal((await bad(req(''),fixture().env)).status,422);
+});
+await test('real complete shared 55-page runs use deduplicated original receipts below the wire cap',async()=>{
+ const f=fixture(),bundle=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import.meta.url),'utf8'));f.setBundle(bundle);
+ const preparer=await F.createPreparer(bundle),snapshot=preparer.snapshot,idea='p_'+'9'.repeat(64);
+ f.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(idea,idea.slice(2),'{}','',at);
+ f.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(idea,at,at.slice(0,10));
+ for(const config of snapshot.configurations){
+  const base=(await preparer.prepare([config.id+'--lp2-00'])).cases[0].task,task=await L.prepare({...base,title:'Full original shared source '+config.id,pages:snapshot.pages}),result=L.run(task),resultId=await hash(result);
+  f.sqlite.prepare('INSERT INTO local_tasks VALUES(?,?,?,?,?,?,?,?,?,?)').run(task.taskId,await hash(task),'0'.repeat(64),idea,'{}',L.stable(task),'raw',null,at,at.slice(0,10));
+  f.sqlite.prepare('INSERT INTO local_task_ideas VALUES(?,?,?,?,?,?)').run(task.taskId,idea,'raw',null,at,at.slice(0,10));
+  f.sqlite.prepare('INSERT INTO local_task_results VALUES(?,?,?,?,?)').run(resultId,task.taskId,L.stable(result),at,at.slice(0,10));
+ }
+ const original=L.verify;let response;L.verify=async()=>{throw Error('The question endpoint must not replay targets.');};
+ try{response=await f.handle(req('question'),f.env);assert.equal(response.status,200,await response.clone().text());}finally{L.verify=original;}
+ const text=await response.text();assert(Buffer.byteLength(text)<2*1024*1024);
+ const wire=JSON.parse(text);assert.equal(wire.cases.length,27);assert(wire.sources.length<=18);assert(wire.sources.every(source=>source.task.pages.length===55),'Full original receipts remain intact.');
+ const normalized=Q.unpack(wire),proof=await Q.summarize({snapshot,bundle,sources:normalized.sources,lookupComplete:normalized.lookupComplete});
+ assert.equal(proof.totalCases,990);assert.equal(proof.complete,true);assert.equal(proof.excludedCaseIds.length,963);assert.equal(proof.verifiedCaseIds.length,27);assert.deepEqual(proof.foundCaseIds,[]);assert.equal(count(f),0);
 });
 console.log('Family result handler: '+groups+' groups passed');

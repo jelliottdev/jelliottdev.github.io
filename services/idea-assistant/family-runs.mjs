@@ -4,7 +4,7 @@ import L from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
 import {loadInputBundle} from './official-inputs.mjs';
 import {readFamilyEvidence} from './family-evidence.mjs';
-import {sharedFamilyCoverage,readSharedFamilyCase} from './family-shared-coverage.mjs';
+import {sharedFamilyCoverage,readSharedFamilyCase,sharedFamilyQuestionEvidence} from './family-shared-coverage.mjs';
 
 const FAMILY='deor-feedback-v1',MAX_BODY=2*1024*1024;
 const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
@@ -32,12 +32,12 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
   if(!valid)return reply({error:'Family experiments are unavailable.'},503);
   if(request.headers.get('origin')!==env.SITE_ORIGIN)return reply({error:'Request is not allowed.'},403);
   headers['Access-Control-Allow-Origin']=env.SITE_ORIGIN;
-  const url=new URL(request.url),match=url.pathname.match(/^\/families\/deor-feedback-v1(?:\/(prepare|results)|\/cases\/([^/]+))?$/),action=match?.[2]?'case':match?.[1]||'snapshot';
+  const url=new URL(request.url),match=url.pathname.match(/^\/families\/deor-feedback-v1(?:\/(prepare|results|question)|\/cases\/([^/]+))?$/),action=match?.[2]?'case':match?.[1]||'snapshot';
   if(!match)return reply({error:'Not found.'},404);
   const revision=url.searchParams.get('revision');
   if(url.search&&(action!=='case'||[...url.searchParams.keys()].length!==1||!/^[a-f0-9]{64}$/.test(revision||'')))return reply({error:'Not found.'},404);
   let caseId=null;if(action==='case')try{caseId=decodeURIComponent(match[2]);if(caseId.length>200)throw Error();}catch{return reply({error:'Case not found.'},404);}
-  const method=['snapshot','case'].includes(action)?'GET':'POST';
+  const method=['snapshot','case','question'].includes(action)?'GET':'POST';
   if(request.method==='OPTIONS'){
    const fields=(request.headers.get('access-control-request-headers')||'').split(',').map(v=>v.trim().toLowerCase()).filter(Boolean);
    if(request.headers.get('access-control-request-method')!==method||fields.some(v=>v!=='content-type'))return reply({error:'Request is not allowed.'},403);
@@ -62,6 +62,42 @@ export function createFamilyRunHandler({fetcher=globalThis.fetch,now=()=>new Dat
    // Validate and freeze the official source once per request. Each selected
    // case hashes only its own task, never all 75 source pages again.
    const preparer=await F.createPreparer(bundle),snapshot=preparer.snapshot,ids=new Set(F.caseIds(snapshot));
+   if(action==='question'){
+    const eligible=F.proveCaseExclusions(snapshot,bundle.alphabet).eligible,needed=new Set(eligible);
+    const rows=(await query('SELECT * FROM family_case_results WHERE family_id=? AND revision=? ORDER BY case_id',FAMILY,snapshot.revision).all()).results;
+    if(!Array.isArray(rows)||rows.length>snapshot.totalCases)throw Error('Stored question coverage is malformed');
+    const rowCases=new Set();for(const row of rows){if(!ids.has(row.case_id)||rowCases.has(row.case_id))throw Error('Stored question case is malformed');rowCases.add(row.case_id);}
+    const selected=rows.filter(row=>needed.has(row.case_id)),sources=[],seen=new Set();
+    for(let offset=0;offset<selected.length;offset+=12){
+     const group=selected.slice(offset,offset+12),plan=await preparer.prepare(group.map(row=>row.case_id)),tasks=new Map(plan.cases.map(item=>[item.id,item.task]));
+     for(const row of group){
+      if(seen.has(row.case_id))throw Error('Stored question case is repeated');seen.add(row.case_id);
+      const task=tasks.get(row.case_id),result=await storedEvidence(row,task);
+      sources.push({familyId:FAMILY,revision:snapshot.revision,caseId:row.case_id,task,result,resultId:row.result_hash,verifiedAt:row.created_at});
+     }
+    }
+    // Read shared computations too: the browser independently verifies them
+    // and rejects any conflict with an existing family-specific receipt.
+    const shared=await sharedFamilyQuestionEvidence({db,preparer},eligible);
+    for(const proof of shared.proofs){
+     const direct=sources.find(item=>item.caseId===proof.caseId);
+     if(!direct){sources.push(proof);continue;}
+     const page=direct.task.pages[0].id,other=proof.source.run.result;
+     if(direct.result.transformed[0].text!==other.transformed.find(item=>item.page===page)?.text||direct.result.matches[0].matched!==other.matches.find(item=>item.page===page)?.matched)throw Error('Saved question computations disagree');
+    }
+    const originals=[],cases=[],bySource=new Map();
+    for(const receipt of sources){
+     const source=receipt.source||{task:receipt.task,inputVersion:'raw',run:{id:receipt.resultId,createdAt:receipt.verifiedAt,result:receipt.result}};
+     const key=source.task.taskId+'|'+source.run.id+'|'+source.run.createdAt,signature=L.stable(source),prior=bySource.get(key);
+     if(prior&&prior.signature!==signature)throw Error('Original question source changed within this lookup');
+     const sourceIndex=prior?.index??originals.length;
+     if(!prior){originals.push(source);bySource.set(key,{index:sourceIndex,signature});}
+     cases.push({caseId:receipt.caseId,sourceIndex});
+    }
+    const body={familyId:FAMILY,revision:snapshot.revision,sources:originals,cases,lookupComplete:true};
+    if(new TextEncoder().encode(L.stable(body)).length>2*1024*1024)throw Error('Question evidence exceeds the bounded response size');
+    return reply(body);
+   }
    if(action==='case'){
     if(revision&&revision!==snapshot.revision)return reply({error:'No verified result has been saved for this case and input snapshot.'},404);
     if(!ids.has(caseId))return reply({error:'Case not found.'},404);

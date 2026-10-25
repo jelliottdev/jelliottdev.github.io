@@ -5,10 +5,11 @@ import Evidence from '../../computation-evidence.js';
 
 const HEX=/^[a-f0-9]{64}$/;
 const hash=async(value,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(L.stable(value))))].map(v=>v.toString(16).padStart(2,'0')).join('');
-async function lookup({db,preparer,crypto:cryptoAPI=globalThis.crypto},onlyCaseId=null){
+async function lookup({db,preparer,crypto:cryptoAPI=globalThis.crypto},onlyCaseId=null,proofCases=null){
  if(typeof db?.prepare!=='function'||typeof preparer?.prepare!=='function'||preparer.snapshot?.id!=='deor-feedback-v1'||!HEX.test(preparer.snapshot.revision)||preparer.snapshot.configurations?.length!==18||preparer.snapshot.pages?.length!==55)throw Error('Shared family evidence lookup is unavailable.');
  const view=JSON.parse(L.stable(preparer.snapshot)),allowed=new Set(F.caseIds(view)),records=new Map();let bytes=0;
  if(onlyCaseId!==null&&!allowed.has(onlyCaseId))throw Error('The requested shared family case is invalid.');
+ if(proofCases!==null&&(!(proofCases instanceof Set)||[...proofCases].some(id=>!allowed.has(id))))throw Error('The requested family question cases are invalid.');
  for(const config of view.configurations){
   if(onlyCaseId!==null&&!onlyCaseId.startsWith(config.id+'--'))continue;
   const samplePlan=await preparer.prepare([config.id+'--'+view.pages[0].id]);await F.validateExecutionPlan(samplePlan,cryptoAPI);
@@ -43,17 +44,22 @@ async function lookup({db,preparer,crypto:cryptoAPI=globalThis.crypto},onlyCaseI
    const source=byTask.get(ref.taskId);
    for(const pageId of ref.pages){
     const caseId=config.id+'--'+pageId;if(!allowed.has(caseId))throw Error('Shared evidence refers to a case outside this family.');
+    if(proofCases!==null&&!proofCases.has(caseId))continue;
     const output=source.run.result.transformed.find(page=>page.page===pageId),match=source.run.result.matches.find(page=>page.page===pageId);
     const signature=L.stable({text:output.text,matched:match.matched}),candidate={caseId,taskId:ref.taskId,resultId:ref.resultId,createdAt:ref.createdAt},existing=records.get(caseId);
     if(existing&&existing.signature!==signature)throw Error('Saved public computations disagree on the same family case.');
-    if(!existing||candidate.taskId.localeCompare(existing.source.taskId)<0||candidate.taskId===existing.source.taskId&&candidate.resultId.localeCompare(existing.source.resultId)<0)records.set(caseId,{signature,matched:match.matched,source:candidate});
+    if(!existing||candidate.taskId.localeCompare(existing.source.taskId)<0||candidate.taskId===existing.source.taskId&&candidate.resultId.localeCompare(existing.source.resultId)<0)records.set(caseId,{signature,matched:match.matched,source:candidate,...(proofCases!==null?{proof:source}:{})});
    }
   }
  }
  const completed=[...records.keys()].sort();
- return {completed,matched:completed.filter(id=>records.get(id).matched),sources:completed.map(id=>records.get(id).source)};
+ return {completed,matched:completed.filter(id=>records.get(id).matched),sources:completed.map(id=>records.get(id).source),...(proofCases!==null?{proofs:completed.map(caseId=>({familyId:view.id,revision:view.revision,caseId,source:records.get(caseId).proof}))}:{})};
 }
 export async function sharedFamilyCoverage(options){return lookup(options);}
+export async function sharedFamilyQuestionEvidence(options,caseIds){
+ if(!Array.isArray(caseIds)||caseIds.length>990||new Set(caseIds).size!==caseIds.length)throw Error('Invalid question case selection.');
+ return lookup(options,null,new Set(caseIds));
+}
 export async function readSharedFamilyCase({db,preparer,caseId,crypto:cryptoAPI=globalThis.crypto}){
  const coverage=await lookup({db,preparer,crypto:cryptoAPI},caseId),reference=coverage.sources.find(item=>item.caseId===caseId);if(!reference)return null;
  const row=await db.prepare(`SELECT t.id AS task_id,t.task_hash,t.task_json,t.input_version,r.id AS result_id,r.result_json,r.created_at
