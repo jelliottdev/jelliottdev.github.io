@@ -24,7 +24,7 @@
  }
  function mount(host,record,options={}){
   mounts.get(host)?.destroy();let dead=false,observer=null;
-  const captured=JSON.parse(JSON.stringify(record)),items=new Map(questions(captured).map(item=>[item.id,item])),entries=[],loadLive=options.loadLive||(()=>root.RecordQuestionRuntime?.load?root.RecordQuestionRuntime.load():Promise.reject(Error('Current evidence tools are unavailable.')));
+  const captured=JSON.parse(JSON.stringify(record)),items=new Map(questions(captured).map(item=>[item.id,item])),entries=[],loadLive=options.loadLive||(settings=>root.RecordQuestionRuntime?.load?root.RecordQuestionRuntime.load(settings):Promise.reject(Error('Current evidence tools are unavailable.')));
   function display(entry,value){
    if(dead)return;const {element,href,reference}=entry,level=entry.level;
    if(value?.state==='loading'){element.innerHTML=entryLink(href)+'<p class="record-question-live-status" role="status">Checking saved results…</p>';return;}
@@ -43,7 +43,7 @@
   }
   async function activate(entry,retry=false){
    if(dead||entry.pending||entry.activated&&!retry)return;entry.activated=true;const token=++entry.generation;display(entry,{state:'loading'});
-   entry.pending=(async()=>{try{if(!entry.controller){const api=await loadLive();if(dead||entry.generation!==token)return;if(typeof api?.createController!=='function')throw Error('Current evidence tools did not load.');const {fetcher,config,loadConfig,loadInputs,crypto,pageURL}=options;entry.controller=api.createController({record:captured,questionId:entry.id,fetcher,config,loadConfig,loadInputs,crypto,pageURL,onState:value=>{if(!dead)display(entry,value);}});}if(dead||entry.generation!==token)return;await (retry?entry.controller.retry():entry.controller.activate());}catch{if(!dead&&entry.generation===token)display(entry,{state:'unavailable'});}finally{if(entry.generation===token)entry.pending=null;}})();return entry.pending;
+   entry.pending=(async()=>{try{if(!entry.controller){const finite=entry.reference.id==='finite-settings-output',recipe=finite?captured.browser_followups.find(item=>item.id===entry.reference.followupId):null,api=await loadLive({finite,language:finite&&recipe?.card?.rules?.evaluation?.value?.kind==='language-score'});if(dead||entry.generation!==token)return;if(typeof api?.createController!=='function')throw Error('Current evidence tools did not load.');const {fetcher,config,loadConfig,loadInputs,crypto,pageURL}=options;entry.controller=api.createController({record:captured,questionId:entry.id,fetcher,config,loadConfig,loadInputs,crypto,pageURL,onState:value=>{if(!dead)display(entry,value);}});}if(dead||entry.generation!==token)return;await (retry?entry.controller.retry():entry.controller.activate());}catch{if(!dead&&entry.generation===token)display(entry,{state:'unavailable'});}finally{if(entry.generation===token)entry.pending=null;}})();return entry.pending;
   }
   for(const element of host?.querySelectorAll?.('[data-live-question]')||[]){
    const id=element.getAttribute('data-live-question'),item=items.get(id),reference=item&&model.protocolReference(captured,id,followupView()?.recipes(captured)||[]);if(!reference)continue;

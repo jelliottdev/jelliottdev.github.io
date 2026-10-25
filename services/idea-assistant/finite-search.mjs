@@ -44,17 +44,19 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
   try{
    const body=await readFiniteJSON(request,action==='evidence'?(factored?40*1024:1000):MAX);
    if(!(await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success){headers['Retry-After']='60';return reply({error:'Please wait before trying again.',code:'rate-limited',retryAfterSeconds:60},429);}quotaDay=now().toISOString().slice(0,10);
-   const row=await query('SELECT card_json FROM proposals WHERE id=?',proposalId).first();if(!row)return reply({error:'Confirmed idea not found.'},404);
-   const card=validateCard(row.card_json);settingsAPI.inspect(card);
+   const row=await query('SELECT card_json FROM proposals WHERE id=?',proposalId).first();
    if(factored){
     const keys=action==='prepare-groups'?['domainId','inputVersion','groups','snapshotToken']:action==='create-groups'?['domainId','snapshotToken','groups']:action==='evidence'?['inputVersion','domainId','cursor']:action==='prepare'?['domainId','inputVersion','cases','snapshotToken']:action==='create'?['domainId','snapshotToken','cases']:['domainId','results'];
     if(!exact(body,[...keys,...(body&&Object.hasOwn(body,'authoredOrigin')?['authoredOrigin']:[])])||typeof body.domainId!=='string'||!HEX.test(body.domainId)||((action==='prepare'||creating||grouped)&&typeof body.snapshotToken!=='string')||(action==='evidence'&&body.cursor!==null&&typeof body.cursor!=='string'))return reply({error:'The declared search request changed.'},400);
    }
    const authoredOrigin=factored?body.authoredOrigin:undefined,loadAuthoredSource=createAuthoredFiniteSourceLoader(fetcher),handleTask=taskHandler||createLocalTaskHandler({fetcher,now,loadAuthoredSource});
+   if(!row&&!(factored&&action==='evidence'&&authoredOrigin!==undefined))return reply({error:'Confirmed idea not found.'},404);
+   let card=row?validateCard(row.card_json):null;
    if(authoredOrigin!==undefined){
-    try{const source=await loadAuthoredSource(authoredOrigin);if(E.stable(source.card)!==E.stable(card)||source.domain.domainId!==body.domainId||source.inputVersion!==card.rules.inputVersion.value)throw Error();}
+    try{const source=await loadAuthoredSource(authoredOrigin);if(!card){card=validateCard(source.card);const hash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(card))))].map(v=>v.toString(16).padStart(2,'0')).join('');if(proposalId!=='p_'+hash)throw Error();}if(E.stable(source.card)!==E.stable(card)||source.domain.domainId!==body.domainId||source.inputVersion!==card.rules.inputVersion.value)throw Error();}
     catch{return reply({error:'The authored finite source, card or domain changed. Review it again.',code:'stale-scan'},409);}
    }
+   settingsAPI.inspect(card);
    let currentDomain,bundle;
    if(request.signal.aborted)return reply({error:'The request was cancelled.'},499);
    if(action==='evidence'||action==='prepare'||grouped||factored&&action==='create'){
@@ -116,7 +118,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    const seen=new Set();for(const item of body.results){
     if(!exact(item,['taskId','result'])||!HEX.test(item.taskId)||seen.has(item.taskId))throw Error('The completed cases changed.');seen.add(item.taskId);
     const row=await query('SELECT t.task_json FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',item.taskId,proposalId).first();if(!row)return reply({error:'A completed case is not associated with this idea.'},409);
-    if(authoredOrigin!==undefined){const owned=await query('SELECT origin_json FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_json=?',item.taskId,proposalId,E.stable(authoredOrigin)).first();if(!owned||E.stable(JSON.parse(owned.origin_json))!==E.stable(authoredOrigin))return reply({error:'A completed case belongs to another authored finite source.'},409);}
+    if(authoredOrigin!==undefined){const owned=await query('SELECT origin_json FROM local_task_all_origins WHERE task_id=? AND proposal_id=? AND origin_json=?',item.taskId,proposalId,E.stable(authoredOrigin)).first();if(!owned||E.stable(JSON.parse(owned.origin_json))!==E.stable(authoredOrigin))return reply({error:'A completed case belongs to another authored finite source.'},409);}
     await E.verify(JSON.parse(row.task_json),item.result);
    }
    const receipts=[];for(const item of body.results){if(request.signal.aborted)return reply({error:'The request was cancelled; any saved results are retained.'},499);const saved=await invoke('/tasks/'+item.taskId+'/results',{result:item.result});receipts.push({taskId:saved.taskId,state:saved.state,latestRun:saved.latestRun});}

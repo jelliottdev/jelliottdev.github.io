@@ -1,3 +1,4 @@
+import {applyMigrations} from './sqlite-test-migrations.mjs';
 import {DatabaseSync} from 'node:sqlite';
 /* Exact canonical interrupter plans only: mocked storage/assets/provider, no network. */
 import assert from 'node:assert/strict';
@@ -22,7 +23,7 @@ const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']})
 const base={id:'interrupted_repeating_key',label:'Interrupted repeating key',key:[1,2,28],direction:'subtract',reset:'page',interrupts:[0,19]};
 const card=(operation=base,rules={})=>H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic explicit interrupter specification'},aim:known('Measure the output'),method:known({operations:[operation]}),scope:known({pages:['lp2-15']}),rules}),{id:'fixture',at}));
 const makeFixture=input=>{
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql','0009_word_boundary_preparations.sql','0010_family_case_results.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');applyMigrations(sqlite);
  const stored=C.serialize(input),hash=createHash('sha256').update(stored).digest('hex');id='p_'+hash;sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,hash,stored,'unused',at);
  let reads=0,calls=0,inference=0;const env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert(/^\s*(?:SELECT\b|INSERT INTO (?:prepared_plans|idea_computation_evidence)\b)/.test(sql));return {bind(...args){return {first:async()=>{reads++;return sqlite.prepare(sql).get(...args)||null;},all:async()=>{reads++;return {results:sqlite.prepare(sql).all(...args)};},run:async()=>sqlite.prepare(sql).run(...args)};}};}},TASK_LIMIT:{limit:async()=>({success:true})},AI:{run(){inference++;throw Error('No model call permitted');}}};
  const handle=createPrepareTaskHandler({fetcher:async url=>{calls++;assert.equal(url,origin+'/data/pages/lp2-15.json');return Response.json({id:'lp2-15',raw:'ᚢᚠᚩ\nᚱ',reviewed_text:'ᚱᚠᚩ'});}});

@@ -440,11 +440,24 @@ the original source, full domain and selected member; saved tasks retain an
 immutable source snapshot with the selected member's control and scope relation.
 Offline reproduction validates that relation independently before target work.
 
-Finite snapshots currently repeat per saved task. The 42-program fixture is
-about 160 KiB; 2,352 individual tasks could repeat roughly 375 MB of source
-metadata. Prefer page groups and add shared immutable snapshot storage before
-opening large individual-case searches. The higher finite admission ceiling is
-not a storage-efficiency claim.
+Migration 0014 stores each canonical finite recipe once by its protocol hash;
+task origins hold lightweight references. Existing origin rows are unchanged and
+remain readable through the combined view. Quotas use indexed scalar origin
+classifications rather than parsing repeated recipe JSON. Task, link, snapshot
+and origin writes are atomic. Deployment requires applying the additive migration
+before the updated Worker.
+
+Discovery now verifies finite source plans and chained saved evidence without
+registering ideas or running target text. Contribution counts represent checks
+across settings and pages, and finite record questions use the same adapter.
+Browser QA on private synthetic inputs verified discovery before registration,
+explicit review/run/save, four saved results sharing one snapshot, and reload
+without re-execution. This is software verification, not manuscript evidence.
+
+Before publishing the known-key language follow-up, expose its archived 2,352
+outputs through the audited evidence provider. Preserve their original opening
+criterion and provenance; any language comparison is a new evaluation of those
+outputs, not a historical language result. Do not advertise them as untried.
 
 These connections have software fixture coverage; no finite source recipe is
 published yet. Release one only after the complete hosted execution/save/reload

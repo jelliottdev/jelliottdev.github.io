@@ -1,3 +1,4 @@
+import {applyMigrations} from './sqlite-test-migrations.mjs';
 import {createHash} from 'node:crypto';
 import {issue as issuePreparation} from './prepared-plans.mjs';
 /* Real SQLite persistence, mocked official page fetches. No hosted calls. */
@@ -17,7 +18,7 @@ const alphabet=Array.from({length:29},(_,i)=>({rune:String.fromCharCode(65+i),la
 const source={id:'lp2-15',raw:'ABC A\nBA',reviewed_text:'ABC B\nBA'};
 const card=H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE ORIGINAL'},method:C.field('specified',{operations:[{id:'described_method',label:'Reverse rows'}]},{kind:'supplied',refs:['source:text']})}),{id:'test',at}));
 function adapter({publicOriginal=true}={}){
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql','0009_word_boundary_preparations.sql','0010_family_case_results.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');applyMigrations(sqlite);
  proposalId='p_'+createHash('sha256').update(C.serialize(card)).digest('hex');
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,proposalId.slice(2),C.serialize(card),'unused',at);
  if(publicOriginal)sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(proposalId,at,at.slice(0,10));

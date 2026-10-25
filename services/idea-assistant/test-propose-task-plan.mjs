@@ -1,3 +1,4 @@
+import {applyMigrations} from './sqlite-test-migrations.mjs';
 import {createHash} from 'node:crypto';
 /* All provider calls are mocks. Exact grammar, coverage and resource limits. */
 import assert from 'node:assert/strict';
@@ -110,7 +111,7 @@ await test('timeouts retain concurrent slots until actual settlement; same-card 
 });
 await test('actual prepare route maps ordered compounds without AI, preserves stored hypothesis and fetches only official pages after validation',async()=>{
  async function fixture(input,mapping,withAI=true){
-  const sqlite=new DatabaseSync(':memory:');for(const file of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql','0009_word_boundary_preparations.sql','0010_family_case_results.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+file,import.meta.url),'utf8'));
+  const sqlite=new DatabaseSync(':memory:');applyMigrations(sqlite);
   const stored=C.serialize(input),cardHash=createHash('sha256').update(stored).digest('hex'),id='p_'+cardHash;sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,cardHash,stored,'unused','2026-10-24');
   let calls=0,fetches=0;const env={SITE_ORIGIN:'https://jelliottdev.github.io',TASK_LIMIT:{limit:async()=>({success:true})},PROPOSALS:{prepare(sql){assert(!sql.includes('original_idea'));assert(/^\s*(?:SELECT\b|INSERT INTO (?:prepared_plans|idea_computation_evidence)\b)/.test(sql));return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null,all:async()=>({results:sqlite.prepare(sql).all(...args)}),run:async()=>sqlite.prepare(sql).run(...args)};}};}},AI:{run:async()=>{calls++;return value(mapping);}}};
   if(!withAI)delete env.AI;

@@ -11,6 +11,27 @@
  }
  function createController({record,questionId,fetcher=root.fetch?.bind(root),config,loadConfig,loadInputs,crypto:cryptoAPI=root.crypto,onState=()=>{},pageURL=root.location?.href||'https://jelliottdev.github.io/library.html'}={}){
   const captured=clone(record),reference=Model.protocolReference(captured,questionId);let generation=0,destroyed=false,active=false,abort=null,pending=null;
+  if(reference?.id==='finite-settings-output'){
+   let controller=null;
+   const live=token=>!destroyed&&generation===token;
+   async function run(retry){
+    const token=++generation;
+    try{
+     const tools=node?require('./followup-readiness.js'):root.FollowupReadiness;if(!tools?.createController)throw Error('Finite saved-work discovery is unavailable.');
+     const recipe=captured.browser_followups.find(item=>item.id===reference.followupId);
+     if(!controller)controller=tools.createController({record:captured,check:recipe,fetcher,config,loadConfig,loadInputs,crypto:cryptoAPI,pageURL,onState:value=>{if(!destroyed&&value?.state==='loading')onState({state:'loading'});}});
+     const checked=await (retry?controller.retry():controller.activate());if(!live(token))return null;
+     if(!checked||!['remaining','results','answered'].includes(checked.state)||checked.unit!=='cases'||checked.lookupComplete!==true||!Number.isSafeInteger(checked.totalCases)||checked.totalCases<1||!Number.isSafeInteger(checked.coveredCases)||!Number.isSafeInteger(checked.remainingCount)||checked.coveredCases+checked.remainingCount!==checked.totalCases||checked.coveredCases<0||checked.remainingCount<0||checked.domainId?.length!==64)throw Error('Finite evidence is incomplete.');
+     const prefix=checked.criterion?.kind==='exact-prefix',language=checked.criterion?.kind==='language-score',found=prefix&&checked.matchingCases>0,missing=checked.state==='remaining',state=missing?'missing-evidence':'answered',number=n=>n.toLocaleString('en-US');
+     if(!missing&&!found&&checked.remainingCount)throw Error('The finite answer still has missing cases.');
+     const heading=missing?'Some checks remain':found?'An output starts with the specified opening':language?'The declared language comparisons are complete':prefix?'No output starts with the specified opening':'The declared outputs are ready';
+     const finding=missing?number(checked.coveredCases)+' of '+number(checked.totalCases)+' page-and-setting checks have saved, verified output. '+number(checked.remainingCount)+' remain.':found?'A verified output starts with the entire specified opening.'+(checked.remainingCount?' Other declared checks remain.':''):language?number(checked.totalCases)+' page-and-setting checks have verified output; '+number(checked.usableCases||0)+' could be compared and '+number(checked.insufficientCases||0)+' were too short.':prefix?'Every declared page and setting has verified output; none starts with the entire specified opening.':number(checked.totalCases)+' page-and-setting checks have saved, verified output for inspection.';
+     const decision={schema:'liberpedia-question-decision-v1',question:{id:reference.id,version:1,definitionSha256:await digest({id:reference.id,version:1},cryptoAPI),instanceId:checked.domainId},questionText:captured.research_questions.find(q=>q.id===questionId).question,state,answer:missing?null:found?'prefix-found':language?'comparisons-complete':prefix?'prefix-not-found':'outputs-ready',heading,finding,limit:language?'Similarity to a language reference is not a translation or a decryption.':prefix?'This checks only the specified opening; it does not establish a decryption.':'These calculations preserve outputs for inspection; they do not judge readability.',evidence:clone(checked),next:missing?{kind:'run-missing-evidence'}:null};
+     if(!live(token))return null;onState({state,decision});return decision;
+    }catch{if(live(token))onState({state:'unavailable',error:'Current evidence could not be verified. Retry to check it again.'});return null;}
+   }
+   return {activate(){if(destroyed)return Promise.resolve(null);if(active)return pending;active=true;pending=run(false);return pending;},retry(){if(destroyed)return Promise.resolve(null);active=true;pending=run(true);return pending;},destroy(){destroyed=true;generation++;controller?.destroy();}};
+  }
   const live=token=>!destroyed&&generation===token;
   function emit(token,value){if(live(token))onState(value);}
   async function perform(){

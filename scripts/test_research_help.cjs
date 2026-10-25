@@ -22,6 +22,9 @@ function settleInitial(f,states=[]){for(const [i,call]of f.initial.entries())cal
 function choose(row,check){row.get('select').value=check.id;row.get('select').onchange();}
 let count=0;async function test(name,fn){await fn();count++;console.log('PASS '+name);}
 (async()=>{
+await test('finite work is counted as page-and-setting checks, never pages',async()=>{
+ const f=fixture([singleIndex]);try{const call=f.calls[0],row=f.rows[0];call.onState({state:'remaining',unit:'cases',remainingCount:2352,totalPages:56,programCount:42});assert.equal(row.get('[data-help-status]').textContent,'2352 checks remain.');call.onState({state:'results',unit:'cases'});assert.equal(row.get('[data-help-status]').textContent,'Results are saved for every declared page and setting.');}finally{f.destroy();}
+});
 await test('maintained immutable source choices, exact links, escaped prose and empty catalogue',async()=>{
  assert(groups.length>0);assert.equal(JSON.stringify(records),before);assert(html.includes('No theory or coding needed'));assert(html.includes('data-help-more hidden>Look for another check</button>'));
  for(const {record,checks}of groups){assert.deepEqual(checks,F.available(record));assert(html.includes('run.html#record='+record.id+'&amp;followup='+checks[0].id));}

@@ -1,3 +1,4 @@
+import {applyMigrations} from '../services/idea-assistant/sqlite-test-migrations.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
@@ -8,7 +9,7 @@ import {sharedFamilyCoverage,readSharedFamilyCase} from '../services/idea-assist
 const clone=v=>JSON.parse(JSON.stringify(v)),hash=v=>createHash('sha256').update(L.stable(v)).digest('hex'),at='2026-10-24T12:00:00.000Z';
 const bundle=JSON.parse(readFileSync(new URL('../data/local-run-inputs.json',import.meta.url),'utf8'));
 async function fixture(input=bundle){
- const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('../services/idea-assistant/migrations/'+name,import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');applyMigrations(sqlite);
  const queries=[],db={prepare(sql){queries.push(sql);return{bind(...args){return{async all(){return{results:sqlite.prepare(sql).all(...args)};},async first(){return sqlite.prepare(sql).get(...args)||null;}};}};}};
  const preparer=await F.createPreparer(input,webcrypto),caseId=F.caseIds(preparer.snapshot).find(id=>id.startsWith('repeat--subtract--page--lp2-00'));
  const task=(await preparer.prepare([caseId])).cases[0].task;

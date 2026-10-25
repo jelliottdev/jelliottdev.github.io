@@ -19,8 +19,8 @@
    let state=value?.state,label='Review check',message;
    if(state==='remaining'&&(!Number.isSafeInteger(value.remainingCount)||value.remainingCount<1))state='unavailable';
    if(state==='loading')message='Checking saved results…';
-   else if(state==='remaining'){message=value.remainingCount+' '+(value.remainingCount===1?'page remains':'pages remain')+' to check.';label='Review remaining check';}
-   else if(state==='results'){message='Results are saved for every declared page.';label='View results';}
+   else if(state==='remaining'){message=value.unit==='cases'?value.remainingCount+' '+(value.remainingCount===1?'check remains.':'checks remain.'):value.remainingCount+' '+(value.remainingCount===1?'page remains':'pages remain')+' to check.';label='Review remaining check';}
+   else if(state==='results'){message=value.unit==='cases'?'Results are saved for every declared page and setting.':'Results are saved for every declared page.';label='View results';}
    else if(state==='answered'){message='This question already has an answer.';label='View answer';}
    else{state='unavailable';message='Saved results could not be checked.';}
    return {state,message,label,...(state==='remaining'?{remainingCount:value.remainingCount}:{})};
@@ -30,7 +30,7 @@
   }
   function stopForBrowse(){
    if(destroyed)return;browsing=true;batchActive=false;if(more)more.hidden=true;
-   if(!recommendation&&startStatus)startStatus.textContent='Choose any check with pages remaining below.';
+   if(!recommendation&&startStatus)startStatus.textContent='Choose a check with work remaining below.';
   }
   function updateStart(entry){
    if(!startStatus)return;const state=entry.state;

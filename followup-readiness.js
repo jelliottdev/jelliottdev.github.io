@@ -9,7 +9,7 @@
  async function digest(value,cryptoAPI,raw=false){return [...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(raw?value:E.stable(value))))].map(v=>v.toString(16).padStart(2,'0')).join('');}
  function validEndpoint(value,path,pageURL,anchor){try{const u=new URL(value),base=new URL(anchor||value),local=['localhost','127.0.0.1'];return u.origin===base.origin&&!u.username&&!u.password&&!u.search&&!u.hash&&u.pathname==='/'+path&&(u.protocol==='https:'||u.protocol==='http:'&&local.includes(u.hostname)&&local.includes(new URL(pageURL).hostname));}catch{return false;}}
  function createController({record,check,followupId=check?.id,fetcher=root.fetch?.bind(root),config,loadConfig,loadInputs,crypto:cryptoAPI=root.crypto,onState=()=>{},pageURL=root.location?.href||'https://jelliottdev.github.io/research.html'}={}){
-  const recordId=record?.id,selected=record?.browser_followups?.filter(item=>item?.id===followupId)||[],recipe=selected.length===1?capture(selected[0],512*1024):null;
+  const recordId=record?.id,selected=record?.browser_followups?.filter(item=>item?.id===followupId)||[],recipe=selected.length===1?capture(selected[0],selected[0]?.kind==='finite-settings'?2*1024*1024:512*1024):null;
   let generation=0,destroyed=false,active=false,pending=null,abort=null;
   const live=token=>!destroyed&&generation===token,emit=(token,state)=>{if(live(token))onState(state);};
   async function perform(){
@@ -24,6 +24,23 @@
     const endpoint=settings.localTaskEndpoint,allowed=(value,path)=>validEndpoint(value,path,pageURL,settings.endpoint||endpoint);
     if(!allowed(endpoint,'tasks')||!allowed(settings.recordPlanEndpoint,'record-plans'))throw Error('Saved work is not configured.');
     const bundle=capture(loadInputs?await loadInputs({signal}):await json('data/local-run-inputs.json'));assertLive();
+    if(recipe.kind==='finite-settings'){
+     const Authored=node?require('./authored-finite-followup.js'):root.AuthoredFiniteFollowup,Finite=node?require('./factored-evidence-client.js'):root.FactoredEvidenceClient;
+     if(!Authored||!Finite)throw Error('The source search reader is unavailable.');
+     const wire=await json(settings.recordPlanEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId,followupId,includeExisting:true,includeMotivation:true})});assertLive();
+     const response=await request('experiments/records/'+recordId+'/record.json',{redirect:'error'}),reader=response.body?.getReader();if(!reader)throw Error('The official source is unavailable.');
+     const parts=[];let size=0;try{for(;;){const part=await reader.read();assertLive();if(part.done)break;size+=part.value.byteLength;if(size>2*1024*1024)throw Error('The official source exceeds its bound.');parts.push(part.value);}}catch(error){await reader.cancel().catch(()=>{});throw error;}
+     const sourceBytes=new Uint8Array(size);let offset=0;for(const part of parts){sourceBytes.set(part,offset);offset+=part.byteLength;}
+     const plan=await Authored.validatePlan(wire,{recordId,followupId},{bundle,sourceBytes,crypto:cryptoAPI,isLive:()=>live(token)&&!signal.aborted});assertLive();
+     if(!same(plan.snapshot,recipe))throw Error('The catalogue source changed.');
+     const domain=plan.compiled.domain,criterion=domain.criterion,inspection=domain.questionPolicy==='transformed-output-inspection-v1',output=domain.questionPolicy==='language-reference-comparison-v1',prefix=!inspection&&!output&&typeof settings.factoredPrefixSearchEndpoint==='string',route=inspection?'factored-inspection-search':output?'factored-output-search':prefix?'factored-prefix-search':'factored-search',searchEndpoint=settings[{ 'factored-inspection-search':'factoredInspectionSearchEndpoint','factored-output-search':'factoredOutputSearchEndpoint','factored-prefix-search':'factoredPrefixSearchEndpoint','factored-search':'factoredSearchEndpoint'}[route]];
+     if(!allowed(searchEndpoint,route))throw Error('Saved search evidence is not configured.');
+     const proposalId='p_'+await digest(C.serialize(recipe.card),cryptoAPI,true),scan=(inspection?Finite.createInspectionScan:output?Finite.createOutputScan:Finite.createScan)({proposalId,domain,crypto:cryptoAPI,signal,...(prefix?{evidenceMode:'verified-output-prefix-v1'}:{}),fetchPage:(body,{signal:scanSignal})=>json(searchEndpoint+'/'+proposalId+'/evidence',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,authoredOrigin:plan.origin}),signal:scanSignal},8*1024*1024)});
+     let result;do{result=await scan.step();assertLive();}while(result.status!=='complete');
+     const proof=result.proof;if(!proof.lookupComplete)throw Error('The saved search lookup is incomplete.');
+     const state={state:proof.decision.state==='answered'?(output||inspection?'results':'answered'):'remaining',unit:'cases',remainingCount:proof.remainingCases,totalCases:proof.totalCases,coveredCases:proof.coveredCases,totalPages:domain.pages.length,programCount:domain.programs.length,criterion,domainId:domain.id,origin:plan.origin,lookupComplete:true,...(domain.questionPolicy?{questionPolicy:domain.questionPolicy}:{}),...Object.fromEntries(['matchingCases','usableCases','insufficientCases','runeOutputCases','noRuneCases'].filter(k=>Object.hasOwn(proof,k)).map(k=>[k,proof[k]]))};
+     emit(token,state);return live(token)?state:null;
+    }
     const official=Inputs.parse(bundle),pins=recipe.inputs,program=F.describeCard(recipe.card);
     if(!exact(pins,['version','alphabet_sha256','pages'])||pins.version!==program.inputVersion||!HEX.test(pins.alphabet_sha256)||!Array.isArray(pins.pages)||!pins.pages.length||pins.pages.length>75||!same(pins.pages.map(p=>p?.id),program.pages)||await digest(official.alphabet,cryptoAPI)!==pins.alphabet_sha256)throw Error('Authored input pins changed.');
     const pages=[];for(const pin of pins.pages){const page=official.pages.get(pin?.id),text=pins.version==='raw'?page?.raw:page?.reviewed_text;if(!exact(pin,['id','text_sha256'])||!HEX.test(pin.text_sha256)||typeof text!=='string'||await digest(text,cryptoAPI,true)!==pin.text_sha256)throw Error('Authored page changed.');pages.push({id:pin.id,text});}assertLive();

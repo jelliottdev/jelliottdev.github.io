@@ -1,3 +1,4 @@
+import {applyMigrations} from './sqlite-test-migrations.mjs';
 /* Statistical control/plan/persistence integration; synthetic words only. */
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
@@ -16,7 +17,7 @@ const control=recipe.control,criterion=control.task.criterion,alphabet=control.t
 const card=structuredClone(recipe.card);card.scope.value.pages=[source.id];
 const pid='p_'+Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(C.serialize(card)))).toString('hex');
 const db={sqlite:new DatabaseSync(':memory:'),prepare(sql){return {bind(...args){return {sql,args,first:async()=>db.sqlite.prepare(sql).get(...args)||null,all:async()=>({results:db.sqlite.prepare(sql).all(...args)}),run:async()=>db.sqlite.prepare(sql).run(...args)};}};},async batch(statements){db.sqlite.exec('BEGIN IMMEDIATE');try{const result=statements.map(s=>({success:true,meta:{changes:Number(db.sqlite.prepare(s.sql).run(...s.args).changes)}}));db.sqlite.exec('COMMIT');return result;}catch(e){db.sqlite.exec('ROLLBACK');throw e;}}};
-for(const name of readdirSync(new URL('./migrations/',import.meta.url)).filter(n=>/^00(?:0[1-9]|1[01])_/.test(n)).sort())db.sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+applyMigrations(db.sqlite);
 db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(pid,pid.slice(2),E.stable(card),'unused',at);db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(pid,at,at.slice(0,10));
 const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async()=>({success:true})},PROPOSAL_LIMIT:{limit:async()=>({success:true})},AI:{run(){throw Error('No model call');}}};
 const req=(path,data)=>new Request('https://worker.example'+path,{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(data)});

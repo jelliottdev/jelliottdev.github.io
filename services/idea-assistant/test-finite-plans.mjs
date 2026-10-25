@@ -1,3 +1,4 @@
+import {applyMigrations} from './sqlite-test-migrations.mjs';
 /* Full finite-plan loop on synthetic text, real SQLite, no hosted writes or AI. */
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
@@ -16,7 +17,7 @@ const key=Array.from({length:277},(_,i)=>(i*i+7)%29),criterion={kind:'exact-pref
 const source={id:'lp2-15',raw:key.map((k,i)=>alphabet[(i%29+k)%29].rune).join('')};
 function card(operation={id:'finite_key',label:'Finite key stream',key,direction:'subtract',reset:'page'},rules={}){return H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic finite-stream fixture'},aim:known('Test a pattern'),method:known({operations:[operation]}),scope:known({pages:[source.id]}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(criterion),...rules}}),{id:'fixture',at}));}
 const db={sqlite:new DatabaseSync(':memory:'),prepare(sql){return {bind(...args){return {sql,args,first:async()=>db.sqlite.prepare(sql).get(...args)||null,all:async()=>({results:db.sqlite.prepare(sql).all(...args)}),run:async()=>db.sqlite.prepare(sql).run(...args)};}};},async batch(statements){db.sqlite.exec('BEGIN IMMEDIATE');try{const result=statements.map(s=>({success:true,meta:{changes:Number(db.sqlite.prepare(s.sql).run(...s.args).changes)}}));db.sqlite.exec('COMMIT');return result;}catch(e){db.sqlite.exec('ROLLBACK');throw e;}}};
-for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql','0009_word_boundary_preparations.sql','0010_family_case_results.sql','0011_task_protocol_lookup.sql'])db.sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
+applyMigrations(db.sqlite);
 const current=card(),before=structuredClone(current),pid='p_'+Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(C.serialize(current)))).toString('hex');db.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(pid,pid.slice(2),E.stable(current),'unused',at);db.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(pid,at,at.slice(0,10));
 const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async()=>({success:true})},PROPOSAL_LIMIT:{limit:async()=>({success:true})},AI:{run(){throw Error('No model call allowed');}}};
 const fetcher=async(url,options)=>{assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');return Response.json(source);};

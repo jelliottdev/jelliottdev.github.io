@@ -320,3 +320,12 @@ Checks: `scripts/test_factored_search_http.mjs` (Node SQLite),
 `scripts/test_factored_search_session_adversarial.cjs`,
 `scripts/test_factored_finite_workspace.cjs`, and
 `scripts/test_factored_finite_workspace_adversarial.cjs`.
+
+## Shared finite source storage (0014)
+
+Apply migration 0014 before deploying the source-aware finite Worker. It adds
+immutable shared snapshots and lightweight task-origin references, retaining all
+old origin bytes and the existing response shape. Local SQLite and private
+browser QA cover migration compatibility, quotas, tampering, source changes and
+save/reload. The October 25 deployment attempt was stopped before migration by
+Cloudflare account authorization error 7403; these changes are not claimed live.

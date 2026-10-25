@@ -17,7 +17,18 @@
   [['ordinary-prefix-evidence-client.js','OrdinaryPrefixEvidenceClient','verify']],
   [['followup-readiness.js','FollowupReadiness','createController']]
  ];
- const version='20261025-authored-language',scripts=new Map();let pending=null,readinessPending=null;
+ // Only authored finite checks need this read-only compiler/evidence path.
+ // Execution, admission, storage and the run-page UI are deliberately absent.
+ const finiteReadinessStages=[
+  [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity'],['output-evaluators.js','OutputEvaluators','identify'],['claim-specification.js','ClaimSpecification','createDraft'],['local-control.js','LocalControl','compatible'],['local-input-bundle.js','LocalInputBundle','parse'],['followup-context.js','FollowupContext','valid'],['experiment-protocols.js','ExperimentProtocols','describe']],
+  [['claim-share.js','ClaimShare','cardData'],['fixed-plan-compiler.js','FixedPlanCompiler','compile'],['computation-evidence.js','ComputationEvidence','compare']],
+  [['finite-settings.js','FiniteSettings','expand'],['finite-question-policy.js','FiniteQuestionPolicy','describe'],['verified-prefix-evaluation.js','VerifiedPrefixEvaluation','evaluate'],['record-question-model.js','RecordQuestionModel','finiteRecipe'],['local-run-view.js','LocalRunView','render']],
+  [['factored-language-reuse.js','FactoredLanguageReuse','prepare'],['finite-search-view.js','FiniteSearchView','render']],
+  [['factored-finite-question.js','FactoredFiniteQuestion','createOutputAccumulator'],['finite-search-workspace-view.js','FiniteSearchWorkspaceView','workDescription']],
+  [['factored-finite-search-compiler.js','FactoredFiniteSearchCompiler','compileLanguageComparison'],['factored-prefix-reuse.js','FactoredPrefixReuse','prepare']],
+  [['factored-evidence-client.js','FactoredEvidenceClient','createScan'],['authored-finite-followup.js','AuthoredFiniteFollowup','validatePlan']]
+ ];
+ const version='20261025-finite-readiness',scripts=new Map();let pending=null,readinessPending=null;
  const ready=([,name,method])=>root[name]&&(method==='payload'?typeof root[name][method]==='object':typeof root[name][method]==='function');
  function ensure(definition){
   const [file,name]=definition;if(ready(definition))return Promise.resolve(root[name]);
@@ -32,13 +43,15 @@
   });
   scripts.set(file,promise);promise.catch(()=>{if(scripts.get(file)===promise)scripts.delete(file);});return promise;
  }
- function load(){
+ function load({finite=false,language=false}={}){
+  if(finite)return loadReadiness({finite:true,language}).then(()=>load());
   if(ready(stages.at(-1)[0]))return Promise.resolve(root.RecordQuestionLive);
   if(pending)return pending;
   pending=(async()=>{for(const stage of stages)await Promise.all(stage.map(ensure));return root.RecordQuestionLive;})().catch(error=>{pending=null;throw error;});return pending;
  }
- async function loadReadiness({language=false}={}){
+ async function loadReadiness({language=false,finite=false}={}){
   if(language){try{await ensure(['language-model-data.js','RuneLanguageModelData','payload']);await ensure(['language-score.js','RuneLanguageScore','evaluate']);}catch(error){if(!root.RuneLanguageScore){scripts.delete('language-model-data.js');delete root.RuneLanguageModelData;}throw error;}}
+  if(finite)for(const stage of finiteReadinessStages)await Promise.all(stage.map(ensure));
   if(ready(readinessStages.at(-1)[0]))return Promise.resolve(root.FollowupReadiness);
   if(readinessPending)return readinessPending;
   readinessPending=(async()=>{for(const stage of readinessStages)await Promise.all(stage.map(ensure));return root.FollowupReadiness;})().catch(error=>{readinessPending=null;throw error;});return readinessPending;

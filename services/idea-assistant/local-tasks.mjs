@@ -1,3 +1,4 @@
+import {prepareOriginWrite} from './finite-origin-storage.mjs';
 import {finiteSnapshotMember,createAuthoredFiniteSourceLoader} from './authored-finite-origin.mjs';
 import {authorize as authorizePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
@@ -75,14 +76,14 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
    const publicIds=JSON.parse(publicRows?.ids||'[]');
-   const selectedOriginRow=linkedProposalId?await query(`SELECT o.origin_id,o.origin_json FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=? AND o.proposal_id=? ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,o.created_at,o.origin_id LIMIT 1`,row.id,linkedProposalId,preferredOriginId).first():null;
+   const selectedOriginRow=linkedProposalId?await query(`SELECT o.origin_id,o.origin_json FROM local_task_all_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=? AND o.proposal_id=? ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,o.created_at,o.origin_id LIMIT 1`,row.id,linkedProposalId,preferredOriginId).first():null;
    if(selectedOriginRow)preferredOriginId=selectedOriginRow.origin_id;
-   const originRows=await query(`SELECT json_group_array(json_object('origin',json(origin_json),'snapshot',json(snapshot_json))) AS entries FROM (
-    SELECT o.origin_json,o.snapshot_json FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id
+   const originRows=await query(`SELECT json_group_array(json_object('origin',json(origin_json),'snapshotText',snapshot_json,'storage',storage_kind)) AS entries FROM (
+    SELECT o.origin_json,o.snapshot_json,o.storage_kind FROM local_task_all_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id
     WHERE o.task_id=? GROUP BY o.origin_id,o.origin_json,o.snapshot_json
     ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,MIN(o.created_at),o.origin_id LIMIT 11)`,row.id,preferredOriginId).first();
-   const savedOrigins=JSON.parse(originRows?.entries||'[]'),origins=[];
-   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,finite=s.kind==='finite-settings'?await finiteSnapshotMember(task,s):null,relation=finite?finite.scopeRelation:await scopeRelation(task,s);origins.push({origin:saved.origin,control:finite?finite.control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
+   const savedOrigins=JSON.parse(originRows?.entries||'[]').map(saved=>({...saved,snapshot:JSON.parse(saved.snapshotText)})),origins=[];
+   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||saved.storage==='shared'&&L.stable(saved.snapshot)!==saved.snapshotText||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,finite=s.kind==='finite-settings'?await finiteSnapshotMember(task,s):null,relation=finite?finite.scopeRelation:await scopeRelation(task,s);origins.push({origin:saved.origin,control:finite?finite.control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
    const controls=origins.length&&!origins.some(item=>item.scopeRelation)&&task.criterion.kind!=='language-score'?null:await controlsFor(task);
    let selectedRecordOrigin=null;if(selectedOriginRow){const candidate=JSON.parse(selectedOriginRow.origin_json);if(!origins.some(item=>L.stable(item.origin)===L.stable(candidate)))throw Error('Selected authored context is not included in the validated origins');selectedRecordOrigin=candidate;}
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
@@ -118,19 +119,10 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      try{reviewed=await loadRecordPlan(body.origin,{fetcher});if(L.stable(reviewed.origin)!==L.stable(body.origin)||L.stable(reviewed.card)!==cardJson||L.stable(reviewed.task)!==taskJson||reviewed.inputVersion!==body.inputVersion||body.parentTaskId!==null)throw Error();originId=await digest(L.stable(reviewed.origin));}
      catch{return reply({error:'The reviewed origin, input pins, card or task could not be verified.'},422);}
     }
-    const originLimit=()=>reviewed?.snapshot?.kind==='finite-settings'?limits.tasks:50,originBucket=()=>reviewed?.snapshot?.kind==='finite-settings'?1:0;
-    const originGate=()=>reviewed?' AND (EXISTS(SELECT 1 FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_id=?) OR (SELECT COUNT(*) FROM local_task_origins WHERE created_day=? AND CASE WHEN json_extract(snapshot_json,\'$.kind\')=\'finite-settings\' THEN 1 ELSE 0 END=?)<?)':'';
-    const originArgs=()=>reviewed?[task.taskId,body.proposalId,originId,day,originBucket(),originLimit()]:[];
-    const originStatement=()=>query(`INSERT INTO local_task_origins(task_id,proposal_id,origin_id,origin_json,snapshot_json,created_at,created_day)
-      SELECT ?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_task_ideas WHERE task_id=? AND proposal_id=?)${originGate()}
-      ON CONFLICT(task_id,proposal_id,origin_id) DO NOTHING`,task.taskId,body.proposalId,originId,L.stable(reviewed.origin),L.stable(reviewed.snapshot),at,day,task.taskId,body.proposalId,...originArgs());
-    const originQuotaError=()=>Object.assign(Error('The daily authored-origin limit has been reached.'),{code:'daily-quota'});
-    const saveOrigin=async()=>{
-     if(!reviewed)return;
-     await db.batch([originStatement()]);
-     const saved=await query('SELECT origin_json,snapshot_json FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_id=?',task.taskId,body.proposalId,originId).first();
-     if(!saved)throw originQuotaError();if(saved.origin_json!==L.stable(reviewed.origin)||saved.snapshot_json!==L.stable(reviewed.snapshot))throw Error('The reviewed origin could not be saved.');
-    };
+    let originWrite=null;
+    const prepareOrigin=async()=>{if(reviewed&&!originWrite)originWrite=await prepareOriginWrite({db,reviewed,taskId:task.taskId,proposalId:body.proposalId,originId,at,day,finiteLimit:limits.tasks});return originWrite;};
+    const originGate=()=>originWrite?.gate.sql||'',originArgs=()=>originWrite?.gate.args||[];
+    const saveOrigin=async()=>{const write=await prepareOrigin();if(!write)return;if(write.statements.length)await db.batch(write.statements);await write.verify();};
     if(existing){
      const saved=await storedTask(existing);
      if(existing.task_hash!==taskHash||L.stable(saved)!==taskJson)return reply({error:'This computation identity has different task content.'},409);
@@ -178,6 +170,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     }catch{return reply({error:'The selected manuscript text could not be verified.'},422);}
     finally{clearTimeout(sourceTimer);}
     }
+    await prepareOrigin();
     await db.batch([query(`INSERT INTO local_tasks (id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day)
      SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<?
      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<?${originGate()} ON CONFLICT(id) DO NOTHING`,
@@ -185,11 +178,11 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      query(`INSERT INTO local_task_ideas (task_id,proposal_id,input_version,parent_task_id,created_at,created_day)
       SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_tasks WHERE id=? AND task_hash=? AND task_json=?)
       AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<?${originGate()} ON CONFLICT(task_id,proposal_id) DO NOTHING`,
-      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks,...originArgs()),...(reviewed?[originStatement()]:[])]);
+      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks,...originArgs()),...(originWrite?.statements||[])]);
     existing=await find(task.taskId);const accepted=await association();
     if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.',code:'daily-quota',retryAt},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
-    await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
+    if(originWrite)await originWrite.verify();return reply(await view(existing,body.proposalId,null,originId));
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
    const context=selectedIdea?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
@@ -202,7 +195,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    let result,controls;
    try{
     exact(body,['result']);
-    const authored=await query('SELECT COUNT(*) AS count FROM local_task_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=?',row.id).first();
+    const authored=await query('SELECT COUNT(*) AS count FROM local_task_all_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=?',row.id).first();
     if(!Number.isSafeInteger(authored?.count)||authored.count<0)throw Error('Invalid reviewed origin count');
     if(!authored.count||task.criterion.kind==='language-score')controls=await controlsFor(task);
     result=await L.verify(task,body.result);
