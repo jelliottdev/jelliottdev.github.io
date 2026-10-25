@@ -1,7 +1,7 @@
 /* Selected original-question context only. No evidence counts or execution authority. */
 (function(root){
  'use strict';
- const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,Compiler=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle;
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,Compiler=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle,Authored=node?require('./followup-context.js'):root.FollowupContext;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/,tokens=new WeakMap(),capture=(v,maxBytes=8*1024*1024)=>J.capture(v,{maxBytes,maxDepth:24,maxNodes:500000}),freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(key=>Object.hasOwn(v,key))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value')&&d.enumerable);
  function route(hash){if(typeof hash!=='string')return null;const match=/^#task=([a-f0-9]{64})(?:&idea=(p_[a-f0-9]{64}))?$/.exec(hash);return match?Object.freeze({kind:'task',id:match[1],...(match[2]?{proposalId:match[2]}:{})}):null;}
@@ -25,6 +25,30 @@
   }
   const token=Object.freeze({});tokens.set(token,freeze({proposalId,card,taskPages:task.pages.map(page=>page.id),declaredPages,comparable}));return token;
  }
+ // JSON.parse alone silently accepts duplicate keys and lone surrogate escapes.
+ function authoredJSON(text){
+  const parsed=JSON.parse(text),stack=[],tokens=text.match(/"(?:\\[\s\S]|[^"\\])*"|[{}\[\]:,]/g)||[];
+  for(const token of tokens){
+   if(token[0]==='"'){
+    const value=JSON.parse(token);if(/[\ud800-\udfff]/u.test(value))throw Error('The authored source contains malformed Unicode.');
+    const top=stack[stack.length-1];if(top?.keys&&top.key){if(top.keys.has(value))throw Error('The authored source contains duplicate fields.');top.keys.add(value);top.key=false;}
+   }else if(token==='{')stack.push({keys:new Set(),key:true});else if(token==='[')stack.push({});else if(token==='}'||token===']')stack.pop();else if(token===','&&stack[stack.length-1]?.keys)stack[stack.length-1].key=true;
+  }
+  return capture(parsed,512*1024);
+ }
+ async function readAuthoredContext(options,crypto=root.crypto){
+  if(!exact(options,['origin','bytes'])||!exact(options.origin,['recordId','followupId','recordSha256','protocolSha256']))throw Error('Use an exact published source identity and its raw bytes.');
+  const origin=capture(options.origin,1024),bytes=options.bytes,slug=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  if(![origin.recordId,origin.followupId].every(id=>typeof id==='string'&&id.length<=100&&slug.test(id))||![origin.recordSha256,origin.protocolSha256].every(id=>typeof id==='string'&&HEX.test(id))||!ArrayBuffer.isView(bytes)||Object.prototype.toString.call(bytes)!=='[object Uint8Array]'||!bytes.byteLength||bytes.byteLength>512*1024)throw Error('The authored source identity or byte bound is invalid.');
+  const raw=new Uint8Array(bytes),hash=async value=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',value))].map(v=>v.toString(16).padStart(2,'0')).join('');
+  if(await hash(raw)!==origin.recordSha256)throw Error('The authored source bytes changed.');
+  const record=authoredJSON(new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(raw));
+  if(record.id!==origin.recordId||record.status!=='published'||!Array.isArray(record.browser_followups))throw Error('The authored source is not this published record.');
+  const matches=record.browser_followups.filter(recipe=>recipe?.id===origin.followupId);if(matches.length!==1)throw Error('The authored source does not identify one matching check.');
+  const recipe=matches[0];if(await hash(new TextEncoder().encode(E.stable(recipe)))!==origin.protocolSha256)throw Error('The authored check changed.');
+  if(typeof recipe.question!=='string'||!recipe.question.trim()||Array.from(recipe.question).length>1200||Object.hasOwn(recipe,'motivation')&&!Authored?.valid(recipe.motivation))throw Error('The authored explanation is invalid.');
+  return Object.freeze({question:recipe.question,...(Object.hasOwn(recipe,'motivation')?{motivation:recipe.motivation}:{})});
+ }
  function inspect(token){const value=tokens.get(token);if(!value)throw Error('Use independently bound original-question context.');return value;}
- const api={route,href,verify,inspect};if(node)module.exports=api;else root.TaskQuestionContext=api;
+ const api={route,href,verify,inspect,readAuthoredContext};if(node)module.exports=api;else root.TaskQuestionContext=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
