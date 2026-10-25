@@ -94,8 +94,8 @@
   restoreFocus();
  }
  function availableMapHeight(){return map.getBoundingClientRect().height;}
- function revealSelection(){if(!state.record||panel.hidden||innerWidth<=760)return;const r=map.getBoundingClientRect(),point=layout.get(recordNode(state.record)?.id);if(!point)return;const x=camera.x+point.x*camera.k,y=camera.y+point.y*camera.k;if(x<32||x>r.width-32)camera.x+=r.width/2-x;if(y<32||y>r.height-32)camera.y+=r.height*.5-y;}
- function updatePreviewMode(){const reading=!panel.hidden&&innerWidth<=760;map.inert=reading;$('research-list').inert=reading;}
+ function revealSelection(){if(!state.record||panel.hidden||innerWidth<=900)return;const r=map.getBoundingClientRect(),point=layout.get(recordNode(state.record)?.id);if(!point)return;const x=camera.x+point.x*camera.k,y=camera.y+point.y*camera.k;if(x<32||x>r.width-32)camera.x+=r.width/2-x;if(y<32||y>r.height-32)camera.y+=r.height*.5-y;}
+ function updatePreviewMode(){const reading=!panel.hidden&&innerWidth<=900;map.inert=reading;$('research-list').inert=reading;}
 
  function fit(){if(!state||state.mode==='list')return;const r=map.getBoundingClientRect(),h=availableMapHeight(),b=worldBounds,k=Math.min((r.width-20)/b.width,(h-20)/b.height,1.3);camera={x:(r.width-b.width*k)/2-b.x*k,y:(h-b.height*k)/2-b.y*k,k};cameraViewport={width:r.width,height:r.height};applyCamera()}
  function reframe(){
@@ -122,7 +122,7 @@
   questionMount?.destroy();questionMount=null;
   const record=data.records[state.record];panel.hidden=!record;updatePreviewMode();if(!record)return;
   const labels={supported:'Supported within this test','not-supported':'Not supported by this test',inconclusive:'Inconclusive'},live=(globalThis.RecordQuestionView?.render(record)||'').includes('data-live-question=');
-  panel.innerHTML=`<div class="inspector-top"><button type="button" class="preview-back" aria-label="Back to map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>Back to map</button></div><div class="inspector-scroll"><h2 id="preview-title" tabindex="-1">${esc(record.title)}</h2><p class="preview-status">${esc(labels[record.outcome]||record.outcome)}</p><h3 class="preview-heading">Result</h3><p class="record-finding">${esc(record.reader_finding||record.finding)}</p>${live?previewScopeHTML(record)+previewFollowupsHTML(record,{secondary:true}):previewFollowupsHTML(record)+previewScopeHTML(record)}</div><a class="record-open" href="${esc(recordHref(record))}">${record.community?(workFor(record)?.kind==='question'?'Review question':workFor(record)?.href.startsWith('run.html#task=')?'Open unfinished experiment':'Open saved idea'):'Read full record'} ${arrow}</a>`;
+  panel.scrollTop=0;panel.innerHTML=`<div class="inspector-top"><button type="button" class="preview-back" aria-label="Back to map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>Back to map</button></div><div class="inspector-scroll"><h2 id="preview-title" tabindex="-1">${esc(record.title)}</h2><p class="preview-status">${esc(labels[record.outcome]||record.outcome)}</p><h3 class="preview-heading">Result</h3><p class="record-finding">${esc(record.reader_finding||record.finding)}</p>${live?previewScopeHTML(record)+previewFollowupsHTML(record,{secondary:true}):previewFollowupsHTML(record)+previewScopeHTML(record)}</div><a class="record-open" href="${esc(recordHref(record))}">${record.community?(workFor(record)?.kind==='question'?'Review question':workFor(record)?.href.startsWith('run.html#task=')?'Open unfinished experiment':'Open saved idea'):'Read full record'} ${arrow}</a>`;
   bindPreviewFollowups(record);questionMount=globalThis.RecordQuestionView?.mount?.(panel,record);panel.querySelector('.preview-back').onclick=()=>navigate({record:''},true);panel.onkeydown=event=>{if(event.key==='Escape'){event.preventDefault();navigate({record:''},true)}};
  }
  function pageRanges(pages){

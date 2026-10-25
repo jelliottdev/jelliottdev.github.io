@@ -62,6 +62,7 @@ assert(panelHTML.includes(escapeHTML(c.pageRanges(record.pages))),'Tested materi
 assert.equal(map.inert,true,'Mobile full-workspace record view blocks graph keyboard targets');assert.equal(container.inert,true,'Underlying List controls are also unavailable while the mobile record is shown');assert.equal(doc.activeElement,heading);
 backButton.onclick();assert.equal(requested.record,'');assert.equal(panel.hidden,true);assert.equal(map.inert,false);assert.equal(container.inert,false);assert.equal(doc.activeElement,map,'Back returns keyboard focus to the same graph workspace');assert.equal(requested.branch,parent.id);
 requested.record=parent.members[0];c.render();let escaped=false;panel.onkeydown({key:'Escape',preventDefault(){escaped=true}});assert(escaped);assert.equal(requested.record,'');assert.equal(doc.activeElement,map);assert.equal(map.inert,false);
+requested.record=parent.members[0];c.innerWidth=768;panel.scrollTop=260;c.render();assert.equal(map.inert,true,'Tablet preview uses the same full-workspace reading mode as phones');assert.equal(container.inert,true);assert.equal(panel.scrollTop,0,'Selecting a record starts at its title rather than a prior preview scroll position');
 requested.record=parent.members[0];c.innerWidth=1200;c.render();assert.equal(map.inert,false,'Desktop side pane leaves the graph available');assert.equal(container.inert,false);
 // Follow-up actions use the actual inspector helpers and the destination parser.
 const selectedId=requested.record,originalRecord=data.records[selectedId];

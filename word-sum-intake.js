@@ -2,7 +2,7 @@
 (function(root){
  'use strict';
  const C=typeof module!=='undefined'?require('./claim-specification.js'):root.ClaimSpecification;
- const ID='word-sum-boundaries',own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+ const ID='word-sum-boundaries',EVALUATION_ID='word-sum-evaluation',own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
  const normalize=s=>s.trim().replace(/\s+/g,' ');
  function scope(text){
   const pages=[];
@@ -26,7 +26,8 @@
   return {table:'reversed',sourceText:text,...(scopePages?{scopePages}:{})};
  }
  const matches=text=>!!parse(text);
- const acknowledgement=draft=>C.serialize({source:draft.source.text,method:draft.method.value});
+ const acknowledgement=draft=>C.serialize({source:draft.source.text,method:draft.method.value,aim:draft.aim,scope:draft.scope,rules:draft.rules});
+ const provenance=value=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===2&&['supplied','user_clarification','project_context','proposed'].includes(value.kind)&&Array.isArray(value.refs)&&value.refs.length<=128&&value.refs.every(ref=>typeof ref==='string'&&ref.length<=12000);
  function inspect(draft){
   try{
    if(!draft||draft.schema!==C.SCHEMA||draft.status!=='draft'||draft.confirmation||draft.execution!=='not_run')return null;
@@ -38,8 +39,9 @@
    const ops=draft.method.value.operations;if(!Array.isArray(ops)||!ops.length||ops.length>2)return null;
    const spans=[];
    for(const op of ops){
-    if(!op||op.id!=='described_method'||Object.keys(op).some(k=>!['id','label','sourceText','declaredFamilyId'].includes(k)))return null;
+    if(!op||op.id!=='described_method'||Object.keys(op).some(k=>!['id','label','sourceText','declaredFamilyId','provenance'].includes(k)))return null;
     if(own(op,'declaredFamilyId')&&op.declaredFamilyId!=='prime-indices')return null;
+    if(own(op,'provenance')&&!provenance(op.provenance))return null;
     if(typeof op.label!=='string'||!op.label.trim()||own(op,'sourceText')&&(typeof op.sourceText!=='string'||normalize(op.sourceText)!==normalize(op.label)))return null;
     spans.push(normalize(op.label));
    }
@@ -61,7 +63,8 @@
   }catch{return null;}
  }
  function question(draft){
-  if(!inspect(draft)||draft.clarifications.some(c=>c.question===ID&&c.choice==='as-described'&&c.text===acknowledgement(draft)))return null;
+  if(!inspect(draft)||draft.clarifications.some(c=>[ID,EVALUATION_ID].includes(c.question)&&c.choice==='as-described'&&c.text===acknowledgement(draft)))return null;
+  if(C.normalizeOutcome(draft.aim).id==='decipher'&&!draft.clarifications.some(c=>c.question===EVALUATION_ID&&c.choice==='numeric-ledger'&&c.text===acknowledgement(draft)))return {id:EVALUATION_ID,prompt:'What should the word sums establish?',context:'Adding prime values produces a numeric ledger. It does not test readable text or solve LP2. Your deciphering aim will stay unchanged.',choices:[{id:'numeric-ledger',label:'List numerical word sums',example:'Show each word and its total; do not judge readability or statistical significance.'},{id:'as-described',label:'Keep my intended evaluation'}]};
   return {id:ID,prompt:'Where should each word end?',
    context:'Use the archived raw rune text and the GP29 alphabet, with its prime values reversed (F=109, U=107, …, EA=2). This lists numeric word sums; it does not decode the text.',
    choices:[{id:'hyphen-period',label:'Hyphens and periods end words',example:'F / U-EA gives FU and EA; line breaks continue the word.'},
@@ -70,10 +73,10 @@
  }
  function clarify(draft,choice){
   const q=question(draft);if(!q||!q.choices.some(c=>c.id===choice))throw Error('Unavailable word-sum clarification');
-  if(choice==='as-described'){
-   const next=C.revise(draft,{});next.clarifications.push({question:ID,choice,text:acknowledgement(draft),revision:next.revision});return next;
+  if(choice==='as-described'||q.id===EVALUATION_ID){
+   const next=C.revise(draft,{});next.clarifications.push({question:q.id,choice,text:acknowledgement(draft),revision:next.revision});return next;
   }
-  const provenance={kind:'user_clarification',refs:[ID]},field=value=>C.field('specified',value,provenance),rules={};
+  const references=[ID,...(draft.method.provenance?.refs||[]),...draft.method.value.operations.flatMap(op=>op.provenance?.refs||[])],provenance={kind:'user_clarification',refs:[...new Set(references)]},field=value=>C.field('specified',value,provenance),rules={};
   for(const [name,value] of Object.entries({representation:'GP29',inputVersion:'raw',wordBoundaries:'preserve',unmapped:'preserve'}))if(draft.rules[name].status==='unspecified')rules[name]=field(value);
   rules.evaluation=field({kind:'word-prime-sums',table:'reversed',boundaries:choice});
   const method=field({...draft.method.value,operations:[{id:'word_prime_sums',label:'Word prime sums',table:'reversed',boundaries:choice}]});
