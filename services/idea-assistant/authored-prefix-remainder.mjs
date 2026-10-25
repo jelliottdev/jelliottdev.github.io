@@ -1,3 +1,4 @@
+import {finiteSnapshotMember} from './authored-finite-origin.mjs';
 /* Closed source relation for an exact reviewed remainder. Ordinary receipts stay ordinary. */
 import E from '../../local-experiment.js';
 import Compiler from '../../fixed-plan-compiler.js';
@@ -5,6 +6,7 @@ import {checkedEvidence} from './task-evidence.mjs';
 const same=(a,b)=>E.stable(a)===E.stable(b),exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 const hash=async value=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof value==='string'?value:E.stable(value))))].map(n=>n.toString(16).padStart(2,'0')).join('');
 export async function scopeRelation(task,snapshot){
+ if(snapshot?.kind==='finite-settings')return (await finiteSnapshotMember(task,snapshot)).scopeRelation;
  const declaredPages=snapshot.inputs.pages.map(p=>p.id),remainingPages=task.pages.map(p=>p.id);
  if(same(declaredPages,remainingPages))return null;
  const plan=Compiler.compile(snapshot.card);

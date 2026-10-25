@@ -5,7 +5,8 @@ import Settings from '../../finite-settings.js';
 import Controls from '../../local-plan-controls.js';
 import {validateCard} from './idea-relations.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
-import {prepareFiniteCases,compileFiniteMember} from './finite-search-admission.mjs';
+import {prepareFiniteCases,compileFiniteMember,unwrapAuthoredMemberBasis} from './finite-search-admission.mjs';
+import {createAuthoredFiniteSourceLoader} from './authored-finite-origin.mjs';
 import {findFiniteEvidence} from './finite-search-evidence.mjs';
 import {authorize} from './prepared-plans.mjs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
@@ -18,7 +19,7 @@ export async function readFiniteJSON(message,max=MAX){
  while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>max){await reader.cancel();throw Error('Request too large');}chunks.push(value);}
  const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
 }
-export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new Date(),discoverEvidence=findFiniteEvidence,prepareCases=prepareFiniteCases,taskHandler=createLocalTaskHandler({fetcher,now}),settingsAPI=Settings,authorizeDomain,routePrefix,reuseCasesBeforeCreate,verifyGroupSnapshot}={}){
+export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new Date(),discoverEvidence=findFiniteEvidence,prepareCases=prepareFiniteCases,taskHandler,settingsAPI=Settings,authorizeDomain,routePrefix,reuseCasesBeforeCreate,verifyGroupSnapshot}={}){
  if(settingsAPI!==Settings&&settingsAPI!==Settings.factored)throw Error('Unsupported finite search policy.');
  const factored=settingsAPI===Settings.factored;
  if(factored&&typeof authorizeDomain!=='function'||!factored&&authorizeDomain!==undefined)throw Error('A factored search needs its maintained domain authority.');
@@ -47,7 +48,12 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    const card=validateCard(row.card_json);settingsAPI.inspect(card);
    if(factored){
     const keys=action==='prepare-groups'?['domainId','inputVersion','groups','snapshotToken']:action==='create-groups'?['domainId','snapshotToken','groups']:action==='evidence'?['inputVersion','domainId','cursor']:action==='prepare'?['domainId','inputVersion','cases','snapshotToken']:action==='create'?['domainId','snapshotToken','cases']:['domainId','results'];
-    if(!exact(body,keys)||typeof body.domainId!=='string'||!HEX.test(body.domainId)||((action==='prepare'||creating||grouped)&&typeof body.snapshotToken!=='string')||(action==='evidence'&&body.cursor!==null&&typeof body.cursor!=='string'))return reply({error:'The declared search request changed.'},400);
+    if(!exact(body,[...keys,...(body&&Object.hasOwn(body,'authoredOrigin')?['authoredOrigin']:[])])||typeof body.domainId!=='string'||!HEX.test(body.domainId)||((action==='prepare'||creating||grouped)&&typeof body.snapshotToken!=='string')||(action==='evidence'&&body.cursor!==null&&typeof body.cursor!=='string'))return reply({error:'The declared search request changed.'},400);
+   }
+   const authoredOrigin=factored?body.authoredOrigin:undefined,loadAuthoredSource=createAuthoredFiniteSourceLoader(fetcher),handleTask=taskHandler||createLocalTaskHandler({fetcher,now,loadAuthoredSource});
+   if(authoredOrigin!==undefined){
+    try{const source=await loadAuthoredSource(authoredOrigin);if(E.stable(source.card)!==E.stable(card)||source.domain.domainId!==body.domainId||source.inputVersion!==card.rules.inputVersion.value)throw Error();}
+    catch{return reply({error:'The authored finite source, card or domain changed. Review it again.',code:'stale-scan'},409);}
    }
    let currentDomain,bundle;
    if(request.signal.aborted)return reply({error:'The request was cancelled.'},499);
@@ -56,26 +62,26 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
     const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,20000);request.signal.addEventListener('abort',abort,{once:true});
     try{bundle=await loadInputBundle({fetcher,signal:controller.signal,read:readFiniteJSON});}finally{clearTimeout(timer);request.signal.removeEventListener('abort',abort);}
     if(request.signal.aborted)return reply({error:'The request was cancelled.'},499);
-    if(factored)currentDomain=await authorizeDomain({db,card,bundle,body,proposalId,action,env,request});
+    if(factored)currentDomain=await authorizeDomain({db,card,bundle,body,proposalId,action,env,request,authoredOrigin,loadAuthoredSource});
     if(factored&&request.signal.aborted)return reply({error:'The request was cancelled.'},499);
     if(action==='evidence'){
      const found=await discoverEvidence({db,card,bundle,body,proposalId,currentDomain,env,request});if(factored)return reply(found);return reply({schema:'liberpedia-finite-search-evidence-v1',proposalId,inputVersion:body.inputVersion,...found});
     }
     if(action==='prepare-groups'){
      if(typeof verifyGroupSnapshot!=='function')return reply({error:'Grouped page reviews are unavailable.'},503);
-     const preparedAt=now().toISOString();quotaDay=preparedAt.slice(0,10);const selected=await preparePageGroups({db,proposalId,card,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},currentDomain,groups:body.groups,policy:routePrefix==='factored-inspection-search'?'inspection':routePrefix==='factored-output-search'?'output':routePrefix==='factored-prefix-search'?'prefix':'strict',cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:Date.parse(preparedAt),createdAt:preparedAt,verifySnapshot:()=>verifyGroupSnapshot({db,proposalId,currentDomain,body,env}),signal:request.signal});
+     const preparedAt=now().toISOString();quotaDay=preparedAt.slice(0,10);const selected=await preparePageGroups({db,proposalId,card,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},currentDomain,groups:body.groups,policy:routePrefix==='factored-inspection-search'?'inspection':routePrefix==='factored-output-search'?'output':routePrefix==='factored-prefix-search'?'prefix':'strict',cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:Date.parse(preparedAt),createdAt:preparedAt,verifySnapshot:()=>verifyGroupSnapshot({db,proposalId,currentDomain,body,env}),signal:request.signal,authoredOrigin,loadAuthoredSource});
      return reply({schema:'liberpedia-page-group-preparation-v1',proposalId,domainId:selected.domainId,inputVersion:selected.inputVersion,groups:selected.groups,totals:selected.totals});
     }
     if(action==='prepare'){
     const preparedAt=now().toISOString();quotaDay=preparedAt.slice(0,10);
-    const prepared=await prepareCases({db,proposalId,card,cases:body.cases,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},crypto:globalThis.crypto,createdAt:preparedAt,settingsAPI,currentDomain,body,env,request});
+    const prepared=await prepareCases({db,proposalId,card,cases:body.cases,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},crypto:globalThis.crypto,createdAt:preparedAt,settingsAPI,currentDomain,body,env,request,authoredOrigin,loadAuthoredSource});
     return reply({schema:'liberpedia-finite-search-preparation-v1',proposalId,inputVersion:prepared.inputVersion,cases:prepared.cases,...(factored?{sources:prepared.sources||[],sourceLinks:prepared.sourceLinks||[]}:{})});
     }
    }
    // Outer admission/rate check covers this bounded batch. Internal calls use
    // the unchanged task/result handlers; there is no externally trusted bypass.
    const innerEnv={...env,TASK_LIMIT:{limit:async()=>({success:true})}},invoke=async(path,data)=>{
-    const response=await taskHandler(new Request(new URL(path,url),{method:'POST',headers:{origin:env.SITE_ORIGIN,'Content-Type':'application/json'},body:JSON.stringify(data),signal:request.signal}),innerEnv),value=await response.json();
+    const response=await handleTask(new Request(new URL(path,url),{method:'POST',headers:{origin:env.SITE_ORIGIN,'Content-Type':'application/json'},body:JSON.stringify(data),signal:request.signal}),innerEnv),value=await response.json();
     if(!response.ok){const error=Error(value.error||'The batch could not be saved.');error.status=response.status;
      if(response.status===429&&value.code==='daily-quota'){error.code='daily-quota';if(typeof value.retryAt==='string'&&/^\d{4}-\d{2}-\d{2}T00:00:00\.000Z$/.test(value.retryAt)&&Number.isFinite(Date.parse(value.retryAt)))error.retryAt=value.retryAt;}
      if(response.status===429&&value.code==='rate-limited'){error.code='rate-limited';if(Number.isSafeInteger(value.retryAfterSeconds)&&value.retryAfterSeconds>0&&value.retryAfterSeconds<=86400)error.retryAfterSeconds=value.retryAfterSeconds;}
@@ -83,7 +89,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    };
    if(action==='create-groups'){
     if(typeof verifyGroupSnapshot!=='function')return reply({error:'Grouped page reviews are unavailable.'},503);
-    const reviewed=await reviewPageGroupCreation({db,proposalId,card,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},currentDomain,groups:body.groups,policy:routePrefix==='factored-inspection-search'?'inspection':routePrefix==='factored-output-search'?'output':routePrefix==='factored-prefix-search'?'prefix':'strict',cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:now().getTime(),verifySnapshot:()=>verifyGroupSnapshot({db,proposalId,currentDomain,body,env}),signal:request.signal}),tasks=[];
+    const reviewed=await reviewPageGroupCreation({db,proposalId,card,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},currentDomain,groups:body.groups,policy:routePrefix==='factored-inspection-search'?'inspection':routePrefix==='factored-output-search'?'output':routePrefix==='factored-prefix-search'?'prefix':'strict',cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:now().getTime(),verifySnapshot:()=>verifyGroupSnapshot({db,proposalId,currentDomain,body,env}),signal:request.signal,authoredOrigin,loadAuthoredSource}),tasks=[];
     for(const group of reviewed.selection.groups){if(request.signal.aborted)return reply({error:'The request was cancelled; any created groups are retained.'},499);const item=reviewed.requests.find(item=>item.groupId===group.id),{groupId,...ordinary}=item;tasks.push({groupId,view:await invoke('/tasks',{proposalId,...ordinary})});}
     return reply({schema:'liberpedia-page-group-tasks-v1',proposalId,domainId:reviewed.selection.domainId,tasks});
    }
@@ -91,9 +97,10 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
     if((!factored&&!exact(body,['cases']))||!Array.isArray(body.cases)||!body.cases.length||body.cases.length>12)return reply({error:'Select one to twelve reviewed cases.'},400);
     const seen=new Set(),reviewed=[];for(const item of body.cases){
      if(!exact(item,['task','inputVersion','parentTaskId','preparationId'])||item.parentTaskId!==null||item.inputVersion!==card.rules.inputVersion.value||seen.has(item.task?.taskId))throw Error('The reviewed cases changed.');seen.add(item.task.taskId);
-     await E.checkIdentity(item.task);const controls=await Controls.prepare(item.task);if(!await authorize({db,proposalId,card,...item,controls}))return reply({error:'A case needs its original reviewed preparation.'},409);
-     const issued=await query('SELECT basis_json FROM prepared_plans WHERE id=? AND proposal_id=?',item.preparationId,proposalId).first(),basis=issued&&JSON.parse(issued.basis_json);
+     await E.checkIdentity(item.task);
+     const issued=await query('SELECT basis_json FROM prepared_plans WHERE id=? AND proposal_id=?',item.preparationId,proposalId).first();let basis;try{basis=issued&&unwrapAuthoredMemberBasis(JSON.parse(issued.basis_json),authoredOrigin,currentDomain?.domain.id);}catch(error){return reply({error:error.message},409);}
      if(!exact(basis,['kind','settings','caseId'])||basis.kind!==(routePrefix==='factored-inspection-search'?'factored-inspection-settings':routePrefix==='factored-output-search'?'factored-output-settings':factored?'factored-finite-settings':'finite-settings'))return reply({error:'A case needs its declared finite-settings preparation.'},409);
+     const controls=await Controls.prepare(item.task);if(!await authorize({db,proposalId,card,...item,controls,loadAuthoredSource}))return reply({error:'A case needs its original reviewed preparation.'},409);
      const member=compileFiniteMember(card,basis.settings,settingsAPI,routePrefix==='factored-inspection-search'?'transformed-output-inspection-v1':routePrefix==='factored-output-search'?'language-reference-comparison-v1':undefined),descriptor=await Evidence.describe(item.task,item.inputVersion);
      if(factored&&(item.task.engine!==currentDomain.domain.engine||E.stable(item.task.alphabet)!==E.stable(currentDomain.domain.alphabet)||item.task.pages.some(page=>!currentDomain.domain.pages.some(actual=>actual.id===page.id&&actual.text===page.text))))return reply({error:'A reviewed case uses an earlier source version. Prepare it again.'},409);
      if(item.task.pages.length!==1||!member.plan.pages.includes(item.task.pages[0].id)||E.stable(item.task.steps)!==E.stable(member.plan.steps)||E.stable(item.task.criterion)!==E.stable(member.plan.criterion)||member.plan.inputVersion!==item.inputVersion||descriptor.pages[0].caseId!==basis.caseId)return reply({error:'A case is outside the declared finite search.'},409);
@@ -109,6 +116,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    const seen=new Set();for(const item of body.results){
     if(!exact(item,['taskId','result'])||!HEX.test(item.taskId)||seen.has(item.taskId))throw Error('The completed cases changed.');seen.add(item.taskId);
     const row=await query('SELECT t.task_json FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',item.taskId,proposalId).first();if(!row)return reply({error:'A completed case is not associated with this idea.'},409);
+    if(authoredOrigin!==undefined){const owned=await query('SELECT origin_json FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_json=?',item.taskId,proposalId,E.stable(authoredOrigin)).first();if(!owned||E.stable(JSON.parse(owned.origin_json))!==E.stable(authoredOrigin))return reply({error:'A completed case belongs to another authored finite source.'},409);}
     await E.verify(JSON.parse(row.task_json),item.result);
    }
    const receipts=[];for(const item of body.results){if(request.signal.aborted)return reply({error:'The request was cancelled; any saved results are retained.'},499);const saved=await invoke('/tasks/'+item.taskId+'/results',{result:item.result});receipts.push({taskId:saved.taskId,state:saved.state,latestRun:saved.latestRun});}

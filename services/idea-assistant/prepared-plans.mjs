@@ -1,3 +1,4 @@
+import {checkedAuthoredFiniteMember} from './authored-finite-origin.mjs';
 import {checkedOrdinaryPrefixEvidence,discoverOrdinaryPrefixEvidence,combineOrdinaryPrefixCoverage} from './ordinary-prefix-evidence.mjs';
 /* Immutable server-issued admission proof. No generation, inference or task writes. */
 import C from '../../claim-specification.js';
@@ -53,9 +54,10 @@ async function proposal(db,bound){
  if(!row)return false;
  try{return row.card_hash===bound.base.cardHash&&C.serialize(validateCard(row.card_json))===C.serialize(bound.card);}catch{return false;}
 }
-async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch){
+async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch,loadAuthoredSource){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
+  if(basis.kind==='authored-finite-member-v1'){await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,fetcher,loadAuthoredSource});await basisFor(db,basis.memberBasis,bound,authority,fresh,fetcher,loadAuthoredSource);return {text:data.text,hash:await sha(data.text)};}
   if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind)){
    const reviewed=await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,fetcher});
    if(basis.kind==='record-strict-evidence-remainder-v1'){
@@ -181,14 +183,14 @@ async function checked(row,bound){
  }catch{return null;}
  return p;
 }
-export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits,fetcher=globalThis.fetch}){
+export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits,fetcher=globalThis.fetch,loadAuthoredSource}){
  const limits=checkedStorageLimits(storageLimits);
  const bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});
  require(await proposal(db,bound),'Confirmed proposal is unavailable or changed');
  if(parentTaskId!==null)require(await query(db,'SELECT t.id FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',parentTaskId,proposalId),
   'Prepared parent is not associated with this idea');
  require(['idea','remaining-lp2','word-boundaries'].includes(authority),'Invalid prepared authority');
- const source=await basisFor(db,basis,bound,authority,false,fetcher),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
+ const source=await basisFor(db,basis,bound,authority,false,fetcher,loadAuthoredSource),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
  let row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
  if(row){const receipt=await checked(row,bound);require(receipt,'Stored preparation differs from its binding');return receipt;}
  require(typeof createdAt==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(createdAt)
@@ -201,7 +203,7 @@ export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,c
  if(!row){const error=Error('The daily prepared-plan limit has been reached');error.code='preparation-limit';throw error;}
  const receipt=await checked(row,bound);require(receipt,'Prepared plan could not be verified');return receipt;
 }
-export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls,fetcher=globalThis.fetch}){
+export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls,fetcher=globalThis.fetch,loadAuthoredSource}){
  let bound;
  try{if(preparationId!==undefined)require(typeof preparationId==='string'&&PREP.test(preparationId),'Invalid preparation ID');
   bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});}catch{return null;}
@@ -210,6 +212,6 @@ export async function authorize({db,preparationId,proposalId,card,task,inputVers
   await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
   await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
  const receipt=await checked(row,bound);if(!receipt)return null;
- try{const basis=JSON.parse(row.basis_json);if(['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
+ try{const basis=JSON.parse(row.basis_json);if(basis.kind==='authored-finite-member-v1'){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource);return {...receipt,reviewed:await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion,fetcher,loadAuthoredSource})};}if(['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
  return receipt;
 }

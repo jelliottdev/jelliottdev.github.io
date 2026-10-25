@@ -49,5 +49,12 @@ await test('actual optional source loader assigns heading through textContent an
  const invalid=setup(),bad={...origin,recordSha256:'f'.repeat(64)};await invalid.scope.loadAuthoredPurpose(invalid.context,bad,1,'a'.repeat(64));assert.equal(invalid.title.textContent,'Prior recorded calculation');assert(!Object.hasOwn(invalid.context,'authoredTitle'));
  assert(source.includes('Recorded calculation: \'+esc(task.title)'),'The unchanged stored title stays in existing exact details');
 });
+await test('large finite source explanations preserve the fixed source bound and reject oversized families',async()=>{
+ const sha=value=>createHash('sha256').update(value).digest('hex'),recipe={kind:'finite-settings',id:'family',title:'Try a number pattern',question:'What does the number pattern produce?',motivation:'Inspect the output before choosing another rule.'};
+ function input(kind,size){const selected={...recipe,...(kind?{kind}:{kind:undefined})};if(!kind)delete selected.kind;const record={id:'large-source',status:'published',browser_followups:[selected],padding:'x'.repeat(size)},bytes=new TextEncoder().encode(JSON.stringify(record));return {origin:{recordId:record.id,followupId:selected.id,recordSha256:sha(bytes),protocolSha256:sha(E.stable(selected))},bytes};}
+ assert.equal((await Context.readAuthoredContext(input('finite-settings',600000),webcrypto)).title,recipe.title);
+ await assert.rejects(Context.readAuthoredContext(input(null,600000),webcrypto),/byte bound/);
+ await assert.rejects(Context.readAuthoredContext(input('finite-settings',2*1024*1024),webcrypto),/byte bound/);
+});
 console.log(n+' selected task/question context groups passed; no evidence counts or execution');}
 module.exports={fixture};if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1;});

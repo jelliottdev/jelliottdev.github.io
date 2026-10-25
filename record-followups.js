@@ -18,11 +18,11 @@
   await E.checkIdentity(plan,cryptoAPI);const seen=new Set(),runes=new Set(plan.alphabet.map(v=>v.rune));
   for(const item of origins){
    if(!exact(item,['origin','control','question','scopeChange','limitation',...(Object.hasOwn(item||{},'scopeRelation')?['scopeRelation']:[])])||!validOrigin(item.origin)||!['question','scopeChange','limitation'].every(k=>text(item[k])))throw Error('The published origin metadata is invalid.');
-   if(Object.hasOwn(item,'scopeRelation')){const relation=item.scopeRelation,ids=/^(?:lp1-(?:0[0-9]|1[0-6])|lp2-(?:[0-4][0-9]|5[0-7]))$/;if(!exact(relation,['kind','declaredPages','remainingPages'])||relation.kind!=='remaining-pages'||!Array.isArray(relation.declaredPages)||!Array.isArray(relation.remainingPages)||!relation.remainingPages.length||relation.declaredPages.length>75||relation.declaredPages.length<=relation.remainingPages.length||[relation.declaredPages,relation.remainingPages].some(values=>values.some(id=>typeof id!=='string'||!ids.test(id))||new Set(values).size!==values.length||!same(values,[...values].sort()))||!same(relation.remainingPages,plan.pages.map(page=>page.id))||relation.remainingPages.some(id=>!relation.declaredPages.includes(id)))throw Error('The published remaining-page relation is invalid.');}
+   if(Object.hasOwn(item,'scopeRelation')){const relation=item.scopeRelation;if(relation?.kind==='finite-settings-member'){const checker=node?require('./finite-origin-relation.js'):root.FiniteOriginRelation;if(typeof checker?.validate!=='function'||!await checker.validate(relation,plan))throw Error('The published finite-member relation is invalid.');}else{const ids=/^(?:lp1-(?:0[0-9]|1[0-6])|lp2-(?:[0-4][0-9]|5[0-7]))$/;if(!exact(relation,['kind','declaredPages','remainingPages'])||relation.kind!=='remaining-pages'||!Array.isArray(relation.declaredPages)||!Array.isArray(relation.remainingPages)||!relation.remainingPages.length||relation.declaredPages.length>75||relation.declaredPages.length<=relation.remainingPages.length||[relation.declaredPages,relation.remainingPages].some(values=>values.some(id=>typeof id!=='string'||!ids.test(id))||new Set(values).size!==values.length||!same(values,[...values].sort()))||!same(relation.remainingPages,plan.pages.map(page=>page.id))||relation.remainingPages.some(id=>!relation.declaredPages.includes(id)))throw Error('The published remaining-page relation is invalid.');}}
    const key=E.stable(item.origin);if(seen.has(key))throw Error('A published origin is repeated.');seen.add(key);
    const control=item.control;if(!exact(control,['label','task','expected_result_sha256'])||!text(control.label,300)||!HEX.test(control.expected_result_sha256))throw Error('The synthetic control metadata is invalid.');
    await E.checkIdentity(control.task,cryptoAPI);
-   if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>runes.has(ch)).length>4096||!Control.compatible(control.task,plan))throw Error('The synthetic control does not match this bounded experiment.');
+   if(control.task.pages.length!==1||Array.from(control.task.pages[0].text).filter(ch=>runes.has(ch)).length>4096||!Control.compatible(control.task,item.scopeRelation?.kind==='finite-settings-member'?{...plan,criterion:{kind:'measurement'}}:plan))throw Error('The synthetic control does not match this bounded experiment.');
   }
   return clone(origins);
  }
@@ -80,7 +80,7 @@
  }
  function createWorkspace(doc,host,options){
   const {reference:ref,config,request,validEndpoint,crypto:cryptoAPI=root.crypto,planHTML,isLive=()=>true,onCreated,onRemaining,onCancel,reviewHTML=planHTML,projection,checkedCoverage,coverageHTML,checkBoundaryComparison,bindAuthoredReuse,checkAuthoredReuse,checkAuthoredPrefixReuse,runAuthoredRemainder}=options;
-  let dead=false,version=0,plan=null,busy=false,intent=null,reuseCleanup=null;const controller=new AbortController(),live=token=>!dead&&version===token&&isLive(),get=id=>doc.getElementById(id),set=(id,value)=>{const el=get(id);if(el)el.textContent=value;};
+  let dead=false,version=0,plan=null,busy=false,intent=null,reuseCleanup=null,finiteWorkspace=null;const controller=new AbortController(),live=token=>!dead&&version===token&&isLive(),get=id=>doc.getElementById(id),set=(id,value)=>{const el=get(id);if(el)el.textContent=value;};
   const endpoint=(value,path)=>typeof value==='string'&&validEndpoint(value,path);
   async function json(url,body,timeout=25000){const response=await request(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal},timeout),reader=node?require('./ordinary-prefix-evidence-client.js'):root.OrdinaryPrefixEvidenceClient,value=reader?await reader.read(response,{signal:controller.signal}):await response.json();if(!response.ok)throw Error(text(value?.error,1200)?value.error:text(value?.reason,1200)?value.reason:'The request could not be completed. Please retry.');return value;}
   const actionLabel=()=>plan?.verifiedAuthoredReuse?(plan.verifiedAuthoredReuse.coveredPages.length?'Run remaining '+plan.verifiedAuthoredReuse.remainingPages.length+' '+(plan.verifiedAuthoredReuse.remainingPages.length===1?'page':'pages'):'Run check'):plan?.verifiedCoverage?'Review '+plan.verifiedCoverage.remainingPages.length+' unchecked '+(plan.verifiedCoverage.remainingPages.length===1?'page':'pages'):'Run check';
@@ -106,7 +106,9 @@
   }
   async function load(preserve=false){cleanupReuse();const previous=preserve===true?plan:null,token=++version;if(previous){busy=true;status('Checking the saved comparison…');}else host.innerHTML='<h1>Published follow-up</h1><p role="status">Loading the reviewed plan…</p>';try{
    if(!ref||!endpoint(config?.recordPlanEndpoint,'record-plans'))throw Error('Published follow-up plans are not available here yet.');
-   const checked=await validatePlan(await json(config.recordPlanEndpoint,{recordId:ref.recordId,followupId:ref.followupId,includeExisting:true,includeExistingContext:true,includeBoundaryComparison:true,includeMotivation:true,...((typeof checkAuthoredReuse==='function'||typeof checkAuthoredPrefixReuse==='function')?{includeDerivedPrefixEvidence:true}:{})}),ref,cryptoAPI);if(!live(token))return;
+   const incoming=await json(config.recordPlanEndpoint,{recordId:ref.recordId,followupId:ref.followupId,includeExisting:true,includeExistingContext:true,includeBoundaryComparison:true,includeMotivation:true,...((typeof checkAuthoredReuse==='function'||typeof checkAuthoredPrefixReuse==='function')?{includeDerivedPrefixEvidence:true}:{})});if(!live(token))return;
+   if(incoming?.state==='finite-plan-ready'){const finite=node?require('./authored-finite-followup.js'):root.AuthoredFiniteFollowup;if(!finite?.createWorkspace)throw Error('The source search tools could not be loaded. Reload this page.');finiteWorkspace?.destroy();finiteWorkspace=finite.createWorkspace(doc,host,{...options,initialPlan:incoming,reloadPlan:()=>load(),saveCard:(card,key,lifecycle)=>saveIdeaCard(card,key,token,true,lifecycle.isLive)});await finiteWorkspace.ready;return;}
+   const checked=await validatePlan(incoming,ref,cryptoAPI);if(!live(token))return;
    const reuseChecker=['measurement','word-affine-count','word-prime-sums','exact-prefix','language-score'].includes(checked.task.criterion.kind)&&typeof checkAuthoredReuse==='function'?checkAuthoredReuse:checked.task.criterion.kind==='exact-prefix'&&typeof checkAuthoredPrefixReuse==='function'?checkAuthoredPrefixReuse:null;
    if(Object.hasOwn(checked,'coverage')){
     if(typeof checkedCoverage!=='function'||typeof coverageHTML!=='function')throw Error('Saved evidence could not be checked. Reload before starting new work.');
@@ -135,13 +137,13 @@
    }catch{if(!live(token))return;checked.boundaryComparisonError=true;}
    plan=checked;draw();
   }catch(error){if(!live(token))return;if(previous){plan=previous;plan.boundaryComparisonError=true;delete plan.verifiedBoundaryComparison;draw();status('',error.message);}else{host.innerHTML='<h1>Follow-up unavailable</h1><p class="error" role="alert">'+esc(error.message)+'</p><button id="retry-followup">Retry</button><p><a href="library.html?v=record-panel-20261024#/experiment/'+esc(ref.recordId)+'">Read the source experiment</a></p>';get('retry-followup').onclick=()=>load();}}finally{if(previous&&live(token)){busy=false;status(get('followup-status')?.textContent||'',get('followup-error')?.textContent||'');}}}
-  async function saveIdeaCard(card,key,token){
+  async function saveIdeaCard(card,key,token,returnEntry=false,childLive=()=>true){
    for(const [name,path]of [['proposalEndpoint','proposals'],['researchIdeaEndpoint','ideas']])if(!endpoint(config?.[name],path))throw Error('Saving reviewed comparisons is not available here yet.');
    if(!intent||intent.key!==key){const snapshot=C.confirm(cardSnapshot(card),{id:cryptoAPI.randomUUID(),at:new Date().toISOString()});intent={key,requestId:cryptoAPI.randomUUID(),fragment:H.encode(snapshot),proposalId:'p_'+await digest(C.serialize(H.cardData(snapshot)),cryptoAPI)};}
-   if(!live(token))return null;const created=await json(config.proposalEndpoint,{requestId:intent.requestId,fragment:intent.fragment});if(!live(token))return null;
+   if(!live(token)||!childLive())return null;const created=await json(config.proposalEndpoint,{requestId:intent.requestId,fragment:intent.fragment});if(!live(token)||!childLive())return null;
    if(created.id!==intent.proposalId||!['received','already_received'].includes(created.status)||!Number.isFinite(Date.parse(created.receivedAt)))throw Error('The saved idea receipt does not match this card.');
-   const idea=await json(config.researchIdeaEndpoint,{proposalId:intent.proposalId});if(!live(token))return null;if(idea.id!==intent.proposalId||!same(idea.card,card))throw Error('The shared research entry does not match this card.');
-   return intent.proposalId;
+   const idea=await json(config.researchIdeaEndpoint,{proposalId:intent.proposalId});if(!live(token)||!childLive())return null;if(idea.id!==intent.proposalId||!same(idea.card,card))throw Error('The shared research entry does not match this card.');
+   return returnEntry?clone(idea):intent.proposalId;
   }
   async function reviewCompanion(){
    const card=plan?.verifiedBoundaryComparison?.nextCard;if(!card||busy||typeof onRemaining!=='function')return;const token=version;busy=true;status('Saving the comparison question…');
@@ -167,7 +169,7 @@
    const origins=await validateOrigins(checked.origins,checked.plan,cryptoAPI);if(!live(token))return;if(!origins.some(item=>same(item.origin,plan.origin)&&same(item.control,plan.control)&&item.question===plan.question&&item.scopeChange===plan.scopeChange&&item.limitation===plan.limitation))throw Error('The created experiment has no matching published origin.');
    status('Starting your check…');await onCreated(checked,true);
   }catch(error){if(live(token)){if(error.reviewAgain){busy=false;const refreshing=load(),refreshedVersion=version;await refreshing;if(live(refreshedVersion))status('Saved output changed. Review the current remaining pages before running.');}else status('',error.message);}}finally{if(live(token)){busy=false;const button=get('create-followup');if(button){button.disabled=false;button.textContent=actionLabel();}}}}
-  const ready=load();return {ready,destroy(){dead=true;version++;controller.abort();cleanupReuse();},getState:()=>({plan,busy})};
+  const ready=load();return {ready,destroy(){dead=true;version++;controller.abort();finiteWorkspace?.destroy();cleanupReuse();},getState:()=>finiteWorkspace?finiteWorkspace.getState():({plan,busy})};
  }
  function comparisonLabel(task){const view=node?require('./boundary-comparison-view.js'):root.BoundaryComparisonView;return view?.describe(task)?.actionLabel||'Review remaining comparison';}
  const api={reference,validateOrigins,createWorkspace};api.describeCard=cardProgram;if(node)module.exports=api;else root.RecordFollowups=api;

@@ -4,9 +4,10 @@
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const encoder=new TextEncoder(),MAX_RUNNER=100000,MAX_TASK=2000000;
  const Control=typeof module==='object'&&module.exports?require('./local-control.js'):root.LocalControl;
+ const finiteRelation=()=>typeof module==='object'&&module.exports?require('./finite-origin-relation.js'):root.FiniteOriginRelation;
  const Checks=typeof module==='object'&&module.exports?require('./local-plan-controls.js'):root.LocalPlanControls;
  const GUARD_SHA256='378f13633d46c18d940b4d5c71b3d2508558e9dd9714eeca22c6bf1a6819059d';
- const SUBSET_GUARD_SHA256='0c3379bedb4b3c3e5e0eb35adf1a0e01d0be94a8b09f0e84d2d2570ff834bd48';
+ const SUBSET_GUARD_SHA256='cacd30de15ef5b9da84eb6bc708fd059d17a83341153f9f997806fb90eb6e759';
  const AUTHORED_LANGUAGE_GUARD_SHA256='eab2836a1fa76b0cff973cb26a8b227a730e30844207345ae32249852533dd75';
  const PLAN_GUARD_SHA256='36b01527be08f0594c2eb94f8bf5390015a7dedbef98657e80f5ab0af9953b95';
  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(k=>Object.hasOwn(value,k));
@@ -76,9 +77,9 @@
   E.validateTask(task);
   const snapshot=JSON.parse(JSON.stringify(task)),savedOrigins=originSnapshot(origins);
   const subsets=savedOrigins.filter(entry=>Object.hasOwn(entry,'scopeRelation'));
-  if(subsets.length){for(const entry of subsets){const r=entry.scopeRelation,id=/^(?:lp1-(?:0[0-9]|1[0-6])|lp2-(?:[0-4][0-9]|5[0-7]))$/;if(!exact(r,['kind','declaredPages','remainingPages'])||r.kind!=='remaining-pages'||!Array.isArray(r.declaredPages)||!Array.isArray(r.remainingPages)||!r.remainingPages.length||r.declaredPages.length>75||r.declaredPages.length<=r.remainingPages.length||[r.declaredPages,r.remainingPages].some(values=>values.some(v=>typeof v!=='string'||!id.test(v))||new Set(values).size!==values.length||E.stable(values)!==E.stable([...values].sort()))||E.stable(r.remainingPages)!==E.stable(snapshot.pages.map(p=>p.id))||r.remainingPages.some(v=>!r.declaredPages.includes(v)))throw Error('Invalid remaining-page origin relation.');}
+  if(subsets.length){for(const entry of subsets){const r=entry.scopeRelation;if(r?.kind==='finite-settings-member'){const FiniteRelation=finiteRelation();if(!FiniteRelation?.validate)throw Error('The finite-member relation validator is unavailable.');FiniteRelation.validate(r,snapshot);continue;}const id=/^(?:lp1-(?:0[0-9]|1[0-6])|lp2-(?:[0-4][0-9]|5[0-7]))$/;if(!exact(r,['kind','declaredPages','remainingPages'])||r.kind!=='remaining-pages'||!Array.isArray(r.declaredPages)||!Array.isArray(r.remainingPages)||!r.remainingPages.length||r.declaredPages.length>75||r.declaredPages.length<=r.remainingPages.length||[r.declaredPages,r.remainingPages].some(values=>values.some(v=>typeof v!=='string'||!id.test(v))||new Set(values).size!==values.length||E.stable(values)!==E.stable([...values].sort()))||E.stable(r.remainingPages)!==E.stable(snapshot.pages.map(p=>p.id))||r.remainingPages.some(v=>!r.declaredPages.includes(v)))throw Error('Invalid remaining-page origin relation.');}
    if(runnerControls===null)throw Error('Remaining-page checks require both control suites.');
-   if(!exact(subsetOptions,['subsetGuardText','planGuardText'])||Object.values(Object.getOwnPropertyDescriptors(subsetOptions)).some(d=>!Object.hasOwn(d,'value')))throw Error('Remaining-page checks require the fixed subset and runner guards.');subsetOptions={subsetGuardText:subsetOptions.subsetGuardText,planGuardText:subsetOptions.planGuardText};
+   const finite=subsets.some(entry=>entry.scopeRelation.kind==='finite-settings-member');if(!exact(subsetOptions,['subsetGuardText','planGuardText',...(finite?['finiteGuardText']:[])])||Object.values(Object.getOwnPropertyDescriptors(subsetOptions)).some(d=>!Object.hasOwn(d,'value')))throw Error('Remaining-page checks require the fixed subset and runner guards.');subsetOptions={subsetGuardText:subsetOptions.subsetGuardText,planGuardText:subsetOptions.planGuardText,...(finite?{finiteGuardText:subsetOptions.finiteGuardText}:{})};
   }else if(subsetOptions!==null)throw Error('Only remaining-page origins use subset guards.');
   if(runnerControls!==null&&savedOrigins.length&&!subsets.length&&snapshot.criterion.kind!=='language-score')throw Error('Choose the authored controls or the generic runner checks, not both.');
   const authoredLanguage=savedOrigins.length&&snapshot.criterion.kind==='language-score';
@@ -105,7 +106,7 @@
    for(const entry of savedOrigins){
     const c=entry.control;await E.checkIdentity(c.task);
     for(const key of ['steps','alphabet'])if(E.stable(c.task[key])!==E.stable(snapshot[key]))throw Error('The control uses a different '+key+'.');
-    if(!Control.compatible(c.task,snapshot))throw Error('The control uses an unsupported criterion.');
+    if(!Control.compatible(c.task,entry.scopeRelation?.kind==='finite-settings-member'?{...snapshot,criterion:{kind:'measurement'}}:snapshot))throw Error('The control uses an unsupported criterion.');
     const result=E.run(c.task);
     if(!Control.passed(c.task,result))throw Error('The synthetic control failed; target package not prepared.');
     if(await digest(encoder.encode(E.stable(result)))!==c.expected_result_sha256)throw Error('The complete synthetic control result changed.');
@@ -114,8 +115,9 @@
    if(subsets.length){
     const subsetGuard=textBytes(subsetOptions.subsetGuardText,'Subset control guard source',MAX_RUNNER),planGuard=textBytes(subsetOptions.planGuardText,'Runner guard source',MAX_RUNNER);
     if(await digest(subsetGuard)!==SUBSET_GUARD_SHA256||await digest(planGuard)!==PLAN_GUARD_SHA256)throw Error('The fixed remaining-page control guards changed.');
+    const finiteMembers=[];if(subsets.some(entry=>entry.scopeRelation.kind==='finite-settings-member')){const finiteGuard=textBytes(subsetOptions.finiteGuardText,'Finite member guard source',MAX_RUNNER);if(await digest(finiteGuard)!==FINITE_AUDIT_SHA256)throw Error('The fixed finite member guard changed.');finiteMembers.push(['verify_finite_search.py',finiteGuard]);}
     const instructions='Remaining pages from a declared check\n\nTask ID: '+snapshot.taskId+'\n\nExtract every file, including the controls folder. Review task.json, origins.json, runner-controls.json and the fixed Python files.\nPython 3.9 or later and its standard library are sufficient.\n\nRun:\n  python verify_subset_controls.py --task task.json --origins origins.json --controls runner-controls.json --out results.json\n\nBoth the original authored known-answer controls and the task-bound runner checks must pass before any target page runs. A failure writes no target result. The command refuses to overwrite results.json.\nThe scope relation names only these remaining pages; it does not reproduce or claim results for other declared pages. Published provenance is preserved, not independently authenticated offline.\nNo network calls or automatic uploads occur.\nReturn manually to inspect or select results at:\n  '+address+'\n';
-    return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],['origins.json',textBytes(E.stable({version:1,origins:savedOrigins})+'\n','Authored origins',MAX_TASK)],['verify_controls.py',guard],...Array.from(controls.entries()).sort((a,b)=>a[0].localeCompare(b[0])).map(([id,task])=>['controls/'+id+'.json',textBytes(E.stable(task)+'\n','Synthetic control',MAX_TASK)]),['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',planGuard],['verify_subset_controls.py',subsetGuard],...modelMembers]);
+    return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],['origins.json',textBytes(E.stable({version:1,origins:savedOrigins})+'\n','Authored origins',MAX_TASK)],['verify_controls.py',guard],...Array.from(controls.entries()).sort((a,b)=>a[0].localeCompare(b[0])).map(([id,task])=>['controls/'+id+'.json',textBytes(E.stable(task)+'\n','Synthetic control',MAX_TASK)]),['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',planGuard],['verify_subset_controls.py',subsetGuard],...finiteMembers,...modelMembers]);
    }
    if(authoredLanguage){
     const languageGuard=textBytes(languageOptions.authoredLanguageGuardText,'Authored language guard source',MAX_RUNNER),planGuard=textBytes(languageOptions.planGuardText,'Runner guard source',MAX_RUNNER);

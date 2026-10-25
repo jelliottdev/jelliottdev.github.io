@@ -16,6 +16,16 @@ const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&
 const hash=async(value,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(value)))].map(n=>n.toString(16).padStart(2,'0')).join('');
 const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
 const captureCard=card=>Json.capture(card,{maxBytes:Share.MAX_BYTES,maxDepth:16,maxNodes:6000});
+export function authoredMemberBasis(memberBasis,authoredOrigin,domainId){
+ if(authoredOrigin===undefined)return memberBasis;
+ if(!exact(authoredOrigin,['recordId','followupId','recordSha256','protocolSha256'])||typeof domainId!=='string'||!/^[a-f0-9]{64}$/.test(domainId))throw Error('The authored finite source binding changed.');
+ return {kind:'authored-finite-member-v1',origin:authoredOrigin,domainId,memberBasis};
+}
+export function unwrapAuthoredMemberBasis(basis,authoredOrigin,domainId){
+ if(authoredOrigin===undefined){if(basis?.kind==='authored-finite-member-v1')throw Error('The authored finite source must remain attached.');return basis;}
+ if(!exact(basis,['kind','origin','domainId','memberBasis'])||basis.kind!=='authored-finite-member-v1'||basis.domainId!==domainId||E.stable(basis.origin)!==E.stable(authoredOrigin))throw Error('The reviewed preparation belongs to another authored finite source.');
+ return basis.memberBasis;
+}
 
 const checkedSettings=api=>{if(api!==Settings&&api!==Settings.factored)throw Error('Unsupported finite settings policy.');return api;};
 export function compileFiniteMember(card,settings,settingsAPI=Settings,questionPolicy){
@@ -28,7 +38,7 @@ export function compileFiniteMember(card,settings,settingsAPI=Settings,questionP
  return freeze({declaration:member.declaration,settings:member.settings,plan});
 }
 
-export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto:cryptoAPI=globalThis.crypto,createdAt=new Date().toISOString(),prepareControls=Controls.prepare,settingsAPI=Settings,questionPolicy,signal}={}){
+export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto:cryptoAPI=globalThis.crypto,createdAt=new Date().toISOString(),prepareControls=Controls.prepare,settingsAPI=Settings,questionPolicy,signal,authoredOrigin,currentDomain,loadAuthoredSource}={}){
  const original=captureCard(card),selection=Json.capture(cases,{maxBytes:LIMITS.selectionBytes,maxDepth:16,maxNodes:6000}),source=parseInputBundle(Json.capture(bundle,{maxBytes:LIMITS.sourceBytes,maxDepth:16,maxNodes:6000}));
  const declaration=checkedSettings(settingsAPI).inspect(original);
  if(typeof proposalId!=='string'||proposalId!=='p_'+await hash(C.serialize(original),cryptoAPI))throw Error('The finite request does not match its original confirmed idea.');
@@ -49,6 +59,6 @@ export async function prepareFiniteCases({db,proposalId,card,cases,bundle,crypto
  for(const item of prepared){item.controls=await prepareControls(item.task,cryptoAPI);await Controls.validate(item.controls,item.task,cryptoAPI);}
  prepared.sort((a,b)=>a.caseId.localeCompare(b.caseId));
  if(new TextEncoder().encode(E.stable(prepared)).length>LIMITS.batchBytes)throw Error('The selected cases exceed the bounded batch size. No preparations were issued.');
- for(const item of prepared){if(signal?.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});item.preparation=await issue({db,proposalId,card:original,task:item.task,inputVersion,parentTaskId:null,controls:item.controls,authority:'idea',basis:{kind:questionPolicy==='transformed-output-inspection-v1'?'factored-inspection-settings':questionPolicy?'factored-output-settings':settingsAPI===Settings.factored?'factored-finite-settings':'finite-settings',settings:item.settings,caseId:item.caseId},createdAt});}
+ for(const item of prepared){if(signal?.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});item.preparation=await issue({db,proposalId,card:original,task:item.task,inputVersion,parentTaskId:null,controls:item.controls,authority:'idea',basis:authoredMemberBasis({kind:questionPolicy==='transformed-output-inspection-v1'?'factored-inspection-settings':questionPolicy?'factored-output-settings':settingsAPI===Settings.factored?'factored-finite-settings':'finite-settings',settings:item.settings,caseId:item.caseId},authoredOrigin,currentDomain?.domain.id),createdAt,loadAuthoredSource});}
  return freeze({declaration,inputVersion,cases:prepared});
 }

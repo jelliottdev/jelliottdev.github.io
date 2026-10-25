@@ -34,18 +34,18 @@
     const top=stack[stack.length-1];if(top?.keys&&top.key){if(top.keys.has(value))throw Error('The authored source contains duplicate fields.');top.keys.add(value);top.key=false;}
    }else if(token==='{')stack.push({keys:new Set(),key:true});else if(token==='[')stack.push({});else if(token==='}'||token===']')stack.pop();else if(token===','&&stack[stack.length-1]?.keys)stack[stack.length-1].key=true;
   }
-  return capture(parsed,512*1024);
+  return capture(parsed,2*1024*1024);
  }
  async function readAuthoredContext(options,crypto=root.crypto){
   if(!exact(options,['origin','bytes'])||!exact(options.origin,['recordId','followupId','recordSha256','protocolSha256']))throw Error('Use an exact published source identity and its raw bytes.');
   const origin=capture(options.origin,1024),bytes=options.bytes,slug=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-  if(![origin.recordId,origin.followupId].every(id=>typeof id==='string'&&id.length<=100&&slug.test(id))||![origin.recordSha256,origin.protocolSha256].every(id=>typeof id==='string'&&HEX.test(id))||!ArrayBuffer.isView(bytes)||Object.prototype.toString.call(bytes)!=='[object Uint8Array]'||!bytes.byteLength||bytes.byteLength>512*1024)throw Error('The authored source identity or byte bound is invalid.');
+  if(![origin.recordId,origin.followupId].every(id=>typeof id==='string'&&id.length<=100&&slug.test(id))||![origin.recordSha256,origin.protocolSha256].every(id=>typeof id==='string'&&HEX.test(id))||!ArrayBuffer.isView(bytes)||Object.prototype.toString.call(bytes)!=='[object Uint8Array]'||!bytes.byteLength||bytes.byteLength>2*1024*1024)throw Error('The authored source identity or byte bound is invalid.');
   const raw=new Uint8Array(bytes),hash=async value=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',value))].map(v=>v.toString(16).padStart(2,'0')).join('');
   if(await hash(raw)!==origin.recordSha256)throw Error('The authored source bytes changed.');
   const record=authoredJSON(new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(raw));
   if(record.id!==origin.recordId||record.status!=='published'||!Array.isArray(record.browser_followups))throw Error('The authored source is not this published record.');
   const matches=record.browser_followups.filter(recipe=>recipe?.id===origin.followupId);if(matches.length!==1)throw Error('The authored source does not identify one matching check.');
-  const recipe=matches[0];if(await hash(new TextEncoder().encode(E.stable(recipe)))!==origin.protocolSha256)throw Error('The authored check changed.');
+  const recipe=matches[0];if(recipe.kind!=='finite-settings'&&raw.byteLength>512*1024)throw Error('The fixed authored source exceeds its byte bound.');if(await hash(new TextEncoder().encode(E.stable(recipe)))!==origin.protocolSha256)throw Error('The authored check changed.');
   if(typeof recipe.question!=='string'||!recipe.question.trim()||Array.from(recipe.question).length>1200||Object.hasOwn(recipe,'motivation')&&!Authored?.valid(recipe.motivation))throw Error('The authored explanation is invalid.');
   if(Object.hasOwn(recipe,'title')&&(typeof recipe.title!=='string'||recipe.title!==recipe.title.trim()||!recipe.title||Array.from(recipe.title).length>300||/[\p{Cc}\p{Cf}\p{Cs}\p{Zl}\p{Zp}]/u.test(recipe.title)))throw Error('The authored title is invalid.');
   return Object.freeze({question:recipe.question,...(Object.hasOwn(recipe,'title')?{title:recipe.title}:{}),...(Object.hasOwn(recipe,'motivation')?{motivation:recipe.motivation}:{})});

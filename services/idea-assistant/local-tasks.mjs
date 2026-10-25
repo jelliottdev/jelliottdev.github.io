@@ -1,3 +1,4 @@
+import {finiteSnapshotMember,createAuthoredFiniteSourceLoader} from './authored-finite-origin.mjs';
 import {authorize as authorizePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 /* Bounded declarative computation persistence. No user code or scientific verdicts. */
@@ -31,9 +32,10 @@ function projection(row,task,run,context){
   inputVersion:context.input_version,parentTaskId:context.parent_task_id,createdAt:context.created_at,
   state:run?'results-verified':'not-run',...(run?{latestRun:run}:{}),verification:NOTICE};
 }
-export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,storageLimits}={}){
+export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,storageLimits,loadAuthoredSource}={}){
  const limits=checkedStorageLimits(storageLimits);
  return async function handle(request,env){
+  const sourceLoader=loadAuthoredSource||createAuthoredFiniteSourceLoader(fetcher);
   const allowed=env?.SITE_ORIGIN,origin=request.headers.get('origin');
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'};
   const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
@@ -80,7 +82,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     WHERE o.task_id=? GROUP BY o.origin_id,o.origin_json,o.snapshot_json
     ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,MIN(o.created_at),o.origin_id LIMIT 11)`,row.id,preferredOriginId).first();
    const savedOrigins=JSON.parse(originRows?.entries||'[]'),origins=[];
-   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,relation=await scopeRelation(task,s);origins.push({origin:saved.origin,control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
+   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,finite=s.kind==='finite-settings'?await finiteSnapshotMember(task,s):null,relation=finite?finite.scopeRelation:await scopeRelation(task,s);origins.push({origin:saved.origin,control:finite?finite.control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
    const controls=origins.length&&!origins.some(item=>item.scopeRelation)&&task.criterion.kind!=='language-score'?null:await controlsFor(task);
    let selectedRecordOrigin=null;if(selectedOriginRow){const candidate=JSON.parse(selectedOriginRow.origin_json);if(!origins.some(item=>L.stable(item.origin)===L.stable(candidate)))throw Error('Selected authored context is not included in the validated origins');selectedRecordOrigin=candidate;}
    if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
@@ -116,12 +118,18 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      try{reviewed=await loadRecordPlan(body.origin,{fetcher});if(L.stable(reviewed.origin)!==L.stable(body.origin)||L.stable(reviewed.card)!==cardJson||L.stable(reviewed.task)!==taskJson||reviewed.inputVersion!==body.inputVersion||body.parentTaskId!==null)throw Error();originId=await digest(L.stable(reviewed.origin));}
      catch{return reply({error:'The reviewed origin, input pins, card or task could not be verified.'},422);}
     }
+    const originLimit=()=>reviewed?.snapshot?.kind==='finite-settings'?limits.tasks:50,originBucket=()=>reviewed?.snapshot?.kind==='finite-settings'?1:0;
+    const originGate=()=>reviewed?' AND (EXISTS(SELECT 1 FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_id=?) OR (SELECT COUNT(*) FROM local_task_origins WHERE created_day=? AND CASE WHEN json_extract(snapshot_json,\'$.kind\')=\'finite-settings\' THEN 1 ELSE 0 END=?)<?)':'';
+    const originArgs=()=>reviewed?[task.taskId,body.proposalId,originId,day,originBucket(),originLimit()]:[];
+    const originStatement=()=>query(`INSERT INTO local_task_origins(task_id,proposal_id,origin_id,origin_json,snapshot_json,created_at,created_day)
+      SELECT ?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_task_ideas WHERE task_id=? AND proposal_id=?)${originGate()}
+      ON CONFLICT(task_id,proposal_id,origin_id) DO NOTHING`,task.taskId,body.proposalId,originId,L.stable(reviewed.origin),L.stable(reviewed.snapshot),at,day,task.taskId,body.proposalId,...originArgs());
+    const originQuotaError=()=>Object.assign(Error('The daily authored-origin limit has been reached.'),{code:'daily-quota'});
     const saveOrigin=async()=>{
      if(!reviewed)return;
-     await db.batch([query(`INSERT INTO local_task_origins(task_id,proposal_id,origin_id,origin_json,snapshot_json,created_at,created_day)
-      SELECT ?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_origins WHERE created_day=?)<50 ON CONFLICT(task_id,proposal_id,origin_id) DO NOTHING`,task.taskId,body.proposalId,originId,L.stable(reviewed.origin),L.stable(reviewed.snapshot),at,day,day)]);
+     await db.batch([originStatement()]);
      const saved=await query('SELECT origin_json,snapshot_json FROM local_task_origins WHERE task_id=? AND proposal_id=? AND origin_id=?',task.taskId,body.proposalId,originId).first();
-     if(!saved||saved.origin_json!==L.stable(reviewed.origin)||saved.snapshot_json!==L.stable(reviewed.snapshot))throw Error('The reviewed origin could not be saved.');
+     if(!saved)throw originQuotaError();if(saved.origin_json!==L.stable(reviewed.origin)||saved.snapshot_json!==L.stable(reviewed.snapshot))throw Error('The reviewed origin could not be saved.');
     };
     if(existing){
      const saved=await storedTask(existing);
@@ -134,15 +142,15 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
      // A previously linked pending task is not permission to bypass the new
      // reviewed prefix-evidence snapshot. Legacy idempotent links stay unchanged.
-     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
+     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['authored-finite-member-v1','ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
       let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
+      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
      }}
      existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
     }
     if(!reviewed){
      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher});
+     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader});
      if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
      if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
     }
@@ -172,12 +180,12 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     }
     await db.batch([query(`INSERT INTO local_tasks (id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day)
      SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<?
-     AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<? ON CONFLICT(id) DO NOTHING`,
-     task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day,limits.tasks,day,limits.taskIdeaLinks),
+     AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<?${originGate()} ON CONFLICT(id) DO NOTHING`,
+     task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day,limits.tasks,day,limits.taskIdeaLinks,...originArgs()),
      query(`INSERT INTO local_task_ideas (task_id,proposal_id,input_version,parent_task_id,created_at,created_day)
       SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_tasks WHERE id=? AND task_hash=? AND task_json=?)
-      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<? ON CONFLICT(task_id,proposal_id) DO NOTHING`,
-      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks)]);
+      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<?${originGate()} ON CONFLICT(task_id,proposal_id) DO NOTHING`,
+      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks,...originArgs()),...(reviewed?[originStatement()]:[])]);
     existing=await find(task.taskId);const accepted=await association();
     if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.',code:'daily-quota',retryAt},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
@@ -209,6 +217,6 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(saved.task_id!==row.id||saved.id!==runId||saved.result_json!==resultJson)throw Error('Stored result mismatch');
    const savedResult=result;
    return reply({taskId:row.id,state:'results-verified',latestRun:{id:saved.id,createdAt:saved.created_at,result:savedResult},...(controls?{controls}:{}),verification:NOTICE});
-  }catch{return reply({error:'Local experiments are temporarily unavailable.'},503);}
+  }catch(error){if(error.code==='daily-quota'){const day=now().toISOString().slice(0,10),retryAt=new Date(Date.parse(day+'T00:00:00.000Z')+86400000).toISOString();return reply({error:error.message,code:'daily-quota',retryAt},429);}return reply({error:'Local experiments are temporarily unavailable.'},503);}
  };
 }

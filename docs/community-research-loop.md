@@ -419,7 +419,7 @@ provides the common question state used by the record view, recipe actions and
 available-work filter. Tested reproductions remain directly accessible but are
 not counted as new prepared follow-up work.
 
-## Authored finite families: remaining connection
+## Authored finite families: source-bound handoff
 
 A finite follow-up belongs in its source experiment as one card with explicit
 `finite-settings` axes, not one recipe per combination or a separate family UI.
@@ -429,14 +429,27 @@ checks cover the known-key search's 42 programs and all 56 pages (2,352 cases).
 The source validator now accepts one explicit finite recipe with a complete
 synthetic witness for every member. The server loader verifies its exact source
 and input pins and returns a distinct `finite-plan-ready` domain, never a fake
-fixed task. Review performs no persistence or manuscript calculation. Generic
-question references and discovery can identify that bounded recipe.
+fixed task. Opening the review performs no persistence or manuscript calculation.
+Generic question references and discovery can identify that bounded recipe.
 
-The browser handoff, source-bound task admission and saved-origin projection are
-still incomplete. No finite source recipe is published until those connections
-and the complete execution/save/reload path are verified. Backend changes must
-be deployed with that finished handoff; a successful source build alone does not
-establish that the hosted contribution path is available.
+The browser verifies the original record bytes, recipe, official inputs and every
+synthetic witness before offering Review search. That explicit action registers
+the unchanged canonical question and opens the existing finite workspace. Run
+and Save remain separate actions. Tagged preparation and admission revalidate
+the original source, full domain and selected member; saved tasks retain an
+immutable source snapshot with the selected member's control and scope relation.
+Offline reproduction validates that relation independently before target work.
+
+Finite snapshots currently repeat per saved task. The 42-program fixture is
+about 160 KiB; 2,352 individual tasks could repeat roughly 375 MB of source
+metadata. Prefer page groups and add shared immutable snapshot storage before
+opening large individual-case searches. The higher finite admission ceiling is
+not a storage-efficiency claim.
+
+These connections have software fixture coverage; no finite source recipe is
+published yet. Release one only after the complete hosted execution/save/reload
+journey is verified. Backend changes must be deployed with the finished handoff;
+a successful source build alone does not establish hosted availability.
 
 Before publishing a finite source recipe, complete the generic question/action
 and reviewed-plan handoff. Bind the original source snapshot and full domain to

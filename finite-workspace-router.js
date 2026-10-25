@@ -5,6 +5,7 @@
  const actions=['prepare','run','save','cancel','inspect','download','downloadPart','restoreLocal','discardLocal','reviewRemaining','startRemaining','pauseRemaining','resumeRemaining'];
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function createWorkspace(doc,host,options){
+  options={...options,...(options.authoredOrigin!==undefined?{authoredOrigin:J.capture(options.authoredOrigin,{maxBytes:1000,maxDepth:4,maxNodes:16})}:{})};
   const idea=J.capture(options.idea,{maxBytes:128*1024,maxDepth:24,maxNodes:12000}),controller=new AbortController();let child=null,dead=false,generation=0,phase='loading',error='',route=null,loading=null;
   const live=token=>{if(dead||generation!==token||options.isLive&&!options.isLive())throw new DOMException('Navigation changed.','AbortError');};
   const prefixReuse=()=>typeof options.config?.factoredPrefixSearchEndpoint==='string'&&typeof options.validEndpoint==='function'&&options.validEndpoint(options.config?.factoredPrefixSearchEndpoint,'factored-prefix-search');
@@ -17,9 +18,18 @@
   async function load(){if(dead)throw new DOMException('Navigation changed.','AbortError');if(child)return child.reload?.();if(loading)return loading;const token=generation;phase='loading';error='';draw();const operation=(async()=>{await Promise.resolve();try{
     if(inspectionRequested()&&!inspectionEnabled())throw Error('Output inspection is not available here yet. No settings or pages were omitted.');
     if(outputRequested()&&!outputEnabled())throw Error('The pinned language comparison is not available here yet. No settings or pages were omitted.');
-    if(!expanded()){route='legacy';child=Legacy.createWorkspace(doc,host,{...options,idea});await child.ready;live(token);phase='ready';return;}
-    const response=await options.request('data/local-run-inputs.json',{signal:controller.signal},15000);live(token);if(!response.ok)throw Error('The manuscript inputs could not be loaded. Please retry.');const bundle=await Legacy.readJSON(response,2*1024*1024);live(token);let precompiled;
-    if(inspectionEnabled()){precompiled=await FullCompiler.compileOutputInspection(idea.card,bundle,options.crypto||root.crypto);route='inspection';}else if(outputEnabled()){precompiled=await FullCompiler.compileLanguageComparison(idea.card,bundle,options.crypto||root.crypto);route='output';}else if(prefixReuse()){precompiled=await FullCompiler.compile(idea.card,bundle,options.crypto||root.crypto);route='factored';}else try{precompiled=await SmallCompiler.compile(idea.card,bundle,options.crypto||root.crypto);route='legacy';}catch(smallError){live(token);precompiled=await FullCompiler.compile(idea.card,bundle,options.crypto||root.crypto);route='factored';}
+    if(!expanded()){if(options.authoredOrigin!==undefined)throw Error('This authored search needs its complete source-aware workspace. No settings or pages were omitted.');route='legacy';child=Legacy.createWorkspace(doc,host,{...options,idea});await child.ready;live(token);phase='ready';return;}
+    let bundle,precompiled;
+    if(Object.hasOwn(options,'precompiled')||Object.hasOwn(options,'sourceBundle')){
+     if(!options.precompiled||!options.sourceBundle)throw Error('The reviewed search inputs are incomplete.');
+     // Reuse only the maintained compiler's original brand for this exact card
+     // and source bundle. This is compilation evidence, never a run receipt.
+     bundle=J.capture(options.sourceBundle,{maxBytes:2*1024*1024,maxDepth:16,maxNodes:6000});precompiled=FullCompiler.inspect(options.precompiled,{card:idea.card,bundle});
+     route=inspectionEnabled()?'inspection':outputEnabled()?'output':'factored';
+    }else{
+     const response=await options.request('data/local-run-inputs.json',{signal:controller.signal},15000);live(token);if(!response.ok)throw Error('The manuscript inputs could not be loaded. Please retry.');bundle=await Legacy.readJSON(response,2*1024*1024);live(token);
+    if(inspectionEnabled()){precompiled=await FullCompiler.compileOutputInspection(idea.card,bundle,options.crypto||root.crypto);route='inspection';}else if(outputEnabled()){precompiled=await FullCompiler.compileLanguageComparison(idea.card,bundle,options.crypto||root.crypto);route='output';}else if(prefixReuse()||options.authoredOrigin!==undefined){precompiled=await FullCompiler.compile(idea.card,bundle,options.crypto||root.crypto);route='factored';}else try{precompiled=await SmallCompiler.compile(idea.card,bundle,options.crypto||root.crypto);route='legacy';}catch(smallError){live(token);precompiled=await FullCompiler.compile(idea.card,bundle,options.crypto||root.crypto);route='factored';}
+    }
     live(token);const factory=route==='legacy'?Legacy:Full;child=(route==='inspection'?Full.createInspectionWorkspace:route==='output'?Full.createOutputWorkspace:factory.createWorkspace)(doc,host,{...options,idea,precompiled,sourceBundle:bundle});await child.ready;live(token);phase='ready';
    }catch(e){if(!dead&&generation===token){phase='error';error=String(e.message||'This search could not be loaded.');draw();}throw e;}finally{if(loading===operation)loading=null;}})();loading=operation;operation.catch(()=>{});return operation;
   }
