@@ -1,6 +1,13 @@
 {
   "id": "doublet-collision-edits",
   "title": "Collision edits for scarce adjacent doublets",
+  "reader_title": "Could deleting or splitting repeats explain the scarcity?",
+  "reader_intro": "A doublet is two identical neighboring runes. This check tries deleting one copy or placing a filler between them, then asks whether those edits can be undone unambiguously. Removing repeats alone does not show how LP2 was encrypted.",
+  "reader_test": {
+    "input": "LP2-00–55 rune sequences, with punctuation removed and pages kept separate; all strings of one to five runes over a separate three-rune test alphabet.",
+    "action": "Apply three fixed rules: collapse each repeated run, insert F between identical neighbors, or insert the next rune in alphabet order. Count repeats and test whether different same-length inputs can produce the same output.",
+    "check": "Measure how many repeats each edit leaves and whether undoing it has a unique answer. The small-alphabet test checks ambiguity, not how many possible readings LP2 has."
+  },
   "status": "published",
   "question": "Can the proposed deletion and filler-insertion rules suppress doublets, and do their outputs uniquely determine the original stream?",
   "summary": "Three fixed forward collision edits reduce the 86 adjacent repeats in LP2-00–55 to zero, eight or zero, but none supplies an LP2 decryption. Insertion and deletion are non-injective in finite known-length controls.",

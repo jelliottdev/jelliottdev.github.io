@@ -1,6 +1,13 @@
 {
   "id": "doublet-placement",
   "title": "LP2-00–55: placement of the 86 doublets",
+  "reader_title": "Where do the 86 repeated rune pairs occur?",
+  "reader_intro": "A doublet is two identical neighboring runes after punctuation is removed. This check asks whether LP2’s 86 doublets cluster on particular pages, favor page edges or leave unusually large gaps between one pair and the next.",
+  "reader_test": {
+    "input": "The 86 repeated-pair locations and 12,901 possible neighboring-rune positions within LP2-00–55 pages, including headings.",
+    "action": "Make 10,000 random placements of 86 pairs across the available positions. Make another 10,000 while also keeping each page’s observed pair count fixed.",
+    "check": "Compare page counts, page-edge positions and distances between pair starts. Page lengths stay fixed; these placements do not reproduce rune identities, overlapping-pair rules or an encryption process."
+  },
   "status": "published",
   "question": "After fixing the observed total of 86 equal-rune events, do their page counts and positions differ from explicit length-aware placement controls?",
   "summary": "Thirteen of 55 nonempty pages have no doublet versus 12.25 expected under fixed-total placement. Page-count spread and edge positions fall inside conditional ranges; the minimum event gap of six lies near the high edge.",

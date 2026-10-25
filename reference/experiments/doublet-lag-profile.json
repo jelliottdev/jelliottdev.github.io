@@ -1,6 +1,13 @@
 {
   "id": "doublet-lag-profile",
   "title": "LP2-00–55: equal rune pairs at lags one through five",
+  "reader_title": "Are identical runes scarce only when they are neighbors?",
+  "reader_intro": "Identical neighboring runes are unusually scarce in LP2. This check compares runes one to five positions apart to see how far that shortage extends. It uses rearrangements that keep each page’s rune counts unchanged.",
+  "reader_test": {
+    "input": "LP2-00–55 archived rune sequences, including headings, with non-runes removed separately on each page.",
+    "action": "Count identical rune pairs one, two, three, four and five positions apart. Rearrange the runes within each page 2,000 times while retaining its length and symbol counts, then count again.",
+    "check": "Compare each observed count with its shuffled range. No pair crosses a page boundary, and the shuffles model neither English nor a specific encryption rule."
+  },
   "status": "published",
   "question": "Does the low count of adjacent equal runes extend to distances two through five under fixed-count page shuffles?",
   "summary": "Lag one has 86 matches versus 439.17 page-shuffle expected; lags two through five have 435, 434, 451 and 463, each inside the corresponding central 95% shuffle range.",

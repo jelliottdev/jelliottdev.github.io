@@ -1,10 +1,12 @@
 """Explicit fixed-program projections of archived exclusions, never historical runs."""
 from collections import defaultdict
+import argparse
 import hashlib
 import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,7 +53,7 @@ def source_files(root=ROOT):
                   | {p['path'] for p in plan['recipe_identities']})
 
 
-def check_original(root, plan):
+def check_original(root, plan, reproduce=False):
     # No archived/repository file is modified. Prose changes do not alter the
     # archived mathematical claim, and the exact original checker runs intact.
     with tempfile.TemporaryDirectory(prefix='liberpedia-opening-check-') as temp:
@@ -69,7 +71,27 @@ def check_original(root, plan):
             if sha(stable(projection)) != identity['sha256']:
                 raise ValueError('The archived source recipe changed its mathematical definition')
             target.write_text(json.dumps(record, ensure_ascii=False), encoding='utf-8')
-        subprocess.run(['python', str(mirror / BASE / 'check.py')], cwd=mirror, check=True, capture_output=True, text=True)
+        commands = ([mirror / BASE / 'run.py', '--check'],) if reproduce else ()
+        outputs = []
+        for command in (*commands, [mirror / BASE / 'check.py']):
+            completed = subprocess.run([sys.executable, *map(str, command)], cwd=mirror,
+                                       check=True, capture_output=True, text=True)
+            outputs.append(completed.stdout.strip())
+        return outputs
+
+
+def reproduce_archive(root=ROOT):
+    """Replay immutable historical checks with current presentation kept separate."""
+    root = Path(root)
+    for name, expected in DECLARATION['sourceSha256'].items():
+        if sha((root / name).read_bytes()) != expected:
+            raise ValueError('Archived scientific source pin changed: ' + name)
+    plan = json.loads((root / BASE / 'plan.json').read_bytes())
+    for item in plan['inputs']:
+        if sha((root / item['path']).read_bytes()) != item['sha256']:
+            raise ValueError('Archived input pin changed: ' + item['path'])
+    return check_original(root, plan, reproduce=True)
+
 
 
 def independent_row_atbash(text, alphabet):
@@ -153,3 +175,14 @@ def build(root=ROOT, write=True):
         elif not (root / name).exists() or (root / name).read_text(encoding='utf-8') != value:
             raise ValueError('Stale published program evidence: ' + name)
     return manifest
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--reproduce-archive', action='store_true', required=True,
+                        help='Run only the unchanged archived producer and checker in a disposable mirror')
+    parser.parse_args()
+    for message in reproduce_archive():
+        if message:
+            print(message)
+    print('PASS: archived checks reproduced; current presentation and expected results were not rewritten.')

@@ -1,6 +1,13 @@
 {
   "id": "doublet-boundaries",
   "title": "LP2-00–55: doublets across words, wraps and stored corrections",
+  "reader_title": "Do repeated rune pairs cross word or line breaks?",
+  "reader_intro": "A doublet is two identical neighboring runes. Removing punctuation can create such neighbors across a break. This check locates those breaks and asks whether seven stored text corrections change the count.",
+  "reader_test": {
+    "input": "LP2-00–55 archived text, including headings, and the seven pages with a separate corrected text version.",
+    "action": "Find equal neighboring runes after removing non-runes within each page. Look back at the original text to record any punctuation or line break between them; repeat with the corrected versions.",
+    "check": "Compare the pair identities and counts for touching runes, line breaks, apostrophes, hyphens and other punctuation. This checks stored text, not the photographed handwriting."
+  },
   "status": "published",
   "question": "How many of the 86 filtered within-page equal-rune pairs cross stored separators, and do published LP2 reviewed-text edits change them?",
   "summary": "Of 86 doublets, 60 are contiguous, 3 cross only a row wrap, 22 cross a hyphen and 1 crosses other punctuation. Seven stored LP2 reviewed-text layers change no doublet identity or class.",

@@ -414,8 +414,8 @@
   "browser_followups": [
     {
       "id": "lag-five-equality-non-rune-boundaries",
-      "motivation": "Count repeated runes five places apart within words, keeping spaces, slashes and line breaks as word breaks. Compare with the earlier count to see whether the pattern depends on joining text across those breaks.",
-      "title": "Check the five-position repeat without joining layout marks",
+      "motivation": "Count identical runes five positions apart within words. Unlike the earlier check, stop a word at every non-rune, including slashes and line breaks, rather than only at hyphens or periods. Compare the count and its word-rearrangement average with the earlier result.",
+      "title": "Recount five-position repeats with stricter word breaks",
       "question": "Does the already selected five-position repeat remain elevated against its word-shuffle mean when every non-rune ends a word?",
       "scope_change": "Keep the published winning relation: the same rune five positions later. Change only word boundaries on LP2-00 to LP2-55: slashes, line breaks and every other non-rune now end a word instead of allowing continuation until a hyphen or period. Pages remain separate.",
       "limitation": "This is a descriptive robustness check of a relation selected by the earlier search, not an independent discovery or a new significance test. It counts one fixed relation and its exact within-word shuffled-order mean. It does not repeat the 12-distance, 841-formula search, run shuffled trials, adjust for selection, test realistic ciphertext models or identify a cipher.",
@@ -958,7 +958,7 @@
     },
     {
       "id": "direct-reading-lag-five-control",
-      "title": "Compare the five-position repeat with readable passages",
+      "title": "Look for five-position repeats in already readable pages",
       "question": "How often does the same rune repeat five positions later within words on the seven already-readable direct-text pages?",
       "scope_change": "Use all seven pages in data/evidence/known-readings.json whose recorded method is direct: LP1-05, LP1-10 to LP1-13, LP1-16 and LP2-57. These already-readable pages replace the original LP2-00 to LP2-55 scope. Keep raw text, headings, the frozen relation and hyphen/period grouping; each page remains separate. Slashes and line breaks do not end a group.",
       "limitation": "This is a descriptive comparison with readable passages, not held-out validation, an independent cipher test or a significance test. It counts one frozen relation and its exact within-word rearrangement average, without repeating the original formula search or shuffled trials. These passages share manuscript spelling conventions and are not a representative language sample. Raw LP1-10 retains its archived rune order rather than the separate reviewed swap. A higher or lower count does not establish or exclude a cipher mechanism.",
@@ -1253,7 +1253,7 @@
         },
         "expected_result_sha256": "866b88631482f7a9b5171bad0e534579b91ee0a12971a89f8c1342093eab8e27"
       },
-      "motivation": "Count the same-rune pairs five positions apart in already-readable passages and compare with their rearrangement average. This shows whether the selected repeat also occurs in ordinary readable text."
+      "motivation": "Count identical runes five positions apart within words on seven already readable pages instead of the unsolved pages. Keep the earlier grouping at hyphens and periods. Compare their count with the average after rearranging each word’s runes; this measures a pattern, not a decoding."
     }
   ],
   "research_questions": [

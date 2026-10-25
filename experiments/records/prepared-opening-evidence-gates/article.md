@@ -44,8 +44,7 @@ The [machine-readable report](experiments/records/prepared-opening-evidence-gate
 From the repository or extracted bundle root, run:
 
 ```text
-python experiments/records/prepared-opening-evidence-gates/run.py --check
-python experiments/records/prepared-opening-evidence-gates/check.py
+python scripts/published_program_projection.py --reproduce-archive
 ```
 
-Both use Python's standard library and pinned local files. The first rebuilds the evidence report; the second independently verifies the source links, mismatch witnesses and strict reset conditions.
+The wrapper uses Python's standard library and pinned local files. It verifies the frozen scientific sources, restores only the four archived recipe titles in a disposable copy, and checks every recipe's mathematical definition before running the unchanged producer and independent checker. The two declared record-file inputs carry current presentation metadata; the archived plan, scripts and results remain unchanged. Expected results and current website files are not rewritten.

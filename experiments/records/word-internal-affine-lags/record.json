@@ -393,8 +393,8 @@
   "browser_followups": [
     {
       "id": "lag-six-non-rune-boundaries",
-      "motivation": "Count pairs six places apart within words that follow the earlier selected number rule, keeping spaces, slashes and line breaks as word breaks. Compare with the earlier count to see whether the pattern depends on joining text across those breaks.",
-      "title": "Does the six-rune pattern depend on word breaks?",
+      "motivation": "Number the runes 0–28. Count pairs six positions apart where the later number is 24 minus twice the earlier number, wrapping within 0–28. Unlike the earlier check, every non-rune now ends a word. Compare the count and its word-rearrangement average with the earlier result.",
+      "title": "Recount the six-position number pattern with stricter word breaks",
       "question": "Compare the same rune rule with and without joining text across layout marks.",
       "scope_change": "Use every non-rune as a word boundary on LP2-00–55. The published test splits only at hyphens and periods, allowing words to continue across slashes and newlines. This prepared measurement changes only that segmentation rule.",
       "limitation": "Counts one fixed relation: c′ = 27c + 24 (mod 29), six runes apart. Includes headings and keeps pages separate. It does not run shuffled trials, rank 841 maps, adjust for selected hypotheses, test other lags, or identify an encryption mechanism.",
@@ -937,7 +937,7 @@
     },
     {
       "id": "direct-reading-lag-six-control",
-      "title": "Compare the six-position rule with readable passages",
+      "title": "Look for the six-position number pattern in readable pages",
       "question": "How often does the fixed six-position alphabet-number rule hold within words on the seven already-readable direct-text pages?",
       "scope_change": "Use all seven pages in data/evidence/known-readings.json whose recorded method is direct: LP1-05, LP1-10 to LP1-13, LP1-16 and LP2-57. These already-readable pages replace the original LP2-00 to LP2-55 scope. Keep raw text, headings, the frozen relation and hyphen/period grouping; each page remains separate. Slashes and line breaks do not end a group.",
       "limitation": "This is a descriptive comparison with readable passages, not held-out validation, an independent cipher test or a significance test. It counts one frozen relation and its exact within-word rearrangement average, without repeating the original formula search or shuffled trials. These passages share manuscript spelling conventions and are not a representative language sample. Raw LP1-10 retains its archived rune order rather than the separate reviewed swap. A higher or lower count does not establish or exclude a cipher mechanism.",
@@ -1232,7 +1232,7 @@
         },
         "expected_result_sha256": "dcd6e887b89dc1fe9120c3f4e46a0b8ca33bbab1785d461c4cf95cc586991a02"
       },
-      "motivation": "Count pairs that follow the fixed six-position rule in already-readable passages and compare with their rearrangement average. This provides a readable-text comparison for the pattern measured on unsolved pages."
+      "motivation": "Number the runes 0–28. Count pairs six positions apart where the later number is 24 minus twice the earlier number, wrapping within 0–28. Use seven already readable pages instead of unsolved pages, keeping the earlier word grouping. Compare the count with its word-rearrangement average."
     }
   ],
   "research_questions": [

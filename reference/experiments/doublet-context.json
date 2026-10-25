@@ -1,6 +1,13 @@
 {
   "id": "doublet-context",
   "title": "Ciphertext symbols and differences around LP2 doublets",
+  "reader_title": "What surrounds the repeated rune pairs?",
+  "reader_intro": "A doublet is two identical neighboring runes after punctuation is removed. This check examines their symbols and neighbors, including whether pairs crossing a hyphen have different surroundings from pairs within a word under the stored separator rules.",
+  "reader_test": {
+    "input": "The 86 repeated rune pairs in LP2-00–55 and the rune values immediately around them; all comparisons use the archived text.",
+    "action": "Keep each page’s repeat positions fixed and shuffle its nonzero steps between rune values 5,000 times. Separately shuffle the hyphen labels among eligible pairs 10,000 times globally and 10,000 times within pages.",
+    "check": "Compare repeated-symbol counts and before/after differences with the first control; compare complete neighboring-rune counts for hyphen-crossing and within-word pairs under the stored separator rules with the label controls. Neither control explains why repeats are scarce."
+  },
   "status": "published",
   "question": "Do doublet symbols or their neighboring ciphertext differences show extra local ordering beyond the observed zero mask and each page difference inventory?",
   "summary": "Across 86 doublets, same-symbol collisions and before/after difference imbalance fall inside fixed-mask controls. A companion comparison of the 22 hyphen-crossing and 63 within-token events finds no unusual whole-label context separation under its conditional controls.",

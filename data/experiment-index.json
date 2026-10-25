@@ -4052,6 +4052,8 @@
       "id": "doublet-boundaries",
       "title": "LP2-00–55: doublets across words, wraps and stored corrections",
       "question": "How many of the 86 filtered within-page equal-rune pairs cross stored separators, and do published LP2 reviewed-text edits change them?",
+      "reader_title": "Do repeated rune pairs cross word or line breaks?",
+      "reader_intro": "A doublet is two identical neighboring runes. Removing punctuation can create such neighbors across a break. This check locates those breaks and asks whether seven stored text corrections change the count.",
       "summary": "Of 86 doublets, 60 are contiguous, 3 cross only a row wrap, 22 cross a hyphen and 1 crosses other punctuation. Seven stored LP2 reviewed-text layers change no doublet identity or class.",
       "tags": [
         "doublets",
@@ -4223,6 +4225,8 @@
       "id": "doublet-collision-edits",
       "title": "Collision edits for scarce adjacent doublets",
       "question": "Can the proposed deletion and filler-insertion rules suppress doublets, and do their outputs uniquely determine the original stream?",
+      "reader_title": "Could deleting or splitting repeats explain the scarcity?",
+      "reader_intro": "A doublet is two identical neighboring runes. This check tries deleting one copy or placing a filler between them, then asks whether those edits can be undone unambiguously. Removing repeats alone does not show how LP2 was encrypted.",
       "summary": "Three fixed forward collision edits reduce the 86 adjacent repeats in LP2-00–55 to zero, eight or zero, but none supplies an LP2 decryption. Insertion and deletion are non-injective in finite known-length controls.",
       "tags": [
         "doublets",
@@ -4399,6 +4403,8 @@
       "id": "doublet-context",
       "title": "Ciphertext symbols and differences around LP2 doublets",
       "question": "Do doublet symbols or their neighboring ciphertext differences show extra local ordering beyond the observed zero mask and each page difference inventory?",
+      "reader_title": "What surrounds the repeated rune pairs?",
+      "reader_intro": "A doublet is two identical neighboring runes after punctuation is removed. This check examines their symbols and neighbors, including whether pairs crossing a hyphen have different surroundings from pairs within a word under the stored separator rules.",
       "summary": "Across 86 doublets, same-symbol collisions and before/after difference imbalance fall inside fixed-mask controls. A companion comparison of the 22 hyphen-crossing and 63 within-token events finds no unusual whole-label context separation under its conditional controls.",
       "tags": [
         "doublets",
@@ -4580,6 +4586,8 @@
       "id": "doublet-event-lags",
       "title": "LP2-00–55: distances between doublet events",
       "question": "Do the specified event extraction and lags reproduce the reported lag-one mean and lag-three +4 rate?",
+      "reader_title": "Do the repeated pairs form a pattern of their own?",
+      "reader_intro": "Extract one rune from each identical neighboring pair, called a doublet. Then compare those 86 runes with the next, second-next and third-next entries. These distances count places in the extracted list, not in the manuscript.",
       "reader_question": "Do the extracted repeat symbols reproduce the claimed number pattern?",
       "summary": "86 doublet events give a lag-one mean of 8.6353 and ten lag-three +4 matches out of 83 comparisons (12.05%). Reported values differ; no p-value is adopted.",
       "tags": [
@@ -4753,6 +4761,8 @@
       "id": "doublet-event-shuffle",
       "title": "Doublet events: global versus within-page shuffle controls",
       "question": "Do the reported doublet-event distances survive controls that preserve the page-specific event inventory and account for selecting an attractive bin?",
+      "reader_title": "Do patterns in the repeated pairs survive shuffling?",
+      "reader_intro": "A doublet is an identical neighboring rune pair. Its repeated symbol forms one entry in an 86-rune list. This check asks whether reported patterns still stand out when shuffles preserve each page’s own entries and can also choose their best-looking pattern.",
       "summary": "The lag-one distance sum is rare under a global event shuffle but ordinary when each page keeps its event symbols. The selected lag-three +4 bin is rare narrowly; choosing the strongest bin across lags gives a much weaker comparison.",
       "tags": [
         "doublets",
@@ -4938,6 +4948,8 @@
       "id": "doublet-lag-profile",
       "title": "LP2-00–55: equal rune pairs at lags one through five",
       "question": "Does the low count of adjacent equal runes extend to distances two through five under fixed-count page shuffles?",
+      "reader_title": "Are identical runes scarce only when they are neighbors?",
+      "reader_intro": "Identical neighboring runes are unusually scarce in LP2. This check compares runes one to five positions apart to see how far that shortage extends. It uses rearrangements that keep each page’s rune counts unchanged.",
       "summary": "Lag one has 86 matches versus 439.17 page-shuffle expected; lags two through five have 435, 434, 451 and 463, each inside the corresponding central 95% shuffle range.",
       "tags": [
         "doublets",
@@ -5109,6 +5121,8 @@
       "id": "doublet-placement",
       "title": "LP2-00–55: placement of the 86 doublets",
       "question": "After fixing the observed total of 86 equal-rune events, do their page counts and positions differ from explicit length-aware placement controls?",
+      "reader_title": "Where do the 86 repeated rune pairs occur?",
+      "reader_intro": "A doublet is two identical neighboring runes after punctuation is removed. This check asks whether LP2’s 86 doublets cluster on particular pages, favor page edges or leave unusually large gaps between one pair and the next.",
       "summary": "Thirteen of 55 nonempty pages have no doublet versus 12.25 expected under fixed-total placement. Page-count spread and edge positions fall inside conditional ranges; the minimum event gap of six lies near the high edge.",
       "tags": [
         "doublets",
@@ -35031,6 +35045,8 @@
       "id": "uniform-additive-doublets",
       "title": "LP2-00–55: uniform additive keys and adjacent matches",
       "question": "Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?",
+      "reader_title": "Would a fresh random shift per rune leave this few repeats?",
+      "reader_intro": "This tests one encryption rule: independently choose one of all 29 alphabet shifts, equally likely, for every rune. It asks whether that rule could reasonably produce as few identical neighbors as LP2 has, rather than testing every kind of key.",
       "summary": "86 adjacent matches versus 444.86 expected under one fixed model. Exact lower-tail calculation, page-boundary proof and independent finite controls.",
       "tags": [
         "doublets",

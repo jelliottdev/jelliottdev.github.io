@@ -457,8 +457,8 @@
   "browser_followups": [
     {
       "id": "word-reversal-atbash-warning",
-      "motivation": "Read the runes inside each word backwards, then apply the alphabet substitution used on Warning, an already decoded passage. Comparing the first 24 output runes checks whether this combined rule reproduces that fixed opening.",
-      "title": "Reverse each word, then apply Atbash",
+      "motivation": "Read the runes inside each word backwards. Then replace the first alphabet rune with the last, the second with the second-last, and so on: the substitution used to decode Warning. This adds substitution to the earlier word-reversal check; compare the first 24 outputs with Warning’s opening.",
+      "title": "Read each word backwards, then reverse the alphabet",
       "question": "Does reversing runes inside each transcription word and then applying Atbash recover the fixed 24-rune Warning opening?",
       "scope_change": "Adds the Warning page’s documented Atbash mapping to within-word reversal. The earlier reversal test excluded substitutions. This tests one combined rule; reversing the order of all words is a different operation.",
       "limitation": "This tests one fixed 24-rune page opening, not general readability or a complete decryption. Archived headings and separators remain included. No later starts, key skips, fitted alphabets or alternative plaintexts are searched. Every non-rune ends a transcription word; these are not verified plaintext word boundaries.",

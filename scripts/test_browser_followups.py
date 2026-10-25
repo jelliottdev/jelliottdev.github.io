@@ -170,8 +170,13 @@ for(const f of recipes){assert.deepEqual(validateCard(f.card),f.card);const plan
 
     def test_constructor_reproduces_exact_authored_recipe_without_targets(self):
         numerical_recipe = self.changed()
+        # The historical constructor retains its original presentation title.
+        # Copy editing must not change the complete executable declaration.
         numerical_recipe.pop('motivation', None)
-        self.assertEqual(construct_second_koan_word_reset(ROOT), numerical_recipe)
+        numerical_recipe.pop('title')
+        constructed = construct_second_koan_word_reset(ROOT)
+        constructed.pop('title')
+        self.assertEqual(constructed, numerical_recipe)
         before = copy.deepcopy(self.recipe)
         self.assertEqual(self.validate(self.recipe), [before])
         self.assertEqual(self.recipe, before)

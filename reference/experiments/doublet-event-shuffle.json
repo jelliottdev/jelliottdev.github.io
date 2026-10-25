@@ -1,6 +1,13 @@
 {
   "id": "doublet-event-shuffle",
   "title": "Doublet events: global versus within-page shuffle controls",
+  "reader_title": "Do patterns in the repeated pairs survive shuffling?",
+  "reader_intro": "A doublet is an identical neighboring rune pair. Its repeated symbol forms one entry in an 86-rune list. This check asks whether reported patterns still stand out when shuffles preserve each page’s own entries and can also choose their best-looking pattern.",
+  "reader_test": {
+    "input": "The fixed list of 86 repeated-pair symbols from LP2-00–55, in page order, and three previously reported alphabet-distance measurements.",
+    "action": "Shuffle the entire list 20,000 times, then shuffle only within each page 20,000 times. Compare entries one to three list positions apart; let each shuffle choose its strongest alphabet-distance group too.",
+    "check": "Compare the reported patterns with both sets of shuffles, before and after allowing that choice. These controls keep observed symbol counts; they do not simulate a cipher or cover every pattern previously searched."
+  },
   "status": "published",
   "question": "Do the reported doublet-event distances survive controls that preserve the page-specific event inventory and account for selecting an attractive bin?",
   "summary": "The lag-one distance sum is rare under a global event shuffle but ordinary when each page keeps its event symbols. The selected lag-three +4 bin is rare narrowly; choosing the strongest bin across lags gives a much weaker comparison.",

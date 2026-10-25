@@ -1,6 +1,13 @@
 {
   "id": "uniform-additive-doublets",
   "title": "LP2-00–55: uniform additive keys and adjacent matches",
+  "reader_title": "Would a fresh random shift per rune leave this few repeats?",
+  "reader_intro": "This tests one encryption rule: independently choose one of all 29 alphabet shifts, equally likely, for every rune. It asks whether that rule could reasonably produce as few identical neighbors as LP2 has, rather than testing every kind of key.",
+  "reader_test": {
+    "input": "LP2-00–55 archived text with non-runes removed within each page: 86 identical neighboring pairs among 12,901 available positions.",
+    "action": "Assume a fresh, independent, equally likely shift from 0 through 28 for each rune, with the original message fixed. Calculate the exact chance of 86 or fewer neighboring matches for the observed page lengths.",
+    "check": "Compare the observed total with this rule’s predicted distribution. Other key choices, rules that avoid repeats and running-sum ciphers are outside this test."
+  },
   "status": "published",
   "question": "Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?",
   "summary": "86 adjacent matches versus 444.86 expected under one fixed model. Exact lower-tail calculation, page-boundary proof and independent finite controls.",
