@@ -52,6 +52,11 @@ async function main(){
    assert.equal(C.serialize(card),C.serialize(expected));assert.equal(f.doc.defaultView.location.hash,'#idea='+saved.canonical.id);assert.notEqual(saved.canonical.id,initial.id);assert.equal(saved.body.sourceUrl,'https://jelliottdev.github.io/run.html#idea='+initial.id);assert.match(saved.body.note,/direction=subtract; reset=word/);assert.deepEqual(card.method.value.operations[0].key,key);noWork(f);
   }finally{f.app.destroy();}
  });
+ await test('literal Vigenere and autokey modes show their maintained name and save only explicit missing choices',async()=>{
+  for(const [id,label,heading,mode]of [['vigenere','Vigenere','Vigen\u00e8re','repeat'],['plaintext_autokey','Plaintext autokey','Plaintext autokey','plaintext-autokey'],['ciphertext_autokey','Ciphertext autokey','Ciphertext autokey','ciphertext-autokey']]){
+   const f=await fixture({operations:[{id,label,key}]});try{assert(f.doc.getElementById('prepared-plan').innerHTML.includes('<strong>'+heading+':</strong>'));assert(!f.doc.getElementById('save-method-idea'));assert.equal(f.proposals.length,0);await choose(f);const session=f.app.getState().methodSession;assert.equal(session.draft.method.value.operations[0].id,id);assert.deepEqual(session.draft.method.value.operations[0].key,key);assert.equal(f.proposals.length,0);noWork(f);await f.click('save-method-idea');assert.equal(f.proposals.length,1);const saved=JSON.parse(f.proposals[0].canonical.cardJson),before=JSON.parse(f.origin.cardJson);assert.deepEqual(saved.outcome,before.outcome);assert.deepEqual(saved.scope,before.scope);assert.deepEqual(saved.rules,before.rules);assert.deepEqual(saved.method.value.operations,[{id,label,key,direction:'subtract',reset:'word'}]);assert.deepEqual(planCard(saved).steps,[{op:'keyed-shift',key,mode,direction:'subtract',reset:'word'}]);assert.equal(f.doc.defaultView.location.hash,'#idea='+f.proposals[0].canonical.id);noWork(f);}finally{f.app.destroy();}
+  }
+ });
  await test('changing settings resets only local choices and performs no save or run',async()=>{
   const f=await fixture();try{await choose(f);await f.click('reset-method-choices');assert.equal(f.app.getState().methodSession.question.parameter,'direction');assert.deepEqual(f.app.getState().methodSession.choices,[]);assert.equal(f.proposals.length,0);noWork(f);}finally{f.app.destroy();}
  });

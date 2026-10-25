@@ -19,6 +19,12 @@ let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS 
    const shared=H.decode(H.encode(confirmed)).draft;assert.equal(shared.method.provenance.kind,'project_context');assert.deepEqual(shared.clarifications,[],'Shared canonical cards intentionally do not preserve the local choice audit');assert.throws(()=>K.choose(done,'page'));assert.deepEqual(original,done.card);
   }
  });
+ await test('literal Vigenere and both autokey modes ask only missing settings and compile identically to explicit input',async()=>{
+  for(const [id,label,mode]of [['vigenere','Vigenere','repeat'],['plaintext_autokey','Plaintext autokey','plaintext-autokey'],['ciphertext_autokey','Ciphertext autokey','ciphertext-autokey']])for(const direction of ['add','subtract'])for(const reset of ['page','line','word']){
+   const input=card({id,label,key}),before=clone(input),start=await K.verify(input,response(input));assert.equal(start.question.operationId,id);assert.equal(start.question.parameter,'direction');const first=K.choose(start,direction),done=K.choose(first,reset),canonical=H.cardData(C.confirm(done.draft,{id:'explicit-mode-review',at})),direct=card({id,label,key,direction,reset});assert.equal(C.serialize(canonical),C.serialize(direct));assert.deepEqual(input,before);assert.deepEqual(done.card,before);assert.deepEqual(done.draft.rules,start.draft.rules);assert.deepEqual(done.draft.aim,start.draft.aim);assert.deepEqual(done.draft.scope,start.draft.scope);assert.equal(done.question,null);assert.deepEqual(planCard(canonical).steps,[{op:'keyed-shift',key,mode,direction,reset}]);assert.equal(K.modeLabel(id),id==='vigenere'?'Vigen\u00e8re':label);
+   const supplied=card({id,label,key,reset});const only=await K.verify(supplied,response(supplied));assert.equal(K.choose(only,direction).question,null);
+  }
+ });
  await test('stale responses, fabricated choices, unknown fields and already supplied settings are rejected',async()=>{
   const input=card(),valid=response(input),other=card({id:'repeating_key',key:[1,2,3]});
   for(const change of [v=>v.proposalId='p_'+'0'.repeat(64),v=>v.clarification.parameter='key',v=>v.clarification.choices.push({id:'guess',value:'guess',label:'Guess'}),v=>v.clarification.choices[0].value='guess',v=>v.clarification.operationIndex=1,v=>v.clarification.version=2,v=>v.task={},v=>v.field='evaluation']){const bad=clone(valid);change(bad);await assert.rejects(()=>K.verify(input,bad));}
@@ -37,14 +43,15 @@ let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS 
   const original=card();original.method.value.operations.unshift({id:'reverse_runes',unit:'line'});const valid=response(original),wrong=clone(valid);wrong.clarification.operationIndex=0;await assert.rejects(()=>K.verify(original,wrong));
   for(const operations of [
    [{id:'repeating_key',key},{id:'repeating_key',key:[1,2]}],
-   [{id:'reverse_runes',unit:'line'},{id:'plaintext_autokey',key}],
+   [{id:'vigenere',key},{id:'plaintext_autokey',key:[1,2]}],
+   [{id:'reverse_runes',unit:'line'},{id:'plaintext_autokey',key,reset:'carry'}],
    [{id:'reverse_runes',unit:'line'},{id:'finite_key',key}],
    [{id:'repeating_key',key},{id:'reverse_runes',unit:'line',label:'Reverse everything except selected words'}],
    [{id:'repeating_key',key},{id:'unknown_cipher'}]
   ]){const input=card();input.method.value.operations=operations;const forged={...clone(valid),proposalId:'p_'+hash(input)};await assert.rejects(()=>K.verify(input,forged));assert.notEqual(planCard(input).state,'needs-clarification');}
  });
  await test('supplied constraints and unsupported methods cannot be smuggled in with a forged typed response',async()=>{
-  const valid=response(card()),inputs=[card({id:'repeating_key',key,reset:'line'},{reset:known('word')}),card({id:'repeating_key',key,direction:'beaufort'}),card({id:'plaintext_autokey',key}),card({id:'repeating_key'}),card(undefined,{searchBounds:known({max:100})}),card(undefined,{evaluation:known({kind:'readability'})}),card(undefined,{reset:C.field('not_applicable')})];
+  const valid=response(card()),inputs=[card({id:'repeating_key',key,reset:'line'},{reset:known('word')}),card({id:'repeating_key',key,direction:'beaufort'}),card({id:'plaintext_autokey',key:[]}),card({id:'repeating_key'}),card(undefined,{searchBounds:known({max:100})}),card(undefined,{evaluation:known({kind:'readability'})}),card(undefined,{reset:C.field('not_applicable')})];
   for(const input of inputs){const forged={...clone(valid),proposalId:'p_'+hash(input)};await assert.rejects(()=>K.verify(input,forged));}
   const compatible=card({id:'repeating_key',key,reset:'line'},{reset:known('reset at each line')}),s=await K.verify(compatible,response(compatible));assert.equal(s.question.parameter,'direction');assert.equal(K.choose(s,'add').question,null);
  });

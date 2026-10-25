@@ -154,6 +154,7 @@
    (task.criterion.kind==='word-affine-count'?wordPairExample(task,result):'')+'<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
  }
  function renderPrefixComparison(task,result,criterion,pageId){
+  E.summary(task,result);
   if(criterion?.kind!=='exact-prefix'||!Array.isArray(criterion.values)||criterion.values.length<1||criterion.values.length>256||criterion.values.some(v=>!Number.isInteger(v)||v<0||v>28)||!task.pages.some(p=>p.id===pageId)||!result.transformed.some(p=>p.page===pageId))throw Error('Use an explicit opening and an original output page.');
   return prefixAlignment(task,result,pageId,'runes',criterion.values);
  }

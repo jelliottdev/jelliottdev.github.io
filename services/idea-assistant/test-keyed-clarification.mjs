@@ -43,7 +43,7 @@ await test('ambiguous missing targets, unsupported companion steps and other inc
   [{id:'repeating_key',key},{id:'reverse_runes'}],
   [{id:'repeating_key',key},{id:'plaintext_autokey',key:[1,2]}],
   [{id:'repeating_key',key},{id:'finite_key',key:[1,2]}],
-  [{id:'reverse_runes',unit:'line'},{id:'plaintext_autokey',key}],
+  [{id:'reverse_runes',unit:'line'},{id:'plaintext_autokey',key,reset:'carry'}],
   [{id:'reverse_runes',unit:'line'},{id:'finite_key',key}],
   [{id:'reverse_runes',unit:'line'},{id:'repeating_key',key,direction:'beaufort'}],
   [{id:'repeating_key',key},...Array.from({length:8},()=>({id:'affine',a:1,b:0}))]
@@ -58,7 +58,7 @@ await test('fully specified autokey and finite-stream companions retain their ow
  }
 });
 await test('missing keys, malformed or explicit unsupported values never become choice prompts',()=>{
- const candidates=[{id:'repeating_key'},{id:'repeating_key',key:[]},{id:'repeating_key',key:[29]},{id:'repeating_key',key,direction:'beaufort'},{id:'repeating_key',key,reset:null},{id:'repeating_key',key,direction:undefined},{id:'repeating_key',key,unit:'line'},{id:'repeating_key',key,interrupts:[0]},{id:'repeating_key',key,label:'Repeating key except when an F rune occurs'},{id:'plaintext_autokey',key},{id:'vigenere',key},{id:'finite_key',key}];
+ const candidates=[{id:'repeating_key'},{id:'repeating_key',key:[]},{id:'repeating_key',key:[29]},{id:'repeating_key',key,direction:'beaufort'},{id:'repeating_key',key,reset:null},{id:'repeating_key',key,direction:undefined},{id:'repeating_key',key,unit:'line'},{id:'repeating_key',key,interrupts:[0]},{id:'repeating_key',key,label:'Repeating key except when an F rune occurs'},{id:'plaintext_autokey',key,reset:'carry'},{id:'vigenere',key,reset:'carry'},{id:'finite_key',key}];
  for(const operation of candidates){let result;try{result=planCard(card(operation));}catch{continue;}assert(result.reason);assert.notEqual(result.state,'needs-clarification');assert(!Object.hasOwn(result,'clarification'));}
 });
 await test('conflicting global rules and unsupported companion steps retain legacy rejection',()=>{
@@ -75,6 +75,11 @@ function handlerFixture(input){
 await test('opted-in handler returns only the missing supported choice before AI, source fetch or writes',async()=>{
  for(const operation of [{id:'repeating_key',key},{id:'repeating_key',key,direction:'add'},{id:'repeating_key',key,reset:'line'}]){
   const input=card(operation),f=handlerFixture(input),expected=planCard(input),result=await f.submit({includeMethodClarification:true});assert.equal(result.status,200);assert.deepEqual(result.value,{state:'needs-clarification',proposalId:f.proposalId,field:'method',reason:expected.reason,clarification:expected.clarification});assert(!['task','controls','preparation'].some(k=>Object.hasOwn(result.value,k)));f.assertUnchanged();f.sqlite.close();
+ }
+});
+await test('Vigenere and both literal autokey modes receive exact choices with no execution or mutation',async()=>{
+ for(const [id,mode]of [['vigenere','repeat'],['plaintext_autokey','plaintext-autokey'],['ciphertext_autokey','ciphertext-autokey']])for(const preset of [{},{direction:'add'},{reset:'line'}]){
+  const input=card({id,key,...preset}),before=structuredClone(input),f=handlerFixture(input);try{const result=await f.submit({includeMethodClarification:true});assert.equal(result.status,200);assert.equal(result.value.state,'needs-clarification');assert.equal(result.value.clarification.operationId,id);assert.equal(result.value.clarification.parameter,Object.hasOwn(preset,'direction')?'reset':'direction');assert(!['task','controls','preparation'].some(k=>Object.hasOwn(result.value,k)));const completed=structuredClone(input);for(const value of [preset.direction||'subtract',preset.reset||'word'])if(planCard(completed).state==='needs-clarification'){const q=planCard(completed).clarification;if(q.choices.some(c=>c.value===value))completed.method.value.operations[q.operationIndex][q.parameter]=value;}assert.deepEqual(planCard(completed).steps,[{op:'keyed-shift',key,mode,direction:preset.direction||'subtract',reset:preset.reset||'word'}]);assert.deepEqual(input,before);f.assertUnchanged();}finally{f.sqlite.close();}
  }
 });
 await test('opted-in compound handler binds its exact step index before any AI, source or storage work',async()=>{

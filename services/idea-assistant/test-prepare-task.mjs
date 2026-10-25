@@ -136,6 +136,12 @@ await test('explicit keyed operations preserve GP indices, direction, resets, ev
  }
  const f=fixture(card({method:known({operations:[{id:'vigenere',label:'Vigenere',key:[1,2,3],direction:'subtract',reset:'page'}]})})),{value}=await submit(f);assert.equal(value.state,'plan-ready');assert(value.task.title.includes('Repeating-key subtraction · 3-rune key · page resets'));assert(!value.task.title.includes('Cumulative'));await L.checkIdentity(value.task);assert.deepEqual(value.task.steps,[{op:'keyed-shift',key:[1,2,3],mode:'repeat',direction:'subtract',reset:'page'}]);assert.equal(f.calls,1);
 });
+await test('opt-in literal keyed clarification preserves each supported mode without loading sources or creating plans',async()=>{
+ for(const [op,label]of [['repeating_key','Repeating key'],['vigenere','Vigenere'],['plaintext_autokey','Plaintext autokey'],['ciphertext_autokey','Ciphertext autokey']]){
+  const input=card({method:known({operations:[{id:op,label,key:[23,18,3,4]}]})}),before=structuredClone(input),f=fixture(input),{response,value}=await submit(f,{proposalId:id,parentTaskId:null,includeMethodClarification:true});assert.equal(response.status,200);assert.equal(value.state,'needs-clarification');assert.equal(value.field,'method');assert.equal(value.clarification.operationId,op);assert.equal(value.clarification.parameter,'direction');assert.deepEqual(value.clarification.choices.map(c=>c.value),['subtract','add']);assert.deepEqual(input,before);assert.equal(f.calls,0);for(const table of ['local_tasks','prepared_plans','idea_computation_evidence'])assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM '+table).get().n,0);
+  const resetOnly=structuredClone(input);resetOnly.method.value.operations[0].direction='add';const g=fixture(resetOnly),next=await submit(g,{proposalId:id,parentTaskId:null,includeMethodClarification:true});assert.equal(next.value.clarification.parameter,'reset');assert.deepEqual(next.value.clarification.choices.map(c=>c.value),['page','line','word']);assert.equal(g.calls,0);
+ }
+});
 await test('keyed plans reject omitted, guessed and unsupported parameters without source fetch',async()=>{
  const base={id:'vigenere',label:'Vigenere',key:[1,2,3],direction:'subtract',reset:'page'};
  const variants=[...['key','direction','reset'].map(key=>{const o={...base};delete o[key];return o;}),...[[],[29],[-1],[1.5],Array(257).fill(1),'ABC'].map(key=>({...base,key})),...['skip','phase','carry','mode'].map(key=>({...base,[key]:1})),{...base,label:'Vigenere except F'},{...base,a:1}];

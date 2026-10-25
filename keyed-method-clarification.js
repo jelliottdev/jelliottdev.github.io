@@ -3,6 +3,7 @@
  'use strict';
  const node=typeof module==='object'&&module.exports,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare;
  const sessions=new WeakSet(),clone=v=>JSON.parse(C.serialize(v));
+ const modeLabel=id=>({repeating_key:'Repeating key',vigenere:'Vigenère',plaintext_autokey:'Plaintext autokey',ciphertext_autokey:'Ciphertext autokey'}[id]||'Keyed method');
  // In the browser the shared compiler may be loaded later in the deferred
  // script list; resolve it when a reviewed choice is actually requested.
  const compiler=()=>node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler;
@@ -40,5 +41,5 @@
   const receipt={...(session.card.method.value.operations.length>1?{operationIndex:q.operationIndex}:{}),parameter:q.parameter,value:selected.value,label:selected.label,before,after:clone(after)},choices=[...clone(session.choices),receipt];
   return branded({proposalId:session.proposalId,card:clone(session.card),draft,question:question(draft),choices});
  }
- const api={verify,choose,inspect};if(node)module.exports=api;else root.KeyedMethodClarification=api;
+ const api={verify,choose,inspect,modeLabel};if(node)module.exports=api;else root.KeyedMethodClarification=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

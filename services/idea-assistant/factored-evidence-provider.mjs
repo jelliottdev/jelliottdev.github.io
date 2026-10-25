@@ -7,6 +7,7 @@ import Counts from '../../published-count-evidence-data.js';
 import Programs from '../../published-opening-evidence-data.js';
 import {readPublishedEvidence} from './published-evidence.mjs';
 import {validateFamilyReceipt} from './family-evidence.mjs';
+import {chooseLocalMetadataQuery,LIMITS as QUERY_LIMITS} from './factored-query-strategy.mjs';
 const LIMITS=Object.freeze({sources:12,metadata:256,bytes:8*1024*1024,cursorBytes:32768,ttlMs:48*60*60*1000});
 const enc=new TextEncoder(),HEX=/^[a-f0-9]{64}$/,fields=['schema','proposalId','domainId','inputVersion','queryHash','registryHash','scanId','issuedAt','sequence','previous','water','stage','after','served'];
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
@@ -62,7 +63,11 @@ export async function readEvidencePage(policy,{db,proposalId,domain,inputVersion
    AND EXISTS(SELECT 1 FROM json_each(?) wanted JOIN json_each(t.task_json,'$.pages') actual ON json_extract(actual.value,'$.id')=json_extract(wanted.value,'$.id') AND json_extract(actual.value,'$.text')=json_extract(wanted.value,'$.text')) ORDER BY r.rowid,r.id LIMIT ?`:
    `SELECT saved.rowid AS position,saved.family_id,saved.revision,saved.case_id,saved.task_id,saved.result_hash AS result_id,saved.created_at,json_extract(saved.task_json,'$.steps') AS steps,json_array(json_extract(saved.task_json,'$.pages[0].id')) AS pages FROM family_case_results saved WHERE saved.rowid>? AND saved.rowid<=? AND saved.family_id='deor-feedback-v1' AND json_extract(saved.task_json,'$.engine')=? AND json_extract(saved.task_json,'$.alphabet')=? AND ${criterionSQL('saved')} AND json_extract(saved.task_json,'$.steps') IN(SELECT value FROM json_each(?)) AND EXISTS(SELECT 1 FROM json_each(?) wanted JOIN json_each(saved.task_json,'$.pages') actual ON json_extract(actual.value,'$.id')=json_extract(wanted.value,'$.id') AND json_extract(actual.value,'$.text')=json_extract(wanted.value,'$.text')) ORDER BY saved.rowid,saved.family_id,saved.revision,saved.case_id LIMIT ?`;
   const args=local?[scope,state.after,state.water.h1,state.water.h0,inputVersion,d.engine,alphabet,criterionBinding,stepJSON,inputVersion,state.water.h2,state.water.h3,scope,remaining]:[state.after,state.water.h4,d.engine,alphabet,criterionBinding,stepJSON,scope,remaining];
-  const rows=(await db.prepare(sql).bind(...args).all())?.results;if(!Array.isArray(rows)||rows.length>remaining)throw fail('unavailable','The evidence index is malformed.');
+  // Query planning is not evidence. Both strategies retain the same predicates,
+  // snapshot fences, rowid order and limit; all selected originals still pass
+  // the unchanged receipt validation below. Strict legacy policy is untouched.
+  const query=local&&policy===PREFIX_POLICY&&d.programs.length>=QUERY_LIMITS.minPrograms?await chooseLocalMetadataQuery({db,sql,bindings:args}):{sql,bindings:args};
+  const rows=(await db.prepare(query.sql).bind(...query.bindings).all())?.results;if(!Array.isArray(rows)||rows.length>remaining)throw fail('unavailable','The evidence index is malformed.');
   let stopped=false;
   for(const row of rows){reviewed++;if(!Number.isSafeInteger(row.position)||row.position<=state.after||!HEX.test(row.task_id)||!HEX.test(row.result_id)||!Number.isFinite(Date.parse(row.created_at))||!programs.has(row.steps))throw fail('unavailable','A source pin is malformed.');const ids=JSON.parse(row.pages);if(!Array.isArray(ids)||!ids.length||new Set(ids).size!==ids.length||ids.some(id=>!pages.has(id)))throw fail('unavailable','A source scope is malformed.');const pi=programs.get(row.steps),positions=ids.map(id=>pi*d.pages.length+pages.get(id).index);
    if(!positions.every(id=>marked(served,id))){let source,link;
