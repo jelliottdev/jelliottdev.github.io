@@ -1,0 +1,41 @@
+/* Real SQLite opt-in clarification. No targets, AI or public persistence. */
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync,readdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import C from '../../claim-specification.js';
+import H from '../../claim-share.js';
+import K from '../../key-alternatives-clarification.js';
+import {createPrepareTaskHandler,planCard} from './prepare-task.mjs';
+const at='2026-10-25T12:00:00.000Z',known=value=>C.field('specified',value,{kind:'supplied',refs:['visitor:original']}),phrase='Try all two-rune repeating keys using GP indices 0–28';
+function card({text=phrase,operations,scope=known({pages:['lp2-15']}),rules={}}={}){return H.cardData(C.confirm(C.createDraft({source:{text},aim:known('Solve LP2'),method:known({operations:operations||[{id:'described_method',label:text,sourceText:text}]}),scope,rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known({kind:'exact-prefix',values:[24,7,24]}),...rules}}),{id:'visitor',at}));}
+function fixture(input){
+ const sqlite=new DatabaseSync(':memory:'),dir=new URL('./migrations/',import.meta.url);for(const file of readdirSync(dir).filter(n=>/^\d{4}_.*\.sql$/.test(n)).sort())sqlite.exec(readFileSync(new URL(file,dir),'utf8'));
+ const json=C.serialize(input),hash=createHash('sha256').update(json).digest('hex'),proposalId='p_'+hash;sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,hash,json,'unused',at);
+ let ai=0,fetches=0,rates=0,writes=0;const env={SITE_ORIGIN:'https://jelliottdev.github.io',PROPOSALS:{prepare(sql){return {bind(...args){return {first:async()=>sqlite.prepare(sql).get(...args)||null,all:async()=>({results:sqlite.prepare(sql).all(...args)}),run:async()=>{writes++;throw Error('Clarification cannot write');}};}};}},TASK_LIMIT:{limit:async()=>{rates++;return {success:true};}},AI:{run(){ai++;throw Error('Injected planner unavailable');}}},handler=createPrepareTaskHandler({fetcher(){fetches++;throw Error('No manuscript fetch for a choice');}});
+ return {sqlite,proposalId,async call(extra={includeMethodClarification:true}){const response=await handler(new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin:env.SITE_ORIGIN,'content-type':'application/json'},body:JSON.stringify({proposalId,parentTaskId:null,...extra})}),env);return {status:response.status,value:await response.json()};},check(expectedAI=0,expectedFetches=0){assert.equal(ai,expectedAI);assert.equal(fetches,expectedFetches);assert.equal(rates,1);assert.equal(writes,0);assert.equal(sqlite.prepare('SELECT card_json FROM proposals WHERE id=?').get(proposalId).card_json,json);for(const table of ['local_tasks','local_task_results','prepared_plans','idea_computation_evidence'])assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM '+table).get().n,0);}};
+}
+let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
+await test('exact one/two GP-index repeating-key requests return independently verifiable opt-in descriptors without side effects',async()=>{
+ for(const text of [phrase,'Every one-index repeating key using GP indices 0-28, add, resetting at each word.',phrase+' on LP2-15']){const input=card({text}),f=fixture(input);try{const result=await f.call();assert.equal(result.status,200);assert.deepEqual(result.value,{state:'needs-clarification',proposalId:f.proposalId,field:'method',reason:'Confirm the repeating-key domain and its exact settings.',clarification:K.describe(input)});const session=await K.verify(input,result.value);assert.equal(session.proposedCard,null);assert.equal(session.question.parameter,'keyDomain');assert(!['task','preparation','controls'].some(key=>Object.hasOwn(result.value,key)));f.check();}finally{f.sqlite.close();}}
+});
+await test('evaluation clarification has priority and never changes deciphering into a numeric or prefix check',async()=>{
+ for(const evaluation of [C.field(),known({kind:'readability'})]){const input=card({rules:{evaluation}}),f=fixture(input);try{const result=await f.call();assert.equal(result.status,200);assert.equal(result.value.state,evaluation.status==='unspecified'?'needs-clarification':'needs-adapter');assert(!Object.hasOwn(result.value,'clarification'));if(evaluation.status==='unspecified')assert.equal(result.value.field,'evaluation');f.check();}finally{f.sqlite.close();}}
+});
+await test('full original scope, missing edition and unsupported explicit evaluations remain retained through local review',async()=>{
+ const pages=Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0')),input=card({scope:known({pages}),rules:{inputVersion:C.field()}}),f=fixture(input);try{const result=await f.call();let s=await K.verify(input,result.value,globalThis.crypto,{factored:true});s=K.choose(K.choose(K.choose(s,'gp29-all-2'),'subtract'),'page');assert.equal(s.question.parameter,'inputVersion');s=K.choose(s,'reviewed');assert.equal(s.state,'ready');assert.equal(s.caseCount,47096);assert.deepEqual(s.proposedCard.scope,input.scope);assert.deepEqual(s.proposedCard.outcome,input.outcome);f.check();}finally{f.sqlite.close();}
+ const measurement=card({rules:{evaluation:known('measurement')}}),m=fixture(measurement);try{const result=await m.call();assert.equal(result.value.state,'needs-clarification');let s=await K.verify(measurement,result.value);for(const value of ['gp29-all-2','subtract','page'])s=K.choose(s,value);assert.equal(s.state,'unsupported');assert.deepEqual(s.proposedCard.rules.evaluation,measurement.rules.evaluation);m.check();}finally{m.sqlite.close();}
+});
+await test('ordered compound descriptor binds the one exact source-quoted operation without modifying companions',async()=>{
+ const operations=[{id:'reverse_runes',unit:'line'},{id:'described_method',label:phrase,sourceText:phrase},{id:'affine',a:7,b:4}],input=card({operations}),f=fixture(input);try{const result=await f.call();assert.equal(result.value.clarification.operationIndex,1);let s=await K.verify(input,result.value);for(const value of ['gp29-all-2','add','word'])s=K.choose(s,value);assert.equal(s.state,'ready');assert.deepEqual(s.proposedCard.method.value.operations[0],input.method.value.operations[0]);assert.deepEqual(s.proposedCard.method.value.operations[2],input.method.value.operations[2]);assert.deepEqual(s.proposedCard.scope,input.scope);f.check();}finally{f.sqlite.close();}
+});
+await test('legacy callers, vague words, nonrepeating streams, Latin domains and conflicting scope keep the existing adapter path',async()=>{
+ for(const [input,extra]of [[card(),{}],...['Try all keys','Try all three-rune repeating keys using GP indices 0–28','Try all two-rune finite keys using GP indices 0–28','Try all two-rune autokey seeds using GP indices 0–28','Try all two-rune repeating keys using Latin letters A–Z',phrase+' except F',phrase+' on LP2-16'].map(text=>[card({text}),{includeMethodClarification:true}])]){const f=fixture(input);try{const result=await f.call(extra);assert.equal(result.status,200);assert.equal(result.value.state,'needs-adapter');assert(!Object.hasOwn(result.value,'clarification'));f.check(1);}finally{f.sqlite.close();}}
+});
+await test('existing ready keyed plans take their normal source-loading path rather than becoming a search',async()=>{
+ const input=card({operations:[{id:'repeating_key',key:[1,2],direction:'subtract',reset:'page'}]}),f=fixture(input);try{assert(!planCard(input).reason);const result=await f.call();assert.equal(result.status,422);assert(!Object.hasOwn(result.value,'clarification'));f.check(0,1);}finally{f.sqlite.close();}
+});
+await test('existing affine and literal-key clarification priorities and wire formats remain unchanged',async()=>{
+ for(const [operation,kind]of [[{id:'described_method',label:'Try all invertible affine settings'},'affine-search'],[{id:'repeating_key',key:[1,2]},'keyed-operation']]){const f=fixture(card({operations:[operation]}));try{const result=await f.call();assert.equal(result.value.clarification.kind,kind);f.check();}finally{f.sqlite.close();}}
+});
+console.log(groups+' key alternatives backend groups passed; real private SQLite, no public writes or target executions.');

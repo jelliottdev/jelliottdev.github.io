@@ -1,5 +1,6 @@
 import Compiler from '../../fixed-plan-compiler.js';
 import AffineChoices from '../../affine-search-clarification.js';
+import KeyAlternatives from '../../key-alternatives-clarification.js';
 import {issue as issuePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 import PlanControls from '../../local-plan-controls.js';
@@ -52,6 +53,8 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    if(body.includeMethodClarification===true&&plan.reason){
     const clarification=AffineChoices.describe(card);
     if(clarification)return reply({state:'needs-clarification',proposalId:body.proposalId,field:'method',reason:'Confirm the affine convention and the settings to enumerate.',clarification});
+    const keyAlternatives=KeyAlternatives.describe(card);
+    if(keyAlternatives)return reply({state:'needs-clarification',proposalId:body.proposalId,field:'method',reason:'Confirm the repeating-key domain and its exact settings.',clarification:keyAlternatives});
    }
    // Older clients only understand evaluation clarification. Keep this exact
    // supported-method question opt-in during the frontend transition.
