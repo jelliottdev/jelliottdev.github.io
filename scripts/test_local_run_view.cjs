@@ -87,3 +87,10 @@ function hostFor(multiple=true,withPrefix=false,single=false){
  const css=fs.readFileSync(require.resolve('../local-run-view.css'),'utf8');assert(css.includes("fonts/NotoSansRunic-Regular.ttf"));assert(css.includes('@media(max-width:640px)'));assert(css.includes('grid-template-columns:repeat(2,minmax(0,1fr))'));assert(css.includes('grid-template-columns:minmax(0,1fr)'));assert(css.includes('white-space:pre-wrap'));assert(css.includes('min-height:44px'));assert(css.includes('.run-prefix-table{width:100%;table-layout:fixed'));assert(css.includes('font-size:.875rem'));assert(css.includes('1.5rem/1.4'));
  console.log('PASS local run inspector: verified actual outputs, escaped text, one selected page, original/after, exact whitespace, unambiguous labels not translation, native page/mode controls, verified prefix counts/alignment/missing runes/late mismatches and actual Welcome48, snapshots, cleanup and responsive CSS.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+{
+ const V=require('../local-run-view.js');
+ assert(V.continuationHTML({verified:true}).includes('href="research.html?contribute=1"'));
+ for(const value of [{},{verified:false},{verified:'true'},{verified:true,unsaved:true},{verified:true,unsaved:0},{verified:true,hasNext:true},{verified:true,hasNext:null}])assert.equal(V.continuationHTML(value),'');
+ assert(!/<(?:button|script|input)\b/.test(V.continuationHTML({verified:true})),'The shared handoff is ordinary navigation, never a calculation or write');
+}

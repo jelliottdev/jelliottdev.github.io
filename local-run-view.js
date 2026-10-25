@@ -220,5 +220,9 @@
   return '<section class="measurement-comparison">'+scope+body+'</section>';
  }
  function bindMeasurementComparison(host,token){const data=measurementData(token);if(!data.coveredPages.length)return ()=>{};return data.task.criterion.kind==='word-prime-sums'?bindWordSums(host,data.task,{wordSums:data.wordSums}):data.task.criterion.kind==='measurement'?bindOutputPreview(host,data.task,{transformed:data.outputs}):()=>{};}
- const api={prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ function continuationHTML({verified=false,unsaved=false,hasNext=false}={}){
+  if(verified!==true||unsaved!==false||hasNext!==false)return '';
+  return '<p class="research-continuation"><a href="research.html?contribute=1">Find another check <span aria-hidden="true">→</span></a></p>';
+ }
+ const api={continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -375,6 +375,19 @@ async function familyEvidenceCoverageTests(){
  console.log('PASS family-to-idea evidence: historical-revision case fetching and exact links, full/partial/reloaded reuse without copied tasks or automatic execution, strict mapping and independent complete-result checks.');
 }
 
+async function contributionContinuationTests(){
+ const task=await E.prepare({title:'Synthetic complete page scope',alphabet,pages:Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:'ᚠᚢᚦ'})),steps:[{op:'reverse',unit:'page'}],criterion:{kind:'measurement'}},webcrypto);
+ let rejectSave=true;const f=await fixture({task,post:async(url,options)=>rejectSave?Response.json({error:'Unavailable'},{status:503}):Response.json({taskId:task.taskId,state:'results-verified',latestRun:await receipt(JSON.parse(options.body).result)})});
+ const link=()=>f.doc.getElementById('research-continuation').innerHTML;
+ try{
+  assert.equal(link(),'');await f.upload(E.run(task));assert.equal(link(),'','Local-only output cannot claim a saved contribution');await f.click('submit-results');assert.equal(link(),'','A failed save keeps Save/Retry primary');assert(!f.doc.getElementById('submit-results').disabled);
+  rejectSave=false;await f.click('submit-results');assert(link().includes('href="research.html?contribute=1"'));assert(link().includes('Find another check'));assert(!f.doc.getElementById('research-continuation').hidden);assert.equal(f.executions.length,0,'Displaying next work starts no worker');
+  const {pending}=await startTarget(f);assert.equal(link(),'','The next-work action stays out of an active rerun');f.click('cancel-run');f.executions.at(-1).resolve(E.run(task));await pending;assert(link().includes('Find another check'),'Cancellation restores the already verified contribution handoff');
+ }finally{f.app.destroy();}
+ const savedResult=await receipt(E.run(task)),reloaded=await fixture({task,get:async()=>Response.json(projection(task,savedResult))});try{assert(reloaded.doc.getElementById('research-continuation').innerHTML.includes('Find another check'));assert.equal(reloaded.requests.filter(r=>r.options.method==='POST').length,0,'Reloading a saved result never submits or executes work');}finally{reloaded.app.destroy();}
+ const partial=await fixture();try{await partial.upload(E.run(partial.task));await partial.click('submit-results');assert(!partial.doc.getElementById('extend-scope').hidden);assert.equal(partial.doc.getElementById('research-continuation').innerHTML,'','The specific remaining-page action takes precedence');}finally{partial.app.destroy();}
+ console.log('PASS contribution handoff: verified save/reload only, unsaved/failed save/running suppression, cancel restoration, specific remaining work precedence and no automatic work.');
+}
 async function keyedReviewIllustrationTests(){
  const modes=[['repeat','Repeat the key','return to the first key rune.'],['plaintext-autokey','Use output runes to extend the key','take the next key rune from the first output above.'],['ciphertext-autokey','Use input runes to extend the key','take the next key rune from the first input above.']];
  const illustrations=new Map();
@@ -413,6 +426,7 @@ async function keyedReviewIllustrationTests(){
 }
 
 (async()=>{
+ await contributionContinuationTests();
  await keyedReviewIllustrationTests();
  // A same-document family link must dispatch to the family workspace rather
  // than being parsed as an invalid legacy task. Reload preserves the hash and

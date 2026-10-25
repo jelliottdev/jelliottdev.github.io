@@ -130,3 +130,30 @@ filterNavigation.state.followups='pending';filterNavigation.navigate({mode:'list
 console.log('PASS available work filter: prepared and unfinished selectors, safe direct task/idea actions, loaded-only record counts, compact active-only chips, and validated canonical recipes, selector/page intersection, shared Graph/List counts, retained branch drill, empty recovery, no data mutation, dialog choices/chip/badge/reset.');
 
 console.log('PASS research navigation: Sort restores replacement focus; Graph/List preserves camera; legacy List links open exact records; mobile preview is source-bound, inert and returns focus via Back/Escape; resize retains world centre and zoom.');
+
+// Execute the production bootstrap and chooser lifecycle, with deferred registry reads.
+(async()=>{
+ const boot=source.split('\n').find(line=>line.startsWith(' Promise.all('));assert(boot);
+ const tick=()=>new Promise(resolve=>setImmediate(resolve));
+ for(const search of ['?contribute=1','?help=1','?contribute=1&help=1','?contribute=0','?contribute=true','?contribute=01','?contribute=unknown','?help=unknown','']){
+  const opens=search.includes('contribute=1')&&!search.includes('contribute=01')||search.includes('help=1');
+  let resolveRegistry,rendered=0,opened=0,unbound=0,loaded=0,probes=[],events=[];
+  const hash='#branch=method%3Afeedback&mode=list&q=key&followups=pending',location={search,hash,href:'https://example.org/research.html'+search+hash};
+  const registry=new Promise(resolve=>{resolveRegistry=resolve}),nodes=new Map(['map-dialog-title','map-dialog-body','help-research-button','close-map-dialog'].map(id=>[id,element(id)]));
+  const route={location,URLSearchParams,Promise,data:null,publishedBaseline:null,helpCleanup:null,dialogReturn:null,map:{innerHTML:''},esc:String,
+   $:id=>nodes.get(id),dialog:{scrollTop:0,showModal(){assert.equal(rendered,1,'Registry and normal map rendering precede opening');opened++;},close(){}},
+   fetch:path=>path==='data/experiments.json'?registry:Promise.resolve({ok:true,json:async()=>({map:true})}),
+   ResearchBrowserModel:{build(mapData,records){assert(mapData.map);assert(records.registry);return {records:{canonical:{id:'canonical'}}};}},
+   render(){assert(route.data?.records.canonical);rendered++;},loadCommunity(){events.push('community');},
+   ResearchHelp:{render(records){assert.equal(records,route.data.records);return 'Existing chooser';},bind(host,records,{createReadiness}){assert.equal(host,nodes.get('map-dialog-body'));assert.equal(records,route.data.records);const probe=createReadiness({record:{id:'canonical'},check:{id:'source-check'},onState:value=>probes.push(value.state)});probe.activate();return ()=>{unbound++;probe.destroy();};}},
+   ResearchHelpRuntime:require('../research-help-runtime.js'),RecordQuestionRuntime:{async loadReadiness(){loaded++;throw Error('API unavailable');}}};
+  vm.createContext(route);for(const name of ['clearHelp','openDialog','closeDialog','helpResearch'])vm.runInContext(production(name),route);
+  vm.runInContext(boot,route);await tick();assert.equal(opened,0,'Never open before registry loading finishes');
+  resolveRegistry({ok:true,json:async()=>({registry:true})});await tick();await tick();
+  assert.equal(opened,Number(opens),search);assert.equal(location.hash,hash,'Contribution entry preserves branch and filters');assert.deepEqual(events,['community']);
+  if(opens){assert.equal(loaded,1);assert.deepEqual(probes,['loading','unavailable'],'Unavailable API uses the existing conservative chooser state');assert.equal(nodes.get('map-dialog-title').textContent,'Help with an existing check');}
+  route.render();location.hash='#branch=method%3Aroutes&mode=graph';route.render();assert.equal(opened,Number(opens),'Later renders/hash/filter changes do not reopen the entry');
+  route.clearHelp();assert.equal(unbound,Number(opens));assert.equal(route.helpCleanup,null);await tick();assert.equal(opened,Number(opens),'Destroying the chooser does not reopen it');
+ }
+ console.log('PASS contribution entry: canonical URL and legacy alias open once after registry/render; unknown values stay closed; branch/filter state retained; unavailable API and chooser cleanup use existing runtime.');
+})().catch(error=>{console.error(error);process.exitCode=1;});
