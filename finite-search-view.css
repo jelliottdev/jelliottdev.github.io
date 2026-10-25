@@ -24,3 +24,9 @@
 
 /* Exact opening text uses the same bundled rune coverage as output inspection. */
 .finite-search-summary dd{font-family:system-ui,-apple-system,"Segoe UI","Local Runic",sans-serif}
+
+/* Explanations need the reading width; short counts can remain aligned. */
+@media(max-width:600px){
+ .finite-search-summary>div:first-child,.finite-search-summary>div:last-child{display:block}
+ .finite-search-summary>div:first-child dt,.finite-search-summary>div:last-child dt{margin-bottom:.3rem}
+}

@@ -418,3 +418,21 @@ do not change the pinned recipe or task identity. `record-question-model.js`
 provides the common question state used by the record view, recipe actions and
 available-work filter. Tested reproductions remain directly accessible but are
 not counted as new prepared follow-up work.
+
+## Authored finite families: remaining connection
+
+A finite follow-up belongs in its source experiment as one card with explicit
+`finite-settings` axes, not one recipe per combination or a separate family UI.
+The independent `scripts/finite_followup_cards.py` now validates and expands the
+supported fixed-compiler subset without running manuscript text. Its parity
+checks cover the known-key search's 42 programs and all 56 pages (2,352 cases).
+This is a validation foundation, not an available authored finite-plan endpoint.
+
+Before publishing a finite source recipe, complete the generic question/action
+and reviewed-plan handoff. Bind the original source snapshot and full domain to
+preparation and admission; verify every selected member/page against them again
+when creating work. Reuse the existing finite workspace and controls. Navigation
+must not run or save anything. Do not weaken fixed-origin validation or attach an
+unverified source label only in browser state. All programs need transform and
+evaluator controls; empty outputs remain explicitly insufficient. New language
+comparisons must remain distinct from the archived exact-opening result.
