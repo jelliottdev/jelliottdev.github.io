@@ -68,49 +68,70 @@
   return {snapshot,steps,pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:rules.evaluation.value==='measurement'?{kind:'measurement'}:rules.evaluation.value};
  }
  async function validatePlan(value,ref,cryptoAPI){
-  if(!exact(value,['state','origin','card','task','inputVersion','control','question','scopeChange','limitation',...(value&&Object.hasOwn(value,'existingTask')?['existingTask']:[]),...(value&&Object.hasOwn(value,'coverage')?['coverage']:[])])||value.state!=='plan-ready'||value.origin?.recordId!==ref.recordId||value.origin?.followupId!==ref.followupId)throw Error('The reviewed plan belongs to another published follow-up.');
+  if(!exact(value,['state','origin','card','task','inputVersion','control','question','scopeChange','limitation',...(value&&Object.hasOwn(value,'existingTask')?['existingTask']:[]),...(value&&Object.hasOwn(value,'coverage')?['coverage']:[]),...(value&&Object.hasOwn(value,'boundaryComparison')?['boundaryComparison']:[])])||value.state!=='plan-ready'||value.origin?.recordId!==ref.recordId||value.origin?.followupId!==ref.followupId)throw Error('The reviewed plan belongs to another published follow-up.');
   if(Object.hasOwn(value,'existingTask')&&(!exact(value.existingTask,['id','state'])||!HEX.test(value.existingTask.id)||value.existingTask.id!==value.task?.taskId||!['not-run','results-verified'].includes(value.existingTask.state)))throw Error('The existing experiment reference is invalid.');
   const program=cardProgram(value.card);await E.checkIdentity(value.task,cryptoAPI);
   if(!same(program.steps,value.task.steps)||!same(program.pages,value.task.pages.map(p=>p.id))||program.inputVersion!==value.inputVersion||!same(program.criterion,value.task.criterion))throw Error('The reviewed plan does not match its idea card.');
   await validateOrigins([{origin:value.origin,control:value.control,question:value.question,scopeChange:value.scopeChange,limitation:value.limitation}],value.task,cryptoAPI);return clone(value);
  }
  function createWorkspace(doc,host,options){
-  const {reference:ref,config,request,validEndpoint,crypto:cryptoAPI=root.crypto,planHTML,isLive=()=>true,onCreated,onRemaining,projection,checkedCoverage,coverageHTML}=options;
+  const {reference:ref,config,request,validEndpoint,crypto:cryptoAPI=root.crypto,planHTML,isLive=()=>true,onCreated,onRemaining,projection,checkedCoverage,coverageHTML,checkBoundaryComparison}=options;
   let dead=false,version=0,plan=null,busy=false,intent=null;const controller=new AbortController(),live=token=>!dead&&version===token&&isLive(),get=id=>doc.getElementById(id),set=(id,value)=>{const el=get(id);if(el)el.textContent=value;};
   const endpoint=(value,path)=>typeof value==='string'&&validEndpoint(value,path);
   async function json(url,body,timeout=25000){const response=await request(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal},timeout),value=await response.json();if(!response.ok)throw Error(text(value?.error,1200)?value.error:text(value?.reason,1200)?value.reason:'The request could not be completed. Please retry.');return value;}
   const actionLabel=()=>plan?.verifiedCoverage?'Review '+plan.verifiedCoverage.remainingPages.length+' unchecked '+(plan.verifiedCoverage.remainingPages.length===1?'page':'pages'):'Create experiment';
-  function status(message='',error=''){set('followup-status',message);set('followup-error',error);const button=get('create-followup');if(button){button.disabled=busy;button.textContent=busy?(plan?.verifiedCoverage?'Opening remaining work…':'Creating experiment…'):actionLabel();}}
+  function status(message='',error=''){set('followup-status',message);set('followup-error',error);const button=get('create-followup');if(button){button.disabled=busy;button.textContent=busy?(plan?.verifiedCoverage?'Opening remaining work…':'Creating experiment…'):actionLabel();}const companion=get('review-companion');if(companion){companion.disabled=busy;companion.textContent=busy?'Opening remaining comparison…':'Review remaining comparison';}const retry=get('retry-companion');if(retry){retry.disabled=busy;retry.textContent=busy?'Checking comparison…':'Retry comparison';}}
   function draw(){
-   const reused=plan.verifiedCoverage,complete=reused&&!reused.remainingPages.length,existing=reused?null:plan.existingTask;
+   const reused=plan.verifiedCoverage,comparison=plan.verifiedBoundaryComparison,complete=!!comparison?.complete||reused&&!reused.remainingPages.length,existing=reused?null:plan.existingTask;
    const header='<nav class="run-links"><a href="research.html?v=record-panel-20261024">Back to research map</a><a href="library.html?v=record-panel-20261024#/experiment/'+esc(ref.recordId)+'">Source experiment</a></nav><h1>'+esc(plan.task.title)+'</h1><p>'+esc(plan.question)+'</p>';
    let body;
    if(reused){
-    body=coverageHTML(reused)+(complete?'<p class="small">'+esc(plan.limitation)+'</p>':'<button id="create-followup" class="primary">'+actionLabel()+'</button><p class="small">Keep this question and review a new plan covering only unchecked pages.</p><details class="experiment-details"><summary>Original published plan</summary><p>'+esc(plan.scopeChange)+'</p>'+planHTML(plan.task,plan.inputVersion)+'<p class="small">'+esc(plan.limitation)+'</p></details>');
+    body=(comparison?'<details class="experiment-details"><summary>Source calculations</summary>'+coverageHTML(reused)+'</details>':coverageHTML(reused))+(complete?(comparison?'':'<p class="small">'+esc(plan.limitation)+'</p>'):'<button id="create-followup" class="primary">'+actionLabel()+'</button><p class="small">Keep this question and review a new plan covering only unchecked pages.</p><details class="experiment-details"><summary>Original published plan</summary><p>'+esc(plan.scopeChange)+'</p>'+planHTML(plan.task,plan.inputVersion)+'<p class="small">'+esc(plan.limitation)+'</p></details>');
    }else{
     const open=existing?'<p class="notice">'+(existing.state==='results-verified'?'A verified computation is already saved.':'This experiment already exists. No saved computation yet.')+'</p><div class="run-actions"><a class="button primary" id="open-followup" href="run.html#task='+existing.id+'">'+(existing.state==='results-verified'?'View saved result':'Continue experiment')+'</a></div>':'';
     body=open+'<p class="small">'+esc(plan.scopeChange)+'</p>'+planHTML(plan.task,plan.inputVersion)+'<p><strong>Synthetic control:</strong> '+esc(plan.control.label)+'. It will run first; a failed control stops the manuscript run.</p><p class="small">'+esc(plan.limitation)+'</p>'+(existing?'':'<p class="small">Creating this experiment shares the confirmed idea as a research entry. Results stay on your device until you submit them.</p><button id="create-followup" class="primary">Create experiment</button>');
    }
-   host.innerHTML=header+body+'<p id="followup-status" class="notice" role="status"></p><p id="followup-error" class="error" role="alert"></p>';const button=get('create-followup');if(button)button.onclick=create;
+   host.innerHTML=header+(comparison?comparison.html+(comparison.nextCard?'<button id="review-companion" class="primary">Review remaining comparison</button>':''):plan.boundaryComparisonError?'<p class="notice">The boundary comparison could not be checked. The original experiment is still available.</p><button id="retry-companion">Retry comparison</button>':'')+body+'<p id="followup-status" class="notice" role="status"></p><p id="followup-error" class="error" role="alert"></p>';const button=get('create-followup');if(button)button.onclick=create;const companion=get('review-companion');if(companion)companion.onclick=reviewCompanion;const retry=get('retry-companion');if(retry)retry.onclick=()=>{if(!busy) return load(true);};
   }
-  async function load(){const token=++version;host.innerHTML='<h1>Published follow-up</h1><p role="status">Loading the reviewed plan…</p>';try{
+  async function load(preserve=false){const previous=preserve===true?plan:null,token=++version;if(previous){busy=true;status('Checking the saved comparison…');}else host.innerHTML='<h1>Published follow-up</h1><p role="status">Loading the reviewed plan…</p>';try{
    if(!ref||!endpoint(config?.recordPlanEndpoint,'record-plans'))throw Error('Published follow-up plans are not available here yet.');
-   const checked=await validatePlan(await json(config.recordPlanEndpoint,{recordId:ref.recordId,followupId:ref.followupId,includeExisting:true}),ref,cryptoAPI);if(!live(token))return;
+   const checked=await validatePlan(await json(config.recordPlanEndpoint,{recordId:ref.recordId,followupId:ref.followupId,includeExisting:true,includeBoundaryComparison:true}),ref,cryptoAPI);if(!live(token))return;
    if(Object.hasOwn(checked,'coverage')){
     if(typeof checkedCoverage!=='function'||typeof coverageHTML!=='function')throw Error('Saved evidence could not be checked. Reload before starting new work.');
     const reused=await checkedCoverage(checked.coverage,checked.inputVersion);if(!live(token))return;
     if(!Array.isArray(reused?.coveredPages)||reused.inputVersion!==checked.inputVersion||!same(reused.requestedTask,checked.task))throw Error('The saved evidence does not describe this exact published follow-up.');
     if(reused.truncated===true&&reused.remainingPages.length)throw Error('Saved evidence is incomplete. Reload before preparing remaining work.');
+    checked.originalVerifiedCoverage=reused;
     if(reused.coveredPages.length){if(reused.remainingPages.length&&typeof onRemaining!=='function')throw Error('The remaining-page review could not be opened. Please reload.');checked.verifiedCoverage=reused;}
    }
+   if(Object.hasOwn(checked,'boundaryComparison'))try{
+    if(typeof checkBoundaryComparison!=='function')throw Error('The boundary comparison verifier is unavailable.');
+    const compared=await checkBoundaryComparison(checked.task,checked.inputVersion,checked.originalVerifiedCoverage||null,checked.boundaryComparison);if(!live(token))return;
+    if(!exact(compared,['html','complete',...(compared&&Object.hasOwn(compared,'nextCard')?['nextCard']:[])])||typeof compared.html!=='string'||!compared.html.trim()||typeof compared.complete!=='boolean')throw Error('The boundary comparison view is invalid.');
+    if(Object.hasOwn(compared,'nextCard')){
+     const original=checked.originalVerifiedCoverage,companion=checked.boundaryComparison,program=cardProgram(compared.nextCard);
+     if(compared.complete||!original?.coveredPages.length||original.remainingPages.length||!companion.coverage?.remainingPages?.length||companion.coverage.truncated!==false||companion.coverageUnavailable===true||typeof onRemaining!=='function'||program.inputVersion!==checked.inputVersion||!same(program.pages,companion.task.pages.map(p=>p.id))||!same(program.steps,companion.task.steps)||!same(program.criterion,companion.task.criterion))throw Error('The next comparison card does not match the exact remaining comparison.');
+    }
+    checked.verifiedBoundaryComparison=clone(compared);
+   }catch{if(!live(token))return;checked.boundaryComparisonError=true;}
    plan=checked;draw();
-  }catch(error){if(!live(token))return;host.innerHTML='<h1>Follow-up unavailable</h1><p class="error" role="alert">'+esc(error.message)+'</p><button id="retry-followup">Retry</button><p><a href="library.html?v=record-panel-20261024#/experiment/'+esc(ref.recordId)+'">Read the source experiment</a></p>';get('retry-followup').onclick=load;}}
-  async function create(){if(!plan||plan.verifiedCoverage&&!plan.verifiedCoverage.remainingPages.length||plan.existingTask&&!plan.verifiedCoverage||busy)return;const token=version;busy=true;status('Saving the reviewed experiment…');try{
-   for(const [key,path]of [['proposalEndpoint','proposals'],['researchIdeaEndpoint','ideas'],['localTaskEndpoint','tasks']])if(!endpoint(config?.[key],path))throw Error('Creating published follow-ups is not available here yet.');
-   const key=E.stable(plan);if(!intent||intent.key!==key){const snapshot=C.confirm(cardSnapshot(plan.card),{id:cryptoAPI.randomUUID(),at:new Date().toISOString()});intent={key,requestId:cryptoAPI.randomUUID(),fragment:H.encode(snapshot),proposalId:'p_'+await digest(C.serialize(H.cardData(snapshot)),cryptoAPI)};}
-   if(!live(token))return;const created=await json(config.proposalEndpoint,{requestId:intent.requestId,fragment:intent.fragment});if(!live(token))return;
+  }catch(error){if(!live(token))return;if(previous){plan=previous;plan.boundaryComparisonError=true;delete plan.verifiedBoundaryComparison;draw();status('',error.message);}else{host.innerHTML='<h1>Follow-up unavailable</h1><p class="error" role="alert">'+esc(error.message)+'</p><button id="retry-followup">Retry</button><p><a href="library.html?v=record-panel-20261024#/experiment/'+esc(ref.recordId)+'">Read the source experiment</a></p>';get('retry-followup').onclick=()=>load();}}finally{if(previous&&live(token)){busy=false;status(get('followup-status')?.textContent||'',get('followup-error')?.textContent||'');}}}
+  async function saveIdeaCard(card,key,token){
+   for(const [name,path]of [['proposalEndpoint','proposals'],['researchIdeaEndpoint','ideas']])if(!endpoint(config?.[name],path))throw Error('Saving reviewed comparisons is not available here yet.');
+   if(!intent||intent.key!==key){const snapshot=C.confirm(cardSnapshot(card),{id:cryptoAPI.randomUUID(),at:new Date().toISOString()});intent={key,requestId:cryptoAPI.randomUUID(),fragment:H.encode(snapshot),proposalId:'p_'+await digest(C.serialize(H.cardData(snapshot)),cryptoAPI)};}
+   if(!live(token))return null;const created=await json(config.proposalEndpoint,{requestId:intent.requestId,fragment:intent.fragment});if(!live(token))return null;
    if(created.id!==intent.proposalId||!['received','already_received'].includes(created.status)||!Number.isFinite(Date.parse(created.receivedAt)))throw Error('The saved idea receipt does not match this card.');
-   const idea=await json(config.researchIdeaEndpoint,{proposalId:intent.proposalId});if(!live(token))return;if(idea.id!==intent.proposalId||!same(idea.card,plan.card))throw Error('The shared research entry does not match this card.');
+   const idea=await json(config.researchIdeaEndpoint,{proposalId:intent.proposalId});if(!live(token))return null;if(idea.id!==intent.proposalId||!same(idea.card,card))throw Error('The shared research entry does not match this card.');
+   return intent.proposalId;
+  }
+  async function reviewCompanion(){
+   const card=plan?.verifiedBoundaryComparison?.nextCard;if(!card||busy||typeof onRemaining!=='function')return;const token=version;busy=true;status('Saving the comparison question…');
+   try{const id=await saveIdeaCard(card,'boundary:'+E.stable(card),token);if(!id||!live(token))return;status('Comparison question saved. Opening the unchecked pages for review.');onRemaining(id);}
+   catch(error){if(live(token))status('',error.message);}finally{if(live(token)){busy=false;const button=get('review-companion');if(button){button.disabled=false;button.textContent='Review remaining comparison';}}}
+  }
+  async function create(){if(!plan||plan.verifiedBoundaryComparison?.complete||plan.verifiedCoverage&&!plan.verifiedCoverage.remainingPages.length||plan.existingTask&&!plan.verifiedCoverage||busy)return;const token=version;busy=true;status('Saving the reviewed experiment…');try{
+   for(const [key,path]of [['proposalEndpoint','proposals'],['researchIdeaEndpoint','ideas'],['localTaskEndpoint','tasks']])if(!endpoint(config?.[key],path))throw Error('Creating published follow-ups is not available here yet.');
+   if(!await saveIdeaCard(plan.card,E.stable(plan),token)||!live(token))return;
    if(plan.verifiedCoverage){status('Original idea saved. Opening the unchecked pages for review.');onRemaining(intent.proposalId);return;}
    const response=await json(config.localTaskEndpoint,{proposalId:intent.proposalId,task:plan.task,inputVersion:plan.inputVersion,parentTaskId:null,origin:plan.origin}),checked=await projection(response,plan.task.taskId,cryptoAPI);if(!live(token))return;
    const assoc=(name,fallback)=>Object.hasOwn(checked,name)?checked[name]:checked[fallback];

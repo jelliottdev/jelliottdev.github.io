@@ -2,6 +2,7 @@
 import E from '../../local-experiment.js';
 import Evidence from '../../computation-evidence.js';
 import {findFamilyEvidence,resolveFamilyEvidence} from './family-evidence.mjs';
+import {findPublishedEvidence,resolvePublishedEvidence} from './published-evidence.mjs';
 
 const HEX=/^[a-f0-9]{64}$/;
 const IDEA=/^p_[a-f0-9]{64}$/;
@@ -72,6 +73,8 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
  }
  const family=await findFamilyEvidence({db,task,inputVersion,crypto:cryptoAPI}),familySources=[];
  for(const source of family.sources)if(!seen.has(source.task.taskId)){seen.add(source.task.taskId);sources.push(source);familySources.push(family.familySources.find(item=>item.taskId===source.task.taskId));}
+ const published=await findPublishedEvidence({task,inputVersion,crypto:cryptoAPI}),publishedSources=[];
+ for(const source of published.sources)if(!seen.has(source.task.taskId)){seen.add(source.task.taskId);sources.push(source);publishedSources.push(published.publishedSources.find(item=>item.taskId===source.task.taskId));}
  const comparison=await Evidence.compare(task,inputVersion,sources,cryptoAPI);
  for(const pin of selected){const receipt=comparison.evidence.find(item=>item.taskId===pin.taskId);if(!receipt||E.stable(receipt.pages)!==E.stable(pin.pages))throw Error('Selected computation evidence changed its exact page coverage.');}
  // Retain a bounded proof, rather than every duplicate title/batch that repeats
@@ -87,7 +90,8 @@ export async function findEvidence({db,task,inputVersion,crypto:cryptoAPI=global
  if(represented.size!==comparison.coveredPages.length||comparison.coveredPages.some(id=>!represented.has(id)))throw Error('The retained computation proof changed its covered pages.');
  const canonicalProof={...comparison,evidence:comparison.evidence.filter(item=>retained.has(item.taskId)),exactTaskId:retained.has(comparison.exactTaskId)?comparison.exactTaskId:null};
  const retainedFamilies=familySources.filter(item=>retained.has(item.taskId)).sort((a,b)=>a.taskId.localeCompare(b.taskId));
- return {...canonicalProof,truncated:rows.length===101||family.truncated,...(retainedFamilies.length?{familySources:retainedFamilies}:{})};
+ const retainedPublished=publishedSources.filter(item=>retained.has(item.taskId)).sort((a,b)=>a.taskId.localeCompare(b.taskId));
+ return {...canonicalProof,truncated:rows.length===101||family.truncated,...(retainedFamilies.length?{familySources:retainedFamilies}:{}),...(retainedPublished.length?{publishedSources:retainedPublished}:{})};
 }
 
 export async function rememberEvidence({db,proposalId,task,inputVersion,coverage,createdAt,crypto:cryptoAPI=globalThis.crypto}){
@@ -136,7 +140,8 @@ export async function checkedEvidence({db,task,inputVersion,evidence,crypto:cryp
   .bind(ref.resultId,ref.taskId,inputVersion,inputVersion).first();
   if(!row||row.created_at!==ref.createdAt){
    const family=await resolveFamilyEvidence({db,taskId:ref.taskId,resultId:ref.resultId,inputVersion,createdAt:ref.createdAt,crypto:cryptoAPI});
-   if(!family)throw Error('Pinned public computation evidence is unavailable.');sources.push(family.source);continue;
+   const published=family?null:await resolvePublishedEvidence({taskId:ref.taskId,resultId:ref.resultId,inputVersion,createdAt:ref.createdAt,crypto:cryptoAPI});
+   if(!family&&!published)throw Error('Pinned public computation evidence is unavailable.');sources.push((family||published).source);continue;
   }
   if(row.task_id!==ref.taskId||row.result_id!==ref.resultId||!HEX.test(row.task_hash)||typeof row.task_json!=='string'||typeof row.result_json!=='string'||row.input_version!==inputVersion)throw Error('Pinned public computation evidence is unavailable.');
   const saved=JSON.parse(row.task_json);if(saved.taskId!==row.task_id||await digest(saved,cryptoAPI)!==row.task_hash)throw Error('The pinned source task identity changed.');

@@ -10,6 +10,7 @@ import H from '../../claim-share.js';
 import L from '../../local-experiment.js';
 import {createRecordPlanHandler,loadRecordPlan,validOrigin,recordPlanDigest as sha} from './record-plans.mjs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
+import Variants from '../../task-variants.js';
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const known=v=>C.field('specified',v,{kind:'supplied',refs:['source:text']});
 const alphabet=Array.from({length:29},(_,i)=>({rune:String.fromCodePoint(0x16a0+i),latin:'R'+i,prime:i+2}));
@@ -34,7 +35,7 @@ await test('strict route/origin/method/body and rate guard run before all source
  assert.equal((await handle(request(args,{origin:'https://evil.example'}),env)).status,403);
  assert.equal((await handle(request(args),{...env,TASK_LIMIT:null})).status,503);
  assert.equal((await handle(request(args),{...env,TASK_LIMIT:{limit:async()=>({success:false})}})).status,429);
- for(const body of [{...args,extra:true},{recordId:'../secret',followupId:args.followupId},{...args,followupId:'x'.repeat(101)},... [false,null,0,1,'true',{}].map(includeExisting=>({...args,includeExisting})),{...args,includeExisting:true,extra:true}])assert.equal((await handle(request(body),env)).status,400);
+ for(const body of [{...args,extra:true},{recordId:'../secret',followupId:args.followupId},{...args,followupId:'x'.repeat(101)},... [false,null,0,1,'true',{}].map(includeExisting=>({...args,includeExisting})),{...args,includeExisting:true,extra:true},{...args,includeBoundaryComparison:true},... [false,null,0,1,'true',{},[]].map(includeBoundaryComparison=>({...args,includeExisting:true,includeBoundaryComparison})),{...args,includeExisting:false,includeBoundaryComparison:true}])assert.equal((await handle(request(body),env)).status,400);
  assert.equal((await handle(request({padding:'x'.repeat(1024)}),env)).status,400);
  assert.equal((await handle(new Request('https://worker.example/record-plans',{headers:{origin}}),env)).status,405);
  assert.equal((await handle(new Request('https://worker.example/record-plans?x=1',{headers:{origin}}),env)).status,404);
@@ -113,6 +114,17 @@ await test('private or mismatched general evidence is not projected and unavaila
   const f=await fixture(),response=await createRecordPlanHandler({fetcher:f.fetcher})(request({...args,includeExisting:true}),{...env,...options});assert.equal(response.status,503);const body=await response.json();assert.equal(body.coverageUnavailable,true);assert(!Object.hasOwn(body,'task'));
  }
  const f=await fixture(),db=database(),response=await createRecordPlanHandler({fetcher:f.fetcher,discoverEvidence:async()=>({coveredPages:[],remainingPages:['lp2-15'],evidence:[],exactTaskId:null,truncated:true})})(request({...args,includeExisting:true}),{...env,PROPOSALS:db});assert.equal(response.status,503);assert.equal((await response.json()).state,'coverage-unavailable');db.sqlite.close();
+});
+await test('authored fixed-pair plans expose read-only opposite-boundary proof; companion failure preserves original availability',async()=>{
+ const f=await fixture(),criterion={kind:'word-affine-count',lag:1,a:28,b:1,boundaries:'hyphen-period'},operation={id:'word_affine_count',label:'Within-word affine pair count',lag:1,a:28,b:1,boundaries:'hyphen-period'};
+ const card=H.cardData(C.confirm(C.createDraft({source:{text:'Fixture pair question'},aim:known('Measure a fixed pair'),method:known({operations:[operation]}),scope:known({pages:['lp2-15']}),rules:{inputVersion:known('raw'),representation:known('GP29'),evaluation:known(criterion)}}),{id:'fixed-pair',at}));
+ f.card=card;f.recipe.card=card;const text=alphabet[0].rune+alphabet[1].rune+' /'+alphabet[0].rune+alphabet[1].rune;f.files.set('/data/pages/lp2-15.json',{id:'lp2-15',raw:text});f.recipe.inputs.pages[0].text_sha256=await sha(text);
+ const controlTask=await L.prepare({title:'Synthetic recovery fixture',pages:[{id:'lp1-00',text:(alphabet[0].rune+alphabet[1].rune).repeat(2)}],alphabet,steps:[],criterion});f.recipe.control={label:'Synthetic planted fixed pairs',task:controlTask,expected_result_sha256:await sha(L.stable(L.run(controlTask)))};
+ const plan=await loadRecordPlan(args,{fetcher:f.fetcher}),db=database(),companion=await Variants.prepare(plan.task),source=await saveGeneral(db,{...plan,task:companion},{label:'Independent grouping'}),before=db.sqlite.prepare('SELECT total_changes() n').get().n;
+ const response=await createRecordPlanHandler({fetcher:f.fetcher})(request({...args,includeExisting:true,includeBoundaryComparison:true}),{...env,PROPOSALS:db});assert.equal(response.status,200,await response.clone().text());const value=await response.json();
+ const legacyResponse=await createRecordPlanHandler({fetcher:f.fetcher})(request({...args,includeExisting:true}),{...env,PROPOSALS:db});assert.equal(legacyResponse.status,200);const legacy=await legacyResponse.json();assert(!Object.hasOwn(legacy,'boundaryComparison'),'Legacy clients did not opt into the new field');assert(Object.hasOwn(legacy,'coverage'),'Existing shared coverage remains available');const {boundaryComparison:excluded,...compatible}=value;assert.deepEqual(legacy,compatible,'Opt-in only adds the requested projection and preserves the legacy response');
+assert.deepEqual(value.task,plan.task);assert.deepEqual(value.card,card);assert.deepEqual(value.coverage.coveredPages,[]);assert.deepEqual(value.boundaryComparison.task,companion);assert.deepEqual(value.boundaryComparison.coverage.coveredPages,['lp2-15']);assert.equal(value.boundaryComparison.coverage.exactTaskId,source.task.taskId);assert.equal(db.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ const unavailable=await createRecordPlanHandler({fetcher:f.fetcher,discoverEvidence:async({task})=>{if(task.criterion.boundaries==='non-rune')throw Error('Companion lookup offline');return{coveredPages:[],remainingPages:['lp2-15'],evidence:[],exactTaskId:null,truncated:false};}})(request({...args,includeExisting:true,includeBoundaryComparison:true}),{...env,PROPOSALS:db});assert.equal(unavailable.status,200);const retained=await unavailable.json();assert.deepEqual(retained.task,plan.task);assert.deepEqual(retained.boundaryComparison,{task:companion,coverageUnavailable:true});db.sqlite.close();
 });
 await test('existing public task lookup is read-only, origin-bound, private-safe and survives unrelated record edits',async()=>{
  const f=await fixture(),plan=await loadRecordPlan(args,{fetcher:f.fetcher}),db=database(),pid='p_'+await sha(C.serialize(plan.card)),privateId='p_'+'f'.repeat(64);

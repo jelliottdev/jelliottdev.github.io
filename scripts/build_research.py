@@ -1,7 +1,8 @@
 """Build all experiment-dependent views once, in dependency order. No Git push.
 
 Edit record.json, run/review its experiment separately, then use this command.
-A failed stage stops the build; this never runs experiments or changes outcomes.
+A failed stage stops the build. Declared count projections are independently
+rechecked; exploratory searches and published outcomes are never changed.
 """
 import argparse
 import subprocess
@@ -11,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STAGES = (
     ('build_local_run_inputs.py',),
+    ('build_published_count_evidence.py',),
     ('build_experiments.py',),
     ('build_articles.py',),
     ('build_assistant.py',),

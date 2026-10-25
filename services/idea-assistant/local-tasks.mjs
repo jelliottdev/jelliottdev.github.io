@@ -6,6 +6,7 @@ import PlanControls from '../../local-plan-controls.js';
 import {validateCard} from './idea-relations.mjs';
 import {loadRecordPlan,validOrigin as validRecordedOrigin} from './record-plans.mjs';
 import {findEvidence} from './task-evidence.mjs';
+import {boundaryComparison} from './boundary-comparison.mjs';
 const MAX_BODY=2*1024*1024, HEX=/^[a-f0-9]{64}$/, PROPOSAL=/^p_[a-f0-9]{64}$/;
 const NOTICE='Verified computation only; this does not establish a correct reading or scientific conclusion.';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -37,9 +38,10 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
   if(!validOrigin)return reply({error:'Local experiments are unavailable.'},503);
   if(origin!==allowed)return reply({error:'Request is not allowed.'},403);
   headers['Access-Control-Allow-Origin']=allowed;
-  const path=new URL(request.url).pathname,match=path.match(/^\/tasks\/([a-f0-9]{64})(\/results)?$/),create=path==='/tasks';
+  const url=new URL(request.url),path=url.pathname,match=path.match(/^\/tasks\/([a-f0-9]{64})(\/results|\/boundary-comparison)?$/),create=path==='/tasks',comparisonRoute=match?.[2]==='/boundary-comparison';
   if(!create&&!match)return reply({error:'Not found.'},404);
-  const method=create||match?.[2]?'POST':'GET';
+  if(comparisonRoute&&url.search)return reply({error:'Not found.'},404);
+  const method=create||match?.[2]==='/results'?'POST':'GET';
   if(request.method==='OPTIONS'){
    const wanted=request.headers.get('access-control-request-method'),hs=(request.headers.get('access-control-request-headers')||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
    if(wanted!==method||hs.some(s=>s!=='content-type'))return reply({error:'Request is not allowed.'},403);
@@ -163,6 +165,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
    const context=await publicContext(row);if(!context)return reply({error:'Experiment not found.'},404);
    const task=await storedTask(row);
+   if(comparisonRoute){const comparison=await boundaryComparison({db,task,inputVersion:context.input_version,discoverEvidence});return comparison?reply(comparison):reply({error:'This experiment has no supported boundary comparison.'},422);}
    if(method==='GET')return reply(await view(row,null,context));
    let result,controls;
    try{

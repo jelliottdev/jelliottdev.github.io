@@ -100,6 +100,53 @@ async function preparationBindingTests(){
  try{await extended.upload(E.run(task));const selected=extended.app.getState().selected;await extended.click('extend-scope');await extended.click('create-extension');assert(!extended.app.getState().extension);assert.equal(extended.doc.getElementById('extension-plan').innerHTML,'');assert(extended.doc.getElementById('extension-error').textContent.includes('no longer current'));assert(!extended.doc.getElementById('extend-scope').hidden);assert.equal(extended.app.getState().selected,selected);await extended.click('extend-scope');assert(extended.app.getState().extension);await extended.click('create-extension');assert.equal(extended.doc.defaultView.location.hash,'#task='+child.taskId);assert.equal(extended.executions.length,0);}finally{extended.app.destroy();}
  console.log('PASS issued preparation UI: exact original-card/task/control hashes, scope authority and parent bindings, missing/tampered receipts block creation, explicit preparationId-only handoff, stale/expired inline recovery and transient retry.');
 }
+async function publishedQuestionEvidenceTests(){
+ const registry=require('../published-count-evidence-data.js'),entry=registry.entries[0],record=registry.records.find(r=>r.recordId===entry.recordId),ref={taskId:entry.task.taskId,resultId:entry.run.id,recordId:entry.recordId,revision:entry.revision,caseId:entry.caseId};
+ const requested=await E.prepare({...entry.task,title:'Three-page boundary sensitivity',pages:entry.task.pages.slice(0,3),criterion:{...entry.task.criterion,boundaries:'non-rune'}},webcrypto),other=await TV.prepare(requested,webcrypto),ownRun=await receipt(E.run(requested));
+ const proof={task:entry.task,inputVersion:entry.inputVersion,run:entry.run},coverage={...await Evidence.compare(other,'raw',[proof],webcrypto),requestedTask:other,inputVersion:'raw',truncated:false,publishedSources:[ref]},body={...proof,publishedSource:ref,provenance:record.provenance},path='https://mock.example/published-evidence/'+ref.recordId+'/'+ref.caseId+'?revision='+ref.revision;
+ async function setup(mutate){return fixture({task:requested,get:async url=>{
+  if(url===endpoint+'/'+requested.taskId)return Response.json(projection(requested,ownRun));
+  if(url===endpoint+'/'+requested.taskId+'/boundary-comparison')return Response.json({task:other,coverage});
+  assert.equal(url,path,'A published proof must be fetched from its dedicated source path');const value=structuredClone(body);if(mutate)mutate(value);return Response.json(value);
+ }});}
+ const f=await setup();try{await until(()=>f.app.getState().sharedBoundary);assert(f.app.getState().sharedBoundary.complete,f.app.getState().sharedBoundaryError);const html=f.doc.getElementById('boundary-comparison').innerHTML;assert(html.includes('Published count check'));assert(html.includes('library.html#/experiment/'+ref.recordId));assert(!html.includes('#task='+ref.taskId),'Compiled published measurements are never labeled as community runs');assert(!f.doc.getElementById('review-boundary-remaining'));assert.equal(f.requests.filter(r=>r.url===path).length,1);assert.equal(f.executions.length,0);assert.equal(f.requests.filter(r=>r.options.method==='POST').length,0);}finally{f.app.destroy();}
+ for(const mutate of [x=>x.publishedSource.revision='0'.repeat(64),x=>x.run.result.wordPairs.matches++,x=>x.provenance.dateMeaning='An invented historical browser submission',x=>x.task.pages[0].text+='ᚠ']){const bad=await setup(mutate);try{await new Promise(r=>setTimeout(r,40));assert(!bad.app.getState().sharedBoundary?.complete);assert(bad.app.getState().saved,'Bad optional evidence must not hide the independently verified current result');assert(!bad.doc.getElementById('review-boundary-remaining'));assert.equal(bad.executions.length,0);}finally{bad.app.destroy();}}
+ console.log('PASS published question evidence: real source manifest, exact revision/input/result checks, original record provenance, partial-page reuse, no fabricated community run and unchanged current result on forged optional proofs.');
+}
+async function sharedQuestionEvidenceTests(){
+ const requested=await E.prepare({title:'Full question assembled from batches',alphabet,pages:[{id:'lp2-15',text:'ᚠᚦᚠ ᚦᚩᚦ ᚦᚩᚠ ᚠᚠᚠ'},{id:'lp2-16',text:'ᚦᚠᚠ ᚩᚢᚩ ᚩᚠᚩ ᚩᚠᚠ'}],steps:[],criterion:{kind:'word-affine-count',lag:2,a:1,b:0,boundaries:'non-rune'}},webcrypto),other=await TV.prepare(requested,webcrypto);
+ const batches=[];
+ for(const t of [requested,other])for(const page of t.pages){const task=await E.prepare({...t,title:'Saved '+t.criterion.boundaries+' '+page.id,pages:[page]},webcrypto);batches.push({task,inputVersion:'raw',run:await receipt(E.run(task))});}
+ const originalSources=batches.filter(x=>x.task.criterion.boundaries==='non-rune'),otherSources=batches.filter(x=>x.task.criterion.boundaries==='hyphen-period');
+ const cov=async(t,sources)=>({requestedTask:t,inputVersion:'raw',...await Evidence.compare(t,'raw',sources,webcrypto),truncated:false});
+ const own=await cov(requested,originalSources),full=await cov(other,otherSources),partial=await cov(other,otherSources.slice(0,1));
+ async function setup(companion,{post,waitReady=true}={}){return fixture({task:requested,config:{proposalEndpoint:'https://mock.example/proposals'},waitReady,post,get:async url=>{
+  if(url===endpoint+'/'+requested.taskId)return Response.json({...projection(requested),coverage:own});
+  if(url===endpoint+'/'+requested.taskId+'/boundary-comparison')return typeof companion==='function'?companion():Response.json(companion);
+  const source=batches.find(x=>url===endpoint+'/'+x.task.taskId);assert(source,'Only declared source receipts may be read');return Response.json(projection(source.task,source.run));
+ }});}
+ const all=await setup({task:other,coverage:full});try{await until(()=>all.app.getState().sharedBoundary);const state=all.app.getState(),html=all.doc.getElementById('boundary-comparison').innerHTML;assert(state.sharedBoundary.complete);assert(html.includes('The above-average count remains without joining'));assert(html.includes('Calculation sources'));for(const item of batches)assert(html.includes(item.task.taskId));assert(!all.doc.getElementById('review-boundary-remaining'));assert(all.doc.getElementById('next-boundary-check').hidden);assert.equal(all.executions.length,0);assert.equal(all.requests.filter(r=>r.options.method==='POST').length,0);}finally{all.app.destroy();}
+ let derived,receivedId;const part=await setup({task:other,coverage:partial},{post:async(url,options)=>{const body=JSON.parse(options.body);if(url==='https://mock.example/proposals'){const snapshot=C.confirm(H.decode(body.fragment).draft,{id:'test-derived',at});derived=H.cardData(snapshot);receivedId='p_'+createHash('sha256').update(C.serialize(derived)).digest('hex');return Response.json({id:receivedId,status:'received',receivedAt:at});}assert.equal(url,ideaEndpoint);assert.equal(body.proposalId,receivedId);return Response.json({id:receivedId,card:derived});}});
+ try{await until(()=>part.app.getState().sharedBoundary);const state=part.app.getState();assert(!state.sharedBoundary.complete);assert(state.sharedBoundary.nextCard);assert.equal(part.executions.length,0);assert(!part.doc.getElementById('boundary-comparison').innerHTML.includes('The above-average count remains'));await part.click('review-boundary-remaining');assert.equal(derived.rules.evaluation.value.boundaries,'hyphen-period');assert.deepEqual(derived.scope.value.pages,requested.pages.map(p=>p.id));assert.equal(derived.method.value.operations[0].boundaries,'hyphen-period');assert.deepEqual(part.app.getState().task.card,card(),'The original idea remains unchanged');assert.equal(part.doc.defaultView.location.hash,'#idea='+receivedId);assert.equal(part.requests.filter(r=>r.options.method==='POST'&&r.url===endpoint).length,0);}finally{part.app.destroy();}
+ const altered=await E.prepare({...other,pages:[{...other.pages[0],text:other.pages[0].text+'ᚠ'},other.pages[1]]},webcrypto);const bad=await setup({task:altered,coverage:full});try{await new Promise(r=>setTimeout(r,30));assert(!bad.app.getState().sharedBoundary?.complete);assert(!bad.doc.getElementById('review-boundary-remaining'));assert(bad.app.getState().taskCoverage);assert.equal(bad.executions.length,0);}finally{bad.app.destroy();}
+ const later=deferred(),stale=await setup(()=>later.promise);try{stale.doc.defaultView.location.hash='#idea='+proposalId;later.resolve(Response.json({task:other,coverage:full}));await new Promise(r=>setTimeout(r,30));assert(!stale.app.getState().sharedBoundary);}finally{stale.app.destroy();}
+ // A partial opposite-rule proof authorizes only its missing page, including existing-task reuse.
+ const parentRun=await receipt(E.run(requested)),missing=await E.prepare({...other,pages:other.pages.slice(1)},webcrypto);
+ for(const reuse of [false,true]){
+  let created;
+  const variant=await fixture({task:requested,get:async url=>{
+   if(url.endsWith('/boundary-comparison'))return Response.json({error:'No optional endpoint in this fixture'},{status:404});
+   if(url===endpoint+'/'+requested.taskId)return Response.json(projection(requested,parentRun));
+   if(url===endpoint+'/'+missing.taskId)return Response.json({...projection(missing),parentTaskId:requested.taskId});
+   const source=otherSources.find(x=>url===endpoint+'/'+x.task.taskId);assert(source);return Response.json(projection(source.task,source.run));
+  },post:async(url,options)=>{
+   if(url.endsWith('/variants'))return Response.json({state:reuse?'existing-task':'plan-ready',proposalId,parentTaskId:requested.taskId,variant:'word-boundaries',from:'non-rune',to:'hyphen-period',coverage:partial,...(reuse?{taskId:missing.taskId,reason:'An exact remainder is already prepared.'}:{inputVersion:'raw',task:missing,notes:[],purpose:'Only the missing comparison page'})});
+   assert.equal(url,endpoint);created=JSON.parse(options.body);return Response.json({...projection(missing),parentTaskId:requested.taskId});
+  }});
+  try{await variant.click('compare-word-boundaries');assert.equal(variant.executions.length,0);if(reuse){assert(!variant.doc.getElementById('create-extension'));assert(variant.doc.getElementById('extension-plan').innerHTML.includes(missing.taskId));assert(!created);}else{assert.deepEqual(variant.app.getState().extension.task.pages,other.pages.slice(1));assert(variant.doc.getElementById('extension-plan').innerHTML.includes('check only pages not covered'));await variant.click('create-extension');assert.deepEqual(created.task,missing);assert.equal(created.parentTaskId,requested.taskId);assert.equal(variant.doc.defaultView.location.hash,'#task='+missing.taskId);}}finally{variant.app.destroy();}
+ }
+ console.log('PASS shared question findings: independently verified distributed batches, no overlap duplication or target execution, complete verdict, partial exact derived-card handoff, source mismatch and stale-response guards.');
+}
 async function wordBoundaryNextCheckTests(){
  async function setup({kind='word-prime-sums',boundary='non-rune',saved=true,variantResponse=null,waitReady=true}={}){
   const criterion=kind==='word-prime-sums'?{kind,table:'reversed',boundaries:boundary}:{kind,lag:1,a:1,b:0,boundaries:boundary},task=await E.prepare({title:'Synthetic original boundary measurement',alphabet,pages:[{id:'lp2-15',text:'ᚠ ᚢ\nᚠᚠ-ᚩ.ᚠ'}],steps:[],criterion},webcrypto),spec=TV.inspect(task),child=await TV.prepare(task,webcrypto),savedRun=await receipt(E.run(task));
@@ -337,6 +384,8 @@ async function familyEvidenceCoverageTests(){
  await controlHandoffRaceTests();
  await preparationBindingTests();
  await wordBoundaryNextCheckTests();
+ await sharedQuestionEvidenceTests();
+ await publishedQuestionEvidenceTests();
  await protocolPresentationTests();
  await authoredControlTests();
  const completeScope=await E.prepare({...await makeTask('Synthetic complete LP2 scope'),pages:Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:'ᚠᚢ'}))}),completeFixture=await fixture({task:completeScope});try{await completeFixture.upload(E.run(completeScope));assert(completeFixture.doc.getElementById('extend-scope').hidden,'A completed all-page run does not advertise nonexistent remaining pages');}finally{completeFixture.app.destroy();}

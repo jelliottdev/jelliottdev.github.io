@@ -46,6 +46,8 @@ jobs:
       - run: node services/idea-assistant/test-prepare-task.mjs
       - run: node scripts/test_browser_executor.cjs
       - run: node scripts/test_computation_evidence.cjs
+      - run: node scripts/test_question_evidence.cjs
+      - run: node scripts/test_published_evidence.mjs
       - run: node scripts/test_task_evidence.mjs
       - run: node scripts/test_evidence_planning.mjs
       - run: node scripts/test_research_family.cjs
@@ -247,6 +249,10 @@ jobs:
       - run: python experiments/records/prepared-opening-evidence-gates/check.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_research_questions.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_published_count_evidence.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/build_published_count_evidence.py --check
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py
         if: steps.scope.outputs.science == 'true'

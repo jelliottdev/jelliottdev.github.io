@@ -5,6 +5,7 @@ import Variants from '../../task-variants.js';
 import Controls from '../../local-plan-controls.js';
 import {validateCard} from './idea-relations.mjs';
 import {issue as issuePreparation} from './prepared-plans.mjs';
+import {findEvidence,rememberEvidence} from './task-evidence.mjs';
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 async function jsonBody(message,max){
  if(!/^application\/json(?:\s*;|$)/i.test(message.headers.get('content-type')||''))throw Error('JSON required');
@@ -14,7 +15,7 @@ async function jsonBody(message,max){
  const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
  const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes);return {value:JSON.parse(text),text};
 }
-export function createTaskVariantHandler({now=()=>new Date()}={}){
+export function createTaskVariantHandler({now=()=>new Date(),discoverEvidence=findEvidence}={}){
  return async function handle(request,env){
   const allowed=env?.SITE_ORIGIN,headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'};
   const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
@@ -57,16 +58,28 @@ export function createTaskVariantHandler({now=()=>new Date()}={}){
    // receipt here; reproducing the target belongs to result admission, not planning.
    const result=JSON.parse(saved.result_json);
    if(result.taskId!==parent.taskId||result.schema!==L.RESULT||result.engine!==L.ENGINE||result.runnerVersion!=='1'||L.stable(result)!==saved.result_json||await digest(saved.result_json)!==saved.id)throw Error('Stored result receipt mismatch');
-   const task=await Variants.prepare(parent,crypto);await Variants.validate(parent,task,crypto);
+   let task=await Variants.prepare(parent,crypto);await Variants.validate(parent,task,crypto);
+   const requestedTask=task,found=await discoverEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:row.input_version});
+   let coverage,basisEvidence={};
+   if(found.coveredPages.length||found.truncated){
+    coverage={...found,requestedTask,inputVersion:row.input_version};
+    await rememberEvidence({db:env.PROPOSALS,proposalId:row.proposal_id,task:requestedTask,inputVersion:row.input_version,coverage,createdAt:now().toISOString()});
+   }
+   if(found.truncated&&found.remainingPages.length)return reply({state:'coverage-unavailable',coverageUnavailable:true,...context,inputVersion:row.input_version,coverage,error:'The comparison’s saved evidence could not be checked completely. Please retry before preparing more work.'},503);
+   if(found.coveredPages.length){
+    if(!found.remainingPages.length)return reply({state:'scope-covered',...context,inputVersion:row.input_version,coverage,reason:'Saved computations already cover this boundary comparison on the requested text.'});
+    task=await L.prepare({...requestedTask,pages:requestedTask.pages.filter(page=>found.remainingPages.includes(page.id))});
+    basisEvidence={requestedTaskId:requestedTask.taskId,evidence:found.evidence};
+   }
    const existing=await query(`SELECT links.input_version,t.task_hash,t.task_json FROM local_task_ideas links JOIN local_tasks t ON t.id=links.task_id WHERE links.task_id=? AND links.proposal_id=?`,task.taskId,row.proposal_id);
    if(existing){
     if(existing.task_hash!==await digest(L.stable(task))||L.stable(await L.checkIdentity(JSON.parse(existing.task_json)))!==L.stable(task))throw Error('Existing comparison mismatch');
     if(existing.input_version!==row.input_version)return reply({error:'This comparison already uses a different input version. Its association was not changed.'},409);
-    return reply({state:'existing-task',...context,taskId:task.taskId,reason:'This comparison already exists. Open it to inspect or run it.'});
+    return reply({state:'existing-task',...context,taskId:task.taskId,...(coverage?{coverage}:{}),reason:'This comparison already exists. Open it to inspect or run it.'});
    }
    const controls=await Controls.prepare(task,crypto);await Controls.validate(controls,task,crypto);
-   const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:row.proposal_id,card,task,inputVersion:row.input_version,parentTaskId:parent.taskId,controls,authority:'word-boundaries',basis:{kind:'word-boundaries',parentTaskId:parent.taskId,parentTaskHash:row.task_hash,from:variant.from,to:variant.to},createdAt:now().toISOString()});
-   return reply({state:'plan-ready',...context,inputVersion:row.input_version,task,controls,preparation,notes:[],purpose:'This compares the two supported word-boundary rules on the same saved text. Other settings are unchanged.'});
+   const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:row.proposal_id,card,task,inputVersion:row.input_version,parentTaskId:parent.taskId,controls,authority:'word-boundaries',basis:{kind:'word-boundaries',parentTaskId:parent.taskId,parentTaskHash:row.task_hash,from:variant.from,to:variant.to,...basisEvidence},createdAt:now().toISOString()});
+   return reply({state:'plan-ready',...context,inputVersion:row.input_version,task,controls,preparation,...(coverage?{coverage}:{}),notes:[],purpose:'This compares the two supported word-boundary rules on the same saved text. Other settings are unchanged.'});
   }catch{return reply({error:'Word-boundary comparison is temporarily unavailable.'},503);}
  };
 }

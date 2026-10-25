@@ -11,15 +11,17 @@ import {canonicalProposal} from './proposals.mjs';
 import {issue,authorize} from './prepared-plans.mjs';
 import {createTaskVariantHandler} from './task-variants.mjs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
+import {boundaryComparison} from './boundary-comparison.mjs';
+import {findEvidence} from './task-evidence.mjs';
 const origin='https://jelliottdev.github.io',at='2026-10-24T12:00:00.000Z';
 const alphabet=JSON.parse(readFileSync(new URL('../../data/index.json',import.meta.url),'utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const sha=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(v=>v.toString(16).padStart(2,'0')).join('');
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['fixture']});
-function fixture({migration9=true}={}){
+function fixture({migration9=true,discoverEvidence}={}){
  const sqlite=new DatabaseSync(':memory:');for(const name of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql','0005_research_ideas.sql','0006_task_ideas.sql','0007_task_origins.sql','0008_prepared_plans.sql',...(migration9?['0009_word_boundary_preparations.sql']:[]),'0010_family_case_results.sql','0011_task_protocol_lookup.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+name,import.meta.url),'utf8'));
  const queries=[],rates=[],db={prepare(sql){queries.push(sql);return {bind(...args){return {sql,args,first:async()=>sqlite.prepare(sql).get(...args)||null,all:async()=>({results:sqlite.prepare(sql).all(...args)}),run:async()=>sqlite.prepare(sql).run(...args)};}};},async batch(statements){sqlite.exec('BEGIN IMMEDIATE');try{const out=statements.map(s=>({success:true,meta:{changes:Number(sqlite.prepare(s.sql).run(...s.args).changes)}}));sqlite.exec('COMMIT');return out;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
  const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{limit:async v=>{rates.push(v);return {success:true};}},AI:{run(){throw Error('No model call allowed');}}};
- return {sqlite,db,env,queries,rates,handle:createTaskVariantHandler({now:()=>new Date(at)})};
+ return {sqlite,db,env,queries,rates,handle:createTaskVariantHandler({now:()=>new Date(at),discoverEvidence})};
 }
 async function addIdea(f,{name='fixture',published=true}={}){
  const draft=C.createDraft({source:{text:'PRIVATE original '+name},aim:known({outcomeId:'measure',wording:'Measure',detail:name}),method:known({operations:[{id:'word_prime_sums',label:'Word prime sums',table:'canonical',boundaries:'non-rune'}]}),scope:known({pages:['lp2-15']})});
@@ -69,8 +71,8 @@ await test('repeated toggles reopen canonical original without changing either a
  const f=fixture(),p=await addIdea(f),seed=await parent(f,p),opposite=await Variants.prepare(seed),canonical=await Variants.prepare(opposite);
  await insert(f,p,canonical,{parentTaskId:null});await insert(f,p,opposite,{parentTaskId:canonical.taskId});
  const links=f.sqlite.prepare('SELECT * FROM local_task_ideas ORDER BY task_id').all(),before=f.sqlite.prepare('SELECT total_changes() n').get().n;
- const {response,value}=await noTargets(()=>call(f,opposite));assert.equal(response.status,200);assert.equal(value.state,'existing-task');assert.equal(value.taskId,canonical.taskId);
- assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_task_ideas ORDER BY task_id').all(),links);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ const {response,value}=await noTargets(()=>call(f,opposite));assert.equal(response.status,200);assert.equal(value.state,'scope-covered');assert([canonical.taskId,seed.taskId].includes(value.coverage.exactTaskId));assert.deepEqual(value.coverage.remainingPages,[]);
+ assert.deepEqual(f.sqlite.prepare('SELECT * FROM local_task_ideas ORDER BY task_id').all(),links);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before+1,'Only the complete requested comparison is remembered');assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);
 });
 await test('new comparison receipt is admitted through unchanged generic task endpoint and cannot authorize changed measurement',async()=>{
  const f=fixture(),p=await addIdea(f),t=await parent(f,p),{value}=await noTargets(()=>call(f,t));let fetches=0;
@@ -107,5 +109,38 @@ await test('migration9 preserves old receipt rows, indices, foreign keys and imm
  assert.throws(()=>f.sqlite.prepare('UPDATE prepared_plans SET created_day=?').run('2026-10-25'),/immutable/);assert.equal(f.sqlite.prepare('PRAGMA foreign_key_check').all().length,0);
  const indices=f.sqlite.prepare('PRAGMA index_list(prepared_plans)').all().map(r=>r.name);assert(indices.includes('prepared_plans_binding'));assert(indices.includes('prepared_plans_day'));
  assert.equal((await noTargets(()=>call(f,t))).value.preparation.authority,'word-boundaries');
+});
+await test('read-only opposite-boundary lookup exposes exact public proof without target execution or new records',async()=>{
+ const f=fixture(),p=await addIdea(f),t=await parent(f,p,{kind:'word-affine-count'}),opposite=await Variants.prepare(t),other=await addIdea(f,{name:'another category'}),source=await L.prepare({...opposite,title:'A different idea already checked this grouping'});await insert(f,other,source);
+ const before=f.sqlite.prepare('SELECT total_changes() n').get().n,value=await noTargets(()=>boundaryComparison({db:f.db,task:t,inputVersion:'raw'}));
+ assert.deepEqual(value.task,opposite);assert.deepEqual(value.coverage.requestedTask,opposite);assert.deepEqual(value.coverage.coveredPages,['lp2-15']);assert.equal(value.coverage.exactTaskId,source.taskId);assert(!value.coverageUnavailable);assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ for(const altered of [await L.prepare({...t,steps:[{op:'affine',a:1,b:0}]}),await L.prepare({...t,criterion:{kind:'measurement'}}),await L.prepare({...t,criterion:{kind:'word-prime-sums',table:'canonical',boundaries:'non-rune'}})])assert.equal(await boundaryComparison({db:f.db,task:altered,inputVersion:'raw'}),null);
+ const unavailable=await boundaryComparison({db:f.db,task:t,inputVersion:'raw',discoverEvidence:async()=>{throw Error('Unavailable');}});assert.deepEqual(unavailable,{task:opposite,coverageUnavailable:true});
+ const incomplete=await boundaryComparison({db:f.db,task:t,inputVersion:'raw',discoverEvidence:async args=>({...await findEvidence(args),coveredPages:[],remainingPages:['lp2-15'],evidence:[],exactTaskId:null,truncated:true})});assert.equal(incomplete.coverageUnavailable,true);assert.equal(incomplete.coverage.truncated,true);assert.deepEqual(incomplete.task,opposite);
+});
+await test('dedicated GET boundary route works for saved and pending originals without recursive default GET work',async()=>{
+ for(const saved of [true,false]){
+  const f=fixture(),p=await addIdea(f),t=await parent(f,p,{kind:'word-affine-count',saved}),opposite=await Variants.prepare(t),other=await addIdea(f,{name:'public source'});await insert(f,other,await L.prepare({...opposite,title:'Existing opposite boundary'}));
+  const discoveries=[],handle=createLocalTaskHandler({discoverEvidence:async args=>{discoveries.push(args.task.taskId);return findEvidence(args);}}),before=f.sqlite.prepare('SELECT total_changes() n').get().n;
+  const response=await noTargets(()=>handle(request(t.taskId,{method:'GET',path:'/tasks/'+t.taskId+'/boundary-comparison'}),f.env));assert.equal(response.status,200);const comparison=await response.json();assert.deepEqual(comparison.task,opposite);assert.deepEqual(comparison.coverage.coveredPages,['lp2-15']);assert.deepEqual(discoveries,[opposite.taskId]);
+  discoveries.length=0;const main=await handle(request(t.taskId,{method:'GET',path:'/tasks/'+t.taskId}),f.env);assert.equal(main.status,200);assert(!Object.hasOwn(await main.json(),'boundaryComparison'));assert(!discoveries.includes(opposite.taskId));assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);
+  assert.equal((await handle(request(t.taskId,{method:'POST',path:'/tasks/'+t.taskId+'/boundary-comparison'}),f.env)).status,405);assert.equal((await handle(request(t.taskId,{method:'GET',path:'/tasks/'+t.taskId+'/boundary-comparison?extra=1'}),f.env)).status,404);
+ }
+});
+await test('shared complete boundary proof skips a duplicate while partial proof admits only its immutable remainder',async()=>{
+ const f=fixture(),p=await addIdea(f),base=await parent(f,p,{kind:'word-affine-count'}),pages=[...base.pages,{id:'lp2-16',text:'ᚢᚦ /ᚠ-ᚩ'}],t=await insert(f,p,await L.prepare({...base,title:'Two requested pages',pages})),opposite=await Variants.prepare(t),other=await addIdea(f,{name:'shared first page'}),first=await L.prepare({...opposite,title:'Separate first-page result',pages:[opposite.pages[0]]});await insert(f,other,first);
+ const {response,value}=await noTargets(()=>call(f,t));assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.deepEqual(value.coverage.coveredPages,['lp2-15']);assert.deepEqual(value.coverage.requestedTask,opposite);assert.deepEqual(value.task.pages,[pages[1]]);assert.deepEqual(value.task.criterion,opposite.criterion);assert.equal(value.preparation.authority,'word-boundaries');
+ const basis=JSON.parse(f.sqlite.prepare('SELECT basis_json FROM prepared_plans WHERE id=?').get(value.preparation.id).basis_json);assert.equal(basis.requestedTaskId,opposite.taskId);assert.equal(basis.evidence[0].taskId,first.taskId);
+ const admission={db:f.db,proposalId:p.id,card:JSON.parse(p.cardJson),task:value.task,inputVersion:'raw',parentTaskId:t.taskId,controls:value.controls,authority:'word-boundaries',createdAt:at};assert(await authorize({...admission,preparationId:value.preparation.id}));
+ const bad=structuredClone(basis);bad.evidence[0].pages=['lp2-16'];await assert.rejects(issue({...admission,basis:bad}));
+ const changed=await L.prepare({...value.task,criterion:{...value.task.criterion,boundaries:t.criterion.boundaries}});await assert.rejects(issue({...admission,task:changed,controls:await Controls.prepare(changed),basis}));
+ const handle=createLocalTaskHandler({fetcher:async url=>{const id=/([^/]+)\.json$/.exec(url)[1];return Response.json({id,raw:pages.find(p=>p.id===id).text});}});
+ const created=await handle(new Request('https://worker.example/tasks',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId:p.id,task:value.task,inputVersion:'raw',parentTaskId:t.taskId,preparationId:value.preparation.id})}),f.env);assert.equal(created.status,200,await created.clone().text());assert.deepEqual((await created.json()).card,JSON.parse(p.cardJson));
+ const result=L.run(value.task),submitted=await handle(new Request('https://worker.example/tasks/'+value.task.taskId+'/results',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({result})}),f.env);assert.equal(submitted.status,200);
+ const preparations=f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,complete=await noTargets(()=>call(f,t));assert.equal(complete.value.state,'scope-covered');assert.deepEqual(complete.value.coverage.remainingPages,[]);assert.equal(complete.value.coverage.evidence.length,2);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,preparations);
+});
+await test('incomplete boundary evidence never authorizes an uncertain duplicate comparison',async()=>{
+ const f=fixture({discoverEvidence:async args=>({...await findEvidence(args),truncated:true})}),p=await addIdea(f),t=await parent(f,p,{kind:'word-affine-count'}),before=f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n;
+ const {response,value}=await noTargets(()=>call(f,t));assert.equal(response.status,503);assert.equal(value.state,'coverage-unavailable');assert.equal(value.coverageUnavailable,true);assert.equal(value.coverage.truncated,true);assert.deepEqual(value.coverage.requestedTask,await Variants.prepare(t));assert(!Object.hasOwn(value,'task'));assert(!Object.hasOwn(value,'preparation'));assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,before);
 });
 console.log('PASS '+groups+' fixed word-boundary variant endpoint groups; synthetic inputs, no hosted calls or target planning execution.');

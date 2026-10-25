@@ -3,6 +3,7 @@
  'use strict';
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const P=typeof module==='object'&&module.exports?require('./experiment-protocols.js'):root.ExperimentProtocols;
+ const Q=typeof module==='object'&&module.exports?require('./question-evidence.js'):root.QuestionEvidence;
  function inspect(task){
   try{E.validateTask(task);}catch{return null;}
   if(task.steps.length)return null;
@@ -32,6 +33,10 @@
   if(E.stable(parent.pages)!==E.stable(child.pages)||E.stable(parent.alphabet)!==E.stable(child.alphabet)||child.steps.length||E.stable(P.variant(parent.criterion,variant.kind))!==E.stable(child.criterion))throw Error('The boundary decision needs the same text and rule.');
   const separate=parent.criterion.boundaries==='non-rune'?before.wordPairs:after.wordPairs;
   const joined=parent.criterion.boundaries==='hyphen-period'?before.wordPairs:after.wordPairs;
+  return interpret(separate,joined);
+ }
+ function aggregateDecision(a,b){const {separate,joined}=Q.paired(a,b);return interpret(separate.wordPairs,joined.wordPairs);}
+ function interpret(separate,joined){
   const above=sample=>BigInt(sample.matches)*BigInt(sample.expected.denominator)>BigInt(sample.expected.numerator);
   const shared={question:'Does the above-average count require joining across layout marks?',limit:'Each grouping uses its own rearrangement average. This is not a significance test or independent confirmation, and it does not establish which breaks are correct.'};
   if(!separate.opportunities||!joined.opportunities)return {...shared,id:'insufficient-pairs',heading:'Too few pairs to compare both groupings',finding:'One grouping has no pairs at the selected distance. This comparison cannot establish whether an above-average count persists.'};
@@ -41,6 +46,6 @@
   if(joinedAbove)return {...shared,id:'excess-joined-only',heading:'Only the joined groups are above average',finding:'The above-average count appears when groups continue until a hyphen or period. It does not remain when every non-rune ends a group.'};
   return {...shared,id:'neither-above',heading:'Neither grouping is above its random-order average',finding:'Neither count exceeds the average for rearrangements within its own groups. This does not rule out the proposed rule or establish that the text is random.'};
  }
- const api={inspect,prepare,validate,decision};
+ const api={inspect,prepare,validate,decision,aggregateDecision};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.TaskVariants=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

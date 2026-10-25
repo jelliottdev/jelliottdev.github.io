@@ -68,7 +68,7 @@ async function basisFor(db,value,bound,authority){
    require(full.protocolId===remaining.protocolId&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(page=>comparison.remainingPages.includes(page.id))),'Remainder changed the method, criterion or exact open pages');
   }
  }else if(authority==='word-boundaries'){
-  require(exact(basis,['kind','parentTaskId','parentTaskHash','from','to'])&&basis.kind==='word-boundaries'
+  require(exact(basis,['kind','parentTaskId','parentTaskHash','from','to',...(Object.hasOwn(basis,'requestedTaskId')||Object.hasOwn(basis,'evidence')?['requestedTaskId','evidence']:[])])&&basis.kind==='word-boundaries'
    &&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),
    'Invalid word-boundary preparation basis');
   const row=await query(db,'SELECT t.task_hash,t.task_json FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',basis.parentTaskId,bound.base.proposalId);
@@ -77,7 +77,18 @@ async function basisFor(db,value,bound,authority){
   require(parent.taskId===basis.parentTaskId&&await sha(E.stable(parent))===row.task_hash,'Stored word-boundary parent differs from its hash');
   const variant=Variants.inspect(parent);
   require(variant&&variant.from===basis.from&&variant.to===basis.to,'Word-boundary basis differs from the fixed comparison');
-  await Variants.validate(parent,bound.task);
+  if(Object.hasOwn(basis,'requestedTaskId')){
+   require(HEX.test(basis.requestedTaskId),'Invalid word-boundary evidence request');
+   const saved=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
+   require(saved&&saved.input_version===bound.base.inputVersion,'Word-boundary request is not associated with this idea');
+   const requested=JSON.parse(saved.requested_task_json);await E.checkIdentity(requested);
+   require(requested.taskId===basis.requestedTaskId&&await sha(E.stable(requested))===saved.requested_task_hash,'Word-boundary request differs from its immutable inputs');
+   await Variants.validate(parent,requested);
+   const comparison=await checkedEvidence({db,task:requested,inputVersion:bound.base.inputVersion,evidence:basis.evidence});
+   require(comparison.coveredPages.length>0&&comparison.remainingPages.length>0,'A boundary remainder needs both covered and open pages');
+   const full=await Evidence.describe(requested,bound.base.inputVersion),remaining=await Evidence.describe(bound.task,bound.base.inputVersion);
+   require(full.protocolId===remaining.protocolId&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(page=>comparison.remainingPages.includes(page.id))),'Word-boundary evidence changed the method, grouping or exact remaining pages');
+  }else await Variants.validate(parent,bound.task);
  }else{
   require(authority==='remaining-lp2'&&exact(basis,['kind','parentTaskId','parentTaskHash','protocolHash','coveredPages','remainingPages',...(Object.hasOwn(basis,'requestedTaskId')||Object.hasOwn(basis,'evidence')?['requestedTaskId','evidence']:[])])
    &&basis.kind==='remaining-lp2'&&basis.parentTaskId===bound.base.parentTaskId&&typeof basis.parentTaskHash==='string'&&HEX.test(basis.parentTaskHash),
