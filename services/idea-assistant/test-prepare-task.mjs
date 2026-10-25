@@ -6,6 +6,7 @@ import {createPrepareTaskHandler,planCard} from './prepare-task.mjs';
 import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 import L from '../../local-experiment.js';
+import PlanControls from '../../local-plan-controls.js';
 import {fromWire} from './interpret-handler.mjs';
 import {SCHEMA,toDraft} from './interpretation.mjs';
 import {validateCandidate as validatePlanCandidate} from './propose-task-plan.mjs';
@@ -15,12 +16,12 @@ const alphabet=index.alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 const raw=alphabet.slice(0,3).map(r=>r.rune).join('')+' '+alphabet[0].rune,reviewed=raw+'\n'+alphabet[2].rune;
 const known=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']});
 function card(extra={}){return H.cardData(C.confirm(C.createDraft({source:{text:'PRIVATE original idea'},aim:known('solve LP2'),method:known({operations:[{id:'reverse_row_runes',label:'Reverse rune order within rows'}]}),scope:known({pages:['lp2-15']}),...extra}),{id:'test',at}));}
-function fixture(data=card()){
+function fixture(data=card(),options={}){
  const sqlite=new DatabaseSync(':memory:');for(const migration of ['0001_proposals.sql','0002_proposal_reviews.sql','0003_original_idea.sql','0004_local_tasks.sql'])sqlite.exec(readFileSync(new URL('./migrations/'+migration,import.meta.url),'utf8'));
  sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,'a'.repeat(64),C.serialize(data),'unused',at);
  let reads=0,calls=0;const urls=[],rate=[];
  const env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert(!sql.includes('original_idea'));assert(!sql.includes('proposal_submissions'));return {bind(...args){return {first:async()=>{reads++;return sqlite.prepare(sql).get(...args)||null;}};}};}},PROPOSAL_LIMIT:{limit:async value=>{rate.push(value);return {success:true};}},AI:{run(){throw Error('Planner must not call AI');}}};
- const handle=createPrepareTaskHandler({now:()=>new Date(at),fetcher:async(url,options)=>{calls++;urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}});
+ const handle=createPrepareTaskHandler({now:()=>new Date(at),...(options.prepareControls?{prepareControls:options.prepareControls}:{}),fetcher:async(url,options)=>{calls++;urls.push(url);assert.equal(url,origin+'/data/pages/lp2-15.json');assert.equal(options.redirect,'manual');assert(options.signal);return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}});
  return {sqlite,env,handle,urls,rate,get reads(){return reads;},get calls(){return calls;}};
 }
 const request=(body={proposalId:id,parentTaskId:null},extra={})=>new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json','CF-Connecting-IP':'203.0.113.9',...extra},body:JSON.stringify(body)});
@@ -46,6 +47,29 @@ await test('supported reversal proposes canonical source-bound task without pers
  const f=fixture(),{response,value}=await submit(f);assert.equal(response.status,200);assert.equal(value.state,'plan-ready');assert.equal(value.parentTaskId,null);assert.equal(value.inputVersion,'raw');assert.deepEqual(value.task.alphabet,alphabet);assert.deepEqual(value.task.steps,[{op:'reverse',unit:'line'}]);assert.deepEqual(value.task.pages,[{id:'lp2-15',text:raw}]);await L.checkIdentity(value.task);
  assert(value.notes.some(n=>n.includes('preliminary measurement')));assert(value.notes.some(n=>n.includes('headings')));assert(!JSON.stringify(value).includes('PRIVATE'));assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(f.rate[0].key,'203.0.113.9');
  const python=readFileSync(new URL('../../scripts/reproduce_reading.py',import.meta.url),'utf8');assert.equal(python.match(/RUNES = "([^"]+)"/)[1],alphabet.map(r=>r.rune).join(''));assert.deepEqual(python.match(/LATIN = "([^"]+)"/)[1].split(' '),alphabet.map(r=>r.latin));
+});
+await test('generic preparation includes independently checked controls while keeping target criterion and identity',async()=>{
+ const input=card({method:known({operations:[{id:'affine',a:7,b:7}]}),rules:{evaluation:known({kind:'exact-prefix',values:[1,2]})}});
+ const f=fixture(input),{value}=await submit(f);assert.equal(value.state,'plan-ready');await PlanControls.validate(value.controls,value.task);
+ assert.deepEqual(value.task.criterion,{kind:'exact-prefix',values:[1,2]});
+ const same=await L.prepare({title:value.task.title,pages:value.task.pages,alphabet:value.task.alphabet,steps:value.task.steps,criterion:value.task.criterion});
+ assert.deepEqual(same,value.task);assert.equal(value.controls.targetId,value.task.taskId);
+ assert.equal(L.run(value.controls.cases[0].task).matches[0].matched,true);
+ assert.equal(L.run(value.controls.cases[1].task).matches[0].matched,false);
+ assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+});
+await test('generic preparation fails closed on failed stale and tampered controls without writing a task',async()=>{
+ for(const failure of ['throw','stale','digest']){
+  const f=fixture(card(),{prepareControls:async target=>{
+   if(failure==='throw')throw Error('Reference disagrees');
+   const suite=await PlanControls.prepare(target);
+   if(failure==='stale')suite.targetId='f'.repeat(64);else suite.cases[0].expectedResultSha256='0'.repeat(64);
+   return suite;
+  }}),before=f.sqlite.prepare('SELECT total_changes() n').get().n;
+  const {response,value}=await submit(f);assert.equal(response.status,422);assert.equal(value.state,undefined);
+  assert.equal(value.error,'The runner checks failed. No experiment was created.');assert.equal(value.task,undefined);assert.equal(value.controls,undefined);
+  assert.equal(f.sqlite.prepare('SELECT total_changes() n').get().n,before);assert.equal(f.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+ }
 });
 await test('ordered explicit affine/feedback/boundary rules and reviewed text remain exact',async()=>{
  const f=fixture(card({method:known({operations:[{id:'affine',a:28,b:3},{id:'cumulative_difference',reset:'word'},{id:'reverse_row_runes'}]}),rules:{boundaryMode:known('within_words'),wordBoundaries:known('preserve'),inputVersion:known('reviewed'),representation:known('GP29'),unmapped:known('preserve'),reset:known('word'),initialState:known(0),evaluation:known({kind:'exact-prefix',values:[1,2]})}}));

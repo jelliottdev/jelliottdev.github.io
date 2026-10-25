@@ -52,6 +52,9 @@ jobs:
       - run: node --experimental-sqlite services/idea-assistant/test-word-pair-plans.mjs
       - run: node --experimental-sqlite services/idea-assistant/test-finite-plans.mjs
       - run: node scripts/test_local_run_ui.cjs
+      - run: node scripts/test_local_run_package.cjs
+      - run: node scripts/test_local_plan_controls.cjs
+      - run: node scripts/test_plan_control_package.cjs
       - run: node scripts/test_record_followups.cjs
       - run: node scripts/test_record_followup_view.cjs
       - run: node --experimental-sqlite services/idea-assistant/test-record-plans.mjs

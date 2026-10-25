@@ -22,7 +22,12 @@ const frontendSource=readFileSync(new URL('../../record-followups.js',import.met
 const frontendContext={module:{exports:{}},require:createRequire(new URL('../../record-followups.js',import.meta.url)),btoa,TextEncoder,crypto:webcrypto};vm.createContext(frontendContext);vm.runInContext(frontendSource.replace(exportNeedle,'const api={cardProgram,validatePlan,reference,validateOrigins,createWorkspace}'),frontendContext);
 const frontend=frontendContext.module.exports;
 async function prepare(input){let calls=0,ai=0;const handle=createPrepareTaskHandler({fetcher:async url=>{calls++;assert.equal(url,origin+'/data/pages/lp2-15.json');return Response.json({id:'lp2-15',raw,reviewed_text:reviewed});}}),env={SITE_ORIGIN:origin,PROPOSALS:{prepare(sql){assert.equal(sql,'SELECT card_json FROM proposals WHERE id=?');return {bind(){return {first:async()=>({card_json:C.serialize(input)})};}};}},TASK_LIMIT:{limit:async()=>({success:true})},AI:{run(){ai++;throw Error('No AI grammar for word sums');}}},request=new Request('https://worker.example/prepare-task',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({proposalId,parentTaskId:null})});
- const original=L.run;L.run=()=>{throw Error('Preparation must not run target text');};try{const response=await handle(request,env);return {response,value:await response.json(),calls,ai};}finally{L.run=original;}
+ const original=L.run;L.run=task=>{
+  assert.match(task.title,/^Synthetic local reference 1: layout-(?:forward|reversed) for [a-f0-9]{64}$/,'Preparation may run only the fixed independent synthetic controls');
+  assert.deepEqual(task.pages.map(page=>page.id),['lp1-00','lp1-01'],'Preparation must not execute manuscript target pages');
+  assert(task.pages.every(page=>page.text!==raw&&page.text!==reviewed),'Official target text cannot be relabeled as a control');
+  return original(task);
+ };try{const response=await handle(request,env);return {response,value:await response.json(),calls,ai};}finally{L.run=original;}
 }
 for(const table of ['canonical','reversed'])for(const boundaries of ['non-rune','hyphen-period']){
  const input=card(table,boundaries),before=structuredClone(input),plan=planCard(input);assert(!plan.reason,plan.reason);assert.deepEqual(plan.steps,[]);assert.deepEqual(plan.criterion,{kind:'word-prime-sums',table,boundaries});assert.deepEqual(input,before);assert(plan.notes.some(n=>n.includes('does not reverse digits or rune order')));

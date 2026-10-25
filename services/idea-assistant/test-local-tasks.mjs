@@ -4,6 +4,7 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
 import L from '../../local-experiment.js';
+import PlanControls from '../../local-plan-controls.js';
 import C from '../../claim-specification.js';
 import H from '../../claim-share.js';
 import {planCard} from './prepare-task.mjs';
@@ -79,6 +80,43 @@ await test('result replay binds all outputs; normalized valid result idempotent,
  const get=await(await call(f,'/tasks/'+t.taskId)).json();assert.equal(get.state,'results-verified');assert.deepEqual(get.latestRun,r.latestRun);
  const retry=await(await call(f,'/tasks','POST',body(t))).json();assert.equal(retry.state,'results-verified');assert.deepEqual(retry.latestRun,r.latestRun);
  f.db.sqlite.prepare('UPDATE local_task_results SET result_json=?').run(JSON.stringify(wrong));assert.equal((await call(f,'/tasks/'+t.taskId)).status,503);
+});
+await test('generic projections derive task-bound controls without changing stored task identities',async()=>{
+ const f=fixture(),t=await task(),before=L.stable(t);
+ const response=await call(f,'/tasks','POST',body(t)),view=await response.json();assert.equal(response.status,200);
+ assert.equal(view.controls.targetId,t.taskId);await PlanControls.validate(view.controls,t);
+ assert.equal(L.stable(t),before);assert.deepEqual(view.plan,t);
+ assert.equal(f.db.sqlite.prepare('SELECT task_json FROM local_tasks WHERE id=?').get(t.taskId).task_json,before);
+ const result=L.run(t),saved=await(await call(f,'/tasks/'+t.taskId+'/results','POST',{result})).json();
+ assert.equal(saved.state,'results-verified');await PlanControls.validate(saved.controls,t);
+ const reloaded=await(await call(f,'/tasks/'+t.taskId)).json();assert.deepEqual(reloaded.controls,view.controls);assert.deepEqual(reloaded.latestRun,saved.latestRun);
+ // A visitor cannot provide a stale or invented control protocol alongside output.
+ const changes=f.db.sqlite.prepare('SELECT total_changes() AS n').get().n;
+ for(const controls of [view.controls,{...view.controls,targetId:'f'.repeat(64)}]){
+  assert.equal((await call(f,'/tasks/'+t.taskId+'/results','POST',{result,controls})).status,422);
+ }
+ assert.equal(f.db.sqlite.prepare('SELECT total_changes() AS n').get().n,changes);
+});
+await test('failed, stale or tampered server-derived controls prevent writes and target replay',async()=>{
+ const f=fixture(),t=await task();
+ for(const failure of ['throw','stale','digest']){
+  const broken=createLocalTaskHandler({now:()=>new Date(at),fetcher:()=>{throw Error('No source fetch after a failed control');},
+   prepareControls:async target=>{if(failure==='throw')throw Error('Reference disagrees');const suite=await PlanControls.prepare(target);if(failure==='stale')suite.targetId='f'.repeat(64);else suite.cases[0].expectedResultSha256='0'.repeat(64);return suite;}});
+  const before=f.db.sqlite.prepare('SELECT total_changes() AS n').get().n;
+  assert.equal((await broken(request('/tasks','POST',body(t)),f.env)).status,422);
+  assert.equal(f.db.sqlite.prepare('SELECT total_changes() AS n').get().n,before);
+ }
+ assert.equal((await call(f,'/tasks','POST',body(t))).status,200);
+ const broken=createLocalTaskHandler({prepareControls:async()=>{throw Error('Reference disagrees');}}),originalVerify=L.verify;
+ let targetReplays=0;
+ try{
+  L.verify=async(...args)=>{if(args[0].taskId===t.taskId)targetReplays++;return originalVerify(...args);};
+  const before=f.db.sqlite.prepare('SELECT total_changes() AS n').get().n;
+  assert.equal((await broken(request('/tasks/'+t.taskId+'/results','POST',{result:L.run(t)}),f.env)).status,422);
+  assert.equal(f.db.sqlite.prepare('SELECT total_changes() AS n').get().n,before);assert.equal(targetReplays,0);
+  assert.equal((await call(f,'/tasks/'+t.taskId+'/results','POST',{result:L.run(t)})).status,200);
+  targetReplays=0;assert.equal((await broken(request('/tasks/'+t.taskId),f.env)).status,503);assert.equal(targetReplays,0);
+ }finally{L.verify=originalVerify;}
 });
 await test('streamed body limits, rate limits and storage errors cannot write partial tasks',async()=>{
  const f=fixture(),t=await task(),reads=f.db.reads;

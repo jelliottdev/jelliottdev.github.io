@@ -4,7 +4,9 @@
  const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
  const encoder=new TextEncoder(),MAX_RUNNER=100000,MAX_TASK=2000000;
  const Control=typeof module==='object'&&module.exports?require('./local-control.js'):root.LocalControl;
+ const Checks=typeof module==='object'&&module.exports?require('./local-plan-controls.js'):root.LocalPlanControls;
  const GUARD_SHA256='71fea900922eab1963af3e4230e47512929d673267180e4740aeee165bd48b2f';
+ const PLAN_GUARD_SHA256='36b01527be08f0594c2eb94f8bf5390015a7dedbef98657e80f5ab0af9953b95';
  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(k=>Object.hasOwn(value,k));
  const hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
  async function digest(bytes){const hash=await root.crypto.subtle.digest('SHA-256',bytes);return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('');}
@@ -50,15 +52,19 @@
   const result=new Uint8Array(offset+centralSize+end.length);let cursor=0;
   for(const part of [...chunks,...central,end]){result.set(part,cursor);cursor+=part.length;}return result;
  }
- // API: build(task, runnerText, returnURL, origins = [], guardText).
+ // API: build(task, runnerText, returnURL, origins = [], guardText, runnerControls = null).
+ // Generic checks add a fixed Python guard and the exact deterministic suite.
  // origins is the task service's public [{origin,control,question,scopeChange,
  // limitation}] projection. Nonempty origins require the exact fixed guard
  // source fetched from tools/verify_controls.py; empty origins need no fetch
  // and preserve the original three-member archive byte for byte.
- async function build(task,runnerText,returnURL,origins=[],guardText){
+ async function build(task,runnerText,returnURL,origins=[],guardText,runnerControls=null){
   // Snapshot before awaiting identity: later caller edits cannot change members.
   E.validateTask(task);
   const snapshot=JSON.parse(JSON.stringify(task)),savedOrigins=originSnapshot(origins);
+  if(runnerControls!==null&&savedOrigins.length)throw Error('Choose the authored controls or the generic runner checks, not both.');
+  if(runnerControls!==null&&!Checks?.validate)throw Error('Runner checks could not be loaded.');
+  const savedChecks=runnerControls===null?null:await Checks.validate(runnerControls,snapshot,root.crypto);
   await E.checkIdentity(snapshot);
   const address=returnAddress(returnURL,snapshot.taskId),runner=textBytes(runnerText,'Runner source',MAX_RUNNER);
   const taskBytes=textBytes(E.stable(snapshot)+'\n','Task',MAX_TASK);
@@ -90,6 +96,24 @@
     ['origins.json',encoder.encode(E.stable({version:1,origins:savedOrigins})+'\n')],['verify_controls.py',guard],
     ...[...controls].map(([id,control])=>['controls/'+id+'.json',encoder.encode(E.stable(control)+'\n')])]);
   }
+  if(savedChecks){
+   if(!Checks?.validate)throw Error('Runner checks could not be loaded.');
+   await Checks.validate(savedChecks,snapshot,root.crypto);
+   const guard=textBytes(guardText,'Runner check guard source',MAX_RUNNER);
+   if(await digest(guard)!==PLAN_GUARD_SHA256)throw Error('The fixed runner check guard source changed.');
+   const instructions='Local rune experiment with runner checks\n\nTask ID: '+snapshot.taskId+'\n\n'+
+    'Extract all five files into one folder. Review task.json, runner-controls.json and the Python files before running.\n'+
+    'Python 3.9 or later is required. Only the Python standard library is used; nothing is installed.\n\n'+
+    'Run:\n  python verify_plan_controls.py --task task.json --controls runner-controls.json --out results.json\n\n'+
+    'Two small synthetic inputs check the exact ordered method against independently calculated outputs before manuscript pages run.\n'+
+    'Prefix checks use a synthetic known match and a mismatch; they do not establish that the manuscript matches a proposed reading.\n'+
+    'A failed check stops without writing manuscript results. The command refuses to overwrite results.json.\n'+
+    'Keep all packaged files unchanged. No network calls or automatic uploads are made.\n\n'+
+    'Return manually and select the results file at:\n  '+address+'\n\n'+
+    'These checks verify the stated computation on small inputs, not a decryption or statistical conclusion.\n';
+   return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],
+    ['runner-controls.json',textBytes(E.stable(savedChecks)+'\n','Runner checks',MAX_TASK)],['verify_plan_controls.py',guard]]);
+  }
   const instructions='Local rune experiment\n\nTask ID: '+snapshot.taskId+'\n\n'+
    'Extract all three files into one folder. Review task.json and research_runner.py before running.\n'+
    'Python 3.9 or later is required. Only the Python standard library is used; nothing is installed.\n\n'+
@@ -100,5 +124,5 @@
    'The return page verifies results against this exact task. A matching calculation does not establish a decryption.\n';
   return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)]]);
  }
- const api={build,GUARD_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
+ const api={build,GUARD_SHA256,PLAN_GUARD_SHA256};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunPackage=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

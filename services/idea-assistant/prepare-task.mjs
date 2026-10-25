@@ -1,4 +1,5 @@
 import {loadInputBundle} from './official-inputs.mjs';
+import PlanControls from '../../local-plan-controls.js';
 /* Source-bound proposed plans; inference can map wording, never execute code. */
 import L from '../../local-experiment.js';
 import C from '../../claim-specification.js';
@@ -120,7 +121,7 @@ async function jsonBody(message,max){
  while(true){const r=await reader.read();if(r.done)break;size+=r.value.length;if(size>max){await reader.cancel();throw Error();}chunks.push(r.value);}
  const bytes=new Uint8Array(size);let i=0;for(const chunk of chunks){bytes.set(chunk,i);i+=chunk.length;}return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
 }
-export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new Date()}={}){
+export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare}={}){
  return async function handle(request,env){
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
   let allowed=false;try{allowed=typeof env?.SITE_ORIGIN==='string'&&new URL(env.SITE_ORIGIN).origin===env.SITE_ORIGIN&&['http:','https:'].includes(new URL(env.SITE_ORIGIN).protocol);}catch{}
@@ -157,7 +158,10 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    }catch(error){console.warn('prepare-task: official manuscript source unavailable',error?.name||'Error',error?.message||'');return reply({error:'The selected manuscript text could not be loaded.'},422);}finally{clearTimeout(timer);}
    const title=plan.criterion.kind==='word-prime-sums'?'Word prime sums · '+plan.criterion.table+' table · '+plan.criterion.boundaries:plan.criterion.kind==='word-affine-count'?'Within-word rune pairs · lag '+plan.criterion.lag+' · '+plan.criterion.boundaries:plan.steps.map(s=>s.op==='reverse'?'Reverse rune order within each '+s.unit:s.op==='affine'?'Affine mapping ('+s.a+', '+s.b+')':s.op==='finite-shift'?'Finite key stream '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+' indices · '+s.reset+' resets':s.op==='interrupted-keyed-shift'?'Interrupted repeating-key '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune key · '+s.reset+' resets':s.op==='keyed-shift'?(s.mode==='repeat'?'Repeating-key':s.mode==='plaintext-autokey'?'Plaintext autokey':'Ciphertext autokey')+' '+(s.direction==='subtract'?'subtraction':'addition')+' · '+s.key.length+'-rune '+(s.mode==='repeat'?'key':'seed')+' · '+s.reset+' resets':'Cumulative difference with '+s.reset+' resets').join(', then ').slice(0,300);
    let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch(error){return reply({state:'needs-adapter',reason:String(error?.message||'').startsWith('The finite key stream is shorter')?'The supplied finite stream is too short for a complete page segment. Supply enough values or specify a different reset.':'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
-   return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
+   let controls;
+   try{controls=await prepareControls(task,crypto);await PlanControls.validate(controls,task,crypto);}
+   catch{return reply({error:'The runner checks failed. No experiment was created.'},422);}
+   return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:body.parentTaskId,inputVersion:plan.inputVersion,task,controls,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
   }catch{return reply({error:'Plan preparation is temporarily unavailable.'},503);}
  };
 }

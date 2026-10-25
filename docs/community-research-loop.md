@@ -206,3 +206,38 @@ Negations, conditions, appended methods, conflicting value examples and existing
 rule conflicts remain opaque. Existing confirmed cards are never rewritten.
 The adapter changes neither the visitor's outcome nor page selection. Its result
 is a word-value ledger, not a readability test or statistical explanation.
+
+## Automatic implementation checks
+
+Generic plans now use `local-plan-controls.js` to derive two small synthetic
+fixtures from the exact ordered program. A separate reference implementation
+calculates the complete expected outputs before comparing them with the runner.
+These checks do not run manuscript inputs, infer a plaintext, measure a false
+positive rate or validate a proposed cipher model. Finite keys may restrict the
+available synthetic segments. Prefix checks use a known synthetic match and a
+mismatch; they do not supply the target's unknown answer.
+
+The proposed plan and task view expose the target-bound checks. The browser
+rederives them, runs them in its cancellable worker before manuscript pages and
+requires both complete result hashes to match. The service independently
+rederives/replays generic checks before task creation, result acceptance and
+saved-result verification. Authored follow-ups retain their own stronger,
+source-bound controls. Existing task and result identities remain unchanged.
+
+Optional generic downloads include `runner-controls.json` and
+`verify_plan_controls.py`. The independent Python runner checks both synthetic
+outputs before the target and refuses to overwrite results. Existing three-file
+replay downloads and authored-control packages remain supported.
+
+A matching implementation check verifies the stated arithmetic on small inputs;
+it does not establish readability, statistical significance or complete coverage.
+
+### Remaining loop boundaries
+
+A generic task is checked against official manuscript input, but task admission
+still needs a server-issued prepared-plan receipt binding its program and
+criterion to the reviewed idea (including AI mappings and authorized scope
+extensions). Existing frontend review checks do not replace this API boundary.
+Extensions currently cover remaining LP2 pages, not arbitrary parameter sweeps.
+The existing global daily persistence caps also remain in place. These gaps mean
+the full contribution loop is not complete for every idea or research node.
