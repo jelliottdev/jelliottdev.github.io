@@ -1,13 +1,29 @@
-/* Source-bound compiled count projections. These are not community submissions. */
+/* Exact current and retained count/program proofs; these are not community submissions. */
 import E from '../../local-experiment.js';
 import Evidence from '../../computation-evidence.js';
 import CountRegistry from '../../published-count-evidence-data.js';
 import ProgramRegistry from '../../published-opening-evidence-data.js';
+import History from '../../published-evidence-history.js';
+import HistoryData from '../../published-evidence-history-data.js';
 const HEX=/^[a-f0-9]{64}$/,SLUG=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 const clone=v=>JSON.parse(E.stable(v));
 const hash=async(v,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');
 const checkedDefault=new WeakMap();
+const checkedHistorical=new WeakMap();let defaultHistory;
+function historicalArchive(registry,history){
+ if(history===null)return null;
+ if(history===undefined&&registry!==undefined)return null;
+ if(history===undefined){defaultHistory??=History.create(HistoryData);return defaultHistory;}
+ return History.create(history);
+}
+async function historicalReceipts(manifest,cryptoAPI,cache){
+ if(!manifest)return [];
+ if(!cache)return checkRegistry(manifest,cryptoAPI);
+ let entries=checkedHistorical.get(cryptoAPI);if(!entries){entries=new Map();checkedHistorical.set(cryptoAPI,entries);}
+ const entry=manifest.entries[0],key=[entry.recordId,entry.revision,entry.caseId].join('|');
+ if(!entries.has(key))entries.set(key,checkRegistry(manifest,cryptoAPI));return entries.get(key);
+}
 async function checkRegistry(registry,cryptoAPI){
  const program=registry?.schema==='liberpedia-published-program-evidence-v1';
  if(!exact(registry,['schema','records','entries'])||!['liberpedia-published-count-evidence-v1','liberpedia-published-program-evidence-v1'].includes(registry.schema)||!Array.isArray(registry.records)||registry.records.length>100||!Array.isArray(registry.entries)||registry.entries.length>100)throw Error('Published count registry is malformed.');
@@ -54,17 +70,21 @@ export async function findPublishedEvidence({task,inputVersion,crypto:cryptoAPI=
  }
  return {sources,publishedSources};
 }
-export async function resolvePublishedEvidence({taskId,resultId,inputVersion,createdAt,crypto:cryptoAPI=globalThis.crypto,registry}){
+export async function resolvePublishedEvidence({taskId,resultId,inputVersion,createdAt,crypto:cryptoAPI=globalThis.crypto,registry,history}){
  if(!HEX.test(taskId)||!HEX.test(resultId)||!['raw','reviewed'].includes(inputVersion)||createdAt!==undefined&&(typeof createdAt!=='string'||!Number.isFinite(Date.parse(createdAt))))throw Error('Pinned published source reference is invalid.');
- const found=(await receipts(registry,cryptoAPI)).find(r=>r.source.task.taskId===taskId&&r.source.run.id===resultId&&r.source.inputVersion===inputVersion&&(createdAt===undefined||r.source.run.createdAt===createdAt));
+ const matches=r=>r.source.task.taskId===taskId&&r.source.run.id===resultId&&r.source.inputVersion===inputVersion&&(createdAt===undefined||r.source.run.createdAt===createdAt);
+ const current=(await receipts(registry,cryptoAPI)).find(matches);if(current)return clone(current);
+ const archive=historicalArchive(registry,history),manifest=archive?.findSource({taskId,resultId,inputVersion,...(createdAt===undefined?{}:{createdAt})}),found=(await historicalReceipts(manifest,cryptoAPI,registry===undefined&&history===undefined)).find(matches);
  return found?clone(found):null;
 }
-export async function readPublishedEvidence({recordId,revision,caseId,crypto:cryptoAPI=globalThis.crypto,registry}){
+export async function readPublishedEvidence({recordId,revision,caseId,crypto:cryptoAPI=globalThis.crypto,registry,history}){
  if(!SLUG.test(recordId)||!HEX.test(revision)||typeof caseId!=='string'||caseId.length>200||!/^[a-z0-9-]+$/.test(caseId))throw Error('Published source reference is invalid.');
- const found=(await receipts(registry,cryptoAPI)).find(r=>r.publishedSource.recordId===recordId&&r.publishedSource.revision===revision&&r.publishedSource.caseId===caseId);
+ const matches=r=>r.publishedSource.recordId===recordId&&r.publishedSource.revision===revision&&r.publishedSource.caseId===caseId;
+ let found=(await receipts(registry,cryptoAPI)).find(matches);
+ if(!found){const archive=historicalArchive(registry,history),manifest=archive?.find({recordId,revision,caseId});found=(await historicalReceipts(manifest,cryptoAPI,registry===undefined&&history===undefined)).find(matches);}
  return found?{...clone(found.source),publishedSource:clone(found.publishedSource),provenance:clone(found.provenance)}:null;
 }
-export function createPublishedEvidenceHandler({crypto:cryptoAPI=globalThis.crypto,registry}={}){
+export function createPublishedEvidenceHandler({crypto:cryptoAPI=globalThis.crypto,registry,history}={}){
  return async(request,env)=>{
   const allowed=env?.SITE_ORIGIN,origin=request.headers.get('origin'),headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
   let valid=false;try{valid=typeof allowed==='string'&&new URL(allowed).origin===allowed&&['http:','https:'].includes(new URL(allowed).protocol);}catch{}
@@ -77,6 +97,6 @@ export function createPublishedEvidenceHandler({crypto:cryptoAPI=globalThis.cryp
    return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Max-Age':'600'}});
   }
   if(request.method!=='GET')return reply({error:'Method not allowed.'},405);
-  try{const found=await readPublishedEvidence({recordId:match[1],caseId:match[2],revision:url.searchParams.get('revision'),crypto:cryptoAPI,registry});return found?reply(found):reply({error:'Published source was not found.'},404);}catch{return reply({error:'Published computation evidence could not be verified.'},503);}
+  try{const found=await readPublishedEvidence({recordId:match[1],caseId:match[2],revision:url.searchParams.get('revision'),crypto:cryptoAPI,registry,history});return found?reply(found):reply({error:'Published source was not found.'},404);}catch{return reply({error:'Published computation evidence could not be verified.'},503);}
  };
 }

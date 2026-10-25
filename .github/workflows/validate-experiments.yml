@@ -50,6 +50,9 @@ jobs:
       - run: node scripts/test_question_evidence.cjs
       - run: node scripts/test_question_protocols.cjs
       - run: node scripts/test_family_question_evidence.cjs
+      - run: node scripts/test_generic_prefix_ui.cjs
+      - run: node scripts/test_published_evidence_history.mjs
+      - run: node scripts/test_published_history_adapter.mjs
       - run: node scripts/test_published_evidence.mjs
       - run: node scripts/test_published_program_client.cjs
       - run: node scripts/test_task_evidence.mjs
@@ -267,6 +270,10 @@ jobs:
       - run: python scripts/test_published_program_projection.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_published_count_evidence.py --check
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_published_evidence_history.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/build_published_evidence_history.py --check
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py
         if: steps.scope.outputs.science == 'true'
