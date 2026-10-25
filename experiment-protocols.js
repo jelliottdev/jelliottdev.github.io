@@ -50,7 +50,7 @@
  function describe(criterion){
   const def=find(criterion);if(!def)return null;
   return {id:def.id,operationId:def.operation.id,label:def.operation.label,
-   title:format(def.title,criterion,def),heading:format(def.heading,criterion,def),question:format(def.question,criterion,def),review:format(def.review,criterion,def),reviewBoundary:format('{boundaryPlan}',criterion,def),plan:format(def.plan,criterion,def),compilerNote:def.compilerNote,limit:def.limit,
+   title:format(def.title,criterion,def),heading:format(def.heading,criterion,def),question:format(def.question,criterion,def),review:def.id==='word-affine-count'&&criterion.a===1&&criterion.b===0?'Count pairs of the same rune '+criterion.lag+' '+(criterion.lag===1?'position':'positions')+' apart inside a word.':format(def.review,criterion,def),reviewBoundary:format('{boundaryPlan}',criterion,def),plan:format(def.plan,criterion,def),compilerNote:def.compilerNote,limit:def.limit,
    settings:Object.entries(def.fields).map(([key,field])=>({key,label:field.label,value:criterion[key],display:field.names?.[criterion[key]]??String(criterion[key])})),
    followups:def.followups.map(f=>{const from=criterion[f.field],to=f.choices.find(v=>v!==from);return {id:f.id,label:f.label,description:f.descriptions[to],from,to};})};
  }

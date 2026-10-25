@@ -6,12 +6,23 @@ const base={kind:'word-affine-count',lag:1,a:1,b:0,boundaries:'non-rune'};
 let checked=0;
 for(const lag of [1,12])for(let a=0;a<29;a++)for(let b=0;b<29;b++){
  const criterion={...base,lag,a,b},saved=JSON.stringify(criterion),html=V.render({criterion,alphabet}),later=(a+b)%29;
- assert(html.includes(`(${a} × 1 + ${b}) mod 29 = ${later}`));
- assert(html.includes(`${alphabet[later].rune}</span><small>index ${later}</small>`));
- assert(html.includes(`rune ${lag} position${lag===1?'':'s'} ahead in the same word has index ${later}, count one match`));
+ if(a===1&&b===0){
+  assert.equal((html.match(new RegExp(alphabet[1].rune,'g'))||[]).length,2,'The equality example shows the same actual rune at both ends');
+  assert(html.includes(`same rune appears ${lag} position${lag===1?'':'s'} ahead inside the same word, count one match`));
+  assert(!/index|mod 29|×/.test(html),'Equality needs no index or modular-arithmetic lesson');
+ }else{
+  assert(html.includes(`(${a} × 1 + ${b}) mod 29 = ${later}`));
+  assert(html.includes(`${alphabet[later].rune}</span><small>index ${later}</small>`));
+  assert(html.includes(`rune ${lag} position${lag===1?'':'s'} ahead in the same word has index ${later}, count one match`));
+ }
  assert(html.includes(lag===1?'Adjacent runes':'11 intervening runes'));
  assert(html.includes('not manuscript evidence'));assert(!html.includes('<details'));
  assert.equal(JSON.stringify(criterion),saved);checked++;
+}
+for(let lag=1;lag<=12;lag++)for(const boundaries of ['non-rune','hyphen-period']){
+ const html=V.render({criterion:{...base,lag,boundaries},alphabet});
+ assert(html.includes('count one match'));assert(!/index|mod 29|×/.test(html));
+ assert(html.includes(lag===1?'Adjacent runes':`${lag-1} intervening rune${lag===2?'':'s'}`));
 }
 for(const table of ['canonical','reversed'])for(const boundaries of ['non-rune','hyphen-period']){
  const html=V.render({criterion:{kind:'word-prime-sums',table,boundaries},alphabet});

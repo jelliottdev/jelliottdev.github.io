@@ -6139,7 +6139,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;cumulative-word-reset-warning&quot;,
-      &quot;motivation&quot;: &quot;The page-reset cumulative rule did not establish a readable message. This word-reset variant instead checks the fixed 24-rune Warning opening; existing saved prefixes already rule out that opening before the changed resets can help.&quot;,
+      &quot;motivation&quot;: &quot;Restart the selected decoding rule at each word and compare its first 24 output runes with Warning, an already decoded passage. The result shows whether this restart can reproduce that fixed opening.&quot;,
       &quot;title&quot;: &quot;Restart the cumulative rule at each word&quot;,
       &quot;question&quot;: &quot;Does the cumulative rule, restarted at every transcription word, recover the fixed 24-rune Warning opening?&quot;,
       &quot;scope_change&quot;: &quot;Changes the original page-reset cumulative rule to word resets and supplies an exact opening criterion. This is a newly specified boundary variant, not a historical solver’s reported test.&quot;,
@@ -6725,7 +6725,7 @@
     },
     {
       &quot;id&quot;: &quot;cumulative-line-reset-warning&quot;,
-      &quot;motivation&quot;: &quot;The page-reset cumulative rule did not establish a readable message. This line-reset variant instead checks the fixed 24-rune Warning opening; existing saved prefixes already rule out that opening before the changed resets can help.&quot;,
+      &quot;motivation&quot;: &quot;Restart the selected decoding rule at each line and compare its first 24 output runes with Warning, an already decoded passage. The result shows whether this restart can reproduce that fixed opening.&quot;,
       &quot;title&quot;: &quot;Restart the cumulative rule at each line&quot;,
       &quot;question&quot;: &quot;Does the cumulative rule, restarted at each archived line, recover the fixed 24-rune Warning opening?&quot;,
       &quot;scope_change&quot;: &quot;Changes the original page-reset cumulative rule to line resets and supplies an exact opening criterion. Lines are those in the archived transcription; their geometry is not inferred.&quot;,
@@ -48914,7 +48914,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;second-koan-word-reset-warning&quot;,
-      &quot;motivation&quot;: &quot;Earlier page-reset tests matched none of the declared known openings. Restarting the second-koan key at each word can change the Warning-opening answer only on LP2-54; the other rune pages already disagree before the first reset could help.&quot;,
+      &quot;motivation&quot;: &quot;Restart the second-koan key at each word on LP2-54 and compare its first 12 output runes with Warning, an already decoded passage. This checks whether that restart can reproduce the fixed opening on this page.&quot;,
       &quot;title&quot;: &quot;Restart the second-koan key at each word&quot;,
       &quot;question&quot;: &quot;Does repeating the second-koan key from its first rune at every transcription word recover the fixed 12-rune Warning opening at a page start?&quot;,
       &quot;scope_change&quot;: &quot;Only LP2-54 remains eligible: on the other 54 rune pages, the saved page-reset output already disagrees with the Warning opening before a word reset could change anything. This checks the remaining page with one key, subtraction and phase zero.&quot;,
@@ -54214,7 +54214,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;row-reversal-atbash-warning&quot;,
-      &quot;motivation&quot;: &quot;Reversing rune order within each line matched none of nine known openings. This combined rule adds Atbash and fixes the target to the 24-rune Warning opening; saved prefixes already rule it out on every rune-bearing page.&quot;,
+      &quot;motivation&quot;: &quot;Read the runes in each line backwards, then apply the alphabet substitution used on Warning, an already decoded passage. Comparing the first 24 output runes checks whether this combined rule reproduces that fixed opening.&quot;,
       &quot;title&quot;: &quot;Reverse each line, then apply Atbash&quot;,
       &quot;question&quot;: &quot;Does reversing each archived line and then applying the Warning page’s Atbash mapping recover its fixed 24-rune opening?&quot;,
       &quot;scope_change&quot;: &quot;Adds the documented Atbash mapping to the existing line-reversal route. The prior route test excluded substitutions; the separate five-direction cipher replay did not include reversing every line.&quot;,
@@ -55669,7 +55669,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;reversed-prime-table-word-sums&quot;,
-      &quot;motivation&quot;: &quot;The earlier test found no excess of prime totals when adding the usual rune values along complete lines. This check instead reverses the value assignments and adds within words, producing a ledger of totals rather than decoded text.&quot;,
+      &quot;motivation&quot;: &quot;Assign the reversed prime values to runes and add them within each word. The result is a table of word totals for inspecting numerical ideas; it does not tell us whether a total has meaning.&quot;,
       &quot;title&quot;: &quot;Word sums with the prime values reversed&quot;,
       &quot;question&quot;: &quot;What does each LP2 word total when the GP prime-value table is reversed?&quot;,
       &quot;scope_change&quot;: &quot;The published test adds the normal GP values along complete manuscript lines. This follow-up instead lists word totals using the reversed table: F=109, U=107, through EA=2. It covers LP2-00 to LP2-55, including headings; hyphens and periods end words, while slashes and line breaks continue them. Pages remain separate.&quot;,
@@ -59212,7 +59212,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;word-reversal-atbash-warning&quot;,
-      &quot;motivation&quot;: &quot;Reversing the runes inside each word matched none of nine known openings. This combined rule adds Atbash and fixes the target to the 24-rune Warning opening; saved prefixes already rule it out on every rune-bearing page.&quot;,
+      &quot;motivation&quot;: &quot;Read the runes inside each word backwards, then apply the alphabet substitution used on Warning, an already decoded passage. Comparing the first 24 output runes checks whether this combined rule reproduces that fixed opening.&quot;,
       &quot;title&quot;: &quot;Reverse each word, then apply Atbash&quot;,
       &quot;question&quot;: &quot;Does reversing runes inside each transcription word and then applying Atbash recover the fixed 24-rune Warning opening?&quot;,
       &quot;scope_change&quot;: &quot;Adds the Warning page’s documented Atbash mapping to within-word reversal. The earlier reversal test excluded substitutions. This tests one combined rule; reversing the order of all words is a different operation.&quot;,
@@ -70324,15 +70324,15 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/cumulative-autokey-literal/record.json&quot;,
-        &quot;sha256&quot;: &quot;a42191855a8305ecbdc45f8fede0e123b35abec91e6e97d9750f8a236fd83f47&quot;
+        &quot;sha256&quot;: &quot;703c2817b8d39b3b3480c2b91e4dfe6b199d9279ea0440b5b411736c9cc72398&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/lp2-row-column-routes/record.json&quot;,
-        &quot;sha256&quot;: &quot;f84a9fa587e2507c550633fd740b0ffef68e81e0a865c12ff23845e8f24a10bc&quot;
+        &quot;sha256&quot;: &quot;f28530f52a7d1c0a3f03fc80d3793a3e5ecb785ce8404a1d75aa8614339c75ca&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/lp2-word-reversal/record.json&quot;,
-        &quot;sha256&quot;: &quot;ef7a2096c088f49e6f2b8b002a9bd8c4e44f0c8912111463918a8467c54fcc79&quot;
+        &quot;sha256&quot;: &quot;2be6dd9f756df1650f4680ab691b930c10678e299c7852e74ace45e39fe7791a&quot;
       }
     ],
     &quot;outputs&quot;: [
@@ -94264,7 +94264,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;lag-five-equality-non-rune-boundaries&quot;,
-      &quot;motivation&quot;: &quot;The earlier search selected a five-position repeat in words that could continue across spaces, slashes and line breaks. This check ends words at every non-rune character to see whether that same selected pattern persists without those joins.&quot;,
+      &quot;motivation&quot;: &quot;Count repeated runes five places apart within words, keeping spaces, slashes and line breaks as word breaks. Compare with the earlier count to see whether the pattern depends on joining text across those breaks.&quot;,
       &quot;title&quot;: &quot;Check the five-position repeat without joining layout marks&quot;,
       &quot;question&quot;: &quot;Does the already selected five-position repeat remain elevated against its word-shuffle mean when every non-rune ends a word?&quot;,
       &quot;scope_change&quot;: &quot;Keep the published winning relation: the same rune five positions later. Change only word boundaries on LP2-00 to LP2-55: slashes, line breaks and every other non-rune now end a word instead of allowing continuation until a hyphen or period. Pages remain separate.&quot;,
@@ -95239,7 +95239,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;lag-six-non-rune-boundaries&quot;,
-      &quot;motivation&quot;: &quot;The earlier six-position pattern was counted in words that could continue across spaces, slashes and line breaks. This check treats every non-rune character as a word break to ask whether the same selected pattern survives without those joins.&quot;,
+      &quot;motivation&quot;: &quot;Count pairs six places apart within words that follow the earlier selected number rule, keeping spaces, slashes and line breaks as word breaks. Compare with the earlier count to see whether the pattern depends on joining text across those breaks.&quot;,
       &quot;title&quot;: &quot;Does the six-rune pattern depend on word breaks?&quot;,
       &quot;question&quot;: &quot;Compare the same rune rule with and without joining text across layout marks.&quot;,
       &quot;scope_change&quot;: &quot;Use every non-rune as a word boundary on LP2-00–55. The published test splits only at hyphens and periods, allowing words to continue across slashes and newlines. This prepared measurement changes only that segmentation rule.&quot;,
@@ -97519,7 +97519,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;deor-plaintext-subtract-warning&quot;,
-      &quot;motivation&quot;: &quot;The earlier test used a four-rune DEOR starting key on only ten pages. This checks the other 45 rune pages for a specific known opening, rather than relying on a rough text-quality score.&quot;,
+      &quot;motivation&quot;: &quot;Apply this DEOR decoding rule to the 45 manuscript pages outside the earlier ten-page test and check for the exact beginning of an already decoded passage. A match would concern that beginning, not a whole decoded page.&quot;,
       &quot;title&quot;: &quot;DEOR plaintext feedback: subtract&quot;,
       &quot;question&quot;: &quot;Does the source four-index DEOR seed with plaintext feedback (subtract) recover the fixed 12-rune Warning opening on the 45 omitted pages?&quot;,
       &quot;scope_change&quot;: &quot;Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.&quot;,
@@ -98045,7 +98045,7 @@
     },
     {
       &quot;id&quot;: &quot;deor-plaintext-add-warning&quot;,
-      &quot;motivation&quot;: &quot;The earlier test used a four-rune DEOR starting key on only ten pages. This checks the other 45 rune pages for a specific known opening, rather than relying on a rough text-quality score.&quot;,
+      &quot;motivation&quot;: &quot;Apply this DEOR decoding rule to the 45 manuscript pages outside the earlier ten-page test and check for the exact beginning of an already decoded passage. A match would concern that beginning, not a whole decoded page.&quot;,
       &quot;title&quot;: &quot;DEOR plaintext feedback: add&quot;,
       &quot;question&quot;: &quot;Does the source four-index DEOR seed with plaintext feedback (add) recover the fixed 12-rune Warning opening on the 45 omitted pages?&quot;,
       &quot;scope_change&quot;: &quot;Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.&quot;,
@@ -98571,7 +98571,7 @@
     },
     {
       &quot;id&quot;: &quot;deor-plaintext-beaufort-warning&quot;,
-      &quot;motivation&quot;: &quot;The earlier test used a four-rune DEOR starting key on only ten pages. This checks the other 45 rune pages for a specific known opening, rather than relying on a rough text-quality score.&quot;,
+      &quot;motivation&quot;: &quot;Apply this DEOR decoding rule to the 45 manuscript pages outside the earlier ten-page test and check for the exact beginning of an already decoded passage. A match would concern that beginning, not a whole decoded page.&quot;,
       &quot;title&quot;: &quot;DEOR plaintext feedback: beaufort&quot;,
       &quot;question&quot;: &quot;Does the source four-index DEOR seed with plaintext feedback (beaufort) recover the fixed 12-rune Warning opening on the 45 omitted pages?&quot;,
       &quot;scope_change&quot;: &quot;Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.&quot;,
@@ -99107,7 +99107,7 @@
     },
     {
       &quot;id&quot;: &quot;deor-ciphertext-subtract-warning&quot;,
-      &quot;motivation&quot;: &quot;The earlier test used a four-rune DEOR starting key on only ten pages. This checks the other 45 rune pages for a specific known opening, rather than relying on a rough text-quality score.&quot;,
+      &quot;motivation&quot;: &quot;Apply this DEOR decoding rule to the 45 manuscript pages outside the earlier ten-page test and check for the exact beginning of an already decoded passage. A match would concern that beginning, not a whole decoded page.&quot;,
       &quot;title&quot;: &quot;DEOR ciphertext feedback: subtract&quot;,
       &quot;question&quot;: &quot;Does the source four-index DEOR seed with ciphertext feedback (subtract) recover the fixed 12-rune Warning opening on the 45 omitted pages?&quot;,
       &quot;scope_change&quot;: &quot;Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.&quot;,
@@ -99633,7 +99633,7 @@
     },
     {
       &quot;id&quot;: &quot;deor-ciphertext-add-warning&quot;,
-      &quot;motivation&quot;: &quot;The earlier test used a four-rune DEOR starting key on only ten pages. This checks the other 45 rune pages for a specific known opening, rather than relying on a rough text-quality score.&quot;,
+      &quot;motivation&quot;: &quot;Apply this DEOR decoding rule to the 45 manuscript pages outside the earlier ten-page test and check for the exact beginning of an already decoded passage. A match would concern that beginning, not a whole decoded page.&quot;,
       &quot;title&quot;: &quot;DEOR ciphertext feedback: add&quot;,
       &quot;question&quot;: &quot;Does the source four-index DEOR seed with ciphertext feedback (add) recover the fixed 12-rune Warning opening on the 45 omitted pages?&quot;,
       &quot;scope_change&quot;: &quot;Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.&quot;,
@@ -100159,7 +100159,7 @@
     },
     {
       &quot;id&quot;: &quot;deor-ciphertext-beaufort-warning&quot;,
-      &quot;motivation&quot;: &quot;The earlier test used a four-rune DEOR starting key on only ten pages. This checks the other 45 rune pages for a specific known opening, rather than relying on a rough text-quality score.&quot;,
+      &quot;motivation&quot;: &quot;Apply this DEOR decoding rule to the 45 manuscript pages outside the earlier ten-page test and check for the exact beginning of an already decoded passage. A match would concern that beginning, not a whole decoded page.&quot;,
       &quot;title&quot;: &quot;DEOR ciphertext feedback: beaufort&quot;,
       &quot;question&quot;: &quot;Does the source four-index DEOR seed with ciphertext feedback (beaufort) recover the fixed 12-rune Warning opening on the 45 omitted pages?&quot;,
       &quot;scope_change&quot;: &quot;Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.&quot;,
@@ -100695,7 +100695,7 @@
     },
     {
       &quot;id&quot;: &quot;divinity-plaintext-word-reset-warning24&quot;,
-      &quot;motivation&quot;: &quot;Earlier tests restarted the DIVINITY key at each page and found no candidates passing their text-quality screen. This checks whether restarting at every word changes the answer for a fixed known opening on four relevant pages.&quot;,
+      &quot;motivation&quot;: &quot;Use the DIVINITY rule on four pages, restarting it at each word instead of each page. Check whether that version produces the exact beginning of an already decoded passage.&quot;,
       &quot;title&quot;: &quot;DIVINITY plaintext autokey: restart each word&quot;,
       &quot;question&quot;: &quot;Does DIVINITY-seeded plaintext autokey, restarted at each transcription word, recover the fixed 24-rune Warning opening on the four declared pages?&quot;,
       &quot;scope_change&quot;: &quot;Change the source DIVINITY autokey from page resets to a newly specified reset at every non-rune character. Limit the check to LP2-16, LP2-27, LP2-32 and LP2-35, whose first 24 runes enter feedback within a word longer than the eight-index seed. This differs from FH3, which repeats a key after its seed rather than feeding back plaintext or ciphertext.&quot;,
@@ -101048,7 +101048,7 @@
     },
     {
       &quot;id&quot;: &quot;divinity-ciphertext-word-reset-warning24&quot;,
-      &quot;motivation&quot;: &quot;Earlier tests restarted the DIVINITY key at each page and found no candidates passing their text-quality screen. This checks whether restarting at every word changes the answer for a fixed known opening on four relevant pages.&quot;,
+      &quot;motivation&quot;: &quot;Use the DIVINITY rule on four pages, restarting it at each word instead of each page. Check whether that version produces the exact beginning of an already decoded passage.&quot;,
       &quot;title&quot;: &quot;DIVINITY ciphertext autokey: restart each word&quot;,
       &quot;question&quot;: &quot;Does DIVINITY-seeded ciphertext autokey, restarted at each transcription word, recover the fixed 24-rune Warning opening on the four declared pages?&quot;,
       &quot;scope_change&quot;: &quot;Change the source DIVINITY autokey from page resets to a newly specified reset at every non-rune character. Limit the check to LP2-16, LP2-27, LP2-32 and LP2-35, whose first 24 runes enter feedback within a word longer than the eight-index seed. This differs from FH3, which repeats a key after its seed rather than feeding back plaintext or ciphertext.&quot;,
@@ -107621,7 +107621,7 @@
   &quot;browser_followups&quot;: [
     {
       &quot;id&quot;: &quot;deor-literal-f-word-reset&quot;,
-      &quot;motivation&quot;: &quot;Earlier searches looked for outputs with plausible one-rune words while allowing the key to continue across a page. This check keeps every F unchanged and restarts the source&#x27;s three-index DEOR key at each word on LP2-11.&quot;,
+      &quot;motivation&quot;: &quot;Apply the selected DEOR rule on LP2-11, leaving every F rune unchanged and restarting the key at each word. The output lets readers inspect exactly what this word-by-word version produces.&quot;,
       &quot;title&quot;: &quot;Restart the DEOR key at each word while copying F&quot;,
       &quot;question&quot;: &quot;What does the fixed DEOR rule output when F stays literal and the key restarts at every word?&quot;,
       &quot;scope_change&quot;: &quot;Keep LP2-11 and the source DEOR array [23, 12, 4], subtraction and phase zero. Copy every F unchanged without consuming a key rune, then restart the key at every non-rune boundary. The earlier mask search tested page-local key counters, including the all-F mask; it did not restart at words.&quot;,

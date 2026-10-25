@@ -388,7 +388,7 @@
   "browser_followups": [
     {
       "id": "lag-six-non-rune-boundaries",
-      "motivation": "The earlier six-position pattern was counted in words that could continue across spaces, slashes and line breaks. This check treats every non-rune character as a word break to ask whether the same selected pattern survives without those joins.",
+      "motivation": "Count pairs six places apart within words that follow the earlier selected number rule, keeping spaces, slashes and line breaks as word breaks. Compare with the earlier count to see whether the pattern depends on joining text across those breaks.",
       "title": "Does the six-rune pattern depend on word breaks?",
       "question": "Compare the same rune rule with and without joining text across layout marks.",
       "scope_change": "Use every non-rune as a word boundary on LP2-00–55. The published test splits only at hyphens and periods, allowing words to continue across slashes and newlines. This prepared measurement changes only that segmentation rule.",

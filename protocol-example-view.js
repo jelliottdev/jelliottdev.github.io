@@ -8,6 +8,8 @@
  }
  function affine(criterion,alphabet){
   const {a,b,lag}=criterion,later=(a+b)%29,earlierRune=esc(alphabet[1].rune),laterRune=esc(alphabet[later].rune),gap=lag-1;
+  if(a===1&&b===0)return '<div class="protocol-example-pair"><span><span class="protocol-example-runes">'+earlierRune+'</span><small>Earlier</small></span><span class="protocol-example-distance">'+(gap?gap+' intervening rune'+(gap===1?'':'s'):'Adjacent runes')+'</span><span><span class="protocol-example-runes">'+earlierRune+'</span><small>Later</small></span></div>'+
+   '<p>If the same rune appears '+lag+' position'+(lag===1?'':'s')+' ahead inside the same word, count one match.</p>';
   return '<div class="protocol-example-pair"><span><span class="protocol-example-runes">'+earlierRune+'</span><small>index 1</small></span><span class="protocol-example-distance">'+(gap?gap+' intervening rune'+(gap===1?'':'s'):'Adjacent runes')+'</span><span><span class="protocol-example-runes">'+laterRune+'</span><small>index '+later+'</small></span><span class="protocol-example-equation">('+a+' × 1 + '+b+') mod 29 = '+later+'</span></div>'+
    '<p>If the rune '+lag+' position'+(lag===1?'':'s')+' ahead in the same word has index '+later+', count one match. “mod 29” keeps the remainder after dividing by 29.</p>';
  }

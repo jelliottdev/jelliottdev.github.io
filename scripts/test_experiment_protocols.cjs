@@ -18,6 +18,13 @@ function check(c){
   const c={kind:'word-affine-count',lag,a,b,boundaries};check(c);assert.equal(P.describe(c).title,`Within-word rune pairs · lag ${lag} · ${boundaries}`);
  }
  const base={kind:'word-affine-count',lag:6,a:27,b:24,boundaries:'non-rune'};
+ for(let lag=1;lag<=12;lag++)for(const boundaries of ['non-rune','hyphen-period']){
+  const c={kind:'word-affine-count',lag,a:1,b:0,boundaries},before=structuredClone(c),d=P.describe(c);check(c);
+  assert.equal(d.review,`Count pairs of the same rune ${lag} ${lag===1?'position':'positions'} apart inside a word.`);
+  assert(!/mod 29|alphabet positions/.test(d.review));assert(d.plan.includes('y = 1x + 0 (mod 29)'),'The full exact plan retains its algebra');
+  assert.deepEqual(d.settings.filter(s=>['a','b'].includes(s.key)).map(s=>s.value),[1,0]);assert.deepEqual(c,before);
+ }
+ for(let a=0;a<29;a++)for(let b=0;b<29;b++)if(a!==1||b!==0){const d=P.describe({...base,a,b});assert.equal(d.review,`Count pairs 6 runes apart when later = (${a} × earlier + ${b}) mod 29. Use alphabet positions 0–28.`);}
  for(const invalid of [null,[],{},'word-prime-sums',{kind:'measurement'},{...base,extra:1},{...base,lag:0},{...base,lag:13},{...base,lag:1.5},{...base,lag:'6'},{...base,a:-1},{...base,a:29},{...base,b:NaN},{...base,b:Infinity},{...base,b:null},{...base,b:undefined},{...base,boundaries:'space'}, {kind:'word-prime-sums',table:'normal',boundaries:'non-rune'}, {kind:'word-prime-sums',table:'reversed'}]){
   assert.equal(P.identify(invalid),null);assert.equal(P.describe(invalid),null);assert.equal(P.variant(invalid,'word-boundaries'),null);
  }
