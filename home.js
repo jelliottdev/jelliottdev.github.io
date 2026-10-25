@@ -1,7 +1,7 @@
 'use strict';
 (() => {
  const $=id=>document.getElementById(id);
- const idea=$('idea'),form=$('check-idea'),picker=$('file-input'),review=$('file-review');
+ const idea=$('idea'),entry=$('idea-entry'),form=$('check-idea'),picker=$('file-input'),review=$('file-review');
  const draftKey='liberpedia-home-refined-draft-v1',limit=IdeaInput.MAX_LENGTH,maxFiles=5,maxBytes=10*1024*1024;
  let files=[],filesTouched=false,saveQueue=Promise.resolve(),saveVersion=0,previewVersion=0;
  const urls=new Map();
@@ -11,6 +11,7 @@
  function status(message=''){const node=$('idea-feedback');node.textContent=message;node.hidden=!message}
  function rememberText(){try{sessionStorage.setItem(draftKey,idea.value)}catch{}}
  function validate(){
+  entry.href=IdeaInput.issue(idea.value)?'investigate.html?v=complete-current-20261024':IdeaInput.href(idea.value);
   idea.required=files.length===0;
   const over=idea.value.length-limit;
   idea.setCustomValidity(!files.length&&over>0?`${over.toLocaleString()} ${over===1?'character':'characters'} over the text limit. Shorten the idea to continue; attached files are available for local preview only.`:'');
@@ -19,6 +20,10 @@
  try{idea.value=sessionStorage.getItem(draftKey)||''}catch{}
  validate();
  idea.addEventListener('input',()=>{rememberText();validate();status(!files.length&&idea.value.length>limit?idea.validationMessage:'')});
+ entry.addEventListener('click',event=>{
+  rememberText();validate();
+  if(idea.value.trim()&&IdeaInput.issue(idea.value)){event.preventDefault();status(IdeaInput.issue(idea.value));idea.focus()}
+ });
  const database=new Promise((resolve,reject)=>{
   const request=window.indexedDB.open('liberpedia-home-files-v1',1);
   request.onupgradeneeded=()=>request.result.createObjectStore('drafts',{keyPath:'id'});

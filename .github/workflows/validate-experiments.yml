@@ -180,6 +180,10 @@ jobs:
       - run: node scripts/test_authored_prefix_review.cjs
       - run: node scripts/test_subset_control_package.cjs
       - run: node --experimental-sqlite scripts/test_authored_question_loop.mjs
+      - run: node --experimental-sqlite scripts/test_authored_strict_reuse.mjs
+      - run: node scripts/test_authored_measurement_review.cjs
+      - run: node scripts/test_measurement_comparison_view.cjs
+      - run: node --experimental-sqlite scripts/test_authored_measurement_loop.mjs
       - run: node scripts/test_question_progression_ui.cjs
       - run: node --experimental-sqlite scripts/test_ordinary_prefix_reuse.mjs
       - run: node scripts/test_keyed_method_clarification.cjs
@@ -246,6 +250,7 @@ jobs:
       - run: node --experimental-sqlite scripts/test_saved_idea_review.mjs
       - run: node scripts/test_factored_prefix_intersections.cjs
       - run: node scripts/test_research_browser.cjs
+      - run: node scripts/test_research_help.cjs
       - run: node scripts/test_research_graph_geometry.cjs
       - run: node scripts/test_research_graph_controller.cjs
       - run: node scripts/test_research_graph_accessibility.cjs

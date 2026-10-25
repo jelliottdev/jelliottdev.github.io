@@ -19,6 +19,30 @@ def question(**changes):
 
 
 class QuestionShapeTests(unittest.TestCase):
+    def test_selected_lag_five_question_binds_existing_recipe_without_recasting_the_search(self):
+        root = Path(__file__).resolve().parents[1]
+        record = json.loads((root / 'experiments/records/word-internal-affine-all-lags/record.json').read_text(encoding='utf-8'))
+        before = copy.deepcopy(record)
+        validate_research_questions(record['research_questions'], record)
+        question = record['research_questions'][0]
+        recipe = record['browser_followups'][0]
+        reference = protocol_reference(question, record)
+        self.assertEqual(reference['id'], 'word-boundary-sensitivity')
+        self.assertEqual(reference['parameters'], {'lag': 5, 'a': 1, 'b': 0})
+        self.assertEqual(reference['followupId'], 'lag-five-equality-non-rune-boundaries')
+        self.assertEqual(reference['inputs'], recipe['inputs'])
+        self.assertEqual(len(reference['inputs']['pages']), 56)
+        self.assertEqual(question['state'], 'open')
+        self.assertEqual(question['records'], [])
+        self.assertIn('already selected', question['note'])
+        self.assertIn('does not repeat the original 10,092-relation selection', question['note'])
+        self.assertIn('not an independent discovery or a new significance test', recipe['limitation'])
+        self.assertEqual(record, before)
+        bad = copy.deepcopy(record)
+        bad['research_questions'][0]['followup'] = 'lag-six-non-rune-boundaries'
+        with self.assertRaisesRegex(ValueError, 'research_questions'):
+            validate_research_questions(bad['research_questions'], bad)
+
     def test_fixed_prefix_reference_reuses_existing_compiler_and_exact_recipe_pins(self):
         root = Path(__file__).resolve().parents[1]
         record = json.loads((root / 'experiments/records/lp2-row-column-routes/record.json').read_text(encoding='utf-8'))

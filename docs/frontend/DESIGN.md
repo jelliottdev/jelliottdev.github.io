@@ -100,3 +100,17 @@ below it; the outcome and its specific objective remain visible above it.
 Existing experiments come first on return visits. A truncated list does not
 establish that no experiment exists. Retry preparation explicitly after errors;
 late responses must not replace another idea's workspace.
+
+### Contribution entry (25 October)
+
+A visitor need not bring a theory. Home and the research map offer **Help with
+an existing check**, which leads directly to maintained browser calculations.
+The chooser uses each record's validated follow-ups; its plain headings describe
+the declared calculation, with the source question and research link retained.
+Do not hand-maintain a separate task catalogue or label a recipe as unfinished:
+current saved evidence is checked on the review page before offering work.
+
+Explain the sequence in ordinary words: review, run in this browser, choose
+whether to save. Say how saving updates the question's checked work. Keep exact
+rules available before Run, and distinguish a completed calculation from a
+decipherment. Learning exercises must not imply that practice adds new evidence.

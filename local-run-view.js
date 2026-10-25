@@ -192,5 +192,33 @@
   const value=inspectionOutputs.get(token);if(!value)throw Error('Verify the original output before displaying it.');
   return '<section class="run-output-inspection"><h3>Transformed text · '+esc(value.pageId.toUpperCase())+'</h3><p>'+ (value.hasRunes?'Exact rune text after the declared method.':'This output contains no runes. Its exact punctuation and spacing are shown below.')+' This does not decide readability or a decryption.</p><pre class="run-language-excerpt" data-inspection-rune-text>'+esc(value.text)+'</pre></section>';
  }
- const api={render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ const measurementComparisons=new WeakMap();
+ function measurementData(token){const value=measurementComparisons.get(token);if(!value)throw Error('Use independently verified saved measurements.');return value;}
+ async function prepareMeasurementComparison(value,crypto=root.crypto){
+  const node=typeof module==='object'&&module.exports,J=node?require('./finite-json.js'):root.FiniteJSON,R=node?require('./computation-evidence.js'):root.ComputationEvidence,Q=node?require('./question-evidence.js'):root.QuestionEvidence;
+  const captured=J.capture(value,{maxBytes:16*1024*1024,maxDepth:24,maxNodes:1000000});
+  if(!captured||Object.keys(captured).length!==3||!['task','inputVersion','sources'].every(key=>Object.hasOwn(captured,key))||!['measurement','word-affine-count','word-prime-sums'].includes(captured.task?.criterion?.kind)||!Array.isArray(captured.sources)||captured.sources.length>75)throw Error('Use bounded original saved measurements for this exact question.');
+  const comparison=await R.compare(captured.task,captured.inputVersion,captured.sources,crypto),verified=new Map();
+  // Verify whole original receipts, including pages outside the requested subset.
+  for(const source of captured.sources){const result=await E.verify(source.task,source.run.result,crypto);verified.set(source.task.taskId,{...source,run:{...source.run,result}});}
+  const witnesses=new Map();for(const ref of comparison.evidence)for(const id of ref.pages)if(!witnesses.has(id))witnesses.set(id,verified.get(ref.taskId));
+  const pages=captured.task.pages.filter(page=>witnesses.has(page.id)),task={...captured.task,pages},outputs=pages.map(page=>witnesses.get(page.id).run.result.transformed.find(row=>row.page===page.id));
+  const data={task,coveredPages:comparison.coveredPages,remainingPages:comparison.remainingPages,declaredCount:captured.task.pages.length,outputs,runes:outputs.reduce((total,page)=>total+Array.from(page.text).filter(ch=>captured.task.alphabet.some(entry=>entry.rune===ch)).length,0)};
+  if(captured.task.criterion.kind==='word-affine-count')data.wordPairs=(await Q.summarize(captured.task,captured.inputVersion,captured.sources,crypto)).wordPairs;
+  if(captured.task.criterion.kind==='word-prime-sums'){
+   const sums=pages.map(page=>witnesses.get(page.id).run.result.wordSums.pages.find(row=>row.page===page.id));data.wordSums={pages:sums,words:sums.reduce((n,page)=>n+page.words.length,0),total:sums.reduce((n,page)=>n+page.words.reduce((m,word)=>m+word.sum,0),0)};
+  }
+  const token=Object.freeze({});measurementComparisons.set(token,data);return token;
+ }
+ function renderMeasurementComparison(token){
+  const data=measurementData(token),{task}=data,partial=data.remainingPages.length>0,scope='<p class="run-text-note">'+data.coveredPages.length+' of '+data.declaredCount+' declared pages. '+(partial?'These values describe covered pages only.':'All declared pages have saved calculations.')+'</p>';
+  if(!data.coveredPages.length)return '<section class="measurement-comparison"><p>No saved calculations for these exact settings.</p></section>';
+  let body;
+  if(task.criterion.kind==='word-affine-count')body='<h3>Saved within-word pair counts</h3>'+wordPairChart(task,{wordPairs:data.wordPairs})+'<p class="run-limit">This is an exact rearrangement average, not a significance test or evidence of a decipherment.</p>';
+  else if(task.criterion.kind==='word-prime-sums')body='<h3>Saved word totals</h3><p>'+data.wordSums.words.toLocaleString('en-US')+' measured words; combined total '+data.wordSums.total.toLocaleString('en-US')+'.</p>'+wordSumsView(task,{wordSums:data.wordSums})+'<p class="run-limit">These totals do not decode the text or establish that a pattern is meaningful.</p>';
+  else body=outputPreview(task,{transformed:data.outputs})+'<p>'+data.runes.toLocaleString('en-US')+' runes in the saved output.</p>';
+  return '<section class="measurement-comparison">'+scope+body+'</section>';
+ }
+ function bindMeasurementComparison(host,token){const data=measurementData(token);if(!data.coveredPages.length)return ()=>{};return data.task.criterion.kind==='word-prime-sums'?bindWordSums(host,data.task,{wordSums:data.wordSums}):data.task.criterion.kind==='measurement'?bindOutputPreview(host,data.task,{transformed:data.outputs}):()=>{};}
+ const api={prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

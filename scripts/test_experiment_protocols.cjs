@@ -4,7 +4,7 @@ const P=require('../experiment-protocols.js'),E=require('../local-experiment.js'
 const alphabet=JSON.parse(fs.readFileSync('data/index.json','utf8')).alphabet.map(({rune,latin,prime})=>({rune,latin,prime}));
 let checked=0;
 function check(c){
- const saved=structuredClone(c),def=P.identify(c),d=P.describe(c);assert(def);assert.equal(d.id,c.kind);assert.equal(d.operationId,def.operation.id);assert(d.heading&&d.question&&d.plan&&d.limit&&d.compilerNote);assert.equal(d.heading,c.kind==='word-prime-sums'?'Adding rune values within words':`Rune pairs ${c.lag} positions apart`);assert(!d.heading.includes('hyphen-period'));assert(!d.heading.includes(' · '));assert.equal(d.settings.length,Object.keys(def.fields).length);
+ const saved=structuredClone(c),def=P.identify(c),d=P.describe(c);assert(def);assert.equal(d.id,c.kind);assert.equal(d.operationId,def.operation.id);assert(d.heading&&d.question&&d.review&&d.reviewBoundary&&d.plan&&d.limit&&d.compilerNote);assert.equal(d.heading,c.kind==='word-prime-sums'?'Adding rune values within words':`Rune pairs ${c.lag} positions apart`);assert(!d.heading.includes('hyphen-period'));assert(!d.heading.includes(' · '));assert.equal(d.settings.length,Object.keys(def.fields).length);
  const op={id:def.operation.id,label:def.operation.label};for(const k of Object.keys(def.fields))op[k]=c[k];assert.deepEqual(P.fromOperation(op),c);
  if(!def.operation.labelRequired){delete op.label;assert.deepEqual(P.fromOperation(op),c);}else{delete op.label;assert.equal(P.fromOperation(op),null);}
  assert.equal(P.fromOperation({...op,extra:true}),null);assert.equal(P.fromOperation({...op,declaredFamilyId:'word-structure'}),null);assert.equal(P.fromOperation({...op,label:'Other'}),null);

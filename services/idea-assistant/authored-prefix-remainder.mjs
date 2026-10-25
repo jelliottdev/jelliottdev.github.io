@@ -19,9 +19,10 @@ export async function strictPrefixMatch({db,task,inputVersion,evidence}){
  return sources.some(source=>source.task.pages.some(page=>pages.get(page.id)===page.text&&source.run.result.matches?.some(match=>match.page===page.id&&match.matched===true)));
 }
 export async function checkedRecordRemainder({basis,card,task,inputVersion,fetcher}){
- if(!exact(basis,['kind','remainderBasis','origin','fullTaskHash','controlHash'])||basis.kind!=='record-derived-prefix-remainder-v1'||basis.remainderBasis?.kind!=='ordinary-derived-prefix-remainder-v1')throw Error('Invalid authored remainder basis');
+ const strict=basis?.kind==='record-strict-evidence-remainder-v1';
+ if(strict?!exact(basis,['kind','requestedTaskId','strictEvidence','origin','fullTaskHash','controlHash']):!exact(basis,['kind','remainderBasis','origin','fullTaskHash','controlHash'])||basis.kind!=='record-derived-prefix-remainder-v1'||basis.remainderBasis?.kind!=='ordinary-derived-prefix-remainder-v1')throw Error('Invalid authored remainder basis');
  const {loadRecordPlan}=await import('./record-plans.mjs'),reviewed=await loadRecordPlan(basis.origin,{fetcher});
- if(!same(reviewed.origin,basis.origin)||!same(reviewed.card,card)||reviewed.inputVersion!==inputVersion||reviewed.task.criterion.kind!=='exact-prefix'||await hash(reviewed.task)!==basis.fullTaskHash||await hash(reviewed.control)!==basis.controlHash||!same(reviewed.task.steps,task.steps)||!same(reviewed.task.criterion,task.criterion)||!same(reviewed.task.alphabet,task.alphabet)||!same(task.pages,reviewed.task.pages.filter(p=>task.pages.some(q=>q.id===p.id))))throw Error('The authored source, controls or remaining task changed');
+ if(!same(reviewed.origin,basis.origin)||!same(reviewed.card,card)||reviewed.inputVersion!==inputVersion||!(strict?['measurement','word-affine-count','word-prime-sums'].includes(reviewed.task.criterion.kind):reviewed.task.criterion.kind==='exact-prefix')||await hash(reviewed.task)!==basis.fullTaskHash||await hash(reviewed.control)!==basis.controlHash||!same(reviewed.task.steps,task.steps)||!same(reviewed.task.criterion,task.criterion)||!same(reviewed.task.alphabet,task.alphabet)||!same(task.pages,reviewed.task.pages.filter(p=>task.pages.some(q=>q.id===p.id))))throw Error('The authored source, controls or remaining task changed');
  // A zero-covered first review may still request the complete task. The closed
  // evidence basis below remains responsible for the exact unanswered complement.
  return reviewed;

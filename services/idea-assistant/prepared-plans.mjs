@@ -56,8 +56,18 @@ async function proposal(db,bound){
 async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
-  if(basis.kind==='record-derived-prefix-remainder-v1'){
-   await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,fetcher});
+  if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind)){
+   const reviewed=await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,fetcher});
+   if(basis.kind==='record-strict-evidence-remainder-v1'){
+    require(bound.base.parentTaskId===null&&typeof basis.requestedTaskId==='string'&&HEX.test(basis.requestedTaskId)&&Array.isArray(basis.strictEvidence)&&basis.strictEvidence.length<=75,'Invalid strict authored remainder binding');
+    const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
+    require(row&&row.input_version===bound.base.inputVersion,'Requested authored scope is unavailable');const requested=JSON.parse(row.requested_task_json);await E.checkIdentity(requested);
+    require(requested.taskId===basis.requestedTaskId&&await sha(E.stable(requested))===row.requested_task_hash&&['engine','alphabet','steps','criterion','pages'].every(key=>E.stable(requested[key])===E.stable(reviewed.task[key])),'Requested authored scope changed');
+    const pinned=await checkedEvidence({db,task:requested,inputVersion:row.input_version,evidence:basis.strictEvidence});
+    require(pinned.remainingPages.length>0&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(page=>pinned.remainingPages.includes(page.id))),'Authored strict remainder changed the exact unchecked pages');
+    if(fresh){const current=await findEvidence({db,task:requested,inputVersion:row.input_version});require(!current.truncated&&E.stable(current.remainingPages)===E.stable(pinned.remainingPages),'Saved work changed; review the authored remaining pages again');}
+    return {text:data.text,hash:await sha(data.text)};
+   }
    await basisFor(db,basis.remainderBasis,bound,authority,fresh,fetcher);
    const requestedRow=await query(db,'SELECT requested_task_json FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.remainderBasis.requestedTaskId);
    require(!await strictPrefixMatch({db,task:JSON.parse(requestedRow.requested_task_json),inputVersion:bound.base.inputVersion,evidence:basis.remainderBasis.strictEvidence}),'The authored opening is already found');
@@ -200,6 +210,6 @@ export async function authorize({db,preparationId,proposalId,card,task,inputVers
   await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
   await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
  const receipt=await checked(row,bound);if(!receipt)return null;
- try{const basis=JSON.parse(row.basis_json);if(['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher);if(basis.kind==='record-derived-prefix-remainder-v1')return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
+ try{const basis=JSON.parse(row.basis_json);if(['ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
  return receipt;
 }

@@ -75,4 +75,17 @@ function exactTextHandoff(){
  const home=fs.readFileSync(require.resolve('../home.html'),'utf8');assert(home.indexOf('src="idea-input.js')<home.indexOf('src="home.js'),'Shared contract loads before home handlers');
  console.log('PASS home handoff: exact Unicode/emoji/code at the limit, text-only and file-review routes, no text in HTTP query, legacy links and malformed-link recovery.');
 }
-(async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();cachedNavigation();exactTextHandoff();console.log('PASS production home preview: stale reads ignored, current errors and exact-code retry preserved, Back-cache URLs retained and discarded-page URLs released; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});
+function titleDraftHandoff(){
+ const f=fixture({attachments:false}),entry=f.get('idea-entry');
+ assert.equal(entry.href,'investigate.html?v=complete-current-20261024');
+ const text='  Compare ᚠ and 字\nwith 0X / 0x  ';f.get('idea').value=text;f.get('idea').listeners.input();
+ assert.equal(entry.href,Input.href(text),'The title link preserves exact draft text, including for native modified clicks');
+ let prevented=false;entry.listeners.click({preventDefault(){prevented=true;}});
+ assert.equal(prevented,false);assert.equal(f.navigations.length,0,'The title remains navigation and never submits a check');
+ assert.equal(Input.read(new URL(entry.href,'https://example.org/')).text,text);
+ f.get('idea').value='x'.repeat(1501);entry.listeners.click({preventDefault(){prevented=true;}});
+ assert.equal(prevented,true);assert.equal(f.get('idea').value.length,1501);assert.match(f.get('idea-feedback').textContent,/1,500/);
+ assert(markup.includes('href="research.html?help=1">Help with an existing check</a>'));
+ console.log('PASS home title: exact draft navigation, no submission, overlong draft recovery and direct existing-check route.');
+}
+(async()=>{await switchedRead('success');await switchedRead('failure');await sameFileRecovery();await overlappingSameFile();cachedNavigation();exactTextHandoff();titleDraftHandoff();console.log('PASS production home preview: stale reads ignored, current errors and exact-code retry preserved, Back-cache URLs retained and discarded-page URLs released; no browser/network/uploads.');})().catch(error=>{console.error(error);process.exitCode=1;});
