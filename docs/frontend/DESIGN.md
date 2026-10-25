@@ -107,8 +107,14 @@ A visitor need not bring a theory. Home and the research map offer **Help with
 an existing check**, which leads directly to maintained browser calculations.
 The chooser uses each record's validated follow-ups; its plain headings describe
 the declared calculation, with the source question and research link retained.
-Do not hand-maintain a separate task catalogue or label a recipe as unfinished:
-current saved evidence is checked on the review page before offering work.
+Do not hand-maintain a separate task catalogue or label a recipe as unfinished.
+The chooser verifies saved evidence for each selected rule before describing
+remaining work; the review page checks it again before Run. Keep unknown or
+incomplete lookups visibly distinct from missing results. A verified opening can
+answer its exact question before every page is checked. Complete measurements
+are saved results, not a claim that the manuscript is deciphered. Limit chooser
+lookups to two at once, load verification tools only on entry, and discard late
+updates after a selection change or closing the chooser.
 
 Explain the sequence in ordinary words: review, run in this browser, choose
 whether to save. Say how saving updates the question's checked work. Keep exact

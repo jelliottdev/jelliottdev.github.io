@@ -9,7 +9,15 @@
   [['task-variants.js','TaskVariants','validate']],
   [['record-question-live.js','RecordQuestionLive','createController']]
  ];
- const version='20261025-evidence-reuse',scripts=new Map();let pending=null;
+ const readinessStages=[
+  [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity']],
+  [['computation-evidence.js','ComputationEvidence','compare'],['experiment-protocols.js','ExperimentProtocols','describe'],['claim-specification.js','ClaimSpecification','createDraft'],['local-control.js','LocalControl','compatible'],['output-evaluators.js','OutputEvaluators','identify'],['local-input-bundle.js','LocalInputBundle','parse']],
+  [['claim-share.js','ClaimShare','cardData'],['verified-evidence-client.js','VerifiedEvidenceClient','create'],['verified-prefix-evaluation.js','VerifiedPrefixEvaluation','evaluate']],
+  [['record-followups.js','RecordFollowups','describeCard'],['fixed-plan-compiler.js','FixedPlanCompiler','compile']],
+  [['ordinary-prefix-evidence-client.js','OrdinaryPrefixEvidenceClient','verify']],
+  [['followup-readiness.js','FollowupReadiness','createController']]
+ ];
+ const version='20261025-evidence-reuse',scripts=new Map();let pending=null,readinessPending=null;
  const ready=([,name,method])=>root[name]&&typeof root[name][method]==='function';
  function ensure(definition){
   const [file,name]=definition;if(ready(definition))return Promise.resolve(root[name]);
@@ -29,5 +37,10 @@
   if(pending)return pending;
   pending=(async()=>{for(const stage of stages)await Promise.all(stage.map(ensure));return root.RecordQuestionLive;})().catch(error=>{pending=null;throw error;});return pending;
  }
- const api={load};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordQuestionRuntime=api;
+ function loadReadiness(){
+  if(ready(readinessStages.at(-1)[0]))return Promise.resolve(root.FollowupReadiness);
+  if(readinessPending)return readinessPending;
+  readinessPending=(async()=>{for(const stage of readinessStages)await Promise.all(stage.map(ensure));return root.FollowupReadiness;})().catch(error=>{readinessPending=null;throw error;});return readinessPending;
+ }
+ const api={load,loadReadiness};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordQuestionRuntime=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

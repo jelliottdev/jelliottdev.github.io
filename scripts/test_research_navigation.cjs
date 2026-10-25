@@ -21,10 +21,12 @@ const map=element('map'),panel=element('inspector'),heading=element('preview-hea
 const c={questionMount:null,document:doc,ResearchIndex:Index,ResearchWork:require('../research-work.js'),data,map,panel,dialog,dialogReturn:null,state:null,previous:'',previousRecord:'',lastGraphKey:'',preferredMode:'graph',indexResult:null,matching:new Set(),nodes:null,focus:null,layout:new Map(),listPositions:new Map(),listKey:'',camera:{x:21,y:-34,k:2.3},fitCalls:0,revealCalls:0,applyCalls:0,
  read:()=>structuredClone(requested),$:id=>id==='research-sort'?sortNode:elements.get(id),esc:String,aliases:{},outcomes:Index.outcomes,sorts:{title:'Title A–Z','title-desc':'Title Z–A',recent:'Recently checked'},resultColours:{},arrow:'',chevron:'',scopeLabel:()=>'',clearFilters(){},filteredChips(){},position(){},paintGraph(){},fit(){c.fitCalls++},revealSelection(){c.revealCalls++},applyCamera(){c.applyCalls++},showInspector(){panel.hidden=!c.state.record},requestAnimationFrame:fn=>fn(),url:next=>'#'+new URLSearchParams(next),navigate(changes){Object.assign(requested,changes);c.render()}};
 vm.createContext(c);vm.runInContext(source.match(/^ const count=.*$/m)[0],c);
-for(const name of ['workFor','recordHref','workFilterLabel','traversalChildren','passesRecordFilters','passes','recordNode','renderList','openDialog','closeDialog','render'])vm.runInContext(production(name),c);
+c.helpCleanup=null;
+for(const name of ['workFor','recordHref','workFilterLabel','traversalChildren','passesRecordFilters','passes','recordNode','renderList','clearHelp','openDialog','closeDialog','render'])vm.runInContext(production(name),c);
 // The complete production Sort path closes its dialog, focuses the old action,
 // and replaces List DOM. The new action must regain focus after replacement.
-c.render();const oldSort=sortNode;oldSort.onclick();assert(modalOpen);const descending=dialog.options.find(n=>n.dataset.sort==='title-desc');descending.onclick();
+let disposed=0;c.helpCleanup=()=>disposed++;
+c.render();const oldSort=sortNode;oldSort.onclick();assert(modalOpen);assert.equal(disposed,1);assert.equal(c.helpCleanup,null,'Opening another dialog releases contribution probes');const descending=dialog.options.find(n=>n.dataset.sort==='title-desc');descending.onclick();
 assert(!modalOpen);assert.equal(requested.sort,'title-desc');assert.notEqual(sortNode,oldSort);assert.equal(doc.activeElement,sortNode,'Sort must not leave keyboard focus on body after replacing its trigger');
 // An unchanged research context retains the camera when returning from List.
 requested.mode='graph';c.render();const initialFits=c.fitCalls;c.camera={x:213,y:-145,k:2.3};

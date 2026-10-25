@@ -195,9 +195,12 @@
  const up=event=>{const selected=gesture?.node;activePointers.delete(event.pointerId);if(activePointers.size)gesture={...pointerState(),camera:{...camera}};else if(event.type==='pointerup'&&!moved&&selected)activate(selected)};svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
  $('zoom-in').onclick=()=>zoom(1.35);$('zoom-out').onclick=()=>zoom(1/1.35);$('fit').onclick=fit;
  document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>navigate({view:button.dataset.view,branch:'',record:''}));
- function openDialog(title,html,button){dialogReturn=button;$('map-dialog-title').textContent=title;$('map-dialog-body').innerHTML=html;dialog.showModal();dialog.scrollTop=0}
+ let helpCleanup=null;
+ function clearHelp(){helpCleanup?.();helpCleanup=null;}
+ function openDialog(title,html,button){clearHelp();dialogReturn=button;$('map-dialog-title').textContent=title;$('map-dialog-body').innerHTML=html;dialog.showModal();dialog.scrollTop=0}
  function closeDialog(){dialog.close();dialogReturn?.focus({preventScroll:true})}$('close-map-dialog').onclick=closeDialog;
- function helpResearch(){if(!data)return;openDialog('Help with an existing check',ResearchHelp.render(data.records),$('help-research-button'));ResearchHelp.bind($('map-dialog-body'),data.records);}
+ dialog.addEventListener('close',clearHelp);
+ function helpResearch(){if(!data)return;openDialog('Help with an existing check',ResearchHelp.render(data.records),$('help-research-button'));const runtime=ResearchHelpRuntime.create({load:()=>RecordQuestionRuntime.loadReadiness(),pageURL:location.href}),unbind=ResearchHelp.bind($('map-dialog-body'),data.records,{createReadiness:runtime.createReadiness});helpCleanup=()=>{unbind?.();runtime.destroy();};}
  $('help-research-button').onclick=helpResearch;
  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeDialog()}});
  $('page-button').onclick=()=>{openDialog('Manuscript page','<button class="quiet-action" data-all-pages>All pages</button><div class="release-picker"><button data-release="2" aria-pressed="true">LP2</button><button data-release="1" aria-pressed="false">LP1</button></div><div class="page-picker"></div>',$('page-button'));
