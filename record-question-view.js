@@ -11,25 +11,26 @@
  function coversFollowups(record){const items=questions(record),recipes=followupView()?.recipes(record)||[];return recipes.length>0&&recipes.every(recipe=>items.some(item=>Object.hasOwn(item,'followup')&&item.followup===recipe.id));}
  function workspace(record,item,reference){return reference.id==='deor-warning-opening'?'run.html#family=deor-feedback-v1':'run.html#record='+record.id+'&followup='+item.followup;}
  function publishedLinks(item){return item.records.length?'<ul class="record-question-links">'+item.records.map((id,index)=>'<li><a href="library.html#/experiment/'+id+'">'+(item.records.length===1?'Read completed test':'Read completed test '+(index+1))+'</a></li>').join('')+'</ul>':'';}
+ const entryLink=(href,label='Try this check')=>'<p class="record-question-next"><a href="'+esc(href)+'">'+label+'</a></p>';
  function liveQuestion(record,item,reference,level){
   const href=workspace(record,item,reference);
-  return '<li><p class="record-question-title"><strong>'+esc(item.question)+'</strong></p><div class="record-live-question" data-live-question="'+esc(item.id)+'" data-question-heading="'+Math.min(level+1,4)+'" aria-live="polite"><p class="record-question-live-status">Current evidence has not been checked.</p><button type="button" data-question-activate>Check current evidence</button><p class="record-question-workspace"><a href="'+esc(href)+'">Open question workspace</a></p></div><details class="record-published-assessment"><summary>Published assessment</summary><p class="record-question-state">Published as '+(item.state==='tested'?'tested':'open')+'</p><p>'+esc(item.note)+'</p>'+publishedLinks(item)+'</details></li>';
+  return '<li><p class="record-question-title"><strong>'+esc(item.question)+'</strong></p><div class="record-live-question" data-live-question="'+esc(item.id)+'" data-question-heading="'+Math.min(level+1,4)+'" aria-live="polite">'+entryLink(href)+'<p class="record-question-live-status">Saved results have not been checked.</p><button type="button" data-question-activate>Check saved results</button></div><details class="record-published-assessment"><summary>Published assessment</summary><p class="record-question-state">Published as '+(item.state==='tested'?'tested':'open')+'</p><p>'+esc(item.note)+'</p>'+publishedLinks(item)+'</details></li>';
  }
  function render(record,{headingLevel=2,fallback=''}={}){
   const level=[2,3,4].includes(headingLevel)?headingLevel:2;
   if(!object(record)||!Object.hasOwn(record,'research_questions'))return text(fallback,10000)?'<section id="experiment-remaining"><h'+level+'>What remains open</h'+level+'><p>'+esc(fallback)+'</p></section>':'';
   const items=questions(record);if(!items.length)return '';
-  return '<section id="experiment-remaining" class="record-questions"><h'+level+'>Questions to explore</h'+level+'><ul>'+items.map(item=>{const reference=model.protocolReference(record,item.id,followupView()?.recipes(record)||[]);return reference?liveQuestion(record,item,reference,level):'<li><p class="record-question-title"><strong>'+esc(item.question)+'</strong>'+' <span class="record-question-state">'+(item.state==='tested'?'Tested':'Open')+'</span>'+'</p><p>'+esc(item.note)+'</p>'+publishedLinks(item)+(Object.hasOwn(item,'followup')?'<p><a href="run.html#record='+record.id+'&amp;followup='+item.followup+'">'+(item.state==='tested'?'Review reproduction':'Review follow-up')+'</a></p>':'')+'</li>';}).join('')+'</ul></section>';
+  return '<section id="experiment-remaining" class="record-questions"><h'+level+'>Questions to explore</h'+level+'><ul>'+items.map(item=>{const reference=model.protocolReference(record,item.id,followupView()?.recipes(record)||[]);return reference?liveQuestion(record,item,reference,level):'<li><p class="record-question-title"><strong>'+esc(item.question)+'</strong>'+' <span class="record-question-state">'+(item.state==='tested'?'Tested':'Open')+'</span>'+'</p><p>'+esc(item.note)+'</p>'+publishedLinks(item)+(Object.hasOwn(item,'followup')?'<p class="record-question-next"><a href="run.html#record='+record.id+'&amp;followup='+item.followup+'">'+(item.state==='tested'?'Review this check':'Try this check')+'</a></p>':'')+'</li>';}).join('')+'</ul></section>';
  }
  function mount(host,record,options={}){
   mounts.get(host)?.destroy();let dead=false,observer=null;
   const captured=JSON.parse(JSON.stringify(record)),items=new Map(questions(captured).map(item=>[item.id,item])),entries=[],loadLive=options.loadLive||(()=>root.RecordQuestionRuntime?.load?root.RecordQuestionRuntime.load():Promise.reject(Error('Current evidence tools are unavailable.')));
   function display(entry,value){
    if(dead)return;const {element,href,reference}=entry,level=entry.level;
-   if(value?.state==='loading'){element.innerHTML='<p class="record-question-live-status" role="status">Checking current evidence…</p>';return;}
+   if(value?.state==='loading'){element.innerHTML=entryLink(href)+'<p class="record-question-live-status" role="status">Checking saved results…</p>';return;}
    const decision=value?.decision,valid=decision&&decision.schema==='liberpedia-question-decision-v1'&&decision.state===value.state&&decision.question?.id===reference.id&&['heading','finding','limit'].every(key=>typeof decision[key]==='string'&&decision[key].trim());
    if(!valid||value.state==='unavailable'){
-    element.innerHTML='<p class="record-question-live-status">Current evidence could not be checked.</p><button type="button" data-question-retry>Retry current evidence</button><p class="record-question-workspace"><a href="'+esc(href)+'">Open question workspace</a></p>';return;
+    element.innerHTML=entryLink(href)+'<p class="record-question-live-status">Saved results could not be checked.</p><button type="button" data-question-retry>Retry saved results</button>';return;
    }
    if(!['answered','missing-evidence'].includes(value.state)){display(entry,{state:'unavailable'});return;}
    let next='';
@@ -38,7 +39,7 @@
     const caseId=decision.next.caseIds?.[0],revision=decision.evidence?.revision;if(typeof caseId==='string'&&/^[a-z0-9-]{1,200}$/.test(caseId)&&typeof revision==='string'&&/^[a-f0-9]{64}$/.test(revision))next='<p class="record-question-next"><a href="run.html#family=deor-feedback-v1&amp;case='+esc(caseId)+'&amp;revision='+revision+'">Inspect matching output</a></p>';
    }
    if(value.state==='answered'&&decision.next?.kind==='inspect-evidence'&&reference.id==='fixed-program-prefix')next='<p class="record-question-next"><a href="'+esc(href)+'">Inspect matching output</a></p>';
-   element.innerHTML='<h'+level+' class="record-question-answer">'+esc(decision.heading)+'</h'+level+'><p>'+esc(decision.finding)+'</p><p class="record-question-live-limit">'+esc(decision.limit)+'</p>'+next+(next?'':'<p class="record-question-workspace"><a href="'+esc(href)+'">Inspect source calculations</a></p>');
+   element.innerHTML='<h'+level+' class="record-question-answer">'+esc(decision.heading)+'</h'+level+'><p>'+esc(decision.finding)+'</p><p class="record-question-live-limit">'+esc(decision.limit)+'</p>'+next+(next?'':entryLink(href,value.state==='answered'?'See results':'Try this check'));
   }
   async function activate(entry,retry=false){
    if(dead||entry.pending||entry.activated&&!retry)return;entry.activated=true;const token=++entry.generation;display(entry,{state:'loading'});

@@ -1,3 +1,4 @@
+import {discoverOrdinaryPrefixEvidence,combineOrdinaryPrefixCoverage} from './ordinary-prefix-evidence.mjs';
 import Compiler from '../../fixed-plan-compiler.js';
 import AffineChoices from '../../affine-search-clarification.js';
 import KeyAlternatives from '../../key-alternatives-clarification.js';
@@ -25,7 +26,7 @@ async function jsonBody(message,max){
  while(true){const r=await reader.read();if(r.done)break;size+=r.value.length;if(size>max){await reader.cancel();throw Error();}chunks.push(r.value);}
  const bytes=new Uint8Array(size);let i=0;for(const chunk of chunks){bytes.set(chunk,i);i+=chunk.length;}return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
 }
-export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,remember=rememberEvidence}={}){
+export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,discoverPrefixEvidence=discoverOrdinaryPrefixEvidence,remember=rememberEvidence}={}){
  return async function handle(request,env){
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
   let allowed=false;try{allowed=typeof env?.SITE_ORIGIN==='string'&&new URL(env.SITE_ORIGIN).origin===env.SITE_ORIGIN&&['http:','https:'].includes(new URL(env.SITE_ORIGIN).protocol);}catch{}
@@ -40,7 +41,7 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
   }
   if(request.method!=='POST')return reply({error:'Method is not allowed.'},405);
   if(!env.PROPOSALS?.prepare||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Plan preparation is unavailable.'},503);
-  let body;try{body=await jsonBody(request,32000);const methodClarification=body&&Object.hasOwn(body,'includeMethodClarification');if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length!==(methodClarification?3:2)||!Object.hasOwn(body,'proposalId')||!Object.hasOwn(body,'parentTaskId')||methodClarification&&body.includeMethodClarification!==true||!/^p_[a-f0-9]{64}$/.test(body.proposalId)||(body.parentTaskId!==null&&!/^[a-f0-9]{64}$/.test(body.parentTaskId)))throw Error();}catch{return reply({error:'The plan request could not be read.'},400);}
+  let body;try{body=await jsonBody(request,32000);const flags=['includeMethodClarification','includeDerivedPrefixEvidence'].filter(key=>body&&Object.hasOwn(body,key));if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length!==2+flags.length||!Object.hasOwn(body,'proposalId')||!Object.hasOwn(body,'parentTaskId')||flags.some(key=>body[key]!==true)||!/^p_[a-f0-9]{64}$/.test(body.proposalId)||(body.parentTaskId!==null&&!/^[a-f0-9]{64}$/.test(body.parentTaskId)))throw Error();}catch{return reply({error:'The plan request could not be read.'},400);}
   try{
    if(!(await (env.TASK_LIMIT||env.PROPOSAL_LIMIT).limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);
    const query=(sql,...args)=>env.PROPOSALS.prepare(sql).bind(...args).first();
@@ -76,6 +77,23 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    let task;try{task=await L.prepare({title,pages,alphabet:ALPHABET,steps:plan.steps,criterion:plan.criterion});}catch(error){return reply({state:'needs-adapter',reason:String(error?.message||'').startsWith('The finite key stream is shorter')?'The supplied finite stream is too short for a complete page segment. Supply enough values or specify a different reset.':'The explicit plan exceeds the supported runner bounds or criterion.',proposalId:body.proposalId});}
    const requestedTask=task,found=await discoverEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:plan.inputVersion});
    const coverage={...found,requestedTask,inputVersion:plan.inputVersion};
+   if(body.includeDerivedPrefixEvidence===true&&body.parentTaskId===null&&basis.kind==='compiled-card'&&plan.criterion.kind==='exact-prefix'&&found.remainingPages.length){
+    let derived;try{derived=await discoverPrefixEvidence({db:env.PROPOSALS,task:requestedTask,inputVersion:plan.inputVersion});}catch{return reply({state:'coverage-unavailable',coverageUnavailable:true,coverage,error:'Saved output could not be checked. Retry before creating more work.'},503);}
+    const derivedCoverage=derived.wire,union=combineOrdinaryPrefixCoverage(requestedTask,found,derivedCoverage.summary);
+    const boundedReply=(body,status=200)=>new TextEncoder().encode(JSON.stringify(body)).length<=8*1024*1024?reply(body,status):reply({state:'coverage-unavailable',coverageUnavailable:true,coverage,error:'Saved output exceeds the bounded evidence response. No experiment was created.'},503);
+    if((found.truncated||!derivedCoverage.lookupComplete)&&union.remainingPages.length&&!union.matchingPages.length)return boundedReply({state:'coverage-unavailable',coverageUnavailable:true,coverage,derivedCoverage,error:'Saved output could not be checked completely. Retry before creating more work.'},503);
+    {
+     if(new Set([...found.evidence,...derived.evidence].map(ref=>L.stable([ref.taskId,ref.resultId,ref.createdAt]))).size>75)throw Error('The combined proof exceeds the source bound.');
+     if(union.matchingPages.length||!union.remainingPages.length)return boundedReply({state:'derived-prefix-answer',proposalId:body.proposalId,parentTaskId:null,inputVersion:plan.inputVersion,coverage,derivedCoverage,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
+     task=await L.prepare({...requestedTask,pages:requestedTask.pages.filter(page=>union.remainingPages.includes(page.id))});
+     const controls=await prepareControls(task,crypto);await PlanControls.validate(controls,task,crypto);
+     if(new TextEncoder().encode(JSON.stringify({coverage,derivedCoverage,task,controls,notes:[...interpretationNotes,...plan.notes]})).length>8*1024*1024-4096)throw Error('The derived response exceeds its byte budget.');
+     await remember({db:env.PROPOSALS,proposalId:body.proposalId,task:requestedTask,inputVersion:plan.inputVersion,coverage,createdAt:now().toISOString()});
+     const derivedBasis={kind:'ordinary-derived-prefix-remainder-v1',originalBasis:basis,requestedTaskId:requestedTask.taskId,strictEvidence:found.evidence,derivedEvidence:derived.evidence};
+     const preparation=await issuePreparation({db:env.PROPOSALS,proposalId:body.proposalId,card,task,inputVersion:plan.inputVersion,parentTaskId:null,controls,authority:'idea',basis:derivedBasis,createdAt:now().toISOString()});
+     return reply({state:'plan-ready',proposalId:body.proposalId,parentTaskId:null,inputVersion:plan.inputVersion,task,controls,preparation,coverage,derivedCoverage,notes:[...interpretationNotes,...plan.notes],purpose:PURPOSE});
+    }
+   }
    if(found.truncated&&found.remainingPages.length){
     await remember({db:env.PROPOSALS,proposalId:body.proposalId,task:requestedTask,inputVersion:plan.inputVersion,coverage,createdAt:now().toISOString()});
     return reply({state:'coverage-unavailable',coverageUnavailable:true,coverage,error:'Saved computation evidence could not be checked completely. Please retry before creating more work.'},503);

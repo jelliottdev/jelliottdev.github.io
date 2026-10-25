@@ -55,7 +55,7 @@ test('plain-text contract matches builder limits, trimming and own fields',()=>{
 
 test('completed owned recipes remain reproducible without advertising open work',()=>{
  const F=require('../record-followup-view.js'),r={...record,research_questions:[{...tested,followup:open.followup}]};
- const html=V.render(r);assert(html.includes('Review reproduction'));assert(!html.includes('Review follow-up'));assert(html.indexOf('Read completed test')<html.indexOf('Review reproduction'));assert(V.coversFollowups(r));
+ const html=V.render(r);assert(html.includes('Review this check'));assert(!html.includes('Review follow-up'));assert(html.indexOf('Read completed test')<html.indexOf('Review this check'));assert(V.coversFollowups(r));
  assert.equal(F.available(r).length,0);assert.equal(F.recipes(r).length,record.browser_followups.length);assert(F.render(r).includes('Reproduce a comparison'));
  const conflict={...r,research_questions:[...r.research_questions,{...open,id:'conflicting-state'}]};assert.equal(V.render(conflict),'');assert.equal(F.available(conflict).length,0);
 });

@@ -1,3 +1,4 @@
+import {checkedOrdinaryPrefixEvidence,discoverOrdinaryPrefixEvidence,combineOrdinaryPrefixCoverage} from './ordinary-prefix-evidence.mjs';
 /* Immutable server-issued admission proof. No generation, inference or task writes. */
 import C from '../../claim-specification.js';
 import E from '../../local-experiment.js';
@@ -5,7 +6,7 @@ import Controls from '../../local-plan-controls.js';
 import Variants from '../../task-variants.js';
 import {validateCard} from './idea-relations.mjs';
 import Evidence from '../../computation-evidence.js';
-import {checkedEvidence} from './task-evidence.mjs';
+import {checkedEvidence,findEvidence} from './task-evidence.mjs';
 import Settings from '../../finite-settings.js';
 import Policy from '../../finite-question-policy.js';
 import Compiler from '../../fixed-plan-compiler.js';
@@ -51,7 +52,7 @@ async function proposal(db,bound){
  if(!row)return false;
  try{return row.card_hash===bound.base.cardHash&&C.serialize(validateCard(row.card_json))===C.serialize(bound.card);}catch{return false;}
 }
-async function basisFor(db,value,bound,authority){
+async function basisFor(db,value,bound,authority,fresh=false){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
   if(basis.kind==='factored-page-group-v1'){
@@ -74,12 +75,23 @@ async function basisFor(db,value,bound,authority){
    require(described.pages.length===1&&described.pages[0].caseId===basis.caseId,'Finite settings case differs from the exact prepared page and program');
    return {text:data.text,hash:await sha(data.text)};
   }
-  const original=basis.kind==='evidence-remainder'?basis.originalBasis:basis;
+  const original=['evidence-remainder','ordinary-derived-prefix-remainder-v1'].includes(basis.kind)?basis.originalBasis:basis;
   require(exact(original,['kind','normalizedCard',...(original?.kind==='mapped-card'?['mapping']:[])])
    &&['compiled-card','mapped-card'].includes(original.kind),'Invalid idea preparation basis');
   const normalized=validateCard(original.normalizedCard);
   if(original.kind==='compiled-card')require(C.serialize(normalized)===C.serialize(bound.card),'Compiled basis changed the original card');
   else require(original.mapping&&typeof original.mapping==='object'&&!Array.isArray(original.mapping),'Mapped basis requires reviewed mapping evidence');
+  if(basis.kind==='ordinary-derived-prefix-remainder-v1'){
+   require(exact(basis,['kind','originalBasis','requestedTaskId','strictEvidence','derivedEvidence'])&&HEX.test(basis.requestedTaskId)&&original.kind==='compiled-card'&&bound.base.parentTaskId===null&&Array.isArray(basis.strictEvidence)&&Array.isArray(basis.derivedEvidence)&&basis.strictEvidence.length<=75&&basis.derivedEvidence.length<=75&&new Set([...basis.strictEvidence,...basis.derivedEvidence].map(ref=>E.stable([ref?.taskId,ref?.resultId,ref?.createdAt]))).size<=75,'Invalid derived-prefix remainder basis');
+   const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
+   require(row&&row.input_version===bound.base.inputVersion,'Derived prefix request is not associated with this idea');const requested=JSON.parse(row.requested_task_json);await E.checkIdentity(requested);
+   require(requested.taskId===basis.requestedTaskId&&await sha(E.stable(requested))===row.requested_task_hash,'Derived prefix request changed');
+   const plan=Compiler.compile(normalized);require(!plan.reason&&requested.criterion.kind==='exact-prefix'&&plan.inputVersion===row.input_version&&E.stable(plan.pages)===E.stable(requested.pages.map(p=>p.id))&&E.stable(plan.steps)===E.stable(requested.steps)&&E.stable(plan.criterion)===E.stable(requested.criterion),'Derived request differs from the original declared question');
+   const strict=await checkedEvidence({db,task:requested,inputVersion:row.input_version,evidence:basis.strictEvidence}),derived=await checkedOrdinaryPrefixEvidence({db,task:requested,inputVersion:row.input_version,evidence:basis.derivedEvidence}),union=combineOrdinaryPrefixCoverage(requested,strict,derived);
+   require(union.remainingPages.length>0&&!union.matchingPages.length,'Derived remainder must retain unanswered pages');
+   const full=await Evidence.describe(requested,row.input_version),remaining=await Evidence.describe(bound.task,row.input_version);require(full.protocolId===remaining.protocolId&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(p=>union.remainingPages.includes(p.id))),'Derived remainder changed its exact open pages or evaluation');
+   if(fresh){const currentStrict=await findEvidence({db,task:requested,inputVersion:row.input_version}),currentDerived=await discoverOrdinaryPrefixEvidence({db,task:requested,inputVersion:row.input_version}),current=combineOrdinaryPrefixCoverage(requested,currentStrict,currentDerived.wire.summary);require(!(currentStrict.truncated||!currentDerived.wire.lookupComplete)&&!current.matchingPages.length&&E.stable(current.remainingPages)===E.stable(union.remainingPages),'Saved evidence changed; review the remaining pages again');}
+  }
   if(basis.kind==='evidence-remainder'){
    require(exact(basis,['kind','originalBasis','requestedTaskId','evidence'])&&HEX.test(basis.requestedTaskId),'Invalid evidence remainder basis');
    const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
@@ -179,5 +191,7 @@ export async function authorize({db,preparationId,proposalId,card,task,inputVers
  const row=preparationId===undefined?
   await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
   await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
- return checked(row,bound);
+ const receipt=await checked(row,bound);if(!receipt)return null;
+ try{const basis=JSON.parse(row.basis_json);if(basis.kind==='ordinary-derived-prefix-remainder-v1')await basisFor(db,basis,bound,row.authority,true);}catch{return null;}
+ return receipt;
 }
