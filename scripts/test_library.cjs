@@ -100,3 +100,16 @@ test('small evidence tables wrap while wide data tables retain scroll navigation
  const compact=L.renderMarkdown('| Rule | First wrong rune |\n| --- | --- |\n| Word reversal | Rune 1 |');assert(compact.includes('experiment-compact-table'));assert(!compact.includes('Scroll table sideways'));
  const wide=L.renderMarkdown('| A | B | C |\n| --- | --- | --- |\n| 1 | 2 | 3 |');assert(wide.includes('Scroll table sideways'));assert(wide.includes('tabindex="0"'));
 });
+
+test('shared search always offers query-preserving saved-idea discovery with honest published scope',()=>{
+ const vm=require('node:vm'),source=fs.readFileSync(path.join(root,'library.js'),'utf8'),start=source.indexOf(' function renderSearch(s)'),end=source.indexOf('\n async function render()',start);assert(start>=0&&end>start);
+ const Index=require('../research-index.js'),Browser=require('../research-browser-model.js'),q='reverse \u201cprime\u201d + words & LP2-15',target=new URL(L.researchHref({q}),'https://example.org/'),mapState=Browser.read(target.hash,'graph',Index.state);
+ assert.equal(mapState.mode,'list');assert.equal(mapState.q,q,'The actual map reader applies the complete encoded search query');
+ for(const count of [0,1,9]){
+  const main={innerHTML:''},context={main,data:{},searchLibrary:()=>({guides:[],experiments:Array.from({length:count},(_,i)=>({id:String(i)}))}),esc:value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),researchHref:L.researchHref,experimentRow:()=>'<article>Published result</article>',url:()=>'',finish(){}};
+  vm.runInNewContext(source.slice(start,end)+';renderSearch({params:new URLSearchParams(query)});',Object.assign(context,{URLSearchParams,query:new URLSearchParams({q}).toString()}));
+  assert.match(main.innerHTML,/Search saved ideas in Research map/);assert.match(main.innerHTML,/Includes loaded ideas/);assert.match(main.innerHTML,new RegExp('Published research · '+count));
+  const href=main.innerHTML.match(/<a href="([^"]+)">Search saved ideas in Research map/)[1].replace(/&amp;/g,'&');assert.equal(href,L.researchHref({q}));
+  if(count===0){assert.match(main.innerHTML,/No matching guides or published records/);assert.doesNotMatch(main.innerHTML,/No matching guides or research\./);}
+ }
+});
