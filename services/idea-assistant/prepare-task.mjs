@@ -1,4 +1,5 @@
 import Compiler from '../../fixed-plan-compiler.js';
+import AffineChoices from '../../affine-search-clarification.js';
 import {issue as issuePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 import PlanControls from '../../local-plan-controls.js';
@@ -48,6 +49,10 @@ export function createPrepareTaskHandler({fetcher=globalThis.fetch,now=()=>new D
    // Choosing a check is a research decision. Neither the planner nor its AI
    // wording adapter may silently replace it with descriptive measurements.
    if(plan.field==='evaluation')return reply({state:plan.state,proposalId:body.proposalId,...(plan.state==='needs-clarification'?{field:'evaluation'}:{}),reason:plan.reason});
+   if(body.includeMethodClarification===true&&plan.reason){
+    const clarification=AffineChoices.describe(card);
+    if(clarification)return reply({state:'needs-clarification',proposalId:body.proposalId,field:'method',reason:'Confirm the affine convention and the settings to enumerate.',clarification});
+   }
    // Older clients only understand evaluation clarification. Keep this exact
    // supported-method question opt-in during the frontend transition.
    if(body.includeMethodClarification===true&&plan.state==='needs-clarification'&&plan.field==='method')return reply({state:plan.state,proposalId:body.proposalId,field:plan.field,reason:plan.reason,clarification:plan.clarification});

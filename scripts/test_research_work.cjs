@@ -13,6 +13,15 @@ for(const bad of [record(-1,0),record(1,2),record(1,-1),record(1.5,0),record(2,0
 const full=record(3,1,[summary(1,'results-verified'),summary(2),summary(3)]);assert(W.describe(full));const copied=W.communityTasks({taskCount:3,verifiedTaskCount:1,tasks:full.task_summaries});copied.tasks[0].state='not-run';assert.equal(full.task_summaries[0].state,'results-verified');
 const selector=()=>({outcome:'',q:'',type:'',method:'',family:'',sort:''});for(const [query,expected]of [['followups=1','1'],['followups=pending','pending'],['followups=other',''],['','']])assert.equal(B.read('#'+query,'graph',selector).followups,expected);assert.equal(B.read('#/research?followups=pending','graph',selector).followups,'pending');
 const ctx={RecordFollowupView:F};vm.createContext(ctx);vm.runInContext(fs.readFileSync('research-work.js','utf8'),ctx);assert.equal(ctx.ResearchWork.describe(unfinished).count,9);
+// Early matches deliberately leave member tasks unrun; those are not proof of
+// an unanswered finite question. Only the original workspace checks the union.
+const finiteMarker={kind:'finite-settings',version:1};
+for(const candidate of [record(0,0),record(2,1,[summary(1,'results-verified'),summary(2)]),record(2,2,[summary(1,'results-verified'),summary(2,'results-verified')])]){
+ const finite={...candidate,finite_search:finiteMarker},prior=JSON.stringify(finite);
+ assert.deepEqual(W.describe(finite),{kind:'question',count:1,label:'Check declared settings',href:'run.html#idea='+proposal});assert(W.matches(finite,'questions'));assert(!W.matches(finite,'pending'));assert(!W.matches(finite,'prepared'));assert.equal(JSON.stringify(finite),prior);
+}
+assert(!W.matches(unfinished,'questions'));assert(!W.isFiniteQuestion({...record(0,0),finite_search:{...finiteMarker,answer:'found'}}));
+assert.equal(B.read('#followups=questions','graph',selector).followups,'questions');
 console.log('PASS prepared declarations, exact pending task counts, partial summaries, safe links, state separation, consistency rejection, legacy filters and browser export');
 
 for(const record of data.records.filter(r=>F.recipes(r).length&&!F.available(r).length)){assert.equal(W.describe(record),null);assert(!W.matches(record,'prepared'));assert(F.render(record).includes('Review reproduction'));}

@@ -29,4 +29,14 @@ const inconsistent=structuredClone(entries[1]);inconsistent.tasks=[{id:'b'.repea
 const shared=entry(9,{aim:'measure a pattern'});shared.hasSharedComputation=true;const sharedRecord=M.merge(base,[shared]).records['idea-'+shared.id.slice(2)];assert.equal(M.label(sharedRecord),'Computation available');assert.equal(sharedRecord.task_count,0);assert.equal(sharedRecord.verified_task_count,0);assert.deepEqual(sharedRecord.task_summaries,[]);
 const notShared=structuredClone(shared);notShared.hasSharedComputation=false;assert.equal(M.label(M.merge(base,[notShared]).records['idea-'+shared.id.slice(2)]),'Untested idea');
 for(const value of ['true',1,null,{}])assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[{...shared,hasSharedComputation:value}],nextCursor:null}));
+const Work=require('../research-work.js');
+const finiteCard=H.cardData(C.confirm(C.createDraft({source:{text:'Try these explicit settings.'},aim:known('Solve LP2'),method:known({operations:[{id:'affine',label:'Affine substitution',b:0}]}),scope:known({pages:['lp2-15']}),rules:{searchBounds:known({kind:'finite-settings',version:1,parameters:[{operation:0,name:'a',values:[1,2]}]}),inputVersion:known('raw'),evaluation:known({kind:'exact-prefix',values:[0,1]})}}),{id:'finite',at:'2026-10-25T12:00:00.000Z'}));
+for(const patch of [
+ {taskCount:0,verifiedTaskCount:0,tasks:[]},
+ {taskCount:2,verifiedTaskCount:1,tasks:[{id:'c'.repeat(64),title:'Saved matching member',state:'results-verified'},{id:'d'.repeat(64),title:'Intentionally unrun after match',state:'not-run'}]},
+ {taskCount:0,verifiedTaskCount:0,tasks:[],hasSharedComputation:true}
+]){
+ const original={...entry(20),card:finiteCard,...patch},record=M.merge(base,[original]).records['idea-'+original.id.slice(2)];assert.deepEqual(record.finite_search,{kind:'finite-settings',version:1});assert.equal(record.evidence_state,'question-review');assert.equal(M.label(record),'Review question');assert.equal(Work.describe(record).href,'run.html#idea='+original.id);assert.equal(Work.describe(record).kind,'question');assert(Work.matches(record,'questions'));assert(!Work.matches(record,'pending'));assert(!JSON.stringify(record).includes('prefix-found'));
+}
+const fabricated={...entry(21),finite_search:{kind:'finite-settings',version:1}};assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[fabricated],nextCursor:null}),'A caller flag cannot replace the decoded original card');
 console.log('PASS community map preserves evidence, routes active cards, separates computation state, filters and validates');

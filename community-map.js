@@ -32,7 +32,7 @@
   }
   return feed;
  }
- function label(record){return record.community?(record.evidence_state==='computation-available'?'Computation available':'Untested idea'):null;}
+ function label(record){return record.community?(Work.isFiniteQuestion(record)?'Review question':record.evidence_state==='computation-available'?'Computation available':'Untested idea'):null;}
  function merge(source,entries){
   // Validate in feed-sized batches without limiting previously loaded pages.
   const seen=new Set();for(let i=0;i<entries.length;i+=50)validate({schema:'liberpedia-community-research-v1',entries:entries.slice(i,i+50),nextCursor:null});
@@ -49,8 +49,11 @@
    const operations=draft.method.status==='specified'?draft.method.value.operations:[];
    const description=operations.map(o=>o.label||o.sourceText||o.id).join(', then '),letters=Array.from(description),title=description?letters.slice(0,157).join('')+(letters.length>157?'…':''):'Unspecified research method';
    const pages=draft.scope.status==='specified'&&Array.isArray(draft.scope.value.pages)?draft.scope.value.pages:[];
+   // Navigation metadata comes only from the decoded original card. It is not
+   // a supplied feed flag or evidence that this finite question remains open.
+   const bounds=draft.rules.searchBounds,finite=bounds.status==='specified'&&bounds.value?.kind==='finite-settings'&&bounds.value.version===1;
    const record={id,title,question:aim.detail||aim.wording||description,summary:description,community:true,proposal_id:entry.id,
-    evidence_state:entry.verifiedTaskCount>0||entry.hasSharedComputation===true?'computation-available':'untested',created_at:entry.createdAt,
+    evidence_state:finite?'question-review':entry.verifiedTaskCount>0||entry.hasSharedComputation===true?'computation-available':'untested',created_at:entry.createdAt,...(finite?{finite_search:{kind:'finite-settings',version:1}}:{}),
     outcome:'',record_type:{id:'idea',label:'Community idea'},method_topics:classified.familyIds.map(id=>({id,title:C.METHOD_FAMILIES[id]})),
     pages,scope:{pages,representation:'',procedure:description,parameters:'',exclusions:''},href:'run.html#idea='+entry.id,task_count:entry.taskCount,verified_task_count:entry.verifiedTaskCount,task_summaries:structuredClone(entry.tasks)};
    data.records[id]=record;

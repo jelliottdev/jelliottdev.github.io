@@ -3,6 +3,7 @@
  'use strict';
  const Followups=typeof module==='object'&&module.exports?require('./record-followup-view.js'):root.RecordFollowupView;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/;
+ function isFiniteQuestion(record){const marker=record?.finite_search;return record?.community===true&&marker&&typeof marker==='object'&&!Array.isArray(marker)&&Object.keys(marker).length===2&&marker.kind==='finite-settings'&&marker.version===1;}
  function communityTasks(value){
   if(!value||!Number.isSafeInteger(value.taskCount)||value.taskCount<0||!Number.isSafeInteger(value.verifiedTaskCount)||value.verifiedTaskCount<0||value.verifiedTaskCount>value.taskCount||!Array.isArray(value.tasks)||value.tasks.length>10||value.tasks.length>value.taskCount)return null;
   const seen=new Set();let verified=0,pending=0;const tasks=[];
@@ -20,7 +21,11 @@
   if(record.community===true){
    if(typeof record.proposal_id!=='string'||!IDEA.test(record.proposal_id)||record.id!=='idea-'+record.proposal_id.slice(2))return null;
    const work=communityTasks({taskCount:record.task_count,verifiedTaskCount:record.verified_task_count,tasks:record.task_summaries});
-   if(!work||!work.pendingCount)return null;
+   if(!work)return null;
+   // A member task may correctly stay unrun after another member answered an
+   // existence question. Counts do not decide whether that question is open.
+   if(isFiniteQuestion(record))return {kind:'question',count:1,label:'Check declared settings',href:'run.html#idea='+record.proposal_id};
+   if(!work.pendingCount)return null;
    const first=work.tasks.find(t=>t.state==='not-run');
    return {kind:'unfinished',count:work.pendingCount,label:work.pendingCount===1?'1 unfinished experiment':work.pendingCount+' unfinished experiments',
     href:first?'run.html#task='+first.id:'run.html#idea='+record.proposal_id};
@@ -30,9 +35,9 @@
  }
  function matches(record,filter){
   if(filter===''||filter==='all'||filter===undefined)return true;
-  const kind=filter==='1'||filter==='prepared'?'prepared':filter==='pending'||filter==='unfinished'?'unfinished':null;
+  const kind=filter==='1'||filter==='prepared'?'prepared':filter==='pending'||filter==='unfinished'?'unfinished':filter==='questions'?'question':null;
   return kind!==null&&describe(record)?.kind===kind;
  }
- const api={communityTasks,describe,matches};
+ const api={communityTasks,isFiniteQuestion,describe,matches};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ResearchWork=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -45,6 +45,7 @@ jobs:
       - run: node services/idea-assistant/test-prepared-plans.mjs
       - run: node services/idea-assistant/test-prepare-task.mjs
       - run: node services/idea-assistant/test-keyed-clarification.mjs
+      - run: node --experimental-sqlite services/idea-assistant/test-affine-clarification.mjs
       - run: node scripts/test_browser_executor.cjs
       - run: node scripts/test_computation_evidence.cjs
       - run: node scripts/test_question_evidence.cjs
@@ -93,6 +94,9 @@ jobs:
       - run: node --experimental-sqlite services/idea-assistant/test-finite-plans.mjs
       - run: node scripts/test_local_run_ui.cjs
       - run: node scripts/test_keyed_method_clarification.cjs
+      - run: node scripts/test_affine_search_clarification.cjs
+      - run: node scripts/test_affine_clarification_ui.cjs
+      - run: node scripts/test_finite_search_snapshot.cjs
       - run: node scripts/test_keyed_clarification_ui.cjs
       - run: node scripts/test_local_run_package.cjs
       - run: node scripts/test_local_plan_controls.cjs
