@@ -32,10 +32,10 @@
  function outputPreview(task,result){
   return '<section data-run-output-preview><h2 id="local-run-finding">What the method produced</h2><p>Shown with Latin rune labels, not a translation. This run does not decide whether the output is readable.</p>'+(task.pages.length>1?'<label class="run-language-page">Page<select data-run-output-page>'+task.pages.map(page=>'<option value="'+esc(page.id)+'">'+esc(page.id.toUpperCase())+'</option>').join('')+'</select></label>':'')+'<div data-run-output-content>'+outputExcerpt(task,result,task.pages[0].id)+'</div></section>';
  }
- function bindOutputPreview(host,task,result){
+ function bindOutputPreview(host,task,result,pageId){
   const panel=host.querySelector?.('[data-run-output-preview]'),select=panel?.querySelector('[data-run-output-page]'),content=panel?.querySelector('[data-run-output-content]');if(!select||!content)return ()=>{};
   const change=()=>{if(task.pages.some(page=>page.id===select.value))content.innerHTML=outputExcerpt(task,result,select.value);};
-  select.addEventListener('change',change);return ()=>select.removeEventListener?.('change',change);
+  select.addEventListener('change',change);if(pageId){select.value=pageId;change();}return ()=>select.removeEventListener?.('change',change);
  }
  function pageLabel(pages){
   const groups=[];for(const page of pages){const id=page.id,last=groups.at(-1);if(last&&last.at(-1).slice(0,4)===id.slice(0,4)&&Number(last.at(-1).slice(4))+1===Number(id.slice(4)))last.push(id);else groups.push([id]);}
@@ -46,8 +46,8 @@
   for(const character of text){const rune=labels.has(character);out+=(rune&&previousRune&&!joined?'·':'')+(rune?labels.get(character):character);previousRune=rune;}
   return out;
  }
- function prefixAlignment(task,result,pageId,mode='runes'){
-  const indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),text=result.transformed.find(page=>page.page===pageId).text,observed=Array.from(text).filter(rune=>indices.has(rune)).map(rune=>indices.get(rune)),expected=task.criterion.values;
+ function prefixAlignment(task,result,pageId,mode='runes',expected=task.criterion.values){
+  const indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),text=result.transformed.find(page=>page.page===pageId).text,observed=Array.from(text).filter(rune=>indices.has(rune)).map(rune=>indices.get(rune));
   const mismatch=expected.findIndex((value,i)=>observed[i]!==value),start=mismatch<0?0:Math.max(0,mismatch-3),end=Math.min(expected.length,start+8),label=value=>value===undefined?'Missing':mode==='latin'?task.alphabet[value].latin:task.alphabet[value].rune;
   const status=mismatch<0?'All '+expected.length+' prefix positions match.':observed[mismatch]===undefined?'The output ends before prefix position '+(mismatch+1)+'.':'First mismatch at prefix position '+(mismatch+1)+'.';
   return '<section class="run-prefix-alignment"><h3>Expected and observed prefix</h3><p class="run-prefix-status">'+esc(pageId.toUpperCase()+': '+status)+'</p><p class="run-text-note">'+'Showing positions '+(start+1)+'–'+end+' of '+expected.length+'. '+'Positions count runes only; separators do not occupy a position.</p><table class="run-prefix-table"><thead><tr><th scope="col">Position</th><th scope="col">Expected</th><th scope="col">Actual</th><th scope="col">Result</th></tr></thead><tbody>'+expected.slice(start,end).map((value,offset)=>{const i=start+offset,missing=observed[i]===undefined,same=value===observed[i];return '<tr class="run-prefix-pair'+(same?'':' is-different')+'"><th scope="row">'+(i+1)+'</th><td class="run-prefix-symbol">'+esc(label(value))+'</td><td'+(missing?'':' class="run-prefix-symbol"')+'>'+esc(label(observed[i]))+'</td><td>'+(same?'Match':missing?'Missing':'Different')+'</td></tr>';}).join('')+'</tbody></table></section>';
@@ -121,15 +121,15 @@
    (task.criterion.kind==='exact-prefix'?'<div data-run-prefix>'+prefixAlignment(task,result,first.id)+'</div>':'')+
    '<div class="run-text-columns'+(single?' run-text-columns-single':'')+'"><section><h3>'+(single?'Text measured':'Original')+'</h3><pre class="run-text-value" data-run-original>'+esc(first.text)+'</pre></section>'+(single?'':'<section><h3>After the method</h3><pre class="run-text-value" data-run-after>'+esc(after.text)+'</pre></section>')+'</div></details>';
  }
- function bind(host,task,result){
+ function bind(host,task,result,options={}){
   bindings.get(host)?.();
-  E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result}));
-  const sumsCleanup=task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result):()=>{};
+  E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result})),initialPage=options.pageId===undefined?snapshot.task.pages[0].id:options.pageId;if(!snapshot.task.pages.some(p=>p.id===initialPage))throw Error('Choose a page in the original output.');
+  const sumsCleanup=task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
   const panel=host.querySelector?.('.run-text-inspector');if(!panel){bindings.set(host,sumsCleanup);return sumsCleanup;}
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
   const original=panel.querySelector('[data-run-original]'),after=panel.querySelector('[data-run-after]');
   if(!original||!after&&!(['word-affine-count','word-prime-sums'].includes(task.criterion.kind)&&!task.steps.length)){bindings.set(host,sumsCleanup);return sumsCleanup;}
-  let pageId=snapshot.task.pages[0].id,mode='runes';const listeners=[];
+  let pageId=initialPage,mode='runes';if(select)select.value=pageId;const listeners=[];
   const update=()=>{
    const page=snapshot.task.pages.find(p=>p.id===pageId),output=snapshot.result.transformed.find(p=>p.page===pageId);
    original.textContent=mode==='latin'?transliteration(page.text,snapshot.task.alphabet):page.text;
@@ -153,5 +153,9 @@
    '</div><p class="run-chart-note">Counts follow the rune sequence on each page, ignoring spaces and punctuation.</p></figure>')+
    (task.criterion.kind==='word-affine-count'?wordPairExample(task,result):'')+'<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
  }
- const api={render,bind,pageLabel};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ function renderPrefixComparison(task,result,criterion,pageId){
+  if(criterion?.kind!=='exact-prefix'||!Array.isArray(criterion.values)||criterion.values.length<1||criterion.values.length>256||criterion.values.some(v=>!Number.isInteger(v)||v<0||v>28)||!task.pages.some(p=>p.id===pageId)||!result.transformed.some(p=>p.page===pageId))throw Error('Use an explicit opening and an original output page.');
+  return prefixAlignment(task,result,pageId,'runes',criterion.values);
+ }
+ const api={render,bind,pageLabel,renderPrefixComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

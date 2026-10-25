@@ -22,6 +22,7 @@ MAX_TOTAL = 512 * 1024 * 1024
 MAX_SOURCES = 76800
 MAX_DOMAIN = 4 * 1024 * 1024
 PATH = re.compile(r'^chunks/[0-9]{6}\.json$')
+DERIVATION = 'The requested opening is evaluated now from independently replayed original transformed text. Original source criteria, verdicts and dates remain unchanged; no requested-experiment result receipt or historical test is created.'
 
 
 def bounded_json(raw, limit):
@@ -80,11 +81,15 @@ def verify(manifest, directory):
     old.bounded(manifest)
     require(len(old.stable(manifest).encode('utf-8')) <= MAX_MANIFEST, 'Manifest exceeds 8 MiB')
     fields(manifest, ('schema', 'original', 'question', 'evidence', 'proof', 'finding', 'snapshotId'), 'Manifest')
-    require(manifest['schema'] == 'liberpedia-factored-finite-search-snapshot-v2', 'Unsupported snapshot schema')
+    derived = manifest['schema'] == 'liberpedia-factored-finite-search-snapshot-v3'
+    require(derived or manifest['schema'] == 'liberpedia-factored-finite-search-snapshot-v2', 'Unsupported snapshot schema')
     require(manifest['snapshotId'] == old.digest({k: v for k, v in manifest.items() if k != 'snapshotId'}), 'Snapshot digest mismatch')
     q, e = manifest['question'], manifest['evidence']
     programs = domain_check(manifest['original'], q)
-    fields(e, ('chunks', 'lookup', 'provenanceMeaning'), 'Evidence')
+    fields(e, ('chunks', 'lookup', 'provenanceMeaning', 'mode', 'derivationMeaning') if derived
+           else ('chunks', 'lookup', 'provenanceMeaning'), 'Evidence')
+    if derived:
+        require(e['mode'] == 'verified-output-prefix-v1' and e['derivationMeaning'] == DERIVATION, 'Derived evidence meaning changed')
     fields(e['lookup'], ('recordedComplete', 'meaning'), 'Recorded lookup')
     require(type(e['lookup']['recordedComplete']) is bool and e['lookup']['meaning'] == old.LOOKUP, 'Lookup is not an absence proof')
     require(e['provenanceMeaning'] == old.PROVENANCE, 'Original provenance meaning changed')
@@ -112,7 +117,7 @@ def verify(manifest, directory):
         require(not expected_paths, 'Required receipt chunks are missing')
     page_index = {p['id']: (i, p['text']) for i, p in enumerate(q['pages'])}
     coverage, matching = bytearray((q['totalCases'] + 7) // 8), bytearray((q['totalCases'] + 7) // 8)
-    claims, receipts, replayed = {}, set(), set()
+    claims, receipts, replayed, owners = {}, set(), set(), {}
     for chunk in chunks:
         raw = read_bytes(root / chunk['path'], MAX_CHUNK)
         require(len(raw) == chunk['bytes'] and hashlib.sha256(raw).hexdigest() == chunk['sha256'], 'Chunk bytes or digest changed')
@@ -135,7 +140,9 @@ def verify(manifest, directory):
             key = (task['taskId'], run['id'], source['inputVersion'], date)
             require(key not in receipts, 'Duplicate original receipt')
             receipts.add(key)
-            require(task['engine'] == q['engine'] and task['alphabet'] == q['alphabet'] and task['criterion'] == q['criterion'], 'Source changed its exact common protocol')
+            require(task['engine'] == q['engine'] and task['alphabet'] == q['alphabet'], 'Source changed its exact transformation')
+            direct = task['criterion'] == q['criterion']
+            require(direct or derived and task['criterion']['kind'] in ('measurement', 'exact-prefix'), 'Source changed its exact common protocol')
             protocol_id = old.protocol(q, task['steps'])
             require(protocol_id in programs, 'Original source is outside the declared programs')
             pair = (task['taskId'], run['id'])
@@ -150,11 +157,19 @@ def verify(manifest, directory):
                     continue
                 relevant = True
                 position = programs[protocol_id] * len(q['pages']) + target[0]
-                match = next(m['matched'] for m in run['result']['matches'] if m['page'] == page['id'])
+                match = next(m['matched'] for m in run['result']['matches'] if m['page'] == page['id']) if direct else False
                 text = next(p['text'] for p in run['result']['transformed'] if p['page'] == page['id'])
+                if not direct:
+                    indices = {entry['rune']: i for i, entry in enumerate(q['alphabet'])}
+                    values = [indices[ch] for ch in text if ch in indices]
+                    match = values[:len(q['criterion']['values'])] == q['criterion']['values']
                 signature = old.digest({'text': text, 'matched': match})
                 require(position not in claims or claims[position] == signature, 'Conflicting exact case output')
                 claims[position] = signature
+                if derived:
+                    owner = (0 if direct else 1, old.stable([task['taskId'], run['id'], date, source['inputVersion']]))
+                    if position not in owners or owner < owners[position]:
+                        owners[position] = owner
                 coverage[position >> 3] |= 1 << (position & 7)
                 if match:
                     matching[position >> 3] |= 1 << (position & 7)
@@ -164,6 +179,15 @@ def verify(manifest, directory):
     proof = {'coveredCases': covered_count, 'matchingCases': matched_count, 'remainingCases': q['totalCases'] - covered_count,
              'complete': covered_count == q['totalCases'], 'coverageSha256': hashlib.sha256(coverage).hexdigest(),
              'matchingSha256': hashlib.sha256(matching).hexdigest()}
+    if derived:
+        derived_coverage = bytearray(len(coverage))
+        for position, owner in owners.items():
+            if owner[0] == 1:
+                derived_coverage[position >> 3] |= 1 << (position & 7)
+        derived_count = sum(1 for owner in owners.values() if owner[0] == 1)
+        proof.update(directCases=covered_count - derived_count, derivedCases=derived_count,
+                     derivedCoverageSha256=hashlib.sha256(derived_coverage).hexdigest())
+        require(type(manifest['proof'].get('directCases')) is int and type(manifest['proof'].get('derivedCases')) is int, 'Derived coverage count types changed')
     fields(manifest['proof'], tuple(proof), 'Coverage proof')
     require(all(type(manifest['proof'][key]) is int for key in ('coveredCases', 'matchingCases', 'remainingCases'))
             and type(manifest['proof']['complete']) is bool

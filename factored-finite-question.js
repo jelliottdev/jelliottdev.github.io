@@ -37,56 +37,70 @@
   for(const ref of refs){if(!exact(ref,Object.hasOwn(ref||{},'id')?['id','programId','pageId']:['programId','pageId']))throw Error('Give the exact program and page address.');const pi=domain.programs.findIndex(p=>p.id===ref.programId),page=domain.pages.find(p=>p.id===ref.pageId);if(pi<0||!page)throw Error('Selected case is outside the declared domain.');const id=await hash({protocolId:ref.programId,page},crypto);if(Object.hasOwn(ref,'id')&&ref.id!==id||seen.has(id))throw Error('Duplicate or changed case identity.');seen.add(id);selected.push({id,programId:ref.programId,pageId:page.id,task:await E.prepare({title:'Finite program '+ref.programId,pages:[page],alphabet:domain.alphabet,steps:domain.programs[pi].steps,criterion:domain.criterion},crypto)});}
   selected.sort((a,b)=>a.programId.localeCompare(b.programId)||a.pageId.localeCompare(b.pageId));return freeze({domainId:domain.id,cases:selected});
  }
- function createAccumulator(domain,crypto=root.crypto){inspect(domain);const token=Object.freeze({});accumulators.set(token,{domain,crypto,owners:new Map(),matches:new Set(),receipts:new Map(),receiptKeys:null,memo:new Map(),memoBytes:0});return token;}
+ function accumulator(domain,crypto,prefixMode){inspect(domain);const token=Object.freeze({});accumulators.set(token,{domain,crypto,prefixMode,owners:new Map(),matches:new Set(),receipts:new Map(),receiptKeys:null,memo:new Map(),memoBytes:0});return token;}
+ function createAccumulator(domain,crypto=root.crypto){return accumulator(domain,crypto,false);}
+ function createPrefixAccumulator(domain,crypto=root.crypto){return accumulator(domain,crypto,true);}
+ const sourceKey=(reference,kind)=>E.stable([kind==='direct-result'?0:1,reference.taskId,reference.resultId,reference.createdAt,reference.inputVersion]);
  function state(token){const s=accumulators.get(token);if(!s)throw Error('Use a private factored evidence accumulator.');return s;}
  async function prepareAccept(token,sources){
   const s=state(token),d=s.domain,inputs=capture(sources,LIMITS.chunkBytes);if(!Array.isArray(inputs)||inputs.length>LIMITS.chunkSources)throw Error('Supply at most twelve bounded original receipts.');
+  const direct=[],derived=[];for(const source of inputs){if(s.prefixMode&&E.stable(source?.task?.criterion)!==E.stable(d.criterion))derived.push(source);else direct.push(source);}
   const programs=new Map(d.programs.map((p,i)=>[p.id,i])),pages=new Map(d.pages.map((p,i)=>[p.id,{page:p,index:i}])),staged=[],memo=[];
-  for(const source of inputs){if(!exact(source,['task','inputVersion','run'])||!exact(source.run,['id','createdAt','result']))throw Error('Use complete original computation receipts.');const descriptor=await R.describe(source.task,source.inputVersion,s.crypto),pi=programs.get(descriptor.protocolId);
-   if(pi===undefined||source.inputVersion!==d.inputVersion)continue;
+  for(const source of direct){if(!exact(source,['task','inputVersion','run'])||!exact(source.run,['id','createdAt','result']))throw Error('Use complete original computation receipts.');const descriptor=await R.describe(source.task,source.inputVersion,s.crypto),pi=programs.get(descriptor.protocolId);
+   if(pi===undefined||source.inputVersion!==d.inputVersion){if(s.prefixMode)throw Error('An original source is outside this exact prefix question.');continue;}
    // Envelope, full task/result hashes and original page geometry are checked on every chunk.
    await R.compare(source.task,source.inputVersion,[source],s.crypto);
-   const positions=[];for(const page of source.task.pages){const target=pages.get(page.id);if(target&&target.page.text===page.text)positions.push({position:pi*d.pages.length+target.index,pageId:page.id});}if(!positions.length)continue;
+   const positions=[];for(const page of source.task.pages){const target=pages.get(page.id);if(target&&target.page.text===page.text)positions.push({position:pi*d.pages.length+target.index,pageId:page.id});}if(!positions.length){if(s.prefixMode)throw Error('An original source has no exact declared page intersection.');continue;}
    const memoKey=source.task.taskId+'--'+source.run.id,signature=E.stable([source.task,source.run.result]),cached=s.memo.get(memoKey);
    if(cached!==undefined&&cached!==signature)throw Error('Conflicting bytes for one computation identity.');
    const result=cached===signature?source.run.result:await E.verify(source.task,source.run.result,s.crypto);
    if(cached!==signature)memo.push({key:memoKey,signature});
-   const reference={taskId:source.task.taskId,resultId:source.run.id,inputVersion:source.inputVersion,createdAt:source.run.createdAt},key=E.stable(reference);
-   staged.push({key,reference,programId:descriptor.protocolId,positions:positions.map(p=>({...p,matched:result.matches.find(m=>m.page===p.pageId).matched}))});
+   const reference={taskId:source.task.taskId,resultId:source.run.id,inputVersion:source.inputVersion,createdAt:source.run.createdAt},key=s.prefixMode?sourceKey(reference,'direct-result'):E.stable(reference);
+   staged.push({key,reference,programId:descriptor.protocolId,...(s.prefixMode?{evidenceKind:'direct-result',sourceProtocolId:descriptor.protocolId}:{}),positions:positions.map(p=>({...p,matched:result.matches.find(m=>m.page===p.pageId).matched}))});
+  }
+  let acceptedSources=staged.length;
+  if(derived.length){
+   // Lazy dependency avoids a Q/primitive UMD cycle and leaves legacy loading
+   // independent of the optional prefix-reuse implementation.
+   const reuse=node?require('./factored-prefix-reuse.js'):root.FactoredPrefixReuse;if(!reuse)throw Error('Derived opening verification is unavailable.');
+   const metadata=reuse.inspect(await reuse.prepare(d,derived,s.crypto));if(metadata.domainId!==d.id||metadata.sourceCount!==derived.length)throw Error('Derived opening claims changed their bound question.');acceptedSources+=metadata.sourceCount;
+   const receipts=new Map();for(const claim of metadata.claims){const pi=programs.get(claim.programId),target=pages.get(claim.pageId);if(pi===undefined||!target)throw Error('A derived opening claim is outside the declared domain.');const key=sourceKey(claim.source,'derived-prefix');let item=receipts.get(key);if(!item){const sourceProtocolId=await hash({...protocol(d,d.programs[pi].steps),criterion:claim.sourceCriterion},s.crypto);item={key,reference:claim.source,programId:claim.programId,evidenceKind:'derived-prefix',sourceProtocolId,positions:[]};receipts.set(key,item);}if(item.programId!==claim.programId)throw Error('One original source changed its transformation.');item.positions.push({position:pi*d.pages.length+target.index,pageId:claim.pageId,matched:claim.matched});}staged.push(...receipts.values());
   }
   // Preparing never changes coverage, provenance or the replay cache. The caller
   // can stage these original receipts before committing any visible evidence.
-  const pending=Object.freeze({});preparedAccepts.set(pending,{token,staged,memo});return pending;
+  const pending=Object.freeze({});preparedAccepts.set(pending,{token,staged,memo,acceptedSources});return pending;
  }
- function inspectPrepared(pending){const saved=preparedAccepts.get(pending);if(!saved)throw Error('Use an uncommitted independently prepared evidence chunk.');return freeze({domainId:state(saved.token).domain.id,acceptedSources:saved.staged.length});}
+ function inspectPrepared(pending){const saved=preparedAccepts.get(pending);if(!saved)throw Error('Use an uncommitted independently prepared evidence chunk.');return freeze({domainId:state(saved.token).domain.id,acceptedSources:saved.acceptedSources});}
  function commitAccept(token,pending){
   const s=state(token),saved=preparedAccepts.get(pending);if(!saved||saved.token!==token)throw Error('The prepared evidence belongs to another accumulator or was already committed.');
   const {staged,memo}=saved;
   for(const item of memo){const existing=s.memo.get(item.key);if(existing!==undefined&&existing!==item.signature)throw Error('Conflicting bytes for one computation identity.');}
+  if(s.prefixMode){const matches=new Map();for(const item of staged)for(const p of item.positions){if(s.owners.has(p.position)&&s.matches.has(p.position)!==p.matched||matches.has(p.position)&&matches.get(p.position)!==p.matched)throw Error('Verified sources conflict on the same requested opening.');matches.set(p.position,p.matched);}}
   preparedAccepts.delete(pending);
   for(const item of memo)if(!s.memo.has(item.key)){const size=new TextEncoder().encode(item.signature).byteLength+item.key.length+128;if(s.memoBytes+size<=LIMITS.memoBytes){s.memo.set(item.key,item.signature);s.memoBytes+=size;}}
   for(const item of staged)for(const p of item.positions){const old=s.owners.get(p.position);if(old&&old.localeCompare(item.key)<=0)continue;
    if(old){const receipt=s.receipts.get(old);receipt.positions.delete(p.position);if(!receipt.positions.size){s.receipts.delete(old);s.receiptKeys=null;}}
-   if(!s.receipts.has(item.key)){s.receipts.set(item.key,{reference:item.reference,programId:item.programId,positions:new Set()});s.receiptKeys=null;}s.receipts.get(item.key).positions.add(p.position);s.owners.set(p.position,item.key);if(p.matched)s.matches.add(p.position);
+   if(!s.receipts.has(item.key)){s.receipts.set(item.key,{reference:item.reference,programId:item.programId,...(s.prefixMode?{evidenceKind:item.evidenceKind,sourceProtocolId:item.sourceProtocolId}:{}),positions:new Set()});s.receiptKeys=null;}s.receipts.get(item.key).positions.add(p.position);s.owners.set(p.position,item.key);if(p.matched)s.matches.add(p.position);
   }
-  return freeze({acceptedSources:staged.length,coveredCases:s.owners.size,matchingCases:s.matches.size});
+  return freeze({acceptedSources:saved.acceptedSources,coveredCases:s.owners.size,matchingCases:s.matches.size});
  }
  async function accept(token,sources){return commitAccept(token,await prepareAccept(token,sources));}
  async function summarize(token,options={lookupComplete:false}){
   const s=state(token),d=s.domain,v=capture(options,100);if(!exact(v,['lookupComplete'])||typeof v.lookupComplete!=='boolean')throw Error('Declare whether the complete source lookup finished.');
+  const derived=new Set();if(s.prefixMode)for(const [position,key]of s.owners)if(s.receipts.get(key).evidenceKind==='derived-prefix')derived.add(position);
   const covered=new Set(s.owners.keys()),matched=new Set(s.matches),matching=matched.size,nextCases=[];if(!matching&&covered.size<d.totalCases&&v.lookupComplete)for(let n=0;n<d.totalCases&&nextCases.length<12;n++)if(!covered.has(n))nextCases.push(await refAt(d,n,s.crypto));
   const complete=covered.size===d.totalCases,decision=matching?{state:'answered',answer:'prefix-found'}:complete?{state:'answered',answer:'prefix-not-found'}:v.lookupComplete?{state:'missing-evidence'}:{state:'unavailable'};
   const coverageSha256=await bitmapHash(covered,d.totalCases,s.crypto),matchingSha256=await bitmapHash(matched,d.totalCases,s.crypto);
-  const proof=freeze({schema:'liberpedia-factored-finite-evidence-v2',domainId:d.id,totalCases:d.totalCases,coveredCases:covered.size,matchingCases:matching,remainingCases:d.totalCases-covered.size,coverageSha256,matchingSha256,lookupComplete:v.lookupComplete,complete,nextCases,decision});proofs.add(proof);return proof;
+  const proof=freeze({schema:s.prefixMode?'liberpedia-factored-finite-evidence-v3':'liberpedia-factored-finite-evidence-v2',...(s.prefixMode?{evidenceMode:'verified-output-prefix-v1',directCases:covered.size-derived.size,derivedCases:derived.size,derivedCoverageSha256:await bitmapHash(derived,d.totalCases,s.crypto)}:{}),domainId:d.id,totalCases:d.totalCases,coveredCases:covered.size,matchingCases:matching,remainingCases:d.totalCases-covered.size,coverageSha256,matchingSha256,lookupComplete:v.lookupComplete,complete,nextCases,decision});proofs.add(proof);return proof;
  }
  function inspectEvidence(proof){if(!proofs.has(proof))throw Error('Use independently verified factored evidence.');return proof;}
  async function coverage(token,refs){
-  const s=state(token),selected=await select(s.domain,refs,s.crypto),coveredCaseIds=[],missingCaseIds=[],matchingCaseIds=[];
+  const s=state(token),selected=await select(s.domain,refs,s.crypto),coveredCaseIds=[],missingCaseIds=[],matchingCaseIds=[],directCaseIds=[],derivedCaseIds=[];
   for(const item of selected.cases){const pi=s.domain.programs.findIndex(p=>p.id===item.programId),pageIndex=s.domain.pages.findIndex(p=>p.id===item.pageId),position=pi*s.domain.pages.length+pageIndex;
-   (s.owners.has(position)?coveredCaseIds:missingCaseIds).push(item.id);if(s.matches.has(position))matchingCaseIds.push(item.id);
+   (s.owners.has(position)?coveredCaseIds:missingCaseIds).push(item.id);if(s.matches.has(position))matchingCaseIds.push(item.id);if(s.prefixMode&&s.owners.has(position))(s.receipts.get(s.owners.get(position)).evidenceKind==='derived-prefix'?derivedCaseIds:directCaseIds).push(item.id);
   }
-  return freeze({domainId:s.domain.id,coveredCaseIds,missingCaseIds,matchingCaseIds});
+  return freeze({domainId:s.domain.id,coveredCaseIds,missingCaseIds,matchingCaseIds,...(s.prefixMode?{directCaseIds,derivedCaseIds}:{})});
  }
- function evidence(token,options={cursor:0,limit:12}){const s=state(token),keys=s.receiptKeys||(s.receiptKeys=[...s.receipts.keys()].sort()),{cursor,limit}=paging(options,keys.length),out=keys.slice(cursor,cursor+limit).map(key=>{const r=s.receipts.get(key);return {...r.reference,programId:r.programId,pageIds:[...r.positions].sort((a,b)=>a-b).map(n=>s.domain.pages[n%s.domain.pages.length].id)};});return freeze({sources:out,nextCursor:cursor+out.length<keys.length?cursor+out.length:null});}
- const api={bind,inspect,cases,select,createAccumulator,prepareAccept,inspectPrepared,commitAccept,accept,summarize,inspectEvidence,coverage,evidence,LIMITS};if(node)module.exports=api;else root.FactoredFiniteQuestion=api;
+ function evidence(token,options={cursor:0,limit:12}){const s=state(token),keys=s.receiptKeys||(s.receiptKeys=[...s.receipts.keys()].sort()),{cursor,limit}=paging(options,keys.length),out=keys.slice(cursor,cursor+limit).map(key=>{const r=s.receipts.get(key);return {...r.reference,programId:r.programId,...(s.prefixMode?{evidenceKind:r.evidenceKind,sourceProtocolId:r.sourceProtocolId,matchingPageIds:[...r.positions].filter(n=>s.matches.has(n)).sort((a,b)=>a-b).map(n=>s.domain.pages[n%s.domain.pages.length].id)}:{}),pageIds:[...r.positions].sort((a,b)=>a-b).map(n=>s.domain.pages[n%s.domain.pages.length].id)};});return freeze({sources:out,nextCursor:cursor+out.length<keys.length?cursor+out.length:null});}
+ const api={bind,inspect,cases,select,createAccumulator,createPrefixAccumulator,prepareAccept,inspectPrepared,commitAccept,accept,summarize,inspectEvidence,coverage,evidence,LIMITS};if(node)module.exports=api;else root.FactoredFiniteQuestion=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

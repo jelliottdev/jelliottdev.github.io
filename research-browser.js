@@ -45,12 +45,13 @@
    const colour=record&&!data.records[n.record_id].community&&state.colour==='results'?resultColours[data.records[n.record_id].outcome]:(focus.id==='all-research'?nodes.get(p.activate)?.color||n.color:n.color);
    const label=lines(isFocus?n.label:aliases[n.id]||n.label.replace(/^LP[12][^:]{0,30}:\s*/,''),isFocus?24:22,isFocus?2:3);
    labelNodes.push({id,p,n,isFocus,isChild,record,matched,label});
-   marks+=`<g class="node ${record?'record':''} ${isFocus?'aim':''} ${matched?'':'muted'} ${n.record_id===state.record?'selected':''}" data-node="${esc(id)}" aria-label="${esc(n.label+(record?'':', '+matched+' records'))}"><title>${esc(n.label)}</title><circle class="hit" cx="${p.x}" cy="${p.y}" r="0"/>${n.record_id===state.record?`<circle class="selection" cx="${p.x}" cy="${p.y}" r="0" vector-effect="non-scaling-stroke"/>`:''}${!isFocus?`<circle class="mark" cx="${p.x}" cy="${p.y}" r="0" fill="${colour}" vector-effect="non-scaling-stroke"/>`:''}<g class="node-label"><rect class="label-hit" width="0" height="0"/><text>${label.map((line,i)=>`<tspan x="0" dy="${i?'1.2em':'0'}">${esc(line)}</tspan>`).join('')}</text>${!record?`<text class="count">${matched} records</text>`:''}</g></g>`;
+   marks+=`<g class="node ${record?'record':''} ${isFocus?'aim':''} ${matched?'':'muted'} ${n.record_id===state.record?'selected':''}" data-node="${esc(id)}" aria-hidden="true" aria-label="${esc(n.label+(record?'':', '+matched+' records'))}"><title>${esc(n.label)}</title><circle class="hit" cx="${p.x}" cy="${p.y}" r="0"/>${n.record_id===state.record?`<circle class="selection" cx="${p.x}" cy="${p.y}" r="0" vector-effect="non-scaling-stroke"/>`:''}${!isFocus?`<circle class="mark" cx="${p.x}" cy="${p.y}" r="0" fill="${colour}" vector-effect="non-scaling-stroke"/>`:''}<g class="node-label"><rect class="label-hit" width="0" height="0"/><text>${label.map((line,i)=>`<tspan x="0" dy="${i?'1.2em':'0'}">${esc(line)}</tspan>`).join('')}</text>${!record?`<text class="count">${matched} records</text>`:''}</g></g>`;
   }
   world.innerHTML=edges+marks+'<g class="labels-layer"></g>';
   labelNodes.forEach(item=>{item.element=world.querySelector(`[data-node="${CSS.escape(item.id)}"]`);item.group=item.element.querySelector('.node-label');item.group.setAttribute('data-node',item.id);item.group.setAttribute('aria-hidden','true');world.querySelector('.labels-layer').appendChild(item.group);});
  }
  function applyCamera(){
+  const syncAccessibility=()=>{for(const {element} of labelNodes)element.setAttribute('aria-hidden',String(element.getAttribute('tabindex')!=='0'));};
   const restoreFocus=()=>{const active=document.activeElement;if(!map.hidden&&!map.inert&&labelNodes.some(item=>item.element===active)&&active.getAttribute('tabindex')!=='0')map.focus({preventScroll:true})};
   const G=ResearchGraphGeometry,k=camera.k,r=map.getBoundingClientRect();
   world.setAttribute('transform',`translate(${camera.x} ${camera.y}) scale(${k})`);
@@ -84,14 +85,14 @@
    candidates.push({id:item.id,priority:isFocus?-2:n.record_id===state.record?-1:isChild?0:p.depth,width,height,placements});
    item.labelOffset={x:measured.x,y:measured.y};labelHit.setAttribute('x',String(measured.x-3));labelHit.setAttribute('y',String(measured.y-2));labelHit.setAttribute('width',String(width+6));labelHit.setAttribute('height',String(height+4));
   }
-  if(r.width<20||r.height<20){restoreFocus();return;}
+  if(r.width<20||r.height<20){syncAccessibility();restoreFocus();return;}
   const placed=G.placeOptionalLabels(candidates,{viewport:{x:8,y:8,width:r.width-16,height:r.height-16},occupied,gap:8}).placed;
   for(const placement of placed){const item=labelNodes.find(n=>n.id===placement.id),group=item.group;
    group.style.display='';group.hidden=false;
    group.setAttribute('transform',`translate(${(placement.x-camera.x)/k} ${(placement.y-camera.y)/k}) scale(${1/k}) translate(${-item.labelOffset.x} ${-item.labelOffset.y})`);
    item.element.dataset.labelVisible='true';if(!item.isFocus){item.element.setAttribute('tabindex','0');item.element.setAttribute('role','button');item.element.querySelector('.hit').setAttribute('r',String(G.worldPixels(18,k)));}
   }
-  restoreFocus();
+  syncAccessibility();restoreFocus();
  }
  function availableMapHeight(){return map.getBoundingClientRect().height;}
  function revealSelection(){if(!state.record||panel.hidden||innerWidth<=900)return;const r=map.getBoundingClientRect(),point=layout.get(recordNode(state.record)?.id);if(!point)return;const x=camera.x+point.x*camera.k,y=camera.y+point.y*camera.k;if(x<32||x>r.width-32)camera.x+=r.width/2-x;if(y<32||y>r.height-32)camera.y+=r.height*.5-y;}

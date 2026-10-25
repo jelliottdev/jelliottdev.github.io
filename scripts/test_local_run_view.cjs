@@ -31,6 +31,8 @@ function hostFor(multiple=true,withPrefix=false,single=false){
  previewSelect.value='lp2-17';previewSelect.fire('change');assert(previewContent.innerHTML.includes('LP2-17'));assert(previewContent.innerHTML.includes('FIA, TH'));
  const selectedPreview=previewContent.innerHTML;previewSelect.value='unknown';previewSelect.fire('change');assert.equal(previewContent.innerHTML,selectedPreview);previewCleanup();previewSelect.value='lp2-15';previewSelect.fire('change');assert.equal(previewContent.innerHTML,selectedPreview,'Disposed previews have no active handlers');
 
+ const laterHost=hostFor(),laterCleanup=V.bind(laterHost,task,result,{pageId:'lp2-17'});assert.equal(laterHost.select.value,'lp2-17');assert.equal(laterHost.original.textContent,second);assert.equal(laterHost.after.textContent,'ᚠᛡ, ᚦ\nᚢ');laterCleanup();
+ const laterPreviewCleanup=V.bind(previewHost,task,result,{pageId:'lp2-17'});assert.equal(previewSelect.value,'lp2-17');assert(previewContent.innerHTML.includes('LP2-17'));laterPreviewCleanup();assert.throws(()=>V.bind(hostFor(),task,result,{pageId:'lp2-99'}),/original output/);
  assert(html.includes('<summary>Inspect the text</summary>'));assert(html.includes('not a translation'));assert(html.includes('middle dot'));
  assert(html.includes('&lt;img src=x onerror=alert(1)&gt;'));assert(!html.includes('<img src=x'));
  assert.equal((html.match(/data-run-original/g)||[]).length,1);assert.equal((html.match(/data-run-after/g)||[]).length,1);

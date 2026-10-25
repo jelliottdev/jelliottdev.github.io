@@ -2,7 +2,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,S=node?require('./factored-finite-search-snapshot.js'):root.FactoredFiniteSearchSnapshot,Zip=node?require('./local-run-package.js'):root.LocalRunPackage;
- const RAW_PART_BYTES=16*1024*1024,ZIP_PART_BYTES=32*1024*1024,encoder=new TextEncoder(),SOURCE_SHA256=Object.freeze({runner:'be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61',auditV1:'35f765cdd9879c6590b0a255dcb7fe18da1a5ce7fd95c2872ca872a9ba75d1ce',auditV2:'e559c8322d57f6f3441123ca1dfe824d7b93ed11b680fb4720d8f74c7c3af684'});
+ const RAW_PART_BYTES=16*1024*1024,ZIP_PART_BYTES=32*1024*1024,encoder=new TextEncoder(),SOURCE_SHA256=Object.freeze({runner:'be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61',auditV1:'35f765cdd9879c6590b0a255dcb7fe18da1a5ce7fd95c2872ca872a9ba75d1ce',auditV2:'26ed0f3b9d5a836ac165a2db51ad7abce9fc8db08548e1c6bccc4e75a09d74f7'});
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const digest=async(bytes,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');
  function parts(snapshot){S.inspect(snapshot);const groups=[];let current={index:0,chunkPaths:[],rawChunkBytes:0};for(const ref of snapshot.evidence.chunks){if(ref.bytes>RAW_PART_BYTES)throw Error('A whole original receipt chunk exceeds one part.');if(current.chunkPaths.length&&current.rawChunkBytes+ref.bytes>RAW_PART_BYTES){groups.push(current);current={index:groups.length,chunkPaths:[],rawChunkBytes:0};}current.chunkPaths.push(ref.path);current.rawChunkBytes+=ref.bytes;}groups.push(current);return freeze(groups);}

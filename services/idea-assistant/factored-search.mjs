@@ -5,13 +5,15 @@ import Settings from '../../finite-settings.js';
 import {createFiniteSearchHandler} from './finite-search.mjs';
 import {createFactoredCompiler} from './factored-compiler-cache.mjs';
 import {readFactoredEvidencePage,verifyFactoredSnapshot} from './factored-search-evidence.mjs';
-import {selectFactoredCases,findSelectedFactoredEvidence} from './factored-selected-evidence.mjs';
+import {readFactoredPrefixEvidencePage,verifyFactoredPrefixSnapshot} from './factored-prefix-evidence.mjs';
+import {selectFactoredCases,findSelectedFactoredEvidence,findSelectedFactoredPrefixEvidence} from './factored-selected-evidence.mjs';
 import {prepareFiniteCases} from './finite-search-admission.mjs';
-export function createFactoredSearchHandler({fetcher=globalThis.fetch,now=()=>new Date(),taskHandler}={}){
+function createHandler({fetcher=globalThis.fetch,now=()=>new Date(),taskHandler}={},prefix=false){
  const compiler=createFactoredCompiler();
  const clock=()=>now().getTime();
- const gate=({db,proposalId,currentDomain,body,env})=>verifyFactoredSnapshot({db,proposalId,domain:currentDomain.domain,inputVersion:currentDomain.domain.inputVersion,snapshotToken:body.snapshotToken,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
- return createFiniteSearchHandler({fetcher,now,...(taskHandler?{taskHandler}:{}),settingsAPI:Settings.factored,
+ const gate=({db,proposalId,currentDomain,body,env})=>(prefix?verifyFactoredPrefixSnapshot:verifyFactoredSnapshot)({db,proposalId,domain:currentDomain.domain,inputVersion:currentDomain.domain.inputVersion,snapshotToken:body.snapshotToken,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
+ const prefixReuse=async context=>{const {db,proposalId,currentDomain,cases,env,request}=context,reuse=await findSelectedFactoredPrefixEvidence({db,proposalId,domain:currentDomain.domain,cases,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});await gate(context);if(request.signal.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});return reuse;};
+ return createFiniteSearchHandler({fetcher,now,...(taskHandler?{taskHandler}:{}),settingsAPI:Settings.factored,...(prefix?{routePrefix:'factored-prefix-search',reuseCasesBeforeCreate:prefixReuse}:{}),
   async authorizeDomain(context){
    const {card,bundle,body,action}=context;
    const compiled=await compiler.compile({card,bundle:{schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]}});
@@ -20,10 +22,10 @@ export function createFactoredSearchHandler({fetcher=globalThis.fetch,now=()=>ne
    return compiled;
   },
   async discoverEvidence({db,proposalId,currentDomain,body,env}){
-   return readFactoredEvidencePage({db,proposalId,domain:currentDomain.domain,inputVersion:body.inputVersion,cursor:body.cursor,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
+   return (prefix?readFactoredPrefixEvidencePage:readFactoredEvidencePage)({db,proposalId,domain:currentDomain.domain,inputVersion:body.inputVersion,cursor:body.cursor,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()});
   },
   async prepareCases(context){
-   const {currentDomain,db,cases,request}=context,selected=await selectFactoredCases({compiled:currentDomain,cases}),reuse=await findSelectedFactoredEvidence({db,domain:currentDomain.domain,cases:selected});
+   const {currentDomain,db,cases,request,proposalId,env}=context,selected=await selectFactoredCases({compiled:currentDomain,cases}),reuse=await (prefix?findSelectedFactoredPrefixEvidence:findSelectedFactoredEvidence)({db,domain:currentDomain.domain,cases:selected,...(prefix?{proposalId,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()}:{} )});
    await gate(context);
    if(request.signal.aborted)throw Object.assign(Error('The request was cancelled.'),{status:499});
    const prepared=reuse.missing.length?await prepareFiniteCases({...context,cases:reuse.missing,settingsAPI:Settings.factored,signal:request.signal}):{inputVersion:currentDomain.domain.inputVersion,cases:[]};
@@ -31,3 +33,5 @@ export function createFactoredSearchHandler({fetcher=globalThis.fetch,now=()=>ne
   }
  });
 }
+export const createFactoredSearchHandler=options=>createHandler(options,false);
+export const createFactoredPrefixSearchHandler=options=>createHandler(options,true);
