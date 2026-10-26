@@ -22,7 +22,7 @@
    const s=choice?.selection;
    if(!s||!Number.isInteger(s.step)||s.step<0||!['direction','reset'].includes(s.parameter)||!setting(s,s.value))return null;
    const describe=value=>choice.op==='cumulative-difference'&&s.parameter==='reset'&&reset(value)?'Restart the running total at '+reset(value):setting(s,value);
-   return {index,selection:{...s},label:text(choice.label)||describe(s.value)+(s.parameter==='direction'?' instead':''),stepLabel:Object.hasOwn(choice,'stepLabel')?text(choice.stepLabel):'Step '+(s.step+1),before:text(choice.before)||describe(choice.from),after:text(choice.after)||describe(s.value)};
+   return {index,selection:{...s},question:text(choice.question),reason:text(choice.reason),reading:text(choice.reading),resetExample:s.parameter==='reset'&&reset(choice.from)&&choice.from!==s.value?{before:choice.from,after:s.value}:null,label:text(choice.question)||text(choice.label)||describe(s.value)+(s.parameter==='direction'?' instead':''),stepLabel:Object.hasOwn(choice,'stepLabel')?text(choice.stepLabel):'Step '+(s.step+1),before:text(choice.before)||describe(choice.from),after:text(choice.after)||describe(s.value)};
   }).filter(Boolean).slice(0,3);
   const selected=choices.find(c=>typeof input.selected==='number'?c.index===input.selected:selectionEqual(c.selection,input.selected))||null;
   const phase=phases.has(input.phase)?input.phase:'choose',change=input.change||{},scope=input.scope||{};
@@ -30,22 +30,29 @@
   const stepIndex=steps.some(s=>s.index===input.stepIndex)?input.stepIndex:steps[0]?.index;
   return {choices,selected,steps,stepIndex,phase,change:{before:text(change.before)||selected?.before||'',after:text(change.after)||selected?.after||'',stepLabel:text(change.stepLabel)||selected?.stepLabel||''},scope:{pages:pageLabel(scope.pages)||text(scope.label),key:text(scope.key),keyLabel:text(scope.keyLabel)||'Key',comparison:text(scope.comparison)},error:text(input.error),check:{href:href(input.check?.href),covered:input.check?.covered===true,title:text(input.check?.title)}};
  }
+ function resetIllustration(example){
+  if(!example)return '';
+  function sequence(mode){return Array.from({length:2},(_,line)=>'<div class="parameter-variation-example-line">'+Array.from({length:2},(_,word)=>'<span class="parameter-variation-example-word">'+Array.from({length:2},(_,rune)=>'<span>'+((mode==='page'?line*4+word*2:mode==='line'?word*2:0)+rune+1)+'</span>').join('')+'</span>').join('')+'</div>').join('');}
+  return '<figure class="parameter-variation-example"><figcaption>Where the count starts over</figcaption><div class="parameter-variation-example-pair">'+[['Before',example.before],['After',example.after]].map(([label,mode])=>'<div><p>'+label+' · '+esc(reset(mode))+'</p><div aria-label="'+label+': rune count restarts at '+esc(reset(mode))+'">'+sequence(mode)+'</div></div>').join('')+'</div><p>Example: four short words on two lines. Numbers count runes since the last restart; they are not key values or results.</p></figure>';
+ }
  function render(input={}){
   const m=model(input);if(!m.choices.length&&m.phase!=='complete')return '';
-  let body='<h2>Try one change</h2>';
+  let body='<h2>'+esc(m.phase==='choose'?'Try a variation':m.selected?.question||(m.phase==='complete'?'Check ready':'Review the change'))+'</h2>';
   if(m.phase==='complete'){
-   body+='<p role="status">'+(m.check.covered?'This variation already has a check.':'Your variation is ready to review.')+'</p>'+(m.check.href?'<a class="parameter-variation-primary" href="'+esc(m.check.href)+'">'+(m.check.covered?'View existing check':'Open check')+'</a>':'');
+   body+='<p role="status">'+(m.check.covered?'This calculation already has saved results.':'Your check is ready.')+'</p>'+(m.check.href?'<a class="parameter-variation-primary" href="'+esc(m.check.href)+'">'+(m.check.covered?'View saved results':'Open check')+'</a>':'');
   }else if(m.phase==='choose'){
    body+='<p>Change one part of this calculation.</p>'+(m.steps.length>1?'<label class="parameter-variation-step-select">Change which step?<select data-parameter-variation-step>'+m.steps.map(s=>'<option value="'+s.index+'"'+(s.index===m.stepIndex?' selected':'')+'>'+esc(s.label)+'</option>').join('')+'</select></label>':'')+'<div class="parameter-variation-choices">'+m.choices.map(c=>'<button type="button" data-parameter-variation="select" data-variation-index="'+c.index+'">'+(c.stepLabel?'<span class="parameter-variation-step">'+esc(c.stepLabel)+'</span>':'')+esc(c.label)+'</button>').join('')+'</div>';
   }else{
-   body+='<h3>Review the change</h3>'+(m.change.stepLabel?'<p class="parameter-variation-step">'+esc(m.change.stepLabel)+'</p>':'')+'<dl class="parameter-variation-change"><div><dt>Before</dt><dd>'+esc(m.change.before)+'</dd></div><div><dt>After</dt><dd>'+esc(m.change.after)+'</dd></div></dl>';
+   body+=(m.selected?.reason?'<p>'+esc(m.selected.reason)+'</p>':'')+(m.change.stepLabel?'<p class="parameter-variation-step">'+esc(m.change.stepLabel)+'</p>':'');
+   body+=m.selected?.question&&m.selected.resetExample?resetIllustration(m.selected.resetExample):'<dl class="parameter-variation-change"><div><dt>Before</dt><dd>'+esc(m.change.before)+'</dd></div><div><dt>After</dt><dd>'+esc(m.change.after)+'</dd></div></dl>';
    body+='<p class="parameter-variation-scope">Applies to the full original calculation'+(m.scope.pages?': <strong>'+esc(m.scope.pages)+'</strong>':'.')+'</p>';
    const same=[m.scope.key&&[m.scope.keyLabel,m.scope.key],m.scope.comparison&&['Comparison',m.scope.comparison]].filter(Boolean);
    if(same.length)body+='<dl class="parameter-variation-same">'+same.map(([label,value])=>'<div><dt>'+esc(label)+' · unchanged</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>';
+   if(m.selected?.reading)body+='<p class="parameter-variation-reading">'+esc(m.selected.reading)+'</p>';
    if(m.phase==='previewing')body+='<p role="status" aria-live="polite">Reviewing this change…</p>';
-   if(m.phase==='creating')body+='<p role="status" aria-live="polite">Creating variation…</p>';
+   if(m.phase==='creating')body+='<p role="status" aria-live="polite">Preparing check…</p>';
    if(m.phase==='error')body+='<p class="parameter-variation-error" role="alert">'+esc(m.error||'The variation could not be created. Try again.')+'</p>';
-   body+='<div class="parameter-variation-actions">'+(['creating','previewing'].includes(m.phase)?'':'<button type="button" class="parameter-variation-primary" data-parameter-variation="'+(m.phase==='error'?'retry':'create')+'">'+(m.phase==='error'?'Try again':'Create variation')+'</button>')+'<button type="button" data-parameter-variation="cancel">Cancel</button></div>';
+   body+='<div class="parameter-variation-actions">'+(['creating','previewing'].includes(m.phase)?'':'<button type="button" class="parameter-variation-primary" data-parameter-variation="'+(m.phase==='error'?'retry':'create')+'">'+(m.phase==='error'?'Try again':'Create check')+'</button>')+'<button type="button" data-parameter-variation="cancel">Cancel</button></div>';
   }
   return '<section class="parameter-variation" aria-label="Change this calculation"'+(['creating','previewing'].includes(m.phase)?' aria-busy="true"':'')+'>'+body+'</section>';
  }
