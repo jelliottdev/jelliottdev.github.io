@@ -8,6 +8,7 @@
  function reset(value){return ({page:'each page',line:'each line',word:'each word'})[value]||'';}
  function setting(selection,value){return selection.parameter==='direction'?({add:'Add the key values',subtract:'Subtract the key values'})[value]||'':reset(value)?'Restart the key at '+reset(value):'';}
  function href(value){return typeof value==='string'&&/^run\.html#(?:task=[a-f0-9]{64}(?:&idea=p_[a-f0-9]{64})?|idea=p_[a-f0-9]{64})$/.test(value)?value:'';}
+ function sourceHref(value){return href(value)||typeof value==='string'&&/^(?:library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*|run\.html#family=[a-z0-9]+(?:-[a-z0-9]+)*&case=[a-z0-9][a-z0-9-]*&revision=[a-f0-9]{64})$/.test(value)&&value||'';}
  function pageLabel(pages){
   if(typeof pages==='string')return pages;
   if(!Array.isArray(pages)||!pages.length)return '';
@@ -28,7 +29,17 @@
   const phase=phases.has(input.phase)?input.phase:'choose',change=input.change||{},scope=input.scope||{};
   const steps=(Array.isArray(input.steps)?input.steps:[]).filter(s=>Number.isInteger(s?.index)&&s.index>=0).filter((s,i,all)=>all.findIndex(other=>other.index===s.index)===i).map(s=>({index:s.index,label:text(s.label)||'Step '+(s.index+1)}));
   const stepIndex=steps.some(s=>s.index===input.stepIndex)?input.stepIndex:steps[0]?.index;
-  return {choices,selected,steps,stepIndex,phase,change:{before:text(change.before)||selected?.before||'',after:text(change.after)||selected?.after||'',stepLabel:text(change.stepLabel)||selected?.stepLabel||''},scope:{pages:pageLabel(scope.pages)||text(scope.label),key:text(scope.key),keyLabel:text(scope.keyLabel)||'Key',comparison:text(scope.comparison)},error:text(input.error),check:{href:href(input.check?.href),covered:input.check?.covered===true,title:text(input.check?.title)}};
+  const c=input.coverage,coverage=c&&Array.isArray(c.coveredPages)&&Array.isArray(c.remainingPages)?{covered:c.coveredPages.length,remaining:c.remainingPages.length,complete:c.lookupComplete===true,finding:c.finding?.kind==='opening-check'&&Array.isArray(c.finding.matchingPages)?{matches:c.finding.matchingPages.length,pages:pageLabel(c.finding.matchingPages)}:null,links:(Array.isArray(c.evidence)?c.evidence:[]).map(ref=>({href:sourceHref(ref.href),label:text(ref.label)||'View saved calculation',pages:pageLabel(ref.pages)})).filter(ref=>ref.href)}:null;
+  return {choices,selected,steps,stepIndex,phase,coverage,change:{before:text(change.before)||selected?.before||'',after:text(change.after)||selected?.after||'',stepLabel:text(change.stepLabel)||selected?.stepLabel||''},scope:{pages:pageLabel(scope.pages)||text(scope.label),key:text(scope.key),keyLabel:text(scope.keyLabel)||'Key',comparison:text(scope.comparison)},error:text(input.error),check:{href:href(input.check?.href),covered:input.check?.covered===true,title:text(input.check?.title)}};
+ }
+ function coverageHTML(c){
+  if(!c)return '';
+  const total=c.covered+c.remaining,full=c.covered>0&&!c.remaining;
+  const finding=c.covered&&c.finding?(c.finding.matches?'A supplied opening matched on '+esc(c.finding.pages)+'.':'No supplied opening matched in the saved results.'):'',summary=(full?'Saved results cover all '+total+' pages.':c.complete?c.covered?'Saved results cover '+c.covered+' of '+total+' pages.':'No matching saved results were found for these exact settings.':'The saved-result lookup is incomplete.')+(c.complete&&c.covered&&c.remaining?' '+c.remaining+' '+(c.remaining===1?'page remains':'pages remain')+' to check.':'');
+  let result='<div class="parameter-variation-coverage" role="status">'+(finding?'<p><strong>'+finding+'</strong></p><p>'+summary+'</p>':'<p><strong>'+summary+'</strong></p>');
+  const link=ref=>'<li><a href="'+esc(ref.href)+'">'+esc(ref.label)+(ref.pages?' · '+esc(ref.pages):'')+'</a></li>';
+  if(c.links.length)result+='<ul>'+c.links.slice(0,3).map(link).join('')+'</ul>'+(c.links.length>3?'<details><summary>More saved sources ('+(c.links.length-3)+')</summary><ul>'+c.links.slice(3).map(link).join('')+'</ul></details>':'');
+  return result+'</div>';
  }
  function resetIllustration(example){
   if(!example)return '';
@@ -42,14 +53,17 @@
    body+='<p role="status">'+(m.check.covered?'This calculation already has saved results.':'Your check is ready.')+'</p>'+(m.check.href?'<a class="parameter-variation-primary" href="'+esc(m.check.href)+'">'+(m.check.covered?'View saved results':'Open check')+'</a>':'');
   }else if(m.phase==='choose'){
    body+='<p>Change one part of this calculation.</p>'+(m.steps.length>1?'<label class="parameter-variation-step-select">Change which step?<select data-parameter-variation-step>'+m.steps.map(s=>'<option value="'+s.index+'"'+(s.index===m.stepIndex?' selected':'')+'>'+esc(s.label)+'</option>').join('')+'</select></label>':'')+'<div class="parameter-variation-choices">'+m.choices.map(c=>'<button type="button" data-parameter-variation="select" data-variation-index="'+c.index+'">'+(c.stepLabel?'<span class="parameter-variation-step">'+esc(c.stepLabel)+'</span>':'')+esc(c.label)+'</button>').join('')+'</div>';
+  }else if(m.phase==='review'&&m.coverage?.covered&&!m.coverage.remaining){
+   body+=coverageHTML(m.coverage)+(m.selected?.reading?'<p>'+esc(m.selected.reading)+'</p>':'')+'<button type="button" data-parameter-variation="cancel">Choose another change</button>';
   }else{
+   body+=coverageHTML(m.coverage);
    body+=(m.selected?.reason?'<p>'+esc(m.selected.reason)+'</p>':'')+(m.change.stepLabel?'<p class="parameter-variation-step">'+esc(m.change.stepLabel)+'</p>':'');
    body+=m.selected?.question&&m.selected.resetExample?resetIllustration(m.selected.resetExample):'<dl class="parameter-variation-change"><div><dt>Before</dt><dd>'+esc(m.change.before)+'</dd></div><div><dt>After</dt><dd>'+esc(m.change.after)+'</dd></div></dl>';
    body+='<p class="parameter-variation-scope">Applies to the full original calculation'+(m.scope.pages?': <strong>'+esc(m.scope.pages)+'</strong>':'.')+'</p>';
    const same=[m.scope.key&&[m.scope.keyLabel,m.scope.key],m.scope.comparison&&['Comparison',m.scope.comparison]].filter(Boolean);
    if(same.length)body+='<dl class="parameter-variation-same">'+same.map(([label,value])=>'<div><dt>'+esc(label)+' · unchanged</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>';
    if(m.selected?.reading)body+='<p class="parameter-variation-reading">'+esc(m.selected.reading)+'</p>';
-   if(m.phase==='previewing')body+='<p role="status" aria-live="polite">Reviewing this change…</p>';
+   if(m.phase==='previewing')body+='<p role="status" aria-live="polite">Reviewing this change and checking saved results…</p>';
    if(m.phase==='creating')body+='<p role="status" aria-live="polite">Preparing check…</p>';
    if(m.phase==='error')body+='<p class="parameter-variation-error" role="alert">'+esc(m.error||'The variation could not be created. Try again.')+'</p>';
    body+='<div class="parameter-variation-actions">'+(['creating','previewing'].includes(m.phase)?'':'<button type="button" class="parameter-variation-primary" data-parameter-variation="'+(m.phase==='error'?'retry':'create')+'">'+(m.phase==='error'?'Try again':'Create check')+'</button>')+'<button type="button" data-parameter-variation="cancel">Cancel</button></div>';

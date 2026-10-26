@@ -21,7 +21,7 @@
    const s=chosen.selection,step=task.steps[s.step],interpretation=reading(task.criterion);if(!interpretation)return null;let question,reason;
    if(s.parameter==='direction'){
     question='What if we '+(s.value==='add'?'add':'subtract')+' the key values?';
-    if(step.op==='finite-shift')reason='The same numbers shift rune positions along the alphabet; this fixed sequence never loops.';
+    if(step.op==='finite-shift')reason=(s.value==='add'?'Add the same number sequence to':'Subtract the same number sequence from')+' rune positions, without repeating it within a segment.';
     else if(step.op==='interrupted-keyed-shift')reason='The same repeating numbers shift the runes; selected runes are still copied without advancing the key.';
     else if(step.mode==='plaintext-autokey')reason='After the starting numbers, runes already produced supply more key numbers to shift the runes.';
     else if(step.mode==='ciphertext-autokey')reason='After the starting numbers, runes already read supply more key numbers to shift the runes.';

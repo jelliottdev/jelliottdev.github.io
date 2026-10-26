@@ -12,7 +12,7 @@
   ensure(typeof fetcher==='function'&&crypto?.subtle&&Number.isSafeInteger(timeoutMs)&&timeoutMs>=1&&timeoutMs<=45000,'Variation checks are unavailable.');
   const origin=service(baseURL,pageURL),display=capture(context),settings=own(display,'parentSettings');ensure(exact(display,['task','card','source','inputVersion','run',...(settings?['parentSettings']:[])])&&['raw','reviewed'].includes(display.inputVersion)&&exact(display.run,['id','createdAt','result'])&&HEX.test(display.run.id)&&iso(display.run.createdAt),'Use an authenticated displayed calculation and result.');E.validateTask(display.task);
   ensure(display.source&&exact(display.source,display.source.kind==='saved-task'?['kind','proposalId','taskId']:['kind','proposalId','recordId','revision','caseId'])&&['saved-task','published-program'].includes(display.source.kind)&&IDEA.test(display.source.proposalId),'Use an exact public source reference.');
-  let generation=0,controller=null,busy=false,phase='idle',review=null,attempt=null,result=null,error=null;
+  let generation=0,controller=null,busy=false,phase='idle',review=null,coverage=null,attempt=null,result=null,error=null;
   const assertLive=token=>{if(token!==generation||controller?.signal.aborted)throw abortError();};
   function begin(next){controller?.abort();controller=new AbortController();busy=true;phase=next;error=null;return ++generation;}
   async function request(path,body,token){
@@ -31,12 +31,31 @@
   }
   async function authenticated(token){await E.checkIdentity(display.task,crypto);assertLive(token);ensure(display.run.result.taskId===display.task.taskId&&await hash(display.run.result,crypto)===display.run.id,'The displayed result receipt changed.');assertLive(token);ensure('p_'+await hash(C.serialize(display.card),crypto)===display.source.proposalId,'The displayed public question changed.');if(display.source.kind==='saved-task')ensure(display.source.taskId===display.task.taskId,'The saved task reference changed.');assertLive(token);}
   function sourceBody(selection){return {source:display.source,selection,...(settings?{parentSettings:display.parentSettings}:{})};}
+  function checkedCoverage(value,preview){
+   const task=preview.preview.derivation.task,all=task.pages.map(p=>p.id),keys=['schema','previewHash','taskId','inputVersion','coveredPages','remainingPages','lookupComplete','finding','evidence'];
+   ensure(exact(value,keys)&&value.schema==='liberpedia-parameter-question-coverage-v1'&&value.previewHash===preview.previewHash&&value.taskId===task.taskId&&value.inputVersion===display.inputVersion&&typeof value.lookupComplete==='boolean','The saved-result lookup changed the reviewed calculation.');
+   const ordered=ids=>Array.isArray(ids)&&new Set(ids).size===ids.length&&same(ids,all.filter(id=>ids.includes(id)));
+   ensure(ordered(value.coveredPages)&&ordered(value.remainingPages)&&all.every(id=>value.coveredPages.includes(id)!==value.remainingPages.includes(id))&&Array.isArray(value.evidence)&&value.evidence.length<=all.length,'The saved-result lookup changed its page coverage.');
+   const opening=['exact-prefix','exact-prefix-set'].includes(task.criterion.kind);
+   ensure(opening?exact(value.finding,['kind','matchingPages'])&&value.finding.kind==='opening-check'&&ordered(value.finding.matchingPages)&&value.finding.matchingPages.every(id=>value.coveredPages.includes(id)):value.finding===null,'The saved finding does not match this check or its covered pages.');
+   const union=new Set(),tasks=new Set(),slug=v=>typeof v==='string'&&v.length<=100&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v),caseId=v=>typeof v==='string'&&v.length<=200&&/^[a-z0-9][a-z0-9-]*$/.test(v);
+   const evidence=value.evidence.map(ref=>{
+    ensure(exact(ref,['taskId','resultId','createdAt','pages','source'])&&HEX.test(ref.taskId)&&HEX.test(ref.resultId)&&iso(ref.createdAt)&&ordered(ref.pages)&&ref.pages.length>0&&!tasks.has(ref.taskId),'A saved-result source is invalid.');tasks.add(ref.taskId);ref.pages.forEach(id=>union.add(id));const s=ref.source;let href,label;
+    if(exact(s,['kind'])&&s.kind==='saved-task'){href='run.html#task='+ref.taskId;label='Saved calculation';}
+    else if(exact(s,['kind','familyId','revision','caseId'])&&s.kind==='family'&&slug(s.familyId)&&HEX.test(s.revision)&&caseId(s.caseId)){href='run.html#family='+s.familyId+'&case='+s.caseId+'&revision='+s.revision;label='Saved family calculation';}
+    else {ensure(exact(s,['kind','recordId','revision','caseId'])&&s.kind==='published'&&slug(s.recordId)&&HEX.test(s.revision)&&caseId(s.caseId),'A published source is invalid.');href='library.html#/experiment/'+s.recordId;label='Source record';}
+    return {...ref,href,label};
+   });
+   ensure(same(all.filter(id=>union.has(id)),value.coveredPages),'The saved sources do not prove their stated page coverage.');return freeze({...value,evidence});
+  }
   async function preview(selection){
-   const chosen=capture(selection,512),token=begin('previewing');review=null;result=null;
+   const chosen=capture(selection,512),token=begin('previewing');review=null;coverage=null;result=null;
    try{await authenticated(token);const input={parentTask:display.task,parentCard:display.card,inputVersion:display.inputVersion,selection:chosen,...(settings?{parentSettings:display.parentSettings}:{})},derivation=await Q.prepare(input,crypto);assertLive(token);
     const receipt={taskId:display.task.taskId,taskSha256:await hash(display.task,crypto),resultId:display.run.id,createdAt:display.run.createdAt,inputVersion:display.inputVersion},publishedSource=display.source.kind==='published-program'?{taskId:display.task.taskId,resultId:display.run.id,recordId:display.source.recordId,revision:display.source.revision,caseId:display.source.caseId}:null,expected={schema:'liberpedia-parameter-question-preview-v1',source:{reference:display.source,receipt,...(publishedSource?{publishedSource}: {})},parentQuestion:{proposalId:display.source.proposalId,cardSha256:display.source.proposalId.slice(2)},derivation};assertLive(token);
     const childProposalId='p_'+await hash(C.serialize(derivation.card),crypto),previewHash=await hash(expected,crypto);assertLive(token);const value=await request('/parameter-questions/preview',sourceBody(chosen),token);
     ensure(exact(value,['preview','childProposalId','previewHash'])&&same(value.preview,expected)&&value.childProposalId===childProposalId&&value.previewHash===previewHash,'The server preview differs from the displayed source or chosen variation.');await Q.validate(input,value.preview.derivation,crypto);assertLive(token);
+    const checked=checkedCoverage(await request('/parameter-questions/coverage',{...sourceBody(chosen),expectedPreviewHash:previewHash},token),value);assertLive(token);coverage=checked;
+    ensure(coverage.lookupComplete||!coverage.remainingPages.length,'Saved results could not be checked completely. Retry before creating more work.');
     const prior=attempt&&attempt.proposalId===childProposalId&&attempt.previewHash===previewHash?attempt:null;attempt=prior||{proposalId:childProposalId,previewHash,requestId:typeof requestId==='function'?requestId():!attempt&&requestId||crypto.randomUUID(),committed:null};ensure(UUID.test(attempt.requestId),'Use a stable valid request identity.');review=freeze(value);result=null;phase='review';return review;
    }catch(failure){if(token===generation){phase='error';error=failure.message;}throw failure;}finally{if(token===generation)busy=false;}
   }
@@ -49,15 +68,15 @@
    const p=value.preparation;ensure(exact(p,['version','id','proposalId','cardHash','taskId','taskHash','inputVersion','parentTaskId','authority','controlsHash'])&&p.version===1&&/^prep_[a-f0-9]{64}$/.test(p.id)&&p.proposalId===attempt.proposalId&&p.cardHash===attempt.proposalId.slice(2)&&p.taskId===value.task.taskId&&p.taskHash===await hash(value.task,crypto)&&p.inputVersion===display.inputVersion&&p.parentTaskId===null&&p.authority==='idea'&&p.controlsHash===await hash(value.controls,crypto),'The admission receipt differs from the reviewed plan.');assertLive(token);return null;
   }
   async function createVariation(){
-   ensure(review&&!busy,'Preview and review a variation before creating it.');if(result)return result;const token=begin('creating'),current=attempt;
+   ensure(review&&!busy&&coverage&&(coverage.lookupComplete||!coverage.remainingPages.length),'Preview and review a variation before creating it.');if(result)return result;ensure(coverage.remainingPages.length>0,'Saved results already cover this calculation. Inspect its existing sources.');const token=begin('creating'),current=attempt;
    try{
     if(!current.committed){phase='saving-question';const value=await request('/parameter-questions/create',{...sourceBody(review.preview.derivation.selection),childProposalId:current.proposalId,expectedPreviewHash:review.previewHash,requestId:current.requestId},token),p=review.preview,originBody={schema:'liberpedia-question-derivation-v1',parentProposalId:p.parentQuestion.proposalId,childProposalId:current.proposalId,previewHash:review.previewHash,source:p.source,selection:p.derivation.selection,...(p.derivation.parent.settings?{parentSettings:p.derivation.parent.settings}:{}),childTaskId:p.derivation.task.taskId};ensure(exact(value,['id','childProposalId','parentProposalId','createdAt','requestId'])&&value.id===await hash(originBody,crypto)&&value.childProposalId===current.proposalId&&value.parentProposalId===display.source.proposalId&&value.requestId===current.requestId.toLowerCase()&&iso(value.createdAt),'The saved question or parent relationship changed.');assertLive(token);current.committed=freeze(value);}
     phase='preparing';const plan=await request('/parameter-questions/prepare',{...sourceBody(review.preview.derivation.selection),childProposalId:current.proposalId},token);let covered;try{covered=await prepared(plan,token);}catch(failure){if(failure.name!=='AbortError')failure.reviewAgain=true;throw failure;}assertLive(token);if(covered){result=covered;phase='scope-covered';return result;}
     phase='creating-task';const value=await request('/tasks',{proposalId:current.proposalId,task:plan.task,inputVersion:display.inputVersion,parentTaskId:null,preparationId:plan.preparation.id},token);ensure(value.id===plan.task.taskId&&same(value.plan,plan.task)&&same(value.card,review.preview.derivation.card)&&(value.linkedProposalId||value.proposalId)===current.proposalId&&(value.linkedInputVersion||value.inputVersion)===display.inputVersion&&(own(value,'linkedParentTaskId')?value.linkedParentTaskId:value.parentTaskId)===null&&['not-run','results-verified'].includes(value.state),'The created task differs from the reviewed plan.');await E.checkIdentity(value.plan,crypto);assertLive(token);result=freeze({state:'task-created',taskId:value.id,proposalId:current.proposalId,href:'run.html'+Context.href(value.id,current.proposalId)});phase='created';return result;
    }catch(failure){if(token===generation){if(failure.reviewAgain)review=null;phase='error';error=failure.message;}throw failure;}finally{if(token===generation)busy=false;}
   }
-  function cancel(){generation++;controller?.abort();controller=null;busy=false;review=null;result=null;phase='cancelled';}
-  function getState(){return freeze(capture({phase,busy,preview:review,result,error,requestId:attempt?.requestId||null,progress:{committed:!!attempt?.committed}}));}
+  function cancel(){generation++;controller?.abort();controller=null;busy=false;review=null;coverage=null;result=null;phase='cancelled';}
+  function getState(){return freeze(capture({phase,busy,preview:review,coverage,result,error,requestId:attempt?.requestId||null,progress:{committed:!!attempt?.committed}}));}
   return Object.freeze({list:()=>V.list(display.task),preview,create:createVariation,cancel,getState,destroy:cancel});
  }
  const api={create};if(node)module.exports=api;else root.ParameterVariationClient=api;

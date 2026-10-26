@@ -12,6 +12,14 @@ Migration 0017 adds these immutable request receipts. Source-bound preparation a
 task registration follow separately; creating a variation never runs it or saves
 a result. The older confirmation endpoint remains available for existing clients.
 
+Before creation, `POST /parameter-questions/coverage` checks the exact reviewed
+variation against saved computations and pinned archive receipts. It creates no
+question, task, preparation or result. The response binds the preview, task and
+edition to an ordered page partition and typed source references. A failed or
+truncated lookup cannot establish that work is absent. The browser directs fully
+covered variations to existing sources; ordinary preparation checks current
+coverage again before admitting remaining pages.
+
 The new `/tasks` routes link a confirmed idea to an immutable declarative plan,
 then accept submitted results only after replaying the bounded computation. The
 handler verifies bundled page text against the site's selected raw or reviewed
