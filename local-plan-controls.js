@@ -77,6 +77,7 @@
    for(let i=0;i<values.length;i++){counts[values[i]]++;runeCount++;if(i){pairCount++;if(values[i]===values[i-1])repeats++;}}
    transformed.push({page:page.id,text});
    if(criterion.kind==='exact-prefix')matches.push({page:page.id,matched:criterion.values.every((value,i)=>values[i]===value)});
+   if(criterion.kind==='exact-prefix-set'){const matchingOpenings=criterion.openings.filter(o=>o.values.length<=values.length&&o.values.every((v,i)=>values[i]===v)).map(o=>o.id);matches.push({page:page.id,matched:matchingOpenings.length>0,matchingOpenings});}
    if(criterion.kind==='language-score')languagePages.push({page:page.id,...referenceLanguage(values)});
    if(criterion.kind==='word-affine-count'){
     let localOpportunities=0,localMatches=0,localExpected=[0n,1n];
@@ -146,9 +147,15 @@
     if(caseIndex===1)values[0]=mod(values[0]+1);
     body.criterion={kind:'exact-prefix',values};
    }
+   if(snapshot.criterion.kind==='exact-prefix-set'){
+    const output=referenceText(pages[0].text,snapshot.steps,snapshot.alphabet),names=snapshot.alphabet.map(v=>v.rune),values=Array.from(output).filter(ch=>names.includes(ch)).map(ch=>names.indexOf(ch)).slice(0,256);
+    if(!values.length)throw Error('The synthetic named-opening control needs at least one rune.');
+    const first=[...values],second=[...values];first[0]=mod(first[0]+caseIndex);second[0]=mod(second[0]+caseIndex+1);
+    body.criterion={kind:'exact-prefix-set',openings:[{id:'first-opening',values:first},{id:'second-opening',values:second}]};
+   }
    const task=await E.prepare(body,cryptoAPI),expected=referenceResult(task),actual=E.run(task);
    if(E.stable(actual)!==E.stable(expected))throw Error('The local runner disagrees with the independent synthetic reference.');
-   if(snapshot.criterion.kind==='exact-prefix'&&expected.matches[0].matched!==(caseIndex===0))throw Error('The synthetic prefix control lost its declared positive or negative result.');
+   if(['exact-prefix','exact-prefix-set'].includes(snapshot.criterion.kind)&&expected.matches[0].matched!==(caseIndex===0))throw Error('The synthetic prefix control lost its declared positive or negative result.');
    cases.push({id,task,expectedResultSha256:await digest(expected,cryptoAPI)});
   }
   return {version:1,targetId:snapshot.taskId,cases};

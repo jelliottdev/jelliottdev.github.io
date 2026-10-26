@@ -1,5 +1,5 @@
 /* Fixed site-owned worker. Task data can select reviewed operations, never code. */
-importScripts('local-experiment.js?v=20261025-language');
+importScripts('local-experiment.js?v=20261026-opening-sets');
 self.onmessage=async function(event){
  const message=event.data;
  if(!message||message.type!=='run'||!Number.isSafeInteger(message.id))return;

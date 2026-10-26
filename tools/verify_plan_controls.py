@@ -55,8 +55,8 @@ def verified_controls(target, suite):
         runner.require(len(control['pages']) == 2 and all(
             1 <= sum(ch in runes for ch in page['text']) <= 320 for page in control['pages']),
             'Runner check exceeds its synthetic input bounds')
-        if target['criterion']['kind'] == 'exact-prefix':
-            runner.require(control['criterion']['kind'] == 'exact-prefix',
+        if target['criterion']['kind'] in ('exact-prefix', 'exact-prefix-set'):
+            runner.require(control['criterion']['kind'] == target['criterion']['kind'],
                            'Runner check uses a different evaluation')
         else:
             runner.require(control['criterion'] == target['criterion'],
@@ -67,10 +67,10 @@ def verified_controls(target, suite):
         result = runner.run(control)
         actual = hashlib.sha256(stable(result).encode('utf-8')).hexdigest()
         runner.require(actual == expected, 'Runner check result differs; manuscript task not run')
-        if target['criterion']['kind'] == 'exact-prefix':
+        if target['criterion']['kind'] in ('exact-prefix', 'exact-prefix-set'):
             runner.require(bool(result['matches']), 'Runner prefix check has no comparisons')
             prefix_states.append(result['matches'][0]['matched'])
-    if target['criterion']['kind'] == 'exact-prefix':
+    if target['criterion']['kind'] in ('exact-prefix', 'exact-prefix-set'):
         runner.require(prefix_states == [True, False], 'Prefix checks must exercise a match and a mismatch')
     return len(cases)
 

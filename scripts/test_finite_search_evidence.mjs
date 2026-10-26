@@ -46,4 +46,13 @@ await test('real relevant-source ceiling cannot hide an older page and claim its
  assert.equal(Questions.decision(proof).state,'unavailable');assert.deepEqual(Questions.decision(proof).next,{kind:'retry-evidence'});assert(!found.sources.some(s=>s.task.pages[0].id==='lp2-16'));
 });
 await test('byte-budget exclusion retains an explicit incomplete lookup',async()=>{const f=fixture(),c=card();save(f,await task());f.setHook((sql,rows)=>sql.includes('AS matching_pages')?rows.map(row=>({...row,source_bytes:9*1024*1024})):rows);const found=await inspect(f,c);assert.equal(found.lookupComplete,false);assert.deepEqual(found.sources,[]);assert.equal(f.queries.length,2);});
+await test('named opening sets reuse only complete same-set receipts without target replay',async()=>{
+ const f=fixture(),bundle=clone(raw),text=raw.alphabet[0].rune+raw.alphabet[1].rune;
+ bundle.pages.forEach(p=>p.raw=text);
+ const criterion={kind:'exact-prefix-set',openings:[{id:'first',values:[0]},{id:'longer',values:[0,1]}]},c=card({criterion});
+ const saved=save(f,await task({text,criterion}));
+ save(f,await task({title:'Single opening is different evidence',text,criterion:{kind:'exact-prefix',values:[0]}}));
+ const found=await inspect(f,c,bundle);assert.equal(found.lookupComplete,true);assert.equal(found.sources.length,1);assert.equal(found.sources[0].task.taskId,saved.taskId);assert.deepEqual(found.sources[0].run.result.matches[0].matchingOpenings,['first','longer']);
+ const changed=clone(c);changed.rules.evaluation.value.openings.reverse();assert.deepEqual((await inspect(f,changed,bundle)).sources,[]);
+});
 console.log(groups+' finite evidence SQL groups passed; no hosted requests or target replay');

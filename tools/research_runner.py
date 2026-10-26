@@ -190,6 +190,22 @@ def validate(task):
         fields(criterion, ('kind', 'values'), 'Prefix criterion')
         require(isinstance(criterion['values'], list) and 1 <= len(criterion['values']) <= 256
                 and all(integer(v, 0, 28) for v in criterion['values']), 'Invalid prefix values')
+    elif criterion.get('kind') == 'exact-prefix-set':
+        fields(criterion, ('kind', 'openings'), 'Opening-set criterion')
+        openings = criterion['openings']
+        require(isinstance(openings, list) and 1 <= len(openings) <= 32, 'Give one to 32 named openings')
+        names, vectors = set(), set()
+        for opening in openings:
+            fields(opening, ('id', 'values'), 'Named opening')
+            name, values = opening['id'], opening['values']
+            require(isinstance(name, str) and re.fullmatch(r'[a-z][a-z0-9-]{0,63}', name)
+                    and name not in names, 'Invalid or duplicate opening name')
+            require(isinstance(values, list) and 1 <= len(values) <= 256
+                    and all(integer(value, 0, 28) for value in values), 'Invalid opening values')
+            vector = tuple(values)
+            require(vector not in vectors, 'Duplicate opening sequence')
+            names.add(name)
+            vectors.add(vector)
     elif criterion.get('kind') == 'word-prime-sums':
         fields(criterion, ('kind', 'table', 'boundaries'), 'Word-prime-sums criterion')
         require(criterion['table'] in ('canonical', 'reversed'), 'Invalid prime table')
@@ -363,6 +379,10 @@ def run(task):
         if task['criterion']['kind'] == 'exact-prefix':
             prefix = task['criterion']['values']
             matches.append({'page': page['id'], 'matched': values[:len(prefix)] == prefix})
+        if task['criterion']['kind'] == 'exact-prefix-set':
+            matching = [opening['id'] for opening in task['criterion']['openings']
+                        if values[:len(opening['values'])] == opening['values']]
+            matches.append({'page': page['id'], 'matched': bool(matching), 'matchingOpenings': matching})
         if task['criterion']['kind'] == 'language-score':
             language_pages.append({'page': page['id'], **language_evaluate(values)})
         if task['criterion']['kind'] == 'word-affine-count':

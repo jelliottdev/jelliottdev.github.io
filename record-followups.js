@@ -10,6 +10,11 @@
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const clone=v=>JSON.parse(JSON.stringify(v)),same=(a,b)=>E.stable(a)===E.stable(b);
  const text=(v,max=1200)=>typeof v==='string'&&v.trim()&&Array.from(v).length<=max;
+ function prefixSet(value){
+  if(!exact(value,['kind','openings'])||value.kind!=='exact-prefix-set'||!Array.isArray(value.openings)||value.openings.length<1||value.openings.length>32)return false;
+  const ids=new Set(),vectors=new Set();for(const item of value.openings){if(!exact(item,['id','values'])||typeof item.id!=='string'||!/^[a-z][a-z0-9-]{0,63}$/.test(item.id)||ids.has(item.id)||!Array.isArray(item.values)||item.values.length<1||item.values.length>256||Array.from(item.values).some(v=>!Number.isInteger(v)||v<0||v>28))return false;const vector=JSON.stringify(item.values);if(vectors.has(vector))return false;ids.add(item.id);vectors.add(vector);}return true;
+ }
+
  function reference(hash){if(typeof hash!=='string')return null;const m=new RegExp('^#record=('+SLUG+')&followup=('+SLUG+')$').exec(hash||'');return m&&m[1].length<=100&&m[2].length<=100?{kind:'record',recordId:m[1],followupId:m[2],id:m[1]+'/'+m[2]}:null;}
  function validOrigin(v){return exact(v,['recordId','followupId','recordSha256','protocolSha256'])&&[v.recordId,v.followupId].every(id=>typeof id==='string'&&id.length<=100&&ID.test(id))&&HEX.test(v.recordSha256)&&HEX.test(v.protocolSha256);}
  async function digest(value,cryptoAPI){return Array.from(new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');}
@@ -35,7 +40,7 @@
  function cardProgram(card){
   const snapshot=cardSnapshot(card),draft=snapshot,rules=draft.rules,known=k=>rules[k].status==='specified';
   if(draft.unresolved.length||draft.method.status!=='specified'||draft.scope.status!=='specified'||!exact(draft.scope.value,['pages'])||!Array.isArray(draft.scope.value.pages)||!draft.scope.value.pages.length||Object.values(rules).some(v=>v.status==='unrestricted'))throw Error('The published idea is not a fixed complete-page experiment.');
-  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||rules.evaluation.value?.kind==='exact-prefix'||Evaluators.identify(rules.evaluation.value)||Protocols.identify(rules.evaluation.value)))throw Error('The published input and evaluation must be explicit.');
+  if(!known('inputVersion')||!['raw','reviewed'].includes(rules.inputVersion.value)||!known('representation')||rules.representation.value!=='GP29'||!known('evaluation')||!(rules.evaluation.value==='measurement'||rules.evaluation.value?.kind==='exact-prefix'||prefixSet(rules.evaluation.value)||Evaluators.identify(rules.evaluation.value)||Protocols.identify(rules.evaluation.value)))throw Error('The published input and evaluation must be explicit.');
   for(const k of ['searchBounds','searchProtocol','exceptionalCases'])if(known(k))throw Error('The published conditions need an execution adapter.');
   if(known('unmapped')&&rules.unmapped.value!=='preserve'||known('wordBoundaries')&&rules.wordBoundaries.value!=='preserve')throw Error('The published separator rule needs an adapter.');
   const measurementIds=new Set(Protocols.list().map(d=>d.operation.id));
@@ -46,7 +51,7 @@
    if(operations.length!==1||!expected||!Protocols.identify(evaluation)||!same(evaluation,expected)||['boundaryMode','reset','initialState'].some(known)||rules.wordBoundaries.status==='not_applicable')throw Error('The published measurement settings and evaluation must agree.');
    return {snapshot,steps:[],pages:draft.scope.value.pages,inputVersion:rules.inputVersion.value,criterion:evaluation};
   }
-  if(rules.evaluation.value!=='measurement'&&!Evaluators.identify(rules.evaluation.value)&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');
+  if(rules.evaluation.value!=='measurement'&&!Evaluators.identify(rules.evaluation.value)&&!prefixSet(rules.evaluation.value)&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');
   const modes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};let reversed=false,cumulative=false,resetUsed=false;
   const steps=draft.method.value.operations.map(op=>{
    const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:op.id==='interrupted_repeating_key'?['key','direction','reset','interrupts']:op.id==='finite_key_bank'?['bankId','bankSha256','offset','direction','reset']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];

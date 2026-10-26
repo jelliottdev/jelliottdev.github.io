@@ -2,7 +2,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,S=node?require('./factored-finite-search-snapshot.js'):root.FactoredFiniteSearchSnapshot,Zip=node?require('./local-run-package.js'):root.LocalRunPackage;
- const RAW_PART_BYTES=16*1024*1024,ZIP_PART_BYTES=32*1024*1024,encoder=new TextEncoder(),SOURCE_SHA256=Object.freeze({runner:'be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61',auditV1:'35f765cdd9879c6590b0a255dcb7fe18da1a5ce7fd95c2872ca872a9ba75d1ce',auditV2:'772a7f60b6733a688fbf2c27df7d2df0d549eacf401cbb5e8bd5730498c0787c',languageModel:'e3625ff392d44916aa78b4549b3b52062e0bccece49ed00850bfc02916a789f1'});
+ const RAW_PART_BYTES=16*1024*1024,ZIP_PART_BYTES=32*1024*1024,encoder=new TextEncoder(),SOURCE_SHA256=Object.freeze({runner:'1943aa4d77263869e5890df09f93199cdc60f464c3e4b1643b5fa7a57fc59a32',auditV1:'b7d76511d4dbc464468131382303944c1c7f88e8287d9df80024514ddb123de7',auditV2:'783c08c9ecd16b0027a601f485e1b59bc63c2faa195eb88a356e750abf5370fb',languageModel:'e3625ff392d44916aa78b4549b3b52062e0bccece49ed00850bfc02916a789f1'});
  const MODEL_BYTES=1175368,MODEL_ID='gp29-flores-trigram-v1',MODEL_PAYLOAD_SHA256='8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4';
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const digest=async(bytes,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');

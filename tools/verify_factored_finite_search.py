@@ -63,7 +63,7 @@ def domain_check(original, q, output=False, inspection=False):
         require(q['questionPolicy'] == 'language-reference-comparison-v1' and q['criterion'] ==
                 {'kind': 'language-score', 'modelId': runner.LANGUAGE_MODEL_ID, 'modelSha256': runner.LANGUAGE_MODEL_SHA256}, 'The explicit pinned comparison changed')
     else:
-        require(q['criterion'].get('kind') == 'exact-prefix', 'Only exact-prefix factored questions are supported')
+        require(q['criterion'].get('kind') in ('exact-prefix', 'exact-prefix-set'), 'Only exact opening factored questions are supported')
     require([p['id'] for p in q['pages']] == sorted(card['scope']['value']['pages']), 'Shared scope changed')
     probe = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE, 'title': 'Offline factored geometry check',
              'alphabet': q['alphabet'], 'pages': q['pages'], 'steps': [], 'criterion': q['criterion']}
@@ -102,6 +102,7 @@ def verify(manifest, directory):
     require(manifest['snapshotId'] == old.digest({k: v for k, v in manifest.items() if k != 'snapshotId'}), 'Snapshot digest mismatch')
     q, e = manifest['question'], manifest['evidence']
     programs = domain_check(manifest['original'], q, output, inspection)
+    require(not derived or q['criterion']['kind'] != 'exact-prefix-set', 'Opening sets require direct original results')
     fields(e, ('chunks', 'lookup', 'provenanceMeaning', 'mode', 'derivationMeaning') if derived or output
            else ('chunks', 'lookup', 'provenanceMeaning'), 'Evidence')
     if output:
@@ -161,7 +162,7 @@ def verify(manifest, directory):
             receipts.add(key)
             require(task['engine'] == q['engine'] and task['alphabet'] == q['alphabet'], 'Source changed its exact transformation')
             direct = task['criterion'] == q['criterion']
-            require(direct or (derived and task['criterion']['kind'] in ('measurement', 'exact-prefix')) or (output and task['criterion']['kind'] in ('measurement', 'exact-prefix', 'word-affine-count', 'word-prime-sums', 'language-score')), 'Source changed its exact common protocol')
+            require(direct or (derived and task['criterion']['kind'] in ('measurement', 'exact-prefix')) or (output and task['criterion']['kind'] in ('measurement', 'exact-prefix', 'exact-prefix-set', 'word-affine-count', 'word-prime-sums', 'language-score')), 'Source changed its exact common protocol')
             protocol_id = old.protocol(q, task['steps'])
             require(protocol_id in programs, 'Original source is outside the declared programs')
             pair = (task['taskId'], run['id'])
@@ -234,7 +235,7 @@ def verify(manifest, directory):
             and type(manifest['proof']['complete']) is bool
             and all(isinstance(manifest['proof'][key], str) and old.HEX.fullmatch(manifest['proof'][key]) for key in (('coverageSha256', 'noRuneSha256') if inspection else ('coverageSha256', 'insufficientSha256') if output else ('coverageSha256', 'matchingSha256'))), 'Coverage proof types changed')
     require(manifest['proof'] == proof, 'Coverage counts or bitmap digests changed')
-    answer = (('outputs-ready' if inspection else 'comparisons-complete') if proof['complete'] else 'incomplete') if output else 'prefix-found' if matched_count else 'prefix-not-found' if proof['complete'] else 'incomplete'
+    answer = (('outputs-ready' if inspection else 'comparisons-complete') if proof['complete'] else 'incomplete') if output else 'prefix-found' if matched_count and (proof['complete'] or q['criterion']['kind'] != 'exact-prefix-set') else 'prefix-not-found' if proof['complete'] else 'incomplete'
     limit = INSPECTION_LIMIT if inspection else OUTPUT_LIMIT if output else old.LIMIT
     require(manifest['finding'] == {'kind': answer, 'limit': limit}, 'Finding or scientific limit changed')
     return {'snapshotId': manifest['snapshotId'], 'domainId': q['id'], 'finding': answer, **proof,

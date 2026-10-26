@@ -2,7 +2,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,R=node?require('./computation-evidence.js'):root.ComputationEvidence,J=node?require('./finite-json.js'):root.FiniteJSON;
- const SCHEMA='liberpedia-factored-group-pending-v1',KINDS=Object.freeze(['exact-prefix','measurement','word-affine-count','word-prime-sums','language-score']),HEX=/^[a-f0-9]{64}$/,MAX=8*1024*1024;
+ const SCHEMA='liberpedia-factored-group-pending-v1',KINDS=Object.freeze(['exact-prefix','exact-prefix-set','measurement','word-affine-count','word-prime-sums','language-score']),HEX=/^[a-f0-9]{64}$/,MAX=8*1024*1024;
  const exact=(v,k)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===k.length&&k.every(n=>Object.hasOwn(v,n)),capture=v=>J.capture(v,{maxBytes:MAX,maxDepth:24,maxNodes:500000}),size=v=>new TextEncoder().encode(E.stable(v)).byteLength;
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  async function id(domainId,programId,caseIds,crypto=root.crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable({schema:'liberpedia-page-group-v1',domainId,programId,caseIds}))))].map(v=>v.toString(16).padStart(2,'0')).join('');}

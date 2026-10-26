@@ -15,7 +15,7 @@ import verify_controls as authored
 import verify_plan_controls as generic
 
 PAGE = re.compile(r'(?:lp1-(?:0[0-9]|1[0-6])|lp2-(?:[0-4][0-9]|5[0-7]))')
-FINITE_AUDIT_SHA256 = '35f765cdd9879c6590b0a255dcb7fe18da1a5ce7fd95c2872ca872a9ba75d1ce'
+FINITE_AUDIT_SHA256 = 'b7d76511d4dbc464468131382303944c1c7f88e8287d9df80024514ddb123de7'
 
 
 def finite_relation(task, relation):

@@ -3,6 +3,24 @@
  'use strict';
  const node=typeof module==='object'&&module.exports,View=node?require('./finite-search-view.js'):root.FiniteSearchView,Output=node?require('./local-run-view.js'):root.LocalRunView,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare;
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ // Known passage names are display context only. Both ID and exact vector must match.
+ const decodedOpenings={warning:['Warning',[24,7,24,4,9,21,17,18,20,10,18,1]],welcome:['Welcome',[7,18,20,5,3,19,18,7,18,20,5,3]],'some-wisdom':['Some Wisdom',[15,3,19,18,7,10,15,23,3,19,2,18]],'first-koan':['First Koan',[24,5,3,24,9,24,19,24,9,23,18,5]],'loss-of-divinity':['Loss of Divinity',[2,18,20,3,15,15,3,0,23,10,1,10]],'second-koan':['Second Koan',[24,5,3,24,9,23,1,4,21,24,20,18]],instruction:['Instruction',[24,9,10,9,15,16,4,1,5,16,27,9]],'lp2-56':['LP2 page 56',[24,9,18,9,23,7,10,2,10,9,2,18]],'lp2-57':['LP2 page 57',[13,24,4,24,17,20,18,20,10,5,18,2]]};
+ function prefixSetOpenings(criterion){
+  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
+  if(!exact(criterion,['kind','openings'])||criterion.kind!=='exact-prefix-set'||!Array.isArray(criterion.openings)||!criterion.openings.length||criterion.openings.length>32)return null;
+  const ids=new Set(),vectors=new Set();for(const item of criterion.openings){if(!exact(item,['id','values'])||typeof item.id!=='string'||!/^[a-z][a-z0-9-]{0,63}$/.test(item.id)||ids.has(item.id)||!Array.isArray(item.values)||!item.values.length||item.values.length>256||Array.from(item.values).some(v=>!Number.isInteger(v)||v<0||v>28))return null;const vector=JSON.stringify(item.values);if(vectors.has(vector))return null;ids.add(item.id);vectors.add(vector);}return criterion.openings;
+ }
+ const decodedOpeningPages={warning:'lp1-01',welcome:'lp1-03','some-wisdom':'lp1-05','first-koan':'lp1-06','loss-of-divinity':'lp1-10','second-koan':'lp1-14',instruction:'lp1-16','lp2-56':'lp2-56','lp2-57':'lp2-57'};
+ function decodedOpening(item){const known=Object.hasOwn(decodedOpenings,item.id)&&decodedOpenings[item.id];return known&&JSON.stringify(known[1])===JSON.stringify(item.values)?known:null;}
+ function openingSetDescription(criterion){
+  const openings=prefixSetOpenings(criterion);if(!openings)return null;
+  const lengths=openings.map(item=>item.values.length),n=openings.length,count=n===9?'nine':n,known=openings.every(decodedOpening),subject=known?(n===1?'one already decoded passage':count+' already decoded passages'):(n===1?'the supplied opening':count+' supplied openings');
+  return lengths.every(length=>length===lengths[0])?'Compare the first '+lengths[0]+' output runes with '+subject+'.':'Compare the start of the output with '+subject+', using each opening’s full length ('+Math.min(...lengths)+'–'+Math.max(...lengths)+' runes).';
+ }
+ function openingSetDetails(criterion){
+  const openings=prefixSetOpenings(criterion);if(!openings)return '';
+  return '<details class="experiment-details"><summary>Which openings are compared?</summary><ul>'+openings.map(item=>{const known=decodedOpening(item),label=known?known[0]:item.id;return '<li>'+(known?'<a href="index.html#/reader/'+decodedOpeningPages[item.id]+'">'+esc(label)+'</a>':esc(label))+' · '+item.values.length+' runes</li>';}).join('')+'</ul><p>Only the start of each page’s output is compared. A matching opening is not a complete reading.</p></details>';
+ }
  function domainLabel(name,values){
   if(values.length>=3&&values.every((v,i)=>Number.isInteger(v)&&(!i||v===values[i-1]+1)))return values[0]+'–'+values.at(-1);
   const literal=values.map(v=>typeof v==='string'?v:JSON.stringify(v)).join(', ');
@@ -49,6 +67,7 @@
   }
   const criterion=context.criterion,warning=[24,7,24,4,9,21,17,18,20,10,18,1,18,9,3,2,21,0,4,3,19,2,10,15];let check;
   if(criterion?.kind==='exact-prefix'&&Array.isArray(criterion.values)&&criterion.values.length){const n=criterion.values.length,known=[12,24].includes(n)&&criterion.values.every((v,i)=>v===warning[i]);check='Compare the first '+n+' output runes with '+(known?'the beginning of Warning, an already decoded passage.':'the supplied opening.');}
+  else if(criterion?.kind==='exact-prefix-set'){check=openingSetDescription(criterion);if(!check)return null;}
   else if(criterion?.kind==='language-score'&&Object.keys(criterion).length===3&&criterion.modelId==='gp29-flores-trigram-v1'&&criterion.modelSha256==='8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4')check='Compare the output’s rune order with eight fixed language references; similarity is not a translation.';
   else if(criterion?.kind==='measurement')check='Keep the changed rune text for inspection; this does not judge readability.';
   else return null;
@@ -59,12 +78,12 @@
    else if(directions.length===1&&directions[0]==='add')briefAction='Add a repeating number pattern to the rune numbers.';
    else if(directions.length&&directions.every(v=>v==='add'||v==='subtract'))briefAction='Try both adding and subtracting a repeating number pattern.';
   }
-  return {action,check,briefAction,briefCheck:criterion.kind==='language-score'?'Compare the changed rune order with language samples.':check};
+  return {action,check,briefAction,briefCheck:criterion.kind==='language-score'?'Compare the changed rune order with language samples.':check,...(criterion.kind==='exact-prefix-set'?{openingDetails:openingSetDetails(criterion)}:{})};
  }
- function workHTML(work){return work?'<p class="finite-work-description">'+esc(work.action)+' '+esc(work.check)+'</p>':'';}
+ function workHTML(work){return work?'<p class="finite-work-description">'+esc(work.action)+' '+esc(work.check)+'</p>'+(work.openingDetails||''):'';}
  function exactSettings(html,work){return work?'<details class="experiment-details"><summary>Exact settings and pages</summary>'+html+'</details>':html;}
  function pageRuns(ids){const runs=[];for(let i=0;i<ids.length;i++){let end=i;while(end+1<ids.length&&ids[end+1].slice(0,4)===ids[i].slice(0,4)&&Number(ids[end+1].slice(4))===Number(ids[end].slice(4))+1)end++;runs.push(ids[i].toUpperCase()+(end>i?'–'+ids[end].slice(4):''));i=end;}return runs.join(', ');}
- function openingLabel(task){const known=C.evaluationText(task.criterion);if(known)return known;const values=task.criterion.values;return 'Exact opening: '+values.slice(0,24).map(value=>task.alphabet[value].rune).join('')+(values.length>24?'… ('+values.length+' runes; complete opening in Confirmed idea)':'');}
+ function openingLabel(task){if(task.criterion?.kind==='exact-prefix-set'){const description=openingSetDescription(task.criterion);if(!description)throw Error('Use one to 32 explicit, distinct openings.');return description;}const known=C.evaluationText(task.criterion);if(known)return known;const values=task.criterion.values;return 'Exact opening: '+values.slice(0,24).map(value=>task.alphabet[value].rune).join('')+(values.length>24?'… ('+values.length+' runes; complete opening in Confirmed idea)':'');}
   function continuationMessage(state,local){
    if(state.status==='waiting')return 'The service is busy. Retrying in '+Math.ceil(state.retryDelayMs/1000)+' seconds.';
    if(state.status==='running')return state.binding?.executionUnit==='page-group-v1'?'Each verified calculation is saved before continuing.':'Verified results are saved after each small batch.';
@@ -101,6 +120,7 @@
    const questionContext=node?require('./task-question-context.js'):root.TaskQuestionContext,displaySource=model&&inspectionIdeaId&&questionContext?.inspectionHref?{...model,sourceLinks:model.sourceLinks.map(link=>({...link,href:questionContext.inspectionHref(link.href,inspectionIdeaId)}))}:model;
    const displayModel=displaySource&&work?{...displaySource,method:work.action.length>300?work.action.slice(0,297)+'…':work.action,check:work.check}:displaySource;
    let html=displayModel?(output==='inspection'?View.renderInspection(displayModel,{checkLabel:'Review remaining outputs'}):output?View.renderOutput(displayModel,{checkLabel:'Review remaining comparisons'}):View.render(displayModel,{checkLabel:'Review remaining search'})):'<h2 data-finite-focus tabindex="-1">Check these settings</h2><p role="status">'+(phase==='loading'?'Checking the declared settings and saved work…':'The settings could not be checked.')+'</p>';
+   if(displayModel&&work?.openingDetails)html+=work.openingDetails;
    if(reuseNote)html+='<p class="finite-search-reuse">'+esc(reuseNote)+'</p>';
    const statusNotice=continuationState&&['running','waiting','paused'].includes(continuationState.status)?'':notice;html+='<p data-finite-focus tabindex="-1" role="status">'+esc(statusNotice||!continuationState&&progress&&(progress.phase==='controls'?'Checking the calculation':prepared?.kind==='page-group-v1'?'Checking calculations':'Checking your pages')+': '+progress.completed+' of '+progress.total||'')+'</p>';
    if(storageNotice)html+='<p role="status">'+esc(storageNotice)+'</p>';

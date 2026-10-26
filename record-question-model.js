@@ -6,6 +6,7 @@
  const object=value=>value&&typeof value==='object'&&!Array.isArray(value);
  const exact=(value,keys)=>object(value)&&Reflect.ownKeys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
  const clone=value=>JSON.parse(JSON.stringify(value)),hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
+ const prefixSet=value=>value&&typeof value==='object'&&!Array.isArray(value)&&Reflect.ownKeys(value).length===2&&Object.hasOwn(value,'kind')&&Object.hasOwn(value,'openings')&&value.kind==='exact-prefix-set'&&Array.isArray(value.openings)&&value.openings.length>=1&&value.openings.length<=32&&Array.from(value.openings).every(o=>o&&typeof o==='object'&&!Array.isArray(o)&&Reflect.ownKeys(o).length===2&&Object.hasOwn(o,'id')&&Object.hasOwn(o,'values')&&typeof o.id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(o.id)&&Array.isArray(o.values)&&o.values.length>=1&&o.values.length<=256&&Array.from(o.values).every(n=>Number.isInteger(n)&&n>=0&&n<=28))&&new Set(value.openings.map(o=>o.id)).size===value.openings.length&&new Set(value.openings.map(o=>JSON.stringify(o.values))).size===value.openings.length;
  function pinnedScope(inputs,scope){return exact(inputs,['version','alphabet_sha256','pages'])&&['raw','reviewed'].includes(inputs.version)&&hex(inputs.alphabet_sha256)&&Array.isArray(inputs.pages)&&inputs.pages.length>0&&inputs.pages.length<=75&&!inputs.pages.some(page=>!exact(page,['id','text_sha256'])||!/^lp[12]-\d{2}$/.test(page.id)||!hex(page.text_sha256))&&new Set(inputs.pages.map(page=>page.id)).size===inputs.pages.length&&scope?.status==='specified'&&exact(scope.value,['pages'])&&JSON.stringify(scope.value.pages)===JSON.stringify(inputs.pages.map(page=>page.id));}
  // Cache only bounded, plain, already validated discovery metadata. Every lookup
  // still traverses descriptors so mutations and accessors cannot reuse a result.
@@ -34,7 +35,7 @@
    const card=recipe.card,inputs=recipe.inputs,criterion=card?.rules?.evaluation;
    if(card?.version!==1||card.unresolved.length||criterion?.status!=='specified'||!pinnedScope(inputs,card.scope)||card.rules.inputVersion?.status!=='specified'||card.rules.inputVersion.value!==inputs.version)return null;
    const c=criterion.value,language=exact(c,['kind','modelId','modelSha256'])&&c.kind==='language-score'&&c.modelId==='gp29-flores-trigram-v1'&&c.modelSha256==='8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4',prefix=exact(c,['kind','values'])&&c.kind==='exact-prefix'&&Array.isArray(c.values)&&c.values.length>0&&c.values.length<=256&&c.values.every(n=>Number.isInteger(n)&&n>=0&&n<=28);
-   if(!prefix&&!language&&c!=='measurement')return null;
+   if(!prefix&&!prefixSet(c)&&!language&&c!=='measurement')return null;
    const Storage=typeof module==='object'&&module.exports?require('./finite-control-storage.js'):root.FiniteControlStorage;
    const declaration=Settings.factored.inspect(card),control=Storage?Storage.expand(recipe.control):recipe.control;
    if(!exact(control,['kind','members'])||control.kind!=='finite-program-controls'||!Array.isArray(control.members)||control.members.length!==declaration.programCount||control.members.length>1024)return null;

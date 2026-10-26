@@ -13,7 +13,7 @@
   const seen=new Set();
   for(const item of envelope.items){
    const keys=['id','kind','title','question','scope_change','limitation','evaluation_kind','available','protocol_sha256',...(Object.hasOwn(item||{},'motivation')?['motivation']:[])];
-   if(!exact(item,keys)||!ID.test(item.id)||item.id.length>100||seen.has(item.id)||!['fixed','finite-settings'].includes(item.kind)||!text(item.title,300)||!['question','scope_change','limitation'].every(k=>text(item[k],1200))||Object.hasOwn(item,'motivation')&&!text(item.motivation,1200)||!['measurement','exact-prefix','word-affine-count','word-prime-sums','language-score'].includes(item.evaluation_kind)||typeof item.available!=='boolean'||!HEX.test(item.protocol_sha256))return [];
+   if(!exact(item,keys)||!ID.test(item.id)||item.id.length>100||seen.has(item.id)||!['fixed','finite-settings'].includes(item.kind)||!text(item.title,300)||!['question','scope_change','limitation'].every(k=>text(item[k],1200))||Object.hasOwn(item,'motivation')&&!text(item.motivation,1200)||!['measurement','exact-prefix','exact-prefix-set','word-affine-count','word-prime-sums','language-score'].includes(item.evaluation_kind)||typeof item.available!=='boolean'||!HEX.test(item.protocol_sha256))return [];
    seen.add(item.id);
   }
   return envelope.items.slice();

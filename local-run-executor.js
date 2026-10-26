@@ -14,7 +14,7 @@
      E.validateTask(task);
      const snapshot=JSON.parse(JSON.stringify(task)),total=snapshot.pages.length;let completed=0;
      if(typeof WorkerClass!=='function')throw Error('This browser cannot start the local runner. You can use the reproduction download instead.');
-     worker=new WorkerClass('local-run-worker.js?v=20261025-language');
+     worker=new WorkerClass('local-run-worker.js?v=20261026-opening-sets');
      worker.onmessage=event=>{
       if(settled||event.data?.id!==id)return;
       const data=event.data;
@@ -45,7 +45,7 @@
   const aborted=()=>new DOMException('Run cancelled.','AbortError');
   function settle(job,fn,value){if(job.settled)return;job.settled=true;if(job.timer!==null)unschedule(job.timer);job.timer=null;if(active===job)active=null;fn(value);}
   function close(error=aborted()){if(closed)return;closed=true;const current=worker;worker=null;current?.terminate();if(active){const job=active;settle(job,job.reject,error);}}
-  function ensureWorker(){if(worker)return;if(typeof WorkerClass!=='function')throw Error('This browser cannot start the local runner. You can use the reproduction download instead.');const current=new WorkerClass('local-run-worker.js?v=20261025-language');worker=current;
+  function ensureWorker(){if(worker)return;if(typeof WorkerClass!=='function')throw Error('This browser cannot start the local runner. You can use the reproduction download instead.');const current=new WorkerClass('local-run-worker.js?v=20261026-opening-sets');worker=current;
    current.onmessage=event=>{if(closed||worker!==current)return;const job=active,data=event.data;if(!job||job.settled||data?.id!==job.id)return;
     if(data.type==='result'){if(!data.result||data.result.taskId!==job.task.taskId){close(Error('The runner returned a different experiment.'));return;}settle(job,job.resolve,data.result);}
     else if(data.type==='error')close(Error('The experiment could not run. Please try again.'));

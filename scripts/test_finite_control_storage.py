@@ -1,4 +1,4 @@
-"""Storage-only sharing: eleven real recipes, malformed forms and JS parity."""
+"""Storage-only sharing: fifteen real recipes, malformed forms and JS parity."""
 import copy
 import hashlib
 import json
@@ -34,8 +34,8 @@ class FiniteControlStorage(unittest.TestCase):
         cls.legacy = codec.expand(cls.recipes[0]['control'])
         cls.shared = codec.compact(cls.legacy)
 
-    def test_eleven_actual_recipes_roundtrip_and_reduction(self):
-        self.assertEqual(len(self.recipes), 11)
+    def test_fifteen_actual_recipes_roundtrip_and_reduction(self):
+        self.assertEqual(len(self.recipes), 15)
         for recipe in self.recipes:
             with self.subTest(recipe=recipe['id']):
                 source_before = digest(recipe['control'])

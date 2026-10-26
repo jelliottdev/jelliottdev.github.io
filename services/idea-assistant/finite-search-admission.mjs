@@ -33,7 +33,7 @@ export function compileFiniteMember(card,settings,settingsAPI=Settings,questionP
  const inspection=questionPolicy==='transformed-output-inspection-v1';
  const original=captureCard(card),member=checkedSettings(settingsAPI).member(original,settings),plan=Compiler.compile(member.card);
  if(plan.reason||!Array.isArray(plan.steps))throw Error('The selected finite setting needs an execution adapter: '+(plan.reason||'unsupported program'));
- if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value)||original.rules.evaluation.status!=='specified'||(inspection?original.rules.evaluation.value!=='measurement':questionPolicy?Policy.describe(original.rules.evaluation.value).id!==questionPolicy:original.rules.evaluation.value?.kind!=='exact-prefix')
+ if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value)||original.rules.evaluation.status!=='specified'||(inspection?original.rules.evaluation.value!=='measurement':questionPolicy?Policy.describe(original.rules.evaluation.value).id!==questionPolicy:!['exact-prefix','exact-prefix-set'].includes(original.rules.evaluation.value?.kind))
   ||plan.inputVersion!==original.rules.inputVersion.value||E.stable(plan.pages)!==E.stable(original.scope.value.pages)||E.stable(plan.criterion)!==E.stable(inspection?{kind:'measurement'}:original.rules.evaluation.value))throw Error('Finite cases need the unchanged explicit text version, page scope and '+(inspection?'transformed-output inspection.':questionPolicy?'pinned language comparison.':'opening check.'));
  return freeze({declaration:member.declaration,settings:member.settings,plan});
 }

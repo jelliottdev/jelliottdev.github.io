@@ -87,6 +87,18 @@
    object(task.criterion,['kind','values']);
    if(!Array.isArray(task.criterion.values)||!task.criterion.values.length||task.criterion.values.length>256)throw Error('Give a prefix of one to 256 rune indices.');
    task.criterion.values.forEach(v=>integer(v,0,28));
+  }else if(task.criterion?.kind==='exact-prefix-set'){
+   object(task.criterion,['kind','openings']);
+   const openings=task.criterion.openings,names=new Set(),vectors=new Set();
+   if(!Array.isArray(openings)||!openings.length||openings.length>32)throw Error('Give one to 32 named opening passages.');
+   for(const opening of openings){
+    object(opening,['id','values']);
+    if(typeof opening.id!=='string'||!/^[a-z][a-z0-9-]{0,63}$/.test(opening.id)||names.has(opening.id))throw Error('Opening names must be unique lowercase identifiers.');
+    if(!Array.isArray(opening.values)||!opening.values.length||opening.values.length>256)throw Error('Give each opening one to 256 rune indices.');
+    for(const value of opening.values)integer(value,0,28);
+    const vector=stable(opening.values);if(vectors.has(vector))throw Error('Opening rune sequences must be distinct.');
+    names.add(opening.id);vectors.add(vector);
+   }
   }else if(task.criterion?.kind==='word-prime-sums'){
    object(task.criterion,['kind','table','boundaries']);
    if(!['canonical','reversed'].includes(task.criterion.table)||!['non-rune','hyphen-period'].includes(task.criterion.boundaries))throw Error('Choose the prime table and word boundary rule.');
@@ -200,6 +212,10 @@
    for(let i=1;i<values.length;i++)if(values[i]===values[i-1])equalAdjacentPairs++;
    transformed.push({page:page.id,text});
    if(task.criterion.kind==='exact-prefix')matches.push({page:page.id,matched:task.criterion.values.every((v,i)=>values[i]===v)});
+   if(task.criterion.kind==='exact-prefix-set'){
+    const matchingOpenings=task.criterion.openings.filter(opening=>opening.values.every((v,i)=>values[i]===v)).map(opening=>opening.id);
+    matches.push({page:page.id,matched:matchingOpenings.length>0,matchingOpenings});
+   }
    if(task.criterion.kind==='language-score')languagePages.push({page:page.id,...languageScorer().evaluate(values)});
    if(task.criterion.kind==='word-affine-count'){
     const measured=countWordPairs(text,index,task.criterion);
@@ -281,6 +297,11 @@
   if(task.criterion.kind==='language-score'){
    const compared=result.languageScore.pages.filter(page=>page.status==='compared').length,short=result.languageScore.pages.length-compared;
    return {finding:compared+' '+(compared===1?'page compared':'pages compared')+' with eight rune-language references.'+(short?' '+short+' '+(short===1?'page has':'pages have')+' fewer than 40 runes and was not scored.':''),comparison:[],limit:'These scores compare rune order with fixed reference models and 32 shuffled orders. They do not identify a language, establish readability or show a decryption. Shuffle counts are not p-values.'};
+  }
+  if(task.criterion.kind==='exact-prefix-set'){
+   const matched=result.matches.filter(page=>page.matched).length;
+   return {finding:matched+' of '+result.metrics.pages+' pages begin with at least one of the '+task.criterion.openings.length+' named passages.',
+    comparison:[],limit:'Only complete opening sequences count. A prefix match alone does not establish a decryption.'};
   }
   if(task.criterion.kind==='word-prime-sums')return {
    finding:result.wordSums.words.toLocaleString('en-US')+' words measured with the '+task.criterion.table+' prime table.',

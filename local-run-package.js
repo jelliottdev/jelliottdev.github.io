@@ -6,10 +6,10 @@
  const Control=typeof module==='object'&&module.exports?require('./local-control.js'):root.LocalControl;
  const finiteRelation=()=>typeof module==='object'&&module.exports?require('./finite-origin-relation.js'):root.FiniteOriginRelation;
  const Checks=typeof module==='object'&&module.exports?require('./local-plan-controls.js'):root.LocalPlanControls;
- const GUARD_SHA256='378f13633d46c18d940b4d5c71b3d2508558e9dd9714eeca22c6bf1a6819059d';
- const SUBSET_GUARD_SHA256='cacd30de15ef5b9da84eb6bc708fd059d17a83341153f9f997806fb90eb6e759';
+ const GUARD_SHA256='101f8b36f754c56206a10c69ad7e0f645b88d7950f8513757e35ee7389b29938';
+ const SUBSET_GUARD_SHA256='52ecb30ba4e0f3f504742f28c6ceda3eebbd4f8750841bbea407301292380e44';
  const AUTHORED_LANGUAGE_GUARD_SHA256='eab2836a1fa76b0cff973cb26a8b227a730e30844207345ae32249852533dd75';
- const PLAN_GUARD_SHA256='36b01527be08f0594c2eb94f8bf5390015a7dedbef98657e80f5ab0af9953b95';
+ const PLAN_GUARD_SHA256='941dfccdc32b58f40cc39cf8caff18e77dd4d8c1ec486f3f94646a0fcb97cf7d';
  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(k=>Object.hasOwn(value,k));
  const hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
  async function digest(bytes){const hash=await root.crypto.subtle.digest('SHA-256',bytes);return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('');}
@@ -99,7 +99,7 @@
    modelMembers.push(['language-model.json',encoder.encode(E.stable(model)+'\n')]);
   }else if(languageModelText!==null)throw Error('This experiment does not use a language reference model.');
   if(savedOrigins.length){
-   if(!['measurement','exact-prefix','word-affine-count','word-prime-sums','language-score'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
+   if(!['measurement','exact-prefix','exact-prefix-set','word-affine-count','word-prime-sums','language-score'].includes(snapshot.criterion.kind))throw Error('Authored controls require a supported evaluation.');
    const guard=textBytes(guardText,'Control guard source',MAX_RUNNER);
    if(await digest(guard)!==GUARD_SHA256)throw Error('The fixed control guard source changed.');
    const controls=new Map();
@@ -168,8 +168,8 @@
   return zip([['task.json',taskBytes],['research_runner.py',runner],['START.txt',encoder.encode(instructions)],...modelMembers]);
  }
  // Whole-search exports audit existing saved computations. They never run missing cases.
- const FINITE_RUNNER_SHA256='be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61';
- const FINITE_AUDIT_SHA256='35f765cdd9879c6590b0a255dcb7fe18da1a5ce7fd95c2872ca872a9ba75d1ce';
+ const FINITE_RUNNER_SHA256='1943aa4d77263869e5890df09f93199cdc60f464c3e4b1643b5fa7a57fc59a32';
+ const FINITE_AUDIT_SHA256='b7d76511d4dbc464468131382303944c1c7f88e8287d9df80024514ddb123de7';
  async function buildSnapshot(snapshot,runnerText,auditText){
   const S=typeof module==='object'&&module.exports?require('./finite-search-snapshot.js'):root.FiniteSearchSnapshot;
   if(!S?.inspect)throw Error('The verified search snapshot could not be loaded.');

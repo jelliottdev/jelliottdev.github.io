@@ -30,8 +30,9 @@
    const a=Array.from(input.text),b=Array.from(output.text);if(a.length!==b.length||a.some((ch,i)=>index.has(ch)?!index.has(b[i]):b[i]!==ch))throw Error('The saved output does not preserve input rune geometry.');
    const values=b.filter(ch=>index.has(ch)).map(ch=>index.get(ch));runeCount+=values.length;adjacent+=Math.max(0,values.length-1);for(let i=0;i<values.length;i++){counts[values[i]]++;if(i&&values[i]===values[i-1])equal++;}
    if(kind==='exact-prefix'){const match=result.matches[p];if(!exact(match,['page','matched'])||match.page!==input.id||typeof match.matched!=='boolean'||match.matched!==task.criterion.values.every((v,i)=>values[i]===v))throw Error('The saved opening result is inconsistent.');}
+   if(kind==='exact-prefix-set'){const match=result.matches[p],matching=task.criterion.openings.filter(o=>o.values.every((v,i)=>values[i]===v)).map(o=>o.id);if(!exact(match,['page','matched','matchingOpenings'])||match.page!==input.id||typeof match.matched!=='boolean'||match.matched!==(matching.length>0)||L.stable(match.matchingOpenings)!==L.stable(matching))throw Error('The saved named-opening result is inconsistent.');}
   }
-  if(result.matches.length!==(kind==='exact-prefix'?task.pages.length:0))throw Error('The saved matches do not cover the task.');
+  if(result.matches.length!==(['exact-prefix','exact-prefix-set'].includes(kind)?task.pages.length:0))throw Error('The saved matches do not cover the task.');
   if(kind==='language-score'){
    const scorer=typeof module==='object'&&module.exports?require('./language-score.js'):root.RuneLanguageScore;
    if(!scorer)throw Error('The pinned language comparison could not be loaded.');

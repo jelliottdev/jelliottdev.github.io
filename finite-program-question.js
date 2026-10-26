@@ -25,7 +25,7 @@
   const captured=options,programs=[],ids=new Set();let common=null;
   for(const input of captured.programs){
    await E.checkIdentity(input,cryptoAPI);
-   if(input.criterion.kind!=='exact-prefix')throw Error('Finite questions currently require an exact prefix.');
+   if(!['exact-prefix','exact-prefix-set'].includes(input.criterion.kind))throw Error('Finite questions require an exact prefix or declared set of exact openings.');
    const pages=input.pages.slice().sort((a,b)=>a.id.localeCompare(b.id)),scope=E.stable({engine:input.engine,alphabet:input.alphabet,criterion:input.criterion,pages});
    if(common!==null&&scope!==common)throw Error('Every alternative must retain the same exact inputs and criterion.');common=scope;
    if(pages.length*captured.programs.length>MAX_CASES)throw Error('The finite question exceeds its case bound.');
@@ -79,8 +79,8 @@
  }
  function inspectEvidence(proof){if(!proofs.has(proof))throw Error('Finite question evidence must be independently verified.');return proof;}
  function decision(proof){
-  inspectEvidence(proof);const base={schema:'liberpedia-finite-program-decision-v1',domainId:proof.domainId,evidence:proof,limit:'Only these declared programs, this exact prefix and these pinned page texts are covered. A matching opening is not a complete reading; a failure does not reject the broader deciphering aim.'};
-  if(proof.matchingCaseIds.length)return freeze({...base,state:'answered',answer:'prefix-found',next:{kind:'inspect-evidence',caseIds:proof.matchingCaseIds}});
+  inspectEvidence(proof);const base={schema:'liberpedia-finite-program-decision-v1',domainId:proof.domainId,evidence:proof,limit:'Only these declared programs, these exact declared openings and these pinned page texts are covered. A matching opening is not a complete reading; a failure does not reject the broader deciphering aim.'};
+  if(proof.matchingCaseIds.length&&(proof.complete||proofs.get(proof).programs[0].task.criterion.kind!=='exact-prefix-set'))return freeze({...base,state:'answered',answer:'prefix-found',next:{kind:'inspect-evidence',caseIds:proof.matchingCaseIds}});
   if(proof.complete)return freeze({...base,state:'answered',answer:'prefix-not-found',next:null});
   if(!proof.lookupComplete)return freeze({...base,state:'unavailable',answer:null,next:{kind:'retry-evidence'}});
   return freeze({...base,state:'missing-evidence',answer:null,next:{kind:'run-missing-evidence',caseIds:proof.missingCaseIds.slice(0,12)}});

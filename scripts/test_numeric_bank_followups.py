@@ -47,8 +47,8 @@ class NumericBankFollowups(unittest.TestCase):
                     else:
                         del restored[field]
                 self.assertEqual(restored, self.original[rid])
-                self.assertEqual(value['browser_followups'][:-1], [r for r in self.original[rid].get('browser_followups', []) if r['id'] != numeric.identifier(rid)])
-                self.assertEqual(value['research_questions'][:-1], [q for q in self.original[rid].get('research_questions', []) if q['id'] != numeric.identifier(rid)])
+                self.assertEqual([r for r in value['browser_followups'] if r['id'] != numeric.identifier(rid)], [r for r in self.original[rid].get('browser_followups', []) if r['id'] != numeric.identifier(rid)])
+                self.assertEqual([q for q in value['research_questions'] if q['id'] != numeric.identifier(rid)], [q for q in self.original[rid].get('research_questions', []) if q['id'] != numeric.identifier(rid)])
                 self.assertEqual(value['finding'], self.original[rid]['finding'])
                 self.assertEqual(value['outcome'], self.original[rid]['outcome'])
                 self.assertLess(len(json.dumps(value, ensure_ascii=False, separators=(',', ':')).encode()), 2 * 1024 * 1024)
@@ -59,7 +59,7 @@ class NumericBankFollowups(unittest.TestCase):
     def test_exact_compact_bank_identity_174_settings_9744_cases_and_no_literal_key_axis(self):
         for rid, value in self.values.items():
             with self.subTest(record=rid):
-                recipe, family = value['browser_followups'][-1], numeric.FAMILIES[rid]
+                recipe, family = next(r for r in value['browser_followups'] if r['id'] == numeric.identifier(rid)), numeric.FAMILIES[rid]
                 card = recipe['card']
                 self.assertLessEqual(len(json.dumps(card, ensure_ascii=False, separators=(',', ':')).encode()), 12 * 1024)
                 self.assertEqual(card['method']['value']['operations'], [{'id': 'finite_key_bank', 'bankId': family['bankId'], 'bankSha256': family['bankSha256']}])
@@ -106,11 +106,11 @@ class NumericBankFollowups(unittest.TestCase):
 
     def test_raw_input_pins_empty_page_and_reference_only_questions_are_honest(self):
         for rid, value in self.values.items():
-            recipe = value['browser_followups'][-1]
+            recipe = next(r for r in value['browser_followups'] if r['id'] == numeric.identifier(rid))
             self.assertEqual(len(recipe['inputs']['pages']), 56)
             for pin in recipe['inputs']['pages']:
                 self.assertEqual(pin['text_sha256'], hashlib.sha256((numeric.ROOT / 'text' / (pin['id'] + '.txt')).read_bytes()).hexdigest())
-            q = value['research_questions'][-1]
+            q = next(q for q in value['research_questions'] if q['id'] == numeric.identifier(rid))
             self.assertEqual(q, numeric.questions(rid)[0])
             self.assertEqual(q['state'], 'open')
             self.assertNotIn('question', q)
@@ -119,7 +119,7 @@ class NumericBankFollowups(unittest.TestCase):
             self.assertIn('305-term sequence', recipe['limitation'])
             self.assertIn('without wrapping, skipped runes or carry between pages', recipe['limitation'])
             self.assertIn('29 starting places', recipe['motivation'])
-        fibonacci = self.values['lp2-fibonacci-openings']['browser_followups'][-1]
+        fibonacci = next(r for r in self.values['lp2-fibonacci-openings']['browser_followups'] if r['id'] == numeric.identifier('lp2-fibonacci-openings'))
         self.assertIn('14 terms', fibonacci['scope_change'])
         self.assertIn('duplicates, not independent trials', fibonacci['limitation'])
 
@@ -152,7 +152,7 @@ class NumericBankFollowups(unittest.TestCase):
 
     def test_actual_browser_source_admission_replays_all_696_complete_synthetic_controls_only(self):
         payload = {'records': list(self.values.values()), 'bundle': json.loads((numeric.ROOT / 'data/local-run-inputs.json').read_bytes())}
-        code = r"""const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto'),E=require('./local-experiment.js'),A=require('./authored-finite-followup.js'),input=JSON.parse(fs.readFileSync(0,'utf8')),run=E.run,hash=v=>crypto.createHash('sha256').update(v).digest('hex');let controls=0;E.run=task=>{assert.deepEqual(task.pages.map(p=>p.id),['lp1-01']);assert(task.title.toLowerCase().includes('synthetic'));assert.equal(task.criterion.values.length,184);controls++;return run(task);};(async()=>{let cases=0;for(const record of input.records){const bytes=Buffer.from(JSON.stringify(record)),recipe=record.browser_followups.at(-1),origin={recordId:record.id,followupId:recipe.id,recordSha256:hash(bytes),protocolSha256:hash(E.stable(recipe))},plan=await A.fromSource(origin,{sourceBytes:bytes,bundle:input.bundle,crypto:crypto.webcrypto});assert.equal(plan.domain.programs,174);assert.equal(plan.domain.pages,56);assert.equal(plan.domain.totalCases,9744);cases+=plan.domain.totalCases;}console.log(JSON.stringify({controls,cases}));})().catch(error=>{console.error(error);process.exitCode=1;});"""
+        code = r"""const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto'),E=require('./local-experiment.js'),A=require('./authored-finite-followup.js'),input=JSON.parse(fs.readFileSync(0,'utf8')),run=E.run,hash=v=>crypto.createHash('sha256').update(v).digest('hex');let controls=0;E.run=task=>{assert.deepEqual(task.pages.map(p=>p.id),['lp1-01']);assert(task.title.toLowerCase().includes('synthetic'));assert.equal(task.criterion.values.length,184);controls++;return run(task);};(async()=>{let cases=0;for(const record of input.records){const bytes=Buffer.from(JSON.stringify(record)),recipe=record.browser_followups.find(r=>r.id.endsWith('-stream-reset-language')),origin={recordId:record.id,followupId:recipe.id,recordSha256:hash(bytes),protocolSha256:hash(E.stable(recipe))},plan=await A.fromSource(origin,{sourceBytes:bytes,bundle:input.bundle,crypto:crypto.webcrypto});assert.equal(plan.domain.programs,174);assert.equal(plan.domain.pages,56);assert.equal(plan.domain.totalCases,9744);cases+=plan.domain.totalCases;}console.log(JSON.stringify({controls,cases}));})().catch(error=>{console.error(error);process.exitCode=1;});"""
         completed = subprocess.run(['node', '-e', code], input=json.dumps(payload, ensure_ascii=True), cwd=numeric.ROOT,
                                    text=True, encoding='utf-8', capture_output=True, check=True)
         self.assertEqual(json.loads(completed.stdout), {'controls': 696, 'cases': 38976})
@@ -161,11 +161,20 @@ class NumericBankFollowups(unittest.TestCase):
         rid = 'lp2-prime-openings'
         expected = self.values[rid]
         declared = {'record': copy.deepcopy(expected)}
-        with patch.object(numeric, 'source', return_value=declared), patch.object(numeric, 'candidate', return_value=copy.deepcopy(expected['browser_followups'][-1])):
+        with patch.object(numeric, 'source', return_value=declared), patch.object(numeric, 'candidate', return_value=copy.deepcopy(next(r for r in expected['browser_followups'] if r['id'] == numeric.identifier(rid)))):
             self.assertEqual(numeric.proposed(rid), expected)
-        declared['record']['browser_followups'][-1]['motivation'] = 'Changed authored purpose.'
-        with patch.object(numeric, 'source', return_value=declared), patch.object(numeric, 'candidate', return_value=copy.deepcopy(expected['browser_followups'][-1])), self.assertRaisesRegex(ValueError, 'existing numerical-bank recipe changed'):
+        next(r for r in declared['record']['browser_followups'] if r['id'] == numeric.identifier(rid))['motivation'] = 'Changed authored purpose.'
+        with patch.object(numeric, 'source', return_value=declared), patch.object(numeric, 'candidate', return_value=copy.deepcopy(next(r for r in expected['browser_followups'] if r['id'] == numeric.identifier(rid)))), self.assertRaisesRegex(ValueError, 'existing numerical-bank recipe changed'):
             numeric.proposed(rid)
+
+    def test_existing_recipe_and_question_keep_position_after_unrelated_addition(self):
+        rid = 'lp2-prime-openings'
+        expected = copy.deepcopy(self.values[rid])
+        expected['browser_followups'].append({'id': 'unrelated-after', 'sentinel': 1})
+        expected['research_questions'].append({'id': 'unrelated-after', 'state': 'open', 'note': 'Another question.', 'question': 'Does another bounded variation change the output?', 'records': []})
+        recipe = next(r for r in expected['browser_followups'] if r['id'] == numeric.identifier(rid))
+        with patch.object(numeric, 'source', return_value={'record': expected}), patch.object(numeric, 'candidate', return_value=recipe):
+            self.assertEqual(numeric.proposed(rid), expected)
 
     def test_cli_can_only_write_detached_outer_qa_temp_and_check_reports_drift(self):
         minimal = {rid: copy.deepcopy(value) for rid, value in self.values.items()}

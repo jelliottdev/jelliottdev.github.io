@@ -3,6 +3,8 @@
  'use strict';
  const node=typeof module==='object'&&module.exports,L=node?require('./local-experiment.js'):root.LocalExperiment,C=node?require('./claim-specification.js'):root.ClaimSpecification,Protocols=node?require('./experiment-protocols.js'):root.ExperimentProtocols,Evaluators=node?require('./output-evaluators.js'):root.OutputEvaluators;
 const fail=reason=>({reason});
+const prefixSet=value=>value&&typeof value==='object'&&!Array.isArray(value)&&Reflect.ownKeys(value).length===2&&Object.hasOwn(value,'kind')&&Object.hasOwn(value,'openings')&&value.kind==='exact-prefix-set'&&Array.isArray(value.openings)&&value.openings.length>=1&&value.openings.length<=32&&Array.from(value.openings).every(o=>o&&typeof o==='object'&&!Array.isArray(o)&&Reflect.ownKeys(o).length===2&&Object.hasOwn(o,'id')&&Object.hasOwn(o,'values')&&typeof o.id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(o.id)&&Array.isArray(o.values)&&o.values.length>=1&&o.values.length<=256&&Array.from(o.values).every(n=>Number.isInteger(n)&&n>=0&&n<=28))&&new Set(value.openings.map(o=>o.id)).size===value.openings.length&&new Set(value.openings.map(o=>JSON.stringify(o.values))).size===value.openings.length;
+
 const MEASUREMENTS=Protocols.list(),MEASUREMENT_IDS=new Set(MEASUREMENTS.map(d=>d.operation.id)),MEASUREMENT_KINDS=new Set(MEASUREMENTS.map(d=>d.id));
 const KEYED_REASON='A keyed step needs explicit GP indices (0–28), add or subtract, and a page, line or word reset.';
 function missingLiteralKeyChoice(card,operation,operationIndex){
@@ -27,7 +29,7 @@ function evaluationIssue(card){
  const value=evaluation.value;
  if(value==='readability'||value&&typeof value==='object'&&value.kind==='readability')return {state:'needs-adapter',field:'evaluation',reason:'Readable-text evaluation is not available yet. This idea has not been tested for readable text.'};
  const prefix=value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===2&&value.kind==='exact-prefix'&&Array.isArray(value.values)&&value.values.length>=1&&value.values.length<=256&&value.values.every(n=>Number.isInteger(n)&&n>=0&&n<=28);
- if(value!=='measurement'&&!prefix&&!Protocols.identify(value)&&!Evaluators.identify(value))return {state:'needs-adapter',field:'evaluation',reason:'The requested evaluation needs an adapter.'};
+ if(value!=='measurement'&&!prefix&&!prefixSet(value)&&!Protocols.identify(value)&&!Evaluators.identify(value))return {state:'needs-adapter',field:'evaluation',reason:'The requested evaluation needs an adapter.'};
  return null;
 }
 function compile(card){
@@ -52,6 +54,7 @@ function compile(card){
   const value=rules.evaluation.value;
   if(value==='measurement')criterion={kind:'measurement'};
   else if(value&&typeof value==='object'&&value.kind==='exact-prefix'&&Object.keys(value).length===2&&Object.hasOwn(value,'values'))criterion={kind:value.kind,values:value.values};
+  else if(prefixSet(value))criterion={kind:'exact-prefix-set',openings:value.openings.map(o=>({id:o.id,values:o.values.slice()}))};
   else if(Protocols.identify(value))criterion={...value};
   else if(Evaluators.identify(value)){criterion=Evaluators.criterion();notes.push(Evaluators.describe(value).plan,Evaluators.describe(value).limit);}
   else return fail('The requested evaluation needs an adapter.');

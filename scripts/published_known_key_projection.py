@@ -26,6 +26,19 @@ PINS = {
 }
 KEYS = {'welcome': [23,10,1,10,9,10,16,26], 'second-koan': [0,10,4,0,1,19,0,18,4,18,9,0,18]}
 AUDIT_PATH = 'published-evidence/programs/known-key-historical-audit.json'
+# Frozen code used by the original import. Runtime upgrades must not rewrite
+# old receipt provenance, revisions, dates or task/result identities.
+HISTORICAL_CODE_PINS = {'scripts/published_known_key_projection.py': '824029e9b72d0eeaf84890ad5f966c101472c47d5ff47e9d0cf7f0eba1b95aea', 'tools/research_runner.py': 'be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61', 'local-experiment.js': 'b2f38df4184a36f1462cfea120c1d121dde05babdb29e30f97442d8528b762c2'}
+
+
+def historical_code_pins(root=ROOT):
+    root = Path(root)
+    for source, digest in HISTORICAL_CODE_PINS.items():
+        retained = root / 'published-sources/runtime' / (digest + Path(source).suffix)
+        require(retained.is_file() and sha(retained.read_bytes()) == digest,
+                'Historical projection code is missing or changed: ' + source)
+    return dict(HISTORICAL_CODE_PINS)
+
 
 
 def stable(value):
@@ -120,8 +133,7 @@ def prepare(root=ROOT):
                'projectedCriterion': 'warning', 'otherOpeningEvaluations': 'The other eight original opening checks remain archived source evidence; these receipts evaluate Warning only.'}
     files[AUDIT_PATH] = stable(sidecar) + '\n'
     pins[AUDIT_PATH] = sha(files[AUDIT_PATH])
-    for path in ('scripts/published_known_key_projection.py', 'tools/research_runner.py', 'local-experiment.js'):
-        pins[path] = sha((root / path).read_bytes().replace(b'\r\n', b'\n'))
+    pins.update(historical_code_pins(root))
     criterion = {'kind': 'exact-prefix', 'values': next(o['indices'] for o in plan['openings'] if o['id'] == 'warning')}
     alphabet_hash = sha(stable(alphabet))
     entries = []

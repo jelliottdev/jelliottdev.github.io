@@ -2,6 +2,7 @@
 'use strict';
 const {execFileSync}=require('node:child_process'),{createHash}=require('node:crypto');
 const read=name=>execFileSync('git',['show',':'+name],{maxBuffer:4*1024*1024}),checks=[
+ ['tools/verify_subset_controls.py',/FINITE_AUDIT_SHA256 = '([a-f0-9]{64})'/g,'tools/verify_finite_search.py'],
  ['local-run-package.js',/const GUARD_SHA256='([a-f0-9]{64})';/g,'tools/verify_controls.py'],
  ['local-run-package.js',/const SUBSET_GUARD_SHA256='([a-f0-9]{64})';/g,'tools/verify_subset_controls.py'],
  ['local-run-package.js',/const PLAN_GUARD_SHA256='([a-f0-9]{64})';/g,'tools/verify_plan_controls.py'],

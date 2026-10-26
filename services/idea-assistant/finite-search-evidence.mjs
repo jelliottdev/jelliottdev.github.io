@@ -12,7 +12,7 @@ const hash=async(v,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest(
 
 export async function findFiniteEvidence({db,card,bundle,crypto:cryptoAPI=globalThis.crypto}){
  const expanded=Settings.expand(card),plans=expanded.variants.map(v=>Compiler.compile(v.card));
- if(plans.some(p=>p.reason||p.criterion?.kind!=='exact-prefix')||card.rules.inputVersion.status!=='specified')throw Error('The declared settings need a supported exact opening check.');
+ if(plans.some(p=>p.reason||!['exact-prefix','exact-prefix-set'].includes(p.criterion?.kind))||card.rules.inputVersion.status!=='specified')throw Error('The declared settings need a supported exact opening check.');
  const first=plans[0],version=first.inputVersion,pages=first.pages.map(id=>{
   const row=bundle.pages.get(id),text=version==='raw'?row?.raw:row?.reviewed_text;if(typeof text!=='string')throw Error('The declared source text is unavailable.');return {id,text};
  });

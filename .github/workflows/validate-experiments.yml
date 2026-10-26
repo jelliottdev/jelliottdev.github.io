@@ -106,6 +106,7 @@ jobs:
       - run: python scripts/test_access_export_bookkeeping.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_export_checkout_copy.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_export_reproducibility.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/ci_experiment_bundles.py
@@ -165,6 +166,12 @@ jobs:
           python scripts/test_finite_key_banks.py
           python scripts/test_numeric_bank_followups.py
           python scripts/numeric_bank_followups.py --check
+          python scripts/test_prefix_set_compilation.py
+          python scripts/test_opening_set_offline_audits.py
+          python scripts/test_opening_set_control_guards.py
+          python scripts/test_published_runtime_pins.py
+          python scripts/test_numeric_opening_set_followups.py
+          python scripts/numeric_opening_set_followups.py --check
           python scripts/test_browser_boundary_variations.py
           python scripts/test_short_numeric_followups.py
           python scripts/short_numeric_followups.py --check

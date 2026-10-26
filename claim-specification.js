@@ -24,6 +24,7 @@
     {id:'inspect-output',label:'Show what the rule produces',example:'Show the resulting runes and counts for you to inspect.',value:'measurement'}
   ]);
   function evaluationText(value){
+    if(value?.kind==='exact-prefix-set'&&Array.isArray(value.openings)&&value.openings.length>=1&&value.openings.length<=32)return 'Compare the output openings with '+value.openings.length+' supplied rune sequences. A match is not a complete reading.';
     const choice=EVALUATION_CHOICES.find(item=>stable(item.value)===stable(value));
     if(!choice)return null;
     return choice.label+(choice.id==='language-samples'?' — eight fixed samples; similarity is not a translation.':choice.id==='readable-text'?'':choice.id==='inspect-output'?' — runes and counts, without a readability verdict.':' — first 12 runes of the decoded Warning passage, at page starts only.');

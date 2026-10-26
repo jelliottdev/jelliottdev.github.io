@@ -15,7 +15,7 @@ for(const dir of fs.readdirSync('experiments/records')){const path='experiments/
   }
   same(source.record,JSON.parse(source.bytes));
  }
- assert.equal(recipes,11);console.log('PASS all11 compact source recipes agree across actual server/browser admission, complete witnesses and immutable saved-member readers');
+ assert.equal(recipes,15);console.log('PASS all15 compact source recipes agree across actual server/browser admission, complete witnesses and immutable saved-member readers');
  }finally{E.run=run;}
  const source=records[0].record,record=structuredClone(source),recipe=record.browser_followups.find(r=>r.kind==='finite-settings');recipe.control=S.compact(S.expand(recipe.control));const ref={recordId:record.id,followupId:recipe.id};
  for(const mutate of [r=>r.control.kind='finite-program-controls-shared-v2',r=>r.control.members[0].control.task.alphabet=r.control.alphabet,r=>r.control.members[0].control.task.criterion=r.control.criterion]){

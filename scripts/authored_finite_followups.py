@@ -56,7 +56,7 @@ def _control(control, plan, ordered_alphabet):
             and type(task.get('title')) is str and 'synthetic' in task['title'].lower(), 'control must be labeled synthetic')
     fixed.runner.validate(task)
     require(task['alphabet'] == ordered_alphabet and task['steps'] == plan['steps'], 'control differs from declared member program')
-    require(plan['criterion']['kind'] in ('measurement', 'language-score', 'exact-prefix'), 'finite controls support transform evaluations only')
+    require(plan['criterion']['kind'] in ('measurement', 'language-score', 'exact-prefix', 'exact-prefix-set'), 'finite controls support transform evaluations only')
     require(task['criterion']['kind'] == 'exact-prefix', 'finite control needs exact complete known output')
     runes = {entry['rune'] for entry in ordered_alphabet}
     require(len(task['pages']) == 1, 'finite control needs exactly one synthetic page')
@@ -120,7 +120,7 @@ def construct_followup(root, *, card, identifier, title, question, scope_change,
     members = []
     for n, variant in enumerate(expanded['variants']):
         plan = variant['compiled']
-        require(plan['criterion']['kind'] in ('measurement', 'language-score', 'exact-prefix'), 'finite controls support transform evaluations only')
+        require(plan['criterion']['kind'] in ('measurement', 'language-score', 'exact-prefix', 'exact-prefix-set'), 'finite controls support transform evaluations only')
         encoded = plaintext
         for step in reversed(plan['steps']):
             encoded = fixed.inverse_step(encoded, step, ordered_alphabet)

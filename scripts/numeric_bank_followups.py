@@ -193,10 +193,12 @@ def proposed(record_id, root=ROOT):
     recipe, wanted = candidate(record_id, root, declared=declared), identifier(record_id)
     prior = [r for r in result.get('browser_followups', []) if r['id'] == wanted]
     fixed.require(len(prior) <= 1 and (not prior or semantic_recipe(prior[0]) == semantic_recipe(recipe)), 'existing numerical-bank recipe changed')
-    result['browser_followups'] = [r for r in result.get('browser_followups', []) if r['id'] != wanted] + [recipe]
+    if not prior:
+        result.setdefault('browser_followups', []).append(recipe)
     prior_questions = [q for q in result.get('research_questions', []) if q['id'] == wanted]
     fixed.require(not prior_questions or prior_questions == questions(record_id), 'existing numerical-bank question changed')
-    result['research_questions'] = [q for q in result.get('research_questions', []) if q['id'] != wanted] + questions(record_id)
+    if not prior_questions:
+        result.setdefault('research_questions', []).extend(questions(record_id))
     validate_research_questions(result['research_questions'], result, strict_authoring=True)
     fixed.require(len(json.dumps(result, ensure_ascii=False, separators=(',', ':')).encode()) < 2 * 1024 * 1024,
                   'proposed source exceeds 2 MiB')

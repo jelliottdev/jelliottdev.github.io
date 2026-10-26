@@ -69,6 +69,24 @@ def field(value, label):
     return value.get('value')
 
 
+def validate_prefix_set(value):
+    fields(value, ('kind', 'openings'), 'opening-set evaluation')
+    require(value['kind'] == 'exact-prefix-set' and isinstance(value['openings'], list)
+            and 1 <= len(value['openings']) <= 32, 'opening-set requires 1..32 openings')
+    ids, vectors = set(), set()
+    for opening in value['openings']:
+        fields(opening, ('id', 'values'), 'opening-set member')
+        require(type(opening['id']) is str and re.fullmatch(r'[a-z][a-z0-9-]{0,63}', opening['id'])
+                and opening['id'] not in ids, 'opening-set requires unique canonical IDs')
+        values = opening['values']
+        require(isinstance(values, list) and 1 <= len(values) <= 256
+                and all(type(n) is int and 0 <= n <= 28 for n in values)
+                and tuple(values) not in vectors, 'opening-set requires unique GP29 vectors')
+        ids.add(opening['id'])
+        vectors.add(tuple(values))
+    return value
+
+
 def compile_card(card):
     """Conservative independent compiler for the reviewed primitive subset.
 
@@ -133,6 +151,8 @@ def compile_card(card):
     elif isinstance(criterion, dict) and criterion.get('kind') == 'language-score':
         fields(criterion, LANGUAGE_CRITERION, 'language evaluation')
         require(criterion == LANGUAGE_CRITERION, 'choose the maintained pinned language evaluation')
+    elif isinstance(criterion, dict) and criterion.get('kind') == 'exact-prefix-set':
+        validate_prefix_set(criterion)
     else:
         fields(criterion, ('kind', 'values'), 'evaluation')
         require(criterion['kind'] == 'exact-prefix', 'explicit evaluation required')
@@ -270,7 +290,7 @@ def validate_followups(value, root, known_pages=None):
         runner.validate(task)
         require(task['alphabet'] == ordered_alphabet and task['steps'] == plan['steps'],
                 'control differs from proposed target program')
-        if plan['criterion']['kind'] in ('measurement', 'language-score'):
+        if plan['criterion']['kind'] in ('measurement', 'language-score', 'exact-prefix-set'):
             require(task['criterion']['kind'] == 'exact-prefix', 'descriptive target requires an exact synthetic control')
             control_runes = {entry['rune'] for entry in ordered_alphabet}
             require(all(sum(ch in control_runes for ch in page['text']) == len(task['criterion']['values'])

@@ -31,7 +31,7 @@
   [['factored-finite-search-compiler.js','FactoredFiniteSearchCompiler','compileLanguageComparison'],['factored-prefix-reuse.js','FactoredPrefixReuse','prepare']],
   [['factored-evidence-client.js','FactoredEvidenceClient','createScan'],['authored-finite-followup.js','AuthoredFiniteFollowup','validatePlan']]
  ];
- const version='20261026-sequence-banks',scripts=new Map();let pending=null,readinessPending=null;
+ const version='20261026-opening-sets',scripts=new Map();let pending=null,readinessPending=null;
  const ready=([,name,method])=>root[name]&&(method==='payload'?typeof root[name][method]==='object':typeof root[name][method]==='function');
  function ensure(definition){
   const [file,name]=definition;if(ready(definition))return Promise.resolve(root[name]);

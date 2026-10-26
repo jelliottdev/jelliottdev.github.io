@@ -67,6 +67,21 @@
   const matched=result.matches.filter(row=>row.matched).length,total=task.pages.length,notMatched=total-matched;
   return '<figure class="local-run-chart run-prefix-chart"><figcaption>Exact starting-sequence check</figcaption><div class="run-prefix-total" role="img" aria-label="'+matched+' of '+total+' pages matched all '+task.criterion.values.length+' prefix positions; '+notMatched+' did not match."><span class="run-prefix-match" style="width:'+(100*matched/total).toFixed(4)+'%"></span><span class="run-prefix-other" style="width:'+(100*notMatched/total).toFixed(4)+'%"></span></div><dl class="run-prefix-counts"><div><dt>Matched every position</dt><dd>'+matched+' of '+total+' pages</dd></div><div><dt>Did not match</dt><dd>'+notMatched+' of '+total+' pages</dd></div></dl><p class="run-chart-note">The fixed prefix has '+task.criterion.values.length+' rune positions.</p></figure>';
  }
+ function openingName(id){const names={warning:'Warning',welcome:'Welcome','some-wisdom':'Some Wisdom','first-koan':'First Koan','loss-of-divinity':'Loss of Divinity','second-koan':'Second Koan',instruction:'Instruction','lp2-56':'LP2 page 56','lp2-57':'LP2 page 57'};return Object.hasOwn(names,id)?names[id]:id;}
+ function openingSetPage(task,result,pageId){
+  const indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),text=result.transformed.find(page=>page.page===pageId).text,values=Array.from(text).filter(ch=>indices.has(ch)).map(ch=>indices.get(ch)),matched=result.matches.find(page=>page.page===pageId).matchingOpenings;
+  const status=!values.length?'No runes to compare.':matched.length?'Full opening match: '+matched.map(openingName).join(', ')+'.':values.length<Math.min(...task.criterion.openings.map(item=>item.values.length))?'The output is too short to contain any complete supplied opening.':'No complete supplied opening matched.';
+  return '<h3>'+esc(pageId.toUpperCase())+'</h3><p class="run-prefix-status">'+esc(status)+'</p><table class="run-prefix-table" style="table-layout:fixed;width:100%"><caption>Supplied openings compared with this page’s output</caption><thead><tr><th scope="col" style="width:44%">Opening</th><th scope="col" style="width:18%">Runes</th><th scope="col">Result</th></tr></thead><tbody>'+task.criterion.openings.map(item=>{const mismatch=item.values.findIndex((value,i)=>values[i]!==value),matching=matched.includes(item.id),short=values.length<item.values.length&&mismatch===values.length,assessment=matching?'<strong>Full match</strong>':!values.length?'No runes':short?'Too short<br>'+values.length+' of '+item.values.length+' runes':'Different<br>Rune '+(mismatch+1);return '<tr class="run-prefix-pair'+(matching?'':' is-different')+'"><th scope="row" style="overflow-wrap:anywhere">'+esc(openingName(item.id))+'</th><td>'+item.values.length+'</td><td>'+assessment+'</td></tr>';}).join('')+'</tbody></table>';
+ }
+ function openingSetView(task,result){
+  const matched=result.matches.filter(page=>page.matched).length,indices=new Set(task.alphabet.map(item=>item.rune)),empty=result.transformed.filter(page=>!Array.from(page.text).some(ch=>indices.has(ch))).length;
+  return '<section class="local-run-result" aria-labelledby="local-run-finding"><p class="run-state">Computation verified</p><h2 id="local-run-finding">'+(matched?'An output matches a supplied opening':'No supplied opening found')+'</h2><p>'+matched+' of '+task.pages.length+' page outputs begin with at least one of the '+task.criterion.openings.length+' supplied openings.'+(empty?' '+empty+' '+(empty===1?'output contains':'outputs contain')+' no runes.':'')+'</p><p class="run-limit">Only a complete opening counts as a match. A match does not establish a decryption; a missing match does not rule out the broader idea.</p><section data-run-opening-set>'+(task.pages.length>1?'<label class="run-language-page">Page<select data-run-opening-set-page>'+task.pages.map(page=>'<option value="'+esc(page.id)+'">'+esc(page.id.toUpperCase())+'</option>').join('')+'</select></label>':'')+'<div data-run-opening-set-content>'+openingSetPage(task,result,task.pages[0].id)+'</div></section><p class="run-text-note">Positions count runes only; spaces and punctuation are ignored. Opening names identify the supplied sequences, not a new translation.</p>'+inspector(task,result)+'</section>';
+ }
+ function bindOpeningSet(host,task,result,initialPage){
+  const panel=host.querySelector?.('[data-run-opening-set]'),select=panel?.querySelector('[data-run-opening-set-page]'),content=panel?.querySelector('[data-run-opening-set-content]');if(!select||!content)return ()=>{};
+  const change=()=>{if(task.pages.some(page=>page.id===select.value))content.innerHTML=openingSetPage(task,result,select.value);};
+  select.addEventListener('change',change);if(initialPage){select.value=initialPage;change();}return ()=>select.removeEventListener?.('change',change);
+ }
  function wordPairExample(task,result){
   if(!result.wordPairs.matches)return '';
   const rule=task.criterion,indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i]));
@@ -135,7 +150,7 @@
  function bind(host,task,result,options={}){
   bindings.get(host)?.();
   E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result})),initialPage=options.pageId===undefined?snapshot.task.pages[0].id:options.pageId;if(!snapshot.task.pages.some(p=>p.id===initialPage))throw Error('Choose a page in the original output.');
-  const sumsCleanup=task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
+  const sumsCleanup=task.criterion.kind==='exact-prefix-set'?bindOpeningSet(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
   const panel=host.querySelector?.('.run-text-inspector');if(!panel){bindings.set(host,sumsCleanup);return sumsCleanup;}
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
   const original=panel.querySelector('[data-run-original]'),after=panel.querySelector('[data-run-after]');
@@ -156,6 +171,7 @@
  }
  function render(task,result){
   const data=E.summary(task,result),max=Math.max(1,...(data.comparison||[]).map(r=>r.value));
+  if(task.criterion.kind==='exact-prefix-set')return openingSetView(task,result);
   if(task.criterion.kind==='language-score')return '<section class="local-run-result" aria-labelledby="local-run-finding"><h2 id="local-run-finding">Output</h2>'+languageView(task,result)+'<dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
   if(task.criterion.kind==='measurement'&&task.steps.length)return '<section class="local-run-result" aria-labelledby="local-run-finding">'+outputPreview(task,result)+'<dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'<details><summary>Rune counts</summary><p>Computation verified. '+esc(data.finding)+'</p><ul>'+data.comparison.map(row=>'<li>'+esc(row.label+': '+row.value+' of '+row.total+' pairs')+'</li>').join('')+'</ul><p>'+esc(data.limit)+'</p></details></section>';
   return '<section class="local-run-result" aria-labelledby="local-run-finding"><p class="run-state">Computation verified</p><h2 id="local-run-finding">What this run found</h2><p>'+esc(data.finding)+'</p>'+
@@ -181,7 +197,7 @@
   const value=languageComparisons.get(token);if(!value)throw Error('Prepare the original verified output comparison before displaying it.');
   return '<section class="run-language">'+languagePage(value.task,value.result,value.pageId,value.comparison)+'<section class="run-language-next"><h3>What to check next</h3><p>'+esc(value.descriptor.next)+'</p><p>'+esc(value.descriptor.limit)+'</p></section></section>';
  }
- function criterionLabel(criterion){return ({measurement:'Rune measurements','exact-prefix':'Exact opening','word-affine-count':'Word pair counts','word-prime-sums':'Word prime sums','language-score':'Language reference comparison'})[criterion?.kind]||'Original check';}
+ function criterionLabel(criterion){return ({measurement:'Rune measurements','exact-prefix':'Exact opening','exact-prefix-set':'Supplied opening comparison','word-affine-count':'Word pair counts','word-prime-sums':'Word prime sums','language-score':'Language reference comparison'})[criterion?.kind]||'Original check';}
  async function prepareInspectionOutput(task,result,pageId,crypto=root.crypto){
   const J=typeof module==='object'&&module.exports?require('./finite-json.js'):root.FiniteJSON,captured=J.capture({task,result,pageId},{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});
   if(!captured.task.pages?.some(page=>page.id===captured.pageId))throw Error('Choose an original output page.');

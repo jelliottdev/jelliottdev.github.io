@@ -97,9 +97,40 @@ def field(value):
     return value
 
 
+BANK_HASHES = {
+    'prime-minus-one-v1': '61add0f42e87c8d2b71a32e54d1b005ac4ca77c5b818bf52d97600da248988dc',
+    'prime-v1': '3e0668ec3551b8dce1245a918c614b6861b80d210fe492d29c9b261439b21bcc',
+    'fibonacci-v1': '6e3475d825d2da7975e139407b1af1c7f2d908deb0c5ab0c91db39ac2b4c31b8',
+    'totient-v1': '822e947c36fd3ebf492ab5e8e2d86f287e2348968b99ccccb1aa4b4edf9dc75d'}
+
+
+def bank_tail(bank_id, expected_hash, offset):
+    """Independently derive only the four reviewed finite banks; no asset/network."""
+    require(isinstance(bank_id, str) and bank_id in BANK_HASHES
+            and expected_hash == BANK_HASHES[bank_id] and integer(offset, 0, 28), 'Invalid pinned sequence bank')
+    if bank_id in ('prime-v1', 'prime-minus-one-v1'):
+        values, n = [], 2
+        while len(values) < 305:
+            if all(n % d for d in range(2, math.isqrt(n) + 1)):
+                values.append((n - (bank_id == 'prime-minus-one-v1')) % 29)
+            n += 1
+    elif bank_id == 'fibonacci-v1':
+        values, a, b = [], 0, 1
+        for _ in range(305):
+            values.append(a % 29)
+            a, b = b, a + b
+    else:
+        values = [sum(math.gcd(k, n) == 1 for k in range(1, n + 1)) % 29 for n in range(1, 306)]
+    require(digest({'schema': 'liberpedia-finite-sequence-bank-v1', 'id': bank_id, 'values': values}) == expected_hash,
+            'Independently derived sequence bank changed')
+    return values[offset:]
+
+
 def literal(name, value):
     if name in ('a', 'b'):
         require(integer(value, 0, 28), 'Invalid affine alternative')
+    elif name == 'offset':
+        require(integer(value, 0, 28), 'Invalid finite bank offset')
     elif name in ('reset', 'unit'):
         require(value in ('page', 'line', 'word'), 'Invalid boundary alternative')
     elif name == 'direction':
@@ -178,7 +209,7 @@ LABELS = {'affine': ('Affine', 'Affine substitution'), 'reverse_runes': ('Revers
           'reverse_row_runes': ('Reverse rune order within rows', 'Reverse rune order within each row'), 'cumulative_difference': ('Cumulative difference',),
           'vigenere': ('Vigenere', 'Vigenère'), 'repeating_key': ('Repeating key', 'Repeating-key', 'Vigenere', 'Vigenère'),
           'plaintext_autokey': ('Plaintext autokey', 'Plaintext-autokey'), 'ciphertext_autokey': ('Ciphertext autokey', 'Ciphertext-autokey'),
-          'finite_key': ('Finite key stream',), 'interrupted_repeating_key': ('Interrupted repeating key',)}
+          'finite_key': ('Finite key stream',), 'finite_key_bank': ('Pinned finite key stream',), 'interrupted_repeating_key': ('Interrupted repeating key',)}
 
 
 def compile_steps(operations, rules):
@@ -194,8 +225,14 @@ def compile_steps(operations, rules):
         if 'declaredFamilyId' in op:
             require(op.pop('declaredFamilyId') in ('fixed-substitution', 'polyalphabetic', 'feedback', 'transposition', 'prime-indices', 'number-streams', 'book-codes', 'repetition'), 'Unknown filing category')
         kind = op.get('id')
-        require(kind in LABELS and set(op) <= {'id', 'label', 'a', 'b', 'reset', 'unit', 'key', 'direction', 'interrupts'}, 'Unsupported operation/metadata contract')
+        require(kind in LABELS and set(op) <= {'id', 'label', 'a', 'b', 'reset', 'unit', 'key', 'direction', 'interrupts', 'bankId', 'bankSha256', 'offset'}, 'Unsupported operation/metadata contract')
         require('label' not in op or op['label'] in LABELS[kind], 'Unsupported operation wording')
+        if kind == 'finite_key_bank':
+            require(set(op) <= {'id', 'label', 'bankId', 'bankSha256', 'offset', 'direction', 'reset'},
+                    'Unsupported bank operation fields')
+            op = {'id': 'finite_key', 'key': bank_tail(op.get('bankId'), op.get('bankSha256'), op.get('offset')),
+                  'direction': op.get('direction'), 'reset': op.get('reset')}
+            kind = 'finite_key'
         if kind == 'affine':
             require(set(op) <= {'id', 'label', 'a', 'b'} and integer(op.get('a'), 0, 28) and integer(op.get('b'), 0, 28), 'Incomplete affine operation')
             steps.append({'op': 'affine', 'a': op['a'], 'b': op['b']})
@@ -268,7 +305,7 @@ def verify(snapshot):
     fields(q, ('domainId', 'engine', 'inputVersion', 'alphabet', 'pages', 'criterion', 'programs', 'cases', 'totalCases'), 'Question')
     require(q['engine'] == runner.ENGINE and q['inputVersion'] in ('raw', 'reviewed'), 'Unsupported engine/edition')
     require(card['rules']['inputVersion'] == {'status': 'specified', 'value': q['inputVersion']} and card['rules']['evaluation'] == {'status': 'specified', 'value': q['criterion']}, 'Original edition/criterion changed')
-    require(q['criterion'].get('kind') == 'exact-prefix', 'Only exact-prefix finite snapshots are supported')
+    require(q['criterion'].get('kind') in ('exact-prefix', 'exact-prefix-set'), 'Only exact opening finite snapshots are supported')
     require([p['id'] for p in q['pages']] == sorted(card['scope']['value']['pages']), 'Question scope differs from original')
     probe = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE, 'title': 'Offline validation only', 'alphabet': q['alphabet'], 'pages': q['pages'], 'steps': [], 'criterion': q['criterion']}
     task_check({**probe, 'taskId': digest(probe)})
@@ -362,7 +399,7 @@ def verify(snapshot):
                 and 0 < len(link['label'].strip()) <= 300 and stable(link) not in seen_links, 'Unsupported/duplicate source location')
         seen_links.add(stable(link))
     fields(snapshot['finding'], ('kind', 'limit'), 'Finding')
-    answer = 'prefix-found' if matching else 'prefix-not-found' if not missing else 'incomplete'
+    answer = 'prefix-found' if matching and (not missing or q['criterion']['kind'] != 'exact-prefix-set') else 'prefix-not-found' if not missing else 'incomplete'
     require(snapshot['finding'] == {'kind': answer, 'limit': LIMIT}, 'Snapshot answer or scientific limit changed')
     return {'snapshotId': snapshot['snapshotId'], 'domainId': q['domainId'], 'finding': answer,
             'coveredCases': len(covered), 'missingCases': len(missing), 'matchingCases': len(matching),

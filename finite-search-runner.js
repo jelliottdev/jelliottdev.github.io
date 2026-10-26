@@ -33,7 +33,7 @@
     const output=await current.promise;live();current=null;const checked=await E.verify(task,output,cryptoAPI);live();return checked;
    }
    (async()=>{
-    const selection=grouped?groupSelection:await question.select(domain,ids,cryptoAPI);live();const items=grouped?selection.groups:selection.cases,controlKey=grouped?'groupId':'caseId';
+    const selection=grouped?groupSelection:await question.select(domain,ids,cryptoAPI);live();const items=grouped?selection.groups:selection.cases,completeSet=items[0]?.task?.criterion?.kind==='exact-prefix-set',controlKey=grouped?'groupId':'caseId';
     if(!Array.isArray(controls)||controls.length!==items.length||controls.some((item,i)=>!exact(item,[controlKey,'suite'])||item[controlKey]!==items[i].id))throw Error('Controls must match every selected case in canonical order.');
     // Finish admission for the entire batch before starting its first worker.
     for(let i=0;i<items.length;i++){await E.checkIdentity(items[i].task,cryptoAPI);live();await C.validate(controls[i].suite,items[i].task,cryptoAPI);live();}
@@ -49,13 +49,13 @@
       else if(result.matches.some(match=>match.page===pageIds[i]&&match.matched)){matchingCaseIds.push(caseIds[i]);checkpointMatches.push(caseIds[i]);}
      }
      const completed=grouped?{id:item.id,programId:item.programId,pageIds:item.pageIds,caseIds:item.caseIds,task:item.task,result}:{caseId:item.id,result};results.push(completed);checkpointResults.push(completed);
-     progress('cases',results.length,items.length);if(!outputMode&&matchingCaseIds.length)break;
+     progress('cases',results.length,items.length);if(!outputMode&&!completeSet&&matchingCaseIds.length)break;
     }
-    if(grouped){live();const completedGroupIds=results.map(g=>g.id),done=new Set(completedGroupIds);return {domainId:domain.id,selection,groups:results,controls:controlResults,selectedGroupIds:items.map(g=>g.id),completedGroupIds,completedCaseIds:results.flatMap(g=>g.caseIds),missingGroupIds:items.filter(g=>!done.has(g.id)).map(g=>g.id),...(inspectionMode?{runeOutputCaseIds:checkpointUsable.slice(),noRuneCaseIds:checkpointInsufficient.slice()}:outputMode?{usableCaseIds:checkpointUsable.slice(),insufficientCaseIds:checkpointInsufficient.slice()}:{matchingCaseIds}),stopped:!outputMode&&matchingCaseIds.length?'prefix-found':'batch-complete'};}
+    if(grouped){live();const completedGroupIds=results.map(g=>g.id),done=new Set(completedGroupIds);return {domainId:domain.id,selection,groups:results,controls:controlResults,selectedGroupIds:items.map(g=>g.id),completedGroupIds,completedCaseIds:results.flatMap(g=>g.caseIds),missingGroupIds:items.filter(g=>!done.has(g.id)).map(g=>g.id),...(inspectionMode?{runeOutputCaseIds:checkpointUsable.slice(),noRuneCaseIds:checkpointInsufficient.slice()}:outputMode?{usableCaseIds:checkpointUsable.slice(),insufficientCaseIds:checkpointInsufficient.slice()}:{matchingCaseIds}),stopped:!outputMode&&!completeSet&&matchingCaseIds.length?'prefix-found':'batch-complete'};}
     live();const completedCaseIds=results.map(item=>item.caseId),done=new Set(completedCaseIds);
     // These are local outputs, not public evidence. The caller must save real
     // verified receipts before constructing a shared question decision.
-    return {domainId:domain.id,selection,results,controls:controlResults,selectedCaseIds:selection.cases.map(item=>item.id),completedCaseIds,missingCaseIds:selection.cases.filter(item=>!done.has(item.id)).map(item=>item.id),...(inspectionMode?{runeOutputCaseIds:checkpointUsable.slice(),noRuneCaseIds:checkpointInsufficient.slice()}:outputMode?{usableCaseIds:checkpointUsable.slice(),insufficientCaseIds:checkpointInsufficient.slice()}:{matchingCaseIds}),stopped:!outputMode&&matchingCaseIds.length?'prefix-found':'batch-complete'};
+    return {domainId:domain.id,selection,results,controls:controlResults,selectedCaseIds:selection.cases.map(item=>item.id),completedCaseIds,missingCaseIds:selection.cases.filter(item=>!done.has(item.id)).map(item=>item.id),...(inspectionMode?{runeOutputCaseIds:checkpointUsable.slice(),noRuneCaseIds:checkpointInsufficient.slice()}:outputMode?{usableCaseIds:checkpointUsable.slice(),insufficientCaseIds:checkpointInsufficient.slice()}:{matchingCaseIds}),stopped:!outputMode&&!completeSet&&matchingCaseIds.length?'prefix-found':'batch-complete'};
    })().then(value=>finish(resolve,value),error=>{try{current?.cancel();}catch{}current=null;finish(reject,error);});
    return {promise,getCheckpoint,cancel(){if(settled)return;aborted=true;try{current?.cancel();}catch{}current=null;finish(reject,new DOMException('Run cancelled.','AbortError'));}};
   }

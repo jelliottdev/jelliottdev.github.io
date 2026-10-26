@@ -93,10 +93,10 @@ await test('every published authored declaration loads exact pins, task identity
   ['lp2-known-vigenere-keys',{programs:42,pages:56,ids:['known-keys-language-comparison','known-keys-word-reset-language','known-keys-line-reset-language']}],
   ['lp2-panel-prime-openings',{programs:32,pages:56,ids:['panel-primes-language-comparison','panel-primes-word-reset-language','panel-primes-line-reset-language']}],
   ['dukotah-fixed-numeric-keys',{programs:54,pages:55,ids:['short-numeric-keys-reset-language']}],
-  ['lp2-prime-minus-one-openings',{programs:174,pages:56,ids:['prime-minus-one-stream-reset-language']}],
-  ['lp2-prime-openings',{programs:174,pages:56,ids:['prime-stream-reset-language']}],
-  ['lp2-fibonacci-openings',{programs:174,pages:56,ids:['fibonacci-stream-reset-language']}],
-  ['lp2-totient-openings',{programs:174,pages:56,ids:['totient-stream-reset-language']}]
+  ['lp2-prime-minus-one-openings',{programs:174,pages:56,ids:['prime-minus-one-stream-reset-language','prime-minus-one-stream-nine-openings']}],
+  ['lp2-prime-openings',{programs:174,pages:56,ids:['prime-stream-reset-language','prime-stream-nine-openings']}],
+  ['lp2-fibonacci-openings',{programs:174,pages:56,ids:['fibonacci-stream-reset-language','fibonacci-stream-nine-openings']}],
+  ['lp2-totient-openings',{programs:174,pages:56,ids:['totient-stream-reset-language','totient-stream-nine-openings']}]
  ]),seenFinite=new Set();
  for(const entry of readdirSync(recordsRoot,{withFileTypes:true}).filter(item=>item.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))){
   let bytes;try{bytes=readFileSync(new URL(entry.name+'/record.json',recordsRoot));}catch(error){if(error.code==='ENOENT')continue;throw error;}const record=JSON.parse(bytes.toString('utf8'));if(record.status!=='published'||!record.browser_followups?.length)continue;
@@ -107,14 +107,14 @@ await test('every published authored declaration loads exact pins, task identity
    if(recipe.kind==='finite-settings'){
     assert.equal(plan.state,'finite-plan-ready');assert(!Object.hasOwn(plan,'task'));assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.snapshot,recipe);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.equal(plan.inputVersion,recipe.inputs.version);
     const family=finiteFamilies.get(record.id);assert(family,'Every finite source family is explicitly covered');assert(family.ids.includes(recipe.id));const declaration=record.id+'/'+recipe.id;assert(!seenFinite.has(declaration));seenFinite.add(declaration);
-    assert.equal(plan.domain.programs,family.programs);assert.equal(plan.domain.pages,family.pages);assert.equal(plan.domain.totalCases,family.programs*family.pages);assert.equal(recipe.control.members.length,family.programs);assert.equal(plan.domain.criterion.kind,'language-score');assert(Storage.expand(recipe.control).members.every(member=>member.control.task.criterion.kind==='exact-prefix'&&member.control.task.criterion.values.length===184));
+    const set=recipe.id.endsWith('-nine-openings'),programs=set?58:family.programs;assert.equal(plan.domain.programs,programs);assert.equal(plan.domain.pages,family.pages);assert.equal(plan.domain.totalCases,programs*family.pages);assert.equal(recipe.control.members.length,programs);assert.equal(plan.domain.criterion.kind,set?'exact-prefix-set':'language-score');if(set){assert.equal(plan.domain.criterion.openings.length,9);assert(plan.domain.criterion.openings.every(o=>o.values.length===12));}assert(Storage.expand(recipe.control).members.every(member=>member.control.task.criterion.kind==='exact-prefix'&&member.control.task.criterion.values.length===184));
     finiteDeclarations++;declarations++;continue;
    }
    await L.checkIdentity(plan.task);assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.control,recipe.control);assert.equal(plan.inputVersion,recipe.inputs.version);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.deepEqual(plan.task.pages.map(page=>page.id),recipe.inputs.pages.map(page=>page.id));assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.task.alphabet,recipe.control.task.alphabet);assert(Control.compatible(recipe.control.task,plan.task));
    for(let i=0;i<plan.task.pages.length;i++)assert.equal(await sha(plan.task.pages[i].text),recipe.inputs.pages[i].text_sha256);declarations++;
   }
  }
- assert(declarations>=15,'The complete current authored catalog is exercised, including fixed and finite source modes');assert.equal(finiteDeclarations,11,'All declared finite source families are ready, including all numerical bank offsets and restart rules');assert.deepEqual([...seenFinite].sort(),[...finiteFamilies].flatMap(([id,family])=>family.ids.map(recipe=>id+'/'+recipe)).sort());
+ assert(declarations>=15,'The complete current authored catalog is exercised, including fixed and finite source modes');assert.equal(finiteDeclarations,15,'All declared finite source families are ready, including all numerical bank offsets and restart rules');assert.deepEqual([...seenFinite].sort(),[...finiteFamilies].flatMap(([id,family])=>family.ids.map(recipe=>id+'/'+recipe)).sort());
 });
 await test('large scopes require exact bounded aggregate, reject corruption and never fall back to page fetches',async()=>{
  async function large(){const f=await fixture(),text=f.files.get('/data/pages/lp2-15.json').raw,ids=Array.from({length:41},(_,i)=>'lp2-'+String(i).padStart(2,'0'));f.card.scope.value.pages=ids;f.recipe.inputs.pages=await Promise.all(ids.map(async id=>({id,text_sha256:await sha(text)})));const pages=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))].map(id=>({id,raw:text,reviewed_text:null}));f.aggregate={schema:'liberpedia-local-inputs-v1',alphabet,pages};f.files.set('/data/local-run-inputs.json',f.aggregate);return f;}

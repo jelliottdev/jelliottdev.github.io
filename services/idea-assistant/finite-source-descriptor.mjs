@@ -16,7 +16,7 @@ export async function describeFiniteSource(input,{crypto=globalThis.crypto,signa
  const declaration=Settings.factored.inspect(card),version=card.rules.inputVersion,evaluation=card.rules.evaluation;
  require(version.status==='specified'&&['raw','reviewed'].includes(version.value),'The complete search needs an explicit source text version.');require(evaluation.status==='specified','The finite evaluation must be explicit.');
  const inspection=evaluation.value==='measurement',language=Evaluators.identify(evaluation.value),criterion=inspection?{kind:'measurement'}:evaluation.value;
- require(inspection||language||criterion?.kind==='exact-prefix','The finite source needs a maintained explicit evaluation.');
+ require(inspection||language||['exact-prefix','exact-prefix-set'].includes(criterion?.kind),'The finite source needs a maintained explicit evaluation.');
  require(same(pages.map(p=>p.id),card.scope.value.pages),'The complete source scope changed.');
  const ordered=pages.slice().sort((a,b)=>a.id.localeCompare(b.id)),shared=await E.prepare({title:'Validate shared finite inputs',pages:ordered,alphabet,steps:[],criterion},crypto);live();
  const base={...shared,title:'Validate finite program',taskId:'0'.repeat(64)},baseBytes=bytes(base),programs=[],members=[],seen=new Set(),axes=declaration.parameters;

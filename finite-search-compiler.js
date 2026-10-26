@@ -10,7 +10,7 @@ async function compileFiniteSearch(card,bundle,cryptoAPI=globalThis.crypto){
  const original=Json.capture(card,{maxBytes:Share.MAX_BYTES,maxDepth:16,maxNodes:6000}),source=Inputs.parse(Json.capture(bundle,{maxBytes:LIMITS.sourceBytes,maxDepth:16,maxNodes:6000})),declaration=Settings.inspect(original);
  if(original.rules.inputVersion.status!=='specified'||!['raw','reviewed'].includes(original.rules.inputVersion.value))throw Error('A finite search needs an explicit raw or reviewed text version.');
  const version=original.rules.inputVersion.value,evaluation=original.rules.evaluation;
- if(evaluation.status!=='specified'||evaluation.value?.kind!=='exact-prefix')throw Error('This finite search needs one explicit exact opening check.');
+ if(evaluation.status!=='specified'||!['exact-prefix','exact-prefix-set'].includes(evaluation.value?.kind))throw Error('This finite search needs an explicit exact opening or opening-set check.');
  const pages=original.scope.value.pages.map(id=>{
   const row=source.pages.get(id),text=version==='raw'?row?.raw:row?.reviewed_text;
   if(typeof text!=='string')throw Error('A declared page has no text in the selected version.');
