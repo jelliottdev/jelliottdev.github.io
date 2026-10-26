@@ -1,4 +1,7 @@
 /* The AI binding supplies inference access; no provider key or secret is required. */
+// Validate the immutable model during isolate startup, before a request's CPU budget.
+// Result admission reuses this checked module; no integrity checks are skipped.
+import '../../language-score.js';
 import AssistantSearch from '../../assistant-search.js';
 import AssistantMarkdown from '../../assistant-markdown.js';
 import ClaimResearch from '../../claim-research.js';

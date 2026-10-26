@@ -472,6 +472,13 @@ reset rule; partial accepted work does not close the full family. Private browse
 QA verified review, a 12-case run, inspection, save and generic saved-idea reload.
 The saved idea recovers its title, purpose and exact source through a verified
 linked task. Before any task exists, no source association is inferred.
+Hosted verification on October 25 also completed a genuine grouped calculation
+for one word-reset setting across all 56 pages: 55 language comparisons and one
+insufficient page, leaving 2,296 cases open. The first save encountered a browser
+network failure; an explicit retry succeeded, with one public task and one result.
+The cause of the first failure was not established. Manual network-save errors
+now explain retained local work and explicit retry; retry does not run it again.
+The idea is p_d73a495a1a9c9c6ee0e699842a1d2b8b4cef8f567e08bea0615c041c4774def7.
 Hosted verification remains separate from a successful source build.
 
 Before publishing a finite source recipe, complete the generic question/action
@@ -493,3 +500,25 @@ change-specific. Newer lightweight application runs can replace older lightweigh
 runs, but cannot cancel required scientific checks. The two maintained operational
 documents skip scientific rebuilds only when no record/catalog dependency names
 them; all unconditional Node checks still run.
+
+## Hosted read cost and verification boundaries
+
+The first public grouped run exposed a production-only limit: subsequent task
+and evidence reads exceeded the Worker's request CPU allowance. Local passing
+checks did not establish hosted reliability. Diagnostics distinguished accepted
+result admission from failed later reads.
+
+Saved local database results now use an admitted-receipt reader: check the exact
+task identity, stored result digest, envelope, page geometry and model/page pins
+without repeating the transformation and language score. Only immutable local
+rows admitted through the existing verifier use this path; external published
+and family evidence retain their prior verification. New result POSTs still
+replay the calculation independently, and the browser still verifies receipts.
+Saved source snapshots likewise check the selected admitted member and pins
+without expanding all 42 programs again. Fresh source declarations remain fully
+validated, with a bounded cache keyed by freshly read source and input hashes.
+
+Language status classification no longer calculates scores it discards: status
+and rune count follow exactly from validated length and the pinned minimum.
+The unchanged language model's integrity check is loaded at Worker startup so
+its synchronous validation does not first occur inside a read request.

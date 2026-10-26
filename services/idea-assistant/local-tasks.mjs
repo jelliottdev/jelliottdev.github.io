@@ -1,5 +1,6 @@
 import {prepareOriginWrite} from './finite-origin-storage.mjs';
-import {finiteSnapshotMember,createAuthoredFiniteSourceLoader} from './authored-finite-origin.mjs';
+import {readAdmittedResult} from './admitted-result.mjs';
+import {readAdmittedFiniteSnapshotMember,createAuthoredFiniteSourceLoader} from './authored-finite-origin.mjs';
 import {authorize as authorizePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 /* Bounded declarative computation persistence. No user code or scientific verdicts. */
@@ -61,7 +62,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
   }
   if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Local experiments are unavailable.'},503);
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
-  const controlsFor=async task=>{const suite=await prepareControls(task,crypto);await PlanControls.validate(suite,task,crypto);return suite;};
+  const controlsFor=async task=>{const suite=await prepareControls(task,crypto);if(prepareControls!==PlanControls.prepare)await PlanControls.validate(suite,task,crypto);return suite;};
   const publicContext=row=>query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
    FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
    JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=?
@@ -83,10 +84,10 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     WHERE o.task_id=? GROUP BY o.origin_id,o.origin_json,o.snapshot_json
     ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,MIN(o.created_at),o.origin_id LIMIT 11)`,row.id,preferredOriginId).first();
    const savedOrigins=JSON.parse(originRows?.entries||'[]').map(saved=>({...saved,snapshot:JSON.parse(saved.snapshotText)})),origins=[];
-   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||saved.storage==='shared'&&L.stable(saved.snapshot)!==saved.snapshotText||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,finite=s.kind==='finite-settings'?await finiteSnapshotMember(task,s):null,relation=finite?finite.scopeRelation:await scopeRelation(task,s);origins.push({origin:saved.origin,control:finite?finite.control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
+   for(const saved of savedOrigins.slice(0,10)){if(!validRecordedOrigin(saved.origin)||saved.storage==='shared'&&L.stable(saved.snapshot)!==saved.snapshotText||await digest(L.stable(saved.snapshot))!==saved.origin.protocolSha256)throw Error('Stored reviewed origin mismatch');const s=saved.snapshot,finite=s.kind==='finite-settings'?await readAdmittedFiniteSnapshotMember(task,s):null,relation=finite?finite.scopeRelation:await scopeRelation(task,s);origins.push({origin:saved.origin,control:finite?finite.control:s.control,question:s.question,scopeChange:s.scope_change,limitation:s.limitation,...(relation?{scopeRelation:relation}:{})});}
    const controls=origins.length&&!origins.some(item=>item.scopeRelation)&&task.criterion.kind!=='language-score'?null:await controlsFor(task);
    let selectedRecordOrigin=null;if(selectedOriginRow){const candidate=JSON.parse(selectedOriginRow.origin_json);if(!origins.some(item=>L.stable(item.origin)===L.stable(candidate)))throw Error('Selected authored context is not included in the validated origins');selectedRecordOrigin=candidate;}
-   if(latest){const result=await L.verify(task,JSON.parse(latest.result_json));if(await digest(L.stable(result))!==latest.id)throw Error('Stored result mismatch');run={id:latest.id,createdAt:latest.created_at,result};}
+   if(latest){const result=await readAdmittedResult(task,latest);run={id:latest.id,createdAt:latest.created_at,result};}
    let shared=null,coverageUnavailable=false;
    if(!run){try{shared=await discoverEvidence({db,task,inputVersion:context.input_version});if(shared.truncated&&shared.remainingPages.length)coverageUnavailable=true;}catch{coverageUnavailable=true;}}
    const coverage=shared?.coveredPages.length?{...shared,requestedTask:task,inputVersion:context.input_version}:null;

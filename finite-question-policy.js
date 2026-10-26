@@ -19,7 +19,11 @@
   const policy=describe(input),values=capture(sequence);if(!Array.isArray(values)||values.length>20000||values.some(n=>!Number.isInteger(n)||n<0||n>28))throw Error('Use the exact bounded transformed rune indices.');
   if(policy.id==='transformed-output-inspection-v1')return freeze({status:values.length?'rune-output':'no-runes',runes:values.length});
   if(policy.id==='exact-prefix-v1')return freeze({status:policy.criterion.values.every((n,i)=>values[i]===n)?'matched':'not-matched',runes:values.length});
-  const scorer=node?require('./language-score.js'):root.RuneLanguageScore;if(!scorer)throw Error('The pinned language-reference comparison is unavailable.');const result=scorer.evaluate(values);return freeze({status:result.status,runes:result.runes});
+  const scorer=node?require('./language-score.js'):root.RuneLanguageScore;if(!scorer)throw Error('The pinned language-reference comparison is unavailable.');scorer.validateCriterion(policy.criterion);
+  // This classification contains no score or verdict. Its two fields depend
+  // only on the already validated length and maintained minimum. Actual score
+  // claims are independently recomputed when their result receipt is admitted.
+  return freeze({status:values.length<policy.minimumRunes?'insufficient':'compared',runes:values.length});
  }
  async function prepare(input,crypto=root.crypto){
   const source=capture(input);
