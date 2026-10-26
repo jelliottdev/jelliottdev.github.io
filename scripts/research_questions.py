@@ -136,7 +136,7 @@ def protocol_reference(question, record):
             'parameters': {key: criterion[key] for key in ('lag', 'a', 'b')}, 'inputs': copy.deepcopy(inputs)}
 
 
-def validate_research_questions(value, record):
+def validate_research_questions(value, record, *, strict_authoring=False):
     """Validate local shape and owned recipe names; never read or write files."""
     require(isinstance(value, list) and 1 <= len(value) <= 12, 'expected 1..12 questions')
     seen = set()
@@ -144,11 +144,12 @@ def validate_research_questions(value, record):
     recipes = {recipe['id'] for recipe in record.get('browser_followups', [])}
     for question in value:
         require(isinstance(question, dict), 'question must be an object')
-        require(FIELDS <= set(question) <= FIELDS | {'followup', 'protocol'}, 'unexpected question fields')
+        require(FIELDS - {'question'} <= set(question) <= FIELDS | {'followup', 'protocol'}, 'unexpected question fields')
         identifier = question['id']
         require(slug(identifier, 100) and identifier not in seen, 'invalid or duplicate question id')
         seen.add(identifier)
-        prose(question['question'], 300, identifier + '.question')
+        if 'question' in question:
+            prose(question['question'], 300, identifier + '.question')
         prose(question['note'], 700, identifier + '.note')
         state = question['state']
         require(state in ('tested', 'open'), identifier + ': invalid state')
@@ -164,7 +165,17 @@ def validate_research_questions(value, record):
                     and question['followup'] in recipes and question['followup'] not in linked,
                     identifier + ': followup must name one unique owned recipe')
             linked.add(question['followup'])
-        protocol_reference(question, record)
+        resolved = protocol_reference(question, record)
+        canonical = None
+        if resolved and 'followupId' in resolved:
+            owned = [r for r in record.get('browser_followups', []) if r.get('id') == resolved['followupId']]
+            require(len(owned) == 1, identifier + ': question needs one owned recipe')
+            canonical = owned[0].get('question')
+            prose(canonical, 1200, identifier + '.followup.question')
+        require(canonical is not None or 'question' in question,
+                identifier + ': standalone question needs authored wording')
+        if strict_authoring and canonical is not None and 'question' in question:
+            require(question['question'] == canonical, identifier + ': duplicated question conflicts with followup')
 
 
 def validate_research_question_refs(records, by_id):

@@ -90,6 +90,18 @@ page bytes match exactly. The historical case route pins the saved revision
 rather than substituting the current input snapshot. Reviewed prose records
 are not automatically imported, and no concurrent work reservations exist.
 
+## One executable question
+
+For a maintained protocol linked to an owned browser follow-up, the recipe's
+question is the live wording used in discovery, review and execution. New linked
+entries reference that recipe rather than copy its question. Standalone editorial
+questions keep their own text. Legacy published question aliases remain readable
+without rewriting source bytes, but cannot change the executable question shown.
+Strict authoring checks reject conflicting explicit duplicates. In particular,
+a language comparison without a paired baseline must not advertise an improvement
+comparison. This changes presentation and authoring validation, not saved outputs,
+criteria, source identities or scientific conclusions.
+
 ## Evaluation must match the intended question
 
 A deciphering outcome with no specific evaluation is a clarification state,

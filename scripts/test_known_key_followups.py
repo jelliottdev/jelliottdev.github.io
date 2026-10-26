@@ -36,6 +36,34 @@ class KnownKeyFollowups(unittest.TestCase):
         self.assertEqual(self.path.read_bytes(), before)
         self.assertLess(len(before), 512 * 1024)
 
+    def test_new_question_links_derive_the_recipe_and_strictly_reject_conflicts(self):
+        linked = known.questions()
+        self.assertTrue(all('question' not in item for item in linked))
+        validate_research_questions(linked, self.record, strict_authoring=True)
+        same = copy.deepcopy(linked)
+        for item in same:
+            item['question'] = self.recipes[item['followup']]['question']
+        validate_research_questions(same, self.record, strict_authoring=True)
+        bad = copy.deepcopy(same)
+        bad[1]['question'] = 'Does this improve the earlier output?'
+        with self.assertRaisesRegex(ValueError, 'conflicts with followup'):
+            validate_research_questions(bad, self.record, strict_authoring=True)
+        validate_research_questions(known.historical_questions(), self.record)
+        self.assertNotIn('improve', self.words['question'])
+
+    def test_drift_checker_accepts_only_exact_historical_projection(self):
+        original = type(self.path).read_bytes
+        bad = copy.deepcopy(self.record)
+        bad['research_questions'][1]['question'] = 'An arbitrary changed scientific question?'
+        def injected(path):
+            if path == self.path:
+                return json.dumps(bad, ensure_ascii=False).encode('utf-8')
+            return original(path)
+        with patch.object(type(self.path), 'read_bytes', injected):
+            with self.assertRaisesRegex(ValueError, 'declarations are stale'):
+                known.build()
+        self.assertEqual(json.loads(self.path.read_bytes()), self.record)
+
     def test_exact_original_programs_and_input_pins(self):
         index = json.loads((known.ROOT / 'data/published-program-source-index.json').read_bytes())
         expanded = finite.compile_card(self.language['card'])
@@ -65,7 +93,7 @@ class KnownKeyFollowups(unittest.TestCase):
     def test_fixed_recipe_and_historical_findings_unchanged_and_questions_open(self):
         self.assertIn('second-koan-word-reset-warning', self.recipes)
         self.assertNotIn('kind', self.recipes['second-koan-word-reset-warning'])
-        self.assertEqual(self.record['research_questions'], known.questions())
+        self.assertIn(self.record['research_questions'], (known.questions(), known.historical_questions()))
         validate_research_questions(self.record['research_questions'], self.record)
         self.assertTrue(all(q['state'] == 'open' for q in self.record['research_questions']))
         self.assertIn('2352', self.record['summary'])

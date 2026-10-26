@@ -9,6 +9,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 import authored_finite_followups as authored
 import browser_followups as fixed
 import finite_followup_cards as finite
+from research_questions import validate_research_questions
 
 
 def specified(value):
@@ -50,13 +51,22 @@ def recipes():
 
 def questions():
     return [
-        {'id': 'known-keys-language-comparison', 'question': 'Do the existing outputs from the two known keys resemble the maintained language samples?',
+        {'id': 'known-keys-language-comparison',
          'state': 'open', 'note': 'Compare the complete archived outputs with language samples. The original result only checked nine fixed openings; language similarity is not a recovered reading.',
          'records': [], 'followup': 'known-keys-language-comparison', 'protocol': {'id': 'finite-settings-output', 'version': 1}},
-        {'id': 'known-keys-word-reset-language', 'question': 'Does restarting either known key at each visible word improve its resemblance to language samples?',
+        {'id': 'known-keys-word-reset-language',
          'state': 'open', 'note': 'Keep the original two keys, all starting places, both directions and the same pages. Change only the key restart from each page to each visible word. No result for this extension is asserted.',
          'records': [], 'followup': 'known-keys-word-reset-language', 'protocol': {'id': 'finite-settings-output', 'version': 1}}
     ]
+
+
+def historical_questions():
+    # Exact previously published projection only. Keep its immutable source
+    # bytes readable until versioned source retrieval permits migration.
+    value = questions()
+    value[0]['question'] = 'Do the existing outputs from the two known keys resemble the maintained language samples?'
+    value[1]['question'] = 'Does restarting either known key at each visible word improve its resemblance to language samples?'
+    return value
 
 
 def build(write=False):
@@ -67,12 +77,18 @@ def build(write=False):
     expected = copy.deepcopy(record)
     expected['browser_followups'] = [r for r in record['browser_followups'] if r['id'] not in identifiers] + generated
     expected['research_questions'] = questions()
-    if write:
-        path.write_text(json.dumps(expected, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8', newline='\n')
-    elif record != expected:
-        raise ValueError('Known-key source follow-up declarations are stale')
-    if len(path.read_bytes()) >= 512 * 1024:
+    validate_research_questions(expected['research_questions'], expected, strict_authoring=True)
+    historical = copy.deepcopy(expected)
+    historical['research_questions'] = historical_questions()
+    serialized = json.dumps(expected, ensure_ascii=False, separators=(',', ':')) + '\n'
+    if max(len(path.read_bytes()), len(serialized.encode('utf-8'))) >= 512 * 1024:
         raise ValueError('Known-key record exceeds the runtime source bound')
+    if write:
+        path.write_text(serialized, encoding='utf-8', newline='\n')
+    elif record != expected:
+        if record == historical:
+            return record
+        raise ValueError('Known-key source follow-up declarations are stale')
     return expected
 
 

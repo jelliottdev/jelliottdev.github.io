@@ -19,6 +19,29 @@ def question(**changes):
 
 
 class QuestionShapeTests(unittest.TestCase):
+    def test_reference_only_runnable_questions_and_explicit_strict_authoring(self):
+        root = Path(__file__).resolve().parents[1]
+        record = json.loads((root / 'experiments/records/lp2-known-vigenere-keys/record.json').read_bytes())
+        before = copy.deepcopy(record)
+        validate_research_questions(record['research_questions'], record)
+        linked = copy.deepcopy(record['research_questions'])
+        recipes = {r['id']: r for r in record['browser_followups']}
+        for item in linked:
+            item.pop('question')
+        validate_research_questions(linked, record, strict_authoring=True)
+        for item in linked:
+            item['question'] = recipes[item['followup']]['question']
+        validate_research_questions(linked, record, strict_authoring=True)
+        linked[1]['question'] = 'Does this improve the earlier output?'
+        with self.assertRaisesRegex(ValueError, 'conflicts with followup'):
+            validate_research_questions(linked, record, strict_authoring=True)
+        validate_research_questions(linked, record)
+        self.assertEqual(record, before)
+        missing = question()
+        missing.pop('question')
+        with self.assertRaisesRegex(ValueError, 'standalone question needs authored wording'):
+            validate_research_questions([missing], {'id': 'source-record'})
+
     def test_selected_lag_five_question_binds_existing_recipe_without_recasting_the_search(self):
         root = Path(__file__).resolve().parents[1]
         record = json.loads((root / 'experiments/records/word-internal-affine-all-lags/record.json').read_text(encoding='utf-8'))

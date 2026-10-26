@@ -63,18 +63,24 @@
   if(Object.entries(specified).some(([k,v])=>!exact(rules[k],['status','value'])||rules[k].status!=='specified'||rules[k].value!==v)||['boundaryMode','reset','initialState','searchBounds','searchProtocol','exceptionalCases'].some(k=>!exact(rules[k],['status'])||rules[k].status!=='not_applicable'))return null;
   return {id:p.id,version:1,followupId:recipe.id,parameters:{lag:c.lag,a:c.a,b:c.b},inputs:clone(inputs)};
  }
- function questions(record,recipes=[]){
+ function questions(record,recipes=[],{strictAuthoring=false}={}){
   if(!object(record)||!slug(record.id)||!Array.isArray(record.research_questions)||record.research_questions.length<1||record.research_questions.length>12)return [];
-  const seen=new Set(),linked=new Set();
+  const seen=new Set(),linked=new Set(),projected=[];
   for(const item of record.research_questions){
-   if(!object(item)||Reflect.ownKeys(item).some(key=>!['id','question','state','note','records','followup','protocol'].includes(key))||!['id','question','state','note','records'].every(key=>Object.hasOwn(item,key))||Object.values(Object.getOwnPropertyDescriptors(item)).some(field=>!Object.hasOwn(field,'value'))||!slug(item.id)||seen.has(item.id)||!prose(item.question,300)||!prose(item.note,700)||!['tested','open'].includes(item.state)||!Array.isArray(item.records)||item.records.length>12||Array.from(item.records).some(id=>!slug(id)||id===record.id)||new Set(item.records).size!==item.records.length)return [];
+   if(!object(item)||Reflect.ownKeys(item).some(key=>!['id','question','state','note','records','followup','protocol'].includes(key))||!['id','state','note','records'].every(key=>Object.hasOwn(item,key))||Object.values(Object.getOwnPropertyDescriptors(item)).some(field=>!Object.hasOwn(field,'value'))||!slug(item.id)||seen.has(item.id)||Object.hasOwn(item,'question')&&!prose(item.question,300)||!prose(item.note,700)||!['tested','open'].includes(item.state)||!Array.isArray(item.records)||item.records.length>12||Array.from(item.records).some(id=>!slug(id)||id===record.id)||new Set(item.records).size!==item.records.length)return [];
    if(item.state==='tested'&&!item.records.length)return [];
    if(Object.hasOwn(item,'followup')&&(!slug(item.followup)||linked.has(item.followup)||!recipes.some(recipe=>recipe.id===item.followup)))return [];
    if(Object.hasOwn(item,'followup'))linked.add(item.followup);
-   if(Object.hasOwn(item,'protocol')&&!resolveProtocol(item,recipes))return [];
-   seen.add(item.id);
+   const resolved=Object.hasOwn(item,'protocol')?resolveProtocol(item,recipes):null;if(Object.hasOwn(item,'protocol')&&!resolved)return [];
+   const owned=resolved?.followupId?recipes.filter(recipe=>recipe.id===resolved.followupId):[],property=owned.length===1?Object.getOwnPropertyDescriptor(owned[0],'question'):null;
+   const canonical=property&&Object.hasOwn(property,'value')&&prose(property.value,1200)?property.value:null;
+   if(resolved?.followupId&&!canonical||!canonical&&!Object.hasOwn(item,'question'))return [];
+   // Historical published aliases remain readable, but never determine the
+   // executable question. New authors may omit this duplicate altogether.
+   if(strictAuthoring&&canonical&&Object.hasOwn(item,'question')&&item.question!==canonical)return [];
+   projected.push(canonical?{...item,question:canonical}:item);seen.add(item.id);
   }
-  return record.research_questions.slice().sort((a,b)=>(a.state==='open'?0:1)-(b.state==='open'?0:1));
+  return projected.sort((a,b)=>(a.state==='open'?0:1)-(b.state==='open'?0:1));
  }
  function protocolReference(record,questionId,recipes=record?.browser_followups||[]){const item=questions(record,recipes).find(item=>item.id===questionId);return item&&Object.hasOwn(item,'protocol')?resolveProtocol(item,recipes):null;}
  const api={questions,protocolReference,finiteRecipe};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordQuestionModel=api;

@@ -15,7 +15,7 @@ async function finishStages(s,start=0){for(let i=start;i<stages.length;i++){awai
 (async()=>{
  const s=setup();assert.equal(s.appended.length,0);const first=s.c.RecordQuestionRuntime.load(),second=s.c.RecordQuestionRuntime.load();assert.equal(first,second);assert.equal(s.appended.length,3);
  await finishStages(s);assert.equal(await first,s.c.RecordQuestionLive);assert.equal(s.appended.length,17);assert.equal(s.timers.size,0);
- for(const script of s.appended){const url=new URL(script.src);assert.equal(url.origin,'https://liberpedia.test');assert.equal(url.pathname,'/sub/'+url.pathname.split('/').at(-1));assert.equal(url.search,'?v=20261025-source-recovery');assert.equal(url.hash,'');assert.equal(script.async,true);assert(!/language|model|data/.test(url.pathname));}
+ for(const script of s.appended){const url=new URL(script.src);assert.equal(url.origin,'https://liberpedia.test');assert.equal(url.pathname,'/sub/'+url.pathname.split('/').at(-1));assert.equal(url.search,'?v=20261025-canonical-question');assert.equal(url.hash,'');assert.equal(script.async,true);assert(!/language|model|data/.test(url.pathname));}
  await s.c.RecordQuestionRuntime.load();assert.equal(s.appended.length,17);console.log('PASS dormant, fixed same-origin assets, staged concurrent loading and completed reuse');
  for(const failure of ['network','timeout','export','append']){
   const f=setup();if(failure==='append')f.setThrow(true);const failed=f.c.RecordQuestionRuntime.load();const reject=assert.rejects(failed,/tools|tool/);

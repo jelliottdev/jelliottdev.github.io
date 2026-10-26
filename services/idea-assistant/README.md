@@ -360,6 +360,15 @@ fall back to the original serializer.
 
 Production previously returned CPU-limit errors on task and evidence reads.
 Successful requests also consumed substantial CPU, so success alone does not
-establish dependable headroom. Deployment and hosted measurements for this
-optimization must be recorded after verification; local parity tests and a dry
-build do not prove the service stays within its CPU allowance.
+establish dependable headroom. This optimization shipped at commit
+`79f7bae7` and Worker version `e05453ed-27bf-4a90-8435-a81f39c71184`.
+All 306 unconditional Node checks and the four known-key source tests passed;
+the Worker reported 109 ms startup. Three direct saved-task reads returned 200
+with all 56 pages and the original task identity (137–144 ms reported CPU).
+Fresh source review retained all 42 programs and 2,352 cases (93 ms CPU in one
+observed request; another browser request used 120 ms). After Pages deployed,
+the native browser loaded the new script versions, restored the authored title,
+purpose and 55/1/2,296 coverage, and opened saved output. The request trace for
+that reload contains no record-plans request. Task/evidence reads still have
+high and variable CPU, including a later 816 ms evidence request. These samples
+establish behavior, not dependable CPU headroom; further profiling remains open.
