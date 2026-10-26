@@ -29,16 +29,17 @@ export function createCommunityFeedHandler(){
    return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'600'}});
   }
   if(request.method!=='GET'){headers.Allow='GET, OPTIONS';return reply({error:'Method is not allowed.'},405);}
-  let cursor=null;
+  let cursor=null,ids=null;
   try{
-   if([...url.searchParams.keys()].some(k=>k!=='before')||url.searchParams.getAll('before').length>1)throw Error('Invalid cursor');
+   if([...url.searchParams.keys()].some(k=>!['before','ids'].includes(k))||url.searchParams.getAll('before').length>1||url.searchParams.getAll('ids').length>1||url.searchParams.has('before')&&url.searchParams.has('ids'))throw Error('Invalid cursor');
+   if(url.searchParams.has('ids')){ids=url.searchParams.get('ids').split(',');if(url.search.length>4000||ids.length<1||ids.length>PAGE_SIZE||ids.some(id=>!IDEA.test(id))||new Set(ids).size!==ids.length)throw Error('Invalid selection');}
    if(url.searchParams.has('before'))cursor=decodeCursor(url.searchParams.get('before'));
   }catch{return reply({error:'Invalid page cursor.'},400);}
   if(!env?.PROPOSALS?.prepare)return reply({error:'Community research is unavailable.'},503);
   try{
    const query=(sql,...args)=>env.PROPOSALS.prepare(sql).bind(...args).all();
-   const where=cursor?' WHERE (i.created_at<? OR (i.created_at=? AND i.proposal_id<?))':'';
-   const args=cursor?[cursor.createdAt,cursor.createdAt,cursor.id]:[];
+   const where=ids?' WHERE i.proposal_id IN ('+ids.map(()=>'?').join(',')+')':cursor?' WHERE (i.created_at<? OR (i.created_at=? AND i.proposal_id<?))':'';
+   const args=ids|| (cursor?[cursor.createdAt,cursor.createdAt,cursor.id]:[]);
    // Bound the expensive shared-page existence checks to this page, even if
    // ordering the public idea directory itself needs a temporary sort.
    const found=await query(`WITH page AS MATERIALIZED (
@@ -115,7 +116,7 @@ export function createCommunityFeedHandler(){
     }
    }
    return reply({schema:'liberpedia-community-research-v1',entries,
-    nextCursor:found.results.length>PAGE_SIZE?encodeCursor(rows.at(-1)):null});
+    nextCursor:!ids&&found.results.length>PAGE_SIZE?encodeCursor(rows.at(-1)):null});
   }catch{return reply({error:'Community research is temporarily unavailable.'},503);}
  };
 }

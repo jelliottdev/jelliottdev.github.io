@@ -636,3 +636,33 @@ the other eight opening checks remain historical source evidence. The authored
 page-reset language comparison reuses these outputs with a new evaluation. The
 word-reset language check changes decoding and remains a separate open family.
 Neither addition changes the historical finding or implies a new reading.
+
+## Discovery without execution details
+
+The Research map loads the presentation-only experiment index. It retains the
+authored findings, scope, labels and follow-up descriptions, but not executable
+cards or synthetic control witnesses. A selected record is fetched from its
+exact-byte-pinned export; a selected follow-up also checks its protocol digest
+before the existing full readiness verifier receives it. Descriptors never
+become execution authority. Two full-record requests may be active at once;
+closing or switching a preview cannot let an old response replace the selection.
+
+## Community interest and browser bookmarks
+
+Upvotes express interest only. They do not alter findings, verification,
+classification or execution coverage. The anonymous browser token is generated
+only on an explicit vote and stored as a domain-separated hash on the server.
+Setting an upvote is idempotent; withdrawing it removes that browser's vote.
+There are no downvotes or accounts. Browser tokens are a best-effort duplicate
+guard, not a proof of one human voter.
+
+Bookmarks and remembered vote selections stay in browser storage. Saving a
+bookmark performs no remote write and never claims success after a storage
+failure. Saved filters the same Graph/List branches; older bookmarked community
+ideas are fetched through a bounded public-ID lookup rather than scanning the
+whole feed. Most upvoted orders matching records and aggregates their interest
+counts within branches; unknown counts stay unknown and can be refreshed.
+
+The Worker validates published voting targets using the generated compact
+research-record-ids manifest. It does not download the experiment registry to
+serve vote counts. Community voting targets must already be public ideas.

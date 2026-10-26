@@ -5,14 +5,14 @@ const read=name=>JSON.parse(fs.readFileSync(require.resolve('../'+name),'utf8'))
 const data=require('../research-browser-model.js').build(read('data/research-map.json'),read('data/experiments.json'));
 const Reader=require('../record-test-view.js'),Index=require('../research-index.js'),source=fs.readFileSync(require.resolve('../research-browser.js'),'utf8');
 const originalRecordMetadata=JSON.stringify(data.records);
-const helpers=['workFor','recordHref','traversalChildren'].map(name=>source.split('\n').find(line=>line.startsWith(' function '+name+'('))).join('\n');
+const helpers=['workFor','recordHref','traversalChildren','interest'].map(name=>source.split('\n').find(line=>line.startsWith(' function '+name+'('))).join('\n');
 const code=source.slice(source.indexOf(' function renderList(){'),source.indexOf('\n function filterMenu(){'));
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function render(focusId,{matches=Object.keys(data.records),colour='methods',selected=''}={}){
+function render(focusId,{matches=Object.keys(data.records),colour='methods',selected='',sort='title',saved=false,counts={}}={}){
  const nodes=new Map(data.views.all.nodes.map(n=>[n.id,n])),focus=nodes.get(focusId),matching=new Set(matches),calls=[];
  const container={html:'',scrollTop:0,set innerHTML(value){this.html=value;this.buttons=[...value.matchAll(/<button[^>]*data-list-node="([^"]+)"[^>]*>/g)].map(m=>({dataset:{listNode:m[1]},disabled:/ disabled/.test(m[0])}));this.links=[...value.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].filter(m=>/\bhref="/.test(m[1])).map(m=>({href:m[1].match(/\bhref="([^"]+)"/)[1],dataset:{listNode:m[1].match(/data-list-node="([^"]+)"/)?.[1]},html:m[2]}));},get innerHTML(){return this.html;},querySelectorAll(selector){return selector==='button[data-list-node]'?this.buttons:selector==='[data-list-node]'?[...this.buttons,...this.links.filter(a=>a.dataset.listNode)]:[];},querySelector(selector){return selector==='#research-sort'&&this.html.includes('id="research-sort"')?{}:null;}};
- const state={view:'all',q:'',type:'',method:'',family:'',result:'',page:'',sort:'title',p:999,colour,record:selected};
- const context={RecordTestView:Reader,readerTitle:Reader.title,readerBlurb:Reader.blurb,ResearchWork:require('../research-work.js'),state,data,nodes,focus,esc,aliases:{},sorts:{title:'Title A–Z'},arrow:'<svg aria-hidden="true"></svg>',chevron:'<svg aria-hidden="true"></svg>',count:n=>n.members.filter(id=>matching.has(id)).length,
+ const state={view:'all',q:'',type:'',method:'',family:'',result:'',page:'',sort,saved:saved?'1':'',p:999,colour,record:selected};
+ const context={RecordTestView:Reader,readerTitle:Reader.title,readerBlurb:Reader.blurb,ResearchWork:require('../research-work.js'),state,data,nodes,focus,esc,aliases:{},sorts:{title:'Title A–Z',top:'Most upvoted'},votesLoading:false,reactions:{count:id=>counts[id]??null},loadTopVotes(){},passes:id=>matching.has(id),arrow:'<svg aria-hidden="true"></svg>',chevron:'<svg aria-hidden="true"></svg>',count:n=>n.members.filter(id=>matching.has(id)).length,
   indexResult:Index.select(Object.values(data.records),{}),$:()=>container,listPositions:new Map(),listKey:'',scopeLabel:r=>r.pages.length+' pages',outcomes:{supported:'Supported within scope',inconclusive:'Inconclusive','not-supported':'Not supported within scope'},resultColours:{supported:'#138575',inconclusive:'#75649a','not-supported':'#7b899b'},navigate:changes=>calls.push(changes),clearFilters(){},dialog:{querySelectorAll:()=>[]},openDialog(){},closeDialog(){}};
  vm.createContext(context);vm.runInContext(helpers+'\n'+code,context);context.renderList();return{container,context,calls,focus,nodes};
 }
@@ -45,3 +45,17 @@ for(const scale of [.08,.1,.28,1,4,5,8])for(const factor of [.25,1,2]){
  if(factor===1)assert.equal(pinched,scale,'Starting a two-finger gesture preserves the current scale');
 }
 console.log('PASS map List: every branch exposes exactly one level, direct native record links, exact scope/filtering/counts/colors, no duplicate record actions or pagination, metadata unchanged, wrapping/touch targets.');
+
+// Interest is a separate ordering of the same children, never a new classification.
+{
+ const parent=data.views.all.nodes.find(n=>n.children.length>1&&n.children.every(id=>data.views.all.nodes.find(x=>x.id===id)?.kind==='record'));assert(parent);
+ const ids=parent.children.map(id=>data.views.all.nodes.find(n=>n.id===id).record_id),counts=Object.fromEntries(ids.map(id=>[id,0]));counts[ids.at(-1)]=7;
+ const top=render(parent.id,{sort:'top',counts});assert(top.container.links[0].href.endsWith('/'+ids.at(-1)));assert(top.container.html.includes('7 upvotes'));assert(top.container.html.includes('community interest'));assert(!top.container.html.includes('At least '));
+ const partial=render(parent.id,{sort:'top',counts:{[ids[0]]:3}});assert(partial.container.html.includes('Some vote counts are unavailable'));assert(partial.container.html.includes('At least '));
+ const root=render('all-research',{sort:'top',counts});assert.equal(root.container.buttons.length,6);assert(root.container.html.includes('across matching records'));
+ const saved=render('all-research',{saved:true,matches:[ids[0]]});assert.equal(saved.container.buttons.length,1,'Saved traverses only the branch containing a bookmark');
+ const empty=render('all-research',{saved:true,matches:[]});assert.equal(empty.container.buttons.length,0);assert(empty.container.html.includes('No saved research here'));
+ const Model=require('../research-browser-model.js');assert.equal(Model.read('#saved=1&sort=top','list',Index.state).saved,'1');assert.equal(Model.read('#saved=1&sort=top','list',Index.state).sort,'top');assert.equal(Model.read('#saved=true','list',Index.state).saved,undefined);
+ assert.equal(JSON.stringify(data.records),originalRecordMetadata,'Interest sorting and local bookmark filtering cannot edit evidence');
+ console.log('PASS interest sorting, unknown vote counts, saved-only branch traversal, empty recovery and evidence separation');
+}

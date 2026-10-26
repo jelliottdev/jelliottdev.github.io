@@ -44,7 +44,7 @@ async function familyResult(f,index,{familyId='deor-feedback-v1'}={}){
 function associate(f,p,plan,createdAt=at,inputVersion='raw'){f.db.sqlite.prepare('INSERT INTO local_task_ideas(task_id,proposal_id,input_version,parent_task_id,created_at,created_day) VALUES(?,?,?,?,?,?)').run(plan.taskId,p.id,inputVersion,null,createdAt,createdAt.slice(0,10));}
 async function cacheRequest(f,p,plan,{inputVersion='raw',createdAt=at}={}){const text=L.stable(plan);f.db.sqlite.prepare('INSERT INTO idea_computation_evidence(proposal_id,requested_task_id,requested_task_json,requested_task_hash,input_version,created_at) VALUES(?,?,?,?,?,?)').run(p.id,plan.taskId,text,await digest(text),inputVersion,createdAt);}
 function request(query='',{method='GET',headers={},path='/community-research'}={}){return new Request('https://worker.example'+path+query,{method,headers:{origin,...headers}});}
-const view=async f=>{const response=await f.handle(request(),f.env);assert.equal(response.status,200);return response.json();};
+const view=async(f,query='',status=200)=>{const response=await f.handle(request(query),f.env);assert.equal(response.status,status);return response.json();};
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
 
 await test('only explicit public entries appear; active card exact; private contributions never selected or returned',async()=>{
@@ -150,6 +150,20 @@ await test('migration backfill keeps existing public task visible without publis
  f.db.sqlite.exec(readFileSync(new URL('./migrations/0006_task_ideas.sql',import.meta.url),'utf8'));
  assert.equal(f.db.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas').get().n,2);
  const body=await view(f);assert.equal(body.entries.length,1);assert.equal(body.entries[0].id,p.id);assert.equal(body.entries[0].taskCount,1);assert.deepEqual(body.entries[0].tasks,[{id:plan.taskId,title:plan.title,state:'results-verified'}]);
+});
+await test('bounded saved-ID lookup restores older public ideas with unchanged cards, task summaries and shared status',async()=>{
+ const f=fixture(),older=await idea(f,800,{createdAt:'2026-01-01T00:00:00.000Z'}),privateIdea=await idea(f,801,{published:false});
+ const owned=await task(f,older,800,{verified:true});await cacheRequest(f,older,owned);
+ for(let i=0;i<51;i++)await idea(f,900+i);
+ const first=await view(f);assert(!first.entries.some(e=>e.id===older.id));assert(first.nextCursor);
+ const before=f.db.sqlite.prepare('SELECT total_changes() n').get().n,queries=f.db.queries.length,body=await view(f,'?ids='+[older.id,privateIdea.id,'p_'+'f'.repeat(64)].join(','));
+ assert.equal(body.nextCursor,null);assert.equal(body.entries.length,1);const entry=body.entries[0];assert.equal(entry.id,older.id);assert.deepEqual(entry.card,JSON.parse(older.cardJson));assert.equal(entry.taskCount,1);assert.equal(entry.verifiedTaskCount,1);assert.deepEqual(entry.tasks,[{id:owned.taskId,title:owned.title,state:'results-verified'}]);assert.equal(entry.hasSharedComputation,true);assert.equal(f.db.queries.length-queries,2);assert(!JSON.stringify(body).includes(privateIdea.id));assert(!JSON.stringify(body).includes('PRIVATE'));assert.equal(f.db.sqlite.prepare('SELECT total_changes() n').get().n,before);
+ const missing=await view(f,'?ids=p_'+'e'.repeat(64));assert.deepEqual(missing.entries,[]);assert.equal(missing.nextCursor,null);
+ // The same existing projector rejects corruption for selected public rows.
+ f.db.sqlite.prepare('UPDATE proposals SET card_hash=? WHERE id=?').run('0'.repeat(64),older.id);await view(f,'?ids='+older.id,503);
+});
+await test('selected-ID lookup bounds and exclusive cursor reject before any database access',async()=>{
+ const f=fixture();for(const query of ['?ids=','?ids=p_bad','?ids='+('p_'+'a'.repeat(64))+','+('p_'+'a'.repeat(64)),'?ids='+Array.from({length:51},(_,i)=>'p_'+i.toString(16).padStart(64,'0')).join(','),'?ids=p_'+'a'.repeat(64)+'&before=anything','?ids=p_'+'a'.repeat(64)+'&ids=p_'+'b'.repeat(64),'?ids=idea-'+'a'.repeat(64),'?ids=p_'+'a'.repeat(64)+'&extra=1'])await view(f,query,400);assert.equal(f.db.queries.length,0);
 });
 await test('origin, method, route and preflight gates need no mutation bindings and perform no rejected reads',async()=>{
  const f=fixture();

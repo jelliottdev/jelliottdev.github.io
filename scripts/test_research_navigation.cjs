@@ -54,7 +54,7 @@ resize.state.mode='list';const lastCamera={...resize.camera};size={width:0,heigh
 const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 let panelHTML='',backButton,recordLink;Object.defineProperty(panel,'innerHTML',{set(html){panelHTML=html;backButton=element('preview-back');recordLink=element('record-open');heading.isConnected=true},get(){return panelHTML}});
 panel.querySelector=selector=>selector==='h2'?heading:selector.includes('record-open')?recordLink:selector==='.preview-back'?backButton:null;
-c.RecordFollowupView=require('../record-followup-view.js');c.esc=escapeHTML;c.arrow='';c.previewExpanded=false;c.innerWidth=390;
+c.previewGeneration=0;c.ResearchDiscovery=require('../research-discovery.js');c.RecordFollowupView=require('../record-followup-view.js');c.esc=escapeHTML;c.arrow='';c.previewExpanded=false;c.innerWidth=390;
 vm.runInContext(production('updatePreviewMode')+'\n'+production('pageRanges')+'\n'+production('readerLimit')+'\n'+production('previewScopeHTML')+'\n'+production('previewFollowupsHTML')+'\n'+production('bindPreviewFollowups')+'\n'+production('showInspector'),c);
 requested.q='';requested.mode='graph';requested.record=parent.members[0];c.render();const record=data.records[requested.record];
 assert.equal((panelHTML.match(/<button\b/g)||[]).length,1,'Record workspace has one Back control, not expand and close affordances');
@@ -142,11 +142,11 @@ console.log('PASS research navigation: Sort restores replacement focus; Graph/Li
   const registry=new Promise(resolve=>{resolveRegistry=resolve}),nodes=new Map(['map-dialog-title','map-dialog-body','help-research-button','close-map-dialog'].map(id=>[id,element(id)]));
   const route={location,URLSearchParams,Promise,data:null,publishedBaseline:null,helpCleanup:null,dialogReturn:null,map:{innerHTML:''},esc:String,
    $:id=>nodes.get(id),dialog:{scrollTop:0,showModal(){assert.equal(rendered,1,'Registry and normal map rendering precede opening');opened++;},close(){}},
-   fetch:path=>path==='data/experiments.json'?registry:Promise.resolve({ok:true,json:async()=>({map:true})}),
+   fetch:path=>path==='data/experiment-index.json'?registry:Promise.resolve({ok:true,json:async()=>({map:true})}),
    ResearchBrowserModel:{build(mapData,records){assert(mapData.map);assert(records.registry);return {records:{canonical:{id:'canonical'}}};}},
    render(){assert(route.data?.records.canonical);rendered++;},loadCommunity(){events.push('community');},
    ResearchHelp:{render(records){assert.equal(records,route.data.records);return 'Existing chooser';},bind(host,records,{createReadiness}){assert.equal(host,nodes.get('map-dialog-body'));assert.equal(records,route.data.records);const probe=createReadiness({record:{id:'canonical'},check:{id:'source-check'},onState:value=>probes.push(value.state)});probe.activate();return ()=>{unbound++;probe.destroy();};}},
-   ResearchHelpRuntime:require('../research-help-runtime.js'),RecordQuestionRuntime:{async loadReadiness(){loaded++;throw Error('API unavailable');}}};
+   recordStore:{hydrate:async value=>value},ResearchHelpRuntime:require('../research-help-runtime.js'),RecordQuestionRuntime:{async loadReadiness(){loaded++;throw Error('API unavailable');}}};
   vm.createContext(route);for(const name of ['clearHelp','openDialog','closeDialog','helpResearch'])vm.runInContext(production(name),route);
   vm.runInContext(boot,route);await tick();assert.equal(opened,0,'Never open before registry loading finishes');
   resolveRegistry({ok:true,json:async()=>({registry:true})});await tick();await tick();

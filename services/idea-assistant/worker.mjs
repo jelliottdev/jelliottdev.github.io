@@ -7,6 +7,7 @@ import AssistantMarkdown from '../../assistant-markdown.js';
 import ClaimResearch from '../../claim-research.js';
 import RecordedComparison from '../../recorded-comparison.js';
 import {handleProposal} from './proposals.mjs';
+import {createUpvoteHandler} from './upvotes.mjs';
 import {createInterpretHandler} from './interpret-handler.mjs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
 import {createPrepareTaskHandler} from './prepare-task.mjs';
@@ -177,6 +178,7 @@ export function createHandler(loadRecords = records) {
   };
 }
 
+const upvotes=createUpvoteHandler();
 const ask=createHandler();
 const interpret=createInterpretHandler();
 const localTasks=createLocalTaskHandler();
@@ -195,6 +197,7 @@ const factoredOutputSearch=createFactoredOutputSearchHandler();
 const factoredInspectionSearch=createFactoredInspectionSearchHandler();
 export default {fetch(request,env,ctx){
   const path=new URL(request.url).pathname;
+  if(path==='/upvotes')return upvotes(request,env);
   if(path.startsWith('/factored-inspection-search/'))return factoredInspectionSearch(request,env);
   if(path.startsWith('/factored-output-search/'))return factoredOutputSearch(request,env);
   if(path.startsWith('/factored-prefix-search/'))return factoredPrefixSearch(request,env);

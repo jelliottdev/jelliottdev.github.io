@@ -218,6 +218,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/build_published_evidence_history.py --check
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_discovery_projection.py
+        if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_article_links.py

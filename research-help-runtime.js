@@ -1,7 +1,7 @@
 /* Lazy, bounded evidence lookup for an open contribution chooser. No writes. */
 (function(root){
  'use strict';
- function create({load,fetcher=root.fetch?.bind(root),pageURL=root.location?.href,limit=2}={}){
+ function create({load,hydrate,fetcher=root.fetch?.bind(root),pageURL=root.location?.href,limit=2}={}){
   if(typeof load!=='function'||!Number.isInteger(limit)||limit<1||limit>2)throw Error('Current-work lookup is unavailable.');
   const queue=[],controllers=new Set(),shared=new Map(),abort=new AbortController();let active=0,closed=false;
   function source(path){
@@ -18,8 +18,9 @@
     emit({state:'loading'});
     pending=new Promise(resolve=>{queue.push(async()=>{try{
      if(dead||closed)return resolve(null);
-     const tools=await load({finite:check?.kind==='finite-settings',language:check?.card?.rules?.evaluation?.value?.kind==='language-score'});if(dead||closed)return resolve(null);
-     if(!controller)controller=tools.createController({record,check,onState:emit,fetcher,pageURL,loadConfig:()=>source('data/assistant.json'),loadInputs:()=>source('data/local-run-inputs.json')});
+     const selected=hydrate?await hydrate({record,check}):{record,check};if(dead||closed)return resolve(null);
+     const tools=await load({finite:selected.check?.kind==='finite-settings',language:selected.check?.card?.rules?.evaluation?.value?.kind==='language-score'});if(dead||closed)return resolve(null);
+     if(!controller)controller=tools.createController({record:selected.record,check:selected.check,onState:emit,fetcher,pageURL,loadConfig:()=>source('data/assistant.json'),loadInputs:()=>source('data/local-run-inputs.json')});
      resolve(await (retry?controller.retry():controller.activate()));
     }catch{emit({state:'unavailable'});resolve(null);}finally{pending=null;}});drain();});return pending;
    }

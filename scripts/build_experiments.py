@@ -1,5 +1,6 @@
 """Validate published record files and build the public index. No scripts are executed."""
 import datetime
+import copy
 import hashlib
 import html
 import json
@@ -27,6 +28,89 @@ def checker_payload(records, registry_bytes):
         'records': [{key: record[key] for key in CHECKER_FIELDS if key in record}
                     for record in records],
     }
+
+
+
+
+def published_record_ids(records):
+    """Tiny authoritative target membership; no descriptions or controls."""
+    ids = []
+    for record in records:
+        identifier = record.get('id')
+        require(record.get('status') == 'published' and isinstance(identifier, str)
+                and len(identifier) <= 100
+                and re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)
+                and not re.fullmatch(r'idea-[a-f0-9]{64}', identifier), 'Invalid published target ID')
+        require(identifier not in ids, 'Duplicate published target ID')
+        ids.append(identifier)
+    require(len(ids) <= 10000, 'Published target count exceeds its bound')
+    value = {'schema': 'liberpedia-published-record-ids-v1', 'ids': ids}
+    require(len((json.dumps(value, separators=(',', ':')) + '\n').encode('utf-8')) <= 128 * 1024,
+            'Published target manifest exceeds its byte bound')
+    return value
+
+
+def record_export_bytes(record):
+    """Exact bytes shared by selected-record hydration and its discovery pin."""
+    return (json.dumps(record, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+
+
+def discovery_record(root, record, base='https://jelliottdev.github.io/'):
+    """Project presentation facts, never a truncated executable recipe."""
+    identifier = record['id']
+    require(re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier), 'Invalid discovery record ID')
+    path = f'reference/experiments/{identifier}.json'
+    source_path = f'experiments/records/{identifier}/record.json'
+    source_bytes = (Path(root) / source_path).read_bytes()
+    source = json.loads(source_bytes)
+    require(source.get('id') == identifier, 'Discovery source ID changed')
+    value = {
+        'id': identifier, 'title': record['title'], 'question': record['question'],
+        **{key: record[key] for key in ('reader_title', 'reader_intro', 'reader_question') if key in record},
+        'summary': record['summary'], 'tags': record['tags'],
+        # Keep legacy discovery display semantics and separately preserve the
+        # exact authored finding for full-record presentation normalization.
+        'finding': record.get('reader_finding') or record['finding'],
+        'scope': record['scope'], 'limitations': record['limitations'],
+        'record_type': record.get('record_type'),
+        'method_topics': record.get('method_topics', []),
+        'family': record.get('family'), 'variant_label': record.get('variant', {}).get('label'),
+        'pages': record['scope']['pages'], 'artifacts': record['scope'].get('artifacts', []),
+        'outcome': record['outcome'], 'retested_on': record['review']['retested_on'],
+        'url': base + '#/experiments/' + identifier, 'record_url': base + path,
+        'article_url': base + record['article_path'],
+        'bundle_url': base + 'downloads/experiments/' + identifier + '.zip',
+        'status': record['status'], 'source_finding': record['finding'],
+        'next_steps': record['next_steps'],
+        **{key: record[key] for key in ('reader_finding', 'reader_limit', 'reader_test',
+                                      'research_questions', 'variant', 'discovery',
+                                      'recorded_comparison', 'materials') if key in record},
+        'record_source': {'path': path, 'sha256': hashlib.sha256(record_export_bytes(record)).hexdigest()},
+        'authored_source': {'path': source_path, 'sha256': hashlib.sha256(source_bytes).hexdigest()},
+    }
+    completed = {question.get('followup') for question in record.get('research_questions', [])
+                 if question.get('state') == 'tested' and 'followup' in question}
+    originals = {recipe['id']: recipe for recipe in source.get('browser_followups', [])}
+    items = []
+    for recipe in record.get('browser_followups', []):
+        require(originals.get(recipe['id']) == recipe, 'Discovery recipe differs from its exact source')
+        evaluation = recipe['card']['rules']['evaluation']['value']
+        item = {key: recipe[key] for key in ('id', 'title', 'question', 'scope_change', 'limitation')}
+        if 'motivation' in recipe:
+            item['motivation'] = recipe['motivation']
+        item.update(kind='finite-settings' if recipe.get('kind') == 'finite-settings' else 'fixed',
+                    evaluation_kind=evaluation['kind'] if isinstance(evaluation, dict) else evaluation,
+                    available=recipe['id'] not in completed,
+                    protocol_sha256=hashlib.sha256(json.dumps(originals[recipe['id']], ensure_ascii=False,
+                        sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest())
+        items.append(item)
+    value['followup_discovery'] = {'schema': 'liberpedia-followup-discovery-v1', 'items': items}
+    if record.get('batch'):
+        batch = record['batch']
+        value['batch'] = {'suite_id': batch['suite_id'], 'case_count': batch['case_count'],
+                          'cases_url': base + batch['cases_path'],
+                          'manifest_url': base + batch['manifest_path'], 'scope_note': batch['scope_note']}
+    return copy.deepcopy(value)
 
 
 def require(value, message):
@@ -517,6 +601,9 @@ def build(root=ROOT):
     registry_text = json.dumps({'schema': 'liberpedia-experiments-v1', 'records': records},
                                ensure_ascii=False, indent=2) + '\n'
     (root / 'data/experiments.json').write_text(registry_text, encoding='utf-8', newline='\n')
+    (root / 'data/research-record-ids.json').write_text(
+        json.dumps(published_record_ids(records), separators=(',', ':')) + '\n',
+        encoding='utf-8', newline='\n')
     (root / 'data/checker-records.json').write_text(
         json.dumps(checker_payload(records, registry_text.encode('utf-8')),
                    ensure_ascii=False, separators=(',', ':')) + '\n',
@@ -535,31 +622,8 @@ def build(root=ROOT):
     for record in records:
         identifier = record['id']
         path = f'reference/experiments/{identifier}.json'
-        (root / path).write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n',
-                                encoding='utf-8', newline='\n')
-        discovery.append({
-            'id': identifier, 'title': record['title'], 'question': record['question'],
-            **{key: record[key] for key in ('reader_title', 'reader_intro', 'reader_question') if key in record},
-            'summary': record['summary'], 'tags': record['tags'],
-            'finding': record.get('reader_finding') or record['finding'],
-            'scope': record['scope'], 'limitations': record['limitations'],
-            'record_type': record.get('record_type'),
-            'method_topics': record.get('method_topics', []),
-            'family': record.get('family'), 'variant_label': record.get('variant', {}).get('label'),
-            'pages': record['scope']['pages'], 'artifacts': record['scope'].get('artifacts', []),
-            'outcome': record['outcome'], 'retested_on': record['review']['retested_on'],
-            'url': base + '#/experiments/' + identifier, 'record_url': base + path,
-            'article_url': base + record['article_path'],
-            'bundle_url': base + 'downloads/experiments/' + identifier + '.zip',
-        })
-        if record.get('batch'):
-            batch = record['batch']
-            discovery[-1]['batch'] = {
-                'suite_id': batch['suite_id'], 'case_count': batch['case_count'],
-                'cases_url': base + batch['cases_path'],
-                'manifest_url': base + batch['manifest_path'],
-                'scope_note': batch['scope_note'],
-            }
+        (root / path).write_bytes(record_export_bytes(record))
+        discovery.append(discovery_record(root, record, base))
     (root / 'data/experiment-index.json').write_text(json.dumps({
         'schema': 'liberpedia-experiment-discovery-v1',
         'usage': 'Discovery only. Fetch record_url and compare the complete scope, findings, '
