@@ -27,6 +27,19 @@ test('word-sum clarification stays UI-only while execution and declared inputs s
   assert(!/^        if:/m.test(block),'Frontend clarification tests cannot be gated by science scope');
  }
 });
+test('question presentation stays lightweight without exempting evaluation, evidence or declared sources',()=>{
+ const ui=['index.html','library.html','library.css','library.js','record-question-view.js','record-question-view.css','scripts/test_record_question_view.cjs','scripts/test_record_question_mount.cjs'];
+ assert.equal(classifyChanges(ui.map(p=>entry(p)),registry(),catalog()).science,false);
+ for(const file of ['record-question-model.js','record-question-live.js','finite-question-policy.js','local-experiment.js','services/idea-assistant/record-plans.mjs','scripts/public_wordlist_followups.py','experiments/records/lp2-prime-openings/record.json'])
+  assert.equal(classifyChanges([...ui.map(p=>entry(p)),entry(file)],registry(),catalog()).science,true,file);
+ for(const file of ui){const c=catalog();c.files.push({path:file});assert.equal(classifyChanges([entry(file)],registry(),c).science,true,file);}
+ const actualRegistry=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/experiments.json'),'utf8')),actualCatalog=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/catalog.json'),'utf8'));
+ assert.equal(classifyChanges(ui.map(p=>entry(p)),actualRegistry,actualCatalog).science,false);
+ const manifest=require('./run_node_checks.cjs').validateManifest(JSON.parse(fs.readFileSync(path.join(__dirname,'node-checks.json'),'utf8')));
+ const workflow=fs.readFileSync(path.join(__dirname,'../.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n'),block=workflow.split(/(?=^      - )/m).find(s=>s.includes('run: node scripts/run_node_checks.cjs\n'));
+ assert(block&&!/^        if:/m.test(block),'The Node suite remains unconditional');
+ for(const script of ui.filter(p=>p.startsWith('scripts/')))assert(manifest.checks.some(item=>item.args.length===1&&item.args[0]===script),script+' still runs in the unconditional Node suite');
+});
 
 test('deletions, copies, renames and type changes always preserve full validation',()=>{
  for(const status of ['D','T','U','X','B'])assert.equal(classifyChanges([entry('app.js',status)],registry(),catalog()).science,true);

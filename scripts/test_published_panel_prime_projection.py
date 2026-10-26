@@ -28,6 +28,7 @@ class PanelProjectionTests(unittest.TestCase):
         names.update(o['source'] for o in plan['openings'])
         names.update(['data/local-run-inputs.json', 'scripts/published_panel_prime_projection.py',
                       'scripts/published_known_key_projection.py', 'tools/research_runner.py', 'local-experiment.js'])
+        names.update('published-sources/runtime/' + digest + Path(source).suffix for source, digest in projection.HISTORICAL_CODE_PINS.items())
         for name in names:
             target = root / name
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -86,7 +87,32 @@ class PanelProjectionTests(unittest.TestCase):
             self.assertFalse(next(m['matched'] for m in source['run']['result']['matches'] if m['page'] == 'lp2-50'))
             source_pins = {p['path']: p['sha256'] for p in provenance['sourcePins']}
             for name in ['scripts/published_panel_prime_projection.py', 'scripts/published_known_key_projection.py', 'tools/research_runner.py', 'local-experiment.js']:
-                self.assertEqual(source_pins[name], projection.sha((projection.ROOT / name).read_bytes().replace(b'\r\n', b'\n')))
+                self.assertEqual(source_pins[name], projection.HISTORICAL_CODE_PINS[name])
+
+    def test_all_existing_receipt_bytes_stay_exact_despite_current_runtime_edits(self):
+        self.assertEqual(projection.HISTORICAL_CODE_PINS['scripts/published_panel_prime_projection.py'], '7bbfa79242e4f8afa62ce2b6069f6458b8c632091d8e94c32a7d7317e3e28d42')
+        for name, generated in self.files.items():
+            self.assertEqual((projection.ROOT / name).read_bytes(), generated.encode('utf8'), name)
+        root = self.mirror()
+        for source in projection.HISTORICAL_CODE_PINS:
+            (root / source).write_text('Current source changed; never executed.\n', encoding='utf8')
+        with patch.object(projection.known.runner, 'run', side_effect=AssertionError('No target execution')):
+            self.assertEqual(projection.prepare(root), self.files)
+
+    def test_missing_corrupt_or_newline_converted_historical_archives_fail_closed(self):
+        root = self.mirror()
+        for source, digest in projection.HISTORICAL_CODE_PINS.items():
+            retained = root / 'published-sources/runtime' / (digest + Path(source).suffix)
+            original = retained.read_bytes()
+            retained.unlink()
+            with self.assertRaisesRegex(ValueError, 'Historical panel projection code'):
+                projection.historical_code_pins(root)
+            for invalid in [b'Corrupt source', original.replace(b'\n', b'\r\n')]:
+                retained.write_bytes(invalid)
+                with self.assertRaisesRegex(ValueError, 'Historical panel projection code'):
+                    projection.historical_code_pins(root)
+            retained.write_bytes(original)
+        self.assertEqual(projection.historical_code_pins(root), projection.HISTORICAL_CODE_PINS)
 
     def test_original_source_pins_and_current_bundle_cannot_change(self):
         for name in [projection.BASE + '/check.py', 'exports/fibonacci-prime-panel.json', 'text/lp2-50.txt']:

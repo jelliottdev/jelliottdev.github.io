@@ -6,16 +6,18 @@ const ROOT=path.resolve(__dirname,'..'),PINS=Object.freeze({
  'tools/research_runner.py':Object.freeze({sha256:'be73adac90d9b7cf7ee8a7b2f11bdd1d7a61974e84b21a5566ca97f37a1d0c61',extension:'.py'}),
  'local-experiment.js':Object.freeze({sha256:'b2f38df4184a36f1462cfea120c1d121dde05babdb29e30f97442d8528b762c2',extension:'.js'})
 });
+const PANEL_PINS=Object.freeze({...PINS,'scripts/published_panel_prime_projection.py':Object.freeze({sha256:'7bbfa79242e4f8afa62ce2b6069f6458b8c632091d8e94c32a7d7317e3e28d42',extension:'.py'})});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-function retainedPath(source){const pin=Object.hasOwn(PINS,source)&&PINS[source];assert(pin,'Unknown historical runtime source identity');return 'published-sources/runtime/'+pin.sha256+pin.extension;}
+function retainedPath(source){const pin=Object.hasOwn(PANEL_PINS,source)&&PANEL_PINS[source];assert(pin,'Unknown historical runtime source identity');return 'published-sources/runtime/'+pin.sha256+pin.extension;}
 function verifySourcePin(pin,{root=ROOT,readFile=fs.readFileSync}={}){
  assert(pin&&typeof pin==='object'&&!Array.isArray(pin)&&Object.keys(pin).length===2&&typeof pin.path==='string'&&typeof pin.sha256==='string'&&/^[a-f0-9]{64}$/.test(pin.sha256),'Invalid source pin');
  assert(/^[a-zA-Z0-9_./-]+$/.test(pin.path)&&!pin.path.startsWith('/')&&!pin.path.split('/').some(p=>!p||p==='.'||p==='..'),'Invalid source path');
- if(Object.hasOwn(PINS,pin.path)){
-  assert.equal(pin.sha256,PINS[pin.path].sha256,'Historical source hash does not match its recorded identity: '+pin.path);
+ if(Object.hasOwn(PANEL_PINS,pin.path)){
+  assert.equal(pin.sha256,PANEL_PINS[pin.path].sha256,'Historical source hash does not match its recorded identity: '+pin.path);
   const file=retainedPath(pin.path),bytes=readFile(path.resolve(root,file));assert.equal(hash(bytes),pin.sha256,'Retained historical source changed: '+pin.path);return Object.freeze({sourcePath:pin.path,retainedPath:file,sha256:pin.sha256});
  }
  const bytes=readFile(path.resolve(root,pin.path));assert(hash(bytes)===pin.sha256||hash(bytes.toString('utf8').replace(/\r\n/g,'\n'))===pin.sha256,'Source pin changed: '+pin.path);return Object.freeze({sourcePath:pin.path,sha256:pin.sha256});
 }
 function verifySourcePins(pins,options){assert(Array.isArray(pins),'Declare source pins');const names=new Set();for(const pin of pins){assert(!names.has(pin?.path),'Duplicate source pin');names.add(pin?.path);verifySourcePin(pin,options);}for(const source of Object.keys(PINS))assert(names.has(source),'Missing historical source identity: '+source);return true;}
-module.exports={PINS,retainedPath,verifySourcePin,verifySourcePins};
+function verifyPanelSourcePins(pins,options){verifySourcePins(pins,options);for(const source of Object.keys(PANEL_PINS))assert(pins.some(pin=>pin.path===source),'Missing historical panel source identity: '+source);return true;}
+module.exports={PINS,PANEL_PINS,retainedPath,verifySourcePin,verifySourcePins,verifyPanelSourcePins};

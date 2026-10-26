@@ -25,6 +25,17 @@ AUDIT_PATH = 'published-evidence/programs/panel-prime-historical-audit.json'
 INDEX_PATH = 'data/published-panel-program-source-index.json'
 MODULE_PATH = 'data/published-panel-program-source-index-data.js'
 sha, stable, require = known.sha, known.stable, known.require
+HISTORICAL_CODE_PINS = {**known.HISTORICAL_CODE_PINS,
+    'scripts/published_panel_prime_projection.py': '7bbfa79242e4f8afa62ce2b6069f6458b8c632091d8e94c32a7d7317e3e28d42'}
+
+
+def historical_code_pins(root=ROOT):
+    root = Path(root)
+    for source, digest in HISTORICAL_CODE_PINS.items():
+        retained = root / 'published-sources/runtime' / (digest + Path(source).suffix)
+        require(retained.is_file() and sha(retained.read_bytes()) == digest,
+                'Historical panel projection code is missing or changed: ' + source)
+    return dict(HISTORICAL_CODE_PINS)
 
 
 def audit(root=ROOT):
@@ -103,8 +114,7 @@ def prepare(root=ROOT):
                'projectedCriterion': 'warning', 'otherOpeningEvaluations': 'The other eight original 12-rune opening decisions remain archived source evidence; projected receipts evaluate Warning only.'}
     files[AUDIT_PATH] = stable(sidecar) + '\n'
     pins[AUDIT_PATH] = sha(files[AUDIT_PATH])
-    for path in ('scripts/published_panel_prime_projection.py', 'scripts/published_known_key_projection.py', 'tools/research_runner.py', 'local-experiment.js'):
-        pins[path] = sha((root / path).read_bytes().replace(b'\r\n', b'\n'))
+    pins.update(historical_code_pins(root))
     criterion = {'kind': 'exact-prefix', 'values': next(o['indices'] for o in plan['openings'] if o['id'] == 'warning')}
     entries = []
     for offset in range(16):
