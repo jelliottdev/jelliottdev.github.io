@@ -9,11 +9,11 @@ const open={id:'another-boundary',question:'Does another boundary change the res
 const tested={id:'completed-comparison',question:'Has the fixed comparison been checked?',state:'tested',note:'The comparison was completed; it does not prove a cipher.',records:['lp1-section-balance']};
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name)}
 
-test('actual known-key questions link both42program source families without claiming results',()=>{
- const questions=M.questions(actualRecord,actualRecord.browser_followups);assert.equal(questions.length,2);
+test('actual known-key questions link all three42program source families without claiming results',()=>{
+ const questions=M.questions(actualRecord,actualRecord.browser_followups);assert.equal(questions.length,3);
  const html=V.render(actualRecord);assert(html.includes('Questions to explore'));assert(!html.includes('What remains open'));
  for(const question of questions){assert.equal(question.state,'open');const ref=M.protocolReference(actualRecord,question.id);assert.equal(ref.id,'finite-settings-output');const recipe=actualRecord.browser_followups.find(r=>r.id===ref.followupId);const family=M.finiteRecipe(recipe);assert.equal(family.programCount,42);assert.equal(family.caseCount,2352);assert(html.includes('followup='+recipe.id));assert.deepEqual(ref.inputs,recipe.inputs);}
- assert(!V.coversFollowups(actualRecord),'The independent fixed comparison remains available alongside the two open finite questions');
+ assert(!V.coversFollowups(actualRecord),'The independent fixed comparison remains available alongside the three open finite questions');
 });
 
 test('maintained protocol references derive exact recipe inputs and ignore editorial completion',()=>{

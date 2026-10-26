@@ -15,10 +15,12 @@ class KnownKeyFollowups(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.path = known.ROOT / 'experiments/records/lp2-known-vigenere-keys/record.json'
-        cls.record = json.loads(cls.path.read_bytes())
+        cls.installed = json.loads(cls.path.read_bytes())
+        cls.record = known.proposed()
         cls.recipes = {r['id']: r for r in cls.record['browser_followups']}
         cls.language = cls.recipes['known-keys-language-comparison']
         cls.words = cls.recipes['known-keys-word-reset-language']
+        cls.lines = cls.recipes['known-keys-line-reset-language']
 
     def test_deterministic_generator_executes_only_synthetic_controls(self):
         original = fixed.runner.run
@@ -31,7 +33,7 @@ class KnownKeyFollowups(unittest.TestCase):
             return original(task)
         before = self.path.read_bytes()
         with patch.object(fixed.runner, 'run', side_effect=synthetic_only):
-            self.assertEqual(known.build(), self.record)
+            self.assertEqual(known.proposed(), self.record)
         self.assertTrue(executed)
         self.assertEqual(self.path.read_bytes(), before)
         self.assertLess(len(before), 512 * 1024)
@@ -62,7 +64,7 @@ class KnownKeyFollowups(unittest.TestCase):
         with patch.object(type(self.path), 'read_bytes', injected):
             with self.assertRaisesRegex(ValueError, 'declarations are stale'):
                 known.build()
-        self.assertEqual(json.loads(self.path.read_bytes()), self.record)
+        self.assertEqual(json.loads(self.path.read_bytes()), self.installed)
 
     def test_exact_original_programs_and_input_pins(self):
         index = json.loads((known.ROOT / 'data/published-program-source-index.json').read_bytes())
@@ -71,24 +73,49 @@ class KnownKeyFollowups(unittest.TestCase):
         self.assertEqual(expanded['declaration']['caseCount'], 2352)
         programs = {fixed.digest(e['steps']) for e in index['entries']}
         self.assertEqual(programs, {fixed.digest(v['compiled']['steps']) for v in expanded['variants']})
-        for recipe in (self.language, self.words):
+        for recipe in (self.language, self.words, self.lines):
             authored.validate_recipe(recipe, known.ROOT, set(self.record['scope']['pages']))
             self.assertEqual(len(recipe['control']['members']), 42)
             self.assertEqual(recipe['inputs']['pages'][50]['id'], 'lp2-50')
             self.assertEqual(recipe['card']['rules']['evaluation']['value'], fixed.LANGUAGE_CRITERION)
 
-    def test_word_extension_changes_exactly_one_rule(self):
-        expected = copy.deepcopy(self.language['card'])
-        expected['method']['value']['operations'][0]['reset'] = 'word'
-        self.assertEqual(expected, self.words['card'])
-        self.assertEqual(self.language['inputs'], self.words['inputs'])
-        original = finite.compile_card(self.language['card'])['variants']
-        changed = finite.compile_card(self.words['card'])['variants']
-        for old, new in zip(original, changed):
-            self.assertEqual(old['settings'], new['settings'])
-            steps = copy.deepcopy(old['compiled']['steps'])
-            steps[0]['reset'] = 'word'
-            self.assertEqual(steps, new['compiled']['steps'])
+    def test_extensions_change_exactly_one_rule_using_shared_helper(self):
+        for reset, recipe in [('word', self.words), ('line', self.lines)]:
+            expected = copy.deepcopy(self.language['card'])
+            expected['method']['value']['operations'][0]['reset'] = reset
+            self.assertEqual(expected, recipe['card'])
+            self.assertEqual(self.language['inputs'], recipe['inputs'])
+            original = finite.compile_card(self.language['card'])['variants']
+            changed = finite.compile_card(recipe['card'])['variants']
+            for old, new in zip(original, changed):
+                self.assertEqual(old['settings'], new['settings'])
+                steps = copy.deepcopy(old['compiled']['steps'])
+                steps[0]['reset'] = reset
+                self.assertEqual(steps, new['compiled']['steps'])
+        with patch.object(known.boundary, 'variants', wraps=known.boundary.variants) as helper:
+            self.assertEqual(known.candidate('line'), self.lines)
+        helper.assert_called_once_with(self.language['card'], operation_index=0, allowed_resets=['line'])
+        self.assertIn('line breaks, but not at spaces or punctuation', self.lines['limitation'])
+        self.assertIn('No result', self.lines['limitation'])
+
+    def test_installed_older_recipes_preserved_exactly_and_guarded_before_write(self):
+        for identifier in ('known-keys-language-comparison', 'known-keys-word-reset-language'):
+            old = next(r for r in self.installed['browser_followups'] if r['id'] == identifier)
+            self.assertEqual(self.recipes[identifier], old)
+        self.assertEqual([r['id'] for r in self.record['browser_followups']][-3:],
+                         ['known-keys-language-comparison', 'known-keys-word-reset-language', 'known-keys-line-reset-language'])
+        original = type(self.path).read_bytes
+        def installed(path):
+            return json.dumps(self.record, ensure_ascii=False).encode('utf8') if path == self.path else original(path)
+        with patch.object(type(self.path), 'read_bytes', installed):
+            self.assertEqual(known.build(), self.record)
+        bad = copy.deepcopy(self.installed)
+        next(r for r in bad['browser_followups'] if r['id'] == self.language['id'])['title'] = 'Changed older recipe'
+        def altered(path):
+            return json.dumps(bad, ensure_ascii=False).encode('utf8') if path == self.path else original(path)
+        with patch.object(type(self.path), 'read_bytes', altered), patch.object(type(self.path), 'write_text', side_effect=AssertionError('Must fail before writing')):
+            with self.assertRaisesRegex(ValueError, 'Existing known-key recipe changed'):
+                known.build(write=True)
 
     def test_fixed_recipe_and_historical_findings_unchanged_and_questions_open(self):
         self.assertIn('second-koan-word-reset-warning', self.recipes)
@@ -101,6 +128,10 @@ class KnownKeyFollowups(unittest.TestCase):
         self.assertIn('not a recovered reading', self.language['limitation'])
         self.assertIn('not a translation', self.words['limitation'])
         self.assertIn('each non-rune mark ends a word', self.words['limitation'])
+        expected = copy.deepcopy(self.record)
+        expected['browser_followups'] = self.installed['browser_followups']
+        expected['research_questions'] = self.installed['research_questions']
+        self.assertEqual(expected, self.installed)
 
 
 if __name__ == '__main__':

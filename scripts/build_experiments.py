@@ -86,7 +86,6 @@ def discovery_record(root, record, base='https://jelliottdev.github.io/'):
                                       'research_questions', 'variant', 'discovery',
                                       'recorded_comparison', 'materials') if key in record},
         'record_source': {'path': path, 'sha256': hashlib.sha256(record_export_bytes(record)).hexdigest()},
-        'authored_source': {'path': source_path, 'sha256': hashlib.sha256(source_bytes).hexdigest()},
     }
     completed = {question.get('followup') for question in record.get('research_questions', [])
                  if question.get('state') == 'tested' and 'followup' in question}

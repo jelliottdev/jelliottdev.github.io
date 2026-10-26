@@ -59,3 +59,13 @@ console.log('PASS map List: every branch exposes exactly one level, direct nativ
  assert.equal(JSON.stringify(data.records),originalRecordMetadata,'Interest sorting and local bookmark filtering cannot edit evidence');
  console.log('PASS interest sorting, unknown vote counts, saved-only branch traversal, empty recovery and evidence separation');
 }
+
+// A vote acknowledgement changes neither the bookmark filter nor focused DOM.
+{
+ let renders=0,refreshes=0,buttons=0;const c={savedPreferenceKey:'one-record',data:{},state:{saved:'1'},reactions:{refresh(){refreshes++;}},render(){renders++;},updateSavedButton(){buttons++;}};vm.createContext(c);vm.runInContext(source.split('\n').find(line=>line.startsWith(' function preferencesChanged(')),c);
+ c.preferencesChanged({saved:['one-record'],upvoted:['one-record']});assert.equal(renders,0);assert.equal(refreshes,1);assert.equal(buttons,1);
+ c.preferencesChanged({saved:['one-record','two-record'],upvoted:['one-record']});assert.equal(renders,1);
+ c.preferencesChanged({saved:['one-record','two-record'],upvoted:[]});assert.equal(renders,1,'Withdrawing a vote must preserve the same focused record controls');
+ c.state.saved='';c.preferencesChanged({saved:[],upvoted:[]});assert.equal(renders,1,'A bookmark change outside Saved does not replace the page');
+ console.log('PASS vote acknowledgements and cross-tab vote changes preserve focused controls; only bookmark changes refresh an active Saved filter');
+}

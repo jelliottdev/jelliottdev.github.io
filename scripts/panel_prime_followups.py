@@ -6,6 +6,7 @@ from pathlib import Path
 
 import authored_finite_followups as authored
 import browser_followups as fixed
+import browser_boundary_variations as boundary
 from research_questions import validate_research_questions
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +45,16 @@ def source(root=ROOT):
 
 
 def candidate(reset, root=ROOT):
+    if reset == 'line':
+        card = boundary.variants(candidate('page', root)['card'], operation_index=0,
+                                 allowed_resets=['line'])[0]['card']
+        return authored.construct_followup(root, card=card,
+            identifier='panel-primes-line-reset-language',
+            title='Restart the spiral-prime pattern at every written line',
+            question='Does restarting the spiral-prime pattern at every written line produce outputs resembling the maintained language samples?',
+            scope_change='Keep all 16 starting places, both directions and LP2-00–55 pages. Change only the repeating-key restart from each page to each written line.',
+            limitation='A higher language score is a lead to inspect, not a reading. The pattern restarts at line breaks, but not at spaces or punctuation. No result for this extension is asserted.',
+            motivation='Try the same spiral-derived pattern from its chosen starting place at each written line. This differs from restarting at every word or continuing through the whole page; repeating the spiral remains an assumption.')
     fixed.require(reset in ('page', 'word'), 'unknown restart rule')
     plan = source(root)
     key = [n % 29 for n in plan['key']]
@@ -78,7 +89,7 @@ def candidate(reset, root=ROOT):
 
 
 def recipes(root=ROOT):
-    return [candidate(reset, root) for reset in ('page', 'word')]
+    return [candidate(reset, root) for reset in ('page', 'word', 'line')]
 
 
 def questions():
@@ -86,7 +97,8 @@ def questions():
              'followup': identifier, 'protocol': {'id': 'finite-settings-output', 'version': 1}}
             for identifier, note in [
                 ('panel-primes-language-comparison', 'A new language comparison of complete existing outputs. The historical nine-opening result is unchanged; language similarity is not a reading.'),
-                ('panel-primes-word-reset-language', 'Change only the key restart to every visible word. This bounded extension has no asserted result.')]]
+                ('panel-primes-word-reset-language', 'Change only the key restart to every visible word. This bounded extension has no asserted result.'),
+                ('panel-primes-line-reset-language', 'Keep the same spiral, starting places, directions and pages. Restart only at written line breaks instead of each page. This bounded extension has no asserted result.')]]
 
 
 def build(root=ROOT):
@@ -94,6 +106,10 @@ def build(root=ROOT):
     root = Path(root)
     record = json.loads((root / 'experiments/records' / RECORD / 'record.json').read_bytes())
     generated = recipes(root)
+    installed = {recipe['id']: recipe for recipe in record.get('browser_followups', [])}
+    for recipe in generated[:2]:
+        fixed.require(recipe['id'] not in installed or installed[recipe['id']] == recipe,
+                      'existing panel recipe changed: ' + recipe['id'])
     identifiers = {recipe['id'] for recipe in generated}
     result = copy.deepcopy(record)
     result['browser_followups'] = [r for r in record.get('browser_followups', []) if r['id'] not in identifiers] + generated
@@ -120,5 +136,5 @@ if __name__ == '__main__':
         fixed.require(destination.is_relative_to(private), 'candidate output must be inside outer qa-temp')
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(json.dumps(value, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
-    print(json.dumps({'recordId': RECORD, 'programsPerFollowup': 32, 'pages': 56,
+    print(json.dumps({'recordId': RECORD, 'finiteFollowups': 3, 'programsPerFollowup': 32, 'pages': 56,
                       'casesPerFollowup': 1792, 'emptyRuneCases': 32, 'targetExecutions': 0}))

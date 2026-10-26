@@ -1,4 +1,4 @@
-"""Maintain two source-owned known-key follow-ups using synthetic controls only."""
+"""Maintain source-owned known-key follow-ups using synthetic controls only."""
 import copy
 import json
 from pathlib import Path
@@ -9,6 +9,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 import authored_finite_followups as authored
 import browser_followups as fixed
 import finite_followup_cards as finite
+import browser_boundary_variations as boundary
 from research_questions import validate_research_questions
 
 
@@ -17,6 +18,17 @@ def specified(value):
 
 
 def candidate(reset):
+    if reset == 'line':
+        card = boundary.variants(candidate('page')['card'], operation_index=0,
+                                 allowed_resets=['line'])[0]['card']
+        return authored.construct_followup(ROOT, card=card,
+            identifier='known-keys-line-reset-language',
+            title='Restart the number pattern at every written line',
+            question='Does restarting either known key at every written line produce outputs resembling the maintained language samples?',
+            scope_change='Keep the same 42 key, starting-place and direction combinations and LP2-00–55 pages. Change only the key restart from each page to each written line.',
+            limitation='A higher language score is a lead to inspect, not a reading. The pattern restarts at line breaks, but not at spaces or punctuation. No result for this extension is asserted.',
+            motivation='Try the two earlier number patterns from their chosen starting place at every written line. This differs from starting again at each word or continuing through the entire page.')
+    fixed.require(reset in ('page', 'word'), 'unknown restart rule')
     plan = json.loads((ROOT / 'experiments/records/lp2-known-vigenere-keys/plan.json').read_bytes())
     keys = [key['indices'][phase:] + key['indices'][:phase]
             for key in plan['keys'] for phase in range(len(key['indices']))]
@@ -46,7 +58,7 @@ def candidate(reset):
 
 
 def recipes():
-    return [candidate(reset) for reset in ('page', 'word')]
+    return [candidate(reset) for reset in ('page', 'word', 'line')]
 
 
 def questions():
@@ -56,7 +68,10 @@ def questions():
          'records': [], 'followup': 'known-keys-language-comparison', 'protocol': {'id': 'finite-settings-output', 'version': 1}},
         {'id': 'known-keys-word-reset-language',
          'state': 'open', 'note': 'Keep the original two keys, all starting places, both directions and the same pages. Change only the key restart from each page to each visible word. No result for this extension is asserted.',
-         'records': [], 'followup': 'known-keys-word-reset-language', 'protocol': {'id': 'finite-settings-output', 'version': 1}}
+         'records': [], 'followup': 'known-keys-word-reset-language', 'protocol': {'id': 'finite-settings-output', 'version': 1}},
+        {'id': 'known-keys-line-reset-language',
+         'state': 'open', 'note': 'Keep the original two keys, starting places, directions and pages. Restart only at written line breaks instead of each page. No result for this extension is asserted.',
+         'records': [], 'followup': 'known-keys-line-reset-language', 'protocol': {'id': 'finite-settings-output', 'version': 1}}
     ]
 
 
@@ -69,20 +84,34 @@ def historical_questions():
     return value
 
 
-def build(write=False):
+def proposed():
+    """Return a detached candidate without writing or requiring installation."""
     path = ROOT / 'experiments/records/lp2-known-vigenere-keys/record.json'
     record = json.loads(path.read_bytes())
     generated = recipes()
+    installed = {recipe['id']: recipe for recipe in record.get('browser_followups', [])}
+    for recipe in generated[:2]:
+        if recipe['id'] in installed and installed[recipe['id']] != recipe:
+            raise ValueError('Existing known-key recipe changed: ' + recipe['id'])
     identifiers = {r['id'] for r in generated}
     expected = copy.deepcopy(record)
     expected['browser_followups'] = [r for r in record['browser_followups'] if r['id'] not in identifiers] + generated
-    expected['research_questions'] = questions()
+    expected['research_questions'] = [q for q in record.get('research_questions', []) if q['id'] not in identifiers] + questions()
     validate_research_questions(expected['research_questions'], expected, strict_authoring=True)
-    historical = copy.deepcopy(expected)
-    historical['research_questions'] = historical_questions()
     serialized = json.dumps(expected, ensure_ascii=False, separators=(',', ':')) + '\n'
     if max(len(path.read_bytes()), len(serialized.encode('utf-8'))) >= 512 * 1024:
         raise ValueError('Known-key record exceeds the runtime source bound')
+    return expected
+
+
+def build(write=False):
+    path = ROOT / 'experiments/records/lp2-known-vigenere-keys/record.json'
+    record = json.loads(path.read_bytes())
+    expected = proposed()
+    historical = copy.deepcopy(expected)
+    identifiers = {q['id'] for q in questions()}
+    historical['research_questions'] = [q for q in expected['research_questions'] if q['id'] not in identifiers] + historical_questions()
+    serialized = json.dumps(expected, ensure_ascii=False, separators=(',', ':')) + '\n'
     if write:
         path.write_text(serialized, encoding='utf-8', newline='\n')
     elif record != expected:
@@ -98,4 +127,4 @@ if __name__ == '__main__':
     parser.add_argument('--write', action='store_true')
     args = parser.parse_args()
     value = build(write=args.write)
-    print(json.dumps({'recordId': value['id'], 'finiteFollowups': 2, 'programsPerFollowup': 42, 'targetExecutions': 0}))
+    print(json.dumps({'recordId': value['id'], 'finiteFollowups': 3, 'programsPerFollowup': 42, 'targetExecutions': 0}))

@@ -64,15 +64,28 @@ class DiscoveryProjectionTests(unittest.TestCase):
                     self.assertEqual(current[key], source[key])
         self.assertEqual(self.records, self.before)
 
-    def test_exact_export_and_canonical_source_hashes_are_distinct_lazy_references(self):
+    def test_source_checkout_line_endings_do_not_change_discovery_metadata(self):
+        record = self.records[0]
+        source = ROOT / f"experiments/records/{record['id']}/record.json"
+        raw = source.read_bytes().replace(b'\r\n', b'\n')
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / source.relative_to(ROOT)
+            target.parent.mkdir(parents=True)
+            target.write_bytes(raw)
+            unix = builder.discovery_record(root, record)
+            target.write_bytes(raw.replace(b'\n', b'\r\n'))
+            windows = builder.discovery_record(root, record)
+            self.assertEqual(unix, windows)
+            self.assertEqual(unix['record_source']['sha256'], hashlib.sha256(builder.record_export_bytes(record)).hexdigest())
+
+    def test_exact_export_is_the_selected_record_authority(self):
         for current, source in zip(self.projected, self.records):
             identifier = source['id']
             exported = builder.record_export_bytes(source)
-            raw = (ROOT / f'experiments/records/{identifier}/record.json').read_bytes()
             self.assertEqual(current['record_source'], {'path': f'reference/experiments/{identifier}.json',
                                                        'sha256': hashlib.sha256(exported).hexdigest()})
-            self.assertEqual(current['authored_source'], {'path': f'experiments/records/{identifier}/record.json',
-                                                         'sha256': hashlib.sha256(raw).hexdigest()})
+            self.assertNotIn('authored_source', current, 'The unused raw-file hash is not a second discovery authority')
             self.assertEqual(json.loads(exported), source)
             self.assertEqual(exported, (ROOT / current['record_source']['path']).read_bytes())
             self.assertNotIn('article', current)
@@ -103,7 +116,7 @@ class DiscoveryProjectionTests(unittest.TestCase):
                 self.assertEqual(item['protocol_sha256'], hashlib.sha256(protocol).hexdigest())
                 for forbidden in ('card', 'inputs', 'control', 'task', 'members', 'alphabet', 'steps'):
                     self.assertNotIn(forbidden, item)
-        self.assertEqual(count, 23)
+        self.assertEqual(count, 26)
 
     def test_projection_size_remains_below_half_of_omnibus_even_with_all_recipe_hints(self):
         raw = (json.dumps({'schema': 'liberpedia-experiment-discovery-v1', 'records': self.projected},
@@ -112,7 +125,11 @@ class DiscoveryProjectionTests(unittest.TestCase):
                            separators=(',', ':')).encode()
         self.assertLess(len(raw), len(self.raw_registry) * .5)
         self.assertLess(len(gzip.compress(raw)), len(gzip.compress(self.raw_registry)) * .5)
-        self.assertLess(len(hints), 50000)
+        # Bound each hint independently so added families cannot hide oversized entries.
+        for record in self.projected:
+            for item in record['followup_discovery']['items']:
+                self.assertLess(len(json.dumps(item, ensure_ascii=False).encode()), 4096)
+        self.assertLess(len(hints), 65536)
         self.assertEqual(self.records, self.before)
 
     def test_tested_is_an_authored_hint_and_cannot_mutate_or_replace_source_protocol(self):

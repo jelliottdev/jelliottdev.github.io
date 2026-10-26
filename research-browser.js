@@ -8,8 +8,9 @@
  const chevron='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
  const aliases=ResearchBrowserModel.branchLabels,recordStore=ResearchDiscovery.createStore();
  let data;
- let previewGeneration=0,reactions=null,previewReactions=null,votesLoading=false,topVoteKey='',savedLookupKey='',savedLookupBusy=false,savedLookupError='';
- const preferences=ResearchPreferences.create({onChange:()=>{if(!data)return;reactions?.refresh();if(state?.saved)render();else updateSavedButton();}});
+ let previewGeneration=0,reactions=null,previewReactions=null,votesLoading=false,topVoteKey='',savedLookupKey='',savedLookupBusy=false,savedLookupError='',savedPreferenceKey='';
+ function preferencesChanged(snapshot){const key=snapshot.saved.join('|'),changed=key!==savedPreferenceKey;savedPreferenceKey=key;if(!data)return;reactions?.refresh();if(changed&&state?.saved)render();else updateSavedButton();}
+ const preferences=ResearchPreferences.create({onChange:preferencesChanged});
  const assistantConfig=()=>fetch('data/assistant.json',{cache:'no-cache',signal:AbortSignal.timeout(10000)}).then(response=>{if(!response.ok)throw Error('Research options are unavailable.');return response.json()});
  function updateSavedButton(){const button=$('saved-research-button');if(!button)return;button.setAttribute('aria-pressed',String(state?.saved==='1'));button.title='Research saved in this browser';}
  function interestChanged(){if(data&&state?.mode==='list'&&state.sort==='top'&&!votesLoading)renderList();}
@@ -162,6 +163,7 @@
  }
  function clearFilters(){navigate({q:'',type:'',method:'',family:'',result:'',page:'',followups:'',saved:'',record:''})}
  function renderList(){
+  if(state.sort==='top'&&typeof reactions!=='undefined')loadTopVotes();
   const children=traversalChildren(focus),hasBranches=children.some(n=>n.kind!=='record'),rank=new Map(indexResult.allRecords.map((r,i)=>[r.id,i]));
   if(state.sort==='top')children.sort((a,b)=>interest(b).count-interest(a).count||Number(interest(b).complete)-Number(interest(a).complete)||a.label.localeCompare(b.label));
   else if(!hasBranches)children.sort((a,b)=>(rank.get(a.record_id)??Infinity)-(rank.get(b.record_id)??Infinity));

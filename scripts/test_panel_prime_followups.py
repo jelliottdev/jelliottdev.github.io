@@ -29,7 +29,7 @@ class PanelPrimeFollowups(unittest.TestCase):
             return original_run(task)
         with patch.object(fixed.runner, 'run', side_effect=synthetic_only):
             cls.proposed = panel.build()
-        cls.language, cls.words = cls.proposed['browser_followups'][-2:]
+        cls.language, cls.words, cls.lines = cls.proposed['browser_followups'][-3:]
 
     def test_only_synthetic_controls_and_source_unchanged(self):
         self.assertTrue(self.executed)
@@ -46,7 +46,7 @@ class PanelPrimeFollowups(unittest.TestCase):
     def test_exact_program_geometry_and_maintained_criterion(self):
         plan = panel.source()
         base = [n % 29 for n in plan['key']]
-        for recipe in (self.language, self.words):
+        for recipe in (self.language, self.words, self.lines):
             expanded = finite.compile_card(recipe['card'])
             self.assertEqual(expanded['declaration']['programCount'], 32)
             self.assertEqual(expanded['declaration']['caseCount'], 1792)
@@ -61,15 +61,38 @@ class PanelPrimeFollowups(unittest.TestCase):
             self.assertEqual(len(recipe['control']['members']), 32)
 
     def test_one_changed_rule_and_identical_inputs(self):
-        changed = copy.deepcopy(self.language['card'])
-        changed['method']['value']['operations'][0]['reset'] = 'word'
-        self.assertEqual(changed, self.words['card'])
-        self.assertEqual(self.language['inputs'], self.words['inputs'])
+        for reset, recipe in [('word', self.words), ('line', self.lines)]:
+            changed = copy.deepcopy(self.language['card'])
+            changed['method']['value']['operations'][0]['reset'] = reset
+            self.assertEqual(changed, recipe['card'])
+            self.assertEqual(self.language['inputs'], recipe['inputs'])
+        with patch.object(panel.boundary, 'variants', wraps=panel.boundary.variants) as helper:
+            self.assertEqual(panel.candidate('line'), self.lines)
+        helper.assert_called_once_with(self.language['card'], operation_index=0, allowed_resets=['line'])
         self.assertIn('Each non-rune mark ends a word', self.words['limitation'])
         self.assertIn('new evaluation of existing outputs', self.language['limitation'])
+        self.assertIn('line breaks, but not at spaces or punctuation', self.lines['limitation'])
+        self.assertIn('No result', self.lines['limitation'])
+
+    def test_existing_recipes_are_exact_and_old_recipe_drift_is_rejected(self):
+        installed = {r['id']: r for r in self.original.get('browser_followups', [])}
+        for recipe in (self.language, self.words):
+            if recipe['id'] in installed:
+                self.assertEqual(recipe, installed[recipe['id']])
+        self.assertEqual([r['id'] for r in self.proposed['browser_followups']][-3:],
+                         ['panel-primes-language-comparison', 'panel-primes-word-reset-language', 'panel-primes-line-reset-language'])
+        bad = copy.deepcopy(self.original)
+        bad['browser_followups'] = [copy.deepcopy(self.language)]
+        bad['browser_followups'][0]['title'] = 'Changed older recipe'
+        original = Path.read_bytes
+        def altered(path):
+            return json.dumps(bad, ensure_ascii=False).encode('utf8') if path == self.path else original(path)
+        with patch.object(Path, 'read_bytes', altered):
+            with self.assertRaisesRegex(ValueError, 'existing panel recipe changed'):
+                panel.build()
 
     def test_questions_open_derived_not_duplicated(self):
-        questions = self.proposed['research_questions'][-2:]
+        questions = self.proposed['research_questions'][-3:]
         self.assertEqual(questions, panel.questions())
         self.assertTrue(all(q['state'] == 'open' and 'question' not in q for q in questions))
         validate_research_questions(questions, self.proposed, strict_authoring=True)
