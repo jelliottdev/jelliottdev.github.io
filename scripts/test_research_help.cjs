@@ -33,6 +33,17 @@ await test('maintained immutable source choices, exact links, escaped prose and 
  const altered=structuredClone(records);altered[groups[0].record.id].title='<img src=x onerror=alert(1)>';assert(!Help.render(altered).includes('<img'));assert(Help.render(altered).includes('&lt;img'));
  assert.equal((html.match(/<details\b/g)||[]).length,1);assert(!/<details[^>]*\bopen\b/.test(html));assert(/data-help-status role="status" aria-live="polite" hidden/.test(html));
 });
+await test('actual known-key choices keep authored titles, purposes and links aligned without promising optional saving',async()=>{
+ const index=groups.findIndex(g=>g.record.id==='lp2-known-vigenere-keys');assert(index>=0);const f=fixture([index]);try{
+  const row=f.rows[0],group=row.group;assert(group.checks.some(c=>c.kind==='finite-settings'));assert(group.checks.some(c=>c.kind!=='finite-settings'));
+  choose(row,group.checks.at(-1));
+  for(const check of group.checks){choose(row,check);assert.equal(row.get('[data-help-title]').textContent,check.title);assert.equal(row.get('[data-help-purpose]').textContent,check.motivation);assert.equal(row.get('[data-help-review]').href,'run.html#record='+group.record.id+'&followup='+check.id);assert(f.calls.some(call=>call.check.id===check.id&&call.record.id===group.record.id));}
+  assert(html.includes('Choose a prepared check and review what it will do before running it.'));assert(!html.includes('choose whether to save'));assert(html.includes('Choose a check</label>'));assert(!html.includes('Choose a rule</label>'));
+  for(const {checks}of groups)assert(html.includes('<h3 data-help-title>'+checks[0].title+'</h3>'));
+  const altered=structuredClone(records);altered[group.record.id].browser_followups[0].title='<img src=x onerror=bad> & title';const escaped=Help.render(altered);assert(escaped.includes('&lt;img src=x onerror=bad&gt; &amp; title'));assert(!escaped.includes('<img'));
+  assert.equal(JSON.stringify(records),before,'Selecting a title cannot mutate authored sources');
+ }finally{f.destroy();}
+});
 await test('selected-row states, retry, source-bound selection and old listeners unsubscribe without destroying cached probes',async()=>{
  const f=fixture(),row=f.rows[0],first=f.calls[0];assert.equal(f.calls.length,2);assert.equal(first.activated,1);
  for(const [value,message,label]of [

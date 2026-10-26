@@ -599,3 +599,23 @@ inputs still reject continuation rather than silently rebinding old work.
 All 19 current fixed declarations are covered by the archive and a software
 regression that checks source replacement/removal and input/pin rejection.
 These checks execute synthetic controls, never manuscript calculations.
+
+## Fixed results retained on the contributor's device
+
+After a verified single-run output, retain its exact task, input edition and
+result in bounded IndexedDB storage. Storage failure keeps the in-memory result
+and Save action available, with wording that only the open tab retains it.
+Never silently evict or replace another pending result.
+
+Opening a task only detects a recovery copy. An explicit Restore result action
+re-verifies it against the fresh loaded task before showing the normal results
+and Save action. Navigation cannot replay target work or submit results.
+Cancellation and stale completion cannot change the selected task. Only an
+exact verified server receipt removes the matching local copy; failed saving
+and mismatched receipts leave it recoverable. This recovery is separate from
+finite-search checkpoints and does not restore execution intent.
+
+Prepared-check discovery shows each selected check's authored title and purpose.
+Changing evaluation must update that heading as well as the link and explanation.
+Entry copy does not promise optional saving for a batch action that explicitly
+includes saving; consent stays on the reviewed action.

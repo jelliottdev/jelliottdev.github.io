@@ -4,6 +4,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),I=require('../i
 const harness=fs.readFileSync(require.resolve('./test_investigate_intake_focus.cjs'),'utf8');
 const {makeDocument}=new Function('require',harness.slice(0,harness.indexOf('async function fixture()'))+'\nreturn {makeDocument};')(require);
 const turn=()=>new Promise(resolve=>setImmediate(resolve));
+async function until(test){const end=Date.now()+5000;while(!test()){assert(Date.now()<end,'Interpretation did not settle');await turn();}}
 async function fixture(reply){
  const doc=makeDocument();doc.defaultView.location.hash='';const calls=[],timers=[];
  const app=I.createApp(doc,{schedule:(fn,ms)=>{const timer={fn,ms};timers.push(timer);return timer;},unschedule:timer=>{timer.cancelled=true;},fetcher:async(url,options={})=>{
@@ -23,7 +24,7 @@ async function fixture(reply){
  const original='Cumulative autokey';
  for(const [name,status,body]of [['unavailable',503,{reason:'unavailable'}],['timeout',503,{reason:'timeout'}],['invalid',503,{reason:'invalid-interpretation'}],['rate-limit',429,{reason:'rate-limit'}],['mismatched',200,{sourceBinding:'0'.repeat(64),candidate:{malicious:'discard this candidate'}}]]){
   const f=await fixture(()=>Response.json(body,{status}));try{
-   assert(f.doc.getElementById('guided-clarification').hidden);await f.submit(original);
+   assert(f.doc.getElementById('guided-clarification').hidden);await f.submit(original);await until(()=>!f.app.getSnapshot().interpreting);
    assert.equal(f.app.getSnapshot().stage,'input',name);assert.equal(f.doc.getElementById('idea').value,original);assert.equal(f.doc.getElementById('guided-clarification').hidden,false);assert(f.doc.getElementById('interpretation-error').textContent);
    assert.equal(f.app.getSnapshot().draft,null);f.noWrites();f.doc.getElementById('guided-clarification').fire('click');
    const snapshot=f.app.getSnapshot();assert.equal(snapshot.stage,'review');assert.equal(snapshot.draft.source.text,original);assert.equal(snapshot.draft.method.value.operations[0].id,'described_method');assert.equal(snapshot.draft.method.value.operations[0].sourceText,original);assert.equal(snapshot.draft.aim.status,'unspecified');assert.equal(snapshot.draft.scope.status,'unspecified');assert.equal(snapshot.confirmed,null);assert.equal(snapshot.draft.rules.evaluation.status,'unspecified');assert(!JSON.stringify(snapshot.draft).includes('malicious'));f.noWrites();
@@ -43,10 +44,10 @@ async function fixture(reply){
   let resolve;const f=await fixture(()=>new Promise(r=>{resolve=r;}));try{await f.submit(original);f.input('Another original idea');resolve(Response.json({reason:'invalid-interpretation'},{status:503}));await turn();assert.equal(f.doc.getElementById('guided-clarification').hidden,true);assert.equal(f.doc.getElementById('interpretation-error').textContent,'');assert.equal(f.app.getSnapshot().stage,'input');f.noWrites();}finally{f.app.destroy();}
  }
  {
-  const f=await fixture(()=>Response.json({reason:'unavailable'},{status:503}));try{await f.submit(original);const stale=f.doc.getElementById('guided-clarification');f.input('Changed text');stale.fire('click');assert.equal(f.app.getSnapshot().stage,'input');assert.equal(stale.hidden,true);f.noWrites();}finally{f.app.destroy();}
+  const f=await fixture(()=>Response.json({reason:'unavailable'},{status:503}));try{await f.submit(original);await until(()=>!f.app.getSnapshot().interpreting);const stale=f.doc.getElementById('guided-clarification');f.input('Changed text');stale.fire('click');assert.equal(f.app.getSnapshot().stage,'input');assert.equal(stale.hidden,true);f.noWrites();}finally{f.app.destroy();}
  }
  {
-  const f=await fixture(options=>new Promise((_,reject)=>options.signal.addEventListener('abort',()=>reject(Object.assign(Error('Aborted'),{name:'AbortError'})))));try{await f.submit(original);const timer=f.timers.find(t=>t.ms===30000&&!t.cancelled);assert(timer);timer.fn();await turn();assert.equal(f.doc.getElementById('guided-clarification').hidden,false);f.noWrites();}finally{f.app.destroy();}
+  const f=await fixture(options=>new Promise((_,reject)=>options.signal.addEventListener('abort',()=>reject(Object.assign(Error('Aborted'),{name:'AbortError'})))));try{await f.submit(original);const timer=f.timers.find(t=>t.ms===30000&&!t.cancelled);assert(timer);timer.fn();await until(()=>!f.app.getSnapshot().interpreting);assert.equal(f.doc.getElementById('guided-clarification').hidden,false);f.noWrites();}finally{f.app.destroy();}
  }
  console.log('PASS edit/cancellation and stale responses cannot revive recovery; actual request abort offers guided clarification without writes');
  {
@@ -54,7 +55,7 @@ async function fixture(reply){
   try{await f.submit(original);await require('./mock_interpretation_response.cjs').waitForReview(f.app);const d=f.app.getSnapshot().draft;assert.equal(d.source.text,original);assert.equal(d.method.status,'unspecified');assert(I.intakeQuestions(d).some(q=>q.id==='method'));assert.equal(d.aim.status,'unspecified');assert.equal(d.scope.status,'unspecified');assert.equal(f.app.getSnapshot().confirmed,null);f.noWrites();}finally{f.app.destroy();}
  }
  {
-  let count=0,resolve;const f=await fixture(()=>++count===1?Response.json({reason:'unavailable'},{status:503}):new Promise(r=>{resolve=r;}));try{await f.submit(original);const stale=f.doc.getElementById('guided-clarification');f.doc.getElementById('intake').fire('submit');await turn();assert(stale.hidden);stale.fire('click');assert.equal(f.app.getSnapshot().stage,'input');assert(f.app.getSnapshot().interpreting);resolve(Response.json({reason:'unavailable'},{status:503}));await turn();assert.equal(stale.hidden,false);f.noWrites();}finally{f.app.destroy();}
+  let count=0,resolve;const f=await fixture(()=>++count===1?Response.json({reason:'unavailable'},{status:503}):new Promise(r=>{resolve=r;}));try{await f.submit(original);await until(()=>!f.app.getSnapshot().interpreting);const stale=f.doc.getElementById('guided-clarification');f.doc.getElementById('intake').fire('submit');await turn();assert(stale.hidden);stale.fire('click');assert.equal(f.app.getSnapshot().stage,'input');assert(f.app.getSnapshot().interpreting);resolve(Response.json({reason:'unavailable'},{status:503}));await until(()=>!f.app.getSnapshot().interpreting);assert.equal(stale.hidden,false);f.noWrites();}finally{f.app.destroy();}
  }
  console.log('PASS valid empty interpretation retains original wording and asks for a method; retry hides recovery until its own failure');
 
