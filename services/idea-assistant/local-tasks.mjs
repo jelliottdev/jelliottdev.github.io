@@ -69,12 +69,12 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
    JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=?
    ORDER BY CASE WHEN links.proposal_id=? THEN 0 ELSE 1 END,links.created_at,links.proposal_id LIMIT 1`,row.id,row.proposal_id).first();
-  const view=async (row,linkedProposalId=null,selectedContext=null,preferredOriginId=null)=>{
+  const view=async (row,task,linkedProposalId=null,selectedContext=null,preferredOriginId=null)=>{
    const context=selectedContext||(linkedProposalId?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
     FROM local_task_ideas links JOIN proposals p ON p.id=links.proposal_id
     WHERE links.task_id=? AND links.proposal_id=?`,row.id,linkedProposalId).first():await publicContext(row));
    if(!context)throw Error('Missing visible task association');
-   const task=await storedTask(row),latest=await query('SELECT * FROM local_task_results WHERE task_id=? ORDER BY created_at DESC,id DESC LIMIT 1',row.id).first();let run=null;
+   const latest=await query('SELECT * FROM local_task_results WHERE task_id=? ORDER BY created_at DESC,id DESC LIMIT 1',row.id).first();let run=null;
    const publicRows=await query(`SELECT json_group_array(proposal_id) AS ids FROM (
     SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
@@ -141,7 +141,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
       let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
       const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
      }}
-     existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,body.proposalId,null,originId));
+     existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,await storedTask(existing),body.proposalId,null,originId));
     }
     if(!reviewed){
      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
@@ -185,7 +185,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     existing=await find(task.taskId);const accepted=await association();
     if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.',code:'daily-quota',retryAt},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
-    if(originWrite)await originWrite.verify();return reply(await view(existing,body.proposalId,null,originId));
+    if(originWrite)await originWrite.verify();return reply(await view(existing,await storedTask(existing),body.proposalId,null,originId));
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
    const context=selectedIdea?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
@@ -194,7 +194,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(!context)return reply({error:'Experiment not found.'},404);
    const task=await storedTask(row);
    if(comparisonRoute){const comparison=await boundaryComparison({db,task,inputVersion:context.input_version,discoverEvidence});return comparison?reply(comparison):reply({error:'This experiment has no supported boundary comparison.'},422);}
-   if(method==='GET')return reply(await view(row,selectedIdea,context));
+   if(method==='GET')return reply(await view(row,task,selectedIdea,context));
    let result,controls;
    try{
     exact(body,['result']);

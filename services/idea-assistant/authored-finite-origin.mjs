@@ -3,7 +3,7 @@ import E from '../../local-experiment.js';
 import Control from '../../local-control.js';
 import Settings from '../../finite-settings.js';
 import Compiler from '../../fixed-plan-compiler.js';
-import {loadFiniteRecordPlan} from './finite-record-plans.mjs';
+import {loadSavedFiniteRecordPlan} from './finite-record-plans.mjs';
 const same=(a,b)=>E.stable(a)===E.stable(b),exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k)),HEX=/^[a-f0-9]{64}$/;
 const hash=async value=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof value==='string'?value:E.stable(value))))].map(v=>v.toString(16).padStart(2,'0')).join('');
 const require=(v,m)=>{if(!v)throw Error(m);};
@@ -16,7 +16,7 @@ function checkedMemberDeclaration(snapshot){
  freeze(owned);const entry={snapshot:owned,programs,bytes};while(memberDeclarations.size&&(memberDeclarations.size>=8||memberBytes+bytes>MAX_MEMBER_BYTES)){const first=memberDeclarations.keys().next().value;memberBytes-=memberDeclarations.get(first).bytes;memberDeclarations.delete(first);}memberDeclarations.set(serialized,entry);memberBytes+=bytes;return entry;
 }
 export function createAuthoredFiniteSourceLoader(fetcher=globalThis.fetch){
- const cache=new Map();return async origin=>{require(exact(origin,['recordId','followupId','recordSha256','protocolSha256'])&&HEX.test(origin.recordSha256)&&HEX.test(origin.protocolSha256),'Invalid authored finite origin');const key=E.stable(origin);if(!cache.has(key)){require(cache.size<8,'Too many authored finite sources');cache.set(key,loadFiniteRecordPlan(origin,{fetcher}).then(source=>{require(same(source.origin,origin),'The authored finite source changed');return source;}));}return cache.get(key);};
+ const cache=new Map();return async origin=>{require(exact(origin,['recordId','followupId','recordSha256','protocolSha256'])&&HEX.test(origin.recordSha256)&&HEX.test(origin.protocolSha256),'Invalid authored finite origin');const key=E.stable(origin);if(!cache.has(key)){require(cache.size<8,'Too many authored finite sources');cache.set(key,loadSavedFiniteRecordPlan(origin,{fetcher}).then(source=>{require(same(source.origin,origin),'The authored finite source changed');return source;}));}return cache.get(key);};
 }
 export async function finiteSnapshotMember(task,snapshot){
  require(snapshot?.kind==='finite-settings'&&snapshot.control?.kind==='finite-program-controls','Invalid stored finite snapshot');

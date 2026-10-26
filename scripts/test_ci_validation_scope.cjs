@@ -91,7 +91,12 @@ test('actual checked-in registry/catalog allow app-only changes and workflow ret
  assert(workflow.includes('python scripts/check_experiment_authoring.py --github-event --fetch-base'),'Authoring policy must check the full push/PR, including a shallow baseline fetch');
  const blocks=workflow.split('  validate:\n')[1].split('    steps:\n')[1].split(/(?=^      - )/m).filter(s=>s.startsWith('      - '));
  for(const b of blocks)assert((b.match(/^        if:/gm)||[]).length<=1,'Duplicate workflow condition makes YAML invalid: '+b.split('\n')[0]);
- const python=blocks.findIndex(s=>s.includes('actions/setup-python@'));assert(python>0);for(const [i,b]of blocks.entries()){if(/run: node\b/.test(b))assert(i<python,'Node check delayed behind science setup');if(/run: python\b|uses: actions\/setup-python@|git diff --exit-code/.test(b))assert(b.includes("if: steps.scope.outputs.science == 'true'"),'Science gate removed: '+b.split('\n')[0]);}
+ const python=blocks.findIndex(s=>s.includes('actions/setup-python@'));assert(python>0);assert(!blocks[python].includes('        if:'),'The one Python setup is shared by retention and science checks');
+ const archiveTests=blocks.findIndex(b=>b.startsWith('      - name: Test immutable authored source retention\n')),archiveGate=blocks.findIndex(b=>b.startsWith('      - name: Check current and retained authored source revisions\n')),nodeChecks=blocks.findIndex(b=>b.includes('run: node scripts/run_node_checks.cjs'));
+ assert(archiveTests>python&&archiveGate>archiveTests&&nodeChecks>archiveGate,'Fast immutable-source checks precede the full Node suite');
+ for(const index of [archiveTests,archiveGate])assert(!blocks[index].includes('        if:'),'Immutable-source retention is unconditional');
+ assert(blocks[archiveTests].includes('python -m unittest discover -s scripts -p test_archive_authored_sources.py'));assert(blocks[archiveGate].includes('--baseline-manifest "$baseline"'));assert(!blocks[archiveGate].includes('--write'));
+ for(const [i,b]of blocks.entries()){if(/run: node\b/.test(b))assert(!b.includes('        if:'),'The reviewed Node checks remain unconditional');if(i!==archiveTests&&(/run: python\b|git diff --exit-code/.test(b)))assert(b.includes("if: steps.scope.outputs.science == 'true'"),'Science gate removed: '+b.split('\n')[0]);}
  for(const command of ['python scripts/test_export_reproducibility.py','python scripts/ci_experiment_bundles.py','python tests/test_bundle_ci_dispatch.py','python scripts/build_experiments.py','python scripts/reproduce_reading.py --check-all','git diff --exit-code --'])assert(workflow.includes(command),'Existing scientific gate missing');
 });
 console.log('PASS '+count+' conservative CI scope groups; no scientific rebuilds or hosted calls');

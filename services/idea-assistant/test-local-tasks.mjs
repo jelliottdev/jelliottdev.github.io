@@ -322,4 +322,19 @@ await test('submission verifies once and checks exact committed bytes without a 
   const corrupt=await call(f,'/tasks/'+t.taskId+'/results','POST',{result});assert.equal(corrupt.status,503);assert.equal(replays,3,'A corrupt stored receipt cannot bypass fresh admission or be projected as verified');
  }finally{L.verify=original;}
 });
+await test('saved56page GET reuses its private validated task while preserving both read integrity gates',async()=>{
+ const f=fixture(),t=await task('Synthetic56page saved read','raw',{pages:Array.from({length:56},(_,i)=>({id:'lp2-'+String(i).padStart(2,'0'),text:'ABC A\nBA'}))}),result=L.run(t),hash=value=>createHash('sha256').update(L.stable(value)).digest('hex'),taskJson=L.stable(t),resultJson=L.stable(result),resultId=hash(result);
+ f.db.sqlite.prepare('INSERT INTO local_tasks VALUES(?,?,?,?,?,?,?,?,?,?)').run(t.taskId,hash(t),'0'.repeat(64),proposalId,L.stable(card),taskJson,'raw',null,at,at.slice(0,10));
+ f.db.sqlite.prepare('INSERT INTO local_task_ideas VALUES(?,?,?,?,?,?)').run(t.taskId,proposalId,'raw',null,at,at.slice(0,10));f.db.sqlite.prepare('INSERT INTO local_task_results VALUES(?,?,?,?,?)').run(resultId,t.taskId,resultJson,at,at.slice(0,10));
+ // Prime through the existing independent control implementation before the
+ // measured GET. No public request carries a skip/verified parameter.
+ const warm=await call(f,'/tasks/'+t.taskId);assert.equal(warm.status,200);
+ const original=L.checkIdentity,execute=L.run,counts={target:0};L.checkIdentity=async(...args)=>{if(args[0].taskId===t.taskId)counts.target++;return original(...args);};L.run=()=>assert.fail('A warmed saved read cannot execute transforms');
+ const before=f.db.sqlite.prepare('SELECT total_changes() n').get().n;
+ try{const response=await call(f,'/tasks/'+t.taskId);assert.equal(response.status,200);const value=await response.json();assert.deepEqual(value.plan,t);assert.deepEqual(value.latestRun.result,result);assert.equal(counts.target,2,'One stored task validation plus the independent admitted-result identity check');assert.equal(f.db.sqlite.prepare('SELECT total_changes() n').get().n,before);
+  f.db.sqlite.prepare('UPDATE local_tasks SET task_hash=? WHERE id=?').run('0'.repeat(64),t.taskId);assert.equal((await call(f,'/tasks/'+t.taskId)).status,503);f.db.sqlite.prepare('UPDATE local_tasks SET task_hash=? WHERE id=?').run(hash(t),t.taskId);
+  const changed=structuredClone(t);changed.pages[0].text+='A';f.db.sqlite.prepare('UPDATE local_tasks SET task_json=?,task_hash=? WHERE id=?').run(L.stable(changed),hash(changed),t.taskId);assert.equal((await call(f,'/tasks/'+t.taskId)).status,503);f.db.sqlite.prepare('UPDATE local_tasks SET task_json=?,task_hash=? WHERE id=?').run(taskJson,hash(t),t.taskId);
+  f.db.sqlite.prepare('UPDATE local_task_results SET result_json=? WHERE id=?').run(L.stable({...result,metrics:{...result.metrics,runes:999}}),resultId);assert.equal((await call(f,'/tasks/'+t.taskId)).status,503);
+ }finally{L.checkIdentity=original;L.run=execute;f.db.sqlite.close();}
+});
 console.log('PASS '+count+' SQLite-backed local-task groups; all official-source fetches injected, no execution of external code.');

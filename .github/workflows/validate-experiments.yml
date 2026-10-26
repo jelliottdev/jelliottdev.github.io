@@ -38,14 +38,55 @@ jobs:
       - name: Select conservative validation scope
         id: scope
         run: node scripts/ci_validation_scope.cjs
-      - name: Run all unconditional Node checks
-        run: node scripts/run_node_checks.cjs
       - uses: actions/setup-python@v5
-        if: steps.scope.outputs.science == 'true'
         with:
           python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: scripts/requirements-line-gap-measurements.txt
+      - name: Test immutable authored source retention
+        run: python -m unittest discover -s scripts -p test_archive_authored_sources.py
+      - name: Check current and retained authored source revisions
+        shell: bash
+        env:
+          ARCHIVE_EVENT: ${{ github.event_name }}
+          ARCHIVE_PR_BASE: ${{ github.event.pull_request.base.sha }}
+          ARCHIVE_PUSH_BASE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          manifest='data/authored-source-archive.json'
+          base=''
+          if [[ "$ARCHIVE_EVENT" == 'pull_request' ]]; then
+            base="$ARCHIVE_PR_BASE"
+          elif [[ "$ARCHIVE_EVENT" == 'push' ]]; then
+            base="$ARCHIVE_PUSH_BASE"
+          elif git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          if [[ "$ARCHIVE_EVENT" == 'pull_request' || "$ARCHIVE_EVENT" == 'push' ]]; then
+            [[ "$base" =~ ^[a-f0-9]{40}$ ]] || { echo 'Missing or invalid archive event baseline'; exit 1; }
+          fi
+          if [[ -n "$base" && ! "$base" =~ ^0{40}$ ]]; then
+            [[ "$base" =~ ^[a-f0-9]{40}$ ]] || { echo 'Invalid archive baseline revision'; exit 1; }
+            if ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              git fetch --no-tags --depth=1 origin "$base"
+            fi
+            git cat-file -e "$base^{commit}"
+            if git cat-file -e "$base:$manifest" 2>/dev/null; then
+              baseline_bytes="$(git cat-file -s "$base:$manifest")"
+              [[ "$baseline_bytes" =~ ^[0-9]+$ && "$baseline_bytes" -le 2097152 ]] || { echo 'Archive baseline manifest exceeds its bound'; exit 1; }
+              baseline="$(mktemp "${RUNNER_TEMP}/authored-source-baseline.XXXXXX.json")"
+              trap 'rm -f -- "$baseline"' EXIT
+              git show "$base:$manifest" > "$baseline"
+              python scripts/archive_authored_sources.py --baseline-manifest "$baseline"
+            else
+              # The first introduction has no historical manifest to retain.
+              python scripts/archive_authored_sources.py
+            fi
+          else
+            python scripts/archive_authored_sources.py
+          fi
+      - name: Run all unconditional Node checks
+        run: node scripts/run_node_checks.cjs
       - run: python scripts/test_finite_search_audit.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_factored_finite_search_audit.py

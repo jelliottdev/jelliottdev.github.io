@@ -92,13 +92,20 @@
    // Optional explanatory copy never delays or authorizes a computation.
    try{
     if(typeof QuestionContext.readAuthoredContext!=='function')return;
+    let bytes;
+    if(finiteSource){
+     const resolver=typeof module==='object'&&module.exports?require('./authored-source-resolver.js'):root.AuthoredSourceResolver;
+     if(!resolver?.readSaved)return;
+     bytes=(await resolver.readSaved(origin,{request,crypto:cryptoAPI,signal:controller.signal,isLive:()=>live(token,id)&&questionContext===context,timeoutMs:6000})).bytes;
+    }else{
     const response=await request('experiments/records/'+origin.recordId+'/record.json',{redirect:'error',cache:'no-cache'},6000);
     const limit=finiteSource?2*1024*1024:512*1024,length=response.headers?.get?.('content-length');
     if(length!==null&&length!==undefined&&(!/^\d+$/.test(length)||Number(length)>limit))throw Error('Source context exceeds its bound.');
     const reader=response.body?.getReader();if(!reader)throw Error('Source context is unreadable.');const chunks=[];let size=0;
     try{while(true){const {done,value}=await reader.read();if(done)break;if(!live(token,id)||questionContext!==context)throw Error('Source context changed.');if(!(value instanceof Uint8Array)||size+value.byteLength>limit)throw Error('Source context exceeds its bound.');chunks.push(new Uint8Array(value));size+=value.byteLength;}}
     finally{await reader.cancel().catch(()=>{});}
-    const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
+    bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
+    }
     const explanation=await QuestionContext.readAuthoredContext({origin,bytes},cryptoAPI);
     if(!live(token,id)||questionContext!==context)return;
     if(explanation.title){context.authoredTitle=explanation.title;const heading=$('run-task-title');if(heading)heading.textContent=explanation.title;}
@@ -367,11 +374,10 @@
     if(!owned)continue;
     const finite=typeof module==='object'&&module.exports?require('./authored-finite-followup.js'):root.AuthoredFiniteFollowup;
     if(!finite?.fromSource)throw Error('The source search tools could not be loaded.');
-    const [sourceResponse,bundleResponse]=await Promise.all([request('experiments/records/'+origin.recordId+'/record.json',{cache:'no-cache',redirect:'error'}),request('data/local-run-inputs.json',{cache:'no-cache',redirect:'error'})]);
-    const reader=sourceResponse.body?.getReader();if(!reader)throw Error('The original source could not be read.');const parts=[];let size=0;
-    try{for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>2*1024*1024)throw Error('The original source exceeds its size limit.');parts.push(part.value);}}catch(error){await reader.cancel();throw error;}
-    const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.byteLength;}
-    const bundle=await bundleResponse.json(),plan=await finite.fromSource(origin,{sourceBytes:bytes,bundle,crypto:cryptoAPI,isLive:()=>live(token,id)});
+    const resolver=typeof module==='object'&&module.exports?require('./authored-source-resolver.js'):root.AuthoredSourceResolver;
+    if(!resolver?.readSaved)throw Error('The saved source tools could not be loaded.');
+    const [source,bundleResponse]=await Promise.all([resolver.readSaved(origin,{request,crypto:cryptoAPI,isLive:()=>live(token,id)}),request('data/local-run-inputs.json',{cache:'no-cache',redirect:'error'})]);
+    const bundle=await bundleResponse.json(),plan=await finite.fromSource(origin,{sourceBytes:source.bytes,bundle,crypto:cryptoAPI,isLive:()=>live(token,id)});
     if(E.stable(plan.origin)!==E.stable(origin)||E.stable(plan.card)!==E.stable(value.card))throw Error('The original source changed.');
     if(!live(token,id))return null;return plan;
    }

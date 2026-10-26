@@ -17,7 +17,8 @@ async function test(name,fn){await fn();count++;console.log('PASS '+name);}
   const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');
   const blocks=workflow.split(/(?=^      - )/m),batch=blocks.filter(b=>b.includes('run: node scripts/run_node_checks.cjs'));
   assert.equal(batch.length,1);assert(!/^        if:/m.test(batch[0]));
-  assert(workflow.indexOf('run: node scripts/run_node_checks.cjs')<workflow.indexOf('uses: actions/setup-python@'));
+  assert(workflow.indexOf('run: node scripts/run_node_checks.cjs')<workflow.indexOf('run: python scripts/test_finite_search_audit.py'));
+  assert(workflow.indexOf('name: Check current and retained authored source revisions')<workflow.indexOf('run: node scripts/run_node_checks.cjs'));
   assert(workflow.includes('id: scope\n        run: node scripts/ci_validation_scope.cjs'));
  });
  await test('manifest rejects duplicate malformed commands flags timeouts and resource declarations',()=>{

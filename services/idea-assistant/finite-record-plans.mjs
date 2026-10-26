@@ -5,6 +5,7 @@ import {describeFiniteSource} from './finite-source-descriptor.mjs';
 import Inputs from '../../local-input-bundle.js';
 import J from '../../finite-json.js';
 import Context from '../../followup-context.js';
+import SavedSources from '../../authored-source-resolver.js';
 import {validateCard} from './idea-relations.mjs';
 
 export const LIMITS=Object.freeze({sourceBytes:2*1024*1024,bundleBytes:2*1024*1024,programs:1024,controlRunes:256,totalControlRunes:262144});
@@ -92,4 +93,23 @@ export async function loadFiniteRecordPlan(ref,{raw,get,fetcher=globalThis.fetch
  const request=get|| (async(path,max)=>read(await fetcherResponse(path),max));
  const work=async()=>{live(activeSignal);const source=raw||await request('/experiments/records/'+ref.recordId+'/record.json',LIMITS.sourceBytes);live(activeSignal);const bundle=await request('/data/local-run-inputs.json',LIMITS.bundleBytes);live(activeSignal);return compileFiniteRecordPlan({...ref,raw:source,bundle:bundle.value},{crypto,signal:activeSignal});};
  try{return get?await work():await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Official finite source loading timed out.'));},timeoutMs);})]);}finally{if(timer)clearTimeout(timer);controller?.abort();}
+}
+
+// Explicit immutable-origin continuation only. Fresh source discovery and
+// /record-plans keep using loadFiniteRecordPlan and never consult an archive.
+export async function loadSavedFiniteRecordPlan(origin,{fetcher=globalThis.fetch,timeoutMs=20000,crypto=globalThis.crypto,signal}={}){
+ const captured=J.capture(origin,{maxBytes:1024,maxDepth:4,maxNodes:16});
+ const archivedPath=SavedSources.archivePath(captured),currentPath='experiments/records/'+captured.recordId+'/record.json';
+ require(Number.isSafeInteger(timeoutMs)&&timeoutMs>=1&&timeoutMs<=20000,'Invalid saved finite source deadline.');live(signal);
+ const controller=new AbortController(),activeSignal=signal?AbortSignal.any([signal,controller.signal]):controller.signal;let timer;
+ const request=async(path,init={})=>{live(activeSignal);require(path===archivedPath||path===currentPath,'Invalid saved finite source path.');return fetcher(BASE+'/'+path,{...init,redirect:'manual',cache:'no-cache',signal:activeSignal});};
+ const work=async()=>{
+  let raw=null;
+  try{const response=await request(currentPath);live(activeSignal);if(response.status!==404){raw=await read(response,LIMITS.sourceBytes);live(activeSignal);if(await digest(raw.bytes,crypto)!==captured.recordSha256)raw=null;}}catch{live(activeSignal);raw=null;}
+  if(!raw)raw=await SavedSources.readSaved(captured,{request,crypto,signal:activeSignal,timeoutMs});
+  live(activeSignal);
+  const plan=await loadFiniteRecordPlan(captured,{raw,fetcher,timeoutMs,crypto,signal:activeSignal});
+  require(E.stable(plan.origin)===E.stable(captured),'The saved finite source identity changed.');live(activeSignal);return plan;
+ };
+ try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Saved finite source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}
 }

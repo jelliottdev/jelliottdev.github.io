@@ -90,6 +90,23 @@ page bytes match exactly. The historical case route pins the saved revision
 rather than substituting the current input snapshot. Reviewed prose records
 are not automatically imported, and no concurrent work reservations exist.
 
+## Preserve the source behind saved work
+
+Published finite-source record bytes are retained at
+`published-sources/records/<recordSha256>.json`. Before publishing a record edit,
+run `python scripts/archive_authored_sources.py --write`; this adds revisions
+without rewriting existing objects. The default command checks current coverage
+and every retained object's bytes. CI also compares the retention manifest to
+its explicit base revision, so deleting both an old object and its manifest
+entry cannot silently erase history. Git must preserve these files byte-for-byte.
+
+Saved finite ideas and task explanations resolve their exact source and protocol
+hashes. Saved finite continuation can use an official retained source after the
+current record changes, then checks all current official input pins and complete
+synthetic controls. A changed input is rejected; the loader does not substitute
+an old transcript or new rule. Fresh source review uses only the current record.
+Archive restoration itself creates no idea, task, result or computation.
+
 ## One executable question
 
 For a maintained protocol linked to an owned browser follow-up, the recipe's
