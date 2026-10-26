@@ -47,7 +47,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    const row=await query('SELECT card_json FROM proposals WHERE id=?',proposalId).first();
    if(factored){
     const keys=action==='prepare-groups'?['domainId','inputVersion','groups','snapshotToken']:action==='create-groups'?['domainId','snapshotToken','groups']:action==='evidence'?['inputVersion','domainId','cursor']:action==='prepare'?['domainId','inputVersion','cases','snapshotToken']:action==='create'?['domainId','snapshotToken','cases']:['domainId','results'];
-    if(!exact(body,[...keys,...(body&&Object.hasOwn(body,'authoredOrigin')?['authoredOrigin']:[])])||typeof body.domainId!=='string'||!HEX.test(body.domainId)||((action==='prepare'||creating||grouped)&&typeof body.snapshotToken!=='string')||(action==='evidence'&&body.cursor!==null&&typeof body.cursor!=='string'))return reply({error:'The declared search request changed.'},400);
+    if(!exact(body,[...keys,...(body&&Object.hasOwn(body,'authoredOrigin')?['authoredOrigin']:[]),...(action==='evidence'&&body&&Object.hasOwn(body,'includeSourceContext')?['includeSourceContext']:[])])||(Object.hasOwn(body||{},'includeSourceContext')&&body.includeSourceContext!==true)||typeof body.domainId!=='string'||!HEX.test(body.domainId)||((action==='prepare'||creating||grouped)&&typeof body.snapshotToken!=='string')||(action==='evidence'&&body.cursor!==null&&typeof body.cursor!=='string'))return reply({error:'The declared search request changed.'},400);
    }
    // Source verification and domain compilation share one bounded official input
    // fetch in this HTTP request; no cross-request cache is used.

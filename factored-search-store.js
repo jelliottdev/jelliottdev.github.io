@@ -12,7 +12,14 @@
  const hash=async(v,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');
  const hashBytes=async(v,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',v))].map(n=>n.toString(16).padStart(2,'0')).join('');
  const request=q=>new Promise((resolve,reject)=>{q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error||Error('Local storage request failed.'));});
- function linkValid(link,source){return exact(link,['taskId','href','label'])&&link.taskId===source.task.taskId&&typeof link.label==='string'&&link.label.trim()&&link.label.length<=300&&typeof link.href==='string'&&(link.href==='run.html#task='+link.taskId||/^library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(link.href)||/^run\.html#family=deor-feedback-v1&case=[a-z0-9-]+&revision=[a-f0-9]{64}$/.test(link.href));}
+ function sourceContextValid(link,source){
+  const present=['sourceKind','sourceReceipt','proposalId','publishedSource'].filter(k=>Object.hasOwn(link,k));if(!present.length)return true;
+  if(!['saved-task','published-program'].includes(link.sourceKind)||!/^p_[a-f0-9]{64}$/.test(link.proposalId)||!exact(link.sourceReceipt,['taskId','resultId','inputVersion','createdAt']))return false;
+  const ref=link.sourceReceipt;if(ref.taskId!==source.task.taskId||ref.resultId!==source.run.id||ref.inputVersion!==source.inputVersion||ref.createdAt!==source.run.createdAt)return false;
+  if(link.sourceKind==='saved-task')return !Object.hasOwn(link,'publishedSource');
+  const p=link.publishedSource;return exact(p,['recordId','revision','caseId'])&&typeof p.recordId==='string'&&p.recordId.length<=100&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.recordId)&&HEX.test(p.revision)&&typeof p.caseId==='string'&&p.caseId.length<=200&&/^[a-z0-9][a-z0-9-]*$/.test(p.caseId);
+ }
+ function linkValid(link,source){return exact(link,['taskId','href','label',...(['sourceKind','sourceReceipt','proposalId','publishedSource'].filter(k=>Object.hasOwn(link||{},k)))])&&sourceContextValid(link,source)&&link.taskId===source.task.taskId&&typeof link.label==='string'&&link.label.trim()&&link.label.length<=300&&typeof link.href==='string'&&(link.href==='run.html#task='+link.taskId||/^library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(link.href)||/^run\.html#family=deor-feedback-v1&case=[a-z0-9-]+&revision=[a-f0-9]{64}$/.test(link.href));}
  async function open(options={}){return openStore(options,false);}
  async function openOutputInspection(options={}){return openOutputComparison(options);}
  async function openOutputComparison(options={}){

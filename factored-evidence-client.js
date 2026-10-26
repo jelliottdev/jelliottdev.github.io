@@ -8,7 +8,14 @@
  const capture=v=>J.capture(v,{maxBytes:MAX,maxDepth:24,maxNodes:500000});
  const aborted=()=>new DOMException('Evidence lookup cancelled.','AbortError');
  async function hash(value,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(value))))].map(v=>v.toString(16).padStart(2,'0')).join('');}
- function validLink(link,source){return exact(link,['taskId','href','label'])&&link.taskId===source.task.taskId&&typeof link.label==='string'&&link.label.trim().length>0&&link.label.length<=300&&typeof link.href==='string'&&(link.href==='run.html#task='+link.taskId||/^library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(link.href)||/^run\.html#family=deor-feedback-v1&case=[a-z0-9-]+&revision=[a-f0-9]{64}$/.test(link.href));}
+ function sourceContextValid(link,source){
+  const present=['sourceKind','sourceReceipt','proposalId','publishedSource'].filter(k=>Object.hasOwn(link,k));if(!present.length)return true;
+  if(!['saved-task','published-program'].includes(link.sourceKind)||!/^p_[a-f0-9]{64}$/.test(link.proposalId)||!exact(link.sourceReceipt,['taskId','resultId','inputVersion','createdAt']))return false;
+  const ref=link.sourceReceipt;if(ref.taskId!==source.task.taskId||ref.resultId!==source.run.id||ref.inputVersion!==source.inputVersion||ref.createdAt!==source.run.createdAt)return false;
+  if(link.sourceKind==='saved-task')return !Object.hasOwn(link,'publishedSource');
+  const p=link.publishedSource;return exact(p,['recordId','revision','caseId'])&&typeof p.recordId==='string'&&p.recordId.length<=100&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.recordId)&&HEX.test(p.revision)&&typeof p.caseId==='string'&&p.caseId.length<=200&&/^[a-z0-9][a-z0-9-]*$/.test(p.caseId);
+ }
+ function validLink(link,source){return exact(link,['taskId','href','label',...(['sourceKind','sourceReceipt','proposalId','publishedSource'].filter(k=>Object.hasOwn(link||{},k)))])&&sourceContextValid(link,source)&&link.taskId===source.task.taskId&&typeof link.label==='string'&&link.label.trim().length>0&&link.label.length<=300&&typeof link.href==='string'&&(link.href==='run.html#task='+link.taskId||/^library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(link.href)||/^run\.html#family=deor-feedback-v1&case=[a-z0-9-]+&revision=[a-f0-9]{64}$/.test(link.href));}
  function createScan(options){return scan(options,false);}
  function createOutputScan(options){return scan(options,true);}
  function createInspectionScan(options){

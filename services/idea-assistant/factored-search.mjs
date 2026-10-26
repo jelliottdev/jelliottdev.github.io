@@ -28,7 +28,7 @@ function createHandler({fetcher=globalThis.fetch,now=()=>new Date(),taskHandler}
    return compiled;
   },
   async discoverEvidence({db,proposalId,currentDomain,body,env,request}){
-   return readPage({db,proposalId,domain:currentDomain.domain,inputVersion:body.inputVersion,cursor:body.cursor,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock(),fetcher,signal:request.signal});
+   return readPage({db,proposalId,domain:currentDomain.domain,inputVersion:body.inputVersion,cursor:body.cursor,includeSourceContext:body.includeSourceContext===true,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock(),fetcher,signal:request.signal});
   },
   async prepareCases(context){
    const {currentDomain,db,cases,request,proposalId,env}=context,selected=await selectFactoredCases({compiled:currentDomain,cases}),reuse=await findSelected({db,domain:currentDomain.domain,cases:selected,fetcher,signal:request.signal,...((prefix||output||inspection)?{proposalId,cursorKey:env.FACTORED_EVIDENCE_CURSOR_KEY,now:clock()}:{} )});
