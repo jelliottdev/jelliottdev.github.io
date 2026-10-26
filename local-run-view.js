@@ -9,9 +9,26 @@
   const registry=typeof module==='object'&&module.exports?require('./output-evaluators.js'):root.OutputEvaluators;
   const descriptor=registry?.describe(task.criterion);if(!descriptor)throw Error('The language comparison is not supported by this view.');return descriptor;
  }
+ function finiteShiftExample(task,result,id){
+  if(task.steps.length!==1||task.steps[0].op!=='finite-shift')return '';
+  const step=task.steps[0],page=task.pages.find(p=>p.id===id),after=result.transformed.find(p=>p.page===id);
+  if(!page||!after)return '';
+  const index=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),original=Array.from(page.text),output=Array.from(after.text),rows=[];let position=0;
+  for(let i=0;i<original.length&&rows.length<3;i++){
+   const ch=original[i];
+   if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;continue;}
+   const input=index.get(ch),key=step.key[position++],raw=input+(step.direction==='add'?key:-key),value=((raw%29)+29)%29;
+   if(!Number.isInteger(key)||output[i]!==task.alphabet[value]?.rune)return '';
+   rows.push({input,key,raw,value});
+  }
+  if(!rows.length)return '';
+  const symbol=step.direction==='add'?'+':'−',cell=value=>'<td><span class="run-step-rune">'+esc(task.alphabet[value].rune)+'</span><small>'+value+'</small></td>',first=rows[0];
+  const reset={page:'Start the sequence again on each page.',line:'Start the sequence again on each line.',word:'Start the sequence again after every non-rune character.'}[step.reset];
+  return '<figure class="run-step-example"><figcaption>How this setting changes the runes</figcaption><table><caption>'+esc(id.toUpperCase())+' · first '+rows.length+' rune'+(rows.length===1?'':'s')+'</caption><thead><tr><th scope="col">Rune</th>'+rows.map((_,i)=>'<th scope="col">'+(i+1)+'</th>').join('')+'</tr></thead><tbody><tr><th scope="row">Original</th>'+rows.map(row=>cell(row.input)).join('')+'</tr><tr><th scope="row">'+(step.direction==='add'?'Add':'Subtract')+'</th>'+rows.map(row=>'<td class="run-step-change">'+symbol+' '+row.key+'</td>').join('')+'</tr><tr><th scope="row">Result</th>'+rows.map(row=>cell(row.value)).join('')+'</tr></tbody></table><p class="run-step-equation">First rune: '+first.input+' '+symbol+' '+first.key+' = '+first.raw+(first.raw===first.value?'.':'; wrap to '+first.value+'.')+'</p><p class="run-text-note">Rune numbers go from 0 to 28 and wrap around. '+reset+' The sequence is not repeated within a '+step.reset+'.</p></figure>';
+ }
  function languagePage(task,result,id,comparison=null){
   const page=comparison||result.languageScore.pages.find(p=>p.page===id),output=result.transformed.find(p=>p.page===id),characters=Array.from(output.text),excerpt=characters.slice(0,120).join('');
-  const introduction='<h3>After the method · '+esc(id.toUpperCase())+'</h3><p class="run-text-note">Rune labels, not a translation.'+(characters.length>120?' First 120 characters; inspect the complete text below.':'')+'</p><pre class="run-language-excerpt">'+esc(transliteration(excerpt,task.alphabet,true))+(characters.length>120?'…':'')+'</pre>';
+  const introduction=finiteShiftExample(task,result,id)+'<h3>After the method · '+esc(id.toUpperCase())+'</h3><p class="run-text-note">Rune labels, not a translation.'+(characters.length>120?' First 120 characters; inspect the complete text below.':'')+'</p><pre class="run-language-excerpt">'+esc(transliteration(excerpt,task.alphabet))+(characters.length>120?'…':'')+'</pre>';
   if(page.status==='insufficient')return introduction+'<h3>Too little text to compare</h3><p>This page has '+page.runes+' runes. This comparison needs at least 40. No language scores were calculated.</p><p>Inspect the output directly, or separately review a longer passage to check.</p>';
   return introduction+'<h3>Compared with rearranged text</h3><p>For each reference, the bar counts how many of 32 rearrangements scored at least as high as this output. Every rearrangement keeps the same runes and length.</p><p class="run-language-caution"><strong>A short bar is not evidence of readable text.</strong> Unreadable outputs can also score above all 32 rearrangements. These rows do not identify the language.</p><ul class="run-language-comparisons" aria-label="Language reference comparisons">'+LANGUAGE_REFERENCES.map(([id,label])=>{const model=page.models.find(m=>m.id===id);if(!model)throw Error('A language reference is missing.');return '<li><div class="run-language-row"><span>'+label+'</span><span>'+model.shuffledAtOrAbove+' of 32</span></div><div class="run-language-track" role="img" aria-label="'+label+': '+model.shuffledAtOrAbove+' of 32 rearrangements scored at least as high as the output"><span style="width:'+(model.shuffledAtOrAbove/32*100)+'%"></span></div></li>';}).join('')+'</ul><p class="run-text-note">References stay in a fixed order. Each compares groups of three runes after the same spelling conversion. Counts describe these 32 rearrangements, not confidence in a language.</p><details class="run-language-values"><summary>Exact comparison values</summary><div class="run-language-table-wrap"><table><thead><tr><th>Reference</th><th>Output score</th><th>Rearranged range</th></tr></thead><tbody>'+LANGUAGE_REFERENCES.map(([id,label])=>{const model=page.models.find(m=>m.id===id);return '<tr><th scope="row">'+label+'</th><td>'+model.total+'</td><td>'+model.shuffledMin+' to '+model.shuffledMax+'</td></tr>';}).join('')+'</tbody></table></div><p class="run-text-note">Scores are model-specific integer totals. Compare each output with its own rearrangements, not raw scores across languages.</p></details>';
  }
@@ -27,7 +44,7 @@
  }
  function outputExcerpt(task,result,id){
   const output=result.transformed.find(page=>page.page===id),chars=Array.from(output.text),excerpt=chars.slice(0,120).join('');
-  return '<p class="run-text-note">'+esc(id.toUpperCase())+(chars.length>120?' · First 120 characters':'')+'</p><pre class="run-language-excerpt">'+esc(transliteration(excerpt,task.alphabet,true))+(chars.length>120?'…':'')+'</pre>';
+  return finiteShiftExample(task,result,id)+'<p class="run-text-note">'+esc(id.toUpperCase())+(chars.length>120?' · First 120 characters':'')+'</p><pre class="run-language-excerpt">'+esc(transliteration(excerpt,task.alphabet))+(chars.length>120?'…':'')+'</pre>';
  }
  function outputPreview(task,result){
   return '<section data-run-output-preview><h2 id="local-run-finding">What the method produced</h2><p>Shown with Latin rune labels, not a translation. This run does not decide whether the output is readable.</p>'+(task.pages.length>1?'<label class="run-language-page">Page<select data-run-output-page>'+task.pages.map(page=>'<option value="'+esc(page.id)+'">'+esc(page.id.toUpperCase())+'</option>').join('')+'</select></label>':'')+'<div data-run-output-content>'+outputExcerpt(task,result,task.pages[0].id)+'</div></section>';
@@ -71,7 +88,7 @@
  function openingSetPage(task,result,pageId){
   const indices=new Map(task.alphabet.map((entry,i)=>[entry.rune,i])),text=result.transformed.find(page=>page.page===pageId).text,values=Array.from(text).filter(ch=>indices.has(ch)).map(ch=>indices.get(ch)),matched=result.matches.find(page=>page.page===pageId).matchingOpenings;
   const status=!values.length?'No runes to compare.':matched.length?'Full opening match: '+matched.map(openingName).join(', ')+'.':values.length<Math.min(...task.criterion.openings.map(item=>item.values.length))?'The output is too short to contain any complete supplied opening.':'No complete supplied opening matched.';
-  return '<h3>'+esc(pageId.toUpperCase())+'</h3><p class="run-prefix-status">'+esc(status)+'</p><table class="run-prefix-table" style="table-layout:fixed;width:100%"><caption>Supplied openings compared with this page’s output</caption><thead><tr><th scope="col" style="width:44%">Opening</th><th scope="col" style="width:18%">Runes</th><th scope="col">Result</th></tr></thead><tbody>'+task.criterion.openings.map(item=>{const mismatch=item.values.findIndex((value,i)=>values[i]!==value),matching=matched.includes(item.id),short=values.length<item.values.length&&mismatch===values.length,assessment=matching?'<strong>Full match</strong>':!values.length?'No runes':short?'Too short<br>'+values.length+' of '+item.values.length+' runes':'Different<br>Rune '+(mismatch+1);return '<tr class="run-prefix-pair'+(matching?'':' is-different')+'"><th scope="row" style="overflow-wrap:anywhere">'+esc(openingName(item.id))+'</th><td>'+item.values.length+'</td><td>'+assessment+'</td></tr>';}).join('')+'</tbody></table>';
+  return finiteShiftExample(task,result,pageId)+'<h3>'+esc(pageId.toUpperCase())+'</h3><p class="run-prefix-status">'+esc(status)+'</p><table class="run-prefix-table" style="table-layout:fixed;width:100%"><caption>Supplied openings compared with this page’s output</caption><thead><tr><th scope="col" style="width:44%">Opening</th><th scope="col" style="width:18%">Runes</th><th scope="col">Result</th></tr></thead><tbody>'+task.criterion.openings.map(item=>{const mismatch=item.values.findIndex((value,i)=>values[i]!==value),matching=matched.includes(item.id),short=values.length<item.values.length&&mismatch===values.length,assessment=matching?'<strong>Full match</strong>':!values.length?'No runes':short?'Too short<br>'+values.length+' of '+item.values.length+' runes':'Different<br>Rune '+(mismatch+1);return '<tr class="run-prefix-pair'+(matching?'':' is-different')+'"><th scope="row" style="overflow-wrap:anywhere">'+esc(openingName(item.id))+'</th><td>'+item.values.length+'</td><td>'+assessment+'</td></tr>';}).join('')+'</tbody></table>';
  }
  function openingSetView(task,result){
   const matched=result.matches.filter(page=>page.matched).length,indices=new Set(task.alphabet.map(item=>item.rune)),empty=result.transformed.filter(page=>!Array.from(page.text).some(ch=>indices.has(ch))).length;
@@ -125,7 +142,7 @@
   const page=result.wordSums.pages[0],boundary=task.criterion.boundaries==='non-rune'?'Every non-rune character separates words.':'Only ASCII hyphens (-) and periods (.) separate groups. Other non-rune characters, including spaces and line breaks, are joined.';
   return '<section class="run-word-sums" data-run-word-sums aria-label="Measured word sums"><p class="run-sum-table-choice"><strong>'+(task.criterion.table==='reversed'?'Reversed':'Canonical')+' prime assignments</strong></p><p class="run-sum-boundary">'+esc(boundary)+'</p><div class="run-sum-controls">'+(result.wordSums.pages.length>1?'<label>Page<select data-run-sum-page aria-label="Measured page">'+result.wordSums.pages.map(p=>'<option value="'+esc(p.page)+'">'+esc(p.page.toUpperCase())+'</option>').join('')+'</select></label>':'<p>'+esc(page.page.toUpperCase())+'</p>')+'</div><div data-run-sum-calculation>'+wordSumCalculation(task,page,0)+'</div><h3>Word totals</h3><p class="run-sum-instruction">Select a word to see its calculation.</p><div data-run-sum-list>'+wordSumRows(page,0,0)+'</div><div class="run-sum-pagination"><button type="button" data-run-sum-prev disabled>Previous</button><p data-run-sum-range role="status">'+(page.words.length?'Words 1–'+Math.min(SUM_PAGE_SIZE,page.words.length)+' of '+page.words.length:'0 words')+' · '+esc(page.page.toUpperCase())+'</p><button type="button" data-run-sum-next'+(page.words.length<=SUM_PAGE_SIZE?' disabled':'')+'>Next</button></div></section>';
  }
- function bindWordSums(host,task,result){
+ function bindWordSums(host,task,result,initialPage){
   const panel=host.querySelector?.('[data-run-word-sums]');if(!panel)return ()=>{};
   const select=panel.querySelector('[data-run-sum-page]'),calculation=panel.querySelector('[data-run-sum-calculation]'),list=panel.querySelector('[data-run-sum-list]'),range=panel.querySelector('[data-run-sum-range]'),prev=panel.querySelector('[data-run-sum-prev]'),next=panel.querySelector('[data-run-sum-next]');
   if(!calculation||!list||!range||!prev||!next)return ()=>{};
@@ -136,6 +153,7 @@
   listen(prev,'click',()=>{if(batch>0){batch--;selected=batch*SUM_PAGE_SIZE;update();}});
   listen(next,'click',()=>{if((batch+1)*SUM_PAGE_SIZE<page.words.length){batch++;selected=batch*SUM_PAGE_SIZE;update();}});
   listen(list,'click',event=>{const button=event.target?.closest?.('[data-run-sum-word]');if(!button||!list.contains(button)||!/^\d+$/.test(button.dataset.runSumWord||''))return;const i=Number(button.dataset.runSumWord);if(i<batch*SUM_PAGE_SIZE||i>=Math.min((batch+1)*SUM_PAGE_SIZE,page.words.length))return;selected=i;calculation.innerHTML=wordSumCalculation(task,page,selected);list.querySelectorAll('[data-run-sum-word]').forEach(node=>node.setAttribute('aria-pressed',String(Number(node.dataset.runSumWord)===selected)));});
+  if(initialPage){const chosen=result.wordSums.pages.find(p=>p.page===initialPage);if(chosen){page=chosen;if(select)select.value=initialPage;}}
   update();return ()=>listeners.forEach(remove=>remove());
  }
  function inspector(task,result){
@@ -150,7 +168,7 @@
  function bind(host,task,result,options={}){
   bindings.get(host)?.();
   E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result})),initialPage=options.pageId===undefined?snapshot.task.pages[0].id:options.pageId;if(!snapshot.task.pages.some(p=>p.id===initialPage))throw Error('Choose a page in the original output.');
-  const sumsCleanup=task.criterion.kind==='exact-prefix-set'?bindOpeningSet(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
+  const sumsCleanup=task.criterion.kind==='exact-prefix-set'?bindOpeningSet(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
   const panel=host.querySelector?.('.run-text-inspector');if(!panel){bindings.set(host,sumsCleanup);return sumsCleanup;}
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
   const original=panel.querySelector('[data-run-original]'),after=panel.querySelector('[data-run-after]');
@@ -166,6 +184,12 @@
   };
   const listen=(node,event,fn)=>{node.addEventListener(event,fn);listeners.push(()=>node.removeEventListener?.(event,fn));};
   if(select)listen(select,'change',()=>{if(snapshot.task.pages.some(p=>p.id===select.value)){pageId=select.value;update();}});
+  const selectors=['[data-finite-output-page]','[data-run-opening-set-page]','[data-run-language-page]','[data-run-output-page]','[data-run-sum-page]'],primary=selectors.map(selector=>host.querySelector?.(selector)).find(Boolean)||select;
+  if(primary){
+   primary.value=initialPage;
+   for(const candidate of [...selectors.slice(1).map(selector=>host.querySelector?.(selector)),select])if(candidate&&candidate!==primary){const label=candidate.closest?.('label');if(label)label.hidden=true;}
+   if(primary!==select)listen(primary,'change',()=>{if(snapshot.task.pages.some(p=>p.id===primary.value)){pageId=primary.value;if(select)select.value=pageId;update();}});
+  }
   buttons.forEach(button=>listen(button,'click',()=>{const chosen=button.getAttribute('data-run-text-mode');if(['runes','latin'].includes(chosen)){mode=chosen;update();}}));
   update();const cleanup=()=>{listeners.forEach(remove=>remove());sumsCleanup();};bindings.set(host,cleanup);return cleanup;
  }
@@ -202,11 +226,11 @@
   const J=typeof module==='object'&&module.exports?require('./finite-json.js'):root.FiniteJSON,captured=J.capture({task,result,pageId},{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});
   if(!captured.task.pages?.some(page=>page.id===captured.pageId))throw Error('Choose an original output page.');
   const verified=await E.verify(captured.task,captured.result,crypto),page=verified.transformed.find(page=>page.page===captured.pageId);if(!page)throw Error('The original output page is missing.');
-  const token=Object.freeze({});inspectionOutputs.set(token,{text:page.text,pageId:captured.pageId,hasRunes:Array.from(page.text).some(ch=>captured.task.alphabet.some(entry=>entry.rune===ch))});return token;
+  const token=Object.freeze({});inspectionOutputs.set(token,{example:finiteShiftExample(captured.task,verified,captured.pageId),text:page.text,pageId:captured.pageId,hasRunes:Array.from(page.text).some(ch=>captured.task.alphabet.some(entry=>entry.rune===ch))});return token;
  }
  function renderInspectionOutput(token){
   const value=inspectionOutputs.get(token);if(!value)throw Error('Verify the original output before displaying it.');
-  return '<section class="run-output-inspection"><h3>Transformed text · '+esc(value.pageId.toUpperCase())+'</h3><p>'+ (value.hasRunes?'Exact rune text after the declared method.':'This output contains no runes. Its exact punctuation and spacing are shown below.')+' This does not decide readability or a decryption.</p><pre class="run-language-excerpt" data-inspection-rune-text>'+esc(value.text)+'</pre></section>';
+  return '<section class="run-output-inspection">'+value.example+'<h3>Transformed text · '+esc(value.pageId.toUpperCase())+'</h3><p>'+ (value.hasRunes?'Exact rune text after the declared method.':'This output contains no runes. Its exact punctuation and spacing are shown below.')+' This does not decide readability or a decryption.</p><pre class="run-language-excerpt" data-inspection-rune-text>'+esc(value.text)+'</pre></section>';
  }
  const measurementComparisons=new WeakMap();
  function measurementData(token){const value=measurementComparisons.get(token);if(!value)throw Error('Use independently verified saved measurements.');return value;}

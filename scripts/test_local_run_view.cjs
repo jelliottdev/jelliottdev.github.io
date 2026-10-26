@@ -28,7 +28,7 @@ function hostFor(multiple=true,withPrefix=false,single=false){
  assert(html.includes('What the method produced'));assert(html.indexOf('data-run-output-content')<html.indexOf('<details'),'The requested transformed output is visible before any disclosure');assert(html.indexOf('Rune counts')>html.indexOf('run-text-inspector'),'Repeat counts are supporting detail for direct inspection');
  const previewPanel=new Element(),previewSelect=new Element(),previewContent=new Element();previewContent.innerHTML='';previewPanel.querySelector=selector=>({'[data-run-output-page]':previewSelect,'[data-run-output-content]':previewContent}[selector]||null);
  const previewHost={querySelector:selector=>selector==='[data-run-output-preview]'?previewPanel:null},previewCleanup=V.bind(previewHost,task,result);
- previewSelect.value='lp2-17';previewSelect.fire('change');assert(previewContent.innerHTML.includes('LP2-17'));assert(previewContent.innerHTML.includes('FIA, TH'));
+ previewSelect.value='lp2-17';previewSelect.fire('change');assert(previewContent.innerHTML.includes('LP2-17'));assert(previewContent.innerHTML.includes('F·IA, TH'));
  const selectedPreview=previewContent.innerHTML;previewSelect.value='unknown';previewSelect.fire('change');assert.equal(previewContent.innerHTML,selectedPreview);previewCleanup();previewSelect.value='lp2-15';previewSelect.fire('change');assert.equal(previewContent.innerHTML,selectedPreview,'Disposed previews have no active handlers');
 
  const laterHost=hostFor(),laterCleanup=V.bind(laterHost,task,result,{pageId:'lp2-17'});assert.equal(laterHost.select.value,'lp2-17');assert.equal(laterHost.original.textContent,second);assert.equal(laterHost.after.textContent,'ᚠᛡ, ᚦ\nᚢ');laterCleanup();
