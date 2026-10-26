@@ -120,7 +120,7 @@
      repetition:[{id:'word_affine_count',label:'Count within-word rune pairs following a formula',example:'Choose a distance and y = a·x + b modulo 29; compare with the rearrangement average.'}],
      'book-codes':[]
     }[op.familyId];
-    return {id,prompt:'Which specific method do you mean?',context:C.METHOD_FAMILIES[op.familyId]+'. '+(op.familyId==='book-codes'?'Book and coordinate lookups need an exact source and lookup rule. The browser does not yet run a general book cipher.':'A family alone does not define a test. Choose an exact method or keep your own rule; other methods may need an adapter.'),choices:[...choices,custom]};
+    return {id,prompt:'Which specific method do you mean?',context:C.METHOD_FAMILIES[op.familyId]+'. '+(op.familyId==='book-codes'?'Book and coordinate lookups need an exact source and lookup rule. The browser does not yet run a general book cipher.':'A family alone does not define a test. Choose an exact method or keep your own rule; Other rules may not be available to run here yet.'),choices:[...choices,custom]};
    }
    if(!Object.hasOwn(C.METHOD_FAMILIES,op.declaredFamilyId))continue;
    const setting=(name,prompt,choices,context)=>({id:'family-setting:'+index+':'+draft.revision+':'+name,prompt,choices,...(context?{context}:{})});
@@ -174,6 +174,20 @@
   }
   const next=C.applyMethodEdit(draft,{type:'replace',index,operation:op});next.clarifications.push({question:id,choice,...(option.requiresText?{text:text.trim()}:{}),revision:next.revision});return next;
  }
+ // Explicit refinement creates a detached draft, never rewrites a saved card.
+ function refinementDraft(fragment){
+  let draft=H.decode(fragment).draft;
+  const prefix='Uninterpreted original wording: ',exception=draft.rules.exceptionalCases;
+  if(exception.status==='specified'&&typeof exception.value==='string'&&exception.value.startsWith(prefix)&&exception.value.length>prefix.length){
+   const wording=exception.value.slice(prefix.length);
+   draft=C.revise(draft,{rules:{exceptionalCases:C.field()},appendUnresolved:[{kind:'source_note',text:wording}]});
+   draft.source={...draft.source,text:wording};
+  }
+  const opaque=draft.method.status==='specified'&&draft.method.value.operations.some(op=>['described_method','family_selection','ambiguous_reversal'].includes(op.id));
+  draft.clarifications.push({question:'saved-refinement',choice:'review',...(opaque?{method:C.serialize(draft.method.value)}:{})});
+  return draft;
+ }
+ function refinementMethodReview(draft){const marker=draft.clarifications.find(item=>item.question==='saved-refinement'&&typeof item.method==='string');return !!marker&&draft.method.status==='specified'&&C.serialize(draft.method.value)===marker.method&&!draft.clarifications.some(item=>item.question==='method'&&item.choice!=='undecided');}
  function intakeQuestions(draft){
   const result=C.questions(draft);
   const acknowledged=name=>draft.clarifications.some(c=>c.question===name&&c.choice==='undecided');
@@ -181,7 +195,7 @@
    ...Object.entries(C.OUTCOMES).map(([id,label])=>({id,label})),
    {id:'unclassified',label:'None of these fits',requiresText:true,fieldLabel:'Describe the outcome you want'},
    {id:'undecided',label:'Leave the outcome undecided'}]});
-  if(draft.method.status==='unspecified'&&!acknowledged('method'))result.push({id:'method',prompt:'What method do you want to check?',choices:[
+  if((draft.method.status==='unspecified'||refinementMethodReview(draft))&&!acknowledged('method'))result.push({id:'method',prompt:refinementMethodReview(draft)?'What exact method do you want to test?':'What method do you want to check?',...(refinementMethodReview(draft)?{context:'Choose specific steps for a new draft. Your saved idea stays unchanged.'}:{}),choices:[
    ...Object.entries(C.METHOD_FAMILIES).map(([id,label])=>({id:'family:'+id,label})),
    {id:'describe',label:'Describe the method',requiresText:true,fieldLabel:'Describe the rule or steps you want to test'},
    {id:'undecided',label:'I haven’t chosen a method'}]});
@@ -467,7 +481,7 @@
   }
   let restoringOverlay=null;
   if(fragment.startsWith('#idea=')){
-   try{const shared=H.decode(fragment);draft=shared.draft;raw=draft.source.text;stage='review';message='Shared idea. Review the wording before checking prior research.';}
+   try{const shared=H.decode(fragment),refining=incoming.get('refine')==='1';draft=refining?refinementDraft(fragment):shared.draft;raw=draft.source.text;stage='review';message=refining?'':'Shared idea. Review the wording before checking prior research.';}
    catch{error='This shared idea link could not be read. Ask for a new link or enter the idea below.';}
   }
   const pageHint=incoming.getAll('pages').join(',');
@@ -518,7 +532,7 @@
    if(stage==='input'||stage==='search'){
     host.innerHTML='<h1>Have we tried it?</h1><p>Ask a question or paste an idea to find related research. You don’t need a finished method or a page selection.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="8000" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><button id="guided-clarification" type="button" hidden>Answer a few questions</button><div class="actions"><a class="left" href="research.html#mode=list">Search existing research</a><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form><div id="related-research">'+roughResearchHTML()+'</div><div class="actions"><button id="define-test" type="button">Define a test</button></div><p class="small">Optional: turn your idea into an exact check you can review before running.</p>';
    }else{
-    host.innerHTML='<button class="back" id="back" type="button">'+(pending?'Edit idea':'Back to idea')+'</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+(pending?'<p class="idea-wording"><strong>Method:</strong> '+esc((C.reviewRows(draft).find(row=>row.label==='Method')?.tags||[]).map(tag=>tag.text).join(' → ').replace(/\s+/gu,' ').replace(/^(.{240})[\s\S]+$/u,'$1…'))+'</p>':'')+
+    host.innerHTML='<button class="back" id="back" type="button">'+(pending?'Edit idea':'Back to idea')+'</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+(incoming.get('refine')==='1'&&stage==='review'?'<p class="small">Review the saved wording and settings in a new draft. The original entry stays unchanged.</p>':'')+(pending?'<p class="idea-wording"><strong>Method:</strong> '+esc((C.reviewRows(draft).find(row=>row.label==='Method')?.tags||[]).map(tag=>tag.text).join(' → ').replace(/\s+/gu,' ').replace(/^(.{240})[\s\S]+$/u,'$1…'))+'</p>':'')+
      (stage==='research'?'<p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>':'')+
      (pending?'':(stage==='research'?'<section class="confirmed-card"><button id="share-idea" class="share-icon" type="button" aria-label="Share confirmed idea" title="Share idea"'+(shareBusy?' disabled':'')+'><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-4 4 4-4 4 4M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/></svg></button><details class="confirmed"><summary>Your idea</summary>':'<section aria-label="Interpreted idea">')+rowsHTML(confirmed||draft)+
      '<div class="actions"><button class="left" id="edit" type="button">Edit interpretation</button></div>'+(stage==='research'?'</details>'+intakeHTML()+'<p id="share-status" class="small" role="status">'+esc(shareNotice)+'</p><div id="share-fallback"></div></section>':'</section>')+
@@ -922,7 +936,7 @@
   render();const ready=load();
   return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
- const api={validServiceEndpoint,parseScope,initialDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,readIntake,createApp};
+ const api={validServiceEndpoint,parseScope,initialDraft,refinementDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,readIntake,createApp};
  if(typeof module!=='undefined')module.exports=api;
  else{root.Investigate=api;if(root.document?.getElementById('investigate'))root.investigateApp=createApp(root.document);}
 })(globalThis);
