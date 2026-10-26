@@ -290,5 +290,5 @@
   if(verified!==true||unsaved!==false||hasNext!==false)return '';
   return '<p class="research-continuation"><a href="research.html?contribute=1">Find another check <span aria-hidden="true">→</span></a></p>';
  }
- const api={actionCopy,continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,renderArchived,bindArchived,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ const api={openingName,actionCopy,continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,renderArchived,bindArchived,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -37,6 +37,9 @@ epoch, verifier, and published registry generation.
 `lookupCompleted` means the original snapshot was completely searched and its
 returned results imported. It does not mean all possible calculations ran, no
 later result exists, or the hypothesis is false. `negativeConclusion` stays false.
+The verified coverage view separately exposes an indexed matching-opening source.
+That positive result can stop this exact opening check while coverage remains
+incomplete; it does not establish a complete manuscript reading.
 
 ## Gates before public integration
 
@@ -54,10 +57,11 @@ later result exists, or the hypothesis is false. `negativeConclusion` stays fals
    the two maintained complete searches. Do not create public questions for each
    scheduled member. Keep unrelated finite searches on their existing path.
 
-The staged HTTP adapter loads the exact canonical public parent and forwards
-only read or advance. It is not registered in the Worker or enabled in site
-configuration. Register it before the broad `/ideas` handler only alongside the
-working public flow, its job-admission/save actions, and required migrations.
+The HTTP adapter loads the exact canonical public parent. It supports one bounded
+read, discovery advancement, preparation, original-receipt import, or saved-result
+credit per request. It is registered before the broad `/ideas` handler; the browser
+path is still disabled in site configuration pending deployment verification and
+the required migrations.
 Unsupported questions retain their existing flow; source outages must remain
 errors rather than being mislabeled unsupported.
 
@@ -81,3 +85,28 @@ revisions, and competing or failed renewal transactions. It uses invented local
 outputs and does not run manuscript experiments. Public integration still needs
 full browser save/retry/resume, rate-limit recovery, and measured end-to-end
 query, outbound-request, row-read, CPU, and memory budgets on the deployment.
+
+## Prepared work and device recovery
+
+`createPinnedQuestionJobs` accepts the same private original-question token. The
+server selects the first missing setting and at most twelve pages, checks current
+evidence, and issues the existing controlled preparation under the unchanged
+public parent. A fresh check also guards task admission. A signed short-lived
+import token names an exact original source and selected intersection; importing
+is a separate independently verified operation. `recordSaved` requires the actual
+persisted result, immutable preparation, and original-parent task association.
+Shared task ownership does not change that association.
+
+`pinned-question-workspace.js` preserves one parent URL and requires an explicit
+Run and save action. It retains device output and saved references until credit
+succeeds. Recovery checks existing saved results before creating or running work;
+a saved reference skips task creation entirely. Pause cancels the executor and
+network reads, including a transport that ignores abort. No page-load calculation
+is authorized by loading progress.
+
+The independent jobs suite uses actual SQLite, synthetic text, independently
+constructed controls, and the real coverage/discovery/source services. The
+trusted composition seam cannot make invented inputs eligible for the maintained
+production registry. Production admission is separately checked with synthetic
+controls and no new manuscript result. These local tests do not establish hosted
+CPU, memory, outbound-request, or whole-job HTTP budget headroom.

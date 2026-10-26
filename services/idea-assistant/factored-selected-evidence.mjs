@@ -70,3 +70,23 @@ async function findSelectedOutputEvidence(output,{db,proposalId,domain,cases,cur
 export const findSelectedFactoredPrefixEvidence=options=>findSelectedOutputEvidence(false,options);
 export const findSelectedFactoredOutputEvidence=options=>findSelectedOutputEvidence(true,options);
 export const findSelectedFactoredInspectionEvidence=options=>findSelectedOutputEvidence(false,options,true);
+
+// Exact selected-parent work only. This is a fresh archive lookup, not a saved
+// completion flag or an arithmetic receipt. Positive sources are reloaded and
+// independently replayed by coverage.ingest; absence must exhaust this lookup.
+export async function findPinnedQuestionTaskEvidence({db,task,inputVersion,crypto=globalThis.crypto,fetcher=globalThis.fetch,signal}){
+ const program=Json.capture(task,{maxBytes:800000,maxDepth:24,maxNodes:100000});
+ if(!['raw','reviewed'].includes(inputVersion)||!Array.isArray(program.pages)||program.pages.length<1||program.pages.length>12||!['exact-prefix','exact-prefix-set'].includes(program.criterion?.kind))throw fail('Use one bounded exact opening-check program.',400);
+ await E.checkIdentity(program,crypto);
+ if(signal?.aborted)throw fail('Selected evidence lookup cancelled.');
+ const found=await findEvidence({db,task:program,inputVersion,crypto,fetcher,signal});
+ if(signal?.aborted)throw fail('Selected evidence lookup cancelled.');
+ if(E.stable(Json.capture(task,{maxBytes:800000,maxDepth:24,maxNodes:100000}))!==E.stable(program))throw fail('The selected program changed during its fresh lookup.');
+ if(found.truncated&&found.evidence.length===0)throw fail('The selected evidence lookup is incomplete. Retry a fresh lookup before running these cases.');
+ return found;
+}
+export async function assertPinnedQuestionTaskUncovered(options){
+ const found=await findPinnedQuestionTaskEvidence(options);
+ if(found.truncated||found.coveredPages.length!==0||found.evidence.length!==0)throw fail('Saved work changed; refresh the complete question before running these pages.');
+ return found;
+}

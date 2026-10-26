@@ -26,6 +26,7 @@ import {createFamilyRunHandler} from './family-runs.mjs';
 import {createFiniteSearchHandler} from './finite-search.mjs';
 import {createFactoredSearchHandler,createFactoredPrefixSearchHandler,createFactoredOutputSearchHandler,createFactoredInspectionSearchHandler} from './factored-search.mjs';
 import {createPublishedEvidenceHandler} from './published-evidence.mjs';
+import {createPinnedQuestionWorkHandler} from './pinned-question-work.mjs';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
@@ -212,6 +213,7 @@ const parameterQuestionCoverage=createParameterQuestionCoverageHandler();
 const archivedParameterContext=createArchivedParameterContextHandler();
 const familyRuns=createFamilyRunHandler();
 const publishedEvidence=createPublishedEvidenceHandler();
+const pinnedQuestionWork=createPinnedQuestionWorkHandler();
 const finiteSearch=createFiniteSearchHandler();
 const factoredSearch=createFactoredSearchHandler();
 const factoredPrefixSearch=createFactoredPrefixSearchHandler();
@@ -238,6 +240,7 @@ export default {fetch(request,env,ctx){
   if(path==='/prepare-task')return prepareTask(request,env);
   if(path==='/record-plans')return recordPlans(request,env);
   if(/^\/ideas\/p_[a-f0-9]{64}\/variations$/.test(path))return questionVariations(request,env);
+  if(/^\/ideas\/p_[a-f0-9]{64}\/work$/.test(path))return pinnedQuestionWork(request,env);
   if(path==='/ideas'||path.startsWith('/ideas/'))return communityIdeas(request,env);
   if(path==='/tasks'||path.startsWith('/tasks/'))return localTasks(request,env);
   if(new URL(request.url).pathname==='/interpret')return interpret(request,env);

@@ -1,5 +1,34 @@
 # Hosted idea comparison
 
+## Complete-question work and recovery
+
+`GET /ideas/:proposalId/work` reads progress for a supported, public, unchanged
+question. Discovery, receipt import, preparation, browser execution, result
+storage, and progress credit are separate transitions. A finished discovery scan
+does not prove a hypothesis false or that every calculation was run. Unsupported
+questions retain their ordinary research/refinement flow.
+
+The server selects missing cases from verified coverage. Browsers cannot submit
+replacement sources, selectors, scope, or a completion flag. Before admitting a
+calculation, check current saved evidence again; an earlier scan is not evidence
+that no newer result exists. Reuse original local, family, or published receipts
+without manufacturing public member ideas. Credit requires independent
+verification against the selected case and the exact source edition.
+
+The browser keeps the original question URL while running small calculations.
+Opening the page does not authorize execution. Explicit Run/Resume permits the
+bounded loop; Pause stops it. Retain completed output and its saved reference
+until progress import succeeds, so a lost response does not force another run.
+On conflict, reload durable progress before continuing. Expired discovery tokens
+start a new scan attempt without erasing verified coverage.
+
+Migrations 0019-0023 add coverage, recoverable scan journals, and indexed opening
+lookups. The request
+adapter is registered in Worker routing; the new browser path remains gated by
+`pinnedQuestionWorkEndpoint` in assistant configuration. Do not enable it before
+its full run/save/reload tests and migration deployment pass. Synthetic fixtures
+exercise execution; validation must not launch new manuscript computations.
+
 ## Browser experiment loop
 
 Reviewed parameter variations use `POST /parameter-questions/create` to save the

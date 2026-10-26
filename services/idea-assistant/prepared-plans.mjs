@@ -1,3 +1,4 @@
+import {assertPinnedQuestionTaskUncovered} from './factored-selected-evidence.mjs';
 import {checkedPinnedQuestionMember} from './pinned-question-admission.mjs';
 import {checkedPinnedDomainMember} from './pinned-domain-admission.mjs';
 import {checkedAuthoredFiniteMember} from './authored-finite-origin.mjs';
@@ -65,7 +66,7 @@ async function proposal(db,bound){
 async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle){
  const data=json(value,128000),basis=data.value;
  if(authority==='idea'){
-  if(basis.kind==='pinned-question-member-v1'){require(bound.base.parentTaskId===null,'Pinned question members preserve their complete original question');await checkedPinnedQuestionMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,loadDomain:loadPinnedDomain,loadBundle:loadPinnedBundle,fetcher});require(basis.parentProposalId===bound.base.proposalId,'The complete parent question identity changed');return {text:data.text,hash:await sha(data.text)};}
+  if(basis.kind==='pinned-question-member-v1'){require(bound.base.parentTaskId===null,'Pinned question members preserve their complete original question');await checkedPinnedQuestionMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,loadDomain:loadPinnedDomain,loadBundle:loadPinnedBundle,fetcher});require(basis.parentProposalId===bound.base.proposalId,'The complete parent question identity changed');if(fresh)await assertPinnedQuestionTaskUncovered({db,task:bound.task,inputVersion:bound.base.inputVersion,fetcher});return {text:data.text,hash:await sha(data.text)};}
   if(basis.kind==='pinned-domain-member-v1'){require(bound.base.parentTaskId===null,'Pinned members preserve an independent parent-domain identity');await checkedPinnedDomainMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,loadDomain:loadPinnedDomain,loadBundle:loadPinnedBundle,fetcher});return {text:data.text,hash:await sha(data.text)};}
   if(basis.kind==='authored-finite-member-v1'){await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,fetcher,loadAuthoredSource});await basisFor(db,basis.memberBasis,bound,authority,fresh,fetcher,loadAuthoredSource);return {text:data.text,hash:await sha(data.text)};}
   if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind)){
