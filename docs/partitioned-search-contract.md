@@ -102,6 +102,9 @@ These continuations are process-local, not durable browser resume tokens.
 The persistent authority can resolve a private certificate in one database read.
 Recovery still checks arithmetic in both the persistent authority and the ledger;
 it avoids a duplicate database lookup, not an independent verification gate.
+An exact selected page subset may reuse a larger saved computation with the
+same protocol and identical page-case identities. Only the selected pages are
+credited; original source bodies and their wider scope remain unchanged.
 
 `pinned-domain-next-work.js` selects missing coordinates directly from the
 verified bitsets. It retains the same full parent and offers bounded jobs without
@@ -138,6 +141,53 @@ coverage, bounded discovery of existing evidence, and browser pause/resume.
 Complete case coverage is not a negative conclusion while evidence discovery is
 unfinished. Do not expose an unbounded restore endpoint or claim an in-memory
 ledger or private recovery token supplies durable aggregate progress.
+
+## Complete archive discovery
+
+`pinned-domain-discovery-domain.js` compiles at most sixteen settings into an
+existing strict factored question, preserving the full page scope and opening
+criteria. Identical programs retain their named-setting aliases. This is
+discovery metadata, not a runnable job or an experimental finding.
+
+The private `pinned-domain-discovery.mjs` service traverses those ranges using
+the existing local, family and published evidence provider. Signed continuations
+bind the full parent, maintained source, original database highwaters, evidence
+epoch, registry snapshot and ordered chunk/page chain. A chunk cannot advance
+until its inner lookup finishes. Later inserts stay outside the original scan;
+edits, retractions, registry changes and mismatched cursors fail closed. Bounded
+provider payloads reserve space for the outer references and selectors rather
+than becoming permanently oversized after wrapping.
+
+Its completion token can establish only that the snapshot lookup finished.
+It does not prove saved case coverage, authorize a task, or produce a negative
+conclusion. Local discovered references already traverse the genuine persistent
+authority into the durable journal in integration tests. Published and family
+sources retain their original typed provenance, but their durable ingestion is
+still required; do not relabel them as locally saved tasks or drop them.
+
+The public coordinator must derive the canonical question-to-maintained-source
+association itself. The private discovery API's proposal label is not public
+ownership or admission authority. Joining discovery and ingestion must also fit
+one request's combined query budget; separate module budgets do not establish
+that. Durable scan-completion admission and the browser handoff remain unfinished.
+
+The complete bank reference already fits the canonical card's finite-settings
+field. Do not raise the ordinary 1,024-program or 76,800-case expansion limits to
+force that card through an eager compiler. Bind its essential aim, exact bank,
+ordered method, full page scope and evaluation to a maintained parent before
+selecting bounded work. Preserve the original card identity and wording.
+
+`pinned-domain-question.mjs` supplies that exact private binding for the two
+maintained complete searches. It derives the source from the card, checks the
+original proposal hash, full scope, rule states, bank reference and evaluation,
+then verifies the maintained manifest and official input pages. Known method
+aliases and original aim detail retain the original card identity; additional
+conditions, altered scope or unresolved wording cannot acquire this binding.
+This supplies no execution or admission authority by itself.
+`createPinnedQuestionDiscovery` accepts that private binding, derives both
+question and source identity, and reuses the verified parent. Caller dependency
+options cannot replace its card, source or scope; raw private-fixture cursors are
+not accepted as branded-question continuations.
 
 ## Public handoff to consolidate
 
