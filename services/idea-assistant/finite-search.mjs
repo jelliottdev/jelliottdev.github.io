@@ -49,7 +49,14 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
     const keys=action==='prepare-groups'?['domainId','inputVersion','groups','snapshotToken']:action==='create-groups'?['domainId','snapshotToken','groups']:action==='evidence'?['inputVersion','domainId','cursor']:action==='prepare'?['domainId','inputVersion','cases','snapshotToken']:action==='create'?['domainId','snapshotToken','cases']:['domainId','results'];
     if(!exact(body,[...keys,...(body&&Object.hasOwn(body,'authoredOrigin')?['authoredOrigin']:[])])||typeof body.domainId!=='string'||!HEX.test(body.domainId)||((action==='prepare'||creating||grouped)&&typeof body.snapshotToken!=='string')||(action==='evidence'&&body.cursor!==null&&typeof body.cursor!=='string'))return reply({error:'The declared search request changed.'},400);
    }
-   const authoredOrigin=factored?body.authoredOrigin:undefined,loadAuthoredSource=createAuthoredFiniteSourceLoader(fetcher),handleTask=taskHandler||createLocalTaskHandler({fetcher,now,loadAuthoredSource});
+   // Source verification and domain compilation share one bounded official input
+   // fetch in this HTTP request; no cross-request cache is used.
+   let officialInputs;
+   const loadOfficialInputs=()=>officialInputs||(officialInputs=(async()=>{
+    const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,20000);request.signal.addEventListener('abort',abort,{once:true});
+    try{if(request.signal.aborted)abort();let raw;const parsed=await loadInputBundle({fetcher,signal:controller.signal,read:async(response,max)=>{raw=await readFiniteJSON(response,max);return raw;}});return {raw,parsed};}finally{clearTimeout(timer);request.signal.removeEventListener('abort',abort);}
+   })());
+   const authoredOrigin=factored?body.authoredOrigin:undefined,loadAuthoredSource=createAuthoredFiniteSourceLoader(fetcher,{loadBundle:async()=> (await loadOfficialInputs()).raw}),handleTask=taskHandler||createLocalTaskHandler({fetcher,now,loadAuthoredSource});
    if(!row&&!(factored&&action==='evidence'&&authoredOrigin!==undefined))return reply({error:'Confirmed idea not found.'},404);
    let card=row?validateCard(row.card_json):null;
    if(authoredOrigin!==undefined){
@@ -61,8 +68,7 @@ export function createFiniteSearchHandler({fetcher=globalThis.fetch,now=()=>new 
    if(request.signal.aborted)return reply({error:'The request was cancelled.'},499);
    if(action==='evidence'||action==='prepare'||grouped||factored&&action==='create'){
     if((!factored&&!exact(body,action==='evidence'?['inputVersion']:['inputVersion','cases']))||!creating&&(body.inputVersion!==card.rules.inputVersion.value||card.rules.inputVersion.status!=='specified'))return reply({error:'The declared search changed.'},400);
-    const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,20000);request.signal.addEventListener('abort',abort,{once:true});
-    try{bundle=await loadInputBundle({fetcher,signal:controller.signal,read:readFiniteJSON});}finally{clearTimeout(timer);request.signal.removeEventListener('abort',abort);}
+    bundle=(await loadOfficialInputs()).parsed;
     if(request.signal.aborted)return reply({error:'The request was cancelled.'},499);
     if(factored)currentDomain=await authorizeDomain({db,card,bundle,body,proposalId,action,env,request,authoredOrigin,loadAuthoredSource});
     if(factored&&request.signal.aborted)return reply({error:'The request was cancelled.'},499);

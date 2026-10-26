@@ -97,7 +97,7 @@ export async function loadFiniteRecordPlan(ref,{raw,get,fetcher=globalThis.fetch
 
 // Explicit immutable-origin continuation only. Fresh source discovery and
 // /record-plans keep using loadFiniteRecordPlan and never consult an archive.
-export async function loadSavedFiniteRecordPlan(origin,{fetcher=globalThis.fetch,timeoutMs=20000,crypto=globalThis.crypto,signal}={}){
+export async function loadSavedFiniteRecordPlan(origin,{fetcher=globalThis.fetch,timeoutMs=20000,crypto=globalThis.crypto,signal,loadBundle}={}){
  const captured=J.capture(origin,{maxBytes:1024,maxDepth:4,maxNodes:16});
  const archivedPath=SavedSources.archivePath(captured),currentPath='experiments/records/'+captured.recordId+'/record.json';
  require(Number.isSafeInteger(timeoutMs)&&timeoutMs>=1&&timeoutMs<=20000,'Invalid saved finite source deadline.');live(signal);
@@ -108,7 +108,11 @@ export async function loadSavedFiniteRecordPlan(origin,{fetcher=globalThis.fetch
   try{const response=await request(currentPath);live(activeSignal);if(response.status!==404){raw=await read(response,LIMITS.sourceBytes);live(activeSignal);if(await digest(raw.bytes,crypto)!==captured.recordSha256)raw=null;}}catch{live(activeSignal);raw=null;}
   if(!raw)raw=await SavedSources.readSaved(captured,{request,crypto,signal:activeSignal,timeoutMs});
   live(activeSignal);
-  const plan=await loadFiniteRecordPlan(captured,{raw,fetcher,timeoutMs,crypto,signal:activeSignal});
+  // The orchestration layer may supply its request-local official fetch. Input
+  // pins and all controls are still checked below; no caller request field can
+  // provide this function or substitute an input snapshot.
+  const get=loadBundle?async(path)=>{require(path==='/data/local-run-inputs.json','Unexpected shared input path.');return {value:await loadBundle(activeSignal)};}:undefined;
+  const plan=await loadFiniteRecordPlan(captured,{raw,fetcher,timeoutMs,crypto,signal:activeSignal,...(get?{get}:{})});
   require(E.stable(plan.origin)===E.stable(captured),'The saved finite source identity changed.');live(activeSignal);return plan;
  };
  try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Saved finite source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}

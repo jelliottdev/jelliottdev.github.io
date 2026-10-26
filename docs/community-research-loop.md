@@ -90,6 +90,24 @@ page bytes match exactly. The historical case route pins the saved revision
 rather than substituting the current input snapshot. Reviewed prose records
 are not automatically imported, and no concurrent work reservations exist.
 
+## Inspect output with the right question
+
+Saved receipt links retain their original bytes. A displayed inspection link can
+carry a `fromIdea` hint; it is a navigation aid, not an association or permission.
+The task loader verifies that idea's public association before showing its source
+explanation. Only an association 404 permits a bare-output fallback. A malformed
+successful response, a service error or an explicit `idea` mismatch stays an
+error. Opening either route never starts a calculation or writes a result.
+
+Finite review shows an illustrative calculation derived from one exact compiled
+setting before Run. It uses invented input, never manuscript text. Its setting
+count and reset description come from the same method as execution.
+
+Evidence lookup and preparation share one bounded official input fetch within
+an HTTP request. The source verifier still checks exact pins and full synthetic
+controls. A new HTTP request fetches afresh; no client-provided bundle or shared
+cross-request cache grants input authority.
+
 ## Preserve the source behind saved work
 
 Published finite-source record bytes are retained at

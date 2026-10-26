@@ -23,12 +23,17 @@
   const pages=v.pages.slice().sort((a,b)=>a.id.localeCompare(b.id));
   // Validate shared geometry once and each program through the maintained engine.
   const shared=await E.prepare({title:'Validate shared finite inputs',pages,alphabet:v.alphabet,steps:[],criterion:v.criterion},crypto),programs=[],seen=new Set();
+  const base={...shared,title:'Validate finite program',taskId:'0'.repeat(64)},baseBytes=new TextEncoder().encode(E.stable(base)).byteLength;
   for(const input of v.programs){if(!exact(input,Object.hasOwn(input||{},'id')?['id','steps']:['steps']))throw Error('A program needs only its exact ordered steps and optional identity.');
-   const task=await E.prepare({title:'Validate finite program',pages:[pages[0]],alphabet:shared.alphabet,steps:input.steps,criterion:shared.criterion},crypto);
-   // Finite key lengths and reset segments depend on every declared page. Reuse
-   // the maintained validator with shared references, without retaining or
-   // hashing a repeated full-input task for each program.
-   E.validateTask({...task,pages:shared.pages});const id=await hash(protocol(v,task.steps),crypto);
+   // Every maintained transform preserves rune/separator geometry. Validate
+   // ordinary program grammar on an empty page; only finite key sufficiency
+   // depends on the complete real reset segments and needs that full geometry.
+   const task={...base,steps:input.steps,pages:Array.isArray(input.steps)&&input.steps.some(step=>step?.op==='finite-shift')?shared.pages:[{id:pages[0].id,text:''}]};
+   E.validateTask(task);
+   // Restore the exact full-task byte bound without repeatedly serializing all
+   // shared text. Only the steps array differs from the already checked base.
+   if(baseBytes+new TextEncoder().encode(E.stable(task.steps)).byteLength-2>2000000)throw Error('The task exceeds the local runner file limit.');
+   const id=await hash(protocol(v,task.steps),crypto);
    if(Object.hasOwn(input,'id')&&input.id!==id||seen.has(id))throw Error('Duplicate or changed computation protocol.');seen.add(id);programs.push({id,steps:task.steps});
   }
   programs.sort((a,b)=>a.id.localeCompare(b.id));const body={schema:output?'liberpedia-factored-finite-output-question-v1':'liberpedia-factored-finite-question-v2',...(output?{questionPolicy:output}:{}),engine:v.engine,inputVersion:v.inputVersion,alphabet:shared.alphabet,pages:shared.pages,criterion:shared.criterion,programs,totalCases:programs.length*pages.length};
