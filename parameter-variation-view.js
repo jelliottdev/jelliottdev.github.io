@@ -6,7 +6,8 @@
  const phases=new Set(['choose','previewing','review','creating','error','complete']);
  function selectionEqual(a,b){return !!a&&!!b&&a.step===b.step&&a.parameter===b.parameter&&a.value===b.value;}
  function reset(value){return ({page:'each page',line:'each line',word:'each word'})[value]||'';}
- function setting(selection,value){return selection.parameter==='unit'?(reset(value)?'Reverse runes within '+reset(value):''):selection.parameter==='direction'?({add:'Add the key values',subtract:'Subtract the key values'})[value]||'':reset(value)?'Restart the key at '+reset(value):'';}
+ function mode(value){return ({repeat:'Repeat the starting key', 'plaintext-autokey':'Use earlier decoded runes', 'ciphertext-autokey':'Use earlier original runes'})[value]||'';}
+ function setting(selection,value){return selection.parameter==='mode'?mode(value):selection.parameter==='unit'?(reset(value)?'Reverse runes within '+reset(value):''):selection.parameter==='direction'?({add:'Add the key values',subtract:'Subtract the key values'})[value]||'':reset(value)?'Restart the key at '+reset(value):'';}
  function href(value){return typeof value==='string'&&/^run\.html#(?:task=[a-f0-9]{64}(?:&idea=p_[a-f0-9]{64})?|idea=p_[a-f0-9]{64})$/.test(value)?value:'';}
  function sourceHref(value){return href(value)||typeof value==='string'&&/^run\.html#published=[a-z0-9]+(?:-[a-z0-9]+)*&case=[a-z0-9][a-z0-9-]*&revision=[a-f0-9]{64}$/.test(value)&&value||typeof value==='string'&&/^(?:library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*|run\.html#family=[a-z0-9]+(?:-[a-z0-9]+)*&case=[a-z0-9][a-z0-9-]*&revision=[a-f0-9]{64})$/.test(value)&&value||'';}
  function pageLabel(pages){
@@ -25,10 +26,10 @@
  function model(input={}){
   const choices=(Array.isArray(input.choices)?input.choices:[]).map((choice,index)=>{
    const s=choice?.selection;
-   if(!s||!Number.isInteger(s.step)||s.step<0||!['direction','reset','unit'].includes(s.parameter)||!setting(s,s.value))return null;
+   if(!s||!Number.isInteger(s.step)||s.step<0||!['direction','reset','unit','mode'].includes(s.parameter)||!setting(s,s.value))return null;
    const describe=value=>choice.op==='cumulative-difference'&&s.parameter==='reset'&&reset(value)?'Restart the running total at '+reset(value):setting(s,value);
-   return {index,selection:{...s},question:text(choice.question),reason:text(choice.reason),reading:text(choice.reading),reverseExample:s.parameter==='unit'&&reset(choice.from)&&choice.from!==s.value?{before:choice.from,after:s.value}:null,resetExample:s.parameter==='reset'&&reset(choice.from)&&choice.from!==s.value?{before:choice.from,after:s.value}:null,label:text(choice.question)||text(choice.label)||describe(s.value)+(s.parameter==='direction'?' instead':''),stepLabel:Object.hasOwn(choice,'stepLabel')?text(choice.stepLabel):'Step '+(s.step+1),before:text(choice.before)||describe(choice.from),after:text(choice.after)||describe(s.value)};
-  }).filter(Boolean).slice(0,3);
+   return {index,selection:{...s},question:text(choice.question),reason:text(choice.reason),reading:text(choice.reading),modeExample:s.parameter==='mode'&&mode(choice.from)&&choice.from!==s.value?{before:choice.from,after:s.value}:null,reverseExample:s.parameter==='unit'&&reset(choice.from)&&choice.from!==s.value?{before:choice.from,after:s.value}:null,resetExample:s.parameter==='reset'&&reset(choice.from)&&choice.from!==s.value?{before:choice.from,after:s.value}:null,label:text(choice.question)||text(choice.label)||describe(s.value)+(s.parameter==='direction'?' instead':''),stepLabel:Object.hasOwn(choice,'stepLabel')?text(choice.stepLabel):'Step '+(s.step+1),before:text(choice.before)||describe(choice.from),after:text(choice.after)||describe(s.value)};
+  }).filter(Boolean).slice(0,5);
   const selected=choices.find(c=>typeof input.selected==='number'?c.index===input.selected:selectionEqual(c.selection,input.selected))||null;
   const phase=phases.has(input.phase)?input.phase:'choose',change=input.change||{},scope=input.scope||{};
   const steps=(Array.isArray(input.steps)?input.steps:[]).filter(s=>Number.isInteger(s?.index)&&s.index>=0).filter((s,i,all)=>all.findIndex(other=>other.index===s.index)===i).map(s=>({index:s.index,label:text(s.label)||'Step '+(s.index+1)}));
@@ -55,6 +56,13 @@
   const output={word:'BA DC.\nFE HG!',line:'DC BA.\nHG FE!',page:'HG FE.\nDC BA!'};
   return '<figure class="parameter-variation-reversal"><figcaption>Example rune order</figcaption><p>Input</p><pre><code>AB CD.\nEF GH!</code></pre><div class="parameter-variation-reversal-pair">'+[['Before',example.before],['After',example.after]].map(([label,unit])=>'<div><p>'+label+' · '+esc(reset(unit))+'</p><pre><code>'+esc(output[unit])+'</code></pre></div>').join('')+'</div><p>A–H stand for eight runes. Spaces, punctuation and line breaks stay in place.</p></figure>';
  }
+ function modeIllustration(example){
+  if(!example)return '';
+  const examples={repeat:{values:[2,5],source:'From the starting key'},'plaintext-autokey':{values:[8,7],source:'From earlier decoded runes'},'ciphertext-autokey':{values:[10,12],source:'From earlier original runes'}};
+  const chips=values=>'<span class="parameter-variation-key-chips">'+values.map(value=>'<span>'+value+'</span>').join('')+'</span>';
+  const source=(label,values)=>'<div class="parameter-variation-key-source-group"><span>'+label+'</span>'+chips(values)+'</div>';
+  return '<figure class="parameter-variation-key-source"><figcaption>Example: where later key numbers come from</figcaption><div class="parameter-variation-key-equation" role="group" aria-label="Illustration: original rune numbers 10, 12 minus starting key 2, 5 produce decoded rune numbers 8, 7.">'+source('Original runes',[10,12])+'<span class="parameter-variation-key-operator" aria-hidden="true">−</span>'+source('Starting key',[2,5])+'<span class="parameter-variation-key-operator" aria-hidden="true">=</span>'+source('Decoded runes',[8,7])+'</div><div class="parameter-variation-key-source-pair">'+[['Before',example.before],['After',example.after]].map(([label,value])=>'<div><h3>'+label+' · '+esc(mode(value))+'</h3><p>'+examples[value].source+'</p><div class="parameter-variation-key-next"><span>Next key</span><span aria-hidden="true">→</span>'+chips(examples[value].values)+'</div></div>').join('')+'</div><p>Illustration only, not manuscript output. The supplied key, arithmetic and restart boundaries stay unchanged.</p></figure>';
+ }
  function render(input={}){
   const m=model(input);if(!m.choices.length&&m.phase!=='complete')return '';
   let body='<h2>'+esc(m.phase==='choose'?'Try a variation':m.selected?.question||(m.phase==='complete'?'Check ready':'Review the change'))+'</h2>';
@@ -68,7 +76,7 @@
   }else{
    body+=coverageHTML(m.coverage);
    body+=(m.selected?.reason?'<p>'+esc(m.selected.reason)+'</p>':'')+(m.change.stepLabel?'<p class="parameter-variation-step">'+esc(m.change.stepLabel)+'</p>':'');
-   body+=m.selected?.reverseExample?reverseIllustration(m.selected.reverseExample):m.selected?.question&&m.selected.resetExample?resetIllustration(m.selected.resetExample):'<dl class="parameter-variation-change"><div><dt>Before</dt><dd>'+esc(m.change.before)+'</dd></div><div><dt>After</dt><dd>'+esc(m.change.after)+'</dd></div></dl>';
+   body+=m.selected?.modeExample?modeIllustration(m.selected.modeExample):m.selected?.reverseExample?reverseIllustration(m.selected.reverseExample):m.selected?.question&&m.selected.resetExample?resetIllustration(m.selected.resetExample):'<dl class="parameter-variation-change"><div><dt>Before</dt><dd>'+esc(m.change.before)+'</dd></div><div><dt>After</dt><dd>'+esc(m.change.after)+'</dd></div></dl>';
    body+='<p class="parameter-variation-scope">Applies to the full original calculation'+(m.scope.pages?': <strong>'+esc(m.scope.pages)+'</strong>':'.')+'</p>';
    const same=[m.selected?.selection.parameter!=='unit'&&m.scope.key&&[m.scope.keyLabel,m.scope.key],m.scope.comparison&&['Comparison',m.scope.comparison]].filter(Boolean);
    if(same.length)body+='<dl class="parameter-variation-same">'+same.map(([label,value])=>'<div><dt>'+esc(label)+' · unchanged</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl>';

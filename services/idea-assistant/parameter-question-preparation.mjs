@@ -2,6 +2,7 @@
  * No new execution authority. Mismatched plans never expose their admission token. */
 import E from '../../local-experiment.js';
 import J from '../../finite-json.js';
+import Variants from '../../task-parameter-variants.js';
 import C from '../../claim-specification.js';
 import {validateCard} from './idea-relations.mjs';
 import {resolveParameterQuestion} from './parameter-question-source.mjs';
@@ -92,7 +93,7 @@ export function createParameterQuestionPreparationHandler(options={}){
   try{
    const body=await readJSON(request,65536,controller.signal),hasSettings=!!body&&Object.hasOwn(body,'parentSettings');
    ensure(body&&typeof body==='object'&&!Array.isArray(body)&&Object.keys(body).length===(hasSettings?4:3)&&['source','selection','childProposalId'].every(k=>Object.hasOwn(body,k))&&typeof body.childProposalId==='string'&&PROPOSAL.test(body.childProposalId),'Malformed preparation request');
-   const choice=body.selection;ensure(choice&&typeof choice==='object'&&!Array.isArray(choice)&&Object.keys(choice).length===4&&['version','step','parameter','value'].every(k=>Object.hasOwn(choice,k))&&choice.version===1&&Number.isInteger(choice.step)&&choice.step>=0&&choice.step<8&&['direction','reset','unit'].includes(choice.parameter)&&(choice.parameter==='direction'?['add','subtract']:['page','line','word']).includes(choice.value),'Malformed preparation request');bodyChecked=true;
+   const choice=Variants.selection(body.selection);ensure(choice.step<8,'Malformed preparation request');bodyChecked=true;
    const clientIP=request.headers.get('CF-Connecting-IP')||'unknown';
    if(!(await rate.limit({key:clientIP}))?.success)return reply({error:'Please wait before trying again.'},429);
    const result=await prepare(body,{...options,db:env.PROPOSALS,env,clientIP,signal:controller.signal});

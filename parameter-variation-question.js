@@ -22,6 +22,9 @@
    if(s.parameter==='unit'){
     question='What if we reverse the runes within '+where[s.value]+'?';
     reason=s.value==='word'?'Reverse each uninterrupted group of runes separately. Spaces, punctuation and line breaks stay in place.':s.value==='line'?'Reverse the rune order across each line, including across word gaps. Spaces, punctuation and line breaks stay in place.':'Reverse the rune order across the whole page, including across lines and word gaps. Spaces, punctuation and line breaks stay in place.';
+   }else if(s.parameter==='mode'){
+    question=s.value==='repeat'?'What if we keep repeating the starting key?':s.value==='plaintext-autokey'?'What if decoded runes supply the later key numbers?':'What if original runes supply the later key numbers?';
+    reason=s.value==='repeat'?'After the supplied key ends, use its starting numbers again in the same order.':s.value==='plaintext-autokey'?'After the supplied key ends, continue with the numbers of runes this step has already decoded, in order. Decoded here means calculated output, not confirmed readable text.':'After the supplied key ends, continue with the numbers of runes this step has already read, in order. Original here means this step’s input, after any earlier steps.';
    }else if(s.parameter==='direction'){
     question='What if we '+(s.value==='add'?'add':'subtract')+' the key values?';
     if(step.op==='finite-shift')reason=(s.value==='add'?'Add the same number sequence to':'Subtract the same number sequence from')+' rune positions, without repeating it within a segment.';
