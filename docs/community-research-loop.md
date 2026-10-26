@@ -582,3 +582,20 @@ can go straight to the existing choice between row order and number digits.
 Conditional, negative and compound wording must not acquire a simpler method.
 A chosen operation uses its canonical label through sharing and compilation;
 the original ambiguous wording remains provenance, never the active meaning.
+
+## Saved fixed-source continuity
+
+Fixed follow-ups use the same exact-byte archive as finite families. Saved
+explanations recover the original record and protocol; current prose cannot
+replace their pinned wording. An already issued evidence-bound remainder can
+finish from that source after the current recipe changes or disappears.
+
+The current-only plan loader and explicit saved-origin loader share the full
+card, official-input and synthetic-control validator. Archive recovery is not
+fresh admission authority: new record discovery, new source preparation and
+direct origin submissions remain current-only. Changed official manuscript
+inputs still reject continuation rather than silently rebinding old work.
+
+All 19 current fixed declarations are covered by the archive and a software
+regression that checks source replacement/removal and input/pin rejection.
+These checks execute synthetic controls, never manuscript calculations.

@@ -1,0 +1,4204 @@
+{
+  "id": "wulfic-autokey-seed-families",
+  "status": "published",
+  "title": "Short seeds for autokey ciphers",
+  "reader_title": "Can earlier runes extend a short starting key?",
+  "reader_intro": "Tries named words and two- or three-rune starting keys that grow using earlier encrypted or recovered runes, plus a separate four-rune key spelling DEOR, not the text of the Old English poem.",
+  "reader_test": {
+    "input": "Archived rune text on LP2-04 through LP2-37, with three-rune starting keys tested on 31 eligible pages and the distinct four-rune DEOR key on LP2-04 through LP2-13.",
+    "action": "Try named words and every two- or three-rune starting key, plus one four-rune DEOR key, extending each key with earlier recovered or encrypted runes and restarting it on each page.",
+    "check": "Except for four-rune DEOR, single-rune words must become I or A before the whole-page rune-frequency test; a candidate must pass that fixed frequency threshold."
+  },
+  "question": "Do the pinned source keyword, two-rune, or three-rune autokey seeds pass their one-rune and IoC screens on the selected LP2 pages?",
+  "reader_question": "Could a short word or rune seed drive an autokey cipher?",
+  "summary": "Four related archived search branches were replayed on verified LP2 page streams. None passed the source-defined hit screen; the gate and ciphertext-feedback design sharply limit what that result can exclude.",
+  "finding": "Across the four source branches, zero manuscript outputs passed their strict IoC > 1.3 hit threshold. The 4,488 named-keyword settings had 135 one-rune-compatible cases; 171,564 two-rune settings had 5,058; 4,536,354 three-rune settings had none on 31 source-eligible pages. The distinct four-rune DEOR vector gave zero hits among 60 IoC-only settings. A planted reading-like control passed in all six feedback modes.",
+  "limitations": "The source requires visible one-rune words to decode to I or A, which assumes this word segmentation and language. Ciphertext-feedback seeds alter only their own short output prefix, so the whole-page screen cannot reliably identify those seeds. Forty-nine full-search shuffles are coarse controls, not a cipher model. Other seed lengths, pages, boundaries and autokey rules remain untested.",
+  "next_steps": "Predeclare a seed-specific prediction of a longer passage or independently measurable feature, then check it on held-out pages without selecting another favorable key afterward.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "autokey",
+    "feedback",
+    "keywords",
+    "seed search",
+    "index of coincidence",
+    "plaintext autokey",
+    "ciphertext autokey"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-autokey-seed-families/inputs.json",
+      "experiments/records/wulfic-autokey-seed-families/plan.json"
+    ],
+    "representation": "Pinned archived source GP29 page values verified against current LP2-04–37 text; source pages old21–54 map to LP2-(old−17). Source isolated-word positions retained.",
+    "procedure": "Replay six GP29 plaintext/ciphertext feedback recurrences for 22 source keyword seeds, every two-rune seed, every three-rune seed on source-eligible pages, and the one distinct four-rune P21–30 DEOR array. Preserve source gates, strict IoC threshold and page resets; compare 49 full-search shuffles.",
+    "parameters": "4,488 named-keyword, 171,564 two-rune, 4,536,354 three-rune, and 60 distinct P21–30 DEOR settings; 49 within-page shuffled complete searches, seed 20261023.",
+    "exclusions": "Other seeds or lengths, alternate alphabets, word resets and segmentations, different singleton assumptions, English scoring, the P21–30 running-key/double-layer branches, and manuscript-derived numerical autokey rules without an exact recurrence."
+  },
+  "review": {
+    "kind": "pinned archived-source replay with sampled original-function parity and full-search shuffle controls",
+    "retested_on": "2026-10-23",
+    "reviewer": "Original-function parity on sampled decodes and full small grids; independent scalar reconstruction of every saved winner, input hash, and control comparison.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-autokey-seed-families/check.py && python experiments/records/wulfic-autokey-seed-families/plot.py --check && python experiments/records/wulfic-autokey-seed-families/run.py --check",
+    "environment": "Python 3 with NumPy and Numba. Optional source_parity.py and gate_check.py require a local checkout of the pinned upstream commit; the replay uses bundled verified inputs.",
+    "script": "experiments/records/wulfic-autokey-seed-families/check.py",
+    "script_sha256": "812a9c7a72aba79661a860bae641abda18632c1b0142ba33d9e8f9e6869009b3",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/plan.json",
+        "sha256": "13bbbc6967d1a8fd95fb29dabb0a0f23b2237c48f4561283115f999fb09d160f"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/inputs.json",
+        "sha256": "f7abcda2e6ccfb1d264f4573ce917086dc632943379316f1f1b84b488ced02b2"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/snapshot_inputs.py",
+        "sha256": "a17a7a7a67ce9c1838f5b9cae787e19b188d7d4cda03f7b75869960b92eefeab"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/gate_check.py",
+        "sha256": "6e31924427d785136559dd0801a4501d09c336309f5cc20afc32bae06618e9f1"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/engine.py",
+        "sha256": "a5f4b6bc8c67408806ab96d641e98deb95a080924a27dfd04ceafe63f5f859f0"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/run.py",
+        "sha256": "a1d5bf29b2d9ab4521e5ca1ab1ac942bcd5986c06c4ec8b534ccb9bba65587b6"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/source_parity.py",
+        "sha256": "6dc2a99cc9ae36d336ff18b110972806eecebc078449f8c5b7d4909aaa853617"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/check.py",
+        "sha256": "812a9c7a72aba79661a860bae641abda18632c1b0142ba33d9e8f9e6869009b3"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/plot.py",
+        "sha256": "cdc42c45e1ac8c179207f842b095d967f8b9f2bf0ce3caea02970685ce25bc87"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/make_record.py",
+        "sha256": "3ec105a1d86572b30bf4dcd05c81c36ed523e9523afff1c496757f1f17fe190a"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/article.md",
+        "sha256": "844cc7a4c072a83e70137ca57729bbaa7e4a2f314a2a01c9342b8e28d227e1ed"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/results.json",
+        "sha256": "26423fe86f670d17f63237010cea19e11e72100962088d7137717b2e741b7ee5"
+      },
+      {
+        "path": "experiments/records/wulfic-autokey-seed-families/screen.svg",
+        "sha256": "f6791a2e81408c795314a1ef7a714186a517e6d55a88675ce8907bb092890b80"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-autokey-seed-families/screen.svg",
+      "caption": "One row per source-defined branch: searched settings, one-rune-compatible settings and hits. The P21–30 variant has no one-rune gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned archived autokey_comprehensive.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/autokey_comprehensive.py"
+    },
+    {
+      "label": "Pinned archived p21_30_autokey_solver.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_autokey_solver.py"
+    }
+  ],
+  "related": [
+    "public-multihistory-feedback",
+    "feedback-opening-census",
+    "cumulative-autokey-literal"
+  ],
+  "browser_followups": [
+    {
+      "id": "deor-plaintext-subtract-warning",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then let earlier decoded runes supply the values subtracted from later manuscript runes. Extend its ten-page check to 45 omitted pages. Compare the first 12 outputs with the opening of Warning, an already decoded passage; a match would not establish a complete reading.",
+      "title": "Use decoded runes to keep decoding: subtract their values",
+      "question": "Does the source four-index DEOR seed with plaintext feedback (subtract) recover the fixed 12-rune Warning opening on the 45 omitted pages?",
+      "scope_change": "Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.",
+      "limitation": "This tests only the declared Warning opening, not a complete reading or a general autokey claim. Other seeds and openings remain separate. Each page starts afresh; headings remain included and non-rune separators are preserved. No interruptions or key-position skips are allowed. A different three-rune DEOR key was tested elsewhere; these settings use the source’s four-rune key.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 12-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "plaintext_autokey",
+                "key": [
+                  23,
+                  18,
+                  3,
+                  4
+                ],
+                "direction": "subtract",
+                "reset": "page"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "page"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: deor-plaintext-subtract-warning",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᛖ-ᚫᛡᚻᚱᛠ.ᛇᛟᚠᚦᚷᛗᚾ-ᛗᛝᚩᛁ-ᚾᚹᚳᛄ-/\nᚦᛉᛖ-ᚹᚳᛈᛚ.ᚷᛒᚻᛞᚦᚢ-ᛇᚣᚻᚩ-ᚱᛄᚫ/\n-ᛝᚷᚷᚻ-ᛝᛇ-ᛚᚫ-ᚩᚹᛖᚹ.ᚩᛟᛏᚳ-ᛖᚹ-ᛚ/\nᚫᚳᚫᚫᛡᚣᛈᚾ.ᛖᚱᛋᛇ-ᚣᛈᛁᛡ-ᛈᚹᚦᚷ.ᚳᛖ/\nᛉᛚᛟᚪᚦᛡᚾᛠ-ᛋᛇᚷᛟ-ᛚᚦᚩ.ᛡᚣ-ᚻᚳᛁ-ᛝᚩᛈᚩ-ᛝ/\nᛡ-ᛋᚪᛡᚫᛞ-ᛁᚳᚹ-ᚷᚳᛈᛚ.ᛚᚹ-ᚳᛞ-ᛟᛟᛒᚱᛉᚪᚱ-/\nᛚᛡᛋᚳᚠᛈᛖᚳᛖ-ᛒᛗᛚᚱᛏ.ᛠᛇᛇᛡᛟ-ᛇᛚ-ᚫᚹ/\nᚷᛇᛟ-ᚷᚻ-ᚫᚱᛈᚻ-ᛄᛗᚠᛝᛡᚳᚳ.ᛒᛝᚻ-ᛁᛚᛞ-ᛉ/\nᛁ-ᚷᛋᛋᛗᚱᛖ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                18,
+                3,
+                4
+              ],
+              "mode": "plaintext-autokey",
+              "direction": "subtract",
+              "reset": "page"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1
+            ]
+          },
+          "taskId": "3bf78290dc64c354b3c427cdf45973df29a81ac6f7bf7b9b2a3b3002a61bebd0"
+        },
+        "expected_result_sha256": "b534821deb35e0ae9603f5a4e52e6b3c9aad021823c0767117ac4c12a7b6dc43"
+      }
+    },
+    {
+      "id": "deor-plaintext-add-warning",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then let earlier decoded runes supply the values added to later manuscript runes. Extend its ten-page check to 45 omitted pages. Compare the first 12 outputs with the opening of Warning, an already decoded passage; a match would not establish a complete reading.",
+      "title": "Use decoded runes to keep decoding: add their values",
+      "question": "Does the source four-index DEOR seed with plaintext feedback (add) recover the fixed 12-rune Warning opening on the 45 omitted pages?",
+      "scope_change": "Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.",
+      "limitation": "This tests only the declared Warning opening, not a complete reading or a general autokey claim. Other seeds and openings remain separate. Each page starts afresh; headings remain included and non-rune separators are preserved. No interruptions or key-position skips are allowed. A different three-rune DEOR key was tested elsewhere; these settings use the source’s four-rune key.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 12-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "plaintext_autokey",
+                "key": [
+                  23,
+                  18,
+                  3,
+                  4
+                ],
+                "direction": "add",
+                "reset": "page"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "page"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: deor-plaintext-add-warning",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᚢ-ᛖᛝᚠᛉᛉ.ᛟᛉᛄᛖᚢᛇᛡ-ᛠᛉᚢᚩ-ᛚᚢᚢᛡ-/\nᚦᚷᛇ-ᛡᚢᛟᛗ.ᚢᛄᚦᛈᚪᚦ-ᚦᛗᛄᚠ-ᛗᚪᚷ/\n-ᛖᛇᚠᚷ-ᛄᛞ-ᛉᛄ-ᚠᚢᛈᚠ.ᚠᛉᛉᛡ-ᛋᚠ-ᛗ/\nᛟᚢᛖᛋᚾᛚᛠᛡ.ᛄᛏᚩᚳ-ᚣᛟᛝᛁ-ᛗᚢᚠᛡ.ᚦᛁ/\nᛇᛏᛋᚫᚳᛚᚢᚻ-ᚻᛞᚫᛋ-ᚣᚫᚢ.ᛗᚾ-ᛁᚢᛟ-ᛋᛉᚹᚠ-ᛉ/\nᛁ-ᚪᛝᛝᛒᛈ-ᛞᛋᛞ-ᛠᚢᛟᛗ.ᛋᚢ-ᛠᛈ-ᛏᛉᛈᚣᚳᛒᚩ-/\nᛗᚻᚩᛡᛗᚹᚠᚦᛠ-ᚣᚢᛈᛏᚦ.ᚻᚻᛝᚾᛋ-ᛝᛏ-ᛖᛠ/\nᚦᚳᚻ-ᚠᚠ-ᚻᚩᚹᚠ-ᚹᛇᚾᛈᚾᚩᚫ.ᛇᛉᚠ-ᚾᛚᛒ-ᚷ/\nᛚ-ᚪᚱᚪᛖᚩᛠ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                18,
+                3,
+                4
+              ],
+              "mode": "plaintext-autokey",
+              "direction": "add",
+              "reset": "page"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1
+            ]
+          },
+          "taskId": "61ca38dabf7b2a18cf1e9757da81599d5ba97da763900af3c6ed8428dd68b7f4"
+        },
+        "expected_result_sha256": "df58d7d33bbb5d74f1669228ddb7f2430fcf8019f5295694978399866492f1f9"
+      }
+    },
+    {
+      "id": "deor-plaintext-beaufort-warning",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then let earlier decoded runes supply the later decoding values. Subtract the current manuscript value from the supplied value, reversing the other subtraction check. Try the 45 pages omitted earlier; compare the first 12 outputs with the opening of Warning, an already decoded passage.",
+      "title": "Use decoded runes to keep decoding: reverse the subtraction",
+      "question": "Does the source four-index DEOR seed with plaintext feedback (beaufort) recover the fixed 12-rune Warning opening on the 45 omitted pages?",
+      "scope_change": "Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.",
+      "limitation": "This tests only the declared Warning opening, not a complete reading or a general autokey claim. Other seeds and openings remain separate. Each page starts afresh; headings remain included and non-rune separators are preserved. No interruptions or key-position skips are allowed. A different three-rune DEOR key was tested elsewhere; these settings use the source’s four-rune key.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 12-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "affine",
+                "a": 28,
+                "b": 0
+              },
+              {
+                "id": "plaintext_autokey",
+                "key": [
+                  23,
+                  18,
+                  3,
+                  4
+                ],
+                "direction": "add",
+                "reset": "page"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "page"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: deor-plaintext-beaufort-warning",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᛠ-ᛄᚻᚠᛋᛋ.ᚹᛋᛖᛄᛠᛒᚦ-ᚢᛋᛠᚣ-ᚾᛠᛠᚦ-/\nᛡᛞᛒ-ᚦᛠᚹᛁ.ᛠᛖᛡᛏᚳᛡ-ᛡᛁᛖᚠ-ᛁᚳᛞ/\n-ᛄᛒᚠᛞ-ᛖᚷ-ᛋᛖ-ᚠᛠᛏᚠ.ᚠᛋᛋᚦ-ᛉᚠ-ᛁ/\nᚹᛠᛄᛉᛚᚾᚢᚦ.ᛖᛈᚣᚪ-ᚩᚹᚻᛗ-ᛁᛠᚠᚦ.ᛡᛗ/\nᛒᛈᛉᚱᚪᚾᛠᛝ-ᛝᚷᚱᛉ-ᚩᚱᛠ.ᛁᛚ-ᛗᛠᚹ-ᛉᛋᛟᚠ-ᛋ/\nᛗ-ᚳᚻᚻᛇᛏ-ᚷᛉᚷ-ᚢᛠᚹᛁ.ᛉᛠ-ᚢᛏ-ᛈᛋᛏᚩᚪᛇᚣ-/\nᛁᛝᚣᚦᛁᛟᚠᛡᚢ-ᚩᛠᛏᛈᛡ.ᛝᛝᚻᛚᛉ-ᚻᛈ-ᛄᚢ/\nᛡᚪᛝ-ᚠᚠ-ᛝᚣᛟᚠ-ᛟᛒᛚᛏᛚᚣᚱ.ᛒᛋᚠ-ᛚᚾᛇ-ᛞ/\nᚾ-ᚳᚫᚳᛄᚣᚢ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "affine",
+              "a": 28,
+              "b": 0
+            },
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                18,
+                3,
+                4
+              ],
+              "mode": "plaintext-autokey",
+              "direction": "add",
+              "reset": "page"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1
+            ]
+          },
+          "taskId": "18f0815c64d023c98c7b8d2ef557582d7cbda5619f1cf8f28f5a153869f7959a"
+        },
+        "expected_result_sha256": "97d64e1fb979fa95bb25426dbad0d712365b891fbc39b78f455385ee57ead324"
+      }
+    },
+    {
+      "id": "deor-ciphertext-subtract-warning",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then subtract earlier original manuscript values from later runes. Use original values, not decoding output. Extend its ten-page check to 45 omitted pages; compare the first 12 outputs with the opening of Warning, an already decoded passage.",
+      "title": "Use earlier manuscript runes to keep decoding: subtract their values",
+      "question": "Does the source four-index DEOR seed with ciphertext feedback (subtract) recover the fixed 12-rune Warning opening on the 45 omitted pages?",
+      "scope_change": "Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.",
+      "limitation": "This tests only the declared Warning opening, not a complete reading or a general autokey claim. Other seeds and openings remain separate. Each page starts afresh; headings remain included and non-rune separators are preserved. No interruptions or key-position skips are allowed. A different three-rune DEOR key was tested elsewhere; these settings use the source’s four-rune key.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 12-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "ciphertext_autokey",
+                "key": [
+                  23,
+                  18,
+                  3,
+                  4
+                ],
+                "direction": "subtract",
+                "reset": "page"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "page"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: deor-ciphertext-subtract-warning",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᛖ-ᚫᛡᚻᛡᛒ.ᛋᚣᛖᛡᚱᛡᚹ-ᚹᚹᚠᛠ-ᚹᛄᚩᛖ-/\nᚾᛝᛖ-ᚷᛇᚪᛞ.ᚪᚣᚠᛇᚻᛈ-ᚹᛚᚩᚠ-ᚱᛞᚱ/\n-ᚳᛈᚣᛄ-ᛝᛏ-ᛉᚠ-ᚻᛚᛋᛖ.ᚪᚾᚢᚳ-ᚣᛡ-ᚷ/\nᛉᚠᚳᚣᚩᛞᛄᛋ.ᚩᚱᛚᚾ-ᚠᚹᛝᛈ-ᛏᛄᛟᛋ.ᚳᚫ/\nᚷᚱᚾᚷᚪᛈᛉᚪ-ᛝᛏᛋᛠ-ᛋᛋᛒ.ᛟᛖ-ᚪᛚᚾ-ᚹᛖᚢᚫ-ᛁ/\nᛟ-ᚷᚱᚳᛉᚪ-ᚷᛋᚠ-ᛇᚾᛖᚳ.ᛋᛈ-ᛚᛞ-ᚳᚦᚷᚾᚠᚻᚪ-/\nᛉᚩᛒᛄᚾᛈᚣᚠᚩ-ᛚᚹᚦᛈᚠ.ᚫᛇᛋᛖᚠ-ᛉᚱ-ᚫᚩ/\nᛖᛡᛄ-ᚷᛟ-ᚠᚠᛏᚣ-ᚾᚢᚷᛉᛡᚳᛝ.ᛉᚢᚾ-ᛏᚳᛝ-ᛗ/\nᚦ-ᛚᛏᚪᚷᚾᛁ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                18,
+                3,
+                4
+              ],
+              "mode": "ciphertext-autokey",
+              "direction": "subtract",
+              "reset": "page"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1
+            ]
+          },
+          "taskId": "3291b20ad1b8cb8005a840fdce7aa64e683e125e09d9c0442163da366d2eaf82"
+        },
+        "expected_result_sha256": "024d99dfdc6e018582ee6d8d32060805533afd888d0a7128ab97a069af0a000f"
+      }
+    },
+    {
+      "id": "deor-ciphertext-add-warning",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then add earlier original manuscript values to later runes. Use original values, not decoding output. Extend its ten-page check to 45 omitted pages; compare the first 12 outputs with the opening of Warning, an already decoded passage.",
+      "title": "Use earlier manuscript runes to keep decoding: add their values",
+      "question": "Does the source four-index DEOR seed with ciphertext feedback (add) recover the fixed 12-rune Warning opening on the 45 omitted pages?",
+      "scope_change": "Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.",
+      "limitation": "This tests only the declared Warning opening, not a complete reading or a general autokey claim. Other seeds and openings remain separate. Each page starts afresh; headings remain included and non-rune separators are preserved. No interruptions or key-position skips are allowed. A different three-rune DEOR key was tested elsewhere; these settings use the source’s four-rune key.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 12-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "ciphertext_autokey",
+                "key": [
+                  23,
+                  18,
+                  3,
+                  4
+                ],
+                "direction": "add",
+                "reset": "page"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "page"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: deor-ciphertext-add-warning",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᚢ-ᛖᛝᚠᚻᚩ.ᚫᛖᛇᚹᛟᛇᚷ-ᚦᛁᛗᛋ-ᛡᛞᛈᚱ-/\nᚱᛏᚦ-ᛈᛠᛏᚩ.ᚳᛋᛖᛋᚻᚢ-ᛖᛟᛏᛋ-ᚻᛁᛉ/\n-ᛗᚢᛟᛟ-ᚣᚦ-ᚪᚫ-ᛗᚦᚷᛟ.ᚣᛏᚾᛞ-ᚳᚦ-ᚫ/\nᛋᛡᚳᚪᚩᚫᚢᛞ.ᚣᛉᚻᚠ-ᚠᛖᛟᚱ-ᛏᛋᚻᛡ.ᚦᛠ/\nᚳᛚᚦᛄᛈᛖᚩᚹ-ᛈᛉᛡᚣ-ᛁᛉᚱ.ᚣᛟ-ᚪᛠᛗ-ᚫᛠᛄᚣ-ᚹ/\nᚳ-ᛞᛄᛒᛏᚪ-ᛚᛟᛠ-ᛟᛇᛁᚷ.ᛁᛝ-ᛝᛇ-ᚾᚣᛞᚩᛋᚾᚪ-/\nᚦᛒᚠᛝᛟᛟᚾᚣᚢ-ᛉᚢᚳᚾᚪ.ᛒᚳᛟᛞᛏ-ᚣᚫ-ᛈᛏ/\nᚹᛡᚦ-ᛏᚣ-ᚱᛏᛞᚹ-ᚳᛉᚫᛁᛈᛗᛗ.ᛗᛗᛉ-ᚳᚢᚢ-ᚫ/\nᛁ-ᛉᛞᚾᛞᚱᚠ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                18,
+                3,
+                4
+              ],
+              "mode": "ciphertext-autokey",
+              "direction": "add",
+              "reset": "page"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1
+            ]
+          },
+          "taskId": "8db0817c43192c4d538aeb2d4352073bad0df90002cd47a14770af044dceaedd"
+        },
+        "expected_result_sha256": "344e772dd58e2031f3577c61d5b8b2ce047ac7e0890cfe2e5f81893723c4ceff"
+      }
+    },
+    {
+      "id": "deor-ciphertext-beaufort-warning",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then let earlier original manuscript values supply later decoding values. Subtract the current manuscript value from the supplied value, reversing the other subtraction check. Try the 45 pages omitted earlier; compare the first 12 outputs with the opening of Warning, an already decoded passage.",
+      "title": "Use earlier manuscript runes to keep decoding: reverse the subtraction",
+      "question": "Does the source four-index DEOR seed with ciphertext feedback (beaufort) recover the fixed 12-rune Warning opening on the 45 omitted pages?",
+      "scope_change": "Extend the distinct four-rune DEOR seed beyond its original LP2-04–13 scope, to the other 45 rune pages. This tests a fixed opening rather than the earlier frequency screen.",
+      "limitation": "This tests only the declared Warning opening, not a complete reading or a general autokey claim. Other seeds and openings remain separate. Each page starts afresh; headings remain included and non-rune separators are preserved. No interruptions or key-position skips are allowed. A different three-rune DEOR key was tested elsewhere; these settings use the source’s four-rune key.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 12-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "ciphertext_autokey",
+                "key": [
+                  23,
+                  18,
+                  3,
+                  4
+                ],
+                "direction": "subtract",
+                "reset": "page"
+              },
+              {
+                "id": "affine",
+                "a": 28,
+                "b": 0
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "page"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: deor-ciphertext-beaufort-warning",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᛠ-ᛄᚻᚠᛗᛗ.ᛚᛄᛠᚾᚦᛁᛁ-ᚠᛠᚻᛖ-ᚠᚪᚳᛠ-/\nᛡᛉᛗ-ᛄᚪᛄᛉ.ᛟᛁᚷᚫᚾᛞ-ᛠᛒᛉᚹ-ᚦᛉᛈ/\n-ᚦᛟᛄᚷ-ᛋᛗ-ᛞᛒ-ᛠᛋᛟᛠ.ᛇᚣᚹᛇ-ᛁᚻ-ᚦ/\nᚩᚹᚢᛄᛉᛈᚪᛟ.ᛉᚩᛋᛠ-ᛒᚠᛉᚪ-ᚢᚫᛈᛟ.ᛇᛄ/\nᚠᚱᚻᚢᛄᚪᚩᛇ-ᛉᛝᚦᚻ-ᛚᛟᚠ.ᛉᛒ-ᛈᚣᛡ-ᛠᛗᛏᛄ-ᚫ/\nᛋ-ᛄᚩᚢᛞᛟ-ᚢᛚᚻ-ᚳᛡᛒᚩ.ᚦᛞ-ᛋᛉ-ᛇᚳᚠᛠᛒᛠᛄ-/\nᛞᛉᛗᚪᛠᚱᛁᚷᚳ-ᚣᚠᚱᚪᛒ.ᛄᛞᛟᛠᚹ-ᛝᚱ-ᛝᚱ/\nᛒᛁᚷ-ᚢᛈ-ᚻᛒᛚᚾ-ᛠᛏᚢᛝᛁᛇᛋ.ᛝᚹᚻ-ᛚᚢᛏ-ᛡ/\nᚳ-ᛋᛝᛟᚢᚣᛡ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                18,
+                3,
+                4
+              ],
+              "mode": "ciphertext-autokey",
+              "direction": "subtract",
+              "reset": "page"
+            },
+            {
+              "op": "affine",
+              "a": 28,
+              "b": 0
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1
+            ]
+          },
+          "taskId": "7af5e6479ce09e386a397cb71cdae6c7d6a28aff5642c411ed9e4ca76f8539bb"
+        },
+        "expected_result_sha256": "3bfd2ffd99d1dc5f85e609102d1acb08b050b9e3f18675a6e4c469ca0ab2b180"
+      }
+    },
+    {
+      "id": "divinity-plaintext-word-reset-warning24",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then subtract earlier decoded values from later runes. Restart the pattern at each word instead of each page; punctuation, slashes and line breaks also cause restarts. On four pages, compare the first 24 outputs with the opening of Warning, an already decoded passage.",
+      "title": "Restart each word, then use decoded runes to keep decoding",
+      "question": "Does DIVINITY-seeded plaintext autokey, restarted at each transcription word, recover the fixed 24-rune Warning opening on the four declared pages?",
+      "scope_change": "Change the source DIVINITY autokey from page resets to a newly specified reset at every non-rune character. Limit the check to LP2-16, LP2-27, LP2-32 and LP2-35, whose first 24 runes enter feedback within a word longer than the eight-index seed. This differs from FH3, which repeats a key after its seed rather than feeding back plaintext or ciphertext.",
+      "limitation": "A match concerns only this 24-rune opening, not a complete reading or other seeds. On LP2-32 and LP2-35 the first 12 outputs are equivalent to repeating-key word reset; the feedback distinction enters later. FH3 used English scores rather than a failed exact Warning-prefix criterion. Headings remain included; no interruptions, phase search or cross-word history is allowed.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 24-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "plaintext_autokey",
+                "key": [
+                  23,
+                  10,
+                  1,
+                  10,
+                  9,
+                  10,
+                  16,
+                  26
+                ],
+                "direction": "subtract",
+                "reset": "word"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-16",
+              "lp2-27",
+              "lp2-32",
+              "lp2-35"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1,
+                18,
+                9,
+                3,
+                2,
+                21,
+                0,
+                4,
+                3,
+                19,
+                2,
+                10,
+                15
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "word"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: divinity-plaintext-word-reset-warning24",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᛖ-ᚢᚳᚳᛗᚢ.ᛄᛠᛝᛚᛡᛄᚳ-ᚩᛈᚩᚦ-ᛞᛉᚱᚠ-/\nᚫᛚᛏ-ᛄᛈᚱᛋ.ᛇᚪᚷᛠᛟᚣ-ᚢᛖᚫᚣ-ᛚᛈᚦ/\n-ᛠᛗᚱᛒ-ᛁᛈ-ᛄᛠ-ᛁᛉᚦᛠ.ᛁᛠᛏᚣ-ᚫᛠ-ᛠ/\nᚩᛈᚻᚢᛡᚱᛟᛋ.ᛞᛚᛁᚱ-ᛚᛈᚦᛉ-ᛁᛉᚦᛇ.ᛇᚪ/\nᚹᛠᚳᛚᛡᛗᛝᛋ-ᛚᛈᚦᛉ-ᛒᚾᚩ.ᛒᛈ-ᚩᛈᛒ-ᛇᚱᛄᚣ-ᚣ/\nᛡ-ᛠᛖᚫᚦᛡ-ᚫᛚᛏ-ᛄᛈᚱᛋ.ᚣᛉ-ᚫᛠ-ᛈᛠᛏᚫᚱᛏᚳ-/\nᛠᛈᛁᚣᚱᛚᚫᛋᛠ-ᚢᛚᚩᛚᛖ.ᛇᛚᚩᛠᛈ-ᚫᛠ-ᚢᛈ/\nᛡᚱᛏ-ᚣᛉ-ᚫᛠᛄᛉ-ᚩᛄᛚᛡᛡᛉᚦ.ᛞᛈᚳ-ᛖᚢᛝ-ᚱ/\nᚾ-ᚾᚳᚷᛉᛡᚱ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                10,
+                1,
+                10,
+                9,
+                10,
+                16,
+                26
+              ],
+              "mode": "plaintext-autokey",
+              "direction": "subtract",
+              "reset": "word"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1,
+              18,
+              9,
+              3,
+              2,
+              21,
+              0,
+              4,
+              3,
+              19,
+              2,
+              10,
+              15
+            ]
+          },
+          "taskId": "b15768de422945c10a53c3df92723dbcad764196e56dcab19bf9b368ba1fd908"
+        },
+        "expected_result_sha256": "ef89e76b9d3f9237a2a5d05490094610f383c8d716bec02b284db26bfa5aa612"
+      }
+    },
+    {
+      "id": "divinity-ciphertext-word-reset-warning24",
+      "motivation": "Use the earlier proposal’s starting pattern to change successive rune numbers, then subtract earlier original manuscript values from later runes. Use original values, not decoding output. Restart at each word instead of each page; punctuation, slashes and line breaks also cause restarts. On four pages, compare the first 24 outputs with the opening of Warning, an already decoded passage.",
+      "title": "Restart each word, then use earlier manuscript runes to keep decoding",
+      "question": "Does DIVINITY-seeded ciphertext autokey, restarted at each transcription word, recover the fixed 24-rune Warning opening on the four declared pages?",
+      "scope_change": "Change the source DIVINITY autokey from page resets to a newly specified reset at every non-rune character. Limit the check to LP2-16, LP2-27, LP2-32 and LP2-35, whose first 24 runes enter feedback within a word longer than the eight-index seed. This differs from FH3, which repeats a key after its seed rather than feeding back plaintext or ciphertext.",
+      "limitation": "A match concerns only this 24-rune opening, not a complete reading or other seeds. On LP2-32 and LP2-35 the first 12 outputs are equivalent to repeating-key word reset; the feedback distinction enters later. FH3 used English scores rather than a failed exact Warning-prefix criterion. Headings remain included; no interruptions, phase search or cross-word history is allowed.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Test only the fixed 24-rune Warning opening under the declared hypothesis; a match is not a complete decipherment."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "ciphertext_autokey",
+                "key": [
+                  23,
+                  10,
+                  1,
+                  10,
+                  9,
+                  10,
+                  16,
+                  26
+                ],
+                "direction": "subtract",
+                "reset": "word"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-16",
+              "lp2-27",
+              "lp2-32",
+              "lp2-35"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix",
+              "values": [
+                24,
+                7,
+                24,
+                4,
+                9,
+                21,
+                17,
+                18,
+                20,
+                10,
+                18,
+                1,
+                18,
+                9,
+                3,
+                2,
+                21,
+                0,
+                4,
+                3,
+                19,
+                2,
+                10,
+                15
+              ]
+            }
+          },
+          "reset": {
+            "status": "specified",
+            "value": "word"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover the known Warning text from synthetic ciphertext",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic Warning control: divinity-ciphertext-word-reset-warning24",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᛖ-ᚢᚳᚳᛗᚢ.ᛄᛠᛝᛚᛡᛄᚳ-ᚩᛈᚩᚦ-ᛞᛉᚱᚠ-/\nᚫᛚᛏ-ᛄᛈᚱᛋ.ᛇᚪᚷᛠᛟᚣ-ᚢᛖᚫᚣ-ᛚᛈᚦ/\n-ᛠᛗᚱᛒ-ᛁᛈ-ᛄᛠ-ᛁᛉᚦᛠ.ᛁᛠᛏᚣ-ᚫᛠ-ᛠ/\nᚩᛈᚻᚢᛡᚱᛟᛋ.ᛞᛚᛁᚱ-ᛚᛈᚦᛉ-ᛁᛉᚦᛇ.ᛇᚪ/\nᚹᛠᚳᛚᛡᛗᛝᛋ-ᛚᛈᚦᛉ-ᛒᚾᚩ.ᛒᛈ-ᚩᛈᛒ-ᛇᚱᛄᚣ-ᚣ/\nᛡ-ᛠᛖᚫᚦᛡ-ᚫᛚᛏ-ᛄᛈᚱᛋ.ᚣᛉ-ᚫᛠ-ᛈᛠᛏᚫᚱᛏᚳ-/\nᛠᛈᛁᚣᚱᛚᚫᛋᛟ-ᚢᛚᚩᛚᛖ.ᛇᛚᚩᛠᛈ-ᚫᛠ-ᚢᛈ/\nᛡᚱᛏ-ᚣᛉ-ᚫᛠᛄᛉ-ᚩᛄᛚᛡᛡᛉᚦ.ᛞᛈᚳ-ᛖᚢᛝ-ᚱ/\nᚾ-ᚾᚳᚷᛉᛡᚱ./\n&\n$\n"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "keyed-shift",
+              "key": [
+                23,
+                10,
+                1,
+                10,
+                9,
+                10,
+                16,
+                26
+              ],
+              "mode": "ciphertext-autokey",
+              "direction": "subtract",
+              "reset": "word"
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              24,
+              7,
+              24,
+              4,
+              9,
+              21,
+              17,
+              18,
+              20,
+              10,
+              18,
+              1,
+              18,
+              9,
+              3,
+              2,
+              21,
+              0,
+              4,
+              3,
+              19,
+              2,
+              10,
+              15
+            ]
+          },
+          "taskId": "149562ce6f764f51ee2e211a858f0836b9abda113270291196de2240c9734356"
+        },
+        "expected_result_sha256": "9a33150f637f8638837fe63fe25e12fa2b4b8e648f0b4558e5cc3cf8d0c23727"
+      }
+    }
+  ],
+  "reader_finding": "None of the tested seeds passed the source’s screening rule. The distinct four-rune DEOR seed covered only ten pages, and the source did not test word resets. Its controls recovered a planted reading in all six feedback modes.",
+  "reader_limit": "The screen assumes single-rune words mean I or A and uses a whole-page frequency score. It cannot identify every short seed or rule out autokey in general.",
+  "research_questions": [
+    {
+      "id": "deor-warning-opening",
+      "question": "Does DEOR recover the fixed 12-rune Warning opening in any of the declared cases?",
+      "state": "open",
+      "note": "This separate question checks the fixed opening across 55 raw LP2 pages and 18 key rules. Current saved computations determine its answer. The archived IoC search above asked a different question. A matching opening would still need the rest of the page checked.",
+      "records": [],
+      "protocol": {
+        "id": "deor-warning-opening",
+        "version": 1
+      }
+    }
+  ]
+}

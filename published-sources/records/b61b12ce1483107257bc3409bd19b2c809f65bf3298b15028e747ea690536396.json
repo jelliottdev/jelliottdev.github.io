@@ -1,0 +1,449 @@
+{
+  "id": "wulfic-p21-literal-f-masks",
+  "status": "published",
+  "title": "Pausing the key at selected F runes",
+  "reader_title": "Can leaving selected F runes unchanged fix keyword decoding?",
+  "reader_intro": "Tries each choice of F runes to leave unchanged while pausing the key, using one assigned keyword per page, and checks whether every one-rune word becomes I or A.",
+  "reader_finding": "No choice of F pauses made every one-rune word read I or A on the ten tested pages; shuffled pages failed the same test, so this result does not establish whether F is an interruption.",
+  "reader_limit": "The result uses ten assigned keys and the program's exact spelling and word-break rules; other keys, corrected spellings or different ways of pausing at F were not tested.",
+  "question": "Does the pinned second-layer program find any fixed-key F-skip mask that satisfies all its singleton I/A constraints?",
+  "reader_question": "Can treating selected F runes as literal fix these keyword decodes?",
+  "summary": "None of 27,402 source-defined F masks across ten exact pages passes all one-rune-word checks; the program falls back to choosing a mask by frequency score.",
+  "finding": "Exact pinned Wulfic pages 21–30 align to LP2-04–13. The unmodified source enumerates 27,402 literal-F masks, and no page has a mask satisfying all of its singleton I/A constraints. Its 45 fixed second-layer rune routes per page on the unmasked decode also print zero gate-passing rows. Nineteen whole-selection shuffled searches likewise have zero gated pages, so this gate does not distinguish the manuscript from the stated shuffle control.",
+  "limitations": "The source keyword parser drops V in DIVINITY and contracts EO in DEOR; this replay preserves its actual arrays. The source's narrow singleton separator rule and IoC/bigram score are not a general reading test. The 19 shuffles are a coarse descriptive reference, not a cipher model. Other keys, page ranges, interruption rules or downstream layers are not tested.",
+  "next_steps": "Specify a corrected key/parser and a held-out passage test before treating an increased IoC from a selected mask as a decoding lead.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "F skip",
+    "Vigenere",
+    "singleton words",
+    "selection effect"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-p21-literal-f-masks/plan.json"
+    ],
+    "representation": "Exact source Git-object rune files pages/page_21–30, rune-aligned to current LP2-04–13; the source's word separators and keyword parser.",
+    "procedure": "For each fixed page keyword/mode, enumerate every subset of ciphertext F positions as literal, non-advancing key slots. Apply the original all-singleton I/A gate, source score or fallback IoC rank, and source-defined unmasked second-layer routes. Run 19 complete page-shuffle controls.",
+    "parameters": "Ten pages, 1–14 F positions each, 27,402 total source masks, 45 fixed rune routes per page, 19 pagewise shuffle repeats, seed 20261023.",
+    "exclusions": "Corrected keyword parse, alternate F behavior, source pages outside 21–30, word-boundary variants, other languages and uncalled prime permutation helper."
+  },
+  "review": {
+    "kind": "complete source-defined F-mask replay and selected-search control",
+    "retested_on": "2026-10-23",
+    "reviewer": "Ten Git-object/page alignments, two-pause planted recovery, 48 scalar/source parity cases, unmodified source output receipt, independent enumeration of all 27,402 observed masks and one shuffled full grid",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-p21-literal-f-masks/check.py",
+    "environment": "Python 3, NumPy and Numba. The full run, source parity and input snapshot also require a checkout of pinned Wulfic commit bf89d3d13aad2b8f2c95ab195cf1b092f250775c.",
+    "script": "experiments/records/wulfic-p21-literal-f-masks/check.py",
+    "script_sha256": "de7d7577470fbd3e219649a82f5a28bdb937067380770441d5281c5def178fea",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/plan.json",
+        "sha256": "491d1c4bc57872a1bf0a04bd18fbb10968ead580157356ec892184a0969069a9"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/snapshot_inputs.py",
+        "sha256": "f4b3d7dabb259c1406a7bdad7562418e6c100fffd12fa37d068fa103008f08c6"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/gate.py",
+        "sha256": "5caf72c681e6b79373cb26cb8418c4199457d3b46b1b1e4dda14b65268279905"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/engine.py",
+        "sha256": "aef0c6cdd1aa3c4f8cbe39081163340c14be253804399c75b289e18128bce5b6"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/run.py",
+        "sha256": "770b5256a4140b64506f42ad6ade077e6e90c3a287aeaf90e333e77264b019e7"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/check.py",
+        "sha256": "de7d7577470fbd3e219649a82f5a28bdb937067380770441d5281c5def178fea"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/plot.py",
+        "sha256": "d19a6bc09276806819c34817cdb62c4301ad2df78c44768304e792d68d5613ab"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/make_record.py",
+        "sha256": "0e01e09088cfd282eaf61ef3174f663c670d18489a4c369a6de8e353eeff5f0c"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/article.md",
+        "sha256": "5d9b088fe8a4781cf0fff61580ab549c3319cdedd6aa05e93eb5d2b775110abe"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/inputs.json",
+        "sha256": "e342597236b55e478de211fd8d136d270d1512a2113b9dac52de65dc61ae30ed"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/gate.json",
+        "sha256": "f9b3f8c9538ab38c5b444e0fc3160e35fa2df6d439a110a1d8e315d3edc9ec91"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/results.json",
+        "sha256": "9cc2ee640a0b870d0ff03603ee49a23888e2320021ea5d51278bbd0d66af19db"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/source-run.json",
+        "sha256": "2e57d86d4ea972f2943fa08cc15c3966911cd06f1dddaf98068e08f38946797d"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/comparison.svg",
+        "sha256": "1d2826113f6439afe1f123ada793721e918a08d7522de0ce3b8fa8cec2a95c7a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-p21-literal-f-masks/comparison.svg",
+      "caption": "Selected F masks can raise IoC on each page, but none passes the source's all-singleton I/A gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic second-layer program",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_second_layer.py"
+    },
+    {
+      "label": "Pinned legacy input warning",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-prime-keyword-stream-families",
+    "wulfic-keyed-transposition-cohort",
+    "wulfic-systematic-stream-source"
+  ],
+  "browser_followups": [
+    {
+      "id": "deor-literal-f-word-reset",
+      "motivation": "Try decoding page 11 by subtracting a repeating three-number pattern from the rune numbers. Start the pattern over at every word; leave F runes unchanged without advancing it. Compare the output with the earlier version, which carried the pattern across the page. This check shows the resulting runes; it does not decide whether they form a readable message.",
+      "title": "Try the same three-number pattern on each word",
+      "question": "What runes result when the same three-number pattern starts again at every word, with F runes left unchanged?",
+      "scope_change": "Keep LP2-11 and the source DEOR array [23, 12, 4], subtraction and phase zero. Copy every F unchanged without consuming a key rune, then restart the key at every non-rune boundary. The earlier mask search tested page-local key counters, including the all-F mask; it did not restart at words.",
+      "limitation": "This is a new descriptive clock variant, not a replay of the source singleton gate, mask selection or IoC/bigram ranking. The browser reports the complete output and basic rune metrics. It does not identify readable language, claim a decryption or test other keys, phases, selective F masks, page joins or cipher layers. Every non-rune ends a transcription word; these are not verified plaintext word boundaries.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "measure",
+            "detail": "Report the declared transform and descriptive rune metrics; no plaintext or significance threshold is inferred."
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "interrupted_repeating_key",
+                "label": "Interrupted repeating key",
+                "key": [
+                  23,
+                  12,
+                  4
+                ],
+                "direction": "subtract",
+                "reset": "word",
+                "interrupts": [
+                  0
+                ]
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-11"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": "measurement"
+          },
+          "reset": {
+            "status": "specified",
+            "value": "word"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "unspecified"
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-11",
+            "text_sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+          }
+        ]
+      },
+      "control": {
+        "label": "Recover every independently specified output rune in a synthetic control",
+        "task": {
+          "schema": "liberpedia-local-task-v1",
+          "engine": "rune-program-v1",
+          "title": "Synthetic complete-output control: deor-literal-f-word-reset",
+          "pages": [
+            {
+              "id": "lp1-01",
+              "text": "ᚹᚠᚱᚠᛗᚠᚦᚻᚠ- ᚹᚠᚱᚠᛗᚠᚦᚻᚠ /\r\nᚹᚠᚱᚠᛗᚠᚦᚻᚠ"
+            }
+          ],
+          "alphabet": [
+            {
+              "rune": "ᚠ",
+              "latin": "F",
+              "prime": 2
+            },
+            {
+              "rune": "ᚢ",
+              "latin": "U",
+              "prime": 3
+            },
+            {
+              "rune": "ᚦ",
+              "latin": "TH",
+              "prime": 5
+            },
+            {
+              "rune": "ᚩ",
+              "latin": "O",
+              "prime": 7
+            },
+            {
+              "rune": "ᚱ",
+              "latin": "R",
+              "prime": 11
+            },
+            {
+              "rune": "ᚳ",
+              "latin": "C",
+              "prime": 13
+            },
+            {
+              "rune": "ᚷ",
+              "latin": "G",
+              "prime": 17
+            },
+            {
+              "rune": "ᚹ",
+              "latin": "W",
+              "prime": 19
+            },
+            {
+              "rune": "ᚻ",
+              "latin": "H",
+              "prime": 23
+            },
+            {
+              "rune": "ᚾ",
+              "latin": "N",
+              "prime": 29
+            },
+            {
+              "rune": "ᛁ",
+              "latin": "I",
+              "prime": 31
+            },
+            {
+              "rune": "ᛄ",
+              "latin": "J",
+              "prime": 37
+            },
+            {
+              "rune": "ᛇ",
+              "latin": "EO",
+              "prime": 41
+            },
+            {
+              "rune": "ᛈ",
+              "latin": "P",
+              "prime": 43
+            },
+            {
+              "rune": "ᛉ",
+              "latin": "X",
+              "prime": 47
+            },
+            {
+              "rune": "ᛋ",
+              "latin": "S",
+              "prime": 53
+            },
+            {
+              "rune": "ᛏ",
+              "latin": "T",
+              "prime": 59
+            },
+            {
+              "rune": "ᛒ",
+              "latin": "B",
+              "prime": 61
+            },
+            {
+              "rune": "ᛖ",
+              "latin": "E",
+              "prime": 67
+            },
+            {
+              "rune": "ᛗ",
+              "latin": "M",
+              "prime": 71
+            },
+            {
+              "rune": "ᛚ",
+              "latin": "L",
+              "prime": 73
+            },
+            {
+              "rune": "ᛝ",
+              "latin": "NG",
+              "prime": 79
+            },
+            {
+              "rune": "ᛟ",
+              "latin": "OE",
+              "prime": 83
+            },
+            {
+              "rune": "ᛞ",
+              "latin": "D",
+              "prime": 89
+            },
+            {
+              "rune": "ᚪ",
+              "latin": "A",
+              "prime": 97
+            },
+            {
+              "rune": "ᚫ",
+              "latin": "AE",
+              "prime": 101
+            },
+            {
+              "rune": "ᚣ",
+              "latin": "Y",
+              "prime": 103
+            },
+            {
+              "rune": "ᛡ",
+              "latin": "IA",
+              "prime": 107
+            },
+            {
+              "rune": "ᛠ",
+              "latin": "EA",
+              "prime": 109
+            }
+          ],
+          "steps": [
+            {
+              "op": "interrupted-keyed-shift",
+              "key": [
+                23,
+                12,
+                4
+              ],
+              "direction": "subtract",
+              "reset": "word",
+              "interrupts": [
+                0
+              ]
+            }
+          ],
+          "criterion": {
+            "kind": "exact-prefix",
+            "values": [
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0,
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0,
+              13,
+              0,
+              21,
+              0,
+              15,
+              0,
+              8,
+              25,
+              0
+            ]
+          },
+          "taskId": "1a050ea24145848947fb1c02633cccbf9bd36f87a333697e5af2947cba59693b"
+        },
+        "expected_result_sha256": "cadf3d0b4431949f4159b936925137899dcab77dc137eb0e928bb276c4682f08"
+      }
+    }
+  ]
+}

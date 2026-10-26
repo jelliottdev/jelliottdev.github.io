@@ -1,4 +1,4 @@
-"""Retain exact published finite-source record bytes; never rewrite a record.
+"""Retain exact published authored-source record bytes; never rewrite a record.
 
 --write adds immutable objects and extends the manifest. The default checks all
 retained objects and current coverage. CI can pass --baseline-manifest from its
@@ -16,6 +16,60 @@ PREFIX = 'published-sources/records/'
 MAX_SOURCE = 2 * 1024 * 1024
 MAX_BYTES = 32 * 1024 * 1024
 MAX_ENTRIES = 128
+HEX = re.compile(r'[a-f0-9]{64}')
+
+
+def fixed_recipe(recipe):
+    """Recognize the maintained fixed declaration, without running its program.
+
+    Retention is not execution or admission. The ordinary publication validator
+    still checks official inputs and synthetic results. Here we require its
+    closed structure and compiler, rather than mistaking arbitrary metadata
+    without a kind field for a fixed follow-up.
+    """
+    from browser_followups import compile_card, digest, runner
+    required = {'id', 'title', 'question', 'scope_change', 'limitation', 'card', 'inputs', 'control'}
+    if not isinstance(recipe, dict) or set(recipe) not in (required, required | {'motivation'}):
+        return False
+    try:
+        if not isinstance(recipe['id'], str) or len(recipe['id']) > 100 or not re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', recipe['id']):
+            return False
+        for name in ('title', 'question', 'scope_change', 'limitation'):
+            value = recipe[name]
+            if not isinstance(value, str) or not value.strip() or len(value) > (300 if name == 'title' else 1200):
+                return False
+        if 'motivation' in recipe:
+            value = recipe['motivation']
+            if not isinstance(value, str) or value != value.strip() or not 1 <= len(value) <= 500 or re.search(r'[<>\[\]`*\\\x00-\x1f\x7f-\x9f\u2028\u2029\ud800-\udfff]', value):
+                return False
+        plan = compile_card(recipe['card'])
+        pins, control = recipe['inputs'], recipe['control']
+        if not isinstance(pins, dict) or set(pins) != {'version', 'alphabet_sha256', 'pages'} or pins['version'] != plan['inputVersion'] or not isinstance(pins['alphabet_sha256'], str) or not HEX.fullmatch(pins['alphabet_sha256']) or not isinstance(pins['pages'], list) or len(pins['pages']) != len(plan['pages']):
+            return False
+        for pin, identifier in zip(pins['pages'], plan['pages']):
+            if not isinstance(pin, dict) or set(pin) != {'id', 'text_sha256'} or pin['id'] != identifier or not isinstance(pin['text_sha256'], str) or not HEX.fullmatch(pin['text_sha256']):
+                return False
+        if not isinstance(control, dict) or set(control) != {'label', 'task', 'expected_result_sha256'} or not isinstance(control['label'], str) or not control['label'].strip() or len(control['label']) > 300 or 'synthetic' not in control['label'].lower() or not isinstance(control['expected_result_sha256'], str) or not HEX.fullmatch(control['expected_result_sha256']):
+            return False
+        task = control['task']
+        runner.validate(task)
+        if 'synthetic' not in task['title'].lower() or task['steps'] != plan['steps'] or digest(task['alphabet']) != pins['alphabet_sha256']:
+            return False
+        if plan['criterion']['kind'] in ('measurement', 'language-score'):
+            if task['criterion']['kind'] != 'exact-prefix':
+                return False
+            runes = {row['rune'] for row in task['alphabet']}
+            if not all(sum(ch in runes for ch in page['text']) == len(task['criterion']['values']) for page in task['pages']):
+                return False
+        elif task['criterion'] != plan['criterion']:
+            return False
+        return True
+    except (ValueError, TypeError, KeyError, AttributeError):
+        return False
+
+
+def authored_recipe(recipe):
+    return isinstance(recipe, dict) and (recipe.get('kind') == 'finite-settings' or fixed_recipe(recipe))
 
 
 def sha(data):
@@ -23,7 +77,7 @@ def sha(data):
 
 
 def parse(data):
-    return json.loads(data.decode('utf-8'))
+    return json.loads(data.decode('utf-8-sig'))
 
 
 def record_identity(data):
@@ -33,8 +87,8 @@ def record_identity(data):
     if not isinstance(record, dict) or not isinstance(record.get('id'), str) or len(record['id']) > 100 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', record['id']) or record.get('status') != 'published':
         raise ValueError('A retained source must be a published record')
     recipes = record.get('browser_followups')
-    if not isinstance(recipes, list) or len(recipes) > 8 or not any(isinstance(recipe, dict) and recipe.get('kind') == 'finite-settings' for recipe in recipes):
-        raise ValueError('A retained source must contain a finite follow-up')
+    if not isinstance(recipes, list) or len(recipes) > 8 or not any(authored_recipe(recipe) for recipe in recipes):
+        raise ValueError('A retained source must contain a maintained authored follow-up')
     return record['id']
 
 
@@ -73,7 +127,7 @@ def prepare(root=ROOT, baseline=None):
     for source in sorted((root / 'experiments/records').glob('*/record.json')):
         data = source.read_bytes()
         record = parse(data)
-        if record.get('status') != 'published' or not any(isinstance(recipe, dict) and recipe.get('kind') == 'finite-settings' for recipe in record.get('browser_followups', [])):
+        if record.get('status') != 'published' or not any(authored_recipe(recipe) for recipe in record.get('browser_followups', [])):
             continue
         item = entry(data)
         if item['recordId'] != source.parent.name:
@@ -117,4 +171,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     baseline = parse(args.baseline_manifest.read_bytes()) if args.baseline_manifest else None
     value = build(write=args.write, baseline=baseline)
-    print(f"PASS {len(value['entries'])} exact finite-source revisions retained")
+    print(f"PASS {len(value['entries'])} exact authored-source revisions retained")

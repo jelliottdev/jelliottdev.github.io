@@ -5,6 +5,7 @@ import subprocess
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import archive_authored_sources as archive
 
 
@@ -116,6 +117,69 @@ class SourceArchiveTests(unittest.TestCase):
                 self.assertEqual(files[item['path']], source.read_bytes())
             else:
                 self.assertEqual(archive.entry((archive.ROOT / item['path']).read_bytes()), item)
+
+    def fixed_record(self):
+        record = json.loads((archive.ROOT / 'experiments/records/lp2-known-vigenere-keys/record.json').read_bytes())
+        return {'id': 'fixture', 'status': 'published', 'browser_followups': [copy.deepcopy(record['browser_followups'][0])]}
+
+    def test_fixed_source_exact_bytes_bom_crlf_and_retention_do_not_execute_controls(self):
+        import browser_followups
+        record = self.fixed_record()
+        data = b'\xef\xbb\xbf' + json.dumps(record, ensure_ascii=False, indent=2).replace('\n', '\r\n').encode('utf-8') + b'\r\n'
+        self.path.write_bytes(data)
+        with patch.object(browser_followups.runner, 'run', side_effect=AssertionError('Archiving cannot execute any task')):
+            first = archive.build(self.root, write=True)
+            self.assertEqual(len(first['entries']), 1)
+            old = first['entries'][0]
+            self.assertEqual((self.root / old['path']).read_bytes(), data)
+            self.assertEqual(old['sha256'], archive.sha(data))
+            record['browser_followups'][0]['title'] = 'A revised source heading'
+            self.path.write_text(json.dumps(record), encoding='utf-8')
+            second = archive.build(self.root, write=True, baseline=first)
+            self.assertEqual(len(second['entries']), 2)
+            self.assertEqual((self.root / old['path']).read_bytes(), data)
+            self.assertEqual(archive.build(self.root, baseline=first), second)
+        (self.root / old['path']).write_bytes(data + b' ')
+        with self.assertRaisesRegex(ValueError, 'missing or changed'):
+            archive.build(self.root, write=True, baseline=first)
+
+    def test_unknown_kinds_and_arbitrary_no_kind_metadata_are_not_fixed_sources(self):
+        record = self.fixed_record()
+        for recipe in ({'id': 'metadata', 'title': 'A note'}, {'kind': 'unknown', 'id': 'first'},
+                       {**record['browser_followups'][0], 'kind': 'fixed'},
+                       {**record['browser_followups'][0], 'unexpected': True}):
+            changed = {**record, 'browser_followups': [recipe]}
+            self.assertFalse(archive.authored_recipe(recipe))
+            with self.assertRaisesRegex(ValueError, 'maintained authored follow-up'):
+                archive.entry(json.dumps(changed).encode('utf-8'))
+        for mutate in (lambda r: r['inputs']['pages'][0].update(text_sha256='bad'),
+                       lambda r: r['control']['task'].update(taskId='0' * 64),
+                       lambda r: r['card']['method']['value']['operations'][0].update(id='unsupported'),
+                       lambda r: r['control'].update(label='An unverified historical assertion')):
+            recipe = copy.deepcopy(record['browser_followups'][0])
+            mutate(recipe)
+            self.assertFalse(archive.fixed_recipe(recipe))
+
+    def test_all_current_fixed_criteria_are_covered_without_rewriting_source_records(self):
+        records, recipes, criteria, before = set(), [], set(), {}
+        for path in sorted((archive.ROOT / 'experiments/records').glob('*/record.json')):
+            raw = path.read_bytes()
+            record = archive.parse(raw)
+            fixed = [recipe for recipe in record.get('browser_followups', []) if 'kind' not in recipe]
+            if record.get('status') == 'published' and fixed:
+                records.add(record['id'])
+                before[path] = raw
+                for recipe in fixed:
+                    self.assertTrue(archive.fixed_recipe(recipe), recipe['id'])
+                    recipes.append(recipe)
+                    value = recipe['card']['rules']['evaluation']['value']
+                    criteria.add(value['kind'] if isinstance(value, dict) else value)
+        self.assertEqual((len(records), len(recipes)), (9, 19))
+        self.assertEqual(criteria, {'exact-prefix', 'word-affine-count', 'word-prime-sums', 'measurement'})
+        files = archive.prepare()
+        for path, raw in before.items():
+            self.assertEqual(path.read_bytes(), raw)
+            self.assertEqual(files[archive.PREFIX + archive.sha(raw) + '.json'], raw)
 
 
 if __name__ == '__main__':

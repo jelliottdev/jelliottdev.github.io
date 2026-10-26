@@ -85,27 +85,16 @@
     const response=await request('data/local-run-inputs.json',{},15000),bundle=await OrdinaryPrefix.read(response,{signal:controller.signal}),bound=await QuestionContext.verify({taskId:id,proposalId,projection:checked,bundle},cryptoAPI);
     if(!live(token,id))return;const context=QuestionContext.inspect(bound);let previous=null;
     if(context.comparable&&progress&&E.stable(progress.declaredPages)===E.stable(context.declaredPages)&&Array.isArray(progress.coveredPages)&&Array.isArray(progress.remainingPages)&&progress.coveredPages.every(page=>context.declaredPages.includes(page)&&!context.taskPages.includes(page))&&E.stable(context.declaredPages.filter(page=>!progress.coveredPages.includes(page)))===E.stable(progress.remainingPages)&&context.taskPages.every(page=>progress.remainingPages.includes(page)))previous={covered:progress.coveredPages.length,total:context.declaredPages.length};
-    const source=checked.selectedRecordOrigin,recordRef=source?{recordId:source.recordId,followupId:source.followupId,id:source.recordId+'/'+source.followupId}:null;questionContext={...context,previous,recordRef,authoredQuestion:source?checked.origins.find(item=>E.stable(item.origin)===E.stable(source))?.question||null:null};questionContextError=null;if(source)void loadAuthoredPurpose(questionContext,source,token,id,checked.origins.some(item=>E.stable(item.origin)===E.stable(source)&&item.scopeRelation?.kind==='finite-settings-member'));
+    const source=checked.selectedRecordOrigin,recordRef=source?{recordId:source.recordId,followupId:source.followupId,id:source.recordId+'/'+source.followupId}:null;questionContext={...context,previous,recordRef,authoredQuestion:source?checked.origins.find(item=>E.stable(item.origin)===E.stable(source))?.question||null:null};questionContextError=null;if(source)void loadAuthoredPurpose(questionContext,source,token,id);
    }catch(error){if(!live(token,id))return;questionContext=null;questionContextError='The original question could not be verified. You can inspect this result or retry the question.';if(strict)throw error;}
   }
-  async function loadAuthoredPurpose(context,origin,token,id,finiteSource=false){
+  async function loadAuthoredPurpose(context,origin,token,id){
    // Optional explanatory copy never delays or authorizes a computation.
    try{
     if(typeof QuestionContext.readAuthoredContext!=='function')return;
-    let bytes;
-    if(finiteSource){
-     const resolver=typeof module==='object'&&module.exports?require('./authored-source-resolver.js'):root.AuthoredSourceResolver;
-     if(!resolver?.readSaved)return;
-     bytes=(await resolver.readSaved(origin,{request,crypto:cryptoAPI,signal:controller.signal,isLive:()=>live(token,id)&&questionContext===context,timeoutMs:6000})).bytes;
-    }else{
-    const response=await request('experiments/records/'+origin.recordId+'/record.json',{redirect:'error',cache:'no-cache'},6000);
-    const limit=finiteSource?2*1024*1024:512*1024,length=response.headers?.get?.('content-length');
-    if(length!==null&&length!==undefined&&(!/^\d+$/.test(length)||Number(length)>limit))throw Error('Source context exceeds its bound.');
-    const reader=response.body?.getReader();if(!reader)throw Error('Source context is unreadable.');const chunks=[];let size=0;
-    try{while(true){const {done,value}=await reader.read();if(done)break;if(!live(token,id)||questionContext!==context)throw Error('Source context changed.');if(!(value instanceof Uint8Array)||size+value.byteLength>limit)throw Error('Source context exceeds its bound.');chunks.push(new Uint8Array(value));size+=value.byteLength;}}
-    finally{await reader.cancel().catch(()=>{});}
-    bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
-    }
+    const resolver=typeof module==='object'&&module.exports?require('./authored-source-resolver.js'):root.AuthoredSourceResolver;
+    if(!resolver?.readSaved)return;
+    const {bytes}=await resolver.readSaved(origin,{request,crypto:cryptoAPI,signal:controller.signal,isLive:()=>live(token,id)&&questionContext===context,timeoutMs:6000});
     const explanation=await QuestionContext.readAuthoredContext({origin,bytes},cryptoAPI);
     if(!live(token,id)||questionContext!==context)return;
     if(explanation.title){context.authoredTitle=explanation.title;const heading=$('run-task-title');if(heading)heading.textContent=explanation.title;}

@@ -1,5 +1,6 @@
 /* Authored bounded follow-ups. No inference, persistence or target execution. */
 import L from '../../local-experiment.js';
+import SavedSources from '../../authored-source-resolver.js';
 import {loadFiniteRecordPlan} from './finite-record-plans.mjs';
 import Control from '../../local-control.js';
 import Evaluators from '../../output-evaluators.js';
@@ -28,10 +29,19 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
  const controller=new AbortController();let timer;
  const work=async()=>{
   const get=async(path,max=512*1024)=>{if(controller.signal.aborted)throw Error('Source loading cancelled.');return readJSON(await fetcher(BASE+path,{redirect:'manual',signal:controller.signal,cache:'no-cache'}),max);};
-  const raw=await get('/experiments/records/'+recordId+'/record.json',2*1024*1024),record=raw.value;
+  const raw=await get('/experiments/records/'+recordId+'/record.json',2*1024*1024);
+  return compileRecordPlan({recordId,followupId,raw},{get,fetcher,signal:controller.signal});
+ };
+ try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Official source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}
+}
+// Both current declarations and explicit saved continuations use this validator.
+// Archive recovery supplies bytes only; current official inputs and controls are
+// checked here on every preparation.
+async function compileRecordPlan({recordId,followupId,raw},{get,fetcher,signal}){
+  const record=raw.value;
   if(record.id!==recordId||record.status!=='published'||!Array.isArray(record.browser_followups)||record.browser_followups.length>8)throw Error('This published follow-up is unavailable.');
   const found=record.browser_followups.filter(v=>v?.id===followupId);if(found.length!==1)throw Error('This published follow-up is unavailable.');const recipe=found[0];
-  if(recipe.kind==='finite-settings')return loadFiniteRecordPlan({recordId,followupId},{raw,get,signal:controller.signal});
+  if(recipe.kind==='finite-settings')return loadFiniteRecordPlan({recordId,followupId},{raw,get,signal});
   if(raw.bytes.byteLength>512*1024)throw Error('Source exceeds its bound.');
   const hasMotivation=Object.hasOwn(recipe,'motivation');
   if(!exact(recipe,['id','title','question','scope_change','limitation','card','inputs','control',...(hasMotivation?['motivation']:[])]))throw Error('The follow-up declaration is malformed.');
@@ -56,17 +66,36 @@ export async function loadRecordPlan({recordId,followupId},{fetcher=globalThis.f
   if(pages.length>40){
    // One fixed source keeps authored large scopes below Workers' subrequest cap.
    // Invalid aggregates must not trigger an unbounded per-page fallback.
-   const bundle=await loadInputBundle({fetcher,signal:controller.signal,read:async(response,max)=>(await readJSON(response,max)).value});
+   const bundle=await loadInputBundle({fetcher,signal,read:async(response,max)=>(await readJSON(response,max)).value});
    if(L.stable(bundle.alphabet)!==L.stable(alphabet))throw Error('The official input aggregate alphabet changed.');
    for(let i=0;i<pages.length;i++)await accept(i,bundle.pages.get(plan.pages[i]));
   }else{
-   const worker=async()=>{while(next<pages.length){if(controller.signal.aborted)throw Error('Source loading cancelled.');const i=next++,page=(await get('/data/pages/'+plan.pages[i]+'.json')).value;await accept(i,page);}};
+   const worker=async()=>{while(next<pages.length){if(signal.aborted)throw Error('Source loading cancelled.');const i=next++,page=(await get('/data/pages/'+plan.pages[i]+'.json')).value;await accept(i,page);}};
    await Promise.all(Array.from({length:Math.min(4,pages.length)},worker));
   }
   const task=await L.prepare({title:recipe.title,pages,alphabet,steps:plan.steps,criterion:plan.criterion});
   return {state:'plan-ready',origin:{recordId,followupId,recordSha256:await recordPlanDigest(raw.bytes),protocolSha256:await recordPlanDigest(L.stable(recipe))},card,task,inputVersion:plan.inputVersion,control,question:recipe.question,scopeChange:recipe.scope_change,limitation:recipe.limitation,...(hasMotivation?{motivation:recipe.motivation}:{}),snapshot:recipe};
+}
+// Only an exact saved origin can use historical bytes. Fresh /record-plans and
+// direct origin admission continue to call loadRecordPlan above.
+export async function loadSavedRecordPlan(origin,{fetcher=globalThis.fetch,timeoutMs=20000}={}){
+ SavedSources.archivePath(origin); // Reject accessors before reading any identity field.
+ if(!validOrigin(origin))throw Error('Invalid saved source identity.');
+ if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>20000)throw Error('Invalid saved source deadline.');
+ const captured={...origin},controller=new AbortController();let timer;
+ const work=async()=>{
+  const archive=SavedSources.archivePath(captured),current='experiments/records/'+captured.recordId+'/record.json';
+  const request=async(path,init={})=>{if(path!==archive&&path!==current)throw Error('Invalid saved source path.');return fetcher(BASE+'/'+path,{...init,redirect:'manual',cache:'no-cache',signal:controller.signal});};
+  let raw=null;
+  try{const response=await request(current);if(response.status!==404){raw=await readJSON(response,2*1024*1024);if(await recordPlanDigest(raw.bytes)!==captured.recordSha256)raw=null;}}catch{if(controller.signal.aborted)throw Error('Source loading cancelled.');raw=null;}
+  if(!raw)raw=await SavedSources.readSaved(captured,{request,crypto:globalThis.crypto,signal:controller.signal,timeoutMs});
+  const get=async(path,max=512*1024)=>{if(controller.signal.aborted)throw Error('Source loading cancelled.');return readJSON(await fetcher(BASE+path,{redirect:'manual',signal:controller.signal,cache:'no-cache'}),max);};
+  const plan=await compileRecordPlan({...captured,raw},{get,fetcher,signal:controller.signal});
+  if(L.stable(plan.origin)!==L.stable(captured))throw Error('The saved source identity changed.');
+  if(controller.signal.aborted)throw Error('Source loading cancelled.');
+  return plan;
  };
- try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Official source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}
+ try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Saved source loading timed out.'));},timeoutMs);})]);}finally{clearTimeout(timer);controller.abort();}
 }
 export function createRecordPlanHandler({fetcher=globalThis.fetch,timeoutMs=20000,discoverEvidence=findEvidence,discoverPrefixEvidence=discoverOrdinaryPrefixEvidence}={}){
  return async(request,env)=>{
