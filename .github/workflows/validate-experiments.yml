@@ -203,6 +203,15 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/published_known_key_projection.py
         if: steps.scope.outputs.science == 'true'
+      - name: Validate panel source work and program catalog
+        if: steps.scope.outputs.science == 'true'
+        run: |
+          python scripts/test_panel_prime_followups.py
+          python scripts/panel_prime_followups.py --check
+          python scripts/test_published_panel_prime_projection.py
+          python scripts/published_panel_prime_projection.py
+          python scripts/test_published_program_catalog.py
+          python scripts/build_published_program_catalog.py
       - run: python scripts/build_published_count_evidence.py --check
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_published_evidence_history.py

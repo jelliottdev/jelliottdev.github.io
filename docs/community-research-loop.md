@@ -619,3 +619,20 @@ Prepared-check discovery shows each selected check's authored title and purpose.
 Changing evaluation must update that heading as well as the link and explanation.
 Entry copy does not promise optional saving for a batch action that explicitly
 includes saving; consent stays on the reviewed action.
+
+## Multiple archived program families
+
+Published program imports own separate receipt files and indexes. The maintained
+catalog combines these providers without rewriting an existing provider or its
+audited receipt identities. Add a provider in build_published_program_catalog.py,
+then regenerate only the combined catalog. The server checks the same bounded
+pointer schema and lazily reads matching receipts. Catalog changes invalidate
+scan cursors; they do not erase old source receipts.
+
+The spiral-prime source contributes 32 repeating programs. Its 1,760 nonempty
+archived outputs remain distinct from 32 explicitly structural empty-page
+projections. Imported receipts format the original Warning-prefix evaluation;
+the other eight opening checks remain historical source evidence. The authored
+page-reset language comparison reuses these outputs with a new evaluation. The
+word-reset language check changes decoding and remains a separate open family.
+Neither addition changes the historical finding or implies a new reading.
