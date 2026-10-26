@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import sources from './pinned-domain-sources.mjs';
 import {createPinnedDomainSourceLoader} from './pinned-domain-registry.mjs';
-import {prepare,inspect,cardFromMaintained} from './pinned-domain-question.mjs';
+import {prepare,inspect,cardFromMaintained,identify} from './pinned-domain-question.mjs';
 import C from '../../claim-specification.js';
 import E from '../../local-experiment.js';
 import M from '../../pinned-domain-members.js';
@@ -34,6 +34,9 @@ try{
  await test('original input mutation is rejected across asynchronous identity binding and returned sources own their bytes',async()=>{
   const input=request(copy(cardFromMaintained(sources[0].sourceId)));let enter,release;const entered=new Promise(r=>enter=r),waiting=new Promise(r=>release=r),crypto={subtle:{async digest(...args){enter();await waiting;return globalThis.crypto.subtle.digest(...args);}}},pending=prepare(input,{bundle,loadDomain:loader,crypto});await entered;input.card.outcome.value.detail+=' changed';release();await assert.rejects(pending,/changed/);
   const loaded=await loader(sources[0].sourceId),bytes=Buffer.from(loaded.manifestBytes),waitingInput=request(cardFromMaintained(sources[0].sourceId));let read,go;const readStarted=new Promise(r=>read=r),wait=new Promise(r=>go=r);const held=prepare(waitingInput,{loadDomain:async()=>({...loaded,manifestBytes:bytes}),loadBundle:async()=>{read();await wait;return bundle;}});await readStarted;bytes[0]^=1;go();const value=inspect(await held);assert.equal(value.source.manifestBytes[0],123);assert.equal(sha(value.source.manifestBytes),loaded.manifestSha256);
+ });
+ await test('pure identification reuses exact maintained grammar without I/O or resolving unreviewed conditions',()=>{
+  const before=reads;for(const source of sources){const card=cardFromMaintained(source.sourceId),text=C.serialize(card);assert.equal(identify(card),source.sourceId);assert.equal(C.serialize(card),text);const note=copy(card);note.unresolved=[{kind:'source_note',text:'Keep every F rune unchanged'}];assert.equal(identify(note),null);const unrelated=copy(card);unrelated.method.value.operations[0].direction='add';assert.equal(identify(unrelated),null);const unknownAim=copy(card);unknownAim.outcome.value.detail='';assert.equal(identify(unknownAim),null);}const malformed=copy(cardFromMaintained(sources[0].sourceId));malformed.extra=true;assert.throws(()=>identify(malformed));let accessed=0;const getter={};Object.defineProperty(getter,'method',{enumerable:true,get(){accessed++;return{};}});assert.throws(()=>identify(getter));assert.equal(accessed,0);assert.equal(reads,before);
  });
  await test('default maintained loaders use only bounded official files and preserve full parent questions',async()=>{
   const value=inspect(await prepare(request(cardFromMaintained(sources[1].sourceId)),{fetcher}));assert.equal(value.sourceId,sources[1].sourceId);assert.equal(value.card.scope.value.pages.length,55);assert.equal(value.card.rules.searchBounds.value.parameters[0].valuesFrom.count,2561);assert(reads>=3);

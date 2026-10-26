@@ -13,7 +13,7 @@ const need=(v,m)=>{if(!v)throw Error(m);},same=(a,b)=>E.stable(a)===E.stable(b),
 const maintained=freeze(capture(Sources)),field=value=>C.field('specified',value),knownLabels=new Set(['Repeating key','Repeating-key','Vigenere','Vigenère']);
 function unicode(v){if(typeof v==='string')need(!/[\ud800-\udfff]/u.test(v),'Use Unicode scalar question text.');else if(v&&typeof v==='object')for(const k of Object.keys(v)){unicode(k);unicode(v[k]);}}
 async function hash(v,crypto,raw=false){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',raw?v:new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
-function canonical(input){const value=J.capture(input,{maxBytes:H.MAX_BYTES,maxDepth:16,maxNodes:6000});unicode(value);const text=JSON.stringify(value),fragment='#idea='+btoa(String.fromCharCode(...new TextEncoder().encode(text))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');const draft=H.decode(fragment).draft,card=H.cardData(C.confirm(draft,{id:'pinned-question-binding',at:'2000-01-01T00:00:00.000Z'}));need(same(value,card),'Use an exact canonical confirmed question.');return card;}
+function canonical(input,readOnly=false){const value=J.capture(input,{maxBytes:H.MAX_BYTES,maxDepth:16,maxNodes:6000});unicode(value);const text=JSON.stringify(value),fragment='#idea='+btoa(String.fromCharCode(...new TextEncoder().encode(text))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');const draft=H.decode(fragment).draft,card=readOnly?H.readCard(fragment):H.cardData(C.confirm(draft,{id:'pinned-question-binding',at:'2000-01-01T00:00:00.000Z'}));need(same(value,card),'Use an exact canonical confirmed question.');return card;}
 function detail(value){need(typeof value==='string'&&value.trim()===value&&[...value].length>=1&&[...value].length<=1000&&!/[\p{Cc}\p{Cf}]/u.test(value),'Use a bounded plain aim detail.');return value;}
 export function cardFromMaintained(sourceId,options={}){
  const v=capture(options);need(exact(v,Object.hasOwn(v||{},'detail')?['detail']:[]),'Declare only optional original aim detail.');const source=maintained.find(s=>s.sourceId===sourceId);need(source,'Choose a maintained complete question.');const d=source.domain,aimDetail=detail(v.detail??d.aim.detail);
@@ -26,6 +26,11 @@ function matches(card,source){
  for(const [name,value]of Object.entries(required))if(!same(card.rules[name],{status:'specified',value}))return false;
  for(const name of C.RULES)if(!Object.hasOwn(required,name)&&!(card.rules[name].status==='unspecified'||name!=='reset'&&card.rules[name].status==='not_applicable'))return false;
  return true;
+}
+export function identify(input){
+ const card=canonical(input,true);if(card.unresolved.length||card.outcome.status!=='specified')return null;
+ const value=card.outcome.value.detail;if(typeof value!=='string'||value.trim()!==value||[...value].length<1||[...value].length>1000||/[\p{Cc}\p{Cf}]/u.test(value))return null;
+ const candidates=maintained.filter(source=>matches(card,source));return candidates.length===1?candidates[0].sourceId:null;
 }
 function descriptor(input,expected){
  need(input&&typeof input==='object'&&!Array.isArray(input)&&Reflect.ownKeys(input).length===5,'Use an exact maintained source descriptor.');const v={};for(const name of ['sourceId','domain','template','manifestBytes','manifestSha256']){const d=Object.getOwnPropertyDescriptor(input,name);need(d?.enumerable&&Object.hasOwn(d,'value'),'Maintained source fields must be data.');v[name]=d.value;}
