@@ -17,6 +17,7 @@ STAGES = (
     ('build_published_count_evidence.py',),
     ('build_published_evidence_history.py',),
     ('build_experiments.py',),
+    ('archive_authored_sources.py', '--write'),
     ('build_articles.py',),
     ('build_assistant.py',),
     ('build_access_exports.py',),

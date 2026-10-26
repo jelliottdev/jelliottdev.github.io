@@ -7,7 +7,7 @@
   "summary": "None of 995,724 shifted arithmetic readings reaches the fixed English-recognition gate. The strongest score is ordinary among the shuffled search maxima.",
   "finding": "Best score -6.4925927001 is LP2-13 minus LP2-32 at shift 56 across 121 runes; zero streams reach -5.5. 100 of 128 full-search shuffle maxima score at least as highly, giving global plus-one comparison 0.7829457364. All 995,724 observed scores independently match exactly.",
   "reader_finding": "None passed the fixed English-recognition test. The strongest output, from LP2-13 minus LP2-32, scored like results commonly found in shuffled pages. The known-reading tests recovered the intended text.",
-  "reader_limit": "Forward sum and both subtraction directions with at least 120-rune overlap, using one fixed English model. Other cipher layers and general shared-key encryption remain open.",
+  "reader_limit": "Only addition and subtraction with at least 120 runes overlapping and one English-scoring model were tested. Extra decoding steps remain open.",
   "limitations": "52 eligible pages from 55 nonempty LP2-00–55 pages; no shorter overlaps, reversal, wrapping, repetition, key skips or other layers. Whole-page shuffles preserve page frequencies but not every overlap histogram. Warning plants validate this direct construction, not every English passage or unrelated plaintexts encrypted with a shared key.",
   "next_steps": "A broader shared-keystream hypothesis needs a statistic and planted power controls matched to its plaintext relationship; do not treat absent English arithmetic output as general key-reuse exclusion.",
   "outcome": "not-supported",
@@ -112,8 +112,8 @@
   ],
   "family": {
     "id": "lp2-page-pair-alignment",
-    "title": "Page-pair arithmetic",
-    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "title": "Using one page to decode another",
+    "question": "Can the numbers from one manuscript page help decode another?",
     "baseline": "lp2-page-pair-alignment"
   },
   "variant": {
@@ -233,5 +233,11 @@
         "sha256": "e30ff1e725d8d1d90b1463b7aded27f24aede3e7d784d536ac23d7985457aab8"
       }
     ]
+  },
+  "reader_title": "Slide pages and look for English",
+  "reader_test": {
+    "input": "Pairs of LP2 pages with at least 120 runes overlapping.",
+    "action": "Slide one page along the other. At each alignment, add their numbers and try both subtraction directions.",
+    "check": "Check whether the outputs pass a fixed English-recognition test and compare the best score with shuffled-page searches."
   }
 }

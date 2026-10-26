@@ -23588,6 +23588,7 @@
       "id": "lp2-page-pair-alignment",
       "title": "One LP2 page as another page’s key",
       "question": "Does aligning any two LP2 ciphertext pages from rune zero and adding or subtracting their GP29 indices produce an unusually concentrated stream?",
+      "reader_title": "Add or subtract pages from their first rune",
       "reader_question": "Can one ciphertext page act as another page’s key?",
       "summary": "Across 2,970 direct page-pair sums and differences, the strongest rune concentration is weaker than a typical maximum from the shuffled control.",
       "tags": [
@@ -23598,7 +23599,7 @@
         "GP29",
         "search space"
       ],
-      "finding": "The observed maximum IoC is 0.0446 (LP2-29 minus LP2-55 across 76 runes). In 256 shared conditional-shuffle controls, 235 global maxima were at least that high; empirical global p=0.9183.",
+      "finding": "No page pair stood out. Randomly reordered runes produced an equally strong or stronger frequency pattern in 235 of 256 searches.",
       "scope": {
         "pages": [
           "lp2-00",
@@ -23709,8 +23710,8 @@
       ],
       "family": {
         "id": "lp2-page-pair-alignment",
-        "title": "Page-pair arithmetic",
-        "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+        "title": "Using one page to decode another",
+        "question": "Can the numbers from one manuscript page help decode another?",
         "baseline": "lp2-page-pair-alignment"
       },
       "variant_label": "Zero-offset sums and differences",
@@ -23784,13 +23785,20 @@
       "status": "published",
       "source_finding": "The observed maximum IoC is 0.0446 (LP2-29 minus LP2-55 across 76 runes). In 256 shared conditional-shuffle controls, 235 global maxima were at least that high; empirical global p=0.9183.",
       "next_steps": "Any specific page-key proposal should state both pages, direction, offset, wrapping, arithmetic and a held-out validation criterion before inspecting the output.",
+      "reader_finding": "No page pair stood out. Randomly reordered runes produced an equally strong or stronger frequency pattern in 235 of 256 searches.",
+      "reader_limit": "This checks addition and subtraction from the start of each page. Shifted alignments and English readings are separate tests.",
+      "reader_test": {
+        "input": "The rune numbers from each pair of LP2 pages.",
+        "action": "Line up the first rune of both pages, then add or subtract the numbers at matching positions.",
+        "check": "Compare the output’s rune frequencies with results from shuffled pages; this is not an English-reading test."
+      },
       "variant": {
         "label": "Zero-offset sums and differences",
         "changes": []
       },
       "record_source": {
         "path": "reference/experiments/lp2-page-pair-alignment.json",
-        "sha256": "652125218867caac10674a794947b27af47459c18a6afecb02ec0e178d2448c5"
+        "sha256": "305b833298233fd8f725ccd11117d3066884c008966dbf3eeaae7adec4ef9532"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
@@ -23801,6 +23809,7 @@
       "id": "lp2-page-pair-english",
       "title": "Can one LP2 page decode another?",
       "question": "Do zero-offset addition or subtraction streams of two ciphertext pages yield English-like GP labels?",
+      "reader_title": "Look for English when two pages start together",
       "reader_question": "Have we tried using another LP2 page as the key?",
       "summary": "A complete 4,455-stream zero-offset page-pair arithmetic search found no English score above matched whole-grid shuffled-page controls.",
       "tags": [
@@ -23814,7 +23823,7 @@
         "one page as another page key",
         "another page as the key"
       ],
-      "finding": "The best eligible stream is LP2-18 minus LP2-02 (201 runes; score −6.802). In 193 of 256 conditional page-shuffle full searches, the best pair and operation scored at least as high (global add-one 194/257≈0.755).",
+      "finding": "The best English score was not unusual. Randomly reordered runes produced an equally high or higher score in 193 of 256 searches.",
       "scope": {
         "pages": [
           "lp2-00",
@@ -23918,8 +23927,8 @@
       ],
       "family": {
         "id": "lp2-page-pair-alignment",
-        "title": "Page-pair arithmetic",
-        "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+        "title": "Using one page to decode another",
+        "question": "Can the numbers from one manuscript page help decode another?",
         "baseline": "lp2-page-pair-alignment"
       },
       "variant_label": "Zero-offset English scoring",
@@ -23993,6 +24002,13 @@
       "status": "published",
       "source_finding": "The best eligible stream is LP2-18 minus LP2-02 (201 runes; score −6.802). In 193 of 256 conditional page-shuffle full searches, the best pair and operation scored at least as high (global add-one 194/257≈0.755).",
       "next_steps": "A more specific page-as-key theory should predeclare the page pair, alignment and key-advancement rule, then predict a continuous independently checkable reading.",
+      "reader_finding": "The best English score was not unusual. Randomly reordered runes produced an equally high or higher score in 193 of 256 searches.",
+      "reader_limit": "Only page starts, direct addition and subtraction, and one English-scoring model were checked. Other alignments, languages and extra cipher steps remain open.",
+      "reader_test": {
+        "input": "The rune numbers from each pair of LP2 pages.",
+        "action": "Line up the first rune of both pages. Add their numbers, subtract the second page from the first, and subtract the first from the second.",
+        "check": "Score the outputs for English letter patterns and compare the strongest result with shuffled-page searches."
+      },
       "variant": {
         "label": "Zero-offset English scoring",
         "changes": [
@@ -24036,7 +24052,7 @@
       },
       "record_source": {
         "path": "reference/experiments/lp2-page-pair-english.json",
-        "sha256": "9f2718102bc59a76acfbc306d0ff6f1aa22b9da95d69d96bda3a9bef2a515109"
+        "sha256": "e233f9bfcd2f1f592e2db45bfd65075848437e72309b0dc2af02f0c47195e040"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
@@ -26030,6 +26046,7 @@
       "id": "lp2-shifted-page-pair-differences",
       "title": "One page as another's key, at every long overlap",
       "question": "Does any forward page-pair difference at a relative offset with at least 120 overlapping runes show exceptional symbol concentration?",
+      "reader_title": "Slide pages and look for unusual rune frequencies",
       "reader_question": "Do any two pages become unusually patterned when one is shifted and subtracted from the other?",
       "summary": "Across 331,908 page-pair alignments, the strongest difference concentration is exceeded or matched by 77 of 128 shuffled search maxima.",
       "tags": [
@@ -26129,8 +26146,8 @@
       ],
       "family": {
         "id": "lp2-page-pair-alignment",
-        "title": "Page-pair arithmetic",
-        "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+        "title": "Using one page to decode another",
+        "question": "Can the numbers from one manuscript page help decode another?",
         "baseline": "lp2-page-pair-alignment"
       },
       "variant_label": "All relative offsets with at least 120-rune overlap",
@@ -26205,7 +26222,12 @@
       "source_finding": "Maximum IoC 0.04721080446 occurs for LP2-14 minus LP2-35 at lag-140 over 131 runes; global plus-one empirical comparison 77+1 over 128+1 =0.60465116.331,908 observed counts are independently verified, including 330,582 new nonzero-lag settings.",
       "next_steps": "Any broader shared-keystream claim needs a statistic with demonstrated power for its proposed plaintext model; freeze shorter-overlap or reversed-page extensions separately.",
       "reader_finding": "The strongest alignment, LP2-14 against LP2-35, is no stronger than results commonly found in shuffled pages: 77 of 128 shuffled searches matched or exceeded it.",
-      "reader_limit": "Forward differences with overlap at least 120 runes and an IoC statistic only; this does not exclude general shared-key encryption.",
+      "reader_limit": "Only subtraction was tested, with at least 120 runes overlapping. Other ways to combine pages remain open.",
+      "reader_test": {
+        "input": "Pairs of LP2 pages with at least 120 runes overlapping.",
+        "action": "Slide one page along the other and subtract the numbers at each overlapping position.",
+        "check": "Compare the strongest rune-frequency pattern with shuffled-page searches; this does not check for English."
+      },
       "variant": {
         "label": "All relative offsets with at least 120-rune overlap",
         "changes": [
@@ -26249,7 +26271,7 @@
       },
       "record_source": {
         "path": "reference/experiments/lp2-shifted-page-pair-differences.json",
-        "sha256": "7890b2a4a2177b7dd837af37e59de698ccadcbf0d043a620886a87edad2cb124"
+        "sha256": "7c88bedab4b1e5dfa520feb49c88f76850206e51505a1b34f76fb7b36a338049"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
@@ -26260,6 +26282,7 @@
       "id": "lp2-shifted-page-pair-english",
       "title": "Do shifted pages produce English?",
       "question": "Do any forward page-pair sums or differences at relative shifts with at least 120 overlapping runes score like English under the fixed GP-label quadgram model?",
+      "reader_title": "Slide pages and look for English",
       "reader_question": "Do shifted sums or differences of two pages score like English?",
       "summary": "None of 995,724 shifted arithmetic readings reaches the fixed English-recognition gate. The strongest score is ordinary among the shuffled search maxima.",
       "tags": [
@@ -26362,8 +26385,8 @@
       ],
       "family": {
         "id": "lp2-page-pair-alignment",
-        "title": "Page-pair arithmetic",
-        "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+        "title": "Using one page to decode another",
+        "question": "Can the numbers from one manuscript page help decode another?",
         "baseline": "lp2-page-pair-alignment"
       },
       "variant_label": "All relative offsets with direct English scoring",
@@ -26439,7 +26462,12 @@
       "source_finding": "Best score -6.4925927001 is LP2-13 minus LP2-32 at shift 56 across 121 runes; zero streams reach -5.5. 100 of 128 full-search shuffle maxima score at least as highly, giving global plus-one comparison 0.7829457364. All 995,724 observed scores independently match exactly.",
       "next_steps": "A broader shared-keystream hypothesis needs a statistic and planted power controls matched to its plaintext relationship; do not treat absent English arithmetic output as general key-reuse exclusion.",
       "reader_finding": "None passed the fixed English-recognition test. The strongest output, from LP2-13 minus LP2-32, scored like results commonly found in shuffled pages. The known-reading tests recovered the intended text.",
-      "reader_limit": "Forward sum and both subtraction directions with at least 120-rune overlap, using one fixed English model. Other cipher layers and general shared-key encryption remain open.",
+      "reader_limit": "Only addition and subtraction with at least 120 runes overlapping and one English-scoring model were tested. Extra decoding steps remain open.",
+      "reader_test": {
+        "input": "Pairs of LP2 pages with at least 120 runes overlapping.",
+        "action": "Slide one page along the other. At each alignment, add their numbers and try both subtraction directions.",
+        "check": "Check whether the outputs pass a fixed English-recognition test and compare the best score with shuffled-page searches."
+      },
       "variant": {
         "label": "All relative offsets with direct English scoring",
         "changes": [
@@ -26484,7 +26512,7 @@
       },
       "record_source": {
         "path": "reference/experiments/lp2-shifted-page-pair-english.json",
-        "sha256": "4a899abf03c61b93c29f3f3ad639d1e983a41fa0eb1ccbf075fa09c0abdd0468"
+        "sha256": "3fc3d016f258d22007230471b3bee7e47c4fc8ed724d59db269c2c66dad5a858"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
@@ -34626,11 +34654,22 @@
             "id": "finite-settings-output",
             "version": 1
           }
+        },
+        {
+          "id": "public-wordlist-rotations-nine-openings",
+          "state": "open",
+          "note": "Try every archived key starting point in both arithmetic directions against nine known openings. This is new work, not a reproduction of the historical language scores.",
+          "records": [],
+          "followup": "public-wordlist-rotations-nine-openings",
+          "protocol": {
+            "id": "finite-settings-output",
+            "version": 1
+          }
         }
       ],
       "record_source": {
         "path": "reference/experiments/public-wordlist-vigenere.json",
-        "sha256": "7cf48e7939a6bc53d580f7e5b6e8ae3b4c7cff9722131b0323b90b8d0d8844f8"
+        "sha256": "27bc9dd0455d5c0be4955d90aa81348e822ba8bb2e64db25feaae73c4755ca1a"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
@@ -34646,6 +34685,18 @@
             "evaluation_kind": "exact-prefix-set",
             "available": true,
             "protocol_sha256": "130ad7ecd00d877b1842b3bc3713adb29a4e5c4a8b05be584c8e81cbcbd5d1d1"
+          },
+          {
+            "id": "public-wordlist-rotations-nine-openings",
+            "title": "Try every starting place for the 43 archived keys",
+            "question": "Does starting elsewhere in an archived key, adding or subtracting its numbers, recover a known opening?",
+            "scope_change": "Check 309 distinct key rotations in both arithmetic directions on 55 rune-bearing pages. Restart the key at each page and compare its first 12 runes with nine known openings.",
+            "limitation": "This is a new 33,990-case opening check with no saved results. It does not reproduce the earlier whole-page English scores or their comparison with shuffled text. Rune-empty LP2-50 is excluded.",
+            "motivation": "The earlier check starts each key at its first rune. Moving that starting point and trying both arithmetic directions tests a clear next variation with the same 43 archived keys.",
+            "kind": "finite-settings",
+            "evaluation_kind": "exact-prefix-set",
+            "available": true,
+            "protocol_sha256": "28180b37a323474dfed2bc5bb44bc6dffc7562c1ae9882dff750377cb8754711"
           }
         ]
       }

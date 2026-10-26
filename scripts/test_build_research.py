@@ -40,7 +40,8 @@ class BuildTests(unittest.TestCase):
         self.assertLess(names.index('build_repeating_key_banks.py'), names.index('build_experiments.py'))
         self.assertLess(names.index('build_published_count_evidence.py'), names.index('build_published_evidence_history.py'))
         self.assertLess(names.index('build_published_evidence_history.py'), names.index('build_experiments.py'))
-        self.assertLess(names.index('build_experiments.py'), names.index('build_access_exports.py'))
+        self.assertLess(names.index('build_experiments.py'), names.index('archive_authored_sources.py'))
+        self.assertLess(names.index('archive_authored_sources.py'), names.index('build_access_exports.py'))
         self.assertLess(names.index('build_research_map.py'), names.index('build_home_clusters.py'))
         self.assertLess(names.index('build_home_clusters.py'), names.index('check_download_catalog.py'))
 
@@ -57,6 +58,19 @@ class BuildTests(unittest.TestCase):
                          ['build_local_run_inputs.py', 'build_finite_sequence_banks.py', 'build_repeating_key_banks.py'])
         self.assertEqual(calls[-1][0][2:], ['--check'])
         self.assertEqual(calls[-1][1], {'cwd': Path('/fixture'), 'check': True})
+
+
+    def test_source_archive_is_extended_before_exports_and_failure_stops_publication(self):
+        calls = []
+        def fail(command, **options):
+            calls.append(command)
+            if Path(command[1]).name == 'archive_authored_sources.py':
+                raise subprocess.CalledProcessError(1, command)
+        with self.assertRaises(subprocess.CalledProcessError):
+            build(Path('/fixture'), run=fail)
+        self.assertEqual(Path(calls[-1][1]).name, 'archive_authored_sources.py')
+        self.assertEqual(calls[-1][2:], ['--write'])
+        self.assertNotIn('build_access_exports.py', [Path(c[1]).name for c in calls])
 
 
 if __name__ == '__main__':

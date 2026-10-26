@@ -609,8 +609,8 @@
   ],
   "family": {
     "id": "lp2-page-pair-alignment",
-    "title": "Page-pair arithmetic",
-    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "title": "Using one page to decode another",
+    "question": "Can the numbers from one manuscript page help decode another?",
     "baseline": "lp2-page-pair-alignment"
   },
   "variant": {
@@ -653,5 +653,13 @@
         "reason": "English scoring is included here; shifted alignments remain outside this variant."
       }
     ]
-  }
+  },
+  "reader_title": "Look for English when two pages start together",
+  "reader_test": {
+    "input": "The rune numbers from each pair of LP2 pages.",
+    "action": "Line up the first rune of both pages. Add their numbers, subtract the second page from the first, and subtract the first from the second.",
+    "check": "Score the outputs for English letter patterns and compare the strongest result with shuffled-page searches."
+  },
+  "reader_finding": "The best English score was not unusual. Randomly reordered runes produced an equally high or higher score in 193 of 256 searches.",
+  "reader_limit": "Only page starts, direct addition and subtraction, and one English-scoring model were checked. Other alignments, languages and extra cipher steps remain open."
 }

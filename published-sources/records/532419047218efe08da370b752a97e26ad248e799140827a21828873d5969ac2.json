@@ -1,0 +1,3439 @@
+{
+  "id": "public-wordlist-vigenere",
+  "status": "published",
+  "title": "Public 43-key Vigenère sweep",
+  "question": "Do the 43 archived wordlist keys reproduce the public GP Vigenère outputs and recover any of nine fixed known-reading openings on LP2-00–55?",
+  "reader_question": "Did the public wordlist Vigenère sweep turn any unsolved page start into a known reading?",
+  "summary": "All 2,494 complete archived page–key output strings reproduce. None of the nine fixed 12-rune openings matches the 2,365 rune-bearing unsolved-page starts.",
+  "finding": "Full archived output matches in 2,494/2,494 cases across 58 pages and 43 keys. The original fixed-opening test remains 0/21,285 exact comparisons.",
+  "limitations": "The 12-rune negative result covers only phase-zero page starts, this source key list, our transcription and nine exact openings. Complete source-output reproduction confirms the archived transform but not the source informal no-good-result judgment, which has no declared language-score threshold.",
+  "next_steps": "For a new claim, specify key derivation, alignment, position and success criterion before inspecting plaintext; compare against this fixed sweep.",
+  "outcome": "not-supported",
+  "tags": [
+    "Vigenère",
+    "public repository",
+    "wordlist",
+    "repeating key",
+    "known opening",
+    "failed attempts"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "LP2-00–55 rune stream in canonical 29-rune GP order; LP2-50 is number-only.",
+    "procedure": "Subtract each source key modulo 29 at page phase zero; compare nine fixed 12-rune openings on LP2-00–55; separately verify complete Latin rune-label streams for all 58 archived pages.",
+    "parameters": "43 archived keys, 58 complete source pages (56 unsolved-page opening-test pages), nine 12-rune openings, 21,285 exact opening comparisons.",
+    "exclusions": "Other keys, phases, directions, word resets, page segments, languages, and semantic assessment of the complete plaintext strings."
+  },
+  "review": {
+    "reviewer": "Independent prefix arithmetic, 2,494 complete source-output strings, and pinned input/source hashes checked",
+    "retested_on": "2026-10-23",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-wordlist-vigenere/run.py --check && python experiments/records/public-wordlist-vigenere/check.py",
+    "environment": "Python 3 standard library from the repository root; source ZIP optional for archived-output comparison.",
+    "script": "experiments/records/public-wordlist-vigenere/run.py",
+    "script_sha256": "8dc8211ac0553c319922f176acef9110256e6c57f4d29c81247f0d6656d72cd3",
+    "inputs": [
+      {
+        "path": "experiments/records/public-wordlist-vigenere/plan.json",
+        "sha256": "f988c9d2ec1b0040a59025253b23752721627edc081c6cc4659e6e8cb417107c"
+      },
+      {
+        "path": "experiments/records/public-wordlist-vigenere/run.py",
+        "sha256": "8dc8211ac0553c319922f176acef9110256e6c57f4d29c81247f0d6656d72cd3"
+      },
+      {
+        "path": "experiments/records/public-wordlist-vigenere/check.py",
+        "sha256": "422adf01a9253f373974b26e08610213ccb37818333179411b539941e650e3a0"
+      },
+      {
+        "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
+        "sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "text/lp2-56.txt",
+        "sha256": "6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266"
+      },
+      {
+        "path": "text/lp2-57.txt",
+        "sha256": "c89a73dc20c77308cb6b65d76895f18ada8b9cd9ff788fad3fd7ee521f36f9a0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-wordlist-vigenere/results.json",
+        "sha256": "282804f80e5e31ee5e6982264935e4ceef031432ec626c4090bb6aa937820d0c"
+      },
+      {
+        "path": "experiments/records/public-wordlist-vigenere/key-sweep.svg",
+        "sha256": "522404f3c33b6e2b675099e3394566fefa4ad8c23cebc7e15c47045ca1332394"
+      },
+      {
+        "path": "experiments/records/public-wordlist-vigenere/source-output-certificate.json",
+        "sha256": "f9a6e3c6d9e78188ec3af224eea6f61a848f4c63b22d82f349c4776cc7ee7e2b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned failed-attempt README",
+      "url": "https://github.com/LiberPrimus/Failed-Attempts/blob/d219a8099f8d24e52496e9ee3456ed9980893884/bruteforce/vigenere/README.md"
+    },
+    {
+      "label": "Pinned source output ZIP",
+      "url": "https://github.com/LiberPrimus/Failed-Attempts/blob/d219a8099f8d24e52496e9ee3456ed9980893884/bruteforce/vigenere/vigenere-bruteforce-results.zip"
+    }
+  ],
+  "related": [
+    "lp2-known-vigenere-keys"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/public-wordlist-vigenere/key-sweep.svg",
+      "caption": "The fixed source keys produced no exact match to the nine 12-rune openings."
+    }
+  ],
+  "browser_followups": [
+    {
+      "kind": "finite-settings",
+      "id": "public-wordlist-nine-openings",
+      "title": "Check nine known openings with 43 archived rune keys",
+      "question": "Does any of the 43 archived rune keys recover one of nine complete 12-rune openings at a page start?",
+      "scope_change": "Repeat the same 43 literal keys, subtraction, phase zero, page restarts and nine named openings on LP2-00-55. Retain rune-empty LP2-50 as 43 no-rune cases, excluded from opening comparisons.",
+      "limitation": "Check all 2,408 page-and-key cases: 2,365 rune-bearing cases and 43 empty cases. The earlier negative finding covers 21,285 opening comparisons. This new browser replay has no results yet. It does not verify the separate 58-page ZIP comparison or test new keys, later starts, other restarts or language scores.",
+      "card": {
+        "version": 1,
+        "outcome": {
+          "status": "specified",
+          "value": {
+            "outcomeId": "decipher",
+            "detail": "Decipher the text"
+          }
+        },
+        "method": {
+          "status": "specified",
+          "value": {
+            "operations": [
+              {
+                "id": "repeating_key",
+                "direction": "subtract",
+                "reset": "page"
+              }
+            ]
+          }
+        },
+        "scope": {
+          "status": "specified",
+          "value": {
+            "pages": [
+              "lp2-00",
+              "lp2-01",
+              "lp2-02",
+              "lp2-03",
+              "lp2-04",
+              "lp2-05",
+              "lp2-06",
+              "lp2-07",
+              "lp2-08",
+              "lp2-09",
+              "lp2-10",
+              "lp2-11",
+              "lp2-12",
+              "lp2-13",
+              "lp2-14",
+              "lp2-15",
+              "lp2-16",
+              "lp2-17",
+              "lp2-18",
+              "lp2-19",
+              "lp2-20",
+              "lp2-21",
+              "lp2-22",
+              "lp2-23",
+              "lp2-24",
+              "lp2-25",
+              "lp2-26",
+              "lp2-27",
+              "lp2-28",
+              "lp2-29",
+              "lp2-30",
+              "lp2-31",
+              "lp2-32",
+              "lp2-33",
+              "lp2-34",
+              "lp2-35",
+              "lp2-36",
+              "lp2-37",
+              "lp2-38",
+              "lp2-39",
+              "lp2-40",
+              "lp2-41",
+              "lp2-42",
+              "lp2-43",
+              "lp2-44",
+              "lp2-45",
+              "lp2-46",
+              "lp2-47",
+              "lp2-48",
+              "lp2-49",
+              "lp2-50",
+              "lp2-51",
+              "lp2-52",
+              "lp2-53",
+              "lp2-54",
+              "lp2-55"
+            ]
+          }
+        },
+        "rules": {
+          "representation": {
+            "status": "specified",
+            "value": "GP29"
+          },
+          "wordBoundaries": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "boundaryMode": {
+            "status": "unspecified"
+          },
+          "unmapped": {
+            "status": "specified",
+            "value": "preserve"
+          },
+          "inputVersion": {
+            "status": "specified",
+            "value": "raw"
+          },
+          "evaluation": {
+            "status": "specified",
+            "value": {
+              "kind": "exact-prefix-set",
+              "openings": [
+                {
+                  "id": "warning",
+                  "values": [
+                    24,
+                    7,
+                    24,
+                    4,
+                    9,
+                    21,
+                    17,
+                    18,
+                    20,
+                    10,
+                    18,
+                    1
+                  ]
+                },
+                {
+                  "id": "welcome",
+                  "values": [
+                    7,
+                    18,
+                    20,
+                    5,
+                    3,
+                    19,
+                    18,
+                    7,
+                    18,
+                    20,
+                    5,
+                    3
+                  ]
+                },
+                {
+                  "id": "some-wisdom",
+                  "values": [
+                    15,
+                    3,
+                    19,
+                    18,
+                    7,
+                    10,
+                    15,
+                    23,
+                    3,
+                    19,
+                    2,
+                    18
+                  ]
+                },
+                {
+                  "id": "first-koan",
+                  "values": [
+                    24,
+                    5,
+                    3,
+                    24,
+                    9,
+                    24,
+                    19,
+                    24,
+                    9,
+                    23,
+                    18,
+                    5
+                  ]
+                },
+                {
+                  "id": "loss-of-divinity",
+                  "values": [
+                    2,
+                    18,
+                    20,
+                    3,
+                    15,
+                    15,
+                    3,
+                    0,
+                    23,
+                    10,
+                    1,
+                    10
+                  ]
+                },
+                {
+                  "id": "second-koan",
+                  "values": [
+                    24,
+                    5,
+                    3,
+                    24,
+                    9,
+                    23,
+                    1,
+                    4,
+                    21,
+                    24,
+                    20,
+                    18
+                  ]
+                },
+                {
+                  "id": "instruction",
+                  "values": [
+                    24,
+                    9,
+                    10,
+                    9,
+                    15,
+                    16,
+                    4,
+                    1,
+                    5,
+                    16,
+                    27,
+                    9
+                  ]
+                },
+                {
+                  "id": "lp2-56",
+                  "values": [
+                    24,
+                    9,
+                    18,
+                    9,
+                    23,
+                    7,
+                    10,
+                    2,
+                    10,
+                    9,
+                    2,
+                    18
+                  ]
+                },
+                {
+                  "id": "lp2-57",
+                  "values": [
+                    13,
+                    24,
+                    4,
+                    24,
+                    17,
+                    20,
+                    18,
+                    20,
+                    10,
+                    5,
+                    18,
+                    2
+                  ]
+                }
+              ]
+            }
+          },
+          "reset": {
+            "status": "unspecified"
+          },
+          "initialState": {
+            "status": "unspecified"
+          },
+          "searchBounds": {
+            "status": "specified",
+            "value": {
+              "kind": "finite-settings",
+              "version": 1,
+              "parameters": [
+                {
+                  "operation": 0,
+                  "name": "key",
+                  "valuesFrom": {
+                    "bankId": "public-wordlist-keys-v1",
+                    "bankSha256": "3fe9c14c22fc8f15649549ac5466781244064152b2cfb0b2b0fa3ddab69db54f",
+                    "start": 0,
+                    "count": 43
+                  }
+                }
+              ]
+            }
+          },
+          "searchProtocol": {
+            "status": "unspecified"
+          },
+          "exceptionalCases": {
+            "status": "unspecified"
+          }
+        },
+        "unresolved": []
+      },
+      "inputs": {
+        "version": "raw",
+        "alphabet_sha256": "06d9b994e762c485c2ce5d6a5f0878258d8277e1e8afa3178d41a29a97c5c73f",
+        "pages": [
+          {
+            "id": "lp2-00",
+            "text_sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "id": "lp2-01",
+            "text_sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "id": "lp2-02",
+            "text_sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "id": "lp2-03",
+            "text_sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "id": "lp2-04",
+            "text_sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+          },
+          {
+            "id": "lp2-05",
+            "text_sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+          },
+          {
+            "id": "lp2-06",
+            "text_sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+          },
+          {
+            "id": "lp2-07",
+            "text_sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+          },
+          {
+            "id": "lp2-08",
+            "text_sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+          },
+          {
+            "id": "lp2-09",
+            "text_sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+          },
+          {
+            "id": "lp2-10",
+            "text_sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+          },
+          {
+            "id": "lp2-11",
+            "text_sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+          },
+          {
+            "id": "lp2-12",
+            "text_sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+          },
+          {
+            "id": "lp2-13",
+            "text_sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+          },
+          {
+            "id": "lp2-14",
+            "text_sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "id": "lp2-15",
+            "text_sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "id": "lp2-16",
+            "text_sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "id": "lp2-17",
+            "text_sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "id": "lp2-18",
+            "text_sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "id": "lp2-19",
+            "text_sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "id": "lp2-20",
+            "text_sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "id": "lp2-21",
+            "text_sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "id": "lp2-22",
+            "text_sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "id": "lp2-23",
+            "text_sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "id": "lp2-24",
+            "text_sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "id": "lp2-25",
+            "text_sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "id": "lp2-26",
+            "text_sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "id": "lp2-27",
+            "text_sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "id": "lp2-28",
+            "text_sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "id": "lp2-29",
+            "text_sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "id": "lp2-30",
+            "text_sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "id": "lp2-31",
+            "text_sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "id": "lp2-32",
+            "text_sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "id": "lp2-33",
+            "text_sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "id": "lp2-34",
+            "text_sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "id": "lp2-35",
+            "text_sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "id": "lp2-36",
+            "text_sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "id": "lp2-37",
+            "text_sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "id": "lp2-38",
+            "text_sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "id": "lp2-39",
+            "text_sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "id": "lp2-40",
+            "text_sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "id": "lp2-41",
+            "text_sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "id": "lp2-42",
+            "text_sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "id": "lp2-43",
+            "text_sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "id": "lp2-44",
+            "text_sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "id": "lp2-45",
+            "text_sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "id": "lp2-46",
+            "text_sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "id": "lp2-47",
+            "text_sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "id": "lp2-48",
+            "text_sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "id": "lp2-49",
+            "text_sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "id": "lp2-50",
+            "text_sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+          },
+          {
+            "id": "lp2-51",
+            "text_sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "id": "lp2-52",
+            "text_sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "id": "lp2-53",
+            "text_sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "id": "lp2-54",
+            "text_sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "id": "lp2-55",
+            "text_sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ]
+      },
+      "control": {
+        "kind": "finite-program-controls-shared-v1",
+        "alphabet": [
+          {
+            "rune": "ᚠ",
+            "latin": "F",
+            "prime": 2
+          },
+          {
+            "rune": "ᚢ",
+            "latin": "U",
+            "prime": 3
+          },
+          {
+            "rune": "ᚦ",
+            "latin": "TH",
+            "prime": 5
+          },
+          {
+            "rune": "ᚩ",
+            "latin": "O",
+            "prime": 7
+          },
+          {
+            "rune": "ᚱ",
+            "latin": "R",
+            "prime": 11
+          },
+          {
+            "rune": "ᚳ",
+            "latin": "C",
+            "prime": 13
+          },
+          {
+            "rune": "ᚷ",
+            "latin": "G",
+            "prime": 17
+          },
+          {
+            "rune": "ᚹ",
+            "latin": "W",
+            "prime": 19
+          },
+          {
+            "rune": "ᚻ",
+            "latin": "H",
+            "prime": 23
+          },
+          {
+            "rune": "ᚾ",
+            "latin": "N",
+            "prime": 29
+          },
+          {
+            "rune": "ᛁ",
+            "latin": "I",
+            "prime": 31
+          },
+          {
+            "rune": "ᛄ",
+            "latin": "J",
+            "prime": 37
+          },
+          {
+            "rune": "ᛇ",
+            "latin": "EO",
+            "prime": 41
+          },
+          {
+            "rune": "ᛈ",
+            "latin": "P",
+            "prime": 43
+          },
+          {
+            "rune": "ᛉ",
+            "latin": "X",
+            "prime": 47
+          },
+          {
+            "rune": "ᛋ",
+            "latin": "S",
+            "prime": 53
+          },
+          {
+            "rune": "ᛏ",
+            "latin": "T",
+            "prime": 59
+          },
+          {
+            "rune": "ᛒ",
+            "latin": "B",
+            "prime": 61
+          },
+          {
+            "rune": "ᛖ",
+            "latin": "E",
+            "prime": 67
+          },
+          {
+            "rune": "ᛗ",
+            "latin": "M",
+            "prime": 71
+          },
+          {
+            "rune": "ᛚ",
+            "latin": "L",
+            "prime": 73
+          },
+          {
+            "rune": "ᛝ",
+            "latin": "NG",
+            "prime": 79
+          },
+          {
+            "rune": "ᛟ",
+            "latin": "OE",
+            "prime": 83
+          },
+          {
+            "rune": "ᛞ",
+            "latin": "D",
+            "prime": 89
+          },
+          {
+            "rune": "ᚪ",
+            "latin": "A",
+            "prime": 97
+          },
+          {
+            "rune": "ᚫ",
+            "latin": "AE",
+            "prime": 101
+          },
+          {
+            "rune": "ᚣ",
+            "latin": "Y",
+            "prime": 103
+          },
+          {
+            "rune": "ᛡ",
+            "latin": "IA",
+            "prime": 107
+          },
+          {
+            "rune": "ᛠ",
+            "latin": "EA",
+            "prime": 109
+          }
+        ],
+        "criterion": {
+          "kind": "exact-prefix",
+          "values": [
+            24,
+            7,
+            24,
+            4,
+            9,
+            21,
+            17,
+            18,
+            20,
+            10,
+            18,
+            1,
+            18,
+            9,
+            3,
+            2,
+            21,
+            0,
+            4,
+            3,
+            19,
+            2,
+            10,
+            15,
+            17,
+            3,
+            3,
+            5,
+            18,
+            14,
+            5,
+            18,
+            13,
+            16,
+            7,
+            8,
+            24,
+            16,
+            26,
+            3,
+            1,
+            5,
+            9,
+            3,
+            7,
+            16,
+            3,
+            17,
+            18,
+            16,
+            4,
+            1,
+            18,
+            16,
+            18,
+            15,
+            16,
+            2,
+            18,
+            5,
+            9,
+            3,
+            7,
+            20,
+            18,
+            23,
+            6,
+            18,
+            0,
+            10,
+            9,
+            23,
+            26,
+            3,
+            1,
+            4,
+            16,
+            4,
+            1,
+            2,
+            18,
+            14,
+            13,
+            18,
+            4,
+            10,
+            18,
+            9,
+            5,
+            18,
+            26,
+            3,
+            1,
+            4,
+            23,
+            28,
+            2,
+            23,
+            3,
+            9,
+            3,
+            16,
+            18,
+            23,
+            10,
+            16,
+            3,
+            4,
+            5,
+            8,
+            24,
+            21,
+            18,
+            2,
+            10,
+            15,
+            17,
+            3,
+            3,
+            5,
+            3,
+            4,
+            2,
+            18,
+            19,
+            18,
+            15,
+            15,
+            24,
+            6,
+            18,
+            5,
+            3,
+            9,
+            16,
+            24,
+            10,
+            9,
+            18,
+            23,
+            7,
+            10,
+            2,
+            10,
+            9,
+            18,
+            10,
+            2,
+            18,
+            4,
+            2,
+            18,
+            7,
+            3,
+            4,
+            23,
+            15,
+            3,
+            4,
+            2,
+            18,
+            10,
+            4,
+            9,
+            1,
+            19,
+            17,
+            18,
+            4,
+            15,
+            0,
+            3,
+            4,
+            24,
+            20,
+            20,
+            10,
+            15,
+            15,
+            24,
+            5,
+            4,
+            18,
+            23
+          ]
+        },
+        "members": [
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  0,
+                  3,
+                  4,
+                  19
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 1",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚪ-ᛁᛠᛞᚾᚪ.ᛝᚻᛚᛈᛟᛚᛖ-ᛇᚹᛝᛝ-ᚩᚻᛟᛗ-/\nᚳᛉᚳ-ᛒᚷᚹᚪ.ᛖᛒᚾᚻᛈᛗ-ᛄᛡᚪᛗ-ᚢᛟᚢ/\n-ᚻᛈᛟᚹ-ᛗᚹ-ᚹᛖ-ᛗᚻᛚᛖ.ᛗᛟᚳᛏ-ᚳᛟ-ᚪ/\nᚾᚷᛄᛁᛖᚣᛁᚻ.ᚠᛈᛈᛈ-ᚣᚷᚳᛞ-ᛏᚹᚳᛝ.ᛖᛒ/\nᛒᚻᚱᛈᛟᛠᚳᛝ-ᚢᛟᚢᚹ-ᛡᛖᚦ.ᚣᚹ-ᛠᚩᛗ-ᛟᛈᛁᛗ-ᚹ/\nᛞ-ᚳᛄᛠᛄᛖ-ᚳᛉᚳ-ᛒᚷᚹᚪ.ᚩᚹ-ᚷᚻ-ᛗᛝᛗᚳᚪᚾᛟ-/\nᚪᚩᛇᛚᛉᛁᛇᛟᛈ-ᚹᛈᚷᚠᚾ.ᛝᛉᛝᛖᚹ-ᚷᚻ-ᚹᚷ/\nᚻᛈᛋ-ᚷᚻ-ᛝᛖᛈᚻ-ᛠᚢᛟᛝᚻᚱᛖ.ᚱᛟᚱ-ᛡᚪᛁ-ᛁ/\nᛖ-ᛗᛉᚳᚹᛟᛈ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      0,
+                      3,
+                      4,
+                      19
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "8155f79dda17d955e32c57d091f9951c3d561d567b3e94475d63926a6924418e"
+              },
+              "expected_result_sha256": "7f53aaebe17bb4480d3246548aed78fc43b302ce5a27add7b6260299ffff865e"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  1,
+                  3,
+                  10,
+                  23
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 2",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚫ-ᛁᚳᛡᛁᚪ.ᛡᛇᛝᛈᛠᚪᛗ-ᛇᛈᚫᛟ-ᚩᛉᚣᛚ-/\nᚳᛚᚾ-ᛖᚷᛈᛠ.ᛗᛒᛋᛇᛉᛗ-ᛒᚦᚫᛗ-ᚹᚣᚦ/\n-ᚻᛗᚣᚻ-ᛗᛈ-ᛄᛗ-ᛗᛉᚪᛗ.ᛗᛠᚾᛒ-ᚳᛠ-ᛠ/\nᛁᚷᛒᛉᛗᚣᛏᛇ.ᚢᛈᛗᛒ-ᛡᚷᛄᛡ-ᛒᚹᛄᚫ.ᛗᛒ/\nᛞᛇᚳᛈᛠᚩᚷᛝ-ᚹᚣᚦᚹ-ᚱᛟᚩ.ᚣᛈ-ᚩᚱᛗ-ᛠᛒᛄᛗ-ᛈ/\nᛡ-ᚷᛄᚳᛋᛗ-ᚳᛚᚾ-ᛖᚷᛈᛠ.ᚱᚹ-ᛇᛇ-ᛚᛝᚫᚾᚫᚾᛠ-/\nᛠᚱᛇᚣᛖᛄᛇᛠᛒ-ᚻᛈᛇᚱᛁ.ᛝᛚᚫᛗᚹ-ᛇᛇ-ᚻᚷ/\nᛉᛒᛏ-ᚷᛉ-ᚫᛗᛈᛉ-ᚩᚦᛟᛡᛇᚳᛖ.ᛁᚣᚳ-ᛡᚢᛉ-ᛄ/\nᛖ-ᚫᛖᚷᚹᛠᛒ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      1,
+                      3,
+                      10,
+                      23
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "3a45fe6fa8a6a8712c861236a9b41b274c841814f4e311da63149e53bfb6380a"
+              },
+              "expected_result_sha256": "11786cfa34262d749e672547d033f923bbb115b064fe24b4ff256dcab83e282a"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  3,
+                  9,
+                  10,
+                  3,
+                  9
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 3",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛡ-ᛏᚳᚹᛖᚪ.ᚣᛠᛞᛗᛝᛁᛠ-ᛇᛇᚳᚢ-ᛁᚹᛇᛟ-/\nᛄᛚᛖ-ᚣᚷᛇᛋ.ᛝᛞᚻᛡᛞᛗ-ᛏᛄᚱᚣ-ᚠᛇᚱ/\n-ᛉᛗᚷᛏ-ᛗᛇ-ᛡᛝ-ᚫᚹᛁᛠ.ᛗᛡᛖᚫ-ᛇᛝ-ᛉ/\nᛇᛇᛒᛞᛡᚣᛋᛠ.ᚩᛗᛇᚩ-ᚹᚷᛁᚹ-ᚫᛉᚱᛄ.ᛝᛞ/\nᛞᛝᛈᛈᛡᛗᚻᛡ-ᚠᛇᛄᚹ-ᚩᚦᛄ.ᚱᚷ-ᛖᚷᚫ-ᛠᚣᛗᛗ-ᛇ/\nᛉ-ᚻᛒᛡᚢᛠ-ᚳᛗᛖ-ᚣᛈᚷᛉ.ᚷᛈ-ᛇᛝ-ᛠᛝᚪᚫᛡᛋᛝ-/\nᛉᛈᛇᚫᛡᛗᛗᛝᚩ-ᛁᛗᛇᛈᛖ.ᛝᛗᛇᛝᛈ-ᚳᛡ-ᛒᚷ/\nᛈᚣᚪ-ᛈᚹ-ᛄᛝᛗᛉ-ᛇᛁᛟᚣᛠᚹᚪ.ᚩᛇᛉ-ᛡᚠᛞ-ᛗ/\nᚫ-ᛖᚱᚻᛈᛠᚣ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      3,
+                      9,
+                      10,
+                      3,
+                      9
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "9e4fa57ecdf203bc75fa33111940af105422bc0e503537c16d7224183cf0dd6f"
+              },
+              "expected_result_sha256": "66ea8e525768f5e01248832290e10abe2ec54bc8d9303bf3977fd2db18123d48"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  3,
+                  17,
+                  15,
+                  5,
+                  1,
+                  4,
+                  24
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 4",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛡ-ᚪᛁᚾᛁᚫ.ᛇᛝᚻᚫᛞᚦᛟ-ᚱᚷᛗᚹ-ᚳᚳᚹᛉ-/\nᚳᛡᚢ-ᛟᚱᚹᚠ.ᛝᚦᛚᛞᛉᛚ-ᚦᛄᛇᚦ-ᚦᚱᚳ/\n-ᚠᛇᛚᛟ-ᛝᚱ-ᛝᛈ-ᛗᛝᛏᛞ.ᛒᛟᛁᛗ-ᛗᚱ-ᛁ/\nᛁᚹᚦᛞᚷᚾᛄᛗ.ᚱᚳᛇᛄ-ᛇᚻᚦᚻ-ᛄᚹᛖᛒ.ᛞᛋ/\nᛒᛈᚹᛡᚱᛉᚷᛟ-ᛝᚷᛖᛗ-ᛠᚠᚷ.ᛖᚷ-ᚣᛖᛝ-ᛗᛡᚳᛗ-ᛚ/\nᛗ-ᛁᚾᛠᛏᛝ-ᛗᚫᛚ-ᛖᚹᛡᚻ.ᛚᛗ-ᚹᛗ-ᛞᛈᛖᚩᛁᛄᛗ-/\nᚾᛡᛇᚱᛁᛋᛁᛟᛖ-ᛁᛡᛒᛋᛁ.ᛟᚳᚳᚷᛗ-ᚹᛗ-ᛄᛡ/\nᚹᛄᚢ-ᚻᚳ-ᚷᛈᛈᛝ-ᚪᚷᛚᛝᛈᚹᚩ.ᛋᚻᚳ-ᛠᛋᛞ-ᛡ/\nᚢ-ᛚᚫᚾᛠᛝᛄ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      3,
+                      17,
+                      15,
+                      5,
+                      1,
+                      4,
+                      24
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "a500954a202177618859dd7f33d0d385d1377b265471b929d73f03b58e21847b"
+              },
+              "expected_result_sha256": "cdf34350564daf97ccf64e85b935f57c3bcd033530921226ba3067061e1f3fd5"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  5,
+                  3,
+                  9,
+                  15,
+                  1,
+                  19,
+                  13,
+                  16,
+                  10,
+                  3,
+                  9
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 5",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚠ-ᛁᚱᛗᛁᛄ.ᚢᚳᚢᛈᛡᚷᛝ-ᛖᛖᚩᛄ-ᛈᛚᛈᛟ-/\nᛄᛋᛖ-ᚣᛖᚱᚪ.ᚦᚢᛋᛝᛟᛝ-ᛁᛒᛁᛒ-ᛏᛏᛒ/\n-ᛋᛇᛇᛇ-ᛗᛇ-ᚩᛗ-ᚷᛒᛒᛠ.ᛗᛡᛚᛗ-ᛄᚱ-ᚷ/\nᛠᛏᛞᚢᛝᚩᛄᛝ.ᚾᚫᛁᛈ-ᛁᛗᛄᚹ-ᚫᚾᚱᛄ.ᚱᛋ/\nᚩᚦᛚᛚᛝᛖᛁᛝ-ᚷᛖᚦᛞ-ᚹᛋᛇ.ᚣᛇ-ᛉᚷᚫ-ᚱᚪᚠᚠ-ᛗ/\nᛉ-ᚻᛒᚠᚪᛡ-ᛒᛄᚳ-ᚢᛗᛈᚻ.ᛇᚾ-ᚳᛡ-ᚳᛗᚳᛠᛄᛏᛝ-/\nᛉᚻᛇᚫᛁᛄᛠᚦᛁ-ᛒᛈᛄᛋᛇ.ᛡᚫᚩᚻᛒ-ᛖᛠ-ᛁᛇ/\nᚾᚣᚪ-ᛖᚳ-ᛝᚦᚣᛉ-ᛇᛁᚪᛚᛡᛗᛏ.ᛗᛏᛚ-ᚳᛞᚠ-ᛋ/\nᛖ-ᚪᛁᚷᛞᚦᛁ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      5,
+                      3,
+                      9,
+                      15,
+                      1,
+                      19,
+                      13,
+                      16,
+                      10,
+                      3,
+                      9
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "7ee060b4174574bc64943d9fd492c83833df1c7b1e69dedfa4a68bf54f877015"
+              },
+              "expected_result_sha256": "fd8e3ab7713fa646e80fb07ff9276b0c89e3a7530a02037895d6725a797deb59"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  5,
+                  3,
+                  24,
+                  9
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 6",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚠ-ᛁᛗᛈᛉᚪ.ᛇᛡᚫᛈᛈᛁᛞ-ᛇᛡᛄᚣ-ᚩᛠᛇᚪ-/\nᚳᚳᚪ-ᛟᚷᛡᛉ.ᛞᛒᚠᛡᛖᛗ-ᚦᛒᚠᛗ-ᛝᛇᚷ/\n-ᚻᚱᛇᛇ-ᛗᛡ-ᚣᛞ-ᛗᛠᛁᛞ.ᛗᛈᚪᛝ-ᚳᛈ-ᛉ/\nᛉᚷᚦᚠᛞᚣᚢᛡ.ᚳᛈᚱᚩ-ᚦᚷᚫᛈ-ᛝᚹᚫᛄ.ᛞᛒ/\nᚻᛡᚾᛈᛈᛖᛁᛝ-ᛝᛇᚷᚹ-ᛖᚻᚹ.ᚣᛡ-ᛖᚻᛗ-ᛈᚩᛋᛗ-ᛡ/\nᛈ-ᛁᛄᛗᚢᛞ-ᚳᚳᚪ-ᛟᚷᛡᛉ.ᚻᚹ-ᚣᛡ-ᚪᛝᛁᚪᚠᚾᛈ-/\nᛉᚻᛇᛄᚱᛋᛇᛈᚩ-ᛇᛈᚣᛗᛉ.ᛝᚳᛄᛞᚹ-ᚣᛡ-ᛇᚷ/\nᛠᚩᛚ-ᚷᛠ-ᛄᛞᛈᛠ-ᛖᚷᛟᛇᛡᚾᛖ.ᚪᛇᚾ-ᛡᛋᚠ-ᛋ/\nᛖ-ᛁᚱᛁᚹᛈᚩ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      5,
+                      3,
+                      24,
+                      9
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "55ed46a58f42c0ab297c629013774d51a8994c13e35c42c654aa9e246154edad"
+              },
+              "expected_result_sha256": "a66db00385bb1a3d2a065502736f3a0ebbf723ecc0e5d105316b2760217d616d"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  5,
+                  8,
+                  18,
+                  5,
+                  5,
+                  15,
+                  1,
+                  19
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 7",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚠ-ᛋᛈᚾᛉᚹ.ᛖᚻᚫᛖᚹᚷᛞ-ᚪᚱᛝᚣ-ᚻᛟᚻᚪ-/\nᛒᛄᚳ-ᛟᛄᛝᛁ.ᛞᚠᚷᚻᛖᚪ-ᚫᛈᚠᚦ-ᛡᛟᚷ/\n-ᛈᛡᚻᛇ-ᚦᚱ-ᚹᛞ-ᚪᛟᚷᛞ.ᚦᛗᚳᛝ-ᛁᚹ-ᛁ/\nᛉᛖᚻᛁᛞᚦᚪᛞ.ᚳᚫᛁᛈ-ᚦᛄᛗᚾ-ᛝᛗᚦᛝ.ᛞᛟ/\nᚦᛞᚾᚫᛗᛠᛁᚣ-ᛋᚻᚷᛗ-ᚪᛖᚹ.ᚦᛝ-ᛉᚻᚦ-ᛗᛈᛋᚪ-ᛝ/\nᚾ-ᛁᛞᚫᛄᛞ-ᛁᛠᛚ-ᛟᛖᚱᚪ.ᚻᛇ-ᛚᛞ-ᚪᚱᛏᚳᚠᛉᚹ-/\nᛁᚻᚪᛒᛉᛋᛒᚹᛠ-ᛇᚫᚩᚠᛉ.ᚣᛠᚹᛞᛗ-ᚩᚻ-ᛇᛄ/\nᛟᛠᛚ-ᛖᚳ-ᛝᛞᛖᛟ-ᛉᚷᚳᛖᚻᚾᛞ.ᛖᚻᚾ-ᛁᛝᛁ-ᛋ/\nᛞ-ᚱᚠᛁᛗᛗᛈ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      5,
+                      8,
+                      18,
+                      5,
+                      5,
+                      15,
+                      1,
+                      19
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "49912f25aa6b48a378b6230a64fc8b89849ebfaa6b1d2374c15e2ebd13b46b9b"
+              },
+              "expected_result_sha256": "1e3c25ff492582193c5b07c1f07f65cbc2e14c8bba81312d32f648d368369cfa"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  5,
+                  10,
+                  5,
+                  24,
+                  23,
+                  24
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 8",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚠ-ᛒᚠᛠᚩᛏ.ᛟᛠᚫᚳᛇᚫᛞ-ᛗᚻᚣᛋ-ᚪᚾᛈᚪ-/\nᚣᚱᛁ-ᛟᛈᚻᚠ.ᛇᚾᛁᛠᛖᛄ-ᚢᚩᚠᚣ-ᚦᛡᚪ/\n-ᚠᛉᛈᛇ-ᛄᚣ-ᛇᛞ-ᚣᚾᚫᛇ.ᛄᛞᚫᛝ-ᚣᛇ-ᚠ/\nᛉᛈᛇᛋᛇᛖᛄᛠ.ᚳᚳᚩᛖ-ᚦᛈᚷᛠ-ᛁᛠᚷᛇ.ᛞᚾ/\nᚹᛈᚾᛚᛞᚱᛠᛈ-ᚦᛈᚷᛠ-ᛒᛞᚹ.ᚱᚻ-ᚱᚣᛄ-ᛞᚱᛋᛄ-ᚣ/\nᛠ-ᛁᛖᚠᛏᛇ-ᚣᛋᚫ-ᛟᛡᚣᚠ.ᚻᛉ-ᚹᛈ-ᛈᛈᛚᚫᚠᚢᛇ-/\nᚠᚻᛗᛝᛗᚱᚱᛞᚱ-ᛇᚳᚫᚳᛉ.ᛠᛋᚣᛇᛠ-ᚹᛠ-ᛇᛡ/\nᛡᛖᛚ-ᛈᚾ-ᚣᛇᚳᚾ-ᛗᚷᛉᛄᛈᚾᚫ.ᚳᛡᛡ-ᛗᚫᚢ-ᛋ/\nᛁ-ᚾᛗᛁᛉᛞᛖ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      5,
+                      10,
+                      5,
+                      24,
+                      23,
+                      24
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "35f35e92464e161316a4d25eb28387900c89af0970a41e1055212bfc71c788a8"
+              },
+              "expected_result_sha256": "62d15c222ae0f3b54e53a39c74420ccb3e1709c7e57dbeaffcf30416450223ae"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  5,
+                  24,
+                  4,
+                  9,
+                  24,
+                  20
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 9",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚠ-ᚦᛠᛈᚱᛇ.ᛟᛈᚪᛗᛈᛝᛞ-ᚱᚹᛄᛏ-ᛚᚾᛡᛞ-/\nᛄᚳᚷ-ᛟᛡᚹᛉ.ᛈᚳᛁᛈᛒᚫ-ᚦᛠᚠᛄ-ᚢᛇᚫ/\n-ᚫᛉᛡᛄ-ᚫᛡ-ᚻᛞ-ᛄᚻᛁᛈ.ᚹᛞᛁᛚ-ᛄᛈ-ᚫ/\nᛉᛡᛄᚠᛈᛉᛄᛈ.ᚱᛗᚱᛉ-ᚦᛡᚳᛈ-ᛄᚪᚷᚣ.ᛟᛞ/\nᚻᚾᚾᚳᛟᛖᚠᚾ-ᚦᛡᚳᛈ-ᛖᛗᚹ.ᛖᚹ-ᛖᛡᚹ-ᛞᛖᛉᚫ-ᛡ/\nᚪ-ᛁᚩᛠᚢᛈ-ᛟᛋᛁ-ᛝᛇᛡᚫ.ᚻᛠ-ᚷᛡ-ᛉᚾᛚᛁᛠᛋᛈ-/\nᚫᚻᚱᛚᚱᚳᚠᛞᛖ-ᛄᛗᚣᚢᛉ.ᛈᛉᛄᛈᚪ-ᚹᛈ-ᛄᛇ/\nᛠᛉᛚ-ᛡᚻ-ᛄᛈᚢᚾ-ᚱᚳᛠᛇᚾᚾᛁ.ᚱᛇᛠ-ᛋᚫᛋ-ᛉ/\nᚪ-ᛁᛋᛁᛠᛟᚩ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      5,
+                      24,
+                      4,
+                      9,
+                      24,
+                      20
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "4c30dc2e6d1786ebac9fc917cde0eb564f72143e3b10fb03fafc0b40e6a9544f"
+              },
+              "expected_result_sha256": "5ac860715cc7f25d4ca8e4f7799ec260b1661903160ee47487492753e64ddf0a"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  5,
+                  24,
+                  17,
+                  24,
+                  20
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 10",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚠ-ᚦᛇᛠᚠᚣ.ᛇᚷᛋᚢᛞᚫᚷ-ᚱᛞᚹᛏ-ᛒᛠᛞᚪ-/\nᚣᛡᛁ-ᚻᚻᛡᛟ.ᛈᚳᛁᛈᚢᛄ-ᛡᛈᛗᚱ-ᛝᛞᚷ/\n-ᚠᚣᛡᛡ-ᛝᛡ-ᚳᛈ-ᚹᚾᚫᚷ.ᛄᚾᛚᛄ-ᛗᛈ-ᚫ/\nᛉᛡᚪᛋᚾᛠᚢᚷ.ᚪᚢᛉᛖ-ᛉᛡᛝᚾ-ᛄᛝᚫᛟ.ᛞᚾ/\nᚢᛈᚪᛋᛈᚣᚠᚾ-ᚦᛡᛖᛠ-ᛉᚱᚣ.ᛄᛡ-ᚠᚻᛄ-ᚷᛖᚢᛝ-ᛡ/\nᛝ-ᚠᛠᚠᛏᚷ-ᚣᚢᛚ-ᛇᛚᛡᚫ.ᚻᛠ-ᛗᛈ-ᛁᛞᛁᚩᛗᚣᛞ-/\nᚠᛚᚱᚹᚠᚳᚣᛈᛉ-ᛇᚳᛗᚳᚠ.ᛞᚳᛗᛈᚪ-ᚹᛈ-ᚪᛡ/\nᚪᛠᛁ-ᛚᛠ-ᛟᛞᚳᛝ-ᚱᛝᚪᛇᚷᛠᚷ.ᚳᛡᛝ-ᛗᛄᚫ-ᚳ/\nᚩ-ᛁᛋᛁᛠᚷᛖ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      5,
+                      24,
+                      17,
+                      24,
+                      20
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "6602165718269d9dde17027cb8edfb10269527c80f8d90dddf7a5c4ccd3818a5"
+              },
+              "expected_result_sha256": "9b67bcc7e61562de90b5376018cdb0d3c61311fe28cdf7909e88e0fcfe31054d"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  6,
+                  18,
+                  19,
+                  24,
+                  16,
+                  4,
+                  10,
+                  24
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 11",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚢ-ᚫᛉᛠᚫᚫ.ᛡᛈᚣᛠᚻᚫᚳ-ᛈᛈᚣᛡ-ᛖᛞᛡᚷ-/\nᚷᛚᛁ-ᛞᛝᛟᚠ.ᚳᛖᛋᛈᛗᚳ-ᚣᚩᛄᛚ-ᚹᛡᚹ/\n-ᛞᛠᛡᛞ-ᛚᛈ-ᛇᚪ-ᚳᛞᚫᚳ.ᛚᛠᛁᛟ-ᛚᚻ-ᚠ/\nᚫᚹᛒᛋᚪᛇᚫᛈ.ᛏᛉᛗᛖ-ᚩᛝᛚᛠ-ᚩᚻᛄᚣ.ᚪᚩ/\nᚩᛈᛚᛉᛠᚱᛄᚹ-ᛏᛡᛒᚻ-ᚱᛞᚻ.ᛇᛟ-ᚱᛗᛚ-ᛠᛖᛏᚳ-ᛟ/\nᛠ-ᛝᛇᚳᛏᚪ-ᛚᚠᛁ-ᚱᚹᛈᚠ.ᚾᛟ-ᛝᛈ-ᚷᛟᚫᛁᚢᚪᚻ-/\nᚠᛗᛈᚣᛗᛏᛡᚻᛖ-ᛞᛉᛇᚳᛋ.ᚹᚠᚣᚳᚻ-ᛇᛈ-ᛈᛝ/\nᛞᛖᚦ-ᚹᛉ-ᚣᚪᛠᛞ-ᚱᛒᛞᛡᛈᛁᚱ.ᛗᛡᛚ-ᛠᚢᛋ-ᛏ/\nᚱ-ᚳᛗᛝᚻᛠᛖ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      6,
+                      18,
+                      19,
+                      24,
+                      16,
+                      4,
+                      10,
+                      24
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "85004c85ed93074f8d81fe15c26d7d98164f699d344c35c9b7ec95595702311c"
+              },
+              "expected_result_sha256": "412aa9b170dd0ffa4f38ddc7fb52dd5aa7b63673ffdc2116bb86c991dd0b2224"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  7,
+                  10,
+                  15,
+                  23,
+                  3,
+                  19
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 12",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚦ-ᛒᛁᛡᛇᛄ.ᚪᛠᚷᚱᛝᛚᚫ-ᛗᛖᚫᚪ-ᛗᛄᛈᚳ-/\nᚫᛈᚳ-ᚪᛈᛖᛠ.ᛝᚱᛇᛠᛠᛁ-ᛁᛡᚦᚣ-ᛇᚣᚱ/\n-ᚪᛏᛈᛟ-ᛁᚷ-ᚹᚫ-ᚣᛗᚪᛝ.ᚷᚫᚫᚦ-ᚫᛝ-ᚪ/\nᛏᛈᛟᛉᛝᛈᛈᛠ.ᛋᚱᛇᛈ-ᚱᛈᛏᛡ-ᛗᛞᚻᛇ.ᚱᚻ/\nᛏᚻᛄᛚᚱᚩᚻᚻ-ᚱᛈᛏᛡ-ᚣᛖᚾ.ᚱᛖ-ᚩᚷᚷ-ᚫᚱᚫᛁ-ᚷ/\nᛞ-ᛇᛖᛁᛋᛝ-ᛝᛒᚫ-ᚩᚣᚷᚪ.ᛁᛉ-ᛒᛇ-ᛟᚻᛟᚫᛁᚠᛝ-/\nᚪᛁᛗᚦᛖᛈᛠᚫᚱ-ᛟᚱᚳᚠᛏ.ᛠᚫᚫᛝᛞ-ᚾᛠ-ᛟᚣ/\nᚹᛈᛟ-ᛈᛗ-ᚫᛝᚠᛄ-ᛗᛏᛈᛚᚻᛄᚫ.ᛋᚣᚹ-ᛉᛡᚢ-ᚫ/\nᚾ-ᛖᛉᛇᛉᚱᛒ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      7,
+                      10,
+                      15,
+                      23,
+                      3,
+                      19
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "4275aa59973db8b0352dafcf54b7ead72d5124d1cdd4244889c887253a603019"
+              },
+              "expected_result_sha256": "c453ac19cc8c7a530671739a3b9de4ea908014fa715165cd777bdfd7e36c3886"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  7,
+                  10,
+                  21
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 13",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚦ-ᛒᛏᛄᛗᛈ.ᚪᛠᛇᛒᛠᛟᚫ-ᛗᚪᚾᚦ-ᛝᛄᛈᛄ-/\nᚾᛚᚹ-ᚪᛈᚪᛇ.ᛠᚷᛇᛠᚳᛞ-ᛒᚠᚦᚣ-ᛖᛁᛄ/\n-ᚣᛏᛈᛠ-ᛞᛈ-ᚾᚫ-ᚣᚫᚻᛠ.ᚻᚫᚫᚻ-ᚾᛠ-ᚣ/\nᛏᛈᛠᛡᛠᛋᛈᛠ.ᛝᛒᛗᛋ-ᚱᛈᛟᛄ-ᚣᚫᚻᛇ.ᛁᛝ/\nᛞᛁᛄᛚᛁᛏᛋᛁ-ᚱᛈᛟᛄ-ᚱᛚᚾ.ᚱᚪ-ᛏᛈᚻ-ᚫᚱᚦᛞ-ᛈ/\nᚫ-ᛇᛖᛏᛠᛠ-ᛞᛒᚫ-ᚾᛁᛈᚣ.ᛁᛉ-ᛞᚫ-ᚠᛁᛟᚫᛏᛈᛠ-/\nᚣᛁᛗᚻᚦᛚᚢᚫᚱ-ᛠᛒᛇᚦᛏ.ᛠᚦᚾᛠᚫ-ᚾᛠ-ᛠᛁ/\nᛉᛋᛟ-ᛈᚫ-ᚾᛠᚦᛄ-ᛗᛟᚣᛡᛁᛄᚫ.ᛝᛁᛉ-ᛏᛡᚢ-ᚦ/\nᛟ-ᚫᛏᛇᛉᛁᚢ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      7,
+                      10,
+                      21
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "a129bfc29a8a11640997b367377ca8ede7de63603364bec462d4faec6468761f"
+              },
+              "expected_result_sha256": "178895fcf437a6ec531274c2c04d885274bc6d12d4ae6d435353e24740606b22"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  7,
+                  10,
+                  21,
+                  18,
+                  23
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 14",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚦ-ᛒᛏᛟᚩᛠ.ᛡᛁᚾᚱᚫᛄᛁ-ᛡᚣᚾᚦ-ᛝᛟᚣᚣ-/\nᛇᚦᚱ-ᛄᛁᛈᚣ.ᚹᚻᛇᛠᚳᚳ-ᚢᛋᚳᚻ-ᛋᚣᚻ/\n-ᛋᚢᛝᚢ-ᛞᛈ-ᚾᚹ-ᛁᛄᛄᛁ.ᚳᛇᛟᚣ-ᛞᚹ-ᛠ/\nᛏᛈᛠᚾᛇᚢᛏᛁ.ᛖᚱᛏᚱ-ᛖᛝᚪᛄ-ᚣᚫᛗᚫ.ᚫᚪ/\nᚳᚹᛡᛒᛠᚢᛞᛇ-ᚱᛈᛟᛟ-ᛒᚷᛇ.ᛋᛝ-ᚩᛁᚣ-ᛁᛇᚱᛞ-ᛈ/\nᚫ-ᛞᚦᚦᚦᛁ-ᛚᚱᛟ-ᛡᚪᛝᛠ.ᛁᛉ-ᛞᚹ-ᛈᚫᚫᚹᛈᚠᚫ-/\nᛋᚪᛡᛁᚦᛚᚢᚹᛒ-ᛉᛚᛞᛠᚩ.ᚫᛚᛞᚹᛡ-ᚾᛠ-ᛠᛝ/\nᛡᚢᚫ-ᚪᛟ-ᚫᚫᛚᚫ-ᛡᚪᚣᛡᛁᛟᚾ.ᚹᛈᚫ-ᛈᛉᛡ-ᛚ/\nᚹ-ᚱᛖᛇᛉᛁᛇ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      7,
+                      10,
+                      21,
+                      18,
+                      23
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "905da88d4a43f0cfe08a02f4beb30960c6f6edc7bf0af04c93a1706764c8696a"
+              },
+              "expected_result_sha256": "7c342b0c1d9f71da1a503e8705589c9f46899623d1c8fc1ba112796495a7f240"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  8,
+                  24,
+                  15,
+                  8
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 15",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚩ-ᚦᛁᛇᛒᛏ.ᚩᚣᛠᚳᚱᚾᚣ-ᚱᛖᛁᚠ-ᚪᛗᛄᛡ-/\nᚣᚫᛞ-ᚫᛡᛖᛈ.ᚣᚾᛚᚣᛝᛄ-ᛟᛏᚩᛄ-ᛇᛄᚾ/\n-ᚠᚪᛄᛋ-ᛄᛖ-ᚫᚣ-ᛄᛗᚾᚣ.ᛄᚱᛞᚪ-ᚣᚱ-ᛈ/\nᛒᛡᛟᛠᚣᛖᛝᚣ.ᚻᚳᚪᚦ-ᚳᛡᛏᛇ-ᚪᛠᛏᛁ.ᚣᚾ/\nᛠᚣᛇᚳᚱᛒᛈᛈ-ᛇᛄᚾᛠ-ᚾᚹᛁ.ᛖᛖ-ᛒᛄᛄ-ᚱᚦᛖᛄ-ᛖ/\nᛇ-ᛈᚩᛁᚠᚣ-ᚣᚫᛞ-ᚫᛡᛖᛈ.ᛄᛠ-ᛒᚣ-ᛡᛈᚢᛞᚩᚢᚱ-/\nᛈᛄᚱᚦᚩᛖᚱᚱᚦ-ᛋᚳᛒᛖᛒ.ᛈᚫᛁᚣᛠ-ᛒᚣ-ᛋᛡ/\nᛗᚦᛞ-ᛡᛗ-ᛁᚣᚳᛗ-ᛒᚾᛉᚩᚣᛇᛁ.ᛋᛄᛇ-ᛗᚷᛠ-ᛖ/\nᛁ-ᚢᚩᛈᛠᚱᚦ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      8,
+                      24,
+                      15,
+                      8
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "3cb0063ae3058caedb1685aca6399f57edcf015e437cbf23502face35a13f59b"
+              },
+              "expected_result_sha256": "2fe430bc32534e68bb80abd0d090b7a61dfa2381788aabbe7b09841b5347afb2"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  9,
+                  18,
+                  16,
+                  7,
+                  3,
+                  4,
+                  5
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 16",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚱ-ᚫᛄᛄᛇᚫ.ᛟᛡᚾᚣᚫᚱᛟ-ᛉᛇᛚᚻ-ᚹᚹᚹᚪ-/\nᛄᛠᚦ-ᚪᚷᚹᛁ.ᛡᚩᛝᚫᛏᛚ-ᛇᛒᛈᚩ-ᚱᚷᚳ/\n-ᛁᛖᛝᛞ-ᛞᚷ-ᛝᛞ-ᚫᛟᛒᚫ.ᛗᛟᛚᚫ-ᛚᚳ-ᛇ/\nᛇᚹᛇᚠᚹᛁᛈᛝ.ᚱᛋᛖᛇ-ᛈᛁᚱᚻ-ᛝᛈᛗᛖ.ᚫᛒ/\nᛒᛞᛈᛠᚳᛏᚻᛟ-ᚦᛇᛗᛚ-ᚢᚦᚷ.ᛠᛇ-ᛡᛗᛞ-ᛝᛡᛋᚫ-ᛝ/\nᛚ-ᛇᛄᛠᚣᛡ-ᛚᚣᛟ-ᛚᚹᚻᛉ.ᛝᛚ-ᚾᛝ-ᛞᛞᚪᚱᛄᛈᛝ-/\nᚾᚻᛖᚳᛄᛒᛇᛟᛠ-ᛏᛠᛖᛒᛇ.ᛟᛋᛄᚹᛚ-ᚾᛝ-ᛄᚻ/\nᛈᛇᚦ-ᛁᚹ-ᚷᛞᛗᛟ-ᚫᚻᛟᛝᛞᛈᚱ.ᛏᛁᚹ-ᛠᚫᚠ-ᛠ/\nᚦ-ᛟᛡᚾᚾᛡᛇ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      9,
+                      18,
+                      16,
+                      7,
+                      3,
+                      4,
+                      5
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "cf532f234bf59f38c4a76c04ee929a90883f692a25f0753a40b5d7f251e832c5"
+              },
+              "expected_result_sha256": "eff204e7d1e93eea66cef5aa508348e5edd564e4af0bbf9ef7aaff6482681728"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  10,
+                  9,
+                  15,
+                  16,
+                  24,
+                  4
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 17",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚳ-ᛏᛁᛚᚱᚫ.ᛡᛡᚷᚣᛈᚳᛠ-ᛖᛖᛖᛏ-ᚱᛉᛇᚳ-/\nᛖᚳᛗ-ᛡᛇᛖᛝ.ᛈᛖᛋᛡᛠᚩ-ᚦᛇᚳᚫ-ᛇᛗᚫ/\n-ᚾᛗᛇᛟ-ᚩᛡ-ᛝᛠ-ᚫᛗᛒᛈ.ᛚᛠᚪᚦ-ᛖᛈ-ᚾ/\nᛗᛇᛟᚹᛈᛡᛏᛡ.ᛋᚣᚱᛡ-ᚹᛇᛏᛚ-ᛄᚻᛄᛄ.ᚱᚢ/\nᚻᛟᛉᛗᚱᚫᚠᛟ-ᚹᛇᛏᛚ-ᛖᚩᛇ.ᚩᛖ-ᚫᛡᛚ-ᛠᚩᚫᚩ-ᛡ/\nᚻ-ᛋᛒᛁᚻᛈ-ᚷᛚᚪ-ᚩᛗᛡᚾ.ᛈᛈ-ᛒᚳ-ᛉᛟᚫᚪᛁᛟᛈ-/\nᚾᛈᛖᚦᛄᚳᛈᛠᚩ-ᛟᚣᚣᛉᛗ.ᛡᚫᛖᛈᚻ-ᛇᛡ-ᛟᛗ/\nᛠᛡᚫ-ᛇᛗ-ᛖᛈᛉᛉ-ᛖᛏᚷᛇᛟᛉᚪ.ᛋᛗᛠ-ᛠᚢᚠ-ᚫ/\nᚦ-ᛁᛠᛋᛈᚱᛁ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      10,
+                      9,
+                      15,
+                      16,
+                      24,
+                      4
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "0b3b2fc454ea185abaaaa8de0779572f6ec397b1f9aeefcb12b6ec963ae99dfe"
+              },
+              "expected_result_sha256": "a4be446c36e9bac436080ce15a9919ca2d9b68e110dd646084defbe59fd44812"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  10,
+                  9,
+                  16,
+                  18,
+                  4,
+                  5,
+                  3,
+                  9,
+                  9,
+                  18,
+                  5,
+                  16,
+                  18,
+                  23
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 18",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚳ-ᛏᛄᛟᛈᚣ.ᛚᛡᚠᛠᛞᛒᚹ-ᚩᛈᛄᚻ-ᛖᚻᚻᛟ-/\nᛄᛗᚱ-ᛟᛗᛝᛠ.ᛠᛞᛝᚹᛒᛝ-ᛁᛒᚱᚳ-ᚦᛗᛗ/\n-ᛠᛗᛇᛞ-ᚳᚹ-ᛟᛝ-ᚫᛈᛗᛞ.ᚩᚹᚾᚣ-ᛄᚳ-ᛞ/\nᛈᚻᛁᚠᛡᛇᛄᚳ.ᛖᚱᛗᚩ-ᛈᛝᚳᚾ-ᛗᛈᛁᛚ.ᛞᚢ/\nᚦᛇᛉᛗᚳᛡᚾᛞ-ᚠᛇᛁᛟ-ᛠᛋᛚ.ᛒᛈ-ᛖᛗᚳ-ᛟᛠᛈᚫ-ᛇ/\nᛟ-ᛁᚪᛈᛋᛠ-ᛄᚣᚱ-ᛝᚻᚷᛉ.ᛇᛟ-ᚹᚳ-ᚻᛇᚫᚪᛄᚪᛟ-/\nᛁᚷᛖᚫᛈᛋᚫᚹᛒ-ᛒᛗᛖᛠᛈ.ᛞᛈᛄᛡᛟ-ᚹᚳ-ᚫᚣ/\nᛉᚩᚦ-ᛝᚻ-ᚹᛝᛗᛈ-ᛡᚷᚷᚷᛇᛉᚪ.ᛏᛝᚻ-ᚠᛞᚠ-ᛗ/\nᚱ-ᛚᛄᛞᛡᛠᚩ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      10,
+                      9,
+                      16,
+                      18,
+                      4,
+                      5,
+                      3,
+                      9,
+                      9,
+                      18,
+                      5,
+                      16,
+                      18,
+                      23
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "7bb0912c47ff8a4c1be1309686a9528d53751ec254bcb25a91b5717fc684316a"
+              },
+              "expected_result_sha256": "b4fb2e5ea9a84751a1cf536e4468a5f61aa601115f0feeb68fb7487f8955e58f"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  10,
+                  9,
+                  16,
+                  18,
+                  4,
+                  5,
+                  3,
+                  9,
+                  9,
+                  18,
+                  5,
+                  16,
+                  18,
+                  23,
+                  9,
+                  18,
+                  15,
+                  15
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 19",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚳ-ᛏᛄᛟᛈᚣ.ᛚᛡᚠᛠᛞᛒᚹ-ᚩᛇᛚᚹ-ᛋᛉᛇᚷ-/\nᛚᛉᛚ-ᛚᛇᛇᛞ.ᛞᚢᛞᛇᛟᚳ-ᛟᛞᚳᚫ-ᛈᛝᚳ/\n-ᛁᛇᛇᛏ-ᚳᚻ-ᚱᚹ-ᛁᛈᛗᚱ.ᚦᛠᚪᚩ-ᛚᛟ-ᛁ/\nᛇᛇᛏᚾᛞᛁᚪᛇ.ᚾᛠᚪᚾ-ᚹᛇᛒᛟ-ᛚᚾᚱᛄ.ᛡᚩ/\nᛖᚳᛟᚱᛡᛡᛚᚱ-ᚹᛇᛒᛟ-ᛡᚱᚳ.ᚩᛇ-ᛡᚻᚩ-ᚹᛒᛗᚳ-ᛖ/\nᛗ-ᛋᛒᛄᛁᛟ-ᚹᛈᚪ-ᚣᛝᚻᛝ.ᛝᛡ-ᛄᚹ-ᚳᚱᚫᚪᛄᚪᛟ-/\nᛁᚷᛖᚫᛈᛋᚫᚹᛒ-ᛏᛠᛒᚫᛗ.ᛡᚣᛚᛟᚾ-ᚳᛡ-ᛏᛝ/\nᚾᛁᚱ-ᚣᛈ-ᛚᚱᚫᛉ-ᛖᛒᚻᛝᛞᚹᚪ.ᚾᛝᚾ-ᛄᚾᛉ-ᛗ/\nᚱ-ᚢᛁᛋᛈᚳᛇ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      10,
+                      9,
+                      16,
+                      18,
+                      4,
+                      5,
+                      3,
+                      9,
+                      9,
+                      18,
+                      5,
+                      16,
+                      18,
+                      23,
+                      9,
+                      18,
+                      15,
+                      15
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "cc656b69c57a556e9440a277364697fcb68c744011576a4c9b022e6e35af4a78"
+              },
+              "expected_result_sha256": "e723eefc97a3d8d4bd0911bba7342e6d7af5724c3fb14b63ad3f7eb4df99bc2c"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  13,
+                  4,
+                  10,
+                  19,
+                  18
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 20",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚻ-ᛄᚳᛞᛡᚳ.ᛝᛠᛁᛠᚦᚳᛠ-ᛠᛝᛋᚫ-ᛁᛞᛝᚩ-/\nᚷᛚᚳ-ᚷᛏᚹᛋ.ᚻᚩᛖᛟᛞᚷ-ᚫᛝᛠᚣ-ᛏᛝᛉ/\n-ᚾᛗᛟᚫ-ᚠᚹ-ᛡᚻ-ᚳᛒᚳᛠ.ᚷᚹᛠᛚ-ᛇᚻ-ᛞ/\nᛟᚹᛒᛁᚹᚹᛁᛠ.ᛗᛠᛟᛡ-ᚹᛟᛗᛒ-ᛚᛉᛚᛚ.ᚦᛖ/\nᛞᚻᛟᛞᛟᛗᚪᚹ-ᛁᚹᛄᛞ-ᛇᛇᚷ.ᚱᛟ-ᛡᛏᛚ-ᛠᛈᛠᚠ-ᚹ/\nᛉ-ᚪᚣᚻᚫᛠ-ᛝᛠᛠ-ᛝᛈᛟᛞ.ᛏᚻ-ᛇᚻ-ᚻᚦᛗᚫᛉᚪᚦ-/\nᚾᛈᛠᚳᚻᛉᛗᚻᛇ-ᛚᛉᛇᚠᛡ.ᚦᛉᛇᚻᛟ-ᛋᛟ-ᛒᛟ/\nᛟᚹᛗ-ᛈᛞ-ᛚᚦᛉᛉ-ᛠᛗᚩᛝᛠᛞᚱ.ᛈᚹᛉ-ᛉᚾᚱ-ᛉ/\nᚫ-ᚳᛈᛖᚻᛠᛈ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      13,
+                      4,
+                      10,
+                      19,
+                      18
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "bc8b670e30087c6d2866ea4c828503b9e4b02f920a798c5435d31a6b37b4003a"
+              },
+              "expected_result_sha256": "402761542d6ac75ac5be6e09b6f54652f87ee540e8a91d2293a3688c7d6befa3"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  13,
+                  4,
+                  18,
+                  15,
+                  18,
+                  4,
+                  1,
+                  24,
+                  16,
+                  10,
+                  3,
+                  9
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 21",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚻ-ᛄᛈᛗᛡᚫ.ᛖᛈᚹᛚᛝᛁᚦ-ᛈᛝᛒᛁ-ᚱᚳᛡᚷ-/\nᛇᛈᚪ-ᚢᚹᛝᛚ.ᚹᛖᚷᛈᚠᚣ-ᛁᛒᚻᛚ-ᛋᛖᛗ/\n-ᚾᛁᛡᛞ-ᚣᚷ-ᚣᚦ-ᛚᛟᛏᚹ.ᛚᛗᛁᚩ-ᛇᛝ-ᛉ/\nᛟᚹᚫᚷᚹᛡᚹᛈ.ᛏᛚᛇᚩ-ᛁᚹᛗᛗ-ᚳᚻᚦᚣ.ᚳᚪ/\nᛏᛡᛒᛉᚹᚪᛞᛟ-ᛡᛡᛒᛉ-ᚣᚻᛋ.ᛡᛝ-ᚪᛝᛚ-ᛗᛖᚣᚣ-ᚷ/\nᛈ-ᛖᛇᛈᚹᚹ-ᚷᛄᛁ-ᚱᛈᚷᛉ.ᛏᚻ-ᛚᚱ-ᚻᛟᛏᛁᛄᛏᛝ-/\nᛉᛏᛈᚳᛁᛠᛈᛗᛖ-ᛞᛚᚳᛗᛟ.ᛟᛠᛒᚹᚻ-ᚩᛈ-ᛞᛈ/\nᚹᚩᛠ-ᚹᛟ-ᛒᚹᛉᚳ-ᚱᛒᚠᛚᛡᛒᛗ.ᛖᛖᛟ-ᛠᛝᛋ-ᚣ/\nᚫ-ᛖᚱᛖᚻᚹᚾ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      13,
+                      4,
+                      18,
+                      15,
+                      18,
+                      4,
+                      1,
+                      24,
+                      16,
+                      10,
+                      3,
+                      9
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "c3a9bee779334603a4960ab1b3bef8a9586a8eda2ac77f34ee5f8407671cced5"
+              },
+              "expected_result_sha256": "9e03c4ceb7b3cfd2540e67aedd84c64a63750dfb3448ddb05322704e8d673b18"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  13,
+                  10,
+                  20,
+                  6,
+                  4,
+                  10,
+                  19
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 22",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚻ-ᛒᛋᛁᛈᚦ.ᚹᚦᚢᚢᚪᚳᛠ-ᛠᛏᛇᛇ-ᚷᚻᛈᚾ-/\nᛋᛚᚷ-ᛞᚹᛈᚪ.ᚦᚪᚫᚪᛒᚣ-ᚣᛝᚳᚹ-ᚩᚹᛄ/\n-ᚪᛟᛈᛡ-ᛟᚹ-ᛡᚻ-ᚠᛉᛝᚪ.ᛚᛠᚳᚠ-ᛇᚾ-ᛄ/\nᛈᛈᚣᚱᛠᛉᛇᛟ.ᛁᚠᛟᚱ-ᛒᚾᚳᛉ-ᚷᛒᛄᛟ.ᚪᛖ/\nᛞᚻᛒᛚᚾᛋᚾᛠ-ᛏᛏᛄᚪ-ᚠᚩᛇ.ᛈᛏ-ᛗᛞᛟ-ᛟᚱᚠᚠ-ᛈ/\nᚪ-ᛄᛇᚳᛄᚦ-ᛇᚢᛝ-ᛝᛈᛟᛖ.ᛈᚪ-ᚻᛟ-ᚠᚻᛠᚫᛋᛇᛟ-/\nᛋᛟᛟᚣᛋᛏᛈᛠᛈ-ᛚᛚᛟᛏᛈ.ᛠᚠᛋᛠᚪ-ᚻᛟ-ᛒᛟ/\nᛒᚱᚷ-ᚾᚻ-ᛇᚻᛞᛉ-ᚠᚹᛞᛡᚻᛒᚫ.ᛚᚾᚻ-ᚳᛁᚱ-ᛚ/\nᚷ-ᛝᛠᛋᛞᚦᚱ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      13,
+                      10,
+                      20,
+                      6,
+                      4,
+                      10,
+                      19
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "0bbc5a89921472300822ba3644b6800736e827c4f31cb21430ba75851da728e0"
+              },
+              "expected_result_sha256": "04e58b415dfb73cfcf41a46424f55d016d6c973e7cba6dbbc7a221b95cc6ef6a"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  13,
+                  10,
+                  20,
+                  6,
+                  4,
+                  10,
+                  19,
+                  24,
+                  6,
+                  18
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 23",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᚻ-ᛒᛋᛁᛈᚦ.ᚹᛈᚣᛠᚦᛄᚾ-ᛋᚹᛇᛄ-ᚪᛁᛝᚩ-/\nᛇᚢᛝ-ᛝᛈᛟᚠ.ᚪᚩᛖᛠᚱᛟ-ᛄᛖᛉᛄ-ᚩᛝᛉ/\n-ᛋᚠᚾᛄ-ᚣᛟ-ᛇᚪ-ᚳᛒᛄᚾ.ᛟᛟᚫᚷ-ᚣᚪ-ᛞ/\nᛟᛈᛡᚣᛟᚱᚫᛈ.ᚷᛠᛟᚱ-ᛒᚾᚳᛉ-ᚷᛠᚹᛚ.ᚦᚪ/\nᚱᚪᚻᛚᚻᚱᛄᚹ-ᛁᛈᛝᛁ-ᛡᚾᛝ.ᛖᚾ-ᛡᛏᚣ-ᚾᚠᛉᚣ-ᛟ/\nᛠ-ᛄᚣᚻᚦᚾ-ᚻᛉᚫ-ᚹᛡᚾᛞ.ᛏᛉ-ᛟᚪ-ᛞᛠᚳᛁᚢᚪᚦ-/\nᛋᛞᛋᛚᚳᚠᚱᚪᛇ-ᛚᛚᛟᛏᛈ.ᛠᚠᚣᚪᛟ-ᛋᛠ-ᛡᚾ/\nᚻᚱᚳ-ᛡᛁ-ᛚᚦᛚᚪ-ᛋᚳᚠᚹᛈᛁᚱ.ᛈᛈᚪ-ᚢᚪᚢ-ᚠ/\nᛁ-ᛝᛈᛖᛉᚾᚠ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      13,
+                      10,
+                      20,
+                      6,
+                      4,
+                      10,
+                      19,
+                      24,
+                      6,
+                      18
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "00bcd80e907e906d9a84b917bf77ddfe8b6f9d3910fdc53ccfae7fddf5d7ed88"
+              },
+              "expected_result_sha256": "683288e185a01a4b135760b071a396580430b439c6959b528f1f8f033eb17117"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  15,
+                  8,
+                  24,
+                  23,
+                  3,
+                  7,
+                  15
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 24",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛁ-ᛋᛗᛡᛇᛠ.ᚩᚱᛠᚳᛇᚱᚫ-ᚪᛖᛁᛏ-ᛞᚹᛁᚳ-/\nᛒᛖᛁ-ᛄᚷᛁᛚ.ᚱᛟᚠᛇᛏᛞ-ᛟᛞᚩᛄ-ᛚᚷᚻ/\n-ᛚᚪᛄᚦ-ᛁᚷ-ᚪᚱ-ᚦᛇᚫᛇ.ᛗᚫᚢᚦ-ᛁᛈ-ᛠ/\nᛇᛁᛟᚷᚣᛖᚠᛝ.ᚹᚫᚪᚦ-ᛝᚣᚱᛄ-ᚦᛗᚾᚣ.ᛇᛒ/\nᛚᚱᛗᛖᛈᚩᚻᚫ-ᛇᛖᚾᛠ-ᛒᚦᚾ.ᚾᛖ-ᛒᛡᛁ-ᛝᚢᚫᚦ-ᛄ/\nᛠ-ᛠᛄᚦᚹᚱ-ᛁᚳᚾ-ᛚᛁᛖᛚ.ᛄᛠ-ᚫᛝ-ᚣᚱᚢᛞᛗᚠᛝ-/\nᛇᛖᚪᚪᛗᚱᛇᚫᚾ-ᛟᛖᚣᚱᛇ.ᚫᚫᛒᚣᛠ-ᚫᛝ-ᛉᛖ/\nᛗᚦᛁ-ᚣᚹ-ᚾᚱᚫᛇ-ᚱᚪᛟᚪᚱᛗᛞ.ᚪᚣᚹ-ᚦᚷᚷ-ᛖ/\nᛁ-ᚾᛡᛇᛗᚱᚦ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      15,
+                      8,
+                      24,
+                      23,
+                      3,
+                      7,
+                      15
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "6d0181848b6278ce6f736f22e38a78ba4524ac6bf312d3bbc8a82ce701e2fafb"
+              },
+              "expected_result_sha256": "c86d96474969b6b7234e7bb70028d205afbdf122fc59d12c3f0f22b70878de2e"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  15,
+                  16,
+                  1,
+                  23,
+                  18,
+                  9,
+                  16
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 25",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛁ-ᛞᚫᛡᛡᚢ.ᚱᚱᚹᛄᛇᛗᛡ-ᚫᛖᛖᛟ-ᛞᛟᛇᚷ-/\nᛒᚣᛏ-ᛄᛝᛇᛝ.ᚱᚢᚷᛇᚦᚫ-ᛞᛞᛄᛒ-ᛚᛝᛁ/\n-ᛝᚪᛗᚻ-ᛁᛝ-ᚣᚳ-ᚦᛚᚦᛇ.ᚳᛡᚦᚦ-ᛖᛗ-ᛠ/\nᛡᛇᛞᚷᚳᚪᚠᚹ.ᚾᚣᚪᛁ-ᛡᚣᛗᛈ-ᚩᛗᛒᚩ.ᛇᚩ/\nᛟᚳᛗᚣᛗᚩᛞᛡ-ᛈᛖᛒᚳ-ᛒᛒᛄ.ᛁᛖ-ᚫᚱᛁ-ᚹᚩᚣᚦ-ᛗ/\nᚳ-ᛠᚣᚱᚻᚱ-ᛖᛄᚾ-ᚷᛇᛗᛚ.ᛗᚳ-ᚫᚹ-ᛠᚳᚢᚦᚫᚠᚹ-/\nᛉᛗᚪᚩᚫᚱᛡᛡᛁ-ᛟᚣᚩᚱᛡ.ᛡᚣᛒᚳᚳ-ᚫᚹ-ᛏᛗ/\nᛗᛁᛏ-ᚣᛟ-ᛄᚳᚫᛚ-ᛁᚪᚻᚣᚳᛗᚦ.ᚢᚣᛟ-ᚱᚹᚷ-ᚣ/\nᛏ-ᚾᛈᛉᛚᚱᛁ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      15,
+                      16,
+                      1,
+                      23,
+                      18,
+                      9,
+                      16
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "473145494142305f1b0875f72fdd4213febde4ec79586a327188499410a78717"
+              },
+              "expected_result_sha256": "8d508a372a0679f55e64302d3ac68d821efa6bb0b8a6965b3c6667c6520a6cdb"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  15,
+                  18,
+                  5,
+                  1,
+                  4,
+                  10,
+                  16,
+                  26
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 26",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛁ-ᚫᚠᚳᛈᚦ.ᚱᛋᚷᛠᛞᚦᛟ-ᛗᛗᛠᚹ-ᛖᚾᚱᛞ-/\nᛇᚣᛇ-ᚩᛝᚻᚷ.ᛟᚪᛝᛋᛠᚳ-ᛇᚾᛠᚣ-ᛈᚠᛏ/\n-ᛞᛉᚱᛄ-ᚣᛗ-ᛉᚱ-ᚳᚾᚦᛟ.ᚣᚳᛇᚦ-ᛚᛞ-ᚷ/\nᛈᛈᛞᛒᚱᛇᛄᛗ.ᚱᛚᚫᛚ-ᛇᛝᚷᚳ-ᛚᛉᛒᛠ.ᚱᚩ/\nᛖᛗᚻᛚᚳᚷᛚᚹ-ᚦᚱᚳᛉ-ᛁᚫᛒ.ᛇᚻ-ᛁᚹᚣ-ᚳᛚᚫᚳ-ᚻ/\nᚳ-ᚾᛖᛄᛖᚱ-ᛚᛋᛏ-ᛝᛈᛗᚦ.ᛖᛟ-ᚹᛗ-ᛞᛠᚦᛇᛁᚪᛞ-/\nᚷᚹᛗᚩᛝᚫᛡᛞᚪ-ᛄᛚᛖᚹᚪ.ᚹᛋᚩᛟᛉ-ᛖᛋ-ᛟᛝ/\nᚾᚪᛗ-ᛈᛚ-ᛠᚱᛠᚾ-ᛁᚳᚠᚱᛋᛗᚱ.ᚳᚱᚻ-ᚳᚹᛒ-ᚫ/\nᚱ-ᛚᚫᚾᛉᚳᛚ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      15,
+                      18,
+                      5,
+                      1,
+                      4,
+                      10,
+                      16,
+                      26
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "b144cbf37192875d4ed1c86e013b2cba2885d2bcf0aa1b10ed5dfb4ea44290b7"
+              },
+              "expected_result_sha256": "52066f674b306765ed7b65fadd03716ef4af4e8229b83e05aa68a3d9cc3243c3"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  15,
+                  24,
+                  5,
+                  4,
+                  18,
+                  23
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 27",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛁ-ᚦᚠᚻᛡᛋ.ᚩᛈᚫᛉᚹᚪᚱ-ᚱᚻᚷᛁ-ᛞᛗᛡᚪ-/\nᚷᛠᚾ-ᚩᛡᚻᚾ.ᚹᚻᛚᛈᛖᛚ-ᚫᚦᛁᛄ-ᚦᚹᛗ/\n-ᛠᚪᛡᛇ-ᛚᛝ-ᛄᚱ-ᛄᚾᚳᚹ.ᛁᚱᛁᛝ-ᚷᚹ-ᛠ/\nᚪᛡᛇᚪᚹᛒᛝᛈ.ᚳᛉᛡᛒ-ᛇᛡᚷᚻ-ᚳᛡᛏᚣ.ᛞᛖ/\nᚦᛇᛗᚳᛞᛈᛞᛇ-ᛇᛡᚷᚻ-ᛇᛟᛒ.ᛖᚻ-ᛈᛝᛁ-ᚱᛖᛋᛚ-ᛝ/\nᛡ-ᛚᚩᚠᚫᚹ-ᚫᚫᛁ-ᛟᚹᛝᛠ.ᛖᛠ-ᚹᛟ-ᚻᛇᚢᛁᚠᛁᚹ-/\nᛠᛖᚱᛝᛠᛠᚩᚱᛖ-ᛇᛉᛚᚱᚪ.ᛈᛋᚷᚹᛡ-ᛒᛈ-ᛇᚹ/\nᛟᛒᚢ-ᛡᚾ-ᚷᚹᚱᛗ-ᚱᚷᛞᚷᛇᛗᛁ.ᚳᚹᛟ-ᛖᚷᛋ-ᛋ/\nᛗ-ᚱᛖᛚᛠᛞᛡ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      15,
+                      24,
+                      5,
+                      4,
+                      18,
+                      23
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "4da4ea8bef7c7b15bf880b09f5ddb3cbdff02bc322ab7614dab2ff3369e1deef"
+              },
+              "expected_result_sha256": "23c8386450c613a8e8ce4bbc95815bd6bbc0776d01b686bd27d5dcb2eae6fc33"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  16,
+                  1,
+                  9,
+                  9,
+                  18,
+                  20
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 28",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛄ-ᚻᚱᛈᛡᛇ.ᚱᛗᚠᛗᚹᛝᚳ-ᛁᛇᛄᛁ-ᛚᛚᚱᛠ-/\nᛄᛠᚷ-ᚱᚱᛇᛉ.ᚹᚳᛝᛗᛟᚫ-ᚫᛠᛄᛒ-ᚷᛇᛗ/\n-ᚫᚫᚱᛏ-ᚫᛝ-ᚻᚳ-ᛒᛈᛁᚹ.ᚹᚳᛏᚫ-ᛄᚹ-ᚫ/\nᚫᚱᛏᚠᚹᛉᛟᛗ.ᚾᛗᛡᛉ-ᛈᚱᛁᛈ-ᚳᚪᛒᚩ.ᛡᛞ/\nᚦᚾᛚᛄᛡᛖᛞᚾ-ᛈᚱᛁᛈ-ᛇᛗᛖ.ᚪᛇ-ᛖᛝᚹ-ᚳᚪᛗᚫ-ᛝ/\nᚪ-ᛝᚾᚱᚢᚹ-ᛟᚣᛏ-ᚣᛇᛝᚫ.ᛗᚳ-ᛄᛡ-ᚻᚾᚦᛏᚱᛋᚹ-/\nᚫᛗᛁᚫᚱᛠᚠᚳᚪ-ᛏᛗᛚᚢᚫ.ᛗᛗᛄᚹᚪ-ᛖᛗ-ᛏᛇ/\nᛟᛉᚦ-ᚱᛈ-ᛄᚹᚢᛚ-ᛁᛁᛠᚷᚾᛚᛏ.ᚾᛇᛟ-ᛋᚹᛝ-ᛗ/\nᚪ-ᚱᛋᛝᚳᛡᚩ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      16,
+                      1,
+                      9,
+                      9,
+                      18,
+                      20
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "b7737be251f18c0c7853dd66133bef3f56eeccdd2752d1bc712bf2cc7713fd58"
+              },
+              "expected_result_sha256": "fbb1bc0b5153c016bc7575c5c4804b864048a0225babc9cb8287eef58122c827"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  16,
+                  1,
+                  9,
+                  9,
+                  18,
+                  20,
+                  10,
+                  21
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 29",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛄ-ᚻᚱᛈᛡᛇ.ᛡᛁᚹᛄᛡᛁᚹ-ᚠᛈᛞᚻ-ᚢᛈᛇᚻ-/\nᛟᛚᚹ-ᚱᚱᛇᛉ.ᚹᚳᛋᛁᚠᛒ-ᛏᛒᛈᚹ-ᚹᚪᛒ/\n-ᚷᛖᛇᚫ-ᚹᛈ-ᚾᚳ-ᛒᛈᛁᚹ.ᚹᛠᚹᚩ-ᚩᛡ-ᛉ/\nᛡᛞᛒᛇᚳᚪᛋᛡ.ᛖᚢᛗᛋ-ᛈᚱᛁᛈ-ᚳᚪᛄᛞ.ᚳᛋ/\nᛟᛡᛟᚢᛠᚢᛝᛗ-ᚷᛇᛗᚪ-ᚱᛚᛖ.ᚪᛇ-ᛖᛝᚹ-ᛠᛋᚣᛒ-ᛇ/\nᛈ-ᛞᛠᚳᛈᚳ-ᚩᛗᚪ-ᚷᛞᛈᚣ.ᛗᚳ-ᛄᛡ-ᚻᚾᚫᚹᛄᚹᛡ-/\nᛉᛝᚠᚣᛏᚣᛁᛡᚩ-ᚫᚢᛇᚦᚫ.ᛗᛗᛄᚹᚪ-ᛇᛁ-ᛞᚱ/\nᛈᚩᚱ-ᛞᛉ-ᛞᚳᛄᛈ-ᛖᛗᛁᛡᛁᛚᛏ.ᚾᛇᛟ-ᛋᚢᛇ-ᚣ/\nᛏ-ᚪᚱᛞᚪᛠᛋ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      16,
+                      1,
+                      9,
+                      9,
+                      18,
+                      20,
+                      10,
+                      21
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "b8cf54c985da51c209b11a3c92bc795cac907ab79a1cdf15fb564ff33a386ecf"
+              },
+              "expected_result_sha256": "783af0b6e76a9d8661125cd2f58c4a44cdfead6e8c2980b3bd4330e5ccbdc016"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  16,
+                  3,
+                  4
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 30",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛄ-ᛁᛠᛚᛇᚫ.ᚱᛝᚪᚣᛝᚳᚳ-ᛇᚹᛖᚪ-ᚱᛚᚷᛞ-/\nᛖᛈᛗ-ᚱᚷᚹᛝ.ᛝᛖᛝᛝᛒᚩ-ᛁᛇᛄᛗ-ᚢᛗᚱ/\n-ᚾᚫᚷᛄ-ᚩᚷ-ᛝᚳ-ᛗᚻᛒᛝ.ᛚᚳᛖᛚ-ᛖᛝ-ᚾ/\nᚫᚷᛄᚹᛝᛡᛟᛝ.ᚱᚣᛇᛡ-ᛈᚷᚳᛚ-ᛗᚻᛒᚳ.ᛟᚢ/\nᛏᛟᛚᛈᛟᚫᚻᛟ-ᛈᚷᚳᛚ-ᚣᚩᛖ.ᚣᚹ-ᚫᚷᛚ-ᚳᚣᛉᚩ-ᚷ/\nᚻ-ᛝᛄᛠᚻᛝ-ᚷᚣᛖ-ᛝᛗᚷᚾ.ᛗᚹ-ᚷᚳ-ᛟᛟᚦᛖᛠᛟᛝ-/\nᚾᛗᛇᛚᛄᛈᛈᚳᚣ-ᛄᚣᚳᛉᚫ.ᛝᛉᛖᛝᚻ-ᛖᛝ-ᛄᛗ/\nᚹᛡᚦ-ᚷᚻ-ᛖᛝᛉᛚ-ᛇᚳᚷᛚᛟᛚᛖ.ᚱᛗᚹ-ᛠᚹᛞ-ᛉ/\nᚦ-ᛖᛠᛝᚹᛟᛁ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      16,
+                      3,
+                      4
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "1843a478310cbfe6862fa63df017c39d9ff43e48edd917f2b28525ed9e0f347b"
+              },
+              "expected_result_sha256": "9cfbd6d4c49ca71c29966f0d050262b7db7e9d146f55e77d53db6d55f9975f18"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  16,
+                  3,
+                  16,
+                  10,
+                  18,
+                  9,
+                  16
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 31",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛄ-ᛁᛄᛉᛡᚢ.ᚱᚳᛞᚣᛠᛗᛡ-ᚫᛗᚳᚻ-ᛁᛟᛇᚷ-/\nᛖᛈᚦ-ᛡᛝᛇᛝ.ᚳᛒᛝᛠᚦᚫ-ᛞᚪᛡᚩ-ᚹᛝᛁ/\n-ᛝᚫᚷᛞ-ᚣᛝ-ᚣᚳ-ᚩᚹᛒᛠ.ᚳᛡᚦᚩ-ᚳᚳ-ᛋ/\nᛡᛇᛞᚹᛝᛁᛏᚹ.ᚾᚣᚫᚣ-ᛈᛈᛗᛈ-ᚩᛚᚱᛖ.ᛠᚩ/\nᛟᚳᛚᛈᚳᛗᛞᛡ-ᛈᛗᚱᛚ-ᚱᛒᛄ.ᛁᛗ-ᛇᛗᚣ-ᚹᚩᚣᚩ-ᚷ/\nᛚ-ᛋᚣᚱᚻᚳ-ᚳᚣᚫ-ᚷᛇᛗᛝ.ᚷᛚ-ᛇᚹ-ᛠᚳᚦᛖᛄᛏᚹ-/\nᛉᛗᚫᛗᛄᛚᛡᛡᛁ-ᛞᛈᛖᛚᛡ.ᛡᚣᛖᛝᛚ-ᛇᚹ-ᛏᛗ/\nᛚᚣᚦ-ᛈᛟ-ᛄᚳᚣᚹ-ᚫᛄᚻᚣᚳᛚᛖ.ᛏᛈᛟ-ᚱᚹᚹ-ᛈ/\nᚦ-ᚫᛈᛉᛚᚳᚣ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      16,
+                      3,
+                      16,
+                      10,
+                      18,
+                      9,
+                      16
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "eed40477198570a866b2635aad83cbc5fee470e140b3900b2169f1880d470e44"
+              },
+              "expected_result_sha256": "31e63c1e3dbc47da347a330ae6ddf303eea1df7d5f69f45f7ad03705f2cabe6e"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  17,
+                  1,
+                  0,
+                  0,
+                  18,
+                  4,
+                  15
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 32",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛇ-ᚻᚪᚱᛡᚫ.ᚩᚷᛝᛁᛖᛗᛟ-ᚪᛚᚩᛝ-ᚠᛟᚹᚳ-/\nᛗᛄᛋ-ᛒᛝᚹᛚ.ᚷᛋᚳᛖᚦᛚ-ᛟᚫᚫᛏ-ᚣᛝᚳ/\n-ᛚᚣᚱᚹ-ᛏᛝ-ᛝᚱ-ᚱᚳᚢᛖ.ᚳᛟᚢᚱ-ᚩᛖ-ᚳ/\nᛡᚹᛟᚻᛗᛞᚷᚹ.ᚱᚫᚣᚪ-ᚣᚩᛗᚻ-ᚦᛝᚦᚦ.ᛖᚩ/\nᛒᚱᛝᛄᛖᚾᛞᛟ-ᛇᛚᚦᚱ-ᛞᛒᚷ.ᚾᛚ-ᛁᚩᛏ-ᚹᛡᚫᚱ-ᚱ/\nᚱ-ᚳᚣᛠᚹᚷ-ᚩᛁᛋ-ᚷᚹᛖᛟ.ᚱᚱ-ᚦᚹ-ᛞᚱᚩᛏᚪᚷᚹ-/\nᚾᛖᚣᛒᚪᛁᛡᛟᚾ-ᚪᛄᚦᛁᛡ.ᛟᚫᛗᛗᚱ-ᚦᚹ-ᛄᛖ/\nᛝᚪᛋ-ᚩᛟ-ᚷᚱᛡᚳ-ᚾᚢᚻᛝᚱᛝᛏ.ᚠᚩᛟ-ᛠᚷᚻ-ᛄ/\nᛋ-ᛋᛈᚾᛗᚷᚪ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      17,
+                      1,
+                      0,
+                      0,
+                      18,
+                      4,
+                      15
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "8fb1ffa8529fb31c14b0dd79bcfad6da9667c3fb9e0f162838fa6928dc312683"
+              },
+              "expected_result_sha256": "8bdff4da0370aadb563c9550389db7fa45aba1e493cda8588e00158a983f28cf"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  18,
+                  19,
+                  18,
+                  4,
+                  6,
+                  18
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 33",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛈ-ᚣᛈᚻᛋᛁ.ᚷᚻᚾᛉᚪᛗᚹ-ᛠᛝᚷᛡ-ᛖᛟᛟᚻ-/\nᚷᛏᚱ-ᚷᛟᛝᚾ.ᚪᚩᛞᚻᚦᛚ-ᛈᚣᛈᚷ-ᛋᚹᚹ/\n-ᛞᛡᛟᚫ-ᛚᚾ-ᚷᚹ-ᚷᛟᚳᚪ.ᚳᚹᚳᚳ-ᚷᚪ-ᛞ/\nᛡᛟᚫᚪᚪᛇᚪᚻ.ᛖᛉᛋᛇ-ᛋᛟᛗᚻ-ᛟᛟᛗᛝ.ᚹᛖ/\nᛗᚹᛟᚠᚹᛈᛄᚹ-ᛋᛟᛗᚻ-ᚠᛒᛚ.ᛈᛝ-ᛈᚾᚳ-ᚹᛈᛠᛚ-ᚾ/\nᛟ-ᛞᛡᛈᚫᚪ-ᛚᛠᚳ-ᚷᚹᚾᛞ.ᛝᛞ-ᛚᛟ-ᚫᚹᚱᚳᛈᛁᚪ-/\nᛞᛝᛠᚳᛠᛏᛡᚹᛈ-ᚫᛉᚻᛠᛡ.ᚻᛠᚷᚪᛟ-ᛚᚻ-ᚫᚹ/\nᛁᛇᚱ-ᛟᛟ-ᚷᚪᛠᛟ-ᛠᛗᛞᛞᚹᛟᚳ.ᛖᚹᛁ-ᛈᚾᛁ-ᛠ/\nᛗ-ᛝᛈᛞᛞᚹᛡ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      18,
+                      19,
+                      18,
+                      4,
+                      6,
+                      18
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "9e0217c1321ff7f721667af367ea28e6a693357f57a857cb8d66d750788f6a70"
+              },
+              "expected_result_sha256": "d71748fe61c2d9625f0a343a741a6c210e7836ec449ad8aa317e5248e4a14f4f"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  18,
+                  19,
+                  18,
+                  4,
+                  6,
+                  18,
+                  9,
+                  5,
+                  18
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 34",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛈ-ᚣᛈᚻᛋᛁ.ᚣᛞᚾᛠᚻᛗᛟ-ᛋᛝᛄᚣ-ᛖᛟᛟᚻ-/\nᚷᛏᚱ-ᚣᚻᛝᛞ.ᚻᚩᚾᚪᚦᚫ-ᛇᚣᛈᚷ-ᛋᚹᚹ/\n-ᛞᛖᚻᚫ-ᚳᛟ-ᚷᛟ-ᛟᛟᛁᛞ.ᚳᚹᚳᚳ-ᚷᚪ-ᛞ/\nᛖᚻᚫᚾᚻᛇᛁᚪ.ᛖᛗᛉᛇ-ᛋᛟᛗᚻ-ᛟᛟᛁᚹ.ᚹᚩ/\nᚩᚹᚻᛏᚹᛖᛁᚹ-ᛋᛟᛗᚻ-ᚠᛒᛄ.ᛠᛝ-ᛡᛟᚳ-ᛟᚠᛠᚫ-ᚻ/\nᛟ-ᛞᛡᛈᚫᚪ-ᛚᛗᛚ-ᚷᛝᛟᛞ.ᚹᛁ-ᛚᛡ-ᚪᚹᚱᚳᛈᛁᚪ-/\nᛞᛇᛉᚳᛈᚠᛡᛟᚠ-ᚫᛗᚹᛠᛡ.ᚻᛠᚷᚪᛟ-ᛄᛞ-ᚫᛝ/\nᛞᛇᛗ-ᚾᛟ-ᛄᛞᛠᛟ-ᛠᛗᛞᛞᚹᛈᛚ.ᛖᛝᛞ-ᛈᚪᚣ-ᛠ/\nᚪ-ᛚᛈᛞᛞᚹᛡ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      18,
+                      19,
+                      18,
+                      4,
+                      6,
+                      18,
+                      9,
+                      5,
+                      18
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "8d1554e17cf30f600f02e055ed89ecca493936d9a5a3f167d92e2fc4079ea1bb"
+              },
+              "expected_result_sha256": "5145db5b7ee0aab749d30334570d6596d9dfeadc3a98b57fb16d8aad7e4de6c9"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  19,
+                  3,
+                  1,
+                  4,
+                  9,
+                  0,
+                  1,
+                  20
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 35",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛉ-ᛁᚫᚻᛖᛝ.ᛖᚾᛁᛈᛗᚳᛡ-ᚾᚱᛟᛄ-ᚩᚳᚹᛠ-/\nᚦᛄᚷ-ᚹᚷᚱᚾ.ᛡᛉᚷᚾᚩᛗ-ᚻᛇᚱᛏ-ᛡᛞᛚ/\n-ᚻᛁᚹᛏ-ᛏᚱ-ᚻᚻ-ᛗᚳᚳᛡ.ᛏᛗᚷᚷ-ᚳᛗ-ᚾ/\nᛖᚩᚻᛄᚻᚣᚹᛟ.ᚾᛁᛁᛉ-ᛏᚷᚦᚻ-ᚫᚱᚦᛟ.ᚻᛒ/\nᛉᛟᛈᛁᛗᚠᚪᛝ-ᛡᚹᛁᚱ-ᚪᛗᛝ.ᚣᚱ-ᛈᛇᛏ-ᛗᛉᚠᛗ-ᚱ/\nᚻ-ᛉᚻᚫᛇᚻ-ᚳᛄᛗ-ᚣᚩᚱᚫ.ᛟᚹ-ᚩᛟ-ᛠᛖᛏᚷᛉᚾᛗ-/\nᚾᛇᚾᛒᛋᚠᛇᛗᛡ-ᛏᛁᚩᚢᛠ.ᛝᛄᚷᛡᚱ-ᚩᚾ-ᚣᚷ/\nᚳᛡᚪ-ᚩᚳ-ᛟᚻᛈᚳ-ᛈᛁᛗᛖᚾᛞᛖ.ᚢᚹᛈ-ᚪᛝᛄ-ᚠ/\nᛖ-ᛏᛠᛉᚱᛗᛉ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      19,
+                      3,
+                      1,
+                      4,
+                      9,
+                      0,
+                      1,
+                      20
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "b1b32da08bb13609d591547b02e58029049cabb7078be8939bb75e491bd47f31"
+              },
+              "expected_result_sha256": "edecf23d7f745e8a77dc69e97346cc2073bf2cc86f032aad4f79c0f636b0cfbf"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  19,
+                  3,
+                  17,
+                  10,
+                  1,
+                  15
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 36",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛉ-ᛁᛇᛉᛁᚹ.ᚹᛝᚻᛚᛗᛏᚻ-ᛇᛚᛇᛟ-ᛋᛞᚷᚹ-/\nᛇᛄᚢ-ᚹᚷᛚᛋ.ᛗᚠᚪᛝᚢᚣ-ᚻᛞᛉᛗ-ᛉᛈᚦ/\n-ᛚᛠᚷᚪ-ᚣᚱ-ᚩᚻ-ᛗᛝᛄᛗ.ᚦᚻᛖᚱ-ᛇᛗ-ᛚ/\nᛠᚷᚪᚢᛗᚾᚫᛝ.ᛒᛚᛁᚾ-ᛏᚷᛖᛉ-ᛒᛗᛚᚳ.ᚷᚪ/\nᛉᚱᛞᛈᚷᛗᚷᚱ-ᛏᚷᛖᛉ-ᚪᛉᛝ.ᚣᛚ-ᛗᚱᚦ-ᚻᚣᛡᚣ-ᚱ/\nᛗ-ᚪᛄᛇᚦᛗ-ᛒᚠᛖ-ᚳᛈᚱᛚ.ᛟᚹ-ᛗᛠ-ᛚᚱᚳᛖᛇᛏᛗ-/\nᛚᛟᛇᚱᚳᛄᚪᚻᚣ-ᚪᛚᚩᚫᛠ.ᛝᛡᛇᛗᛗ-ᛝᛝ-ᚪᛈ/\nᚳᚾᚳ-ᚷᛝ-ᛇᛗᚫᛞ-ᛇᛖᚠᛖᚱᛞᛖ.ᛒᛈᚳ-ᛁᛁᛞ-ᛡ/\nᚫ-ᛏᛁᚪᚹᚷᚱ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      19,
+                      3,
+                      17,
+                      10,
+                      1,
+                      15
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "b813c3cd60c196198c2d5fd244668eb8e2e73d885632297b5a760e8ed7b87111"
+              },
+              "expected_result_sha256": "db78b12123a606de2f52a470de4d6220cdd9296a64266db5e5a1bcddcff54843"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  19,
+                  24,
+                  6,
+                  10,
+                  9,
+                  3,
+                  17,
+                  10,
+                  3,
+                  9
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 37",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛉ-ᚦᚢᛉᛖᚪ.ᚳᛠᛞᛗᚻᚫᚪ-ᛗᛇᚳᚾ-ᛁᚹᛇᚾ-/\nᚣᛏᚫ-ᚣᚷᛚᛋ.ᛝᛞᚪᛈᛗᚣ-ᛏᛄᛇᚣ-ᚠᛇᛚ/\n-ᚠᛋᛈᛏ-ᛗᛚ-ᛡᛝ-ᚫᛞᚫᚪ.ᚣᛡᛖᚱ-ᛇᛝ-ᛉ/\nᛠᛡᛈᚢᛡᚣᛞᛠ.ᚩᛗᛠᛖ-ᚩᛈᛁᚹ-ᚱᛉᚱᛄ.ᚻᚾ/\nᛗᛠᛈᛈᚷᛗᚻᛡ-ᛏᛡᚹᛉ-ᚩᚦᛗ.ᚱᚷ-ᛖᛟᛄ-ᚪᚱᛗᛗ-ᛚ/\nᛉ-ᚻᛒᛉᛏᚪ-ᛇᛗᛖ-ᚳᛈᚷᛉ.ᛟᛠ-ᚻᛠ-ᛠᛝᚩᚫᛡᛋᚻ-/\nᚠᚾᛗᚫᛡᛡᛗᛝᚩ-ᚣᚳᚻᛚᛖ.ᛝᛡᛇᛝᛈ-ᛝᛈ-ᛈᛈ/\nᛈᚣᚩ-ᛈᚹ-ᛄᚻᚳᛁ-ᛗᛁᛟᚳᛠᚹᚪ.ᛗᛡᛁ-ᚳᚠᛞ-ᛡ/\nᚫ-ᛖᚱᚪᛠᚪᚱ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      19,
+                      24,
+                      6,
+                      10,
+                      9,
+                      3,
+                      17,
+                      10,
+                      3,
+                      9
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "1f388bc8947b20ba7860158bc57ef5633f2e5f5308e0411c7a7b935f02be9612"
+              },
+              "expected_result_sha256": "7ee3934004c931e64841036058110d3613fcd93a4ad94173d3d335688bf48a90"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  19,
+                  24,
+                  15,
+                  16,
+                  18,
+                  4
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 38",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛉ-ᚦᛁᛚᛡᚫ.ᚹᛈᚷᚣᚹᚳᚻ-ᚱᛖᛖᛁ-ᚱᛞᛡᚳ-/\nᛖᛠᛗ-ᚹᛡᛖᛝ.ᚹᛖᚪᛈᛠᚩ-ᚫᛇᛉᛄ-ᛇᛗᛗ/\n-ᚾᛠᛡᛟ-ᚩᛝ-ᛝᚻ-ᛄᛗᛒᚹ.ᛚᚻᛁᚦ-ᛖᚹ-ᚾ/\nᛠᛡᛟᚹᚹᛡᚫᛈ.ᛋᚣᛡᛡ-ᛏᛡᛏᛚ-ᚳᚻᛚᚣ.ᚱᚢ/\nᚦᛟᛞᚳᚱᚫᛞᛟ-ᛏᛡᛏᛚ-ᛇᚩᛝ.ᛖᛖ-ᚫᛝᛚ-ᚻᛖᚫᚩ-ᛝ/\nᚻ-ᚪᚩᛁᚻᚹ-ᚷᚠᛁ-ᚩᛗᛝᚾ.ᛟᛠ-ᛒᚳ-ᚻᛟᚳᛁᛁᛟᚹ-/\nᚾᛟᚱᚦᛄᛠᛈᚻᛖ-ᛟᚣᛚᛉᛠ.ᛈᚫᛖᚹᚻ-ᛝᛈ-ᛟᛗ/\nᛟᛡᚳ-ᛡᛗ-ᛖᚹᛉᛞ-ᚱᛏᚷᚷᛟᛞᛁ.ᛋᛗᛟ-ᛠᛁᛋ-ᚫ/\nᚦ-ᚱᛠᚪᛠᚱᛁ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      19,
+                      24,
+                      15,
+                      16,
+                      18,
+                      4
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "731489df820be9f224a0a09b33bbf276d2f232615af3e2551aba2c6776f6bd93"
+              },
+              "expected_result_sha256": "ecf2de6df50a65a224e7dc893b12440b2cc0762efa3d085cda903cc58685d27e"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  23,
+                  10,
+                  1,
+                  10,
+                  9,
+                  10,
+                  16,
+                  26
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 39",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛖ-ᛒᚫᛉᛖᚦ.ᚱᛋᛉᛚᛗᛄᛡ-ᛗᛗᛠᛋ-ᛁᚳᛈᛠ-/\nᛇᚣᛇ-ᛄᛈᚱᛋ.ᛡᚪᛝᛋᚹᚣ-ᚻᛖᚱᚣ-ᛈᚠᚪ/\n-ᛋᛁᛈᛏ-ᚣᛗ-ᛉᛇ-ᚣᚳᛄᛡ.ᚣᚳᛇᛁ-ᛇᛗ-ᛋ/\nᛖᛈᛞᛒᛇᚱᚹᛠ.ᚾᛚᚫᛚ-ᛚᛈᚦᛉ-ᚫᛉᛒᛠ.ᛇᚪ/\nᛉᛠᛈᛚᚳᚷᛠᛠ-ᛡᛈᛁᛉ-ᛁᚫᚫ.ᚱᚱ-ᛗᛇᚣ-ᚳᛚᚱᚣ-ᚱ/\nᛉ-ᛉᛖᛄᛖᛇ-ᛇᛄᚫ-ᚣᛈᛗᚦ.ᚣᛉ-ᚩᛠ-ᛠᛠᚦᛇᛖᛏᛗ-/\nᛋᛇᛗᚩᛝᚱᛗᛗᚱ-ᛏᛚᛖᚹᚩ.ᛠᛄᛇᛡᛉ-ᛖᛋ-ᚢᛈ/\nᚳᚱᚪ-ᛈᛚ-ᛠᛇᛚᚳ-ᛗᛁᚠᚱᛋᛡᚫ.ᚢᛈᛈ-ᚳᚹᛒ-ᚱ/\nᚫ-ᛏᚳᛉᛉᚳᛚ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      23,
+                      10,
+                      1,
+                      10,
+                      9,
+                      10,
+                      16,
+                      26
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "7fe715d9980054f7b45420fa8c6c4bcac94892bf3fa8d84ef327bbc71d805605"
+              },
+              "expected_result_sha256": "85f6a3cf636c87723749575a14ae23a932c214ced803a08161caa527f7a9c039"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  23,
+                  18,
+                  5,
+                  18,
+                  13,
+                  16,
+                  10,
+                  3,
+                  9
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 40",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛖ-ᚫᚠᛟᛟᚻ.ᛡᛝᚠᚱᚹᚷᚹ-ᛟᛗᛇᚪ-ᚾᛡᛝᚪ-/\nᛚᛞᚦ-ᛡᚷᛇᛠ.ᚹᛗᛞᚦᚠᚣ-ᛁᛒᛖᚳ-ᚦᛝᛉ/\n-ᛝᛗᚷᛏ-ᛁᛝ-ᛟᚹ-ᚠᛚᛄᛝ.ᚫᛇᚱᛝ-ᛚᚦ-ᛝ/\nᛗᚷᛏᛉᚹᛠᚪᚦ.ᛏᛚᛇᚩ-ᛚᛝᚷᛟ-ᚠᛚᛄᚳ.ᛡᚻ/\nᚦᛞᛟᛞᚳᛗᚻᛡ-ᛚᛝᚷᛟ-ᚹᛋᛇ.ᚣᛇ-ᚩᛝᛝ-ᚹᚹᚣᚣ-ᚷ/\nᛈ-ᛠᚣᚠᛁᚦ-ᛖᛚᛖ-ᚣᚣᛝᛁ.ᛝᛒ-ᛖᛠ-ᛟᛡᚾᚱᚠᚪᚦ-/\nᛝᛈᛇᚫᛖᛠᛉᚹᚹ-ᛞᛚᚳᛗᚩ.ᚹᛋᛚᚦᛚ-ᛇᛝ-ᛏᚣ/\nᛟᛠᚱ-ᛏᛚ-ᛇᛝᛗᛡ-ᛡᚷᚻᚢᚳᛉᛖ.ᚾᚣᛟ-ᚠᚾᚱ-ᚣ/\nᚫ-ᛖᚱᛠᛟᛞᛇ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      23,
+                      18,
+                      5,
+                      18,
+                      13,
+                      16,
+                      10,
+                      3,
+                      9
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "38a6aa5b7fe6d7b909a1b42575268c8e0f9263ca0b59c79629e521170a6dea10"
+              },
+              "expected_result_sha256": "066d734b053c48901fd5f8965db328adbcf13de796205848ada7822a0e2142bb"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  24,
+                  9,
+                  24,
+                  20,
+                  3,
+                  6
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 41",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛗ-ᛏᛗᚪᛇᛡ.ᛇᛡᛋᚢᛝᚹᛈ-ᛖᛡᛟᚪ-ᚷᛠᛇᛉ-/\nᛟᛈᛝ-ᛇᛇᛡᚫ.ᛝᛚᚠᛡᚻᚹ-ᛁᛉᛗᚫ-ᛝᛞᚱ/\n-ᛄᚱᛇᚦ-ᚹᚷ-ᛞᛈ-ᚫᛠᛝᛝ.ᛟᛈᚪᛄ-ᛟᛝ-ᛄ/\nᚱᛇᚦᛄᛝᚠᚢᛡ.ᚪᚢᛇᚠ-ᛝᛇᚫᚪ-ᛗᛁᚫᛄ.ᛈᚳ/\nᛏᚪᛠᛗᛈᚠᚻᚪ-ᛝᛇᚫᚪ-ᚣᚳᚣ.ᚩᛡ-ᚠᚷᛟ-ᛈᚩᚳᚹ-ᚷ/\nᛁ-ᚠᛒᛗᛇᛝ-ᚻᚳᚪ-ᛇᛞᚷᛄ.ᛡᛈ-ᚣᚾ-ᛟᚪᛁᚪᛗᚣᛝ-/\nᛄᛡᛖᛄᛋᛈᛋᛈᚩ-ᚦᚢᚳᛏᚱ.ᛡᚳᛟᛝᛁ-ᚣᛡ-ᚦᛞ/\nᚹᚠᛁ-ᛇᛠ-ᛟᛝᛏᛠ-ᛖᚫᛁᛚᚪᛠᚪ.ᚪᛞᚹ-ᚢᛋᚠ-ᚳ/\nᚷ-ᛖᚢᚠᛈᛈᛉ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      24,
+                      9,
+                      24,
+                      20,
+                      3,
+                      6
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "e143bc44a5235b67a20cab0bbc10e22b1f19aaca7904fbceca5ec13fe90c07b9"
+              },
+              "expected_result_sha256": "cddd2e35ab8064e33e92a70eb052a32914f05f04a47ee67c0eefba988e646969"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  24,
+                  18,
+                  2,
+                  18,
+                  4,
+                  18,
+                  24,
+                  20
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 42",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛗ-ᚫᚣᛟᛈᛁ.ᛇᚾᛋᛠᛚᛗᛟ-ᛡᛡᛟᛏ-ᛖᚷᛝᛞ-/\nᛚᚳᚷ-ᛇᛝᚳᛞ.ᛟᚩᚠᚾᚻᚳ-ᚾᚣᛠᚳ-ᛝᛞᚫ/\n-ᛞᛄᛝᛄ-ᚳᛡ-ᚻᛈ-ᚳᚷᛗᛟ.ᚳᛈᚷᛄ-ᛚᛚ-ᛞ/\nᛈᛝᚦᛄᛈᛇᚻᚹ.ᚱᛠᚱᛉ-ᛝᛝᚩᛟ-ᛚᛟᚫᛟ.ᛈᚩ/\nᛋᚹᚻᛠᛈᚠᚠᚹ-ᛠᛝᚳᛟ-ᛖᛗᚣ.ᛇᚳ-ᛡᚹᚳ-ᛈᛉᚳᚳ-ᚳ/\nᛟ-ᚾᚣᛗᛇᛈ-ᛚᛇᚱ-ᛝᛝᛡᚫ.ᛡᛟ-ᚱᚹ-ᛞᚹᛁᚷᛗᚪᛚ-/\nᛞᚹᛡᛄᛋᚳᛡᛚᛇ-ᛄᛠᚣᚢᚱ.ᚹᛇᛚᛟᛟ-ᚣᚾ-ᚦᛝ/\nᚷᛇᛗ-ᛝᛠ-ᛟᛈᛠᚷ-ᛡᚳᚻᛇᚾᛠᚱ.ᚦᛝᚻ-ᛈᛋᛄ-ᚳ/\nᚱ-ᛒᛈᚾᛟᛈᛉ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      24,
+                      18,
+                      2,
+                      18,
+                      4,
+                      18,
+                      24,
+                      20
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "88569bab33c95b9a8eee2cf6514cc29e1b67351893cf53de7f8468e11fcd6014"
+              },
+              "expected_result_sha256": "30e82b2f2811184ac0f28d405131b4081a5d0f09bd3297fb6800d8d215baf386"
+            }
+          },
+          {
+            "settings": [
+              {
+                "operation": 0,
+                "name": "key",
+                "value": [
+                  24,
+                  23,
+                  8,
+                  18,
+                  4,
+                  18,
+                  9,
+                  5,
+                  18
+                ]
+              }
+            ],
+            "control": {
+              "label": "Recover every known Warning rune from synthetic ciphertext",
+              "task": {
+                "schema": "liberpedia-local-task-v1",
+                "engine": "rune-program-v1",
+                "title": "Synthetic complete-output finite control: public-wordlist-nine-openings member 43",
+                "pages": [
+                  {
+                    "id": "lp1-01",
+                    "text": "ᛗ-ᚢᚩᛟᛈᛁ.ᚣᛞᚾᚳᛇᚾᚹ-ᛈᛝᛄᚣ-ᛖᛠᚣᛡ-/\nᛚᛉᚱ-ᚣᚻᛝᚠ.ᛇᛟᛞᛟᚦᚫ-ᛇᚣᛗᛁ-ᚳᛝᚳ/\n-ᛞᛖᚻᚫ-ᛄᚣ-ᚫᚹ-ᛚᛟᛁᛞ.ᚳᛈᚾᚪ-ᛚᛟ-ᛞ/\nᛖᚻᚫᛋᛇᚦᚪᛟ.ᛖᛗᛉᛇ-ᛝᚣᚾᛟ-ᛚᛟᛁᚹ.ᚹᚾ/\nᚹᚣᛟᛉᚹᛖᛁᚹ-ᛝᚣᚾᛟ-ᛡᛒᛄ.ᛠᛝ-ᚱᚣᚪ-ᚹᛡᛠᚫ-ᚻ/\nᛟ-ᚠᚦᚩᛁᛟ-ᛚᛗᛚ-ᚷᛡᚣᛈ.ᛝᚻ-ᛚᛡ-ᚪᚹᛁᚾᚩᚪᛟ-/\nᛞᛇᛉᚳᛗᚱᛒᚹᛡ-ᚫᛗᚹᛠᚱ.ᛇᛖᛚᛟᛟ-ᛄᛞ-ᚫᛡ/\nᛡᚦᚱ-ᚹᛟ-ᛄᛞᛠᛠ-ᚩᚾᚻᛝᚹᛈᛚ.ᛖᛡᛡ-ᚩᚾᚪ-ᛠ/\nᚪ-ᛚᛈᚠᛡᚣᛇ./\n&\n$\n"
+                  }
+                ],
+                "steps": [
+                  {
+                    "op": "keyed-shift",
+                    "key": [
+                      24,
+                      23,
+                      8,
+                      18,
+                      4,
+                      18,
+                      9,
+                      5,
+                      18
+                    ],
+                    "mode": "repeat",
+                    "direction": "subtract",
+                    "reset": "page"
+                  }
+                ],
+                "taskId": "b7c3f89ba8df937e9be1117c78aa59235362e15f879d6bc73f2f804c4fbbcfd8"
+              },
+              "expected_result_sha256": "7b3b0e3024260c34475283f27cc604a05ed79bfdd7be7f530f39fa584316bdaa"
+            }
+          }
+        ]
+      },
+      "motivation": "A public attempt tried these 43 rune sequences as repeating keys. Repeat its exact opening check in your browser, comparing complete 12-rune beginnings with nine known passages."
+    }
+  ],
+  "research_questions": [
+    {
+      "id": "public-wordlist-nine-openings",
+      "state": "open",
+      "note": "Replay the exact 43-key, nine-opening comparison in the browser. Historical findings remain unchanged; the separate source ZIP certificate is not imported as saved output.",
+      "records": [],
+      "followup": "public-wordlist-nine-openings",
+      "protocol": {
+        "id": "finite-settings-output",
+        "version": 1
+      }
+    }
+  ]
+}

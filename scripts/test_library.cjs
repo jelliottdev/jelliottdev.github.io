@@ -56,7 +56,7 @@ test('production shell has no archive-prefix/snapshot dependencies or native red
  assert.ok(js.includes('index.html#/experiments/${record.id}?full=1'));
  assert.ok(html.includes('library-guides.js')&&html.includes('line-gap-view.js'));
  assert.ok(html.includes('library.js')&&html.includes('library.css'));
- for(const id of ['contents-dialog','files-dialog','variant-dialog'])assert.ok(html.includes('id="'+id+'"'));
+ for(const id of ['contents-dialog','files-dialog'])assert.ok(html.includes('id="'+id+'"'));assert(!html.includes('id="variant-dialog"'));
 });
 test('legacy record sections select the correct complete panel',()=>{
  for(const key of ['input','procedure','bounds','exclusions','limitations'])assert.equal(L.sectionTab('experiment-'+key),'scope');

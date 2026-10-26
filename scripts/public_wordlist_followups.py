@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RECORD = 'public-wordlist-vigenere'
 BASE = 'experiments/records/' + RECORD
 IDENTIFIER = 'public-wordlist-nine-openings'
+ROTATION_IDENTIFIER = 'public-wordlist-rotations-nine-openings'
 PAGES = ['lp2-%02d' % n for n in range(56)]
 RUNES = 'ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ'
 REVISION = 'd219a8099f8d24e52496e9ee3456ed9980893884'
@@ -153,27 +154,65 @@ def candidate(root=ROOT, *, declared=None):
         motivation='A public attempt tried these 43 rune sequences as repeating keys. Repeat its exact opening check in your browser, comparing complete 12-rune beginnings with nine known passages.')
 
 
+def rotation_candidate(root=ROOT, *, declared=None):
+    """New exact-opening search, not a replay of historical whole-page scoring."""
+    declared = source(root) if declared is None else declared
+    bank = next(b for b in banks.prepare(root)['banks'] if b['id'] == 'public-wordlist-rotations-v1')
+    reference = {'bankId': bank['id'], 'bankSha256': bank['sha256'], 'start': 0, 'count': bank['total']}
+    expected = {tuple(key['indices'][phase:] + key['indices'][:phase])
+                for key in declared['keys'] for phase in range(len(key['indices']))}
+    fixed.require(bank['rule'] == 'all-rotations-v1' and bank['total'] == len(expected) == 309
+                  and bank['historicalSettings'] == 618
+                  and {tuple(key) for key in banks.resolve(reference)} == expected,
+                  'rotation bank differs from all starting places of the audited 43 keys')
+    fixed.require(any(pin['path'] == 'experiments/records/wholepage-public-wordlist/plan.json' for pin in bank['sourcePins'])
+                  and any(pin['path'] == 'experiments/records/wholepage-public-wordlist/results.json' for pin in bank['sourcePins']),
+                  'rotation bank lacks its historical phase/sign source pins')
+    specified = lambda value: {'status': 'specified', 'value': value}
+    rules = {name: {'status': 'unspecified'} for name in fixed.RULES}
+    for name, value in {'representation': 'GP29', 'wordBoundaries': 'preserve', 'unmapped': 'preserve',
+                        'inputVersion': 'raw', 'evaluation': copy.deepcopy(declared['criterion']),
+                        'searchBounds': {'kind': 'finite-settings', 'version': 1, 'parameters': [
+                            {'operation': 0, 'name': 'key', 'valuesFrom': reference},
+                            {'operation': 0, 'name': 'direction', 'values': ['subtract', 'add']}]}}.items():
+        rules[name] = specified(value)
+    pages = [pid for pid in PAGES if pid != 'lp2-50']
+    card = {'version': 1, 'outcome': specified({'outcomeId': 'decipher', 'detail': 'Decipher the text'}),
+            'method': specified({'operations': [{'id': 'repeating_key', 'reset': 'page'}]}),
+            'scope': specified({'pages': pages}), 'rules': rules, 'unresolved': []}
+    return authored.construct_followup(root, card=card, identifier=ROTATION_IDENTIFIER,
+        title='Try every starting place for the 43 archived keys',
+        question='Does starting elsewhere in an archived key, adding or subtracting its numbers, recover a known opening?',
+        scope_change='Check 309 distinct key rotations in both arithmetic directions on 55 rune-bearing pages. Restart the key at each page and compare its first 12 runes with nine known openings.',
+        limitation='This is a new 33,990-case opening check with no saved results. It does not reproduce the earlier whole-page English scores or their comparison with shuffled text. Rune-empty LP2-50 is excluded.',
+        motivation='The earlier check starts each key at its first rune. Moving that starting point and trying both arithmetic directions tests a clear next variation with the same 43 archived keys.')
+
+
 def questions():
     return [{'id': IDENTIFIER, 'state': 'open', 'note': 'Replay the exact 43-key, nine-opening comparison in the browser. Historical findings remain unchanged; the separate source ZIP certificate is not imported as saved output.',
-             'records': [], 'followup': IDENTIFIER, 'protocol': {'id': 'finite-settings-output', 'version': 1}}]
+             'records': [], 'followup': IDENTIFIER, 'protocol': {'id': 'finite-settings-output', 'version': 1}},
+            {'id': ROTATION_IDENTIFIER, 'state': 'open', 'note': 'Try every archived key starting point in both arithmetic directions against nine known openings. This is new work, not a reproduction of the historical language scores.',
+             'records': [], 'followup': ROTATION_IDENTIFIER, 'protocol': {'id': 'finite-settings-output', 'version': 1}}]
 
 
 def proposed(root=ROOT):
     declared = source(root)
     result = copy.deepcopy(declared['record'])
-    recipe = candidate(root, declared=declared)
-    prior = [r for r in result.get('browser_followups', []) if r['id'] == IDENTIFIER]
+    recipes = [candidate(root, declared=declared), rotation_candidate(root, declared=declared)]
     def semantic(value):
         value = copy.deepcopy(value)
         value['control'] = storage.expand(value['control'])
         return value
-    fixed.require(len(prior) <= 1 and (not prior or semantic(prior[0]) == semantic(recipe)), 'existing wordlist recipe changed')
-    if not prior:
-        result.setdefault('browser_followups', []).append(recipe)
-    owned = [q for q in result.get('research_questions', []) if q['id'] == IDENTIFIER]
-    fixed.require(not owned or owned == questions(), 'existing wordlist question changed')
-    if not owned:
-        result.setdefault('research_questions', []).extend(questions())
+    for recipe in recipes:
+        prior = [r for r in result.get('browser_followups', []) if r['id'] == recipe['id']]
+        fixed.require(len(prior) <= 1 and (not prior or semantic(prior[0]) == semantic(recipe)), 'existing wordlist recipe changed')
+        if not prior:
+            result.setdefault('browser_followups', []).append(recipe)
+    for question in questions():
+        owned = [q for q in result.get('research_questions', []) if q['id'] == question['id']]
+        fixed.require(not owned or owned == [question], 'existing wordlist question changed')
+        if not owned:
+            result.setdefault('research_questions', []).append(question)
     validate_research_questions(result['research_questions'], result, strict_authoring=True)
     fixed.require(len(json.dumps(result, ensure_ascii=False, separators=(',', ':')).encode('utf-8')) < 2 * 1024 * 1024, 'wordlist proposal exceeds source bound')
     return result
@@ -194,6 +233,7 @@ def main():
         (destination / (RECORD + '.json')).write_bytes((json.dumps(value, ensure_ascii=False, separators=(',', ':')) + '\n').encode('utf-8'))
     print(json.dumps({'recordId': RECORD, 'followupId': IDENTIFIER, 'programs': 43, 'declaredCases': 2408,
                       'runeBearingCases': 2365, 'emptyCases': 43, 'openingComparisons': 21285,
+                      'rotationFollowup': {'id': ROTATION_IDENTIFIER, 'rotations': 309, 'directions': 2, 'programs': 618, 'pages': 55, 'cases': 33990, 'openingComparisons': 305910},
                       'targetExecutions': 0, 'installed': False, 'detachedOutputWritten': bool(args.output)}))
 
 if __name__ == '__main__':

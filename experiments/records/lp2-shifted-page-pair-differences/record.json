@@ -7,7 +7,7 @@
   "summary": "Across 331,908 page-pair alignments, the strongest difference concentration is exceeded or matched by 77 of 128 shuffled search maxima.",
   "finding": "Maximum IoC 0.04721080446 occurs for LP2-14 minus LP2-35 at lag-140 over 131 runes; global plus-one empirical comparison 77+1 over 128+1 =0.60465116.331,908 observed counts are independently verified, including 330,582 new nonzero-lag settings.",
   "reader_finding": "The strongest alignment, LP2-14 against LP2-35, is no stronger than results commonly found in shuffled pages: 77 of 128 shuffled searches matched or exceeded it.",
-  "reader_limit": "Forward differences with overlap at least 120 runes and an IoC statistic only; this does not exclude general shared-key encryption.",
+  "reader_limit": "Only subtraction was tested, with at least 120 runes overlapping. Other ways to combine pages remain open.",
   "limitations": "52 eligible pages from 55 nonempty LP2-00–55 pages; no shorter overlaps, page reversal, wraparound, repeated/skipped key symbols or additional cipher layer. Shuffles preserve whole-page frequencies rather than each overlap frequency. Shifted-copy controls do not measure sensitivity to unrelated plaintexts encrypted under one key.",
   "next_steps": "Any broader shared-keystream claim needs a statistic with demonstrated power for its proposed plaintext model; freeze shorter-overlap or reversed-page extensions separately.",
   "outcome": "not-supported",
@@ -112,8 +112,8 @@
   ],
   "family": {
     "id": "lp2-page-pair-alignment",
-    "title": "Page-pair arithmetic",
-    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "title": "Using one page to decode another",
+    "question": "Can the numbers from one manuscript page help decode another?",
     "baseline": "lp2-page-pair-alignment"
   },
   "variant": {
@@ -220,5 +220,11 @@
         "sha256": "ddf37bd4c6ccebddc3ce062e0ef856687be4c12da5d8b588e96aedfd43f598d4"
       }
     ]
+  },
+  "reader_title": "Slide pages and look for unusual rune frequencies",
+  "reader_test": {
+    "input": "Pairs of LP2 pages with at least 120 runes overlapping.",
+    "action": "Slide one page along the other and subtract the numbers at each overlapping position.",
+    "check": "Compare the strongest rune-frequency pattern with shuffled-page searches; this does not check for English."
   }
 }

@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "dc3e04abdd74841deb822bd01001194d8fa8ddceeaaf114da96cb83008af6830",
+    "current_experiments_sha256": "d2515fea595ab622499121e3f0d23a3951379672e57c2cd9326d4d42ee088631",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -91,12 +91,16 @@
       "lp2-31-row-shuffle-ioc",
       "lp2-fibonacci-openings",
       "lp2-known-vigenere-keys",
+      "lp2-page-pair-alignment",
+      "lp2-page-pair-english",
       "lp2-panel-prime-openings",
       "lp2-prime-minus-one-openings",
       "lp2-prime-openings",
       "lp2-row-column-english",
       "lp2-row-column-routes",
       "lp2-row-prime-sums",
+      "lp2-shifted-page-pair-differences",
+      "lp2-shifted-page-pair-english",
       "lp2-totient-openings",
       "lp2-trigram-repeats",
       "lp2-turtle-spatial-replay",
@@ -20837,10 +20841,11 @@
     "lp2-page-pair-alignment": {
       "id": "lp2-page-pair-alignment",
       "title": "One LP2 page as another page’s key",
+      "reader_title": "Add or subtract pages from their first rune",
       "reader_question": "Can one ciphertext page act as another page’s key?",
       "question": "Can one ciphertext page act as another page’s key?",
-      "finding": "The observed maximum IoC is 0.0446 (LP2-29 minus LP2-55 across 76 runes). In 256 shared conditional-shuffle controls, 235 global maxima were at least that high; empirical global p=0.9183.",
-      "limitations": "IoC measures symbol concentration, not readable plaintext. The result only assesses zero-offset, common-prefix, nonrepeating direct addition/subtraction; other alignments or cipher layers remain untested.",
+      "finding": "No page pair stood out. Randomly reordered runes produced an equally strong or stronger frequency pattern in 235 of 256 searches.",
+      "limitations": "This checks addition and subtraction from the start of each page. Shifted alignments and English readings are separate tests.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -20967,18 +20972,26 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-page-pair-alignment",
-      "current_sha256": "af511af4eaabbb6e463cb18a96c7735a553e0a9fc6978d80c059161c63625e95",
+      "current_sha256": "0890d1916b7187e474d705f97b203a2185b2c352e0a23285114c3e4c7e7ed49a",
       "snapshot_sha256": "af511af4eaabbb6e463cb18a96c7735a553e0a9fc6978d80c059161c63625e95",
-      "changed_fields": [],
+      "changed_fields": [
+        "family",
+        "reader_finding",
+        "reader_limit",
+        "reader_test",
+        "reader_title",
+        "visuals"
+      ],
       "classification": "draft"
     },
     "lp2-page-pair-english": {
       "id": "lp2-page-pair-english",
       "title": "Can one LP2 page decode another?",
+      "reader_title": "Look for English when two pages start together",
       "reader_question": "Have we tried using another LP2 page as the key?",
       "question": "Have we tried using another LP2 page as the key?",
-      "finding": "The best eligible stream is LP2-18 minus LP2-02 (201 runes; score −6.802). In 193 of 256 conditional page-shuffle full searches, the best pair and operation scored at least as high (global add-one 194/257≈0.755).",
-      "limitations": "Only direct zero-offset, nonrepeating A+B, A−B and B−A modulo 29 with English scoring were tested. Shifts, repeats, other layers, other languages and clue-selected pairings remain untested. The catalog is an idea list, not proof of a historical attempt.",
+      "finding": "The best English score was not unusual. Randomly reordered runes produced an equally high or higher score in 193 of 256 searches.",
+      "limitations": "Only page starts, direct addition and subtraction, and one English-scoring model were checked. Other alignments, languages and extra cipher steps remain open.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -21105,9 +21118,15 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-page-pair-english",
-      "current_sha256": "7878a0ba6d2221ffbaf2f77bd2e6f9f70bafb6035f0a4093869e4420dcd3b53a",
+      "current_sha256": "58a93f183d46a98e1251eac7f42094364fcbf7321e811c101b092b040f6555a1",
       "snapshot_sha256": "7878a0ba6d2221ffbaf2f77bd2e6f9f70bafb6035f0a4093869e4420dcd3b53a",
-      "changed_fields": [],
+      "changed_fields": [
+        "family",
+        "reader_finding",
+        "reader_limit",
+        "reader_test",
+        "reader_title"
+      ],
       "classification": "draft"
     },
     "lp2-panel-prime-openings": {
@@ -22232,10 +22251,11 @@
     "lp2-shifted-page-pair-differences": {
       "id": "lp2-shifted-page-pair-differences",
       "title": "One page as another's key, at every long overlap",
+      "reader_title": "Slide pages and look for unusual rune frequencies",
       "reader_question": "Do any two pages become unusually patterned when one is shifted and subtracted from the other?",
       "question": "Do any two pages become unusually patterned when one is shifted and subtracted from the other?",
       "finding": "The strongest alignment, LP2-14 against LP2-35, is no stronger than results commonly found in shuffled pages: 77 of 128 shuffled searches matched or exceeded it.",
-      "limitations": "Forward differences with overlap at least 120 runes and an IoC statistic only; this does not exclude general shared-key encryption.",
+      "limitations": "Only subtraction was tested, with at least 120 runes overlapping. Other ways to combine pages remain open.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -22362,18 +22382,24 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-shifted-page-pair-differences",
-      "current_sha256": "0083898a86871883077533dbac5a3bd753a0dd6016185b703c97f62dcf9640cf",
+      "current_sha256": "84002b8a4de02d539f159cf01f3e215371921e72958a9a8f108a70e4269bdb66",
       "snapshot_sha256": "0083898a86871883077533dbac5a3bd753a0dd6016185b703c97f62dcf9640cf",
-      "changed_fields": [],
+      "changed_fields": [
+        "family",
+        "reader_limit",
+        "reader_test",
+        "reader_title"
+      ],
       "classification": "draft"
     },
     "lp2-shifted-page-pair-english": {
       "id": "lp2-shifted-page-pair-english",
       "title": "Do shifted pages produce English?",
+      "reader_title": "Slide pages and look for English",
       "reader_question": "Do shifted sums or differences of two pages score like English?",
       "question": "Do shifted sums or differences of two pages score like English?",
       "finding": "None passed the fixed English-recognition test. The strongest output, from LP2-13 minus LP2-32, scored like results commonly found in shuffled pages. The known-reading tests recovered the intended text.",
-      "limitations": "Forward sum and both subtraction directions with at least 120-rune overlap, using one fixed English model. Other cipher layers and general shared-key encryption remain open.",
+      "limitations": "Only addition and subtraction with at least 120 runes overlapping and one English-scoring model were tested. Extra decoding steps remain open.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -22501,9 +22527,14 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/lp2-shifted-page-pair-english",
-      "current_sha256": "a614e3539f6f1cc4130131107ecbe7a707253ce5bdad4e4c31f835820f2a1850",
+      "current_sha256": "30a30c0a90c4ba0ed8c6e42fa45834c72fbeb34deaf12a1710c121c96b05f559",
       "snapshot_sha256": "a614e3539f6f1cc4130131107ecbe7a707253ce5bdad4e4c31f835820f2a1850",
-      "changed_fields": [],
+      "changed_fields": [
+        "family",
+        "reader_limit",
+        "reader_test",
+        "reader_title"
+      ],
       "classification": "draft"
     },
     "lp2-spacing-gap-audit": {
@@ -27279,7 +27310,7 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/public-wordlist-vigenere",
-      "current_sha256": "2eb7d987b8d44c5ce4a672bbf27213c6cfa8c4708ca1f744547ec21cc5684ec2",
+      "current_sha256": "679d5f1a44e795c6ca6d338cf9f57f54dc0da42799b7485193eecf48ea9c04ba",
       "snapshot_sha256": "6242244f284c03c83269a62efd6e77d52d8edeaa9ede4633ccda954f41c1cf7b",
       "changed_fields": [
         "browser_followups",

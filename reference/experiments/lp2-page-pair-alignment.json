@@ -577,19 +577,27 @@
   "visuals": [
     {
       "path": "experiments/records/lp2-page-pair-alignment/global-max.svg",
-      "caption": "The strongest observed pairwise IoC lies below the median global maximum of the conditional shuffles."
+      "caption": "The strongest frequency pattern from the manuscript was weaker than the typical best result from shuffled pages."
     }
   ],
   "family": {
     "id": "lp2-page-pair-alignment",
-    "title": "Page-pair arithmetic",
-    "question": "Does direct arithmetic between manuscript pages reveal unusual structure?",
+    "title": "Using one page to decode another",
+    "question": "Can the numbers from one manuscript page help decode another?",
     "baseline": "lp2-page-pair-alignment"
   },
   "variant": {
     "label": "Zero-offset sums and differences",
     "changes": []
   },
+  "reader_title": "Add or subtract pages from their first rune",
+  "reader_test": {
+    "input": "The rune numbers from each pair of LP2 pages.",
+    "action": "Line up the first rune of both pages, then add or subtract the numbers at matching positions.",
+    "check": "Compare the output’s rune frequencies with results from shuffled pages; this is not an English-reading test."
+  },
+  "reader_finding": "No page pair stood out. Randomly reordered runes produced an equally strong or stronger frequency pattern in 235 of 256 searches.",
+  "reader_limit": "This checks addition and subtraction from the start of each page. Shifted alignments and English readings are separate tests.",
   "article": "# One LP2 page as another page’s key\n\n**Question.** If two ciphertext pages are aligned from their first rune and added or subtracted rune by rune, does any output show unusually concentrated symbols?\n\n**Result.** No. The strongest of **2,970** direct page-pair streams has an index of coincidence (IoC) of **0.0446**: subtracting LP2-55 from LP2-29 across their first 76 runes. Yet **235 of 256** shuffled-control searches produced a maximum at least this large (global empirical *p* = **0.918**). This particular page-on-page alignment does not stand out under the declared concentration measure.\n\n![The observed strongest page-pair IoC is lower than the median shuffled maximum.](experiments/records/lp2-page-pair-alignment/global-max.svg)\n\n## What was compared\n\nWe took all **55 rune-bearing pages LP2-00–55**, including headings, and paired every two distinct pages. Each pair begins at rune zero and stops when the shorter page runs out; no page key repeats. At each position we computed both **A + B** and **A − B modulo 29**, yielding 1,485 page pairs and 2,970 output streams. Reversing the pages in a subtraction only negates every output symbol, leaving its IoC unchanged, so unordered pairs suffice for this statistic.\n\nThe IoC measures how often two positions in a stream contain the same symbol. It does not tell us whether the stream reads as English. We compared the **largest** observed IoC against the largest in each shuffled trial, so selecting the most attractive pair after viewing all 2,970 outputs is accounted for.\n\nEach trial shuffled all 55 pages once and reused those shared shuffled pages across the entire pair grid. The shuffle was restricted to bands delimited by the observed page lengths. That keeps the exact rune counts in every compared prefix unchanged while disrupting alignment. There were **1,226 bands** across the page set, including 310 one-rune bands; nevertheless **87.8% of rune positions changed** on average. The median control maximum was **0.0476** and its 95th percentile was **0.0531**. The observed maximum was below both.\n\n## What this leaves open\n\nThis is a bounded structural check inspired by the catalogued “one ciphertext page as another’s key” idea; it is not a replay of a documented earlier attempt. It does not rule out a page-derived key with a different offset, order, reversal, repetition, interruption, arithmetic rule, or decoding layer. Nor does an ordinary IoC alone prove the absence of meaningful text. The previously documented LP2-as-pad test used LP2 data against *external* artifacts; it did not perform this page-on-page alignment.\n\nRun `python experiments/records/lp2-page-pair-alignment/run.py --check` and `python experiments/records/lp2-page-pair-alignment/check.py` from the repository root. The independent check reads the page JSON, verifies all 2,970 observed scores, the 256 shared-shuffle global maxima, the preserved band counts, and a planted shifted-copy control. `results.json` contains every pair/operation score and the full null-max distribution.\n",
   "article_path": "experiments/records/lp2-page-pair-alignment/article.md",
   "script_sha256": "9e07f41fabe09a30d0572caec06a4f7b048c010d14adad9dd7224c67d237f575",
