@@ -1,0 +1,67 @@
+/* Explicit atomic public variation creation. No task creation or target execution. */
+import E from '../../local-experiment.js';
+import J from '../../finite-json.js';
+import C from '../../claim-specification.js';
+import {validateCard} from './idea-relations.mjs';
+import {canonicalProposal} from './proposals.mjs';
+import {resolveParameterQuestion} from './parameter-question-source.mjs';
+const ID=/^p_[a-f0-9]{64}$/,HEX=/^[a-f0-9]{64}$/,UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,MAX=65536;
+const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
+const sha=async(v,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');
+const fragment=card=>{let raw='';for(const b of new TextEncoder().encode(C.serialize(card)))raw+=String.fromCharCode(b);return '#idea='+btoa(raw).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');};
+async function bodyJSON(request){
+ if(!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''))throw Error();const length=request.headers.get('content-length');if(length!==null&&(!/^\d+$/.test(length)||Number(length)>MAX))throw Error();
+ if(request.signal.aborted)throw Object.assign(Error('Cancelled'),{name:'AbortError'});const reader=request.body?.getReader();if(!reader)throw Error();let size=0,stop;const chunks=[],abort=new Promise((_,reject)=>{stop=()=>reject(Object.assign(Error('Cancelled'),{name:'AbortError'}));request.signal.addEventListener('abort',stop,{once:true});}),timer=setTimeout(stop,30000);
+ try{while(true){if(request.signal.aborted)throw Object.assign(Error('Cancelled'),{name:'AbortError'});const {done,value}=await Promise.race([reader.read(),abort]);if(done)break;size+=value.byteLength;if(size>MAX)throw Error('Request too large');chunks.push(value);}}
+ catch(error){try{void reader.cancel().catch(()=>{});}catch{}throw error;}finally{clearTimeout(timer);request.signal.removeEventListener('abort',stop);}
+ const bytes=new Uint8Array(size);let at=0;for(const chunk of chunks){bytes.set(chunk,at);at+=chunk.byteLength;}return J.capture(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes)),{maxBytes:MAX,maxDepth:16,maxNodes:10000});
+}
+export function createParameterQuestionCreateHandler({now=()=>new Date(),crypto=globalThis.crypto,fetcher=globalThis.fetch,registry,history,programIndex,dailyCap=50}={}){
+ if(!Number.isSafeInteger(dailyCap)||dailyCap<1||dailyCap>50)throw Error('Invalid variation limit');
+ return async(request,env)=>{
+  const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(value,status=200)=>new Response(JSON.stringify(value),{status,headers}),allowed=env?.SITE_ORIGIN;
+  try{if(typeof allowed!=='string'||new URL(allowed).origin!==allowed||!['http:','https:'].includes(new URL(allowed).protocol))throw Error();}catch{return reply({error:'Public variations are unavailable.'},503);}
+  if(request.headers.get('origin')!==allowed)return reply({error:'Request is not allowed.'},403);headers['Access-Control-Allow-Origin']=allowed;const url=new URL(request.url);if(url.pathname!=='/parameter-questions/create'||url.search)return reply({error:'Not found.'},404);
+  if(request.method==='OPTIONS'){const keys=(request.headers.get('access-control-request-headers')||'').split(',').map(v=>v.trim().toLowerCase()).filter(Boolean);return request.headers.get('access-control-request-method')==='POST'&&keys.every(k=>k==='content-type')?new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}}):reply({error:'Request is not allowed.'},403);}
+  if(request.method!=='POST'){headers.Allow='POST, OPTIONS';return reply({error:'Method is not allowed.'},405);}
+  const db=env?.PROPOSALS,rates=[...new Set([env?.PROPOSAL_LIMIT,env?.TASK_LIMIT].filter(Boolean))];if(!db?.prepare||!db.batch||!rates.length||rates.some(rate=>!rate?.limit))return reply({error:'Public variations are unavailable.'},503);
+  let body;try{body=await bodyJSON(request);const settings=Object.hasOwn(body||{},'parentSettings');if(!exact(body,['source','selection',...(settings?['parentSettings']:[]),'childProposalId','expectedPreviewHash','requestId'])||!ID.test(body.childProposalId)||!HEX.test(body.expectedPreviewHash)||!UUID.test(body.requestId))throw Error();body.requestId=body.requestId.toLowerCase();}catch(error){return reply({error:error?.name==='AbortError'?'Variation creation was cancelled. Retry with the same request identifier.':'The reviewed variation could not be read.'},error?.name==='AbortError'?503:400);}
+  const query=(sql,...args)=>db.prepare(sql).bind(...args),live=()=>{if(request.signal.aborted)throw Error('Cancelled');};
+  try{
+   for(const rate of rates)if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);const requestHash=await sha(body,crypto);live();
+   const find=()=>query('SELECT * FROM question_derivation_submissions WHERE request_id=?',body.requestId).first();
+   const replay=async saved=>{
+    if(saved.request_hash!==requestHash)return reply({error:'Request identifier was already used.'},409);
+    const receipt=JSON.parse(saved.receipt_json),edge=await query('SELECT * FROM question_derivations WHERE id=?',saved.origin_id).first(),submission=await query('SELECT proposal_id FROM proposal_submissions WHERE request_id=?',body.requestId).first(),child=await query('SELECT p.id,p.card_hash,p.card_json FROM proposals p JOIN research_ideas i ON i.proposal_id=p.id WHERE p.id=?',body.childProposalId).first();
+    if(!exact(receipt,['id','childProposalId','parentProposalId','createdAt','requestId'])||receipt.id!==saved.origin_id||receipt.childProposalId!==body.childProposalId||receipt.requestId!==body.requestId||!edge||await sha(edge.origin_json,crypto)!==receipt.id||edge.child_proposal_id!==receipt.childProposalId||edge.parent_proposal_id!==receipt.parentProposalId||edge.created_at!==receipt.createdAt||submission?.proposal_id!==receipt.childProposalId||!child||child.card_hash!==body.childProposalId.slice(2)||await sha(child.card_json,crypto)!==child.card_hash||C.serialize(validateCard(child.card_json))!==child.card_json)throw Error('The immutable variation receipt changed');
+    live();return reply(receipt);
+   };
+   const prior=await find();if(prior)return await replay(prior);
+   if(await query('SELECT request_id FROM proposal_submissions WHERE request_id=?',body.requestId).first())return reply({error:'Request identifier was already used.'},409);
+   let preview;try{preview=await resolveParameterQuestion({source:body.source,selection:body.selection,...(Object.hasOwn(body,'parentSettings')?{parentSettings:body.parentSettings}:{})},{db,crypto,fetcher,registry,history,programIndex,signal:request.signal});}catch{return request.signal.aborted?reply({error:'Variation creation was cancelled. Retry with the same request identifier.'},503):reply({state:'review-required',code:'parameter-source-changed',error:'The original calculation or selected change is unavailable. Review it again.'},409);}
+   const cardText=C.serialize(preview.derivation.card),childId='p_'+await sha(cardText,crypto),previewHash=await sha(preview,crypto);live();if(childId!==body.childProposalId||previewHash!==body.expectedPreviewHash)return reply({error:'The variation changed since preview. Review it again.'},409);
+   const origin={schema:'liberpedia-question-derivation-v1',parentProposalId:preview.parentQuestion.proposalId,childProposalId:childId,previewHash,source:preview.source,selection:preview.derivation.selection,...(preview.derivation.parent.settings?{parentSettings:preview.derivation.parent.settings}:{}),childTaskId:preview.derivation.task.taskId},originJson=E.stable(origin),originId=await sha(originJson,crypto);live();if(originJson.length>MAX||origin.parentProposalId===childId)throw Error('Invalid variation');
+   const p=await canonicalProposal({requestId:body.requestId,fragment:fragment(preview.derivation.card)});if(p.id!==childId||p.cardJson!==cardText)throw Error('Canonical child changed');
+   const existingCard=await query('SELECT card_hash,card_json FROM proposals WHERE id=?',childId).first(),existingEdge=await query('SELECT origin_json,created_at FROM question_derivations WHERE id=?',originId).first();
+   if(existingCard&&(existingCard.card_hash!==p.cardHash||existingCard.card_json!==cardText)||existingEdge&&existingEdge.origin_json!==originJson)throw Error('Existing public content changed');
+   const at=now().toISOString(),day=at.slice(0,10),receipt={id:originId,childProposalId:childId,parentProposalId:origin.parentProposalId,createdAt:existingEdge?.created_at||at,requestId:body.requestId},receiptJson=E.stable(receipt);
+   const guard='EXISTS(SELECT 1 FROM question_derivation_submissions WHERE request_id=? AND request_hash=? AND origin_id=?)',args=[body.requestId,requestHash,originId];live();
+   // The first row is a durable, deferred-FK reservation. If the cap guard
+   // declines it, every following INSERT is a no-op. If any later write fails,
+   // D1 rolls back the batch; the deferred FK forbids a committed orphan gate.
+   const parentGate='EXISTS(SELECT 1 FROM proposals p JOIN research_ideas i ON i.proposal_id=p.id WHERE p.id=? AND p.card_hash=?)',parentArgs=[origin.parentProposalId,preview.parentQuestion.cardSha256];
+   const savedSource=body.source.kind==='saved-task',sourceGate=savedSource?`EXISTS(SELECT 1 FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id JOIN local_task_results r ON r.task_id=t.id WHERE t.id=? AND t.task_hash=? AND links.proposal_id=? AND links.input_version=? AND r.id=? AND r.created_at=? AND r.id=(SELECT latest.id FROM local_task_results latest WHERE latest.task_id=t.id ORDER BY latest.created_at DESC,latest.id DESC LIMIT 1))`:'1',sourceArgs=savedSource?[preview.source.receipt.taskId,preview.source.receipt.taskSha256,origin.parentProposalId,preview.source.receipt.inputVersion,preview.source.receipt.resultId,preview.source.receipt.createdAt]:[];
+   const result=await db.batch([
+    query(`INSERT INTO question_derivation_submissions(request_id,request_hash,origin_id,receipt_json,created_at,created_day) SELECT ?,?,?,json_set(?,'$.createdAt',COALESCE((SELECT created_at FROM question_derivations WHERE id=?),?)),?,? WHERE NOT EXISTS(SELECT 1 FROM proposal_submissions WHERE request_id=?) AND NOT EXISTS(SELECT 1 FROM question_derivation_submissions WHERE request_id=?) AND (SELECT COUNT(*) FROM proposal_submissions WHERE received_day=?)<? AND (EXISTS(SELECT 1 FROM research_ideas WHERE proposal_id=?) OR (SELECT COUNT(*) FROM research_ideas WHERE created_day=?)<?) AND (EXISTS(SELECT 1 FROM question_derivations WHERE id=?) OR (SELECT COUNT(*) FROM question_derivations WHERE created_day=?)<?) AND (NOT EXISTS(SELECT 1 FROM proposals WHERE id=?) OR EXISTS(SELECT 1 FROM proposals WHERE id=? AND card_hash=? AND card_json=?)) AND (NOT EXISTS(SELECT 1 FROM question_derivations WHERE id=?) OR EXISTS(SELECT 1 FROM question_derivations WHERE id=? AND origin_json=?)) AND ${parentGate} AND ${sourceGate} ON CONFLICT(request_id) DO NOTHING`,body.requestId,requestHash,originId,receiptJson,originId,at,at,day,body.requestId,body.requestId,day,dailyCap,childId,day,dailyCap,originId,day,dailyCap,childId,childId,p.cardHash,cardText,originId,originId,originJson,...parentArgs,...sourceArgs),
+    query(`INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) SELECT ?,?,?,?,? WHERE ${guard} ON CONFLICT(card_hash) DO NOTHING`,childId,p.cardHash,cardText,p.fragment,at,...args),
+    query(`INSERT INTO proposal_submissions(request_id,proposal_id,request_hash,note,source_url,received_at,received_day,original_idea) SELECT ?,?,?,?,?,?,?,? WHERE ${guard} ON CONFLICT(request_id) DO NOTHING`,body.requestId,childId,p.requestHash,'','',at,day,'',...args),
+    query(`INSERT INTO research_ideas(proposal_id,created_at,created_day) SELECT ?,?,? WHERE ${guard} ON CONFLICT(proposal_id) DO NOTHING`,childId,at,day,...args),
+    query(`INSERT INTO question_derivations(id,parent_proposal_id,child_proposal_id,origin_json,created_at,created_day) SELECT ?,?,?,?,?,? WHERE ${guard} ON CONFLICT(id) DO NOTHING`,originId,origin.parentProposalId,childId,originJson,receipt.createdAt,existingEdge?receipt.createdAt.slice(0,10):day,...args)
+   ]);
+   if(result.some(item=>item?.success===false))throw Error('The variation transaction failed');const saved=await find();if(saved)return await replay(saved);
+   if(await query('SELECT request_id FROM proposal_submissions WHERE request_id=?',body.requestId).first())return reply({error:'Request identifier was already used.'},409);
+   if(!await query(`SELECT 1 AS available WHERE ${parentGate} AND ${sourceGate}`,...parentArgs,...sourceArgs).first())return reply({error:'The original calculation changed while saving. Review the variation again.'},409);
+   return reply({error:'The daily public variation limit has been reached.'},429);
+  }catch{return reply({error:'The variation could not be saved. Retry with the same request identifier.'},503);}
+ };
+}

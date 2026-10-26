@@ -2,6 +2,16 @@
 
 ## Browser experiment loop
 
+Reviewed parameter variations use `POST /parameter-questions/create` to save the
+canonical question, its public entry, and its original calculation connection in
+one database transaction. The server derives the card from the exact reviewed
+source; it does not accept a replacement card from the browser. A stable request
+ID makes retries return the same saved receipt, including after a lost response.
+Failed source checks or exhausted daily limits leave no partial question behind.
+Migration 0017 adds these immutable request receipts. Source-bound preparation and
+task registration follow separately; creating a variation never runs it or saves
+a result. The older confirmation endpoint remains available for existing clients.
+
 The new `/tasks` routes link a confirmed idea to an immutable declarative plan,
 then accept submitted results only after replaying the bounded computation. The
 handler verifies bundled page text against the site's selected raw or reviewed
