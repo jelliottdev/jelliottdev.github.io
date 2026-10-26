@@ -666,3 +666,19 @@ counts within branches; unknown counts stay unknown and can be refreshed.
 The Worker validates published voting targets using the generated compact
 research-record-ids manifest. It does not download the experiment registry to
 serve vote counts. Community voting targets must already be public ideas.
+
+## Navigate retained question variations
+
+Saved question pages expose the retained parent and child links from
+`question_derivations`. These links describe the exact selected change; they
+never imply that a child has been run or that either question is answered.
+Both questions must be public, and their canonical cards, retained origin and
+compiled parameter difference are checked before navigation is displayed.
+Repeated origins linking the same question pair remain retained; the interface
+shows one destination per direction to avoid repeating identical links.
+
+The read-only `/ideas/:id/variations` endpoint pages each direction independently.
+Opening or paging these links never creates a question, task or result, and
+never executes the manuscript calculation. Archive origins can link back to
+the exact pinned source output. Missing or malformed relationships cannot be
+replaced with inferred links based on titles or categories.
