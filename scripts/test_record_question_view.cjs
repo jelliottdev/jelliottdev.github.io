@@ -83,4 +83,17 @@ test('actual library overview uses typed questions and preserves legacy fallback
  const legacy=c.overview({...legacyRecord,next_steps:'Keep the original untyped suggestion.'});assert(legacy.includes('Keep the original untyped suggestion.'));assert(legacy.includes('What remains open'));
  assert(html.includes('record-question-view.css'));assert(html.indexOf('record-followup-view.js')<html.indexOf('record-question-view.js'));assert(html.indexOf('record-question-view.js')<html.indexOf('src="library.js'));
 });
+test('numerical extension and historical replay expose distinct authored purpose without changing canonical questions',()=>{
+ const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/lp2-prime-openings/record.json'),'utf8')),before=JSON.stringify(r),html=V.render(r),cards=html.split('<li>').slice(1);
+ assert.equal(cards.length,2);for(const [i,recipe]of r.browser_followups.entries()){const part=cards[i],details=part.indexOf('<details class="record-published-assessment">'),live=part.indexOf('<div class="record-live-question"');assert(part.indexOf(recipe.title)<live);assert(part.indexOf(recipe.motivation)<live);assert(part.indexOf(recipe.question)>details);assert.equal((part.match(/class="record-question-context"/g)||[]).length,1);assert.equal((part.match(/<details/g)||[]).length,1);assert(part.includes('followup='+recipe.id));assert.equal(V.questions(r)[i].question,recipe.question);}
+ assert(cards[0].includes('this new comparison asks about language similarity'));assert(cards[0].includes('restart at each page, line or word'));assert(cards[1].includes('This repeats the earlier opening test'));assert(cards[1].includes('does not compare language scores or add line and word restarts'));assert.equal(JSON.stringify(r),before);
+});
+test('owned display context escapes source text, uses only validated recipes and bounds fallback prose',()=>{
+ const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/lp2-prime-openings/record.json'),'utf8'));r.browser_followups=r.browser_followups.slice(0,1);r.research_questions=r.research_questions.slice(0,1);r.browser_followups[0].title='Compare A & B "quoted"';r.browser_followups[0].motivation='Try A & B, then inspect the output.';const html=V.render(r);assert(html.includes('Compare A &amp; B &quot;quoted&quot;'));assert(html.includes('Try A &amp; B, then inspect the output.'));assert(!html.includes('<img'));
+ for(const mutate of [x=>x.browser_followups[0].motivation='<img src=x>',x=>x.browser_followups[0].title='x'.repeat(301),x=>x.browser_followups[0].inputs.pages[0].text_sha256='bad']){const bad=structuredClone(r);mutate(bad);assert.equal(V.render(bad),'');}
+ delete r.browser_followups[0].motivation;r.browser_followups[0].scope_change='Try a different starting place.';assert(V.render(r).includes('<p class="record-question-context">Try a different starting place.</p>'));r.browser_followups[0].scope_change='Long source scope. '.repeat(30);assert(!V.render(r).includes('class="record-question-context"'));
+});
+test('unowned Deor question retains its maintained wording without invented display context',()=>{
+ const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/wulfic-autokey-seed-families/record.json'),'utf8')),html=V.render(r),question=r.research_questions[0].question;assert(html.indexOf(question)<html.indexOf('data-live-question'));assert(!html.includes('class="record-question-context"'));assert(!html.includes('class="record-question-exact"'));
+});
 console.log(count+' record question view groups passed');

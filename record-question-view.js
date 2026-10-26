@@ -12,9 +12,15 @@
  function workspace(record,item,reference){return reference.id==='deor-warning-opening'?'run.html#family=deor-feedback-v1':'run.html#record='+record.id+'&followup='+item.followup;}
  function publishedLinks(item){return item.records.length?'<ul class="record-question-links">'+item.records.map((id,index)=>'<li><a href="library.html#/experiment/'+id+'">'+(item.records.length===1?'Read completed test':'Read completed test '+(index+1))+'</a></li>').join('')+'</ul>':'';}
  const entryLink=(href,label='Try this check')=>'<p class="record-question-next"><a href="'+esc(href)+'">'+label+'</a></p>';
+ function displayContext(record,item){
+  if(!Object.hasOwn(item,'followup'))return null;
+  const recipe=(followupView()?.recipes(record)||[]).find(recipe=>recipe.id===item.followup);if(!recipe)return null;
+  const context=Object.hasOwn(recipe,'motivation')?recipe.motivation:text(recipe.scope_change,300)?recipe.scope_change:'';
+  return {title:recipe.title,context};
+ }
  function liveQuestion(record,item,reference,level){
-  const href=workspace(record,item,reference);
-  return '<li><p class="record-question-title"><strong>'+esc(item.question)+'</strong></p><div class="record-live-question" data-live-question="'+esc(item.id)+'" data-question-heading="'+Math.min(level+1,4)+'" aria-live="polite">'+entryLink(href)+'<p class="record-question-live-status">Saved results have not been checked.</p><button type="button" data-question-activate>Check saved results</button></div><details class="record-published-assessment"><summary>Published assessment</summary><p class="record-question-state">Published as '+(item.state==='tested'?'tested':'open')+'</p><p>'+esc(item.note)+'</p>'+publishedLinks(item)+'</details></li>';
+  const href=workspace(record,item,reference),context=displayContext(record,item);
+  return '<li><p class="record-question-title"><strong>'+esc(context?.title||item.question)+'</strong></p>'+(context?.context?'<p class="record-question-context">'+esc(context.context)+'</p>':'')+'<div class="record-live-question" data-live-question="'+esc(item.id)+'" data-question-heading="'+Math.min(level+1,4)+'" aria-live="polite">'+entryLink(href)+'<p class="record-question-live-status">Saved results have not been checked.</p><button type="button" data-question-activate>Check saved results</button></div><details class="record-published-assessment"><summary>Published assessment</summary>'+(context?'<p class="record-question-exact">'+esc(item.question)+'</p>':'')+'<p class="record-question-state">Published as '+(item.state==='tested'?'tested':'open')+'</p><p>'+esc(item.note)+'</p>'+publishedLinks(item)+'</details></li>';
  }
  function render(record,{headingLevel=2,fallback=''}={}){
   const level=[2,3,4].includes(headingLevel)?headingLevel:2;
