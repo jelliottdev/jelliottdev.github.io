@@ -12,19 +12,25 @@
   try{for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;ensure(size<=LIMIT,'The research source exceeds its size limit.');parts.push(part.value);}}catch(error){try{await reader.cancel();}catch{}throw error;}
   const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}const value=J.capture(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes)),{maxBytes:LIMIT,maxDepth:24,maxNodes:300000});return {bytes,value};
  }
- async function validatePlan(input,ref,{bundle,sourceBytes,crypto=root.crypto,isLive=()=>true}={}){
-  const value=J.capture(input,{maxBytes:LIMIT,maxDepth:24,maxNodes:300000}),captured=J.capture(bundle,{maxBytes:LIMIT,maxDepth:16,maxNodes:6000}),sourceCopy=sourceBytes instanceof Uint8Array?sourceBytes.slice():null,optional=Object.hasOwn(value,'motivation')?['motivation']:[];
-  ensure(exact(value,['state','origin','card','inputVersion','domain','question','scopeChange','limitation','snapshot',...optional])&&value.state==='finite-plan-ready','The source search review is malformed.');
+ async function validatePlan(input,ref,options={}){return checkedPlan(input,ref,options,false);}
+ async function fromSource(origin,options={}){const captured=J.capture(origin,{maxBytes:1024,maxDepth:4,maxNodes:16});return checkedPlan(captured,captured,options,true);}
+ // The raw-source path has no incoming domain or plan to trust. Both public
+ // entry points share the same source pins, compiler and complete witnesses.
+ async function checkedPlan(input,ref,{bundle,sourceBytes,crypto=root.crypto,isLive=()=>true}={},sourceOnly){
+  const incoming=J.capture(input,{maxBytes:LIMIT,maxDepth:24,maxNodes:300000}),captured=J.capture(bundle,{maxBytes:LIMIT,maxDepth:16,maxNodes:6000}),sourceCopy=sourceBytes instanceof Uint8Array?sourceBytes.slice():null;let value=sourceOnly?{origin:incoming}:incoming;
+  if(!sourceOnly){const optional=Object.hasOwn(value,'motivation')?['motivation']:[];ensure(exact(value,['state','origin','card','inputVersion','domain','question','scopeChange','limitation','snapshot',...optional])&&value.state==='finite-plan-ready','The source search review is malformed.');}
   ensure(exact(value.origin,['recordId','followupId','recordSha256','protocolSha256'])&&[value.origin.recordId,value.origin.followupId].every(id=>typeof id==='string'&&id.length<=100&&ID.test(id))&&HEX.test(value.origin.recordSha256)&&HEX.test(value.origin.protocolSha256)&&value.origin.recordId===ref?.recordId&&value.origin.followupId===ref?.followupId,'The search belongs to another source.');
   ensure(sourceCopy instanceof Uint8Array&&sourceCopy.byteLength<=LIMIT&&await hash(sourceCopy,crypto)===value.origin.recordSha256,'The source experiment changed. Review it again.');
   const source=J.capture(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(sourceCopy)),{maxBytes:LIMIT,maxDepth:24,maxNodes:300000}),owned=source.browser_followups?.filter(r=>r?.id===ref.followupId);
-  ensure(source.id===ref.recordId&&source.status==='published'&&Array.isArray(owned)&&owned.length===1&&same(owned[0],value.snapshot)&&await hash(value.snapshot,crypto)===value.origin.protocolSha256,'The published search declaration changed.');
+  ensure(source.id===ref.recordId&&source.status==='published'&&Array.isArray(owned)&&owned.length===1,'The published search declaration changed.');
+  if(sourceOnly){const recipe=owned[0];value={state:'finite-plan-ready',origin:value.origin,card:recipe.card,inputVersion:recipe.inputs?.version,question:recipe.question,scopeChange:recipe.scope_change,limitation:recipe.limitation,snapshot:recipe,...(Object.hasOwn(recipe,'motivation')?{motivation:recipe.motivation}:{})};}
+  ensure(same(owned[0],value.snapshot)&&await hash(value.snapshot,crypto)===value.origin.protocolSha256,'The published search declaration changed.');
   const recipe=value.snapshot;ensure(Model.finiteRecipe(recipe)&&same(value.card,recipe.card)&&value.inputVersion===recipe.inputs.version&&value.question===recipe.question&&value.scopeChange===recipe.scope_change&&value.limitation===recipe.limitation&&Object.hasOwn(value,'motivation')===Object.hasOwn(recipe,'motivation')&&(!Object.hasOwn(value,'motivation')||Context.valid(value.motivation)&&value.motivation===recipe.motivation),'The reviewed search differs from its source declaration.');
   const inputs=Inputs.parse(captured),pins=recipe.inputs;
   ensure(await hash(inputs.alphabet,crypto)===pins.alphabet_sha256,'The official rune alphabet changed.');
   for(const pin of pins.pages){const page=inputs.pages.get(pin.id),text=value.inputVersion==='raw'?page?.raw:page?.reviewed_text;ensure(typeof text==='string'&&await hash(text,crypto)===pin.text_sha256,'A declared manuscript page changed.');}
   const evaluation=recipe.card.rules.evaluation.value,compiled=await (evaluation==='measurement'?Compiler.compileOutputInspection:evaluation?.kind==='language-score'?Compiler.compileLanguageComparison:Compiler.compile)(recipe.card,captured,crypto),domain=compiled.domain,descriptor={domainId:domain.id,programs:domain.programs.length,pages:domain.pages.length,totalCases:domain.totalCases,criterion:domain.criterion,...(domain.questionPolicy?{questionPolicy:domain.questionPolicy}:{})};
-  ensure(same(value.domain,descriptor),'The reviewed search settings or comparison changed.');
+  if(sourceOnly)value.domain=descriptor;else ensure(same(value.domain,descriptor),'The reviewed search settings or comparison changed.');
   const programs=new Map(domain.programs.map(p=>[p.id,p])),members=recipe.control.members,runes=new Set(inputs.alphabet.map(a=>a.rune));let total=0;
   ensure(members.length===compiled.members.length&&members.length<=1024,'Some source calculations lack a synthetic check.');
   for(let i=0;i<members.length;i++){
@@ -53,5 +59,5 @@
   }
   return {ready:load(),getState:()=>({plan,busy}),destroy(){dead=true;generation++;controller.abort();}};
  }
- const api={validatePlan,render,createWorkspace};if(node)module.exports=api;else root.AuthoredFiniteFollowup=api;
+ const api={validatePlan,fromSource,render,createWorkspace};if(node)module.exports=api;else root.AuthoredFiniteFollowup=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

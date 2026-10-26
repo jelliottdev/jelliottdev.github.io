@@ -1,7 +1,7 @@
 /* Source-authored finite domains. Compile inputs and replay synthetic witnesses only. */
 import E from '../../local-experiment.js';
 import Control from '../../local-control.js';
-import Compiler from '../../factored-finite-search-compiler.js';
+import {describeFiniteSource} from './finite-source-descriptor.mjs';
 import Inputs from '../../local-input-bundle.js';
 import J from '../../finite-json.js';
 import Context from '../../followup-context.js';
@@ -46,7 +46,7 @@ export async function compileFiniteRecordPlan({recordId,followupId,raw,bundle},{
  }
  live(signal);
  const evaluation=card.rules?.evaluation;require(evaluation?.status==='specified','The finite evaluation must be explicit.');
- const compiled=await (evaluation.value==='measurement'?Compiler.compileOutputInspection:evaluation.value?.kind==='language-score'?Compiler.compileLanguageComparison:Compiler.compile)(card,captured,crypto),domain=compiled.domain;
+ const compiled=await describeFiniteSource({card,alphabet:source.alphabet,pages:pins.pages.map(pin=>({id:pin.id,text:pins.version==='raw'?source.pages.get(pin.id).raw:source.pages.get(pin.id).reviewed_text}))},{crypto,signal}),domain=compiled.domain;
  live(signal);
  const control=recipe.control;require(exact(control,['kind','members'])&&control.kind==='finite-program-controls'&&Array.isArray(control.members)&&control.members.length===compiled.members.length&&control.members.length<=LIMITS.programs,'The finite controls do not cover the complete declared family.');
  const programs=new Map(domain.programs.map(p=>[p.id,p])),runes=new Set(source.alphabet.map(v=>v.rune));let total=0;

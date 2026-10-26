@@ -365,16 +365,14 @@
     if(checked.linkedProposalId!==id||E.stable(checked.card)!==E.stable(value.card))throw Error('The saved calculation changed its original idea association.');
     const origin=checked.selectedRecordOrigin,owned=origin&&checked.origins.find(item=>E.stable(item.origin)===E.stable(origin)&&item.scopeRelation?.kind==='finite-settings-member'&&E.stable(item.scopeRelation.card)===E.stable(value.card));
     if(!owned)continue;
-    if(!endpointFor(config?.recordPlanEndpoint,'record-plans'))throw Error('The original source context is unavailable.');
-    const incoming=await(await request(config.recordPlanEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:origin.recordId,followupId:origin.followupId,includeExisting:true,includeMotivation:true})})).json();
-    if(E.stable(incoming.origin)!==E.stable(origin)||E.stable(incoming.card)!==E.stable(value.card))throw Error('The original source changed.');
     const finite=typeof module==='object'&&module.exports?require('./authored-finite-followup.js'):root.AuthoredFiniteFollowup;
-    if(!finite?.validatePlan)throw Error('The source search tools could not be loaded.');
+    if(!finite?.fromSource)throw Error('The source search tools could not be loaded.');
     const [sourceResponse,bundleResponse]=await Promise.all([request('experiments/records/'+origin.recordId+'/record.json',{cache:'no-cache',redirect:'error'}),request('data/local-run-inputs.json',{cache:'no-cache',redirect:'error'})]);
     const reader=sourceResponse.body?.getReader();if(!reader)throw Error('The original source could not be read.');const parts=[];let size=0;
     try{for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>2*1024*1024)throw Error('The original source exceeds its size limit.');parts.push(part.value);}}catch(error){await reader.cancel();throw error;}
     const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.byteLength;}
-    const bundle=await bundleResponse.json(),plan=await finite.validatePlan(incoming,origin,{sourceBytes:bytes,bundle,crypto:cryptoAPI,isLive:()=>live(token,id)});
+    const bundle=await bundleResponse.json(),plan=await finite.fromSource(origin,{sourceBytes:bytes,bundle,crypto:cryptoAPI,isLive:()=>live(token,id)});
+    if(E.stable(plan.origin)!==E.stable(origin)||E.stable(plan.card)!==E.stable(value.card))throw Error('The original source changed.');
     if(!live(token,id))return null;return plan;
    }
    return null;

@@ -333,5 +333,33 @@ applied remotely. Worker version `8b8131e8-6a7b-4716-a800-acb4b89132b0`
 was then deployed after all 42 indexed receipt files were published and their
 byte counts and SHA-256 values matched. Read-only hosted checks loaded the first
 and last indexed program with the expected immutable task/result IDs and all
-56 pages. This does not verify a public finite-recipe run/save/reload journey;
-no finite source recipe is published yet.
+56 pages. This initial deployment preceded the public finite-recipe run/save/reload check described below.
+
+
+## Finite source recovery and read costs (25 October 2026)
+
+The published known-key record now owns two finite follow-ups: evaluate the
+existing page-reset outputs, or restart the same key at each visible word.
+A real public word-reset calculation completed Review → Run → Save → Reload
+for one setting across 56 pages: 55 comparable outputs, one insufficient sample,
+and 2,296 cases remaining. This verifies the contribution loop for that setting,
+not completion of the family or a decipherment.
+
+Saved idea recovery validates the immutable admitted origin against the official
+record bytes and input bundle in the browser. It compiles once and checks every
+synthetic witness; it no longer asks the server to rebuild a plan on reload.
+Fresh source review still checks source pins and every witness on the server.
+Its descriptive compiler shares the maintained grammar, step compiler and
+identities, without constructing 42 copies of the full manuscript task.
+
+Verified saved reads may reuse a bounded cache of independently constructed
+implementation controls. Every new submission still receives independent result
+replay. The language model's numeric-table serialization has identical canonical
+bytes and the unchanged model digest; numeric arrays with serialization hooks
+fall back to the original serializer.
+
+Production previously returned CPU-limit errors on task and evidence reads.
+Successful requests also consumed substantial CPU, so success alone does not
+establish dependable headroom. Deployment and hosted measurements for this
+optimization must be recorded after verification; local parity tests and a dry
+build do not prove the service stays within its CPU allowance.
