@@ -27,6 +27,65 @@ class BrowserFollowups(unittest.TestCase):
     def changed(self):
         return copy.deepcopy(self.recipe)
 
+    def test_keyed_compilers_preserve_254_256_edges_and_reject_long_keys_before_controls(self):
+        identifiers = ['repeating_key', 'vigenere', 'plaintext_autokey', 'ciphertext_autokey', 'interrupted_repeating_key']
+        cards, expected = [], []
+        def source(identifier, key):
+            card = copy.deepcopy(self.recipe['card'])
+            op = {'id': identifier, 'key': key, 'direction': 'subtract', 'reset': 'word'}
+            if identifier == 'interrupted_repeating_key':
+                op.update(label='Interrupted repeating key', interrupts=[0])
+            card['method']['value']['operations'] = [op]
+            return card
+        from unittest.mock import patch
+        with patch.object(runner, 'run', side_effect=AssertionError('Compilation cannot execute controls or targets')):
+            for identifier in identifiers:
+                for length in (254, 256):
+                    key = [n % 29 for n in range(length)]
+                    card = source(identifier, key)
+                    before = copy.deepcopy(card)
+                    plan = compile_card(card)
+                    self.assertEqual(plan['steps'][0]['key'], key)
+                    self.assertEqual(len(plan['steps'][0]['key']), length)
+                    self.assertEqual(card, before)
+                    cards.append(card)
+                    expected.append({'accepted': True, 'steps': plan['steps']})
+                for key in ([n % 29 for n in range(257)], [n % 29 for n in range(324)], [], [True], [29]):
+                    card = source(identifier, key)
+                    with self.assertRaises(ValueError):
+                        compile_card(card)
+                    cards.append(card)
+                    expected.append({'accepted': False})
+            for length in (324,):
+                card = source('finite_key', [n % 29 for n in range(length)])
+                plan = compile_card(card)
+                self.assertEqual(plan['steps'][0]['op'], 'finite-shift')
+                self.assertEqual(len(plan['steps'][0]['key']), length)
+                cards.append(card)
+                expected.append({'accepted': True, 'steps': plan['steps']})
+            # The operation grammar still supports up to20000 finite numbers;
+            # a literal20000-key card separately exceeds the unchanged12KiB card cap.
+            task = {'schema': runner.TASK_SCHEMA, 'engine': runner.ENGINE, 'taskId': '0' * 64,
+                    'title': 'Finite stream syntax only', 'alphabet': alphabet(ROOT),
+                    'pages': [{'id': 'lp2-00', 'text': alphabet(ROOT)[0]['rune']}],
+                    'steps': [{'op': 'finite-shift', 'key': [0] * 20000, 'direction': 'subtract', 'reset': 'page'}],
+                    'criterion': {'kind': 'measurement'}}
+            task['taskId'] = runner.task_identity(task)
+            runner.validate(task)
+            with self.assertRaisesRegex(ValueError, '12,000 bytes'):
+                compile_card(source('finite_key', [0] * 20000))
+            task['steps'][0]['key'].append(0)
+            with self.assertRaises(ValueError):
+                runner.validate(task)
+            card = source('finite_key', [0] * 20001)
+            with self.assertRaises(ValueError):
+                compile_card(card)
+            cards.append(card)
+            expected.append({'accepted': False})
+        code = "const fs=require('node:fs'),F=require('./fixed-plan-compiler.js');console.log(JSON.stringify(JSON.parse(fs.readFileSync(0,'utf8')).map(card=>{const plan=F.compile(card);return plan.reason?{accepted:false}:{accepted:true,steps:plan.steps};})));"
+        result = subprocess.run(['node', '-e', code], input=json.dumps(cards), cwd=ROOT, encoding='utf8', capture_output=True, check=True)
+        self.assertEqual(json.loads(result.stdout), expected)
+
     def test_optional_motivation_is_editorial_and_plain_unicode(self):
         legacy = self.changed()
         legacy.pop('motivation', None)

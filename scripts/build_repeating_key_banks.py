@@ -71,7 +71,7 @@ def vectors(bank):
         return [list(k) for k in sorted(set(tuple(k) for k in seeds))]
     if bank['rule'] == 'all-rotations-v1':
         return [list(k) for k in sorted({tuple(k[i:] + k[:i]) for k in seeds for i in range(len(k))})]
-    if bank['rule'] in ('fold-repeat-endpoints-v1', 'fold-skip-endpoints-v1'):
+    if bank['rule'] in tuple(variant + '-v1' for variant in VARIANTS):
         cycles = [schedule(k, bank['variant']) for k in seeds]
         return [list(k) for k in sorted({cycle[i:] + cycle[:i] for cycle in cycles for i in range(len(cycle))})]
     raise ValueError('Unknown repeating key bank rule')
@@ -125,10 +125,11 @@ def prepare(root=ROOT):
             or audit['overLimitVectors'] != 648 or audit['overLimitPeriods'] != [324]
             or any(result['variants'][variant]['configurations'] != count for variant, count in expected.items())):
         raise ValueError('The complete historical schedule census changed')
-    for variant, label in [('fold-repeat-endpoints', 'Historical folded keys — repeat endpoints'), ('fold-skip-endpoints', 'Historical folded keys — skip endpoints')]:
+    for variant, label in [('fold-repeat-endpoints', 'Historical folded keys — repeat endpoints'), ('fold-skip-endpoints', 'Historical folded keys — skip endpoints'), ('rotate-left', 'Historical rotating keys — left'), ('rotate-right', 'Historical rotating keys — right')]:
         bank = dict(id='public-wordlist-' + variant + '-v1', label=label, rule=variant + '-v1', total=expected[variant], sourcePins=[dict(path=p, sha256=h) for p, h in sorted({**PINS, **SCHEDULE_PINS}.items())], seeds=[list(k) for k in seeds], historicalSettings=expected[variant], variant=variant, sourceAudit=audit)
-        if len(vectors(bank)) != bank['total'] or any(len(k) > 256 for k in vectors(bank)):
-            raise ValueError('The named folded variant cannot fit the unchanged repeating key limit')
+        maximum = 324 if variant.startswith('rotate-') else 256
+        if len(vectors(bank)) != bank['total'] or any(len(k) > maximum for k in vectors(bank)):
+            raise ValueError('The complete named schedule vector census changed')
         bank['sha256'] = digest(bank)
         banks.append(bank)
     return dict(schema=SCHEMA, banks=banks)
@@ -151,13 +152,13 @@ RUNTIME = r'''
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value')&&d.enumerable);
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const compare=(a,b)=>{for(let i=0;i<Math.min(a.length,b.length);i++)if(a[i]!==b[i])return a[i]-b[i];return a.length-b.length;},cache=new Map(),map=new Map();
- for(const bank of DATA.banks){const {sha256:pin,...basis}=bank,folded=Object.hasOwn(bank,'variant');if(!exact(bank,['id','label','rule','total','sourcePins','seeds','historicalSettings','sha256',...(folded?['variant','sourceAudit']:[])])||map.has(bank.id)||PINS[bank.id]!==pin||sha256(stable(basis))!==pin||!['source-keys-v1','all-rotations-v1','fold-repeat-endpoints-v1','fold-skip-endpoints-v1'].includes(bank.rule)||!Number.isSafeInteger(bank.total)||bank.total<1||!Array.isArray(bank.seeds)||bank.seeds.length!==43||bank.seeds.some(k=>!Array.isArray(k)||!k.length||k.length>256||k.some(n=>!Number.isInteger(n)||n<0||n>28)))throw Error('Repeating key bank integrity failed.');map.set(bank.id,bank);}
+ for(const bank of DATA.banks){const {sha256:pin,...basis}=bank,folded=Object.hasOwn(bank,'variant');if(!exact(bank,['id','label','rule','total','sourcePins','seeds','historicalSettings','sha256',...(folded?['variant','sourceAudit']:[])])||map.has(bank.id)||PINS[bank.id]!==pin||sha256(stable(basis))!==pin||!['source-keys-v1','all-rotations-v1','fold-repeat-endpoints-v1','fold-skip-endpoints-v1','rotate-left-v1','rotate-right-v1'].includes(bank.rule)||!Number.isSafeInteger(bank.total)||bank.total<1||!Array.isArray(bank.seeds)||bank.seeds.length!==43||bank.seeds.some(k=>!Array.isArray(k)||!k.length||k.length>256||k.some(n=>!Number.isInteger(n)||n<0||n>28)))throw Error('Repeating key bank integrity failed.');map.set(bank.id,bank);}
  if(DATA.schema!=='liberpedia-repeating-key-banks-v1'||map.size!==Object.keys(PINS).length||map.size<1)throw Error('The repeating key bank set changed.');freeze(DATA);freeze(PINS);
  function list(){return freeze(DATA.banks.map(({seeds,...metadata})=>({...metadata,sourcePins:metadata.sourcePins.map(p=>({...p}))})));}
  function resolve(input){
   if(!exact(input,['bankId','bankSha256','start','count']))throw Error('Use an exact repeating key bank slice.');const {bankId,bankSha256,start,count}=input,bank=map.get(bankId);
   if(typeof bankId!=='string'||typeof bankSha256!=='string'||!bank||bank.sha256!==bankSha256||!Number.isSafeInteger(start)||!Number.isSafeInteger(count)||start<0||count<1||count>1024||start+count>bank.total)throw Error('Repeating key bank slice is outside its exact bounds.');
-  let keys=cache.get(bankId);if(!keys){const candidates=[];for(const key of bank.seeds){if(bank.rule==='source-keys-v1')candidates.push(key.slice());else{let cycle=key;if(bank.rule.startsWith('fold-')){const whole=bank.variant==='fold-repeat-endpoints'?key.concat(key.slice().reverse()):key.concat(key.slice(1,-1).reverse());for(let n=1;n<=whole.length;n++)if(whole.length%n===0&&whole.every((v,i)=>v===whole[i%n])){cycle=whole.slice(0,n);break;}}for(let phase=0;phase<cycle.length;phase++)candidates.push(cycle.slice(phase).concat(cycle.slice(0,phase)));}}const unique=new Map(candidates.map(key=>[key.join(','),key]));keys=[...unique.values()].sort(compare);if(keys.length!==bank.total||keys.some(k=>k.length>256))throw Error('The repeating key vector count or length changed.');freeze(keys);cache.set(bankId,keys);}
+  let keys=cache.get(bankId);if(!keys){const candidates=[];for(const key of bank.seeds){if(bank.rule==='source-keys-v1')candidates.push(key.slice());else{let cycle=key;if(Object.hasOwn(bank,'variant')){let whole;if(bank.variant.startsWith('rotate-')){whole=[];for(let q=0;q<key.length;q++)whole.push(...(bank.variant==='rotate-left'?key.slice(q).concat(key.slice(0,q)):q?key.slice(-q).concat(key.slice(0,-q)):key));}else whole=bank.variant==='fold-repeat-endpoints'?key.concat(key.slice().reverse()):key.concat(key.slice(1,-1).reverse());for(let n=1;n<=whole.length;n++)if(whole.length%n===0&&whole.every((v,i)=>v===whole[i%n])){cycle=whole.slice(0,n);break;}}for(let phase=0;phase<cycle.length;phase++)candidates.push(cycle.slice(phase).concat(cycle.slice(0,phase)));}}const unique=new Map(candidates.map(key=>[key.join(','),key]));keys=[...unique.values()].sort(compare);if(keys.length!==bank.total||keys.some(k=>k.length>(bank.rule.startsWith('rotate-')?324:256)))throw Error('The repeating key vector count or length changed.');freeze(keys);cache.set(bankId,keys);}
   return freeze(keys.slice(start,start+count).map(key=>key.slice()));
  }
  const api=Object.freeze({list,resolve});if(typeof module==='object'&&module.exports)module.exports=api;else root.RepeatingKeyBanks=api;
@@ -189,7 +190,7 @@ def main():
             path.write_bytes(content.encode())
         elif not path.exists() or path.read_bytes() != content.encode():
             raise SystemExit('Stale generated file: ' + name)
-    print('Verified 43 archived keys, 309 rotations, and exact folded variants 618/532; full historical schedule census 6272 includes 648 unsupported period-324 vectors. No output calculations.')
+    print('Verified 43 source keys, 309 ordinary rotations, and all four historical schedules (2561/2561/618/532). All 648 period-324 vectors retained as data; existing repeating-key execution bound remains 256. No output calculations.')
 
 
 if __name__ == '__main__':

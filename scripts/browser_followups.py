@@ -170,6 +170,11 @@ def compile_card(card):
         if identifier in modes:
             require(set(op) in ({'id', 'key', 'direction', 'reset'}, {'id', 'label', 'key', 'direction', 'reset'}), 'keyed operation fields')
             require('label' not in op or op['label'] in labels[identifier], 'unsupported operation wording')
+            require(type(op['key']) is list and 1 <= len(op['key']) <= 256
+                    and all(type(n) is int and 0 <= n <= 28 for n in op['key']),
+                    'keyed operation needs 1..256 GP29 indices')
+            require(op['direction'] in ('add', 'subtract') and op['reset'] in ('page', 'line', 'word'),
+                    'keyed operation needs explicit direction and reset')
             steps.append({'op': 'keyed-shift', 'key': op['key'], 'mode': modes[identifier],
                           'direction': op['direction'], 'reset': op['reset']})
         elif identifier == 'finite_key_bank':

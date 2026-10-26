@@ -5,6 +5,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 import finite_followup_cards as finite
+import browser_followups as fixed
 from build_repeating_key_banks import resolve
 from test_finite_followup_cards import card, js
 
@@ -23,7 +24,11 @@ def family(axes, pages=None):
 class BankAxes(unittest.TestCase):
     def test_literal_equivalence_browser_parity_and_detachment(self):
         for bank in BANKS:
-            a = axis(bank)
+            start = 1
+            if bank['total'] > 1024:
+                keys = resolve({'bankId': bank['id'], 'bankSha256': bank['sha256'], 'start': 0, 'count': 1024})
+                start = next(n for n in range(len(keys) - 3) if all(len(k) <= 256 for k in keys[n:n + 4]))
+            a = axis(bank, start, 4)
             compact = family([a])
             before = copy.deepcopy(compact)
             literal = family([{'operation': 0, 'name': 'key', 'values': resolve(a['valuesFrom'])}])
@@ -51,14 +56,46 @@ class BankAxes(unittest.TestCase):
                 finite.expand(bad)
 
     def test_full_pinned_count_and_cartesian_limits(self):
-        bank = BANKS[1]
-        compact = family([axis(bank, 0, bank['total'])])
-        expanded = finite.expand(compact)
-        self.assertEqual(expanded['declaration']['programCount'], bank['total'])
-        self.assertEqual(expanded, js([compact])[0]['value'])
-        bad = family([axis(bank, 0, bank['total']), {'operation': 0, 'name': 'unit', 'values': ['line', 'word', 'page']}, {'operation': 0, 'name': 'a', 'values': [0, 1]}])
-        with self.assertRaisesRegex(ValueError, '1024'):
-            finite.expand(bad)
+        for bank in BANKS:
+            compact = family([axis(bank, 0, bank['total'])])
+            if bank['total'] > 1024:
+                with self.assertRaises(ValueError):
+                    finite.expand(compact)
+                self.assertFalse(js([compact])[0]['ok'])
+                continue
+            expanded = finite.expand(compact)
+            self.assertEqual(expanded['declaration']['programCount'], bank['total'])
+            self.assertEqual(expanded, js([compact])[0]['value'])
+            bad = family([axis(bank, 0, bank['total']), {'operation': 0, 'name': 'unit', 'values': ['line', 'word', 'page']}, {'operation': 0, 'name': 'a', 'values': [0, 1]}])
+            if bank['total'] * 6 > 1024:
+                with self.assertRaisesRegex(ValueError, '1024'):
+                    finite.expand(bad)
+
+    def test_324_rune_bank_members_stay_literal_and_repeating_compiler_refuses_them(self):
+        for bank in BANKS:
+            if bank['total'] <= 1024:
+                continue
+            found, key = None, None
+            for start in range(0, bank['total'], 1024):
+                part = resolve({'bankId': bank['id'], 'bankSha256': bank['sha256'], 'start': start, 'count': min(1024, bank['total'] - start)})
+                for n, value in enumerate(part):
+                    if len(value) == 324:
+                        found, key = start + n, value
+                        break
+                if found is not None:
+                    break
+            self.assertIsNotNone(found)
+            self.assertEqual(finite.literal('key', key), key)
+            compact = family([axis(bank, found, 1)])
+            browser = js([compact])[0]
+            self.assertTrue(browser['ok'])
+            member = browser['value']['variants'][0]['card']
+            self.assertEqual(member['method']['value']['operations'][0]['key'], key)
+            self.assertEqual(len(key), 324)
+            with self.assertRaises(ValueError):
+                fixed.compile_card(member)
+            with self.assertRaises(ValueError):
+                finite.expand(compact)
 
     def test_expanded_byte_budget_is_not_bypassed_by_short_reference(self):
         keys = [[i % 29, (i // 29) % 29, i // 841] + [28] * 1497 for i in range(1024)]
