@@ -239,3 +239,9 @@ A question-level variation uses the original question’s complete ordered scope
 ### Comparing saved variation results
 
 When a variation and its retained starting calculation both have saved outputs, show what changed beside the finding. For output-only checks with shared saved pages, use this comparison as the main finding instead of repeating the generic output preview. Keep scored, opening-match and numerical findings visible; retain the original preview when comparison evidence is missing. Compare only shared saved pages from the same source edition and verified programs. Show short paired excerpts with differences marked without relying on color, and label Latin rune names as labels rather than translation. State when additional pages have no earlier saved output. A changed count is an observation, never a readability score or a claim that the variation improved the answer. Missing or invalid comparison evidence must leave the current question’s finding usable.
+
+### Choosing a check after inspecting output
+
+A saved deciphering question that only recorded transformed runes can offer maintained output checks before further method variations. Explain what each check looks for, its limit, the complete intended page scope, and any smaller earlier saved scope. Keep the original aim, ordered transformations and source edition unchanged. Review and creation are explicit; opening the page never runs or publishes a follow-up. A follow-up is a separate canonical question linked to its source, not a new method family or a retroactive verdict on the original measurement.
+
+Opening checks may derive exact matches from independently verified saved outputs. Language comparisons need an explicitly scored run unless a matching scored result already exists. Distinguish these paths, preserve the reviewed choice across redraws, and always provide links to existing evidence when a check is already covered.

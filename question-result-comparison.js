@@ -16,6 +16,7 @@
   ensure(exact(value,['entry','childProposalId','childCard','childProjection','parentProjection','bundle'])&&crypto?.subtle,'Use one retained variation and both exact saved projections.');
   const {entry,childProposalId,childCard,childProjection:child,parentProjection:parent}=value,o=entry?.origin;
   const relation=await Links.validate(entry,{ideaId:childProposalId,direction:'parents',crypto});unchanged();
+  ensure(o.selection.parameter!=='evaluation','An evaluation follow-up keeps the same transformed output; rune-difference comparison is not applicable.');
   ensure(same(childCard,entry.childCard),'The selected child question changed.');
   const source=o.source,ref=source.reference,pin=source.receipt;
   ensure(['saved-task','saved-question-program'].includes(ref.kind),'Comparison currently requires a saved parent calculation; published sources are not supported.');

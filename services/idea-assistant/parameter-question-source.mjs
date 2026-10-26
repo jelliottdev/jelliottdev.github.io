@@ -28,7 +28,8 @@ async function readOfficialJSON(response,max,signal){
 export async function resolveParameterQuestionDetails(input,{db,crypto=globalThis.crypto,fetcher=globalThis.fetch,registry,history,programIndex,signal}={}){
  const value=J.capture(input,{maxBytes:65536,maxDepth:16,maxNodes:10000}),hasSettings=!!value&&Object.hasOwn(value,'parentSettings');
  ensure(exact(value,['source','selection',...(hasSettings?['parentSettings']:[])]),'Declare an exact source and selected parameter change.');
- const ref=value.source;
+ const ref=value.source,choice=Question.selection(value.selection);
+ ensure(choice.parameter!=='evaluation'||ref?.kind==='saved-question-program','An output-check follow-up requires the complete saved question program.');
  ensure(ref&&typeof ref==='object'&&!Array.isArray(ref)&&typeof ref.proposalId==='string'&&PROPOSAL.test(ref.proposalId),'Use an exact public parent question.');
  if(['saved-task','saved-question-program'].includes(ref.kind))ensure(exact(ref,['kind','proposalId','taskId'])&&typeof ref.taskId==='string'&&HEX.test(ref.taskId),'Use an exact saved-task source reference.');
  else ensure(['published-program','archived-program'].includes(ref.kind)&&exact(ref,['kind','proposalId','recordId','revision','caseId'])&&typeof ref.recordId==='string'&&ref.recordId.length<=100&&SLUG.test(ref.recordId)&&typeof ref.revision==='string'&&HEX.test(ref.revision)&&typeof ref.caseId==='string'&&ref.caseId.length<=200&&/^[a-z0-9-]+$/.test(ref.caseId),'Use an exact pinned published-program reference.');
