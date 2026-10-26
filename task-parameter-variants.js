@@ -42,6 +42,45 @@
   }
   return freeze(items);
  }
+ // Suggestions omit only choices whose outputs are provably unchanged on this
+ // scope. Every operation preserves rune positions and separators, so these
+ // clocks remain valid after arbitrary earlier operations. They contain no
+ // transformed rune values and do not run or admit a calculation.
+ function suggestions(parent){
+  const task=captureTask(parent),items=list(task),runes=new Set(task.alphabet.map(entry=>entry.rune)),positions={page:[],line:[],word:[]};
+  for(const page of task.pages){let p=0,l=0,w=0;for(const ch of page.text){
+   if(runes.has(ch)){positions.page.push(p++);positions.line.push(l++);positions.word.push(w++);}
+   else{w=0;if(/[\r\n]/.test(ch))l=0;}
+  }}
+  const equal=(a,b)=>a.every((value,index)=>value===b[index]),maximum=a=>a.reduce((max,value)=>Math.max(max,value),-1)+1;
+  const sameOutputs=item=>{
+   if(!positions.page.length)return true;
+   const {step:index,parameter,value}=item.selection,step=task.steps[index],before=positions[step.reset];
+   // A later constant affine substitution discards every earlier rune value.
+   if(task.steps.slice(index+1).some(later=>later.op==='affine'&&later.a===0))return true;
+   if(step.op==='interrupted-keyed-shift'&&step.interrupts.length===29)return true;
+   if(parameter==='direction'){
+    if(step.op==='interrupted-keyed-shift')return step.key.slice(0,Math.min(step.key.length,maximum(before))).every(k=>k===0);
+    if(step.op==='keyed-shift'&&step.mode!=='repeat'&&maximum(before)>step.key.length)return false;
+    return before.every(position=>step.key[step.op==='finite-shift'?position:position%step.key.length]===0);
+   }
+   const after=positions[value];if(equal(before,after))return true;
+   if(step.op==='cumulative-difference')return false;
+   if(step.op==='interrupted-keyed-shift'){
+    // Interrupts depend on this step's input, which preceding operations can
+    // change. A nonconstant key must not use the ordinary rune clock here.
+    const reachable=step.key.slice(0,Math.min(step.key.length,Math.max(maximum(before),maximum(after))));
+    return reachable.every(k=>k===reachable[0]);
+   }
+   if(step.op==='keyed-shift'&&step.mode!=='repeat'){
+    // Zero or periodic seeds alone prove nothing once feedback is in use.
+    if(Math.max(maximum(before),maximum(after))>step.key.length)return false;
+    return before.every((position,i)=>step.key[position]===step.key[after[i]]);
+   }
+   return before.every((position,i)=>step.key[step.op==='finite-shift'?position:position%step.key.length]===step.key[step.op==='finite-shift'?after[i]:after[i]%step.key.length]);
+  };
+  return freeze(items.filter(item=>!sameOutputs(item)));
+ }
  async function prepare(parent,selection,cryptoAPI=root.crypto){
   const original=captureTask(parent),chosen=captureSelection(selection),body=derive(original,chosen);
   await E.checkIdentity(original,cryptoAPI);
@@ -59,5 +98,5 @@
   if(stable(expected)!==stable(candidate))throw Error('The child changed more than the selected step parameter.');
   return freeze(candidate);
  }
- const api={list,prepare,validate};if(node)module.exports=api;else root.TaskParameterVariants=api;
+ const api={list,suggestions,prepare,validate};if(node)module.exports=api;else root.TaskParameterVariants=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

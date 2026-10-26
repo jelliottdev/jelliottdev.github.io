@@ -77,7 +77,7 @@
   }
   function cancel(){generation++;controller?.abort();controller=null;busy=false;review=null;coverage=null;result=null;phase='cancelled';}
   function getState(){return freeze(capture({phase,busy,preview:review,coverage,result,error,requestId:attempt?.requestId||null,progress:{committed:!!attempt?.committed}}));}
-  return Object.freeze({list:()=>V.list(display.task),preview,create:createVariation,cancel,getState,destroy:cancel});
+  return Object.freeze({list:()=>V.suggestions(display.task),preview,create:createVariation,cancel,getState,destroy:cancel});
  }
  const api={create};if(node)module.exports=api;else root.ParameterVariationClient=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -5,9 +5,9 @@
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
  const where={page:'each page',line:'each line',word:'each word'};
  function reading(criterion){
-  if(criterion.kind==='exact-prefix')return 'A match means the output begins with the supplied rune sequence. It does not establish a decryption.';
-  if(criterion.kind==='exact-prefix-set')return 'A match means the output begins with one of the supplied rune sequences. It does not establish a decryption.';
-  if(criterion.kind==='language-score')return 'The language score measures resemblance to a reference text. It does not establish a decryption.';
+  if(criterion.kind==='exact-prefix')return 'If the opening matches, inspect the full output; a match is not a decryption. If it does not match, this version did not recover the supplied opening on these pages. Other text is still possible.';
+  if(criterion.kind==='exact-prefix-set')return 'If an opening matches, inspect the full output; a match is not a decryption. If none match, this version did not recover the supplied openings on these pages. Other text is still possible.';
+  if(criterion.kind==='language-score')return 'Compare each language score with its rearranged-text baseline, then inspect the output. Similarity does not identify the language or establish a decryption.';
   if(criterion.kind==='measurement')return 'Inspect the output and counts. These measurements are not a decryption verdict.';
   if(criterion.kind==='word-affine-count')return 'The count measures how often the chosen rune relation occurs. It does not identify the encryption rule.';
   if(criterion.kind==='word-prime-sums')return 'The totals measure words using the chosen number table. They do not establish a decryption.';
