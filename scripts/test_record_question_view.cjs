@@ -2,10 +2,19 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const V=require('../record-question-view.js'),L=require('../library.js');
 const M=require('../record-question-model.js');
-const record=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/lp2-known-vigenere-keys/record.json'),'utf8'));
+const actualRecord=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/lp2-known-vigenere-keys/record.json'),'utf8'));
+const record={...actualRecord,browser_followups:[actualRecord.browser_followups[0]]};delete record.research_questions;
+const legacyRecord={...record};delete legacyRecord.research_questions;
 const open={id:'another-boundary',question:'Does another boundary change the result?',state:'open',note:'Keep the same key and pages.',records:[],followup:record.browser_followups[0].id};
 const tested={id:'completed-comparison',question:'Has the fixed comparison been checked?',state:'tested',note:'The comparison was completed; it does not prove a cipher.',records:['lp1-section-balance']};
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name)}
+
+test('actual known-key questions link both42program source families without claiming results',()=>{
+ const questions=M.questions(actualRecord,actualRecord.browser_followups);assert.equal(questions.length,2);
+ const html=V.render(actualRecord);assert(html.includes('Questions to explore'));assert(!html.includes('What remains open'));
+ for(const question of questions){assert.equal(question.state,'open');const ref=M.protocolReference(actualRecord,question.id);assert.equal(ref.id,'finite-settings-output');const recipe=actualRecord.browser_followups.find(r=>r.id===ref.followupId);const family=M.finiteRecipe(recipe);assert.equal(family.programCount,42);assert.equal(family.caseCount,2352);assert(html.includes('followup='+recipe.id));assert.deepEqual(ref.inputs,recipe.inputs);}
+ assert(!V.coversFollowups(actualRecord),'The independent fixed comparison remains available alongside the two open finite questions');
+});
 
 test('maintained protocol references derive exact recipe inputs and ignore editorial completion',()=>{
  const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/word-internal-affine-lags/record.json'),'utf8')),before=JSON.stringify(r),q=r.research_questions[0],resolved=M.protocolReference(r,q.id);
@@ -26,7 +35,7 @@ test('open questions precede completed comparisons without mutation',()=>{
  assert.equal(JSON.stringify(r),before);assert.equal(V.questions(r)[0].state,'open');assert(html.indexOf(open.question)<html.indexOf(tested.question));assert.equal((html.match(/id="experiment-remaining"/g)||[]).length,1);assert.match(html,/<h2>Questions to explore<\/h2>/);assert.match(html,/Tested<\/span>/);assert.match(html,/library\.html#\/experiment\/lp1-section-balance/);assert.match(html,new RegExp('run.html#record='+record.id+'&amp;followup='+open.followup));assert(!/Run now|Create experiment|Proven|<details|<button/.test(html));
 });
 test('only missing typed questions permit legacy fallback',()=>{
- assert.match(V.render(record,{fallback:'Keep a fixed comparison.'}),/What remains open/);assert.equal(V.render(record),'');
+ assert.match(V.render(legacyRecord,{fallback:'Keep a fixed comparison.'}),/What remains open/);assert.equal(V.render(legacyRecord),'');
  for(const value of [null,[],{},'',Array(13).fill(open)])assert.equal(V.render({...record,research_questions:value},{fallback:'Stale suggestion'}),'');
  assert.equal(V.render(null),'');assert.equal(V.render({},{}),'');
 });
@@ -40,7 +49,7 @@ test('reject malformed questions rather than advertise partial or invented work'
 });
 test('escape prose, retain exact navigation and optional references',()=>{
  const r={...record,research_questions:[{...open,question:'What does A & B mean?',note:'A & B "quoted"'},{...tested,records:['one','two']}]},html=V.render(r,{headingLevel:3});
- assert.match(html,/What does A &amp; B mean/);assert(!html.includes('<img'));assert.match(html,/A &amp; B &quot;quoted&quot;/);assert.match(html,/<h3>/);assert.match(html,/library\.html#\/experiment\/one/);assert.match(html,/Read completed test 2/);assert.match(V.render(record,{fallback:'<script>bad</script>'}),/&lt;script&gt;/);
+ assert.match(html,/What does A &amp; B mean/);assert(!html.includes('<img'));assert.match(html,/A &amp; B &quot;quoted&quot;/);assert.match(html,/<h3>/);assert.match(html,/library\.html#\/experiment\/one/);assert.match(html,/Read completed test 2/);assert.match(V.render(legacyRecord,{fallback:'<script>bad</script>'}),/&lt;script&gt;/);
 });
 
 test('plain-text contract matches builder limits, trimming and own fields',()=>{
@@ -54,9 +63,9 @@ test('plain-text contract matches builder limits, trimming and own fields',()=>{
 });
 
 test('completed owned recipes remain reproducible without advertising open work',()=>{
- const F=require('../record-followup-view.js'),r={...record,research_questions:[{...tested,followup:open.followup}]};
+ const F=require('../record-followup-view.js'),r={...legacyRecord,browser_followups:[record.browser_followups[0]],research_questions:[{...tested,followup:open.followup}]};
  const html=V.render(r);assert(html.includes('Review this check'));assert(!html.includes('Review follow-up'));assert(html.indexOf('Read completed test')<html.indexOf('Review this check'));assert(V.coversFollowups(r));
- assert.equal(F.available(r).length,0);assert.equal(F.recipes(r).length,record.browser_followups.length);assert(F.render(r).includes('Reproduce a comparison'));
+ assert.equal(F.available(r).length,0);assert.equal(F.recipes(r).length,1);assert(F.render(r).includes('Reproduce a comparison'));
  const conflict={...r,research_questions:[...r.research_questions,{...open,id:'conflicting-state'}]};assert.equal(V.render(conflict),'');assert.equal(F.available(conflict).length,0);
 });
 
@@ -71,7 +80,7 @@ test('actual library overview uses typed questions and preserves legacy fallback
  const source=fs.readFileSync(require.resolve('../library.js'),'utf8'),html=fs.readFileSync(require.resolve('../library.html'),'utf8');
  const c={RecordQuestionView:V,readerLimit:L.readerLimit,recordFiles:L.recordFiles,readerSections:L.readerSections,esc:JSON.stringify,hasInteractive:()=>false,prepareAuthored:x=>x,renderExperimentMarkdown:L.renderMarkdown,url:(path,params={})=>{if(path==='experiments')return L.researchHref(params);const search=new URLSearchParams(Object.entries(params).filter(([,value])=>value!==''&&value!==null&&value!==undefined));return '#/'+path+(search.size?'?'+search:'');},experimentHref:id=>'library.html#/experiment/'+id,familyMembers:()=>[]};vm.createContext(c);vm.runInContext(source.slice(source.indexOf(' function overview('),source.indexOf(' function scope(')),c);
  const typed=c.overview({...record,research_questions:[tested,open],next_steps:'Do the already completed comparison again.'});assert(typed.includes('Questions to explore'));assert(!typed.includes('Do the already completed comparison again.'));assert(typed.indexOf('experiment-finding')<typed.indexOf('Questions to explore'));
- const legacy=c.overview({...record,next_steps:'Keep the original untyped suggestion.'});assert(legacy.includes('Keep the original untyped suggestion.'));assert(legacy.includes('What remains open'));
+ const legacy=c.overview({...legacyRecord,next_steps:'Keep the original untyped suggestion.'});assert(legacy.includes('Keep the original untyped suggestion.'));assert(legacy.includes('What remains open'));
  assert(html.includes('record-question-view.css'));assert(html.indexOf('record-followup-view.js')<html.indexOf('record-question-view.js'));assert(html.indexOf('record-question-view.js')<html.indexOf('src="library.js'));
 });
 console.log(count+' record question view groups passed');

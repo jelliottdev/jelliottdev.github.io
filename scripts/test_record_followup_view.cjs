@@ -2,8 +2,15 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const V=require('../record-followup-view.js');
 const read=id=>JSON.parse(fs.readFileSync(path.join(__dirname,'../experiments/records',id,'record.json'),'utf8'));
-const single=read('lp2-known-vigenere-keys'),multi=read('wulfic-autokey-seed-families');
+const actualKnown=read('lp2-known-vigenere-keys'),single={...actualKnown,browser_followups:[actualKnown.browser_followups[0]]};delete single.research_questions;const multi=read('wulfic-autokey-seed-families');
 let groups=0;function test(name,f){f();groups++;console.log('PASS '+name)}
+
+test('real known-key record exposes both complete finite source plans alongside its fixed comparison',()=>{
+ const M=require('../record-question-model.js'),Q=require('../record-question-view.js');
+ assert.equal(V.recipes(actualKnown).length,3);assert.equal(M.questions(actualKnown,actualKnown.browser_followups).length,2);
+ for(const id of ['known-keys-language-comparison','known-keys-word-reset-language']){const recipe=V.recipes(actualKnown).find(r=>r.id===id);assert(recipe);const finite=M.finiteRecipe(recipe);assert.equal(finite.programCount,42);assert.equal(finite.caseCount,2352);assert.equal(recipe.control.members.length,42);assert(recipe.control.members.every(m=>m.control.task.criterion.values.length===184));assert(Q.render(actualKnown).includes('followup='+id));}
+});
+
 test('every authored canonical recipe is available without changing its source',()=>{
  let count=0;for(const dir of fs.readdirSync(path.join(__dirname,'../experiments/records'))){const p=path.join(__dirname,'../experiments/records',dir,'record.json');if(!fs.existsSync(p))continue;const r=JSON.parse(fs.readFileSync(p,'utf8'));if(!r.browser_followups)continue;const before=JSON.stringify(r);assert.equal(V.recipes(r).length,r.browser_followups.length,dir);V.render(r);assert.equal(JSON.stringify(r),before);count+=r.browser_followups.length}assert.ok(count>=13);
 });

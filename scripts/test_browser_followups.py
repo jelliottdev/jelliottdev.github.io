@@ -315,13 +315,23 @@ process.stdout.write(JSON.stringify(result));
         from unittest.mock import patch
         import build_experiments as builder
         pages = {p.stem for p in (ROOT / 'data/pages').glob('*.json')}
+        declared = json.loads(RECORD.read_text(encoding='utf-8'))['browser_followups']
+        controls = [member['control']['task'] for recipe in declared if recipe.get('kind') == 'finite-settings'
+                    for member in recipe['control']['members']]
+        controls.extend(recipe['control']['task'] for recipe in declared if 'kind' not in recipe)
+        # Compare bounded task digests rather than dumping large fixtures on a
+        # mock mismatch. Every invocation must be an actual declared witness.
+        expected = sorted(digest(task) for task in controls)
         original = builder.validate_followups
         with patch.object(builder, 'validate_followups', wraps=original) as validate, \
                 patch.object(runner, 'run', wraps=runner.run) as run_control:
             builder.validate_record(ROOT, RECORD, pages)
             validate.assert_called_once()
-            run_control.assert_called_once()
-            self.assertEqual(run_control.call_args.args[0], self.recipe['control']['task'])
+            actual = sorted(digest(call.args[0]) for call in run_control.call_args_list)
+            self.assertEqual(actual, expected)
+            self.assertTrue(all(len(call.args[0]['pages']) == 1 and call.args[0]['pages'][0]['id'] == 'lp1-01'
+                                and 'synthetic' in call.args[0]['title'].lower()
+                                for call in run_control.call_args_list))
         recipe = self.changed()
         with self.assertRaisesRegex(ValueError, 'duplicate id'):
             validate_followups([recipe, recipe], ROOT)

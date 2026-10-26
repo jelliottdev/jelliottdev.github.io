@@ -465,10 +465,14 @@ The complete local reuse check covers 2,310 usable outputs and 42 empty-rune
 cases. Private browser QA found all cases without creating tasks or results.
 Imported programs use sourceProgramId, separately from a real runnable followupId.
 
-These connections have software fixture coverage; no finite source recipe is
-published yet. Release one only after the complete hosted execution/save/reload
-journey is verified. Backend changes must be deployed with the finished handoff;
-a successful source build alone does not establish hosted availability.
+The known-key record now owns two finite source declarations: compare the saved
+page-reset outputs with language references, and try the same patterns with word
+resets. The first reuses all 2,352 archived outputs. The second changes only that
+reset rule; partial accepted work does not close the full family. Private browser
+QA verified review, a 12-case run, inspection, save and generic saved-idea reload.
+The saved idea recovers its title, purpose and exact source through a verified
+linked task. Before any task exists, no source association is inferred.
+Hosted verification remains separate from a successful source build.
 
 Before publishing a finite source recipe, complete the generic question/action
 and reviewed-plan handoff. Bind the original source snapshot and full domain to
@@ -478,3 +482,14 @@ must not run or save anything. Do not weaken fixed-origin validation or attach a
 unverified source label only in browser state. All programs need transform and
 evaluator controls; empty outputs remain explicitly insufficient. New language
 comparisons must remain distinct from the archived exact-opening result.
+
+Saved finite outputs can be browsed by verified decoding setting and page. The
+main output preview follows that selection, including pages with no runes;
+Previous/Next can cross setting boundaries. Browsing cannot create tasks, run
+calculations or save results. Late responses cannot reopen a dismissed viewer.
+
+Scientific CI uses a per-commit validation lane because some replay checks are
+change-specific. Newer lightweight application runs can replace older lightweight
+runs, but cannot cancel required scientific checks. The two maintained operational
+documents skip scientific rebuilds only when no record/catalog dependency names
+them; all unconditional Node checks still run.

@@ -3,13 +3,30 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-concurrency:
-  group: validate-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      science: ${{ steps.scope.outputs.science }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Select validation lane
+        id: scope
+        run: node scripts/ci_validation_scope.cjs
   validate:
+    needs: scope
+    # Scientific checks include change-specific bundle replay. A later push must
+    # not cancel those checks; application-only updates can replace each other.
+    concurrency:
+      group: validate-${{ github.workflow }}-${{ needs.scope.outputs.science == 'true' && github.sha || github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -96,6 +113,10 @@ jobs:
       - run: python scripts/test_finite_followup_cards.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_authored_finite_followups.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_known_key_followups.py
+        if: steps.scope.outputs.science == 'true'
+      - run: python scripts/known_key_followups.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_verify_controls.py
         if: steps.scope.outputs.science == 'true'

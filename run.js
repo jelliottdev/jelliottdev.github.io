@@ -356,15 +356,39 @@
    finiteWorkspace=sourceRouter.createWorkspace(doc,$('finite-search-workspace'),{idea,config,authoredOrigin:plan.origin,precompiled:plan.compiled,sourceBundle:plan.bundle,request:(url,init,ms)=>request(url,init,ms,true),validEndpoint:endpointFor,checkPreparation,projection,crypto:cryptoAPI,...(options.finiteRunner?{runner:options.finiteRunner}:{}),isLive:()=>live(token,id)});
    await finiteWorkspace.ready.catch(()=>{});
   }
+  async function recoverFiniteSource(value,token,id){
+   // A matching card alone does not establish a source association.
+   if(!value.tasks.length||!endpointFor(config?.localTaskEndpoint,'tasks'))return null;
+   for(const summary of value.tasks.slice(0,3)){
+    const raw=await(await request(config.localTaskEndpoint+'/'+summary.id+'?idea='+id)).json(),checked=await projection(raw,summary.id,cryptoAPI);
+    if(!live(token,id))return null;
+    if(checked.linkedProposalId!==id||E.stable(checked.card)!==E.stable(value.card))throw Error('The saved calculation changed its original idea association.');
+    const origin=checked.selectedRecordOrigin,owned=origin&&checked.origins.find(item=>E.stable(item.origin)===E.stable(origin)&&item.scopeRelation?.kind==='finite-settings-member'&&E.stable(item.scopeRelation.card)===E.stable(value.card));
+    if(!owned)continue;
+    if(!endpointFor(config?.recordPlanEndpoint,'record-plans'))throw Error('The original source context is unavailable.');
+    const incoming=await(await request(config.recordPlanEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:origin.recordId,followupId:origin.followupId,includeExisting:true,includeMotivation:true})})).json();
+    if(E.stable(incoming.origin)!==E.stable(origin)||E.stable(incoming.card)!==E.stable(value.card))throw Error('The original source changed.');
+    const finite=typeof module==='object'&&module.exports?require('./authored-finite-followup.js'):root.AuthoredFiniteFollowup;
+    if(!finite?.validatePlan)throw Error('The source search tools could not be loaded.');
+    const [sourceResponse,bundleResponse]=await Promise.all([request('experiments/records/'+origin.recordId+'/record.json',{cache:'no-cache',redirect:'error'}),request('data/local-run-inputs.json',{cache:'no-cache',redirect:'error'})]);
+    const reader=sourceResponse.body?.getReader();if(!reader)throw Error('The original source could not be read.');const parts=[];let size=0;
+    try{for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>2*1024*1024)throw Error('The original source exceeds its size limit.');parts.push(part.value);}}catch(error){await reader.cancel();throw error;}
+    const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.byteLength;}
+    const bundle=await bundleResponse.json(),plan=await finite.validatePlan(incoming,origin,{sourceBytes:bytes,bundle,crypto:cryptoAPI,isLive:()=>live(token,id)});
+    if(!live(token,id))return null;return plan;
+   }
+   return null;
+  }
   async function loadIdea(token,id){
    if(!endpointFor(config?.researchIdeaEndpoint,'ideas'))throw Error('Saved research ideas are not available here yet.');
    let response;try{response=await request(config.researchIdeaEndpoint+'/'+id);}catch(error){if(error.status===404)throw Object.assign(Error('This saved idea could not be found. Check the link or search for the idea again.'),{code:'idea-not-found',status:404});if(error.status===undefined&&error.name!=='AbortError')throw Error('The saved idea could not be loaded. Please retry.');throw error;}
    let value;try{value=await response.json();}catch{throw Error('The saved idea could not be read. Please retry.');}
    if(!value||value.id!==id||!ideaHref(value.card)||!Number.isFinite(Date.parse(value.createdAt))||!Array.isArray(value.tasks)||value.tasks.some(t=>!HEX.test(t.id)||typeof t.title!=='string'||!['not-run','results-verified'].includes(t.state)))throw Error('The saved idea could not be verified.');
    if(value.card.rules?.searchBounds?.status==='specified'&&value.card.rules.searchBounds.value?.kind==='finite-settings'){
+    let sourceNotice='';try{const source=await recoverFiniteSource(value,token,id);if(!live(token,id))return;if(source){await openAuthoredFinite(value,source,token,id);return;}}catch(error){if(!live(token,id))return;sourceNotice='The original source context could not be verified. You are reviewing the saved idea with its original settings.';}
     if(!live(token,id))return;idea={...value,coverage:null};
     const rows=H.sections(idea.card).filter(row=>row[0]!=='Other rules');
-    host.innerHTML='<nav class="run-links"><a href="research.html?v=record-panel-20261024#mode=list">Back to research map</a><a href="'+esc(ideaHref(idea.card))+'">Review confirmed idea</a></nav><h1 id="idea-heading">Review this search</h1><p>'+esc(rows.find(row=>row[0]==='Outcome')?.[1]||'')+'</p><section id="finite-search-workspace"></section><details class="experiment-details"><summary>Confirmed idea</summary><dl class="plan-summary">'+rows.map(([label,text])=>'<dt>'+esc(label)+'</dt><dd>'+esc(text).replace(/\n/g,'<br>')+'</dd>').join('')+'</dl></details>';
+    host.innerHTML='<nav class="run-links"><a href="research.html?v=record-panel-20261024#mode=list">Back to research map</a><a href="'+esc(ideaHref(idea.card))+'">Review confirmed idea</a></nav><h1 id="idea-heading">Review this search</h1>'+(sourceNotice?'<p role="status">'+esc(sourceNotice)+'</p>':'')+'<p>'+esc(rows.find(row=>row[0]==='Outcome')?.[1]||'')+'</p><section id="finite-search-workspace"></section><details class="experiment-details"><summary>Confirmed idea</summary><dl class="plan-summary">'+rows.map(([label,text])=>'<dt>'+esc(label)+'</dt><dd>'+esc(text).replace(/\n/g,'<br>')+'</dd>').join('')+'</dl></details>';
     if(!FiniteWorkspace?.createWorkspace)throw Error('The finite search controls could not be loaded. Reload this page.');
     finiteWorkspace=FiniteWorkspace.createWorkspace(doc,$('finite-search-workspace'),{idea,config,request:(url,init,ms)=>request(url,init,ms,true),validEndpoint:endpointFor,checkPreparation,projection,crypto:cryptoAPI,...(options.finiteRunner?{runner:options.finiteRunner}:{}),isLive:()=>live(token,id)});
     await finiteWorkspace.ready.catch(()=>{});return;

@@ -13,6 +13,7 @@ const UI_PATHS=new Set([
  'numeric-skip-view.js','prime-lag-view.js','reader.html','research-index.js','research-map.css','research-map.js',
  'research.js','search-engine.js','search-ui.js','spelling.js','style.css','url-marker-view.js','wiki.js','workspace-routes.js',
  'data/assistant.json','word-sum-intake.js',
+ 'docs/community-research-loop.md','services/idea-assistant/README.md',
  'scripts/test_word_sum_intake.cjs','scripts/test_word_sum_intake_flow.cjs',
  'scripts/test_home_preview.cjs',
  'scripts/test_assistant.cjs','scripts/test_claim_interpretation.cjs','scripts/test_claim_specification.cjs',
