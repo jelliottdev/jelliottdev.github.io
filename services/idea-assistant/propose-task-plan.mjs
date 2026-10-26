@@ -1,3 +1,4 @@
+import Reviewed from '../../reviewed-program.js';
 /* AI proposes source spans; closed local grammar and reviewed compiler decide validity. */
 import {validateCard} from './idea-relations.mjs';
 import L from '../../local-experiment.js';
@@ -53,7 +54,6 @@ function parse(quote,scope){
  }
  return null;
 }
-function connectors(text){return text.replace(/[\s,;.!]+/g,' ').trim().split(/\s+/).every(word=>!word||['please','try','then','and'].includes(word.toLowerCase()));}
 function orderedSpans(label){
  if(typeof label!=='string'||!label.length||label.length>12000||/["'`{}]/.test(label))return null;
  const cuts=[];let depth=0;
@@ -86,49 +86,7 @@ function deterministicCandidate(card){
  }
  return {version:1,steps,unsupported:[]};
 }
-export function validateCandidate(input,candidate,{compile}={}){
- try{
-  const card=validateCard(input);
-  if(typeof compile!=='function')return {reason:'A reviewed deterministic compiler is required.'};
-  if(card.unresolved.length)return {reason:'The idea has unresolved conditions.'};
-  if(Object.values(card.rules).some(rule=>rule.status==='unrestricted'))return {reason:'An explicitly unrestricted rule cannot be represented by one fixed experiment.'};
-  if(card.method.status!=='specified')return {reason:'The method wording is unspecified.'};
-  if(requiresExplicitInterrupters(card))return {reason:INTERRUPTER_REASON};
-  if(!exact(candidate,['version','steps','unsupported'])||candidate.version!==1||!Array.isArray(candidate.steps)||!candidate.steps.length||candidate.steps.length>8||!Array.isArray(candidate.unsupported)||candidate.unsupported.length>32||candidate.unsupported.some(s=>typeof s!=='string'||s.length>500)||new TextEncoder().encode(JSON.stringify(candidate)).length>LIMITS.responseBytes)return {reason:'The proposed mapping is malformed.'};
-  if(candidate.unsupported.length)return {reason:'Some method wording needs an execution adapter.'};
-  const original=card.method.value.operations,coverage=original.map(()=>[]),steps=[],notes=[];let previous=[-1,-1];
-  for(const item of candidate.steps){
-   if(!exact(item,['source','step'])||!exact(item.source,['operationIndex','start','quote']))return {reason:'Each step needs exact source evidence.'};
-   const {operationIndex:index,start,quote}=item.source;
-   if(!Number.isInteger(index)||index<0||index>=original.length||!Number.isInteger(start)||start<0||typeof quote!=='string'||!quote.length||quote.length>1200)return {reason:'Invalid source evidence.'};
-   const operation=original[index];
-   const keyedLabels={vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey'],finite_key:['Finite key stream']};
-   if(Object.hasOwn(keyedLabels,operation.id)&&(!keyedLabels[operation.id].includes(operation.label)||!['key','direction','reset'].every(k=>Object.hasOwn(operation,k))))return {reason:'Explicit keyed operations require their exact parameters and plain matching label.'};
-   if(Object.keys(operation).some(k=>!['id','label','declaredFamilyId','a','b','reset','unit','key','direction'].includes(k))||typeof operation.label!=='string'||operation.label.slice(start,start+quote.length)!==quote)return {reason:'The mapping does not preserve an exact method source.'};
-   if(index<previous[0]||index===previous[0]&&start<previous[1])return {reason:'Method steps were reordered or overlap.'};
-   const parsed=parse(quote,card.scope);if(!parsed||L.stable(parsed)!==L.stable(item.step))return {reason:'The complete source phrase does not support the proposed operation.'};
-   const known={affine:'affine',cumulative_difference:'cumulative-difference',reverse_row_runes:'reverse',reverse_runes:'reverse',vigenere:'keyed-shift',repeating_key:'keyed-shift',plaintext_autokey:'keyed-shift',ciphertext_autokey:'keyed-shift',finite_key:'finite-shift'};
-   if(Object.hasOwn(known,operation.id)&&known[operation.id]!==parsed.op)return {reason:'The mapping conflicts with an explicit operation.'};
-   for(const key of ['a','b','reset','unit','key','direction'])if(Object.hasOwn(operation,key)&&L.stable(operation[key])!==L.stable(parsed[key]))return {reason:'An explicit parameter changed.'};
-   const modes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};if(Object.hasOwn(modes,operation.id)&&modes[operation.id]!==parsed.mode)return {reason:'The explicit keyed mode changed.'};
-   if(!['described_method',...Object.keys(known)].includes(operation.id))return {reason:'The source operation needs an adapter.'};
-   coverage[index].push([start,start+quote.length]);previous=[index,start+quote.length];steps.push(parsed);const description=parsed.op==='reverse'?'Reverse rune order within each '+parsed.unit:parsed.op==='affine'?'Map each rune index using ('+parsed.a+' × index + '+parsed.b+') modulo 29':parsed.op==='finite-shift'?'Apply a finite stream of '+parsed.key.length+' supplied GP indices, '+parsed.direction+', resetting at each '+parsed.reset+' without repetition':parsed.op==='keyed-shift'?'Apply '+parsed.mode+' using GP indices ['+parsed.key.join(',')+'], '+parsed.direction+', resetting at each '+parsed.reset:'Apply cumulative difference, resetting at each '+parsed.reset;notes.push('Proposed interpretation of “'+quote+'”: '+description+'.');
-  }
-  for(let i=0;i<original.length;i++){
-   if(!coverage[i].length)return {reason:'An original method step was omitted.'};
-   let end=0;
-   for(const [start,stop]of coverage[i]){if(!connectors(original[i].label.slice(end,start)))return {reason:'Method conditions remain outside the proposed operations.'};end=stop;}
-   if(!connectors(original[i].label.slice(end)))return {reason:'Method conditions remain outside the proposed operations.'};
-  }
-  const normalized=clone(card);
-  normalized.method.value.operations=steps.map(s=>s.op==='reverse'?{id:'reverse_runes',label:'Reverse rune order within each '+s.unit,unit:s.unit}:s.op==='affine'?{id:'affine',a:s.a,b:s.b}:s.op==='finite-shift'?{id:'finite_key',key:s.key,direction:s.direction,reset:s.reset}:s.op==='keyed-shift'?{id:s.mode==='repeat'?'vigenere':s.mode==='plaintext-autokey'?'plaintext_autokey':'ciphertext_autokey',key:s.key,direction:s.direction,reset:s.reset}:{id:'cumulative_difference',reset:s.reset});
-  if(steps.some(s=>s.op==='reverse'))notes.push('Reversal boundaries are proposed separately for each step; non-rune separators stay in place.');
-  const validated=validateCard(normalized),plan=compile(validated);
-  if(!plan||plan.reason)return {reason:plan?.reason||'The mapped plan could not be validated.'};
-  if(L.stable(plan.steps)!==L.stable(steps))return {reason:'The deterministic compiler changed the proposed operations.'};
-  return {card:validated,notes,steps:clone(steps),plan:clone(plan),mapping:clone(candidate)};
- }catch{return {reason:'The proposed method mapping could not be validated.'};}
-}
+export function validateCandidate(input,candidate,options={}){return Reviewed.validateCandidate(input,candidate,options);}
 export function createAIPlanner({AI,compile,now=()=>Date.now(),schedule=setTimeout,unschedule=clearTimeout}={}){
  const memory=new Map(),pending=new Map();
  const failure=reason=>({reason});

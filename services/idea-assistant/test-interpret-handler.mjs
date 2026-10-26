@@ -161,7 +161,7 @@ await test('captured synthetic model output aligns unique exact quotes without c
  const original=JSON.stringify(captured),aligned=alignQuotePositions(text,original);
  assert.equal(aligned.steps[0].source.start,4);assert.equal(aligned.scope.source.start,4);assert.equal(aligned.rules.wordBoundaries.source.start,text.indexOf('preserving'));
  const expected=JSON.parse(original);expected.steps[0].source.start=4;expected.scope.source.start=4;expected.rules.wordBoundaries.source.start=text.indexOf('preserving');assert.deepEqual(aligned,expected);assert.equal(JSON.stringify(captured),original);
- let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v11-opaque-known-operation-guards');
+ let calls=0;const handler=createInterpretHandler(),env=environment(async()=>{calls++;return providerResult(captured);});const response=await handler(request(text),env),data=await response.json();assert.equal(response.status,200);assert.deepEqual(data.candidate,aligned);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(calls,1);assert.equal(PROMPT_VERSION,'interpret-v12-role-specific-constraint-coverage');
 });
 await test('alignment uses UTF-16 positions and only whitelisted evidence fields',async()=>{
  const text='😀 Use key "ABC" on LP2-15; measure a pattern; reset each word.',candidate=proposal(text);
@@ -218,6 +218,10 @@ await test('20s response timeout retains actual provider slot, drops late result
  const first=handler(request(text),env);await until(()=>calls===1);time.advance(LIMITS.timeoutMs);const timeout=await first;assert.equal(timeout.status,503);assert.equal((await timeout.json()).reason,'timeout');
  time.advance(LIMITS.cooldownMs+1);assert.equal((await handler(request(text),env)).status,503);assert.equal(calls,1,'hung exact call is not retried after response timeout');
  slow.resolve(providerResult(proposal(text)));await tick();assert.equal((await handler(request(text),env)).status,200);assert.equal(calls,2,'late success was not cached');assert.equal(time.timerCount,0);
+});
+await test('a broad goal quote never hides an omitted method condition in a successful provider response',async()=>{
+ const text='Decrypt LP2 by reversing each row, keeping every F rune unchanged.',quote='reversing each row',candidate={schema:SCHEMA,outcome:{id:'decipher',source:{start:0,quote:text}},steps:[{id:'reverse_row_runes',familyId:'transposition',source:{start:text.indexOf(quote),quote},parameters:{}}],scope:null,rules:{}},handler=createInterpretHandler(),env=environment(async()=>providerResult(candidate)),response=await handler(request(text),env),data=await response.json();
+ assert.equal(response.status,200);assert.equal(data.sourceBinding,await sourceBinding(text));assert.equal(data.requiresConfirmation,true);const interpreted=toDraft(text,data.candidate);assert(interpreted.uninterpreted.some(span=>span.quote.includes('keeping every F rune unchanged')));assert.equal(interpreted.draft.rules.exceptionalCases.status,'specified');assert(interpreted.draft.rules.exceptionalCases.value.includes('keeping every F rune unchanged'));assert(WIRE_PROMPT.includes('cannot replace evidence for method steps or conditions'));
 });
 assert.equal(fetches,0);console.log('PASS '+groups+' interpretation handler groups; all AI mocked, zero network calls');
 }finally{globalThis.fetch=originalFetch;}

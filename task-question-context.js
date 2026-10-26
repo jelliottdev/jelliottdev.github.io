@@ -1,7 +1,7 @@
 /* Selected original-question context only. No evidence counts or execution authority. */
 (function(root){
  'use strict';
- const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,Compiler=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle,Authored=node?require('./followup-context.js'):root.FollowupContext;
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,Compiler=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle,Authored=node?require('./followup-context.js'):root.FollowupContext,Reviewed=node?require('./reviewed-program.js'):root.ReviewedProgram;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/,tokens=new WeakMap(),capture=(v,maxBytes=8*1024*1024)=>J.capture(v,{maxBytes,maxDepth:24,maxNodes:500000}),freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(key=>Object.hasOwn(v,key))&&Object.values(Object.getOwnPropertyDescriptors(v)).every(d=>Object.hasOwn(d,'value')&&d.enumerable);
  function route(hash){if(typeof hash!=='string')return null;const match=/^#task=([a-f0-9]{64})(?:&(idea|fromIdea)=(p_[a-f0-9]{64}))?$/.exec(hash);return match?Object.freeze({kind:'task',id:match[1],...(match[2]==='idea'?{proposalId:match[3]}:match[2]==='fromIdea'?{fromIdea:match[3]}:{})}):null;}
@@ -17,7 +17,8 @@
   const card=capture(projection.card,H.MAX_BYTES);H.sections(card);const cardHash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(C.serialize(card))))].map(v=>v.toString(16).padStart(2,'0')).join('');if(proposalId!=='p_'+cardHash)throw Error('The selected original idea changed its canonical card identity.');
   const task=projection.plan;await E.checkIdentity(task,crypto);const source=Inputs.parse(capture(bundle,2*1024*1024));if(E.stable(task.alphabet)!==E.stable(source.alphabet))throw Error('The selected task changed the official alphabet.');
   for(const page of task.pages){const official=source.pages.get(page.id),text=projection.inputVersion==='raw'?official?.raw:official?.reviewed_text;if(typeof text!=='string'||page.text!==text)throw Error('The selected task changed its official page bytes or input edition.');}
-  const declaredPages=card.scope.status==='specified'&&Array.isArray(card.scope.value?.pages)?[...card.scope.value.pages]:[],plan=Compiler.compile(card),comparable=!plan.reason&&!plan.state&&Array.isArray(plan.pages)&&Array.isArray(plan.steps)&&!!plan.criterion;
+  const reviewedProgram=Object.hasOwn(projection,'reviewedProgram')?(await Reviewed.verifyProof({proof:projection.reviewedProgram,originalCard:card,task,inputVersion:projection.inputVersion},crypto)).proof:null;
+  const declaredPages=card.scope.status==='specified'&&Array.isArray(card.scope.value?.pages)?[...card.scope.value.pages]:[],plan=Compiler.compile(reviewedProgram?reviewedProgram.normalizedCard:card),comparable=!plan.reason&&!plan.state&&Array.isArray(plan.pages)&&Array.isArray(plan.steps)&&!!plan.criterion;
   if(comparable){
    if(plan.inputVersion!==projection.inputVersion||E.stable(plan.pages)!==E.stable(declaredPages)||E.stable(plan.steps)!==E.stable(task.steps)||E.stable(plan.criterion)!==E.stable(task.criterion)||task.pages.some(page=>!declaredPages.includes(page.id)))throw Error('The selected calculation is not an exact subset of the original question.');
    const fullPages=declaredPages.map(id=>{const page=source.pages.get(id),text=plan.inputVersion==='raw'?page?.raw:page?.reviewed_text;if(typeof text!=='string')throw Error('The complete original scope has no official text in this edition.');return {id,text};});
@@ -28,7 +29,7 @@
    // prevents dropping/reordering an original page under the same subset label.
    if(E.stable(task.pages.map(page=>page.id))!==E.stable(declaredPages.filter(id=>task.pages.some(page=>page.id===id))))throw Error('The selected task changed the original page order.');
   }
-  const token=Object.freeze({});tokens.set(token,freeze({proposalId,card,taskPages:task.pages.map(page=>page.id),declaredPages,comparable}));return token;
+  const token=Object.freeze({});tokens.set(token,freeze({proposalId,card,taskPages:task.pages.map(page=>page.id),declaredPages,comparable,...(reviewedProgram?{reviewedProgram}:{})}));return token;
  }
  // JSON.parse alone silently accepts duplicate keys and lone surrogate escapes.
  function authoredJSON(text){

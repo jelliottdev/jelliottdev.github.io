@@ -40,7 +40,7 @@
  function coverageHTML(c){
   if(!c)return '';
   const total=c.covered+c.remaining,full=c.complete&&c.covered>0&&!c.remaining;
-  const finding=c.covered&&c.finding?(c.finding.matches?'A supplied opening matched on '+esc(c.finding.pages)+'.':'No supplied opening matched in the saved results.'):'',summary=(full?'Saved results cover all '+total+' pages.':c.complete?c.covered?'Saved results cover '+c.covered+' of '+total+' pages.':'No matching saved results were found for these exact settings.':'The saved-result lookup is incomplete.')+(c.complete&&c.covered&&c.remaining?' '+c.remaining+' '+(c.remaining===1?'page remains':'pages remain')+' to check.':'');
+  const finding=c.covered&&c.finding?(c.finding.matches?'A supplied opening matched on '+esc(c.finding.pages)+'.':'No supplied opening matched in the saved results.'):'',summary=(full?total===1?'Saved results cover this page.':'Saved results cover all '+total+' pages.':c.complete?c.covered?'Saved results cover '+c.covered+' of '+total+' pages.':'No matching saved results were found for these exact settings.':'The saved-result lookup is incomplete.')+(c.complete&&c.covered&&c.remaining?' '+c.remaining+' '+(c.remaining===1?'page remains':'pages remain')+' to check.':'');
   let result='<div class="parameter-variation-coverage" role="status">'+(finding?'<p><strong>'+finding+'</strong></p><p>'+summary+'</p>':'<p><strong>'+summary+'</strong></p>');
   const link=ref=>'<li><a href="'+esc(ref.href)+'">'+esc(ref.label)+(ref.pages?' · '+esc(ref.pages):'')+'</a></li>';
   if(c.links.length)result+='<ul>'+c.links.slice(0,3).map(link).join('')+'</ul>'+(c.links.length>3?'<details><summary>More saved sources ('+(c.links.length-3)+')</summary><ul>'+c.links.slice(3).map(link).join('')+'</ul></details>':'');

@@ -214,7 +214,25 @@ function references(s){return {kind:'proposed',refs:[JSON.stringify({source:'ori
 function uncovered(raw,candidate){
  const covered=new Uint8Array(raw.length),mark=s=>covered.fill(1,s.start,s.start+s.quote.length);
  const literal=(s,value)=>{const at=literalOutsideKey(raw,s,value);if(at!==-1)mark({start:s.start+at,quote:value});};
- if(candidate.outcome)mark(candidate.outcome.source);
+ if(candidate.outcome){
+  const s=candidate.outcome.source;
+  // A goal quote proves a proposed aim, not that every instruction inside that
+  // quote was understood. In a method-bearing idea only compact maintained aim
+  // aliases consume source text. Complete measurement/goal overlap still works:
+  // its exact method quote below independently covers that instruction.
+  // Other goal prose remains visible as a condition rather than hiding a key,
+  // skipped rune, extra step or qualifier under the broad outcome evidence.
+  {
+   const text=maskedKeys(raw).slice(s.start,s.start+s.quote.length),prefix=text.match(/^(?:\s*)(?:please\s+)?(?:try\s+)?(?:(?:I|we)\s+(?:want|would like|hope|aim|intend)\s+to\s+|(?:(?:my|our|the)\s+)?(?:goal|aim|objective)\s*(?:is\s+|:\s*)(?:to\s+)?)?/i)[0];
+   let end=0;for(const match of text.slice(prefix.length).matchAll(/\S+(?:\s+|$)/g)){
+    const length=prefix.length+match.index+match[0].trimEnd().length;
+    if(C.normalizeOutcome(text.slice(prefix.length,length)).id===candidate.outcome.id&&candidate.outcome.id!=='unclassified')end=length;
+   }
+   const namedResult=/^(?:[Rr]eproduce|[Rr]eplicate|[Rr]erun) (?:the )?[A-Z][A-Za-z0-9'’-]*(?: [A-Z][A-Za-z0-9'’-]*){0,5} (?:opening|reading|result|test|experiment)[.!?]?$/u.test(text.trim());
+   if(namedResult||!candidate.steps.length&&(!end||!text.slice(prefix.length,end).trim().includes(' ')))mark(s);
+   else if(end)mark({start:s.start,quote:s.quote.slice(0,end)});
+  }
+ }
  if(candidate.scope){const s=candidate.scope.source;if(candidate.scope.passage)literal(s,candidate.scope.passage);if(candidate.scope.pages)for(const m of pageReferences(maskedKeys(raw).slice(s.start,s.start+s.quote.length)))mark({start:s.start+m.index,quote:m[0]});}
  candidate.steps.forEach(step=>mark(step.source));
  for(const [key,rule]of Object.entries(candidate.rules)){

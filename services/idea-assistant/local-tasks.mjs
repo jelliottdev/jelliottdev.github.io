@@ -1,3 +1,5 @@
+import {readReviewedProgram} from './reviewed-program-source.mjs';
+import Compiler from '../../fixed-plan-compiler.js';
 import {prepareOriginWrite} from './finite-origin-storage.mjs';
 import {readAdmittedResult} from './admitted-result.mjs';
 import {createReadControlCache} from './read-control-cache.mjs';
@@ -92,8 +94,9 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(latest){const result=await readAdmittedResult(task,latest);run={id:latest.id,createdAt:latest.created_at,result};}
    let shared=null,coverageUnavailable=false;
    if(!run){try{shared=await discoverEvidence({db,task,inputVersion:context.input_version});if(shared.truncated&&shared.remainingPages.length)coverageUnavailable=true;}catch{coverageUnavailable=true;}}
+   let reviewedProgram=null;const originalCard=validateCard(context.card_json);if(Compiler.compile(originalCard).reason){try{reviewedProgram=await readReviewedProgram({db,proposalId:context.proposal_id,card:originalCard,task,inputVersion:context.input_version,parentTaskId:context.parent_task_id});}catch{/* Invalid optional mapping proof cannot authorize a variation. The archived task remains readable. */}}
    const coverage=shared?.coveredPages.length?{...shared,requestedTask:task,inputVersion:context.input_version}:null;
-   return {...projection(row,task,run,context),origins,...(selectedRecordOrigin?{selectedRecordOrigin}:{}),...(coverage?{coverage}:{}),...(coverageUnavailable?{coverageUnavailable:true}:{}),...(controls?{controls}:{}),...(savedOrigins.length>10?{originsTruncated:true}:{}),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
+   return {...projection(row,task,run,context),origins,...(reviewedProgram?{reviewedProgram}:{}),...(selectedRecordOrigin?{selectedRecordOrigin}:{}),...(coverage?{coverage}:{}),...(coverageUnavailable?{coverageUnavailable:true}:{}),...(controls?{controls}:{}),...(savedOrigins.length>10?{originsTruncated:true}:{}),relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:context.parent_task_id}:{})};
   };
   try{
    let body;

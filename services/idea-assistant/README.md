@@ -12,6 +12,12 @@ Migration 0017 adds these immutable request receipts. Source-bound preparation a
 task registration follow separately; creating a variation never runs it or saves
 a result. The older confirmation endpoint remains available for existing clients.
 
+Mapped original questions retain their public identity when their saved calculations
+offer parameter variations. Complete source mappings are verified by the shared
+`reviewed-program.js` module and the retained immutable preparation. Migration
+0018 adds the covering lookup index. New mapped relationships use explicit v2
+origins; existing v1 origins remain unchanged.
+
 Before creation, `POST /parameter-questions/coverage` checks the exact reviewed
 variation against saved computations and pinned archive receipts. It creates no
 question, task, preparation or result. The response binds the preview, task and

@@ -682,3 +682,22 @@ Opening or paging these links never creates a question, task or result, and
 never executes the manuscript calculation. Archive origins can link back to
 the exact pinned source output. Missing or malformed relationships cannot be
 replaced with inferred links based on titles or categories.
+
+## Keep ordinary written questions expandable
+
+A saved calculation whose original method is prose can expose the same maintained
+variations as a typed question. `reviewed-program.js` checks the complete source
+mapping, unchanged original aim and rules, normalized operations, exact task and
+input edition. The original public question retains its identity.
+
+The service finds a compatible immutable preparation for that question/task
+association through the indexed `prepared_plans` lookup. It verifies the complete
+retained preparation and independently validates the mapping. This proves a
+compatible reviewed program exists; it does not claim the token was historically
+consumed. Missing, ambiguous or altered proofs cannot authorize a variation.
+
+Mapped children retain explicit v2 derivation origins containing the mapping
+proof. Existing v1 origins keep their original strict schema. Browser and service
+checks reject omitted conditions or changed settings before creation. Preview and
+navigation perform no target execution or publication; creation, running and
+saving remain separate explicit actions.

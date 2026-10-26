@@ -1,8 +1,8 @@
 /* Retained question lineage, not execution or coverage evidence. No I/O. */
 (function(root){
  'use strict';
- const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,F=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,S=node?require('./finite-settings.js'):root.FiniteSettings,V=node?require('./task-parameter-variants.js'):root.TaskParameterVariants;
- const SCHEMA='liberpedia-question-derivation-v1',HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/,SLUG=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,F=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,S=node?require('./finite-settings.js'):root.FiniteSettings,V=node?require('./task-parameter-variants.js'):root.TaskParameterVariants,Reviewed=node?require('./reviewed-program.js'):root.ReviewedProgram;
+ const SCHEMA='liberpedia-question-derivation-v1',MAPPED_SCHEMA='liberpedia-question-derivation-v2',HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/,SLUG=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k)),same=(a,b)=>E.stable(a)===E.stable(b),ensure=(v,m)=>{if(!v)throw Error(m);},freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;},capture=v=>J.capture(v,{maxBytes:131072,maxDepth:24,maxNodes:20000}),iso=v=>typeof v==='string'&&Number.isFinite(Date.parse(v))&&new Date(v).toISOString()===v;
  async function hash(v,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
  function canonical(card){
@@ -10,7 +10,7 @@
   const draft=H.decode('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')).draft,checked=H.cardData(C.confirm(draft,{id:'lineage-card-validation',at:'2000-01-01T00:00:00.000Z'}));ensure(same(checked,card),'The retained question is not canonical.');return checked;
  }
  function source(origin){
-  const value=origin.source;ensure(exact(value,['reference','receipt',...(Object.hasOwn(value||{},'publishedSource')?['publishedSource']:[])]),'The variation source fields changed.');
+  const value=origin.source,mapped=origin.schema===MAPPED_SCHEMA;ensure(exact(value,['reference','receipt',...(Object.hasOwn(value||{},'publishedSource')?['publishedSource']:[]),...(mapped?['reviewedProgram']:[])]),'The variation source fields changed.');ensure(!mapped||!Object.hasOwn(origin,'parentSettings')&&value.reference?.kind==='saved-task'&&!Object.hasOwn(value,'publishedSource'),'A reviewed mapping needs an exact saved-task source without family settings.');
   const r=value.reference,p=value.receipt;ensure(r&&r.proposalId===origin.parentProposalId&&['saved-task','published-program','archived-program'].includes(r.kind),'The source identifies another parent.');
   ensure(exact(p,['taskId','taskSha256','resultId','createdAt','inputVersion'])&&[p.taskId,p.taskSha256,p.resultId].every(v=>typeof v==='string'&&HEX.test(v))&&iso(p.createdAt)&&['raw','reviewed'].includes(p.inputVersion),'The retained source receipt changed.');
   if(r.kind==='saved-task'){ensure(exact(r,['kind','proposalId','taskId'])&&r.taskId===p.taskId&&!Object.hasOwn(value,'publishedSource'),'The saved source reference changed.');return null;}
@@ -37,13 +37,14 @@
   ensure(typeof ideaId==='string'&&IDEA.test(ideaId)&&['parents','children'].includes(direction)&&crypto?.subtle,'Choose an exact question and relationship direction.');
   const value=capture(entry),unchanged=()=>ensure(same(capture(entry),value),'The retained variation changed during validation.');
   ensure(exact(value,['id','createdAt','origin','parentCard','childCard'])&&typeof value.id==='string'&&HEX.test(value.id)&&iso(value.createdAt),'The retained variation envelope changed.');
-  const o=value.origin,settings=Object.hasOwn(o||{},'parentSettings');ensure(new TextEncoder().encode(E.stable(o)).length<=65536,'The retained origin exceeds its byte bound.');ensure(exact(o,['schema','parentProposalId','childProposalId','previewHash','source','selection',...(settings?['parentSettings']:[]),'childTaskId'])&&o.schema===SCHEMA&&[o.parentProposalId,o.childProposalId].every(v=>typeof v==='string'&&IDEA.test(v))&&o.parentProposalId!==o.childProposalId&&[o.previewHash,o.childTaskId].every(v=>typeof v==='string'&&HEX.test(v)),'The retained origin fields changed.');
+  const o=value.origin,settings=Object.hasOwn(o||{},'parentSettings');ensure(new TextEncoder().encode(E.stable(o)).length<=65536,'The retained origin exceeds its byte bound.');ensure(exact(o,['schema','parentProposalId','childProposalId','previewHash','source','selection',...(settings?['parentSettings']:[]),'childTaskId'])&&[SCHEMA,MAPPED_SCHEMA].includes(o.schema)&&[o.parentProposalId,o.childProposalId].every(v=>typeof v==='string'&&IDEA.test(v))&&o.parentProposalId!==o.childProposalId&&[o.previewHash,o.childTaskId].every(v=>typeof v==='string'&&HEX.test(v)),'The retained origin fields changed.');
   ensure((direction==='parents'?o.childProposalId:o.parentProposalId)===ideaId,'The variation belongs to another question.');
   const sourceHref=source(o),selection=V.selection(o.selection),parent=canonical(value.parentCard),child=canonical(value.childCard);
   ensure(await hash(o,crypto)===value.id,'The retained origin identity changed.');unchanged();
   ensure('p_'+await hash(C.serialize(parent),crypto)===o.parentProposalId&&'p_'+await hash(C.serialize(child),crypto)===o.childProposalId,'The retained question identity changed.');unchanged();
   const member=settings?S.factored.member(parent,o.parentSettings):null;ensure(!member||same(member.settings,o.parentSettings),'The finite member assignments changed.');
-  const before=F.compile(member?member.card:parent),after=F.compile(child);ensure(!before.reason&&!after.reason&&!before.state&&!after.state&&same(parent.outcome,child.outcome)&&before.inputVersion===after.inputVersion&&before.inputVersion===o.source.receipt.inputVersion&&same(before.criterion,after.criterion),'The variation changed its aim, edition or evaluation.');
+  const reviewed=o.schema===MAPPED_SCHEMA?await Reviewed.verifyMappingProof({proof:o.source.reviewedProgram,originalCard:parent,inputVersion:o.source.receipt.inputVersion},crypto):null;unchanged();ensure(!reviewed||reviewed.originalProposalId===o.parentProposalId,'The reviewed mapping identifies another parent.');
+  const before=reviewed?reviewed.mapped.plan:F.compile(member?member.card:parent),after=F.compile(child);ensure(!before.reason&&!after.reason&&!before.state&&!after.state&&same(parent.outcome,child.outcome)&&before.inputVersion===after.inputVersion&&before.inputVersion===o.source.receipt.inputVersion&&same(before.criterion,after.criterion),'The variation changed its aim, edition or evaluation.');
   const validPages=pages=>Array.isArray(pages)&&pages.length>0&&pages.length<=75&&new Set(pages).size===pages.length&&pages.every(p=>typeof p==='string'&&/^lp[12]-\d{2}$/.test(p)&&Number(p.slice(4))<=(p[2]==='1'?16:57));
   ensure(validPages(before.pages)&&validPages(after.pages)&&before.steps.length<=8&&after.steps.length<=8,'The retained calculation exceeds its supported scope.');
   ensure(Array.isArray(after.pages)&&after.pages.length>0&&new Set(after.pages).size===after.pages.length&&after.pages.every(p=>before.pages.includes(p)),'The variation extends beyond its parent scope.');
@@ -51,5 +52,5 @@
   const proposalId=direction==='parents'?o.parentProposalId:o.childProposalId,text=wording(before.steps[selection.step],selection);unchanged();
   return freeze({id:value.id,createdAt:value.createdAt,direction,proposalId,href:'run.html#idea='+proposalId,...text,sourceHref});
  }
- const api={SCHEMA,validate};if(node)module.exports=api;else root.QuestionVariationLinks=api;
+ const api={SCHEMA,MAPPED_SCHEMA,validate};if(node)module.exports=api;else root.QuestionVariationLinks=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
