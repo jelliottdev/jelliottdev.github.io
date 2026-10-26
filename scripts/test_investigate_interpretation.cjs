@@ -59,8 +59,13 @@ async function accepted(){
  }finally{f.destroy();}
 }
 async function ambiguity(){
- const text='Reverse prime values in each row, preserving word boundaries.',proposed={schema:P.SCHEMA,outcome:null,steps:[{id:'ambiguous_reversal',familyId:null,source:quote(text,text),parameters:{}}],scope:null,rules:{wordBoundaries:{status:'specified',value:'preserve',source:quote(text,'preserving word boundaries')}}};
- const f=await fixture();try{f.submit(text);f.requests[0].resolve(await response(text,proposed));await until(()=>f.app.getSnapshot().stage==='review','Ambiguity not reviewed');assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'operation');answer(f,'reverse_row_runes');assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'word-boundary');answer(f,'within_words');assert.equal(f.app.getSnapshot().draft.rules.boundaryMode.value,'within_words');assert.equal(f.requests.length,1);}finally{f.destroy();}
+ const text='Reverse prime values in each row on LP2-15, preserving word boundaries.';
+ const f=await fixture();try{
+  f.submit(text);assert.equal(f.app.getSnapshot().stage,'review');assert.equal(f.requests.length,0,'Exact scoped ambiguity uses local clarification without AI');
+  const original=f.app.getSnapshot().draft;assert.equal(original.source.text,text);assert.deepEqual(original.scope.value.pages,['lp2-15']);assert.equal(original.rules.wordBoundaries.value,'preserve');assert.equal(original.method.value.operations[0].sourceText,text);assert.equal(I.intakeQuestions(original)[0].id,'operation');
+  answer(f,'reverse_row_runes');assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'word-boundary');answer(f,'within_words');
+  const clarified=f.app.getSnapshot().draft;assert.equal(clarified.rules.boundaryMode.value,'within_words');assert.equal(clarified.rules.wordBoundaries.value,'preserve');assert.deepEqual(clarified.scope.value.pages,['lp2-15']);assert.equal(clarified.source.text,text);assert.equal(clarified.method.value.operations[0].sourceText,text);assert.equal(clarified.method.value.operations[0].id,'reverse_row_runes');assert.equal(clarified.confirmation,null);assert.equal(f.requests.length,0,'Clarification does not interpret, prepare, save or run');
+ }finally{f.destroy();}
 }
 async function tinyAmbiguity(){
  for(const text of ['Reverse prime values in rows','  Reverse the prime values in rows.  ','Reverse prime values in every row']){

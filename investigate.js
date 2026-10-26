@@ -454,7 +454,7 @@
   let intakeEndpoint=null,ideaEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
   let renderedResearchCard=null;
   let cardContract=false;
-  let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='';
+  let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='',guidedRecovery=null;
   let configResolved=false,configValid=false,configReady=null,configAttempt=null,loadVersion=0,destroyed=false;
   const fragment=doc.defaultView?.location?.hash||'';
   const recoveryEntry=JSON.stringify({search:doc.defaultView?.location?.search||'',fragment});
@@ -505,7 +505,7 @@
   }
   const focus=selector=>doc.querySelector(selector)?.focus();
   function stop(){generation++;controller?.abort();controller=null;busy=false;}
-  function stopInterpretation(){interpretVersion++;interpretController?.abort();interpretController=null;interpreting=false;}
+  function stopInterpretation(){guidedRecovery=null;interpretVersion++;interpretController?.abort();interpretController=null;interpreting=false;}
   function stopIntake(clear=false){intakeVersion++;intakeController?.abort();intakeController=null;if(intake)intake.busy=false;if(clear)intake=null;}
   function render(){
    if(stage==='review'&&!editing&&draft)draft=Cumulative?.complete(draft)||draft;
@@ -515,7 +515,7 @@
    const selection=sameResearch&&prior&&Number.isInteger(doc.activeElement.selectionStart)&&Number.isInteger(doc.activeElement.selectionEnd)?{value:doc.activeElement.value,start:doc.activeElement.selectionStart,end:doc.activeElement.selectionEnd}:null;
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
    if(stage==='input'){
-    host.innerHTML='<h1>Have we tried it?</h1><p>Describe your idea to find related research. We’ll ask you to clarify missing details. Checking an idea doesn’t run an experiment.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><div class="actions"><a class="left" href="research.html#mode=list">Search existing research</a><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form>';
+    host.innerHTML='<h1>Have we tried it?</h1><p>Describe your idea to find related research. We’ll ask you to clarify missing details. Checking an idea doesn’t run an experiment.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><button id="guided-clarification" type="button" hidden>Answer a few questions</button><div class="actions"><a class="left" href="research.html#mode=list">Search existing research</a><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form>';
    }else{
     host.innerHTML='<button class="back" id="back" type="button">'+(pending?'Edit idea':'Back to idea')+'</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+(pending?'<p class="idea-wording"><strong>Method:</strong> '+esc((C.reviewRows(draft).find(row=>row.label==='Method')?.tags||[]).map(tag=>tag.text).join(' → ').replace(/\s+/gu,' ').replace(/^(.{240})[\s\S]+$/u,'$1…'))+'</p>':'')+
      (stage==='research'?'<p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>':'')+
@@ -674,10 +674,16 @@
    if(stage==='research')updateShare();
    bindMethodSteps();
    doc.getElementById('method-add')?.addEventListener('click',()=>editMethodStep({type:'add',index:methodOperations().length,operation:{id:'described_method',label:''}},'#'+(methodOperations().length?'edit-method-'+methodOperations().length:'edit-method')));
-   doc.getElementById('idea')?.addEventListener('input',event=>{if(interpreting)stopInterpretation();raw=event.target.value;interpretError='';updateInterpretationInput();saveRecovery();});
+   doc.getElementById('idea')?.addEventListener('input',event=>{if(interpreting)stopInterpretation();raw=event.target.value;guidedRecovery=null;interpretError='';updateInterpretationInput();saveRecovery();});
    doc.getElementById('idea')?.addEventListener('keydown',event=>{if(event.key==='Escape'&&interpreting){event.preventDefault();stopInterpretation();interpretError='';updateInterpretationInput();}});
    for(const name of Object.keys(recoveryFields()))if(name!=='choice'&&!name.startsWith('edit-method'))for(const type of ['input','change'])doc.getElementById(name)?.addEventListener(type,saveRecovery);
    for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.addEventListener('change',saveRecovery);
+   doc.getElementById('guided-clarification')?.addEventListener('click',()=>{
+    const recovery=guidedRecovery;
+    if(!recovery||interpreting||stage!=='input'||recovery.version!==interpretVersion||recovery.text!==raw||doc.getElementById('idea')?.value!==raw)return;
+    const inputError=Input.issue(raw);if(inputError){guidedRecovery=null;interpretError=inputError;updateInterpretationInput();focus('#idea');return;}
+    stopInterpretation();interpretError='';acceptDraft(initialDraft(recovery.text));
+   });
    doc.getElementById('intake')?.addEventListener('submit',event=>{
     event.preventDefault();if(interpreting)return;raw=doc.getElementById('idea').value;const inputError=Input.issue(raw);if(inputError){interpretError=inputError;updateInterpretationInput();focus('#idea');return;}
     stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
@@ -750,10 +756,14 @@
    if(button){button.disabled=interpreting;button.textContent=interpreting?'Checking idea…':'Check idea';}
    if(status)status.textContent=interpreting?'Checking the wording…':'';
    if(notice)notice.textContent=interpretError;
+   const guided=doc.getElementById('guided-clarification');if(guided)guided.hidden=!guidedRecovery||interpreting||guidedRecovery.text!==raw||guidedRecovery.version!==interpretVersion;
   }
   async function interpret(){
    stopInterpretation();const token=interpretVersion,text=raw;let returnedInterpretation=false;
-   if(plainPrimeReversal.test(text.trim().replace(/[.!?]$/,''))||WordSums?.matches(text)||WordAffine?.matches(text)||Cumulative?.matches(text)){acceptDraft(initialDraft(text));return;}
+   const localDraft=initialDraft(text),localOperations=localDraft.method.status==='specified'?localDraft.method.value.operations:[];
+   // The parser accepts an exact positive page clause but keeps conditional or
+   // additional steps opaque. Only a whole, single recognized ambiguity skips AI.
+   if((localOperations.length===1&&localOperations[0].id==='ambiguous_reversal')||WordSums?.matches(text)||WordAffine?.matches(text)||Cumulative?.matches(text)){acceptDraft(localDraft);return;}
    stage='input';interpreting=true;interpretError='';error='';message='';updateInterpretationInput();
    try{
     if(configResolved&&!configValid)loadConfig().catch(()=>{});
@@ -785,6 +795,7 @@
    }catch(e){
     if(token===interpretVersion&&stage==='input'){
      interpreting=false;const reason=e.name==='AbortError'?'timeout':e.interpretationReason||(returnedInterpretation?'invalid':'unavailable');
+     guidedRecovery={text,version:token};
      interpretError=({timeout:'The check timed out. Your text is kept. Try again.', 'rate-limit':'Too many checks. Try again in a minute.', invalid:'The wording couldn’t be interpreted reliably. Try rephrasing it.', unavailable:'The checker is temporarily unavailable. Your text is kept.'})[reason];updateInterpretationInput();
     }
    }finally{if(token===interpretVersion){interpreting=false;interpretController=null;}}

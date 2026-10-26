@@ -351,7 +351,9 @@
       if(!Number.isInteger(slot)||slot<0||(list.length>1&&!own(ambiguity,'operationIndex'))||slot>Math.max(0,list.length-1))throw Error('Identify the ambiguous operation in a compound method');
       list[slot]={...(list[slot]||{}),id:choice};
       if(!own(list[slot],'sourceText')&&typeof list[slot].label==='string')list[slot].sourceText=list[slot].label;
-      delete list[slot].label; // The old ambiguous wording is not the chosen operation's label.
+      // The explicit choice supplies the active meaning. Keep the old wording
+      // as provenance, but do not let sharing promote it back into the label.
+      list[slot].label=OPERATIONS[choice];
       next=revise(draft,{method:field('specified',{...((draft.method.status==='specified'&&draft.method.value)||{}),operations:list},provenance)});
       next.unresolved.splice(index,1);
     }else{

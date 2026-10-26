@@ -569,3 +569,16 @@ Language status classification no longer calculates scores it discards: status
 and rune count follow exactly from validated length and the pinned minimum.
 The unchanged language model's integrity check is loaded at Worker startup so
 its synchronous validation does not first occur inside a read request.
+
+## Intake clarification and failure recovery
+
+A failed interpretation stays on the input form with the original wording. The
+explicit “Answer a few questions” action starts a fresh local draft; it cannot
+reuse an invalid model candidate, run work or save an idea. Editing, cancelling
+or retrying invalidates that recovery action and any late response.
+
+An exact recognized row-reversal phrase, including its explicit page scope,
+can go straight to the existing choice between row order and number digits.
+Conditional, negative and compound wording must not acquire a simpler method.
+A chosen operation uses its canonical label through sharing and compilation;
+the original ambiguous wording remains provenance, never the active meaning.

@@ -34,6 +34,26 @@ test('only known consequential reversal ambiguity is questioned',()=>{
  assert.equal(C.questions(d).length,0);assert(C.summary(d).includes('space positions'));
  assert(!C.summary(d).includes('prime values of each row'));
 });
+test('explicit scoped-prime clarification survives sharing as the chosen supported rule without rewriting its source',()=>{
+ const H=require('../claim-share.js'),Fixed=require('../fixed-plan-compiler.js'),text='Reverse the prime values in rows on LP2-15';
+ let d=I.initialDraft(text);assert.equal(I.intakeQuestions(d)[0].id,'operation');
+ d=I.answerIntake(d,'operation','reverse_row_runes');
+ assert.equal(d.method.value.operations[0].sourceText,text);assert.equal(d.method.value.operations[0].label,'Reverse rune order within rows');
+ d=I.answerIntake(d,'aim','decipher');assert.equal(I.intakeQuestions(d)[0].id,'evaluation');
+ d=I.answerIntake(d,'evaluation','inspect-output');
+ d=C.revise(d,{rules:{inputVersion:C.field('specified','raw'),representation:C.field('specified','GP29')}});
+ assert.equal(I.intakeQuestions(d).length,0);
+ const confirmed=C.confirm(d,{id:'explicit-reversal',at}),card=H.cardData(confirmed),plan=Fixed.compile(card);
+ assert.equal(confirmed.source.text,text);assert.equal(confirmed.method.value.operations[0].sourceText,text);
+ assert.equal(card.method.value.operations[0].label,'Reverse rune order within rows');assert(!Object.hasOwn(card.method.value.operations[0],'sourceText'));
+ assert.deepEqual(plan.steps,[{op:'reverse',unit:'line'}]);assert.deepEqual(plan.pages,['lp2-15']);assert.equal(plan.inputVersion,'raw');assert.deepEqual(plan.criterion,{kind:'measurement'});assert.equal(confirmed.execution,'not_run');
+ const imported=H.decode(H.encode(confirmed)).draft;assert.deepEqual(Fixed.compile(H.cardData(C.confirm(imported,{id:'shared-reversal',at}))).steps,plan.steps);
+ for(const source of [text+' only if the result is English',text+' without changing spaces',text+' except the red runes']){const opaque=I.initialDraft(source);assert.equal(opaque.source.text,source);assert.equal(opaque.method.value.operations[0].id,'described_method');assert.throws(()=>C.clarify(opaque,'operation','reverse_row_runes'));}
+ let compound=I.initialDraft(text+' then use an unknown cipher with key FOO'),tail=C.serialize(compound.method.value.operations[1]);compound=C.clarify(compound,'operation','reverse_row_runes');assert.equal(C.serialize(compound.method.value.operations[1]),tail);assert(Fixed.compile(H.cardData(C.confirm(compound,{id:'unsupported-tail',at}))).reason);
+ let limited=I.initialDraft(text);limited=C.revise(limited,{rules:{exceptionalCases:C.field('specified','Use only the red runes')}});limited=C.clarify(limited,'operation','reverse_row_runes');assert(Fixed.compile(H.cardData(C.confirm(limited,{id:'unsupported-condition',at}))).reason);
+ for(const parameter of [{customCondition:'Only red marks'},{key:'FOO'},{a:7,b:7}]){let bounded=I.initialDraft(text);Object.assign(bounded.method.value.operations[0],parameter);bounded=C.clarify(bounded,'operation','reverse_row_runes');assert(Fixed.compile(H.cardData(C.confirm(bounded,{id:'unsupported-parameter',at}))).reason);for(const [key,value]of Object.entries(parameter))assert.deepEqual(bounded.method.value.operations[0][key],value);}
+});
+
 test('recognized reversal never drops an appended cipher, key, tail or explicit ordering',()=>{
  const text='Reverse digits of each prime value, then apply Vigenere with key FOO and reset at each page';
  const d=I.initialDraft(text),c=C.confirm(d,{id:'compound',at});
