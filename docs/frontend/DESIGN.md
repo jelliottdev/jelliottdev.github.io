@@ -214,3 +214,18 @@ Research browsing starts in List for a first visit so every immediate option is
 named. Explicit links and saved Graph/List preferences retain priority. Both
 views traverse the same branches, membership and colors; Graph remains available
 without forcing visitors to identify unlabeled points before choosing a question.
+
+### Ordinary question overview
+
+Use the concrete method as the stable page title. Keep workflow messages secondary;
+show scope, what the check measures, and supplied conditions before the verified
+finding. Do not hide the method in the confirmed-card disclosure. Show saved
+measurement output directly, then one primary route to inspect its calculation.
+Repeated calculation links and source bookkeeping belong below that result.
+
+A saved result is not coverage of an arbitrary question. Bind its requested
+program, criterion, complete ordered scope, edition and source bytes to the
+original canonical card before displaying a coverage verdict. A subset receipt
+can support part of a verified full request, but cannot define what remains
+unchecked by itself. Missing or mismatched bindings leave the question visible
+and offer recovery; they cannot authorize preparation or execution.

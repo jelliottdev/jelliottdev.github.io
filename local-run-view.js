@@ -268,7 +268,7 @@
   if(captured.task.criterion.kind==='language-score')data.languageScore={modelId:captured.task.criterion.modelId,modelSha256:captured.task.criterion.modelSha256,pages:pages.map(page=>verified.get(witnesses.get(page.id).task.taskId).run.result.languageScore.pages.find(row=>row.page===page.id))};
   const token=Object.freeze({});measurementComparisons.set(token,data);return token;
  }
- function renderMeasurementComparison(token){
+ function renderMeasurementComparison(token,{showScope=true}={}){
   const data=measurementData(token),{task}=data,partial=data.remainingPages.length>0,scope='<p class="run-text-note">'+data.coveredPages.length+' of '+data.declaredCount+' declared pages. '+(partial?'These values describe covered pages only.':'All declared pages have saved calculations.')+'</p>';
   if(!data.coveredPages.length)return '<section class="measurement-comparison"><p>No saved calculations for these exact settings.</p></section>';
   let body;
@@ -276,7 +276,7 @@
   else if(task.criterion.kind==='word-prime-sums')body='<h3>Saved word totals</h3><p>'+data.wordSums.words.toLocaleString('en-US')+' measured words; combined total '+data.wordSums.total.toLocaleString('en-US')+'.</p>'+wordSumsView(task,{wordSums:data.wordSums})+'<p class="run-limit">These totals do not decode the text or establish that a pattern is meaningful.</p>';
   else if(task.criterion.kind==='language-score')body='<h3>Saved language comparisons</h3>'+languageView(task,{transformed:data.outputs,languageScore:data.languageScore});
   else body=outputPreview(task,{transformed:data.outputs})+'<p>'+data.runes.toLocaleString('en-US')+' runes in the saved output.</p>';
-  return '<section class="measurement-comparison">'+scope+body+'</section>';
+  return '<section class="measurement-comparison">'+(showScope?scope:'')+body+'</section>';
  }
  function bindMeasurementComparison(host,token){const data=measurementData(token);if(!data.coveredPages.length)return ()=>{};return data.task.criterion.kind==='word-prime-sums'?bindWordSums(host,data.task,{wordSums:data.wordSums}):data.task.criterion.kind==='language-score'?bindLanguage(host,data.task,{transformed:data.outputs,languageScore:data.languageScore}):data.task.criterion.kind==='measurement'?bindOutputPreview(host,data.task,{transformed:data.outputs}):()=>{};}
  // Workflow copy describes confirmed calculation state, never scientific support.
