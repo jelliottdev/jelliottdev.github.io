@@ -39,7 +39,7 @@ async function fixture({configured=true,delayConfig=false,delayConfigAfterFailur
   return new Promise((resolve,reject)=>requests.push({url,options,resolve,reject}));
  }});
  if(!delayConfig&&!delayRegistry)await app.ready;
- return {doc,app,requests,timers,loads,releaseConfig:()=>resolveConfig(Response.json(config)),releaseRegistry:()=>resolveRegistry(Response.json(registry)),submit(text=raw){doc.getElementById('idea').value=text;doc.getElementById('intake').fire('submit');},destroy:()=>app.destroy()};
+ return {doc,app,requests,timers,loads,releaseConfig:()=>resolveConfig(Response.json(config)),releaseRegistry:()=>resolveRegistry(Response.json(registry)),submit(text=raw){doc.getElementById('idea').value=text;doc.getElementById('define-test').fire('click');},destroy:()=>app.destroy()};
 }
 function answer(f,choice,text=''){f.doc.selectedChoice=choice;const detail=f.doc.getElementById('other-detail');if(detail)detail.value=text;f.doc.getElementById('clarification').fire('submit');f.doc.selectedChoice=null;}
 
@@ -49,7 +49,7 @@ async function accepted(){
  const f=await fixture();try{
   const field=edit(f,raw),markup=f.doc.host.html;f.doc.activeElement=field;field.selectionStart=8;field.selectionEnd=12;
   f.submit();assert.equal(f.app.getSnapshot().stage,'input');assert(f.app.getSnapshot().interpreting);assert.equal(f.requests.length,1);assert.equal(f.doc.getElementById('idea'),field);assert.equal(f.doc.host.html,markup,'Loading does not replace the input form');assert.equal(field.value,raw);assert.equal(field.selectionStart,8);assert.equal(field.selectionEnd,12);
-  assert(f.doc.getElementById('interpret-submit').disabled);assert.equal(f.doc.getElementById('interpret-submit').textContent,'Checking idea…');
+  assert(f.doc.getElementById('interpret-submit').disabled);assert.equal(f.doc.getElementById('interpret-submit').textContent,'Check idea');
   for(const id of ['cancel-interpretation','use-original','retry-interpretation','confirm'])assert.equal(f.doc.getElementById(id),null);
   f.submit();assert.equal(f.requests.length,1,'Repeated submit while pending cannot duplicate the request');
   f.requests[0].resolve(await response());await until(()=>f.app.getSnapshot().stage==='review','Valid candidate did not advance');

@@ -285,6 +285,26 @@
     const rescue=rescueSelection(documents,query,pages,baseline);
     return rescue===null?baseline:rescue;
   }
+  function related(documents,query,pages=[]) {
+    // Casual vocabulary can name a subject without specifying a runnable rule.
+    // These are lexical leads only: do not choose a null rune, insertion model,
+    // deletion rule, page range, success criterion or research outcome.
+    const words=(query.toLowerCase().match(/[a-z]+/g)||[]),runeContext=words.some(w=>['rune','runes','symbol','symbols','letter','letters'].includes(w));
+    const negated=i=>['not','no','without','excluding'].includes(words[i-1]);
+    const nullSubject=runeContext&&words.some((word,i)=>!negated(i)&&(
+      ['junk','filler','dummy','nulls'].includes(word)||word==='null'&&['rune','runes','symbol','symbols','letter','letters'].includes(words[i+1])));
+
+    // Rank the named subject separately from conversational framing. This is a
+    // retrieval synonym, never a choice of a particular null or deletion rule.
+    const focus='null symbols nulls'+(words.some(w=>['added','inserted','insertion','extra'].includes(w))?' insertion':'')+(words.some(w=>['doublet','doublets','double','doubles','repeats'].includes(w))?' doublets':'');
+    const explicit=[...new Set([...pages,...pageIds(query)])],ranked=rankedRecords(documents,nullSubject?focus:query,explicit),selected=[];
+    let size=0;const strongest=ranked[0]?.score||0;
+    for(const hit of ranked){if(selected.length===4)break;if(hit.score<Math.max(.5,strongest*.5))break;
+      const document=hit.document;if(!selected.length&&document.text.length>11000)return [];
+      if(size+document.text.length>11000)continue;selected.push(document);size+=document.text.length;
+    }
+    return addPageContext(selected,documents,query,explicit,size);
+  }
   function rankedRecords(documents,query,pages=[]) {
     const technique=techniqueQuery(query);
     if(!tokens(technique).length)return [];
@@ -324,6 +344,6 @@
   function supporting(documents,query,pages=[],discovery) {
     return classify(documents,query,pages,discovery).supporting;
   }
-  const api={tokens,pageIds,experimentDocs,search,select,experiments,supporting,classify,techniqueQuery};
+  const api={tokens,pageIds,experimentDocs,search,select,related,experiments,supporting,classify,techniqueQuery};
   if(typeof module!=='undefined')module.exports=api;else root.AssistantSearch=api;
 })(globalThis);

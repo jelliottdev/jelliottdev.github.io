@@ -16,7 +16,7 @@ const aliases=[
 (async()=>{
  let flows=0;
  for(const [phrase,table]of aliases){const text=phrase+' on LP2-15, LP2-17';assert(W.matches(text),text);const f=await fixture();try{
-  f.doc.getElementById('idea').value=text;f.doc.getElementById('intake').fire('submit');assert.equal(f.app.getSnapshot().stage,'review');assert.equal(f.app.getSnapshot().draft.source.text,text);
+  f.doc.getElementById('idea').value=text;f.doc.getElementById('define-test').fire('click');assert.equal(f.app.getSnapshot().stage,'review');assert.equal(f.app.getSnapshot().draft.source.text,text);
   choose(f,'decipher');let d=f.app.getSnapshot().draft;assert.deepEqual(d.scope.value.pages,['lp2-15','lp2-17']);assert.equal(I.intakeQuestions(d)[0].id,'word-sum-evaluation');assert.equal(d.rules.evaluation.status,'unspecified');assert.equal(f.doc.getElementById('confirm'),null);
   choose(f,'numeric-ledger');d=f.app.getSnapshot().draft;assert.equal(I.intakeQuestions(d)[0].id,'word-sum-boundaries');assert.equal(d.rules.evaluation.status,'unspecified');assert.equal(d.rules.representation.status,'unspecified');
   choose(f,'hyphen-period');d=f.app.getSnapshot().draft;assert.equal(d.source.text,text);assert.equal(C.normalizeOutcome(d.aim).id,'decipher');assert.deepEqual(d.scope.value.pages,['lp2-15','lp2-17']);const plan=Compiler.compile(H.cardData(C.confirm(d,{id:'private-alias-test',at:'2026-10-25T12:00:00Z'})));assert.deepEqual(plan.criterion,{kind:'word-prime-sums',table,boundaries:'hyphen-period'});assert.deepEqual(plan.steps,[]);assert.equal(f.app.getSnapshot().confirmed,null);assert(f.calls.every(c=>c.method==='GET'&&!c.url.includes('forbidden.invalid')));flows++;

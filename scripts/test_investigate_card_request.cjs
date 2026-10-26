@@ -39,7 +39,7 @@ async function fixture({gateBinding=false,legacy=false}={}){
   assert.equal(url,'https://mock.example/ask');return new Promise(resolve=>requests.push({resolve,options}));
  }});
  await app.ready;
- doc.getElementById('idea').value=original;doc.getElementById('intake').fire('submit');
+ doc.getElementById('idea').value=original;doc.getElementById('define-test').fire('click');
  await until(()=>app.getSnapshot().stage==='review','Mocked interpretation did not reach review');
  require('./mock_interpretation_response.cjs').acknowledge(doc,app);
  const draft=app.getSnapshot().draft;

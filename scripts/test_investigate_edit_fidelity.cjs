@@ -47,7 +47,7 @@ async function appFor(text){
   throw Error('No inference or external fetch is allowed');
  }});
  await app.ready;
- doc.getElementById('idea').value=text;doc.getElementById('intake').fire('submit');
+ doc.getElementById('idea').value=text;doc.getElementById('define-test').fire('click');
  await require('./mock_interpretation_response.cjs').waitForReview(app);
  require('./mock_interpretation_response.cjs').acknowledge(doc,app);
  return {doc,app};

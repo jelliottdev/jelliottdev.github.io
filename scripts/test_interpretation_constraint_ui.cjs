@@ -19,7 +19,7 @@ async function fixture(candidate,binding){
   assert(['https://mock.example/ask','https://mock.example/proposals'].includes(url),'No live service or execution request is permitted: '+url);
   return new Promise((resolve,reject)=>options.signal?.addEventListener('abort',()=>reject(Object.assign(Error('Aborted'),{name:'AbortError'})),{once:true}));
  }});await app.ready;
- return {doc,app,calls,submit(text=raw){const input=doc.getElementById('idea');input.value=text;input.fire('input');input.focus();input.setSelectionRange(7,12);doc.getElementById('intake').fire('submit');return input;},answer(choice,text=''){doc.selectedChoice=choice;const detail=doc.getElementById('other-detail');if(detail)detail.value=text;doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;},noResearch(){assert(!calls.some(call=>/\/(ask|proposals)$/.test(call.url)));}};
+ return {doc,app,calls,submit(text=raw){const input=doc.getElementById('idea');input.value=text;input.fire('input');input.focus();input.setSelectionRange(7,12);doc.getElementById('define-test').fire('click');return input;},answer(choice,text=''){doc.selectedChoice=choice;const detail=doc.getElementById('other-detail');if(detail)detail.value=text;doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;},noResearch(){assert(!calls.some(call=>/\/(ask|proposals)$/.test(call.url)));}};
 }
 (async()=>{
  const Adapter=await import('../services/idea-assistant/interpret-handler.mjs'),candidate=Adapter.fromWire(wire(),raw),binding=await Adapter.sourceBinding(raw);

@@ -42,7 +42,7 @@ async function setup(enabled=true,shared=true){
  await app.ready;
  assert.equal(requests.length,0);assert.equal(research.length,0,'Viewing the page or imported card never submits');
  if(!shared){
-  doc.getElementById('idea').value='Use Vigenere with key ABC on LP2-15';doc.getElementById('intake').fire('submit');
+  doc.getElementById('idea').value='Use Vigenere with key ABC on LP2-15';doc.getElementById('define-test').fire('click');
   await require('./mock_interpretation_response.cjs').waitForReview(app);
   doc.selectedChoice='decipher';doc.getElementById('clarification').fire('submit');doc.selectedChoice=null;
  }

@@ -56,7 +56,7 @@ async function fixture(session,backend,options={}){
   return Response.json({answer:null,sources:[],reason:'no-matching-records'});
  }});await app.ready;return {doc,app,entries};
 }
-async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('intake').fire('submit');
+async function submit(f,text){if(!f.doc.getElementById('idea'))f.doc.getElementById('back').fire('click');f.doc.getElementById('idea').value=text;f.doc.getElementById('idea').fire('input');f.doc.getElementById('define-test').fire('click');
  await require('./mock_interpretation_response.cjs').waitForReview(f.app);
  require('./mock_interpretation_response.cjs').acknowledge(f.doc,f.app);
  const d=f.app.getSnapshot().draft;d.aim=C.normalizeAim(known({outcomeId:'decipher',wording:'Find readable text',detail:''}));d.method=known({operations:JSON.parse(JSON.stringify(operations))});d.scope=known({pages:['lp2-15']});d.rules.evaluation=known('measurement');
@@ -92,7 +92,7 @@ async function main(){
  }
  const malformed=await fixture(storage(),server(),{hash:'#input=%E1'});assert(malformed.doc.host.html.includes('This idea link could not be read'));assert.equal(malformed.app.getSnapshot().stage,'input');malformed.app.destroy();
  const longText='ᚠ'.repeat(1501),over=await fixture(storage(),server(),{hash:'#input='+encodeURIComponent(longText)});
- over.doc.getElementById('intake').fire('submit');assert.equal(over.app.getSnapshot().stage,'input');assert.equal(over.doc.getElementById('idea').value,longText);assert(over.doc.getElementById('interpretation-error').textContent.includes('1,500 characters'));over.app.destroy();
+ over.doc.getElementById('define-test').fire('click');assert.equal(over.app.getSnapshot().stage,'input');assert.equal(over.doc.getElementById('idea').value,longText);assert(over.doc.getElementById('interpretation-error').textContent.includes('1,500 characters'));over.app.destroy();
  console.log('PASS fragment entry: exact input, no automatic submission, malformed-link recovery and editable over-limit text.');
  const text='  Use Vigenere with key ABC on LP2-15.\nKeep this original wording: \u16a0.  ';
  const session=storage(),backend=server();backend.defer=true;

@@ -346,7 +346,7 @@ async function waitForReview(app){await require('./mock_interpretation_response.
  },now:()=>at,id:()=> 'test-id'});
  assert(doc.host.html.includes('Fibonacci keys'));assert.equal(app.getSnapshot().stage,'input');
  await app.ready;
- doc.getElementById('idea').value='Fibonacci keys';doc.getElementById('intake').fire('submit');
+ doc.getElementById('idea').value='Fibonacci keys';doc.getElementById('define-test').fire('click');
  await waitForReview(app);
  assert.deepEqual(app.getSnapshot().draft.scope.value.pages,['lp2-15','lp2-17']);
  assert(doc.host.html.includes('class="question-title"'));assert(!doc.host.html.includes('id="confirm"'));
@@ -368,7 +368,7 @@ async function waitForReview(app){await require('./mock_interpretation_response.
   return new Promise(resolve=>requests.push({resolve,options}));
  },now:()=>at,id:()=> 'test-'+(++serial),printer:()=>{prints++;},schedule:fn=>{timers.push(fn);return timers.length-1;},unschedule:()=>{}});
  await application.ready;
- journey.getElementById('idea').value='Fibonacci keys on LP2-15';journey.getElementById('intake').fire('submit');
+ journey.getElementById('idea').value='Fibonacci keys on LP2-15';journey.getElementById('define-test').fire('click');
  await waitForReview(application);
  answerInDOM(journey,'undecided');
  journey.getElementById('confirm').fire('click');
@@ -400,7 +400,7 @@ async function waitForReview(app){await require('./mock_interpretation_response.
  const saved=application.getSnapshot().packet;
  journey.getElementById('back').fire('click');assert.equal(application.getSnapshot().stage,'input');assert.equal(application.getSnapshot().packet,null);
  assert.equal(saved.research.answer,'The published Fibonacci stream test is bounded [1].','Old frozen packet remains unchanged after leaving');
- journey.getElementById('idea').value='Unmatched careful idea';journey.getElementById('intake').fire('submit');
+ journey.getElementById('idea').value='Unmatched careful idea';journey.getElementById('define-test').fire('click');
  await waitForReview(application);
  answerInDOM(journey,'unclassified','Check the visual alignment');answerInDOM(journey,'specific','LP2-43, lines 2–3');
  journey.getElementById('confirm').fire('click');
@@ -425,7 +425,7 @@ async function waitForReview(app){await require('./mock_interpretation_response.
   assert.equal(application.getSnapshot().draft.aim.outcome.id,expected);assert.equal(application.getSnapshot().draft.aim.value.detail,detail);
   assert.equal(application.getSnapshot().draft.source.text,'Unmatched careful idea');
  }
- const beforeGoalOnly=requests.length;journey.getElementById('back').fire('click');journey.getElementById('idea').value='solve LP2';journey.getElementById('intake').fire('submit');
+ const beforeGoalOnly=requests.length;journey.getElementById('back').fire('click');journey.getElementById('idea').value='solve LP2';journey.getElementById('define-test').fire('click');
  await waitForReview(application);
  assert(journey.host.html.includes('What method do you want to check?'));answerInDOM(journey,'undecided');answerInDOM(journey,'undecided');
  assert.equal(journey.getElementById('confirm'),null);assert(journey.host.html.includes('Browse research'));assert.equal(requests.length,beforeGoalOnly,'A goal without method sends no research request');
@@ -436,7 +436,7 @@ async function waitForReview(app){await require('./mock_interpretation_response.
  const doc=fakeDocument(),app=I.createApp(doc,{fetcher:async(url,options)=>url==='https://mock.example/interpret'?mockInterpretation(options):Response.json(url==='data/experiments.json'?registry:url==='data/assistant.json'?{endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'}:{documents:[]})});
  await app.ready;
  const source='Reverse each row on LP2-15, then apply Vigenere with key FIRFUMFERENFE';
- doc.getElementById('idea').value=source;doc.getElementById('intake').fire('submit');await waitForReview(app);answerInDOM(doc,'decipher');answerInDOM(doc,'inspect-output');
+ doc.getElementById('idea').value=source;doc.getElementById('define-test').fire('click');await waitForReview(app);answerInDOM(doc,'decipher');answerInDOM(doc,'inspect-output');
  const original=app.getSnapshot().draft;
  original.method.value.operations[1].parameters={key:'FIRFUMFERENFE',offset:7};
  original.unresolved.push({kind:'source_note',text:'Preserve this independent constraint'});

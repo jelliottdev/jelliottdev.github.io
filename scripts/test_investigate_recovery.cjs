@@ -41,7 +41,7 @@ async function fixture(session,options={}){
   return Response.json({endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret'});
  }});await app.ready;return {doc,app,calls,pending:options.interpret};
 }
-async function submit(f,text){const field=f.doc.getElementById('idea');field.value=text;field.fire('input');f.doc.getElementById('intake').fire('submit');if(!f.pending)await reviewed(f);}
+async function submit(f,text){const field=f.doc.getElementById('idea');field.value=text;field.fire('input');f.doc.getElementById('define-test').fire('click');if(!f.pending)await reviewed(f);}
 async function reviewed(f){const end=Date.now()+5000;while(f.app.getSnapshot().stage!=='review'&&Date.now()<end)await new Promise(resolve=>setImmediate(resolve));assert.equal(f.app.getSnapshot().stage,'review',f.doc.getElementById('interpretation-error')?.textContent);}
 function answer(f,choice,text=''){for(const radio of f.doc.querySelectorAll('input[name=choice]'))radio.checked=radio.value===choice;f.doc.getElementById('other-detail').value=text;f.doc.getElementById('clarification').fire('submit');}
 async function main(){
@@ -68,7 +68,7 @@ async function main(){
 
  // An in-flight interpretation returns to exact input and never restarts.
  const waiting=storage();f=await fixture(waiting,{interpret:true});await submit(f,'Try an autokey on LP2-15.');assert.equal(f.calls.length,1);f.app.destroy();f=await fixture(waiting,{interpret:true});assert.equal(f.app.getSnapshot().stage,'input');assert.equal(f.doc.getElementById('idea').value,'Try an autokey on LP2-15.');assert.equal(f.calls.length,0);f.app.destroy();
- const hinted=storage(),search='?q=Reverse+each+row.&pages=LP2-17';f=await fixture(hinted,{search});f.app.destroy();f=await fixture(hinted,{search});f.doc.getElementById('intake').fire('submit');await reviewed(f);assert.deepEqual(f.app.getSnapshot().draft.scope.value.pages,['lp2-17'],'An input-stage recovery retains the unconsumed URL page hint');f.app.destroy();
+ const hinted=storage(),search='?q=Reverse+each+row.&pages=LP2-17';f=await fixture(hinted,{search});f.app.destroy();f=await fixture(hinted,{search});f.doc.getElementById('define-test').fire('click');await reviewed(f);assert.deepEqual(f.app.getSnapshot().draft.scope.value.pages,['lp2-17'],'An input-stage recovery retains the unconsumed URL page hint');f.app.destroy();
 
  // A finalized card is recovered only as a draft, with no result or POST.
  f=await fixture(session);f.doc.getElementById('confirm').fire('click');assert.equal(f.app.getSnapshot().stage,'research');assert(f.app.getSnapshot().confirmed);f.app.destroy();f=await fixture(session);assert.equal(f.app.getSnapshot().stage,'review');assert.equal(f.app.getSnapshot().confirmed,null);assert.equal(f.app.getSnapshot().result,null);assert.equal(f.app.getSnapshot().packet,null);assert.equal(f.calls.length,0);f.app.destroy();

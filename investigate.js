@@ -430,7 +430,7 @@
   try{
    if(typeof serialized!=='string'||serialized.length>RECOVERY_LIMIT)return null;
    const value=JSON.parse(serialized),age=at-value.at;
-   if(value.version!==1||value.entry!==entry||!Number.isFinite(age)||age<0||age>RECOVERY_AGE||typeof value.raw!=='string'||value.raw.length>32000||typeof value.editing!=='boolean'||!['input','review','interpreting','research'].includes(value.stage))return null;
+   if(value.version!==1||value.entry!==entry||!Number.isFinite(age)||age<0||age>RECOVERY_AGE||typeof value.raw!=='string'||value.raw.length>32000||typeof value.editing!=='boolean'||!['input','search','review','interpreting','research'].includes(value.stage))return null;
    const draft=['review','research'].includes(value.stage)?recoveryDraft(value.draft):null;
    if(value.editing&&!draft)return null;
    if(draft&&draft.source.text!==value.raw)return null;
@@ -441,7 +441,7 @@
     if(!overlay||typeof overlay!=='object'||Array.isArray(overlay))return null;
     for(const [key,field]of Object.entries(overlay))if(!/^(edit-(aim|objective|scope|rules|method(?:-\d+)?|method-family-\d+)|remove-rule-[A-Za-z]+|other-detail|choice)$/.test(key)||!['string','boolean'].includes(typeof field)||(typeof field==='string'&&field.length>32000))return null;
    }
-   return {raw:value.raw,stage:draft?'review':'input',draft,editing:!!baseline,baseline,overlay:overlay||{}};
+   return {raw:value.raw,stage:draft?'review':value.stage==='search'?'search':'input',draft,editing:!!baseline,baseline,overlay:overlay||{}};
   }catch{return null;}
  }
  function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout,sharer=H.share,renderCard=H.renderPNG}={}){
@@ -453,6 +453,7 @@
   let shareBusy=false,shareNotice='',shareFallback=null,preparedCard=null,preparedFor=null;
   let intakeEndpoint=null,ideaEndpoint=null,intake=null,intakeController=null,intakeVersion=0;
   let renderedResearchCard=null;
+  let searchedText='',relatedAnswer=null;
   let cardContract=false;
   let interpretationEndpoint=null,interpretController=null,interpretVersion=0,interpreting=false,interpretError='',guidedRecovery=null;
   let configResolved=false,configValid=false,configReady=null,configAttempt=null,loadVersion=0,destroyed=false;
@@ -473,9 +474,9 @@
   if(pageHint){try{legacyScope=parseScope(pageHint,{kind:'supplied',refs:['URL page hint']});}catch{message='The linked page selection could not be read. You can enter exact pages when reviewing the idea.';}}
   let recovered=null;try{recovered=readRecovery(session?.getItem(RECOVERY_KEY),recoveryEntry,Date.parse(now()));}catch{}
   if(recovered){
-   ({raw,stage,draft,editing}=recovered);restoringOverlay=recovered.overlay;if(stage==='review')legacyScope=null;
+   ({raw,stage,draft,editing}=recovered);if(stage==='search')searchedText=raw;restoringOverlay=recovered.overlay;if(stage==='review')legacyScope=null;
    if(editing)editingBackup={stage:'review',draft:recovered.baseline,confirmed:null,result:null,packet:null,message:'',error:''};
-   message='Draft restored.';
+   message=stage==='search'?'Search restored.':'Draft restored.';
   }
   function recoveryFields(){
    const fields={};
@@ -512,10 +513,10 @@
    const prior=doc.activeElement?.id;
    const sameResearch=stage==='research'&&confirmed&&renderedResearchCard===confirmed;
    const disclosures=sameResearch?captureDisclosureState(host,doc.activeElement):[];
-   const selection=sameResearch&&prior&&Number.isInteger(doc.activeElement.selectionStart)&&Number.isInteger(doc.activeElement.selectionEnd)?{value:doc.activeElement.value,start:doc.activeElement.selectionStart,end:doc.activeElement.selectionEnd}:null;
+   const selection=(sameResearch||stage==='input'||stage==='search')&&prior&&Number.isInteger(doc.activeElement.selectionStart)&&Number.isInteger(doc.activeElement.selectionEnd)?{value:doc.activeElement.value,start:doc.activeElement.selectionStart,end:doc.activeElement.selectionEnd}:null;
    const pending=stage==='review'&&!editing?intakeQuestions(draft)[0]:null;
-   if(stage==='input'){
-    host.innerHTML='<h1>Have we tried it?</h1><p>Describe your idea to find related research. We’ll ask you to clarify missing details. Checking an idea doesn’t run an experiment.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="'+Input.MAX_LENGTH+'" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><button id="guided-clarification" type="button" hidden>Answer a few questions</button><div class="actions"><a class="left" href="research.html#mode=list">Search existing research</a><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form>';
+   if(stage==='input'||stage==='search'){
+    host.innerHTML='<h1>Have we tried it?</h1><p>Ask a question or paste an idea to find related research. You don’t need a finished method or a page selection.</p><form id="intake"><label class="sr-only" for="idea">Your idea</label><textarea id="idea" required maxlength="8000" rows="6" aria-describedby="interpretation-status interpretation-error" placeholder="For example: reverse the prime values of each row on LP2-15">'+esc(raw)+'</textarea><p id="interpretation-status" class="small" role="status"></p><p id="interpretation-error" class="error" role="alert"></p><button id="guided-clarification" type="button" hidden>Answer a few questions</button><div class="actions"><a class="left" href="research.html#mode=list">Search existing research</a><button id="interpret-submit" class="primary" type="submit">Check idea</button></div></form><div id="related-research">'+roughResearchHTML()+'</div><div class="actions"><button id="define-test" type="button">Define a test</button></div><p class="small">Optional: turn your idea into an exact check you can review before running.</p>';
    }else{
     host.innerHTML='<button class="back" id="back" type="button">'+(pending?'Edit idea':'Back to idea')+'</button><h1 id="review-title"'+(pending?' class="question-title"':'')+' tabindex="-1">'+esc(pending?pending.prompt:stage==='research'?'Research comparison':'Is this the idea?')+'</h1>'+(pending?'<p class="idea-wording"><strong>Method:</strong> '+esc((C.reviewRows(draft).find(row=>row.label==='Method')?.tags||[]).map(tag=>tag.text).join(' → ').replace(/\s+/gu,' ').replace(/^(.{240})[\s\S]+$/u,'$1…'))+'</p>':'')+
      (stage==='research'?'<p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>':'')+
@@ -529,7 +530,7 @@
    }
    host.insertAdjacentHTML('beforeend','<p id="status" class="notice small" role="status">'+esc(message||(!loaded&&!loadError?'Loading research records…':''))+'</p>'+(stage==='research'?'':'<p id="error" class="notice error" role="alert">'+esc(error||loadError)+'</p>')+(!loaded&&loadError?'<button id="reload" type="button">Retry loading research</button>':'')+'<p class="small privacy">'+(endpoint?'Research questions are processed by Cloudflare. Don’t include private information.':'')+'</p>');
    bind();
-   if(stage==='input')updateInterpretationInput();
+   if(stage==='input'||stage==='search')updateInterpretationInput();
    if(restoringOverlay){restoreFields(restoringOverlay);restoringOverlay=null;}
    if(sameResearch)restoreDisclosureState(host,disclosures);
    if(prior&&doc.getElementById(prior))doc.getElementById(prior).focus({preventScroll:true});
@@ -661,6 +662,40 @@
    const q=intakeQuestions(draft)[0];if(!q)return '';
    return '<form id="clarification" class="question'+(q.id==='evaluation'?' evaluation-question':'')+'"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Continue</button></div></form>';
   }
+  function roughSourceHTML(document){
+   const record=records.find(r=>r.id===document.id);if(!record)return '';
+   const excerpt=(value,max)=>{const text=String(value||'').replace(/\s+/gu,' ').trim();if(text.length<=max)return text;const head=text.slice(0,max),cut=head.lastIndexOf(' ');return head.slice(0,cut>max*.6?cut:max)+'…';};
+   const action=excerpt(record.reader_test?.action||record.scope?.procedure,260),finding=excerpt(record.reader_finding||record.finding,420),limit=excerpt(readerLimit(record),190);
+   return '<section class="source"><h3><a href="library.html#/experiment/'+esc(record.id)+'">'+esc(Reader?.title(record)||document.title)+'</a></h3>'+
+    (action?'<p><strong>What was tried:</strong> '+esc(action)+'</p>':'')+(finding?'<p><strong>Result:</strong> '+esc(finding)+'</p>':'')+
+    (limit?'<p class="small source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
+  }
+  function roughResearchHTML(){
+   if(!searchedText)return '';
+   const related=(S.related?S.related(documents,searchedText):S.select(documents,searchedText)).filter(d=>d.kind==='experiment'&&records.some(r=>r.id===d.id));
+   return '<section aria-labelledby="related-title"><h2 id="related-title" tabindex="-1">Related research</h2>'+
+    (!loaded?'<p role="status">'+esc(loadError?'The research records could not be loaded. Your wording is kept.':'Loading research records…')+'</p>':
+    '<p>These records may help with your idea. A related record does not mean the same test has been done.</p>'+
+    (relatedAnswer?'<p class="small answer-note">AI summary of the linked research.</p><div class="answer">'+nativeLinks(M.render(relatedAnswer.answer,relatedAnswer.sources))+'</div>':'')+
+    (related.length?related.map(roughSourceHTML).join(''):'<p>No close match was found in this collection. That does not tell us whether someone has tried it elsewhere.</p><p><a href="research.html#mode=list">Explore the research map</a></p>'))+'</section>';
+  }
+  async function searchRelated(){
+   stop();const token=generation,text=raw;searchedText=text;relatedAnswer=null;stage='search';draft=null;confirmed=null;render();focus('#related-title');
+   // The local records remain useful while optional configuration/AI loads or fails.
+   if(!configResolved)await configReady;
+   if(destroyed||token!==generation||stage!=='search'||searchedText!==text||raw!==text||!endpoint)return;
+   const requestController=new AbortController();controller=requestController;
+   const timer=schedule(()=>requestController.abort(),30000);
+   try{
+    const data=await json(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:'related-research',query:text}),signal:requestController.signal});
+    if(destroyed||token!==generation||stage!=='search'||searchedText!==text||raw!==text)return;
+    if(data.kind!=='related-research'&&data.comparisonKind!=='related-research')return;
+    const checked=validateAnswer({...data,kind:undefined},documents,null);
+    if(checked.sources.some(d=>d.kind!=='experiment'))return;
+    relatedAnswer=checked;render();
+   }catch{/* Optional synthesis must never remove local research or demand a formal card. */}
+   finally{unschedule(timer);if(token===generation)controller=null;}
+  }
   function researchHTML(){
    const controls='<div class="actions">'+(busy?'<button id="cancel" type="button">Stop waiting</button>':(!result?'<button id="retry" type="button">Try comparison again</button>':''))+(packet?'<button id="print" type="button">Print research note</button>':'')+'</div>';
    if(result)return observedFindingsHTML(result.sources,records)+'<h2>'+(result.noMatch?'Search result':'How this relates to your idea')+'</h2>'+(result.noMatch||result.kind==='recorded-overlap'?'':'<p class="small answer-note">AI interpretation of the linked records.</p>')+'<div class="answer">'+nativeLinks(M.render(result.answer,result.sources))+'</div>'+(result.sources.length?'<details class="source-evidence"><summary>Sources &amp; details ('+result.sources.length+')</summary>'+result.sources.map(d=>sourceHTML(d,records)).join('')+'</details>':'<p><a href="research.html#mode=list" target="_blank" rel="noopener">Browse research</a></p>')+controls;
@@ -674,7 +709,7 @@
    if(stage==='research')updateShare();
    bindMethodSteps();
    doc.getElementById('method-add')?.addEventListener('click',()=>editMethodStep({type:'add',index:methodOperations().length,operation:{id:'described_method',label:''}},'#'+(methodOperations().length?'edit-method-'+methodOperations().length:'edit-method')));
-   doc.getElementById('idea')?.addEventListener('input',event=>{if(interpreting)stopInterpretation();raw=event.target.value;guidedRecovery=null;interpretError='';updateInterpretationInput();saveRecovery();});
+   doc.getElementById('idea')?.addEventListener('input',event=>{if(interpreting)stopInterpretation();if(stage==='search'){stop();searchedText='';relatedAnswer=null;const related=doc.getElementById('related-research');if(related)related.innerHTML='';}raw=event.target.value;guidedRecovery=null;interpretError='';updateInterpretationInput();saveRecovery();});
    doc.getElementById('idea')?.addEventListener('keydown',event=>{if(event.key==='Escape'&&interpreting){event.preventDefault();stopInterpretation();interpretError='';updateInterpretationInput();}});
    for(const name of Object.keys(recoveryFields()))if(name!=='choice'&&!name.startsWith('edit-method'))for(const type of ['input','change'])doc.getElementById(name)?.addEventListener(type,saveRecovery);
    for(const radio of doc.querySelectorAll?.('input[name=choice]')||[])radio.addEventListener('change',saveRecovery);
@@ -685,9 +720,14 @@
     stopInterpretation();interpretError='';acceptDraft(initialDraft(recovery.text));
    });
    doc.getElementById('intake')?.addEventListener('submit',event=>{
-    event.preventDefault();if(interpreting)return;raw=doc.getElementById('idea').value;const inputError=Input.issue(raw);if(inputError){interpretError=inputError;updateInterpretationInput();focus('#idea');return;}
+    event.preventDefault();if(interpreting)return;raw=doc.getElementById('idea').value;const inputError=!raw.trim()?'Describe an idea first.':raw.length>8000?'Paste up to 8,000 characters to find related research.':'';if(inputError){interpretError=inputError;updateInterpretationInput();focus('#idea');return;}
     stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
-    interpret();
+    searchRelated();
+   });
+   doc.getElementById('define-test')?.addEventListener('click',()=>{
+    if(interpreting)return;raw=doc.getElementById('idea').value;const inputError=raw.length>Input.MAX_LENGTH?'To define a test, shorten this to 1,500 characters. Your full text is kept; you can still search it.':Input.issue(raw);if(inputError){interpretError=inputError;updateInterpretationInput();focus('#idea');return;}
+    stopIntake(true);stop();stopInterpretation();confirmed=null;result=null;packet=null;printHost.replaceChildren();editing=false;error='';message='';
+    stage='input';interpret();
    });
    doc.getElementById('back')?.addEventListener('click',()=>{stopIntake(true);stop();stage='input';editing=false;confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#idea');});
    doc.getElementById('edit')?.addEventListener('click',()=>{stopIntake(true);stop();editingBackup={stage,draft,confirmed,result,packet,message,error};editing=true;stage='review';draft=C.revise(draft,{});confirmed=null;result=null;packet=null;printHost.replaceChildren();message='';error='';render();focus('#edit-method');});
@@ -753,8 +793,9 @@
   }
   function updateInterpretationInput(){
    const button=doc.getElementById('interpret-submit'),status=doc.getElementById('interpretation-status'),notice=doc.getElementById('interpretation-error');
-   if(button){button.disabled=interpreting;button.textContent=interpreting?'Checking idea…':'Check idea';}
-   if(status)status.textContent=interpreting?'Checking the wording…':'';
+   if(button){button.disabled=interpreting;button.textContent='Check idea';}
+   const define=doc.getElementById('define-test');if(define){define.disabled=interpreting;define.textContent=interpreting?'Preparing test…':'Define a test';}
+   if(status)status.textContent=interpreting?'Preparing the test wording…':'';
    if(notice)notice.textContent=interpretError;
    const guided=doc.getElementById('guided-clarification');if(guided)guided.hidden=!guidedRecovery||interpreting||guidedRecovery.text!==raw||guidedRecovery.version!==interpretVersion;
   }
@@ -836,7 +877,8 @@
    const token=++loadVersion;loadError='';loaded=false;availability();
    const configured=loadConfig();
    try{
-    const [registry]=await Promise.all([json('data/experiments.json',{signal:AbortSignal.timeout(8000)}),configured]);
+    configured.catch(()=>{});
+    const registry=await json('data/experiments.json',{signal:AbortSignal.timeout(8000)});
     if(token!==loadVersion)return;
     if(!Array.isArray(registry.records))throw Error('Research records could not be read.');
     const published=registry.records.filter(r=>r.status==='published');
@@ -853,7 +895,7 @@
      documents.push(...(index.documents||[]).filter(d=>typeof d.id==='string'&&M.safe(d.href)));
     }).catch(()=>{});
    }catch(e){if(token!==loadVersion)return;loadError=e.message;loaded=false;}
-   availability();
+   availability();if(stage==='search')render();
   }
   async function compare(){
    stop();const token=generation,snapshot=confirmed;

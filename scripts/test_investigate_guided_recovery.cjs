@@ -16,7 +16,7 @@ async function fixture(reply){
   throw Error('Unexpected endpoint '+url);
  }});await app.ready;
  const input=text=>{doc.getElementById('idea').value=text;doc.getElementById('idea').fire('input');};
- const submit=async text=>{input(text);doc.getElementById('intake').fire('submit');await turn();await turn();};
+ const submit=async text=>{input(text);doc.getElementById('define-test').fire('click');await turn();await turn();};
  const noWrites=()=>assert.deepEqual(calls.filter(c=>c.options.method==='POST').map(c=>c.url).filter(url=>!url.endsWith('/interpret')),[]);
  return {doc,app,calls,timers,input,submit,noWrites};
 }
@@ -55,7 +55,7 @@ async function fixture(reply){
   try{await f.submit(original);await require('./mock_interpretation_response.cjs').waitForReview(f.app);const d=f.app.getSnapshot().draft;assert.equal(d.source.text,original);assert.equal(d.method.status,'unspecified');assert(I.intakeQuestions(d).some(q=>q.id==='method'));assert.equal(d.aim.status,'unspecified');assert.equal(d.scope.status,'unspecified');assert.equal(f.app.getSnapshot().confirmed,null);f.noWrites();}finally{f.app.destroy();}
  }
  {
-  let count=0,resolve;const f=await fixture(()=>++count===1?Response.json({reason:'unavailable'},{status:503}):new Promise(r=>{resolve=r;}));try{await f.submit(original);await until(()=>!f.app.getSnapshot().interpreting);const stale=f.doc.getElementById('guided-clarification');f.doc.getElementById('intake').fire('submit');await turn();assert(stale.hidden);stale.fire('click');assert.equal(f.app.getSnapshot().stage,'input');assert(f.app.getSnapshot().interpreting);resolve(Response.json({reason:'unavailable'},{status:503}));await until(()=>!f.app.getSnapshot().interpreting);assert.equal(stale.hidden,false);f.noWrites();}finally{f.app.destroy();}
+  let count=0,resolve;const f=await fixture(()=>++count===1?Response.json({reason:'unavailable'},{status:503}):new Promise(r=>{resolve=r;}));try{await f.submit(original);await until(()=>!f.app.getSnapshot().interpreting);const stale=f.doc.getElementById('guided-clarification');f.doc.getElementById('define-test').fire('click');await turn();assert(stale.hidden);stale.fire('click');assert.equal(f.app.getSnapshot().stage,'input');assert(f.app.getSnapshot().interpreting);resolve(Response.json({reason:'unavailable'},{status:503}));await until(()=>!f.app.getSnapshot().interpreting);assert.equal(stale.hidden,false);f.noWrites();}finally{f.app.destroy();}
  }
  console.log('PASS valid empty interpretation retains original wording and asks for a method; retry hides recovery until its own failure');
 
