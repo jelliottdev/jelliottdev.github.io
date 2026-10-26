@@ -38,7 +38,7 @@ function projection(row,task,run,context){
   inputVersion:context.input_version,parentTaskId:context.parent_task_id,createdAt:context.created_at,
   state:run?'results-verified':'not-run',...(run?{latestRun:run}:{}),verification:NOTICE};
 }
-export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,storageLimits,loadAuthoredSource}={}){
+export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Date(),prepareControls=PlanControls.prepare,discoverEvidence=findEvidence,storageLimits,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle}={}){
  const limits=checkedStorageLimits(storageLimits);
  return async function handle(request,env){
   const sourceLoader=loadAuthoredSource||createAuthoredFiniteSourceLoader(fetcher);
@@ -140,15 +140,15 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
      // A previously linked pending task is not permission to bypass the new
      // reviewed prefix-evidence snapshot. Legacy idempotent links stay unchanged.
-     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['authored-finite-member-v1','ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
+     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['pinned-domain-member-v1','authored-finite-member-v1','ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
       let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
+      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
      }}
      existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,await storedTask(existing),body.proposalId,null,originId));
     }
     if(!reviewed){
      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader});
+     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle});
      if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
      if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
     }

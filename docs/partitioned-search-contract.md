@@ -28,6 +28,39 @@ scheduling must not change the scientific question.
   unused tails, checks the existing finite-stream bound, and binds every input
   page and reset rule. This is a scope-bound representation proof, not global
   equivalence, task admission or an experiment result.
+- `pinned-domain-members.js` binds the full input scope before compiling a
+  selected setting and page subset through the existing canonical compiler.
+  Private parent and member tokens protect that binding. Compilation does not
+  authorize execution or claim that a control passed.
+- `scripts/pinned_domain_controls.py` creates full Warning controls with the
+  independent Python inverse encoder and commits each synthetic task and result
+  hash offline. `pinned-warning-controls.js` reconstructs one selected control,
+  checks its committed task hash, then checks the complete 184-rune output and
+  committed result hash. It never invents an expected result with the decoder.
+- `pinned-domain-case-ledger.js` requires an internal persistent-source
+  authority, independently verifies the original computation, and unions global
+  setting/page coverage with compact bitsets. Hashed, paged snapshots restore by
+  reloading and re-verifying sources. Its authority interface is not yet wired
+  to a public endpoint. `pinned-domain-source-authority.mjs` now reads actual
+  public-associated saved receipts, checks original identities and arithmetic,
+  and issues private certificates. Cross-idea reuse requires the same exact
+  computation, rather than matching a filing label.
+
+## Maintained sources and admission
+
+`build_pinned_domains.py` retains both complete 2,561-setting rotating banks
+and their 5,122 independently encoded full-Warning commitments. The server
+registry pins the exact manifest bytes; a visitor cannot provide replacement
+source metadata or control expectations. Generated assets alone authorize
+neither a run nor a scientific conclusion.
+
+The admission bridge derives the selected member from that maintained source.
+Its immutable prepared-plan basis records the complete parent, selected pages,
+member and independent control identities. The existing task gate rechecks the
+basis on creation and on an idempotent relink. Actual result admission still
+replays the original bounded task. This is the server/database admission link;
+a public coordinator, durable aggregate coverage and browser continuation remain
+required before enabling these searches.
 
 ## Required before enabling execution
 
@@ -56,3 +89,13 @@ scheduling must not change the scientific question.
 
 Enable the composite flow only after these gates pass through the real browser,
 server and database loop, including overlaps, source changes and interruption.
+
+## Remaining coordinator constraint
+
+The receipt authority and ledger deliberately recheck saved evidence. A full
+restore currently performs two database reads and three arithmetic checks per
+retained receipt. Restoring a large parent in one Worker request would exceed
+practical request budgets. Do not expose an unbounded restore endpoint or claim
+that an in-memory ledger provides durable aggregate progress. The next coordinator
+must restore bounded pages, preserve a continuation identity, and finish evidence
+lookups before presenting a complete negative result.
