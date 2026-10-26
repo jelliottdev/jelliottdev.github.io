@@ -116,7 +116,10 @@ class DiscoveryProjectionTests(unittest.TestCase):
                 self.assertEqual(item['protocol_sha256'], hashlib.sha256(protocol).hexdigest())
                 for forbidden in ('card', 'inputs', 'control', 'task', 'members', 'alphabet', 'steps'):
                     self.assertNotIn(forbidden, item)
-        self.assertEqual(count, 34)
+        self.assertEqual(count, sum(len(record.get('browser_followups', [])) for record in self.records))
+        public_wordlist = next(record for record in self.projected if record['id'] == 'public-wordlist-vigenere')
+        self.assertEqual({item['id'] for item in public_wordlist['followup_discovery']['items']},
+                         {'public-wordlist-nine-openings', 'public-wordlist-rotations-nine-openings'})
 
     def test_projection_size_remains_below_half_of_omnibus_even_with_all_recipe_hints(self):
         raw = (json.dumps({'schema': 'liberpedia-experiment-discovery-v1', 'records': self.projected},

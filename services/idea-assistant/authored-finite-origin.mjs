@@ -20,7 +20,7 @@ export function createAuthoredFiniteSourceLoader(fetcher=globalThis.fetch,{loadB
  const cache=new Map();return async origin=>{require(exact(origin,['recordId','followupId','recordSha256','protocolSha256'])&&HEX.test(origin.recordSha256)&&HEX.test(origin.protocolSha256),'Invalid authored finite origin');const key=E.stable(origin);if(!cache.has(key)){require(cache.size<8,'Too many authored finite sources');cache.set(key,loadSavedFiniteRecordPlan(origin,{fetcher,loadBundle}).then(source=>{require(same(source.origin,origin),'The authored finite source changed');return source;}));}return cache.get(key);};
 }
 export async function finiteSnapshotMember(task,snapshot){
- require(snapshot?.kind==='finite-settings'&&['finite-program-controls','finite-program-controls-shared-v1'].includes(snapshot.control?.kind),'Invalid stored finite snapshot');
+ require(snapshot?.kind==='finite-settings'&&['finite-program-controls','finite-program-controls-shared-v1','finite-program-controls-pooled-v1'].includes(snapshot.control?.kind),'Invalid stored finite snapshot');
  const declaration=checkedMemberDeclaration(snapshot);snapshot=declaration.snapshot;const found=declaration.programs.get(E.stable([task.steps,task.criterion]));
  require(found,'Task is outside its authored finite family');
  const pins=snapshot.inputs,declaredPages=pins.pages.map(p=>p.id),remainingPages=task.pages.map(p=>p.id);
@@ -36,8 +36,9 @@ export async function finiteSnapshotMember(task,snapshot){
 // The caller must verify its persisted protocol digest before calling this.
 // Fresh source/member admission continues through finiteSnapshotMember above.
 export async function readAdmittedFiniteSnapshotMember(task,snapshot){
- require(snapshot?.kind==='finite-settings'&&['finite-program-controls','finite-program-controls-shared-v1'].includes(snapshot.control?.kind)&&Array.isArray(snapshot.control.members)&&snapshot.control.members.length>0&&snapshot.control.members.length<=1024,'Invalid admitted finite snapshot');
- const matches=Storage.expand(snapshot.control).members.filter(member=>same(member?.control?.task?.steps,task.steps));require(matches.length===1,'The admitted task has no unique finite member');const found=matches[0],member=Settings.factored.member(snapshot.card,found.settings),plan=Compiler.compile(member.card);
+ require(snapshot?.kind==='finite-settings'&&['finite-program-controls','finite-program-controls-shared-v1','finite-program-controls-pooled-v1'].includes(snapshot.control?.kind),'Invalid admitted finite snapshot');
+ const controls=Storage.expand(snapshot.control);require(Array.isArray(controls.members)&&controls.members.length>0&&controls.members.length<=1024,'Invalid admitted finite snapshot');
+ const matches=controls.members.filter(member=>same(member?.control?.task?.steps,task.steps));require(matches.length===1,'The admitted task has no unique finite member');const found=matches[0],member=Settings.factored.member(snapshot.card,found.settings),plan=Compiler.compile(member.card);
  require(!plan.reason&&!plan.state&&same(plan.steps,task.steps)&&same(plan.criterion,task.criterion)&&same(member.settings,found.settings),'The admitted finite program or criterion changed');
  const pins=snapshot.inputs,declaredPages=pins.pages.map(p=>p.id),remainingPages=task.pages.map(p=>p.id);require(pins.version===plan.inputVersion&&same(declaredPages,snapshot.card.scope.value.pages)&&remainingPages.length>0&&same(remainingPages,declaredPages.filter(id=>remainingPages.includes(id)))&&await hash(task.alphabet)===pins.alphabet_sha256,'Admitted finite scope or alphabet changed');
  for(const page of task.pages)require(await hash(page.text)===pins.pages.find(p=>p.id===page.id)?.text_sha256,'Admitted finite page bytes changed');

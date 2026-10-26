@@ -161,6 +161,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
         run: |
           python scripts/test_finite_control_storage.py
+          python scripts/test_pooled_finite_control_storage.py
+          python scripts/test_repack_finite_controls.py
           python scripts/test_finite_sequence_banks.py
           python scripts/build_finite_sequence_banks.py
           python scripts/test_finite_key_banks.py
