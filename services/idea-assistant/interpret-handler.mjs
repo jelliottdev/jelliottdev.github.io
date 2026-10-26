@@ -2,7 +2,7 @@
 import {SCHEMA,JSON_SCHEMA,validateInput,toDraft,pagesFromSource,keyDeclarations,knownOperationMatches} from './interpretation.mjs';
 
 export const MODEL='@cf/google/gemma-4-26b-a4b-it';
-export const PROMPT_VERSION='interpret-v12-role-specific-constraint-coverage';
+export const PROMPT_VERSION='interpret-v13-unchanged-condition-evidence';
 export const LIMITS=Object.freeze({bodyBytes:12000,modelBytes:24000,responseBytes:26000,timeoutMs:20000,concurrency:3,cacheEntries:50,cacheMs:600000,cooldownMs:60000});
 const encoder=new TextEncoder();
 const stepProperties=JSON_SCHEMA.properties.steps.items.properties;
@@ -48,7 +48,7 @@ const RULE_MARKERS={representation:/\b(?:represent|representation|runes?|indices
  inputVersion:/\b(?:version|transcription|edition|source|input|snapshot)\b/i,evaluation:/\b(?:score|scoring|readable|plaintext|success|criterion|criteria|match|evaluate|evaluation|threshold|english)\b/i,
  reset:/\b(?:reset|restart|carry|continue)\b/i,initialState:/\b(?:initial|start|seed|iv)\w*\b/i,
  searchBounds:/\b(?:bound|range|limit|maximum|minimum|length|lag|period|shift|key|offset|coefficient)\w*\b/i,
- searchProtocol:/\b(?:search|scan|enumerate|sample|random|exhaustive|test|shuffle)\w*\b/i,exceptionalCases:/\b(?:if|when|unless|except|excluding|skip|only|otherwise|without|before|after|not|never)\b/i};
+ searchProtocol:/\b(?:search|scan|enumerate|sample|random|exhaustive|test|shuffle)\w*\b/i,exceptionalCases:/\b(?:if|when|unless|except|excluding|skip|only|otherwise|without|before|after|not|never|unchanged|intact)\b/i};
 const RULE_SUBJECTS={representation:'representation|encoding|alphabet',wordBoundaries:'word boundaries|word breaks|spaces',boundaryMode:'boundary mode',unmapped:'unmapped(?: values| policy)?',inputVersion:'input version|source version|transcription version',evaluation:'evaluation|scoring|success criteria',reset:'resets?|reset rule|reset policy',initialState:'initial state|seed|initial value',searchBounds:'search bounds|bounds|key range|key lengths?',searchProtocol:'search protocol|search method',exceptionalCases:'exceptions|exceptional cases'};
 function explicitRuleState(name,quote){
  const subject='(?:'+RULE_SUBJECTS[name]+')',state='(unrestricted|not applicable)';
