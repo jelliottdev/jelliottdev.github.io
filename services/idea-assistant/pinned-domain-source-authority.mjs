@@ -21,8 +21,12 @@ export function createPinnedDomainSourceAuthority({db,crypto=globalThis.crypto,s
   const task=capture(JSON.parse(stored.task_json));await E.checkIdentity(task,crypto);ensure(task.taskId===ref.taskId&&await hash(task,crypto)===stored.task_hash,'The saved task identity changed.');live();
   const admitted=await readAdmittedResult(task,{id:stored.result_id,result_json:stored.result_json,created_at:stored.created_at},crypto),result=await E.verify(task,admitted,crypto);live();ensure(await hash(result,crypto)===ref.resultId,'The saved result identity changed.');live();return freeze(capture({task,inputVersion:ref.inputVersion,run:{id:ref.resultId,createdAt:ref.createdAt,result}}));
  }
+ function certificate(sourceId,source){live();const cert=Object.freeze({});certificates.set(cert,freeze({sourceId,source}));return cert;}
+ // One bounded persistent read and one independent replay. The private token
+ // may be consumed only by this authority; wire values cannot mint it.
+ async function resolveCertificate(sourceId){const ref=fromId(sourceId),source=await load(ref);return certificate(idFor(ref),source);}
  async function resolveSource(sourceId){return load(fromId(sourceId));}
- async function verify(input){const original=freeze(capture(input));ensure(exact(original,['task','inputVersion','run'])&&exact(original.run,['id','createdAt','result']),'Use complete original saved source bytes.');const ref=reference({taskId:original.task?.taskId,resultId:original.run.id,inputVersion:original.inputVersion,createdAt:original.run.createdAt}),source=await load(ref);ensure(E.stable(original)===E.stable(source),'Caller bytes do not match the immutable database receipt.');live();const cert=Object.freeze({});certificates.set(cert,freeze({sourceId:idFor(ref),source}));return cert;}
+ async function verify(input){const original=freeze(capture(input));ensure(exact(original,['task','inputVersion','run'])&&exact(original.run,['id','createdAt','result']),'Use complete original saved source bytes.');const ref=reference({taskId:original.task?.taskId,resultId:original.run.id,inputVersion:original.inputVersion,createdAt:original.run.createdAt}),source=await load(ref);ensure(E.stable(original)===E.stable(source),'Caller bytes do not match the immutable database receipt.');live();return certificate(idFor(ref),source);}
  function inspect(cert){const value=certificates.get(cert);ensure(value,'Use a private certificate issued by this persistent source authority.');live();return value;}
- return Object.freeze({load,resolveSource,verify,inspect});
+ return Object.freeze({load,resolveSource,resolveCertificate,verify,inspect});
 }

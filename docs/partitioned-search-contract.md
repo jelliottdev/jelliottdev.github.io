@@ -90,12 +90,65 @@ required before enabling these searches.
 Enable the composite flow only after these gates pass through the real browser,
 server and database loop, including overlaps, source changes and interruption.
 
+## Bounded recovery and scheduling
+
+Ledger snapshots can now be restored a bounded number of receipts at a time.
+The private restoration token pins the complete parent, snapshot manifest, page
+digest and receipt offset. A failed lookup retains the verified prefix; a retry
+continues at the same receipt. Partial restoration never exposes a normal ledger
+or a completed-search verdict. Finalization requires every committed reference.
+These continuations are process-local, not durable browser resume tokens.
+
+The persistent authority can resolve a private certificate in one database read.
+Recovery still checks arithmetic in both the persistent authority and the ledger;
+it avoids a duplicate database lookup, not an independent verification gate.
+
+`pinned-domain-next-work.js` selects missing coordinates directly from the
+verified bitsets. It retains the same full parent and offers bounded jobs without
+deriving every program. Suggestions neither reserve work nor authorize execution.
+Reaching the end of a scheduling range cannot hide missing earlier coordinates.
+
 ## Remaining coordinator constraint
 
-The receipt authority and ledger deliberately recheck saved evidence. A full
-restore currently performs two database reads and three arithmetic checks per
-retained receipt. Restoring a large parent in one Worker request would exceed
-practical request budgets. Do not expose an unbounded restore endpoint or claim
-that an in-memory ledger provides durable aggregate progress. The next coordinator
-must restore bounded pages, preserve a continuation identity, and finish evidence
-lookups before presenting a complete negative result.
+`pinned-domain-coverage-store.mjs` and migration 0019 provide the private durable
+journal. Trusted maintained-source loaders bind the full parent, manifest,
+verifier version and evidence epoch. Ingestion accepts at most twelve exact saved
+receipt references, checks their public database association and arithmetic, and
+stages the entire bounded batch before four atomic bulk statements. Unique
+setting/page facts and program/page facts prevent retries or overlaps from
+inflating either count. Reopening reads the committed counts without replaying
+all historical output. These are trusted server-maintained counters, not a
+portable proof that a browser may supply or alter.
+
+New saved receipts preserve that generation. Updating or removing earlier
+evidence invalidates it; the old rows remain for audit and the new generation
+requires bounded re-ingestion. Read and write fences reject mixed generations
+or concurrent revisions. Completing case coverage always remains explicitly
+lookup-pending: this layer has no operation that can declare discovery finished
+or issue a negative scientific verdict. The schema is not yet activated by a
+public coordinator.
+Ingestion budgets cover both receipt bytes and database query counts. Bound
+parameters and batch statements still count against platform limits; one INSERT
+per case is not a scalable bulk write. Keep staged source/case inserts compact
+and transactional, and test query counts against the conservative Free-plan
+budget in the [D1 limits](https://developers.cloudflare.com/d1/platform/limits/).
+
+The public coordinator must still join maintained-source admission, durable
+coverage, bounded discovery of existing evidence, and browser pause/resume.
+Complete case coverage is not a negative conclusion while evidence discovery is
+unfinished. Do not expose an unbounded restore endpoint or claim an in-memory
+ledger or private recovery token supplies durable aggregate progress.
+
+## Public handoff to consolidate
+
+Variation creation currently saves a child question and calculation, then links
+to a task workspace. The visitor encounters Create check, Open check, Run in
+browser, and Save and update question as separate transitions. A reviewed run
+intent exists in the ordinary question flow; the variation link deliberately
+does not imply one. Preserve that consent boundary when consolidating the flow.
+
+The coordinator should return to the persistent question after review, with one
+clear Run/Resume action and visible remaining scope. A creation link must not
+silently start work. Saving an idea, running a calculation, saving its result and
+supporting a scientific conclusion remain separate operations even when their
+product presentation is simpler.
