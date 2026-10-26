@@ -229,3 +229,9 @@ original canonical card before displaying a coverage verdict. A subset receipt
 can support part of a verified full request, but cannot define what remains
 unchecked by itself. Missing or mismatched bindings leave the question visible
 and offer recovery; they cannot authorize preparation or execution.
+
+### Variations from a saved question
+
+Offer maintained variations directly beneath a saved question’s finding. Review one concrete change with an example, the pages it will check, and the comparison that stays unchanged. If the earlier saved result covers fewer pages, state both ranges. Opening or reviewing a variation does not run or save it.
+
+A question-level variation uses the original question’s complete ordered scope. Keep its declared program separate from the actual saved calculation and receipt that supplied the starting point. Never present that program as an executed result. Retain the original question and link the variation back to it; preserve the selected review when evidence refreshes.

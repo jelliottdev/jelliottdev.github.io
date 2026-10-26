@@ -1,0 +1,33 @@
+/* Bind an already checked saved receipt to its original question and declared program.
+ * This does not replay result mathematics or grant admission. The caller verifies
+ * the displayed result first; the service checks its saved reference on action.
+ * No fetching, inference, execution, storage or publication. */
+(function(root){
+ 'use strict';
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,Context=node?require('./task-question-context.js'):root.TaskQuestionContext,Compiler=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle;
+ const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/,same=(a,b)=>E.stable(a)===E.stable(b),exact=(v,ks)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===ks.length&&ks.every(k=>Object.hasOwn(v,k)),ensure=(v,m)=>{if(!v)throw Error(m);},capture=v=>J.capture(v,{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000}),freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;},iso=v=>typeof v==='string'&&Number.isFinite(Date.parse(v))&&new Date(v).toISOString()===v;
+ async function hash(v,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
+ function canonical(card){const text=E.stable(card),bytes=new TextEncoder().encode(text);ensure(bytes.length<=H.MAX_BYTES,'The original question exceeds its card limit.');let binary='';for(const b of bytes)binary+=String.fromCharCode(b);const draft=H.decode('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')).draft,checked=H.cardData(C.confirm(draft,{id:'question-result-context',at:'2000-01-01T00:00:00.000Z'}));ensure(same(checked,card),'Use an unchanged canonical original question.');return checked;}
+ function receiptShape(task,run){
+  ensure(exact(run,['id','createdAt','result'])&&typeof run.id==='string'&&HEX.test(run.id)&&iso(run.createdAt),'The saved receipt identity or date changed.');
+  const result=run.result,kind=task.criterion.kind,extra=kind==='language-score'?['languageScore']:kind==='word-affine-count'?['wordPairs']:kind==='word-prime-sums'?['wordSums']:[];
+  ensure(exact(result,['schema','taskId','engine','runnerVersion','metrics','matches','transformed',...extra])&&result.schema===E.RESULT&&result.taskId===task.taskId&&result.engine===task.engine&&result.runnerVersion==='1','The saved result envelope changed.');
+  const m=result.metrics;ensure(exact(m,['pages','runes','adjacentPairs','equalAdjacentPairs','ioc'])&&m.pages===task.pages.length&&['runes','adjacentPairs','equalAdjacentPairs'].every(k=>Number.isSafeInteger(m[k])&&m[k]>=0)&&m.equalAdjacentPairs<=m.adjacentPairs&&Number.isFinite(m.ioc)&&m.ioc>=0&&m.ioc<=1,'The saved result metrics are malformed.');
+  ensure(Array.isArray(result.transformed)&&result.transformed.length===task.pages.length,'The saved output scope changed.');const runes=new Set(task.alphabet.map(r=>r.rune));
+  for(let i=0;i<task.pages.length;i++){const p=result.transformed[i],input=Array.from(task.pages[i].text);ensure(exact(p,['page','text'])&&p.page===task.pages[i].id&&typeof p.text==='string','The saved output page changed.');const output=Array.from(p.text);ensure(output.length===input.length&&input.every((ch,j)=>runes.has(ch)?runes.has(output[j]):output[j]===ch),'The saved output changed its source geometry.');}
+  const openings=['exact-prefix','exact-prefix-set'].includes(kind);ensure(Array.isArray(result.matches)&&result.matches.length===(openings?task.pages.length:0),'The saved opening scope changed.');
+  for(let i=0;i<result.matches.length;i++){const match=result.matches[i];ensure(exact(match,['page','matched',...(kind==='exact-prefix-set'?['matchingOpenings']:[])])&&match.page===task.pages[i].id&&typeof match.matched==='boolean','The saved opening fields changed.');if(kind==='exact-prefix-set')ensure(Array.isArray(match.matchingOpenings)&&new Set(match.matchingOpenings).size===match.matchingOpenings.length&&match.matchingOpenings.every(id=>task.criterion.openings.some(o=>o.id===id))&&match.matched===(match.matchingOpenings.length>0),'The saved named openings changed.');}
+  for(const name of extra)ensure(result[name]&&typeof result[name]==='object'&&!Array.isArray(result[name]),'The saved measurement payload is malformed.');
+ }
+ async function prepare(input,crypto=root.crypto){
+  const value=capture(input),unchanged=()=>ensure(same(capture(input),value),'The selected saved result changed during preparation.');ensure(exact(value,['proposalId','card','projection','bundle'])&&typeof value.proposalId==='string'&&IDEA.test(value.proposalId)&&crypto?.subtle,'Use one exact original question and saved task projection.');
+  const card=canonical(value.card),projection=value.projection;ensure(projection&&projection.state==='results-verified'&&same(projection.card,card)&&projection.latestRun&&projection.plan,'A saved result from this unchanged original question is required.');
+  ensure('p_'+await hash(C.serialize(card),crypto)===value.proposalId,'The original question identity changed.');unchanged();
+  const token=await Context.verify({taskId:projection.id,proposalId:value.proposalId,projection,bundle:value.bundle},crypto);unchanged();const bound=Context.inspect(token);ensure(bound.comparable,'The selected saved calculation is not an exact program of this original question.');
+  receiptShape(projection.plan,projection.latestRun);ensure(await hash(projection.latestRun.result,crypto)===projection.latestRun.id,'The saved result bytes changed.');unchanged();
+  const plan=Compiler.compile(bound.reviewedProgram?bound.reviewedProgram.normalizedCard:card),official=Inputs.parse(value.bundle),pages=bound.declaredPages.map(id=>({id,text:official.pages.get(id)[projection.inputVersion==='raw'?'raw':'reviewed_text']}));
+  const questionTask=await E.prepare({title:'Complete declared question',pages,alphabet:official.alphabet,steps:plan.steps,criterion:plan.criterion},crypto);unchanged();
+  return freeze({task:projection.plan,questionTask,card,source:{kind:'saved-question-program',proposalId:value.proposalId,taskId:projection.id},inputVersion:projection.inputVersion,run:projection.latestRun,...(bound.reviewedProgram?{reviewedProgram:bound.reviewedProgram}:{})});
+ }
+ const api={prepare};if(node)module.exports=api;else root.QuestionResultContext=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
