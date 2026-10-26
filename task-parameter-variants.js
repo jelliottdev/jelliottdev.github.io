@@ -11,16 +11,16 @@
  }
  function captureSelection(value){
   const selection=J.capture(value,{maxBytes:512,maxDepth:3,maxNodes:16}),keys=['version','step','parameter','value'];
-  if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).length!==keys.length||!keys.every(key=>own(selection,key))||selection.version!==1||!Number.isInteger(selection.step)||selection.step<0||!['direction','reset'].includes(selection.parameter)||!(selection.parameter==='direction'?directions:resets).includes(selection.value))throw Error('Choose one exact supported step parameter and destination.');
+  if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).length!==keys.length||!keys.every(key=>own(selection,key))||selection.version!==1||!Number.isInteger(selection.step)||selection.step<0||!['direction','reset','unit'].includes(selection.parameter)||!(selection.parameter==='direction'?directions:resets).includes(selection.value))throw Error('Choose one exact supported step parameter and destination.');
   return selection;
  }
  function unchanged(value,snapshot,capture){if(stable(capture(value))!==stable(snapshot))throw Error('The task or selected variation changed during preparation.');}
  function derive(parent,selection){
   const step=parent.steps[selection.step],parameter=selection.parameter;
-  if(!step||!(parameter==='direction'?keyed.has(step.op):keyed.has(step.op)||step.op==='cumulative-difference'))throw Error('The selected step does not support this parameter variation.');
+  if(!step||!(parameter==='direction'?keyed.has(step.op):parameter==='unit'?step.op==='reverse':keyed.has(step.op)||step.op==='cumulative-difference'))throw Error('The selected step does not support this parameter variation.');
   if(step[parameter]===selection.value)throw Error('Choose a value different from the saved task.');
   const steps=JSON.parse(stable(parent.steps));steps[selection.step][parameter]=selection.value;
-  const action=parameter==='direction'?(selection.value==='add'?'add key indices':'subtract key indices'):'restart at each '+selection.value;
+  const action=parameter==='direction'?(selection.value==='add'?'add key indices':'subtract key indices'):parameter==='unit'?'reverse runes within each '+selection.value:'restart at each '+selection.value;
   const body={title:'Step '+(selection.step+1)+': '+action,pages:JSON.parse(stable(parent.pages)),alphabet:JSON.parse(stable(parent.alphabet)),steps,criterion:JSON.parse(stable(parent.criterion))};
   // The normal runner checks the entire resulting geometry, including all
   // finite-key segments. An unavailable restart is rejected, never shortened.
@@ -32,12 +32,12 @@
  function list(parent){
   const task=captureTask(parent),items=[];
   for(let step=0;step<task.steps.length;step++){
-   const operation=task.steps[step],parameters=keyed.has(operation.op)?['direction','reset']:operation.op==='cumulative-difference'?['reset']:[];
+   const operation=task.steps[step],parameters=keyed.has(operation.op)?['direction','reset']:operation.op==='cumulative-difference'?['reset']:operation.op==='reverse'?['unit']:[];
    for(const parameter of parameters)for(const value of parameter==='direction'?directions:resets){
     if(operation[parameter]===value)continue;
     const selection={version:1,step,parameter,value};
     try{derive(task,selection);}catch{continue;}
-    items.push({selection,from:operation[parameter],label:parameter==='direction'?(value==='add'?'Add the key values':'Subtract the key values'):'Restart at each '+value});
+    items.push({selection,from:operation[parameter],label:parameter==='direction'?(value==='add'?'Add the key values':'Subtract the key values'):parameter==='unit'?'Reverse runes within each '+value:'Restart at each '+value});
    }
   }
   return freeze(items);
@@ -53,11 +53,21 @@
    else{w=0;if(/[\r\n]/.test(ch))l=0;}
   }}
   const equal=(a,b)=>a.every((value,index)=>value===b[index]),maximum=a=>a.reduce((max,value)=>Math.max(max,value),-1)+1;
+  const permutations={};
+  function reversal(unit){
+   if(permutations[unit])return permutations[unit];
+   const output=[];let ordinal=0;
+   for(const page of task.pages){let group=[];const flush=()=>{for(let i=group.length-1;i>=0;i--)output.push(group[i]);group=[];};
+    for(const ch of page.text){if(runes.has(ch))group.push(ordinal++);else if(unit==='word'||unit==='line'&&/[\r\n]/.test(ch))flush();}flush();
+   }
+   return permutations[unit]=output;
+  }
   const sameOutputs=item=>{
    if(!positions.page.length)return true;
    const {step:index,parameter,value}=item.selection,step=task.steps[index],before=positions[step.reset];
    // A later constant affine substitution discards every earlier rune value.
    if(task.steps.slice(index+1).some(later=>later.op==='affine'&&later.a===0))return true;
+   if(parameter==='unit')return equal(reversal(step.unit),reversal(value));
    if(step.op==='interrupted-keyed-shift'&&step.interrupts.length===29)return true;
    if(parameter==='direction'){
     if(step.op==='interrupted-keyed-shift')return step.key.slice(0,Math.min(step.key.length,maximum(before))).every(k=>k===0);

@@ -19,7 +19,10 @@
    if(!exact(value,['selection','from',...(Object.hasOwn(value||{},'label')?['label']:[])])||Object.hasOwn(value,'label')&&(typeof value.label!=='string'||value.label.length>300))return null;
    const chosen=V.list(task).find(candidate=>E.stable(candidate.selection)===E.stable(value.selection)&&candidate.from===value.from);if(!chosen)return null;
    const s=chosen.selection,step=task.steps[s.step],interpretation=reading(task.criterion);if(!interpretation)return null;let question,reason;
-   if(s.parameter==='direction'){
+   if(s.parameter==='unit'){
+    question='What if we reverse the runes within '+where[s.value]+'?';
+    reason=s.value==='word'?'Reverse each uninterrupted group of runes separately. Spaces, punctuation and line breaks stay in place.':s.value==='line'?'Reverse the rune order across each line, including across word gaps. Spaces, punctuation and line breaks stay in place.':'Reverse the rune order across the whole page, including across lines and word gaps. Spaces, punctuation and line breaks stay in place.';
+   }else if(s.parameter==='direction'){
     question='What if we '+(s.value==='add'?'add':'subtract')+' the key values?';
     if(step.op==='finite-shift')reason=(s.value==='add'?'Add the same number sequence to':'Subtract the same number sequence from')+' rune positions, without repeating it within a segment.';
     else if(step.op==='interrupted-keyed-shift')reason='The same repeating numbers shift the runes; selected runes are still copied without advancing the key.';
