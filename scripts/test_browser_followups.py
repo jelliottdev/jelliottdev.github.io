@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import finite_control_storage as storage
 
 from browser_followups import (KEY, WARNING12, alphabet, compile_card,
                                construct_second_koan_word_reset, construct_followup, digest,
@@ -317,7 +318,7 @@ process.stdout.write(JSON.stringify(result));
         pages = {p.stem for p in (ROOT / 'data/pages').glob('*.json')}
         declared = json.loads(RECORD.read_text(encoding='utf-8'))['browser_followups']
         controls = [member['control']['task'] for recipe in declared if recipe.get('kind') == 'finite-settings'
-                    for member in recipe['control']['members']]
+                    for member in storage.expand(recipe['control'])['members']]
         controls.extend(recipe['control']['task'] for recipe in declared if 'kind' not in recipe)
         # Compare bounded task digests rather than dumping large fixtures on a
         # mock mismatch. Every invocation must be an actual declared witness.

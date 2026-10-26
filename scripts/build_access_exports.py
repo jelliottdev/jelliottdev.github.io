@@ -115,6 +115,7 @@ for article in articles:
   files[-1].update(title=article['title'],aliases=article.get('aliases',[]),guide=article['id'])
  documents.append((root/f'reference/articles/{article["id"]}.txt').read_text(encoding='utf-8'))
 register('data/index.json','Page and alphabet index')
+register('data/finite-sequence-banks.json','Pinned numerical sequence banks and source audit')
 register('data/articles.json','Reference article index')
 register('data/article-search.json','Reference article index')
 save('data/guide-index.json',json.dumps(guide_discovery_index(articles),ensure_ascii=False,indent=2)+'\n')

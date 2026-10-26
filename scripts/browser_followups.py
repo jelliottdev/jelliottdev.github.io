@@ -152,6 +152,24 @@ def compile_card(card):
             require('label' not in op or op['label'] in labels[identifier], 'unsupported operation wording')
             steps.append({'op': 'keyed-shift', 'key': op['key'], 'mode': modes[identifier],
                           'direction': op['direction'], 'reset': op['reset']})
+        elif identifier == 'finite_key_bank':
+            require(set(op) - {'declaredFamilyId'} in ({'id', 'bankId', 'bankSha256', 'offset', 'direction', 'reset'},
+                                {'id', 'label', 'bankId', 'bankSha256', 'offset', 'direction', 'reset'})
+                    and ('declaredFamilyId' not in op or op['declaredFamilyId'] == 'number-streams')
+                    and ('label' not in op or op['label'] == 'Pinned finite key stream'), 'pinned sequence operation fields/wording')
+            require(type(op['bankId']) is str and type(op['bankSha256']) is str
+                    and re.fullmatch(r'[a-f0-9]{64}', op['bankSha256'])
+                    and type(op['offset']) is int and 0 <= op['offset'] <= 28
+                    and op['direction'] in ('add', 'subtract') and op['reset'] in ('page', 'line', 'word'),
+                    'pinned sequence needs exact bank, offset, direction and restart')
+            try:
+                import finite_sequence_banks as banks
+                key = banks.resolve(op['bankId'], op['bankSha256'], op['offset'])
+            except (ImportError, ValueError, KeyError) as error:
+                raise ValueError('browser_followups: maintained sequence bank unavailable or changed') from error
+            require(type(key) is list and len(key) == 305 - op['offset']
+                    and all(type(n) is int and 0 <= n <= 28 for n in key), 'maintained sequence bank incomplete')
+            steps.append({'op': 'finite-shift', 'key': key, 'direction': op['direction'], 'reset': op['reset']})
         elif identifier == 'finite_key':
             require(set(op) in ({'id', 'key', 'direction', 'reset'}, {'id', 'label', 'key', 'direction', 'reset'})
                     and ('label' not in op or op['label'] == 'Finite key stream'), 'finite operation fields/wording')

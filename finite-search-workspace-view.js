@@ -30,16 +30,17 @@
   for(const [index,op] of context.operations.entries()){
    if(!op||typeof op.id!=='string')return null;
    const values=name=>{const axis=axes.find(p=>p.operation===index&&p.name===name);return axis?.values||[op[name]];},directions=values('direction'),change=directions.length===1&&directions[0]==='subtract'?'Subtract these values from the manuscript rune numbers.':directions.length===1&&directions[0]==='add'?'Add these values to the manuscript rune numbers.':directions.length&&directions.every(v=>v==='add'||v==='subtract')?'Try both adding and subtracting these values.':'';
-   if(['repeating_key','vigenere','plaintext_autokey','ciphertext_autokey','finite_key','interrupted_repeating_key'].includes(op.id)){
-    parts.push(op.id==='plaintext_autokey'?'Begin with the supplied starting patterns, then use earlier decoded runes to keep decoding.':op.id==='ciphertext_autokey'?'Begin with the supplied starting patterns, then use earlier input runes, rather than decoding output, to keep decoding.':op.id==='finite_key'?'Use each supplied sequence of rune-number changes without repeating it.':'Repeat the supplied patterns of changes to rune numbers.');
+   if(['repeating_key','vigenere','plaintext_autokey','ciphertext_autokey','finite_key','finite_key_bank','interrupted_repeating_key'].includes(op.id)){
+    parts.push(op.id==='plaintext_autokey'?'Begin with the supplied starting patterns, then use earlier decoded runes to keep decoding.':op.id==='ciphertext_autokey'?'Begin with the supplied starting patterns, then use earlier input runes, rather than decoding output, to keep decoding.':['finite_key','finite_key_bank'].includes(op.id)?'Use each supplied sequence of rune-number changes without repeating it.':'Repeat the supplied patterns of changes to rune numbers.');
     if(change)parts.push(change);
+    if(op.id==='finite_key_bank'){const offsets=values('offset');if(offsets.length===1&&Number.isInteger(offsets[0]))parts.push('Start '+offsets[0]+' places into the archived stream.');else if(offsets.length&&offsets.every(Number.isInteger))parts.push('Try every supplied starting place in the archived stream.');}
     if(op.id==='interrupted_repeating_key')parts.push(Array.isArray(op.interrupts)&&op.interrupts.length===1&&op.interrupts[0]===0?'Leave F runes unchanged and pause the pattern there.':'Leave the supplied pause runes unchanged without advancing the pattern.');
    }else if(op.id==='cumulative_difference')parts.push('Subtract the preceding input rune’s number from the current one, leaving the first rune after a restart unchanged.');
    else if(op.id==='reverse_runes'||op.id==='reverse_row_runes'){
     const unit=op.unit;if(!['word','line','page'].includes(unit))return null;parts.push('Read the runes backwards within each '+unit+'.');
    }else if(op.id==='affine')parts.push(values('a').length===1&&values('a')[0]===28&&values('b').length===1&&values('b')[0]===28?'Reverse the rune alphabet: first becomes last, second becomes second-last, and so on.':'Multiply each rune’s alphabet number and add the supplied offset, wrapping within the 29-rune alphabet.');
    else return null;
-   if(['repeating_key','vigenere','plaintext_autokey','ciphertext_autokey','finite_key','interrupted_repeating_key','cumulative_difference'].includes(op.id)){
+   if(['repeating_key','vigenere','plaintext_autokey','ciphertext_autokey','finite_key','finite_key_bank','interrupted_repeating_key','cumulative_difference'].includes(op.id)){
     const resets=values('reset');if(resets.length===1&&resets[0]==='word')parts.push('Restart at every non-rune, including punctuation, slashes and line breaks.');
     else if(resets.length===1&&resets[0]==='line')parts.push('Restart at each stored line break.');
     else if(resets.length===1&&resets[0]==='page')parts.push('Restart on each page.');

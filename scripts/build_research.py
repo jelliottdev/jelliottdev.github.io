@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STAGES = (
     ('build_local_run_inputs.py',),
+    ('build_finite_sequence_banks.py',),
     ('build_published_count_evidence.py',),
     ('build_published_evidence_history.py',),
     ('build_experiments.py',),

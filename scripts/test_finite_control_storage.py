@@ -1,4 +1,4 @@
-"""Storage-only sharing: seven real recipes, malformed forms and JS parity."""
+"""Storage-only sharing: eleven real recipes, malformed forms and JS parity."""
 import copy
 import hashlib
 import json
@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def recipes():
     values = []
-    for identifier in ('dukotah-fixed-numeric-keys', 'lp2-known-vigenere-keys', 'lp2-panel-prime-openings'):
+    for identifier in ('dukotah-fixed-numeric-keys', 'lp2-known-vigenere-keys', 'lp2-panel-prime-openings', 'lp2-prime-minus-one-openings', 'lp2-prime-openings', 'lp2-fibonacci-openings', 'lp2-totient-openings'):
         record = json.loads((ROOT / 'experiments/records' / identifier / 'record.json').read_bytes())
         values.extend(recipe for recipe in record['browser_followups'] if recipe.get('kind') == 'finite-settings')
     return values
@@ -29,13 +29,13 @@ class FiniteControlStorage(unittest.TestCase):
         cls.source_bytes = {
             ROOT / 'experiments/records' / identifier / 'record.json':
                 (ROOT / 'experiments/records' / identifier / 'record.json').read_bytes()
-            for identifier in ('dukotah-fixed-numeric-keys', 'lp2-known-vigenere-keys', 'lp2-panel-prime-openings')}
+            for identifier in ('dukotah-fixed-numeric-keys', 'lp2-known-vigenere-keys', 'lp2-panel-prime-openings', 'lp2-prime-minus-one-openings', 'lp2-prime-openings', 'lp2-fibonacci-openings', 'lp2-totient-openings')}
         cls.recipes = recipes()
         cls.legacy = codec.expand(cls.recipes[0]['control'])
         cls.shared = codec.compact(cls.legacy)
 
-    def test_seven_actual_recipes_roundtrip_and_reduction(self):
-        self.assertEqual(len(self.recipes), 7)
+    def test_eleven_actual_recipes_roundtrip_and_reduction(self):
+        self.assertEqual(len(self.recipes), 11)
         for recipe in self.recipes:
             with self.subTest(recipe=recipe['id']):
                 source_before = digest(recipe['control'])

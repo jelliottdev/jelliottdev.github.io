@@ -3,9 +3,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),S=require('../finite-control-storage.js'),E=require('../local-experiment.js');
 const copy=structuredClone,bytes=v=>Buffer.byteLength(JSON.stringify(v)),stable=E.stable,records=[];
 for(const folder of fs.readdirSync('experiments/records')){const path='experiments/records/'+folder+'/record.json';if(fs.existsSync(path)){const record=JSON.parse(fs.readFileSync(path,'utf8'));for(const recipe of record.browser_followups||[])if(recipe.kind==='finite-settings')records.push({recordId:record.id,id:recipe.id,control:S.expand(recipe.control)});}}
-assert.equal(records.length,7,'Exercise all seven maintained finite recipes');const sample=records.find(r=>r.control.members.length===54).control;
+assert.equal(records.length,11,'Exercise all eleven maintained finite recipes');const sample=records.find(r=>r.control.members.length===54).control;
 let groups=0;function test(name,fn){fn();groups++;console.log('PASS '+name);}
-test('all seven real finite control sets round trip exact stable JSON without execution or mutation',()=>{
+test('all eleven real finite control sets round trip exact stable JSON without execution or mutation',()=>{
  const run=E.run;E.run=()=>assert.fail('Storage codec must never execute a control');try{for(const entry of records){const before=stable(entry.control),out=S.compact(entry.control);assert.equal(out.kind,'finite-program-controls-shared-v1');assert.equal(stable(S.expand(out)),before);assert.equal(stable(entry.control),before);assert.equal(stable(S.compact(out)),stable(out));assert.deepEqual(Object.keys(out).sort(),['alphabet','criterion','kind','members']);assert(out.members.every(m=>!Object.hasOwn(m.control.task,'alphabet')&&!Object.hasOwn(m.control.task,'criterion')));}}finally{E.run=run;}
 });
 test('representative large families shrink at least35 percent and remain fully detached',()=>{

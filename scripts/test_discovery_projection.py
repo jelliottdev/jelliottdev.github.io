@@ -116,7 +116,7 @@ class DiscoveryProjectionTests(unittest.TestCase):
                 self.assertEqual(item['protocol_sha256'], hashlib.sha256(protocol).hexdigest())
                 for forbidden in ('card', 'inputs', 'control', 'task', 'members', 'alphabet', 'steps'):
                     self.assertNotIn(forbidden, item)
-        self.assertEqual(count, 26)
+        self.assertEqual(count, 30)
 
     def test_projection_size_remains_below_half_of_omnibus_even_with_all_recipe_hints(self):
         raw = (json.dumps({'schema': 'liberpedia-experiment-discovery-v1', 'records': self.projected},

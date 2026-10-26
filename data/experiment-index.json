@@ -22618,6 +22618,19 @@
       "next_steps": "Do not extend the starting-offset range under unchanged rules: all 14 phases are covered. Declare different seeds, interruptions, boundary rules or plaintext criteria separately.",
       "reader_finding": "Fibonacci shifts produced 1,540 distinct page outputs; none began with any of nine known 12-rune openings. Starting later repeats the same 14-term cycle under these rules.",
       "reader_limit": "This test uses the standard Fibonacci seeds 0 and 1, with uninterrupted shifts restarting on each page. Other seeds, skips or plaintext beginnings remain untested.",
+      "research_questions": [
+        {
+          "id": "fibonacci-stream-reset-language",
+          "state": "open",
+          "note": "A new language comparison with three restart rules. Earlier nine-opening findings are unchanged; no output or reading is asserted.",
+          "records": [],
+          "followup": "fibonacci-stream-reset-language",
+          "protocol": {
+            "id": "finite-settings-output",
+            "version": 1
+          }
+        }
+      ],
       "variant": {
         "label": "Fibonacci; all other search settings fixed",
         "changes": [
@@ -22631,11 +22644,24 @@
       },
       "record_source": {
         "path": "reference/experiments/lp2-fibonacci-openings.json",
-        "sha256": "6c3486bc2028e1e7ac9c67bc3ca979ca68b3bf0fe84325dfa9b09d9db122742d"
+        "sha256": "b53c2e74b21557e30901bac6843b7428293a881e9a8dab11a7e500a81c61e107"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
-        "items": []
+        "items": [
+          {
+            "id": "fibonacci-stream-reset-language",
+            "title": "Try the Fibonacci stream with three restart rules",
+            "question": "Do outputs from the fixed Fibonacci stream resemble the maintained language samples across 29 starting places, both arithmetic directions and page, line or word restarts?",
+            "scope_change": "Keep the original 29 starting places, addition and subtraction, and LP2-00-55. Include page restarts and add line and word restarts. Compare language samples instead of the nine fixed historical openings. Fibonacci residues repeat after 14 terms; the 29 named starting places include duplicates, not independent trials.",
+            "limitation": "Use the stored 305-term sequence once per restart, without wrapping, skipped runes or carry between pages. These new comparisons have no results yet. Fibonacci residues repeat after 14 terms; the 29 named starting places include duplicates, not independent trials.",
+            "motivation": "Change successive rune numbers using Fibonacci numbers, starting with zero and one and adding the previous two numbers. Try 29 starting places, adding or subtracting, and restart at each page, line or word. The earlier test checked nine fixed openings; this new comparison asks about language similarity, not a proved reading.",
+            "kind": "finite-settings",
+            "evaluation_kind": "language-score",
+            "available": true,
+            "protocol_sha256": "92400efa47477628fbec14a48e7fa1f2cfaeca3a0555cae6c7c44c84ecab4b53"
+          }
+        ]
       }
     },
     {
@@ -24446,17 +24472,43 @@
       "status": "published",
       "source_finding": "Zero exact opening matches. Full rerun reproduced every saved candidate; an independent trial-division and inverse-arithmetic check audited all 3190 candidates and the 56-rune LP2-56 control.",
       "next_steps": "Declare alternative schedules or boundary rules as separate variants. Specify interruption bounds and plaintext criteria before inspecting results.",
+      "research_questions": [
+        {
+          "id": "prime-minus-one-stream-reset-language",
+          "state": "open",
+          "note": "A new language comparison with three restart rules. Earlier nine-opening findings are unchanged; no output or reading is asserted.",
+          "records": [],
+          "followup": "prime-minus-one-stream-reset-language",
+          "protocol": {
+            "id": "finite-settings-output",
+            "version": 1
+          }
+        }
+      ],
       "variant": {
         "label": "Baseline: prime-minus-one, offsets 0–28, no interruptions",
         "changes": []
       },
       "record_source": {
         "path": "reference/experiments/lp2-prime-minus-one-openings.json",
-        "sha256": "bbf0ede2e89352bf9ff1649f3614174038278c3b99cddc2528deb3dd2a7cbcc4"
+        "sha256": "4700260882f00b33e2e40a8b3fa2f64ad917acf00f55d9454e976266846ec643"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
-        "items": []
+        "items": [
+          {
+            "id": "prime-minus-one-stream-reset-language",
+            "title": "Try the prime-minus-one stream with three restart rules",
+            "question": "Do outputs from the fixed prime-minus-one stream resemble the maintained language samples across 29 starting places, both arithmetic directions and page, line or word restarts?",
+            "scope_change": "Keep the original 29 starting places, addition and subtraction, and LP2-00-55. Include page restarts and add line and word restarts. Compare language samples instead of the nine fixed historical openings.",
+            "limitation": "Use the stored 305-term sequence once per restart, without wrapping, skipped runes or carry between pages. These new comparisons have no results yet.",
+            "motivation": "Change successive rune numbers using prime numbers with one subtracted from each. Try 29 starting places, adding or subtracting, and restart at each page, line or word. The earlier test checked nine fixed openings; this new comparison asks about language similarity, not a proved reading.",
+            "kind": "finite-settings",
+            "evaluation_kind": "language-score",
+            "available": true,
+            "protocol_sha256": "541264ccc05b5fe5b8e2817f2ff1a32699f746a2fd1e00a6d8f4f502205b241c"
+          }
+        ]
       }
     },
     {
@@ -24635,6 +24687,19 @@
       "next_steps": "Use the baseline relation to avoid duplicate work when trying all constant shifts. Other schedules, interruption rules or plaintext criteria need separately declared variants.",
       "reader_finding": "None of the 3,190 outputs from adding or subtracting successive primes began with any of nine known 12-rune openings.",
       "reader_limit": "Only the first 29 starting points were checked, without skips. Ordinary-prime and prime-minus-one shifts differ by a constant alphabet shift, so these are closely related tests.",
+      "research_questions": [
+        {
+          "id": "prime-stream-reset-language",
+          "state": "open",
+          "note": "A new language comparison with three restart rules. Earlier nine-opening findings are unchanged; no output or reading is asserted.",
+          "records": [],
+          "followup": "prime-stream-reset-language",
+          "protocol": {
+            "id": "finite-settings-output",
+            "version": 1
+          }
+        }
+      ],
       "variant": {
         "label": "Ordinary primes; all other settings fixed",
         "changes": [
@@ -24648,11 +24713,24 @@
       },
       "record_source": {
         "path": "reference/experiments/lp2-prime-openings.json",
-        "sha256": "ec3661a912cdf8c4345dc0765d6e33ca58011146ad76aab827ba57206f354394"
+        "sha256": "0461bdd4a043ab7928e868c18d43a6baaec8ab90d0069bb09205693c8ab1cb2d"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
-        "items": []
+        "items": [
+          {
+            "id": "prime-stream-reset-language",
+            "title": "Try the prime-number stream with three restart rules",
+            "question": "Do outputs from the fixed prime-number stream resemble the maintained language samples across 29 starting places, both arithmetic directions and page, line or word restarts?",
+            "scope_change": "Keep the original 29 starting places, addition and subtraction, and LP2-00-55. Include page restarts and add line and word restarts. Compare language samples instead of the nine fixed historical openings.",
+            "limitation": "Use the stored 305-term sequence once per restart, without wrapping, skipped runes or carry between pages. These new comparisons have no results yet.",
+            "motivation": "Change successive rune numbers using successive prime numbers. Try 29 starting places, adding or subtracting, and restart at each page, line or word. The earlier test checked nine fixed openings; this new comparison asks about language similarity, not a proved reading.",
+            "kind": "finite-settings",
+            "evaluation_kind": "language-score",
+            "available": true,
+            "protocol_sha256": "956705cb0b29a65343252ffabf2d8b03a8b7c1adcba2c6f4a03ec8e9328ef085"
+          }
+        ]
       }
     },
     {
@@ -26591,6 +26669,19 @@
       "next_steps": "Specify any different inputs to phi explicitly. Totients of consecutive primes repeat the baseline; later offsets, interruption rules and broader plaintext criteria require separately declared tests.",
       "reader_finding": "Adding or subtracting totients of consecutive integers produced 3,190 outputs; none began with any of nine known 12-rune openings.",
       "reader_limit": "Only the first 29 starting points were checked, with the sequence restarting on each page. Totients of rune values or sums, or different plaintext beginnings, require a different test.",
+      "research_questions": [
+        {
+          "id": "totient-stream-reset-language",
+          "state": "open",
+          "note": "A new language comparison with three restart rules. Earlier nine-opening findings are unchanged; no output or reading is asserted.",
+          "records": [],
+          "followup": "totient-stream-reset-language",
+          "protocol": {
+            "id": "finite-settings-output",
+            "version": 1
+          }
+        }
+      ],
       "variant": {
         "label": "Consecutive-integer totients; all other search settings fixed",
         "changes": [
@@ -26604,11 +26695,24 @@
       },
       "record_source": {
         "path": "reference/experiments/lp2-totient-openings.json",
-        "sha256": "7dac0b7f0c57c3f460d3f47f83cecbc2e60ba2f30354628b52157ab8a60ff812"
+        "sha256": "3139d9a7fc727017ea4796a1620a9235f04687d8826e637fc172d4b13c6ad354"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
-        "items": []
+        "items": [
+          {
+            "id": "totient-stream-reset-language",
+            "title": "Try the totient stream with three restart rules",
+            "question": "Do outputs from the fixed totient stream resemble the maintained language samples across 29 starting places, both arithmetic directions and page, line or word restarts?",
+            "scope_change": "Keep the original 29 starting places, addition and subtraction, and LP2-00-55. Include page restarts and add line and word restarts. Compare language samples instead of the nine fixed historical openings.",
+            "limitation": "Use the stored 305-term sequence once per restart, without wrapping, skipped runes or carry between pages. These new comparisons have no results yet.",
+            "motivation": "Change successive rune numbers using totients: count the positive integers up to each number that have no common factor with it greater than one. Try 29 starting places, adding or subtracting, and restart at each page, line or word. The earlier test checked nine fixed openings; this new comparison asks about language similarity, not a proved reading.",
+            "kind": "finite-settings",
+            "evaluation_kind": "language-score",
+            "available": true,
+            "protocol_sha256": "19c2d0e8359ece372e789a2437b271c67975d357f73205b006deb93130073e12"
+          }
+        ]
       }
     },
     {

@@ -49,7 +49,7 @@
   if(rules.evaluation.value!=='measurement'&&!Evaluators.identify(rules.evaluation.value)&&(rules.evaluation.value.kind!=='exact-prefix'||!exact(rules.evaluation.value,['kind','values'])))throw Error('The published transformation needs an explicit evaluation.');
   const modes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};let reversed=false,cumulative=false,resetUsed=false;
   const steps=draft.method.value.operations.map(op=>{
-   const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:op.id==='interrupted_repeating_key'?['key','direction','reset','interrupts']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];
+   const allowed=['id','label','declaredFamilyId',...(op.id==='affine'?['a','b']:op.id==='reverse_runes'?['unit']:op.id==='cumulative_difference'?['reset']:op.id==='interrupted_repeating_key'?['key','direction','reset','interrupts']:op.id==='finite_key_bank'?['bankId','bankSha256','offset','direction','reset']:(op.id==='finite_key'||Object.hasOwn(modes,op.id))?['key','direction','reset']:[])];
    if(Object.keys(op).some(k=>!allowed.includes(k)))throw Error('The published operation has unsupported parameters.');
    if(op.id==='reverse_row_runes'||op.id==='reverse_runes'){
     reversed=true;let unit=op.id==='reverse_row_runes'?(known('boundaryMode')&&rules.boundaryMode.value==='within_words'?'word':'line'):op.unit;
@@ -57,10 +57,11 @@
     const labels=op.id==='reverse_row_runes'?['Reverse rune order within rows','Reverse rune order within each row']:['Reverse rune order within each '+unit];if(op.label!==undefined&&!labels.includes(op.label))throw Error('The published reversal wording is unsupported.');return {op:'reverse',unit};
    }
    if(op.id==='affine'){if(op.label!==undefined&&!['Affine','Affine substitution'].includes(op.label))throw Error('The published affine wording is unsupported.');return {op:'affine',a:op.a,b:op.b};}
-   if(op.id==='cumulative_difference'||op.id==='finite_key'||op.id==='interrupted_repeating_key'||Object.hasOwn(modes,op.id)){
+   if(op.id==='cumulative_difference'||op.id==='finite_key'||op.id==='finite_key_bank'||op.id==='interrupted_repeating_key'||Object.hasOwn(modes,op.id)){
     resetUsed=true;if(rules.reset.status==='not_applicable'||known('reset')&&rules.reset.value!==op.reset)throw Error('The published reset conflicts.');
     if(op.id==='cumulative_difference'){cumulative=true;if(op.label!==undefined&&op.label!=='Cumulative difference'||rules.initialState.status==='not_applicable'||known('initialState')&&rules.initialState.value!==0)throw Error('The published initial state conflicts.');return {op:'cumulative-difference',reset:op.reset};}
     if(op.id==='interrupted_repeating_key'){if(op.label!=='Interrupted repeating key')throw Error('The published interrupted-key wording is unsupported.');return {op:'interrupted-keyed-shift',key:op.key,direction:op.direction,reset:op.reset,interrupts:op.interrupts};}
+    if(op.id==='finite_key_bank'){const banks=node?require('./finite-sequence-banks.js'):root.FiniteSequenceBanks;if(!banks?.resolve||op.label!==undefined&&op.label!=='Pinned finite key stream')throw Error('The pinned number stream is unavailable.');return {op:'finite-shift',key:banks.resolve(op.bankId,op.bankSha256,op.offset),direction:op.direction,reset:op.reset};}
     if(op.id==='finite_key'){if(op.label!==undefined&&op.label!=='Finite key stream')throw Error('The published finite stream wording is unsupported.');return {op:'finite-shift',key:op.key,direction:op.direction,reset:op.reset};}
     const labels={vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey']};if(op.label!==undefined&&!labels[op.id].includes(op.label))throw Error('The published keyed wording is unsupported.');return {op:'keyed-shift',key:op.key,mode:modes[op.id],direction:op.direction,reset:op.reset};
    }

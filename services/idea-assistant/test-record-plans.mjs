@@ -89,7 +89,15 @@ await test('actual authored recipe compiles and verifies its control using pinne
 });
 await test('every published authored declaration loads exact pins, task identity and matching control without target execution',async()=>{
  const recordsRoot=new URL('../../experiments/records/',import.meta.url);let declarations=0,finiteDeclarations=0;
- const finiteFamilies=new Map([['lp2-known-vigenere-keys',{programs:42,pages:56,ids:['known-keys-language-comparison','known-keys-word-reset-language','known-keys-line-reset-language']}],['lp2-panel-prime-openings',{programs:32,pages:56,ids:['panel-primes-language-comparison','panel-primes-word-reset-language','panel-primes-line-reset-language']}],['dukotah-fixed-numeric-keys',{programs:54,pages:55,ids:['short-numeric-keys-reset-language']}]]),seenFinite=new Set();
+ const finiteFamilies=new Map([
+  ['lp2-known-vigenere-keys',{programs:42,pages:56,ids:['known-keys-language-comparison','known-keys-word-reset-language','known-keys-line-reset-language']}],
+  ['lp2-panel-prime-openings',{programs:32,pages:56,ids:['panel-primes-language-comparison','panel-primes-word-reset-language','panel-primes-line-reset-language']}],
+  ['dukotah-fixed-numeric-keys',{programs:54,pages:55,ids:['short-numeric-keys-reset-language']}],
+  ['lp2-prime-minus-one-openings',{programs:174,pages:56,ids:['prime-minus-one-stream-reset-language']}],
+  ['lp2-prime-openings',{programs:174,pages:56,ids:['prime-stream-reset-language']}],
+  ['lp2-fibonacci-openings',{programs:174,pages:56,ids:['fibonacci-stream-reset-language']}],
+  ['lp2-totient-openings',{programs:174,pages:56,ids:['totient-stream-reset-language']}]
+ ]),seenFinite=new Set();
  for(const entry of readdirSync(recordsRoot,{withFileTypes:true}).filter(item=>item.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))){
   let bytes;try{bytes=readFileSync(new URL(entry.name+'/record.json',recordsRoot));}catch(error){if(error.code==='ENOENT')continue;throw error;}const record=JSON.parse(bytes.toString('utf8'));if(record.status!=='published'||!record.browser_followups?.length)continue;
   for(const recipe of record.browser_followups){let requests=0;
@@ -106,7 +114,7 @@ await test('every published authored declaration loads exact pins, task identity
    for(let i=0;i<plan.task.pages.length;i++)assert.equal(await sha(plan.task.pages[i].text),recipe.inputs.pages[i].text_sha256);declarations++;
   }
  }
- assert(declarations>=15,'The complete current authored catalog is exercised, including fixed and finite source modes');assert.equal(finiteDeclarations,7,'All exact known-key, panel and short numeric source declarations are ready');assert.deepEqual([...seenFinite].sort(),[...finiteFamilies].flatMap(([id,family])=>family.ids.map(recipe=>id+'/'+recipe)).sort());
+ assert(declarations>=15,'The complete current authored catalog is exercised, including fixed and finite source modes');assert.equal(finiteDeclarations,11,'All declared finite source families are ready, including all numerical bank offsets and restart rules');assert.deepEqual([...seenFinite].sort(),[...finiteFamilies].flatMap(([id,family])=>family.ids.map(recipe=>id+'/'+recipe)).sort());
 });
 await test('large scopes require exact bounded aggregate, reject corruption and never fall back to page fetches',async()=>{
  async function large(){const f=await fixture(),text=f.files.get('/data/pages/lp2-15.json').raw,ids=Array.from({length:41},(_,i)=>'lp2-'+String(i).padStart(2,'0'));f.card.scope.value.pages=ids;f.recipe.inputs.pages=await Promise.all(ids.map(async id=>({id,text_sha256:await sha(text)})));const pages=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))].map(id=>({id,raw:text,reviewed_text:null}));f.aggregate={schema:'liberpedia-local-inputs-v1',alphabet,pages};f.files.set('/data/local-run-inputs.json',f.aggregate);return f;}

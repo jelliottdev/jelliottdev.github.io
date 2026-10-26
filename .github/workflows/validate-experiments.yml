@@ -159,6 +159,11 @@ jobs:
         if: steps.scope.outputs.science == 'true'
         run: |
           python scripts/test_finite_control_storage.py
+          python scripts/test_finite_sequence_banks.py
+          python scripts/build_finite_sequence_banks.py
+          python scripts/test_finite_key_banks.py
+          python scripts/test_numeric_bank_followups.py
+          python scripts/numeric_bank_followups.py --check
           python scripts/test_browser_boundary_variations.py
           python scripts/test_short_numeric_followups.py
           python scripts/short_numeric_followups.py --check

@@ -16,6 +16,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def source(identifier='repeating_key'):
     operation = {'id': identifier, 'key': [4, 2, 28], 'direction': 'subtract', 'reset': 'page'}
+    if identifier == 'finite_key_bank':
+        import finite_sequence_banks as banks
+        manifest = json.loads((ROOT / 'data/finite-sequence-banks.json').read_bytes())
+        bank = manifest['banks'][0]
+        operation = {'id': identifier, 'bankId': bank['id'], 'bankSha256': bank['sha256'],
+                     'offset': 0, 'direction': 'subtract', 'reset': 'page'}
     if identifier == 'interrupted_repeating_key':
         operation.update(label='Interrupted repeating key', interrupts=[0, 3])
     value = card([operation])

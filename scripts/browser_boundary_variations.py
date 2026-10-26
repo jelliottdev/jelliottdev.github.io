@@ -16,7 +16,7 @@ import browser_followups as fixed
 import finite_followup_cards as finite
 
 OPERATIONS = frozenset(('repeating_key', 'vigenere', 'plaintext_autokey',
-                        'ciphertext_autokey', 'interrupted_repeating_key', 'finite_key'))
+                        'ciphertext_autokey', 'interrupted_repeating_key', 'finite_key', 'finite_key_bank'))
 RESETS = frozenset(('page', 'line', 'word'))
 
 

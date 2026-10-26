@@ -4,7 +4,7 @@
  const node=typeof module==='object'&&module.exports,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare;
  const LIMITS=Object.freeze({programs:1024,cases:4096,pages:75,operations:8,parameters:56,expandedBytes:8*1024*1024});
  const FACTORED_LIMITS=Object.freeze({...LIMITS,cases:76800});
- const NAMES=new Set(['a','b','reset','unit','key','direction','interrupts']);
+ const NAMES=new Set(['a','b','reset','unit','key','direction','interrupts','offset']);
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===keys.length&&keys.every(key=>Object.hasOwn(v,key));
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
  const stable=v=>C.serialize(v),clone=v=>JSON.parse(stable(v));
@@ -30,6 +30,7 @@
  }
  function literal(name,value){
   if(name==='a'||name==='b'){if(!Number.isInteger(value)||value<0||value>28)throw Error('Affine alternatives must be indices from 0 to 28.');}
+  else if(name==='offset'){if(!Number.isInteger(value)||value<0||value>28)throw Error('Sequence offsets must be integers from 0 to 28.');}
   else if(name==='reset'||name==='unit'){if(!['page','line','word'].includes(value))throw Error('Boundary alternatives must be page, line or word.');}
   else if(name==='direction'){if(!['subtract','add'].includes(value))throw Error('Arithmetic alternatives must be add or subtract.');}
   else if(name==='key'||name==='interrupts'){

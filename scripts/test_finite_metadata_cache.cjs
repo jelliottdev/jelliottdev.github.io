@@ -20,8 +20,8 @@ test('cache hits still inspect every descriptor and never invoke a newly install
 test('inherited serialization hooks cannot be invoked by the metadata cache',()=>{
  const f=fixture(),r=f.copy();let calls=0;Object.setPrototypeOf(r,{toJSON(){calls++;throw Error('No hook');}});assert(f.model.finiteRecipe(r));assert(f.model.finiteRecipe(r));assert.equal(calls,0);assert.equal(f.counts().members,84,'Non-plain prototypes bypass only the cache');
 });
-test('the bounded eight-entry LRU evicts old metadata without changing validation',()=>{
- const f=fixture(),r=f.copy();assert(f.model.finiteRecipe(r));for(let i=0;i<8;i++){const next=f.copy();next.id='distinct-cache-'+i;assert(f.model.finiteRecipe(next));}assert.equal(f.counts().members,9*42);assert(f.model.finiteRecipe(r));assert.equal(f.counts().members,10*42,'Evicted metadata must pass member validation again');
+test('the bounded sixty-four-entry LRU evicts old metadata without changing validation',()=>{
+ const f=fixture(),r=f.copy();assert(f.model.finiteRecipe(r));for(let i=0;i<64;i++){const next=f.copy();next.id='distinct-cache-'+i;assert(f.model.finiteRecipe(next));}assert.equal(f.counts().members,65*42);assert(f.model.finiteRecipe(r));assert.equal(f.counts().members,66*42,'Evicted metadata must pass member validation again');
 });
 test('missing settings tools cannot reuse previously validated metadata',()=>{
  const f=fixture(),r=f.copy();assert(f.model.finiteRecipe(r));const module=require.cache[require.resolve('../finite-settings.js')],prior=module.exports;try{module.exports={factored:null};assert.equal(f.model.finiteRecipe(r),null);module.exports={factored:{inspect(){}}};assert.equal(f.model.finiteRecipe(r),null);}finally{module.exports=prior;}assert.equal(f.model.finiteRecipe(r).caseCount,2352);assert.equal(f.counts().members,42);

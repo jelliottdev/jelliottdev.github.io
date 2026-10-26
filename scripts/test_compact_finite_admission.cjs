@@ -15,12 +15,12 @@ for(const dir of fs.readdirSync('experiments/records')){const path='experiments/
   }
   same(source.record,JSON.parse(source.bytes));
  }
- assert.equal(recipes,7);console.log('PASS all7 compact source recipes agree across actual server/browser admission, complete witnesses and immutable saved-member readers');
+ assert.equal(recipes,11);console.log('PASS all11 compact source recipes agree across actual server/browser admission, complete witnesses and immutable saved-member readers');
  }finally{E.run=run;}
  const source=records[0].record,record=structuredClone(source),recipe=record.browser_followups.find(r=>r.kind==='finite-settings');recipe.control=S.compact(S.expand(recipe.control));const ref={recordId:record.id,followupId:recipe.id};
  for(const mutate of [r=>r.control.kind='finite-program-controls-shared-v2',r=>r.control.members[0].control.task.alphabet=r.control.alphabet,r=>r.control.members[0].control.task.criterion=r.control.criterion]){
   const bad=structuredClone(record),r=bad.browser_followups.find(r=>r.id===recipe.id);mutate(r);const raw=encode(bad),origin={...ref,recordSha256:hash(raw),protocolSha256:hash(r)},original=E.run;E.run=()=>assert.fail('Malformed storage must reject before any execution');try{await assert.rejects(()=>compileFiniteRecordPlan({...ref,raw:{bytes:raw},bundle},{crypto:webcrypto}));await assert.rejects(()=>A.fromSource(origin,{sourceBytes:raw,bundle,crypto:webcrypto}));}finally{E.run=original;}
  }
  let hooks=0;const origin={...ref,recordSha256:'0'.repeat(64),protocolSha256:'0'.repeat(64)};Object.defineProperty(origin,'recordId',{enumerable:true,get(){hooks++;return ref.recordId;}});await assert.rejects(()=>A.fromSource(origin,{sourceBytes:encode(record),bundle,crypto:webcrypto}));assert.equal(hooks,0);
- console.log('PASS conflicting compact task fields, unknown compact versions and accessor-backed source identity fail closed without execution');console.log(JSON.stringify({recipes:7,completeSyntheticWitnessExecutions:witnesses,targetExecutions:0,sourceWrites:0}));
+ console.log('PASS conflicting compact task fields, unknown compact versions and accessor-backed source identity fail closed without execution');console.log(JSON.stringify({recipes,completeSyntheticWitnessExecutions:witnesses,targetExecutions:0,sourceWrites:0}));
 })().catch(error=>{console.error(error);process.exitCode=1;});

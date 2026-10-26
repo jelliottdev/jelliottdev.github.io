@@ -13,7 +13,7 @@ import browser_followups as fixed
 
 LIMITS = {'programs': 1024, 'cases': 76800, 'pages': 75, 'operations': 8,
           'parameters': 56, 'expandedBytes': 8 * 1024 * 1024}
-NAMES = {'a', 'b', 'reset', 'unit', 'key', 'direction', 'interrupts'}
+NAMES = {'a', 'b', 'reset', 'unit', 'key', 'direction', 'interrupts', 'offset'}
 UNSAFE = {'__proto__', 'prototype', 'constructor'}
 # These exact aliases are canonicalized by ClaimSpecification.normalizeOutcome.
 ALIASES = {
@@ -99,6 +99,8 @@ def canonical(card):
 def literal(name, value):
     if name in ('a', 'b'):
         require(type(value) is int and 0 <= value <= 28, 'affine index must be 0..28')
+    elif name == 'offset':
+        require(type(value) is int and 0 <= value <= 28, 'sequence offset must be 0..28')
     elif name in ('reset', 'unit'):
         require(value in ('page', 'line', 'word'), 'boundary must be page, line or word')
     elif name == 'direction':
