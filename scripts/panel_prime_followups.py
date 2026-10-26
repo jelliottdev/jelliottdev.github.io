@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import authored_finite_followups as authored
+import finite_control_storage as storage
 import browser_followups as fixed
 import browser_boundary_variations as boundary
 from research_questions import validate_research_questions
@@ -101,6 +102,12 @@ def questions():
                 ('panel-primes-line-reset-language', 'Keep the same spiral, starting places, directions and pages. Restart only at written line breaks instead of each page. This bounded extension has no asserted result.')]]
 
 
+
+def semantic_recipe(recipe):
+    value = copy.deepcopy(recipe)
+    value['control'] = storage.expand(value['control'])
+    return value
+
 def build(root=ROOT):
     """Return a proposed record; never write the published source."""
     root = Path(root)
@@ -108,7 +115,7 @@ def build(root=ROOT):
     generated = recipes(root)
     installed = {recipe['id']: recipe for recipe in record.get('browser_followups', [])}
     for recipe in generated[:2]:
-        fixed.require(recipe['id'] not in installed or installed[recipe['id']] == recipe,
+        fixed.require(recipe['id'] not in installed or semantic_recipe(installed[recipe['id']]) == semantic_recipe(recipe),
                       'existing panel recipe changed: ' + recipe['id'])
     identifiers = {recipe['id'] for recipe in generated}
     result = copy.deepcopy(record)

@@ -8,7 +8,7 @@ let groups=0;function test(name,f){f();groups++;console.log('PASS '+name)}
 test('real known-key record exposes all three complete finite source plans alongside its fixed comparison',()=>{
  const M=require('../record-question-model.js'),Q=require('../record-question-view.js');
  assert.equal(V.recipes(actualKnown).length,4);assert.equal(M.questions(actualKnown,actualKnown.browser_followups).length,3);
- for(const id of ['known-keys-language-comparison','known-keys-word-reset-language','known-keys-line-reset-language']){const recipe=V.recipes(actualKnown).find(r=>r.id===id);assert(recipe);const finite=M.finiteRecipe(recipe);assert.equal(finite.programCount,42);assert.equal(finite.caseCount,2352);assert.equal(recipe.control.members.length,42);assert(recipe.control.members.every(m=>m.control.task.criterion.values.length===184));assert(Q.render(actualKnown).includes('followup='+id));}
+ for(const id of ['known-keys-language-comparison','known-keys-word-reset-language','known-keys-line-reset-language']){const recipe=V.recipes(actualKnown).find(r=>r.id===id);assert(recipe);const finite=M.finiteRecipe(recipe);assert.equal(finite.programCount,42);assert.equal(finite.caseCount,2352);assert.equal(recipe.control.members.length,42);assert(require('../finite-control-storage.js').expand(recipe.control).members.every(m=>m.control.task.criterion.values.length===184));assert(Q.render(actualKnown).includes('followup='+id));}
 });
 
 test('every authored canonical recipe is available without changing its source',()=>{

@@ -21,14 +21,14 @@
  // Execution, admission, storage and the run-page UI are deliberately absent.
  const finiteReadinessStages=[
   [['finite-json.js','FiniteJSON','capture'],['local-experiment.js','LocalExperiment','checkIdentity'],['output-evaluators.js','OutputEvaluators','identify'],['claim-specification.js','ClaimSpecification','createDraft'],['local-control.js','LocalControl','compatible'],['local-input-bundle.js','LocalInputBundle','parse'],['followup-context.js','FollowupContext','valid'],['experiment-protocols.js','ExperimentProtocols','describe']],
-  [['claim-share.js','ClaimShare','cardData'],['fixed-plan-compiler.js','FixedPlanCompiler','compile'],['computation-evidence.js','ComputationEvidence','compare']],
+  [['finite-control-storage.js','FiniteControlStorage','expand'],['claim-share.js','ClaimShare','cardData'],['fixed-plan-compiler.js','FixedPlanCompiler','compile'],['computation-evidence.js','ComputationEvidence','compare']],
   [['finite-settings.js','FiniteSettings','expand'],['finite-question-policy.js','FiniteQuestionPolicy','describe'],['verified-prefix-evaluation.js','VerifiedPrefixEvaluation','evaluate'],['record-question-model.js','RecordQuestionModel','finiteRecipe'],['local-run-view.js','LocalRunView','render']],
   [['factored-language-reuse.js','FactoredLanguageReuse','prepare'],['finite-search-view.js','FiniteSearchView','render']],
   [['factored-finite-question.js','FactoredFiniteQuestion','createOutputAccumulator'],['finite-search-workspace-view.js','FiniteSearchWorkspaceView','workDescription']],
   [['factored-finite-search-compiler.js','FactoredFiniteSearchCompiler','compileLanguageComparison'],['factored-prefix-reuse.js','FactoredPrefixReuse','prepare']],
   [['factored-evidence-client.js','FactoredEvidenceClient','createScan'],['authored-finite-followup.js','AuthoredFiniteFollowup','validatePlan']]
  ];
- const version='20261025-guided-recovery',scripts=new Map();let pending=null,readinessPending=null;
+ const version='20261026-shared-controls',scripts=new Map();let pending=null,readinessPending=null;
  const ready=([,name,method])=>root[name]&&(method==='payload'?typeof root[name][method]==='object':typeof root[name][method]==='function');
  function ensure(definition){
   const [file,name]=definition;if(ready(definition))return Promise.resolve(root[name]);

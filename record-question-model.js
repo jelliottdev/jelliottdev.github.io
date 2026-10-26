@@ -7,28 +7,36 @@
  const exact=(value,keys)=>object(value)&&Reflect.ownKeys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
  const clone=value=>JSON.parse(JSON.stringify(value)),hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
  function pinnedScope(inputs,scope){return exact(inputs,['version','alphabet_sha256','pages'])&&['raw','reviewed'].includes(inputs.version)&&hex(inputs.alphabet_sha256)&&Array.isArray(inputs.pages)&&inputs.pages.length>0&&inputs.pages.length<=75&&!inputs.pages.some(page=>!exact(page,['id','text_sha256'])||!/^lp[12]-\d{2}$/.test(page.id)||!hex(page.text_sha256))&&new Set(inputs.pages.map(page=>page.id)).size===inputs.pages.length&&scope?.status==='specified'&&exact(scope.value,['pages'])&&JSON.stringify(scope.value.pages)===JSON.stringify(inputs.pages.map(page=>page.id));}
+ // Cache only bounded, plain, already validated discovery metadata. Every lookup
+ // still traverses descriptors so mutations and accessors cannot reuse a result.
+ const finiteMetadata=new Map(),CACHE_ENTRIES=8,CACHE_BYTES=16*1024*1024,CACHE_KEY_BYTES=2*1024*1024;let finiteMetadataBytes=0;
+ function metadataKey(recipe,cacheable){if(!cacheable)return null;const key=JSON.stringify(recipe);if(key.length>CACHE_KEY_BYTES)return null;const bytes=new TextEncoder().encode(key).byteLength;return bytes<=CACHE_KEY_BYTES?{key,bytes}:null;}
+ function rememberMetadata(identity,value){const result=Object.freeze(value);if(identity){while(finiteMetadata.size&&(finiteMetadata.size>=CACHE_ENTRIES||finiteMetadataBytes+identity.bytes>CACHE_BYTES)){const oldest=finiteMetadata.keys().next().value;finiteMetadataBytes-=finiteMetadata.get(oldest).bytes;finiteMetadata.delete(oldest);}finiteMetadata.set(identity.key,{value:result,bytes:identity.bytes});finiteMetadataBytes+=identity.bytes;}return result;}
  const settingsAPI=()=>typeof module==='object'&&module.exports?require('./finite-settings.js'):root.FiniteSettings;
  // Discovery metadata only: canonical settings and source-shaped controls permit
  // a review link. The maintained loader still verifies every executable member.
  function finiteRecipe(recipe){
   try{
-   let nodes=0,characters=0;const plain=(value,depth=0)=>{
+   let nodes=0,characters=0,cacheable=true;const plain=(value,depth=0)=>{
     if(depth>24||++nodes>1000000)return false;
     if(value===null||typeof value==='boolean')return true;
     if(typeof value==='number')return Number.isFinite(value);
     if(typeof value==='string'){characters+=value.length;return characters<=8*1024*1024;}
     if(!object(value)&&!Array.isArray(value))return false;
+    if(Object.getPrototypeOf(value)!==(Array.isArray(value)?Array.prototype:Object.prototype)&&Object.getPrototypeOf(value)!==null)cacheable=false;
     const keys=Reflect.ownKeys(value),descriptors=Object.getOwnPropertyDescriptors(value);
     if(Array.isArray(value)&&keys.length!==value.length+1)return false;
     return keys.every(key=>key==='length'&&Array.isArray(value)||typeof key==='string'&&!['__proto__','constructor','prototype'].includes(key)&&Object.hasOwn(descriptors[key],'value')&&descriptors[key].enumerable&&plain(descriptors[key].value,depth+1));
    };
    if(!plain(recipe)||recipe.kind!=='finite-settings')return null;
    const Settings=settingsAPI();if(!Settings?.factored?.inspect||!Settings.factored.member)return null;
+   const identity=metadataKey(recipe,cacheable),cached=identity&&finiteMetadata.get(identity.key);if(cached){finiteMetadata.delete(identity.key);finiteMetadata.set(identity.key,cached);return cached.value;}
    const card=recipe.card,inputs=recipe.inputs,criterion=card?.rules?.evaluation;
    if(card?.version!==1||card.unresolved.length||criterion?.status!=='specified'||!pinnedScope(inputs,card.scope)||card.rules.inputVersion?.status!=='specified'||card.rules.inputVersion.value!==inputs.version)return null;
    const c=criterion.value,language=exact(c,['kind','modelId','modelSha256'])&&c.kind==='language-score'&&c.modelId==='gp29-flores-trigram-v1'&&c.modelSha256==='8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4',prefix=exact(c,['kind','values'])&&c.kind==='exact-prefix'&&Array.isArray(c.values)&&c.values.length>0&&c.values.length<=256&&c.values.every(n=>Number.isInteger(n)&&n>=0&&n<=28);
    if(!prefix&&!language&&c!=='measurement')return null;
-   const declaration=Settings.factored.inspect(card),control=recipe.control;
+   const Storage=typeof module==='object'&&module.exports?require('./finite-control-storage.js'):root.FiniteControlStorage;
+   const declaration=Settings.factored.inspect(card),control=Storage?Storage.expand(recipe.control):recipe.control;
    if(!exact(control,['kind','members'])||control.kind!=='finite-program-controls'||!Array.isArray(control.members)||control.members.length!==declaration.programCount||control.members.length>1024)return null;
    const seen=new Set();
    for(const member of control.members){
@@ -38,7 +46,7 @@
     const runes=new Set(task.alphabet.map(entry=>entry?.rune));if(runes.size!==29||[...runes].some(rune=>typeof rune!=='string'||Array.from(rune).length!==1)||Array.from(task.pages[0].text).filter(rune=>runes.has(rune)).length!==task.criterion.values.length)return null;
     seen.add(identity);
    }
-   return {kind:'finite-settings',programCount:declaration.programCount,caseCount:declaration.caseCount};
+   return rememberMetadata(identity,{kind:'finite-settings',programCount:declaration.programCount,caseCount:declaration.caseCount});
   }catch{return null;}
  }
  function resolveProtocol(item,recipes){

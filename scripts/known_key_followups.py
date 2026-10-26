@@ -7,6 +7,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import authored_finite_followups as authored
+import finite_control_storage as storage
 import browser_followups as fixed
 import finite_followup_cards as finite
 import browser_boundary_variations as boundary
@@ -84,6 +85,12 @@ def historical_questions():
     return value
 
 
+
+def semantic_recipe(recipe):
+    value = copy.deepcopy(recipe)
+    value['control'] = storage.expand(value['control'])
+    return value
+
 def proposed():
     """Return a detached candidate without writing or requiring installation."""
     path = ROOT / 'experiments/records/lp2-known-vigenere-keys/record.json'
@@ -91,7 +98,7 @@ def proposed():
     generated = recipes()
     installed = {recipe['id']: recipe for recipe in record.get('browser_followups', [])}
     for recipe in generated[:2]:
-        if recipe['id'] in installed and installed[recipe['id']] != recipe:
+        if recipe['id'] in installed and semantic_recipe(installed[recipe['id']]) != semantic_recipe(recipe):
             raise ValueError('Existing known-key recipe changed: ' + recipe['id'])
     identifiers = {r['id'] for r in generated}
     expected = copy.deepcopy(record)

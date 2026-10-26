@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 import authored_finite_followups as authored
+import finite_control_storage as storage
 import browser_boundary_variations as boundary
 import browser_followups as fixed
 from research_questions import validate_research_questions
@@ -128,12 +129,18 @@ def questions():
              'records': [], 'followup': IDENTIFIER, 'protocol': {'id': 'finite-settings-output', 'version': 1}}]
 
 
+
+def semantic_recipe(recipe):
+    value = copy.deepcopy(recipe)
+    value['control'] = storage.expand(value['control'])
+    return value
+
 def proposed(root=ROOT):
     root = Path(root)
     result = copy.deepcopy(source(root)['record'])
     recipe = candidate(root)
     existing = next((r for r in result.get('browser_followups', []) if r['id'] == IDENTIFIER), None)
-    fixed.require(existing is None or existing == recipe, 'existing short-key recipe changed')
+    fixed.require(existing is None or semantic_recipe(existing) == semantic_recipe(recipe), 'existing short-key recipe changed')
     result['browser_followups'] = [r for r in result.get('browser_followups', []) if r['id'] != IDENTIFIER] + [recipe]
     result['research_questions'] = [q for q in result.get('research_questions', []) if q['id'] != IDENTIFIER] + questions()
     validate_research_questions(result['research_questions'], result, strict_authoring=True)

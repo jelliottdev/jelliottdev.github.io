@@ -27,12 +27,15 @@ def real_card():
 
 
 def fixture():
-    return authored.construct_followup(ROOT, card=real_card(), identifier='known-keys-language-fixture',
+    value = authored.construct_followup(ROOT, card=real_card(), identifier='known-keys-language-fixture',
         title='Compare two explicit known-key families with language samples',
         question='How do these complete fixed outputs compare with the maintained references?',
         scope_change='Use the declared phases and directions without changing any target transformation.',
         limitation='A language comparison is not a recovered reading.',
         motivation='Compare the exact declared outputs with fixed language references.')
+    # Keep the legacy admission fixture; compact admission has its own end-to-end coverage.
+    value['control'] = authored.storage.expand(value['control'])
+    return value
 
 
 class AuthoredFinite(unittest.TestCase):

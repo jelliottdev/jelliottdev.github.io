@@ -1,5 +1,6 @@
 import {applyMigrations} from './sqlite-test-migrations.mjs';
 import Control from '../../local-control.js';
+import Storage from '../../finite-control-storage.js';
 import PlanControls from '../../local-plan-controls.js';
 import {issue as issuePreparation} from './prepared-plans.mjs';
 /* Offline official-source fixtures and real SQLite. No AI or target execution. */
@@ -98,7 +99,7 @@ await test('every published authored declaration loads exact pins, task identity
    if(recipe.kind==='finite-settings'){
     assert.equal(plan.state,'finite-plan-ready');assert(!Object.hasOwn(plan,'task'));assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.snapshot,recipe);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.equal(plan.inputVersion,recipe.inputs.version);
     const family=finiteFamilies.get(record.id);assert(family,'Every finite source family is explicitly covered');assert(family.ids.includes(recipe.id));const declaration=record.id+'/'+recipe.id;assert(!seenFinite.has(declaration));seenFinite.add(declaration);
-    assert.equal(plan.domain.programs,family.programs);assert.equal(plan.domain.pages,family.pages);assert.equal(plan.domain.totalCases,family.programs*family.pages);assert.equal(recipe.control.members.length,family.programs);assert.equal(plan.domain.criterion.kind,'language-score');assert(recipe.control.members.every(member=>member.control.task.criterion.kind==='exact-prefix'&&member.control.task.criterion.values.length===184));
+    assert.equal(plan.domain.programs,family.programs);assert.equal(plan.domain.pages,family.pages);assert.equal(plan.domain.totalCases,family.programs*family.pages);assert.equal(recipe.control.members.length,family.programs);assert.equal(plan.domain.criterion.kind,'language-score');assert(Storage.expand(recipe.control).members.every(member=>member.control.task.criterion.kind==='exact-prefix'&&member.control.task.criterion.values.length===184));
     finiteDeclarations++;declarations++;continue;
    }
    await L.checkIdentity(plan.task);assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.control,recipe.control);assert.equal(plan.inputVersion,recipe.inputs.version);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.deepEqual(plan.task.pages.map(page=>page.id),recipe.inputs.pages.map(page=>page.id));assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.task.alphabet,recipe.control.task.alphabet);assert(Control.compatible(recipe.control.task,plan.task));

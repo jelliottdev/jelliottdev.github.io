@@ -1,7 +1,7 @@
 /* Source-authored finite review. Only synthetic witnesses execute at admission. */
 (function(root){
  'use strict';
- const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle,Compiler=node?require('./factored-finite-search-compiler.js'):root.FactoredFiniteSearchCompiler,Model=node?require('./record-question-model.js'):root.RecordQuestionModel,Control=node?require('./local-control.js'):root.LocalControl,Context=node?require('./followup-context.js'):root.FollowupContext,View=node?require('./finite-search-workspace-view.js'):root.FiniteSearchWorkspaceView;
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,Inputs=node?require('./local-input-bundle.js'):root.LocalInputBundle,Compiler=node?require('./factored-finite-search-compiler.js'):root.FactoredFiniteSearchCompiler,Model=node?require('./record-question-model.js'):root.RecordQuestionModel,Control=node?require('./local-control.js'):root.LocalControl,Context=node?require('./followup-context.js'):root.FollowupContext,View=node?require('./finite-search-workspace-view.js'):root.FiniteSearchWorkspaceView,Storage=node?require('./finite-control-storage.js'):root.FiniteControlStorage;
  const HEX=/^[a-f0-9]{64}$/,ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/,LIMIT=2*1024*1024;
  const exact=(v,ks)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===ks.length&&ks.every(k=>Object.hasOwn(v,k)),same=(a,b)=>E.stable(a)===E.stable(b),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const ensure=(v,message)=>{if(!v)throw Error(message);},clone=v=>JSON.parse(JSON.stringify(v));
@@ -31,7 +31,7 @@
   for(const pin of pins.pages){const page=inputs.pages.get(pin.id),text=value.inputVersion==='raw'?page?.raw:page?.reviewed_text;ensure(typeof text==='string'&&await hash(text,crypto)===pin.text_sha256,'A declared manuscript page changed.');}
   const evaluation=recipe.card.rules.evaluation.value,compiled=await (evaluation==='measurement'?Compiler.compileOutputInspection:evaluation?.kind==='language-score'?Compiler.compileLanguageComparison:Compiler.compile)(recipe.card,captured,crypto),domain=compiled.domain,descriptor={domainId:domain.id,programs:domain.programs.length,pages:domain.pages.length,totalCases:domain.totalCases,criterion:domain.criterion,...(domain.questionPolicy?{questionPolicy:domain.questionPolicy}:{})};
   if(sourceOnly)value.domain=descriptor;else ensure(same(value.domain,descriptor),'The reviewed search settings or comparison changed.');
-  const programs=new Map(domain.programs.map(p=>[p.id,p])),members=recipe.control.members,runes=new Set(inputs.alphabet.map(a=>a.rune));let total=0;
+  const programs=new Map(domain.programs.map(p=>[p.id,p])),members=Storage.expand(recipe.control).members,runes=new Set(inputs.alphabet.map(a=>a.rune));let total=0;
   ensure(members.length===compiled.members.length&&members.length<=1024,'Some source calculations lack a synthetic check.');
   for(let i=0;i<members.length;i++){
    if(!isLive())throw new DOMException('Navigation changed.','AbortError');

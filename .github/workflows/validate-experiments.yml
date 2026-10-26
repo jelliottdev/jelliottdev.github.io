@@ -158,6 +158,7 @@ jobs:
       - name: Validate shared restart variations and short numeric follow-ups
         if: steps.scope.outputs.science == 'true'
         run: |
+          python scripts/test_finite_control_storage.py
           python scripts/test_browser_boundary_variations.py
           python scripts/test_short_numeric_followups.py
           python scripts/short_numeric_followups.py --check

@@ -10,6 +10,7 @@ import re
 
 import browser_followups as fixed
 import finite_followup_cards as finite
+import finite_control_storage as storage
 
 FIELDS = fixed.RECIPE_FIELDS | {'kind'}
 
@@ -77,7 +78,7 @@ def validate_recipe(recipe, root, known_pages=None):
     ordered_alphabet = fixed.alphabet(root)
     # Expansion preserves exact scope/version; validate shared pins once.
     _inputs(recipe['inputs'], variants[0]['compiled'], root, ordered_alphabet, known_pages)
-    controls = recipe['control']
+    controls = storage.expand(recipe['control'])
     fixed.fields(controls, ('kind', 'members'), 'finite program controls')
     require(controls['kind'] == 'finite-program-controls' and type(controls['members']) is list
             and len(controls['members']) == len(variants), 'one complete control per declared member required')
@@ -143,7 +144,7 @@ def construct_followup(root, *, card, identifier, title, question, scope_change,
     recipe = {'kind': 'finite-settings', 'id': identifier, 'title': title, 'question': question,
               'scope_change': scope_change, 'limitation': limitation, 'card': copy.deepcopy(card),
               'inputs': {'version': plan['inputVersion'], 'alphabet_sha256': fixed.digest(ordered_alphabet), 'pages': pins},
-              'control': {'kind': 'finite-program-controls', 'members': members}}
+              'control': storage.compact({'kind': 'finite-program-controls', 'members': members})}
     if motivation is not None:
         recipe['motivation'] = motivation
     validate_recipe(recipe, root)
