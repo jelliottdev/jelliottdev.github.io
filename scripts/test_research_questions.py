@@ -27,7 +27,8 @@ class QuestionShapeTests(unittest.TestCase):
         linked = copy.deepcopy(record['research_questions'])
         recipes = {r['id']: r for r in record['browser_followups']}
         for item in linked:
-            item.pop('question')
+            item.pop('question', None)
+            self.assertNotIn('question', item)
         validate_research_questions(linked, record, strict_authoring=True)
         for item in linked:
             item['question'] = recipes[item['followup']]['question']

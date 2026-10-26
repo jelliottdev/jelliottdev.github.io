@@ -105,6 +105,7 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_access_export_bookkeeping.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_export_checkout_copy.py
       - run: python scripts/test_export_reproducibility.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/ci_experiment_bundles.py
