@@ -8,7 +8,7 @@
  function reset(value){return ({page:'each page',line:'each line',word:'each word'})[value]||'';}
  function setting(selection,value){return selection.parameter==='direction'?({add:'Add the key values',subtract:'Subtract the key values'})[value]||'':reset(value)?'Restart the key at '+reset(value):'';}
  function href(value){return typeof value==='string'&&/^run\.html#(?:task=[a-f0-9]{64}(?:&idea=p_[a-f0-9]{64})?|idea=p_[a-f0-9]{64})$/.test(value)?value:'';}
- function sourceHref(value){return href(value)||typeof value==='string'&&/^(?:library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*|run\.html#family=[a-z0-9]+(?:-[a-z0-9]+)*&case=[a-z0-9][a-z0-9-]*&revision=[a-f0-9]{64})$/.test(value)&&value||'';}
+ function sourceHref(value){return href(value)||typeof value==='string'&&/^run\.html#published=[a-z0-9]+(?:-[a-z0-9]+)*&case=[a-z0-9][a-z0-9-]*&revision=[a-f0-9]{64}$/.test(value)&&value||typeof value==='string'&&/^(?:library\.html#\/experiment\/[a-z0-9]+(?:-[a-z0-9]+)*|run\.html#family=[a-z0-9]+(?:-[a-z0-9]+)*&case=[a-z0-9][a-z0-9-]*&revision=[a-f0-9]{64})$/.test(value)&&value||'';}
  function pageLabel(pages){
   if(typeof pages==='string')return pages;
   if(!Array.isArray(pages)||!pages.length)return '';

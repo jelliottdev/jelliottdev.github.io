@@ -166,8 +166,11 @@
    '<div class="run-text-columns'+(single?' run-text-columns-single':'')+'"><section><h3>'+(single?'Text measured':'Original')+'</h3><pre class="run-text-value" data-run-original>'+esc(first.text)+'</pre></section>'+(single?'':'<section><h3>After the method</h3><pre class="run-text-value" data-run-after>'+esc(after.text)+'</pre></section>')+'</div></details>';
  }
  function bind(host,task,result,options={}){
+  E.summary(task,result);return bindOutput(host,task,result,options);
+ }
+ function bindOutput(host,task,result,options={}){
   bindings.get(host)?.();
-  E.summary(task,result);const snapshot=JSON.parse(JSON.stringify({task,result})),initialPage=options.pageId===undefined?snapshot.task.pages[0].id:options.pageId;if(!snapshot.task.pages.some(p=>p.id===initialPage))throw Error('Choose a page in the original output.');
+  const snapshot=JSON.parse(JSON.stringify({task,result})),initialPage=options.pageId===undefined?snapshot.task.pages[0].id:options.pageId;if(!snapshot.task.pages.some(p=>p.id===initialPage))throw Error('Choose a page in the original output.');
   const sumsCleanup=task.criterion.kind==='exact-prefix-set'?bindOpeningSet(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='word-prime-sums'?bindWordSums(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='language-score'?bindLanguage(host,snapshot.task,snapshot.result,initialPage):task.criterion.kind==='measurement'&&task.steps.length?bindOutputPreview(host,snapshot.task,snapshot.result,initialPage):()=>{};
   const panel=host.querySelector?.('.run-text-inspector');if(!panel){bindings.set(host,sumsCleanup);return sumsCleanup;}
   const select=panel.querySelector('[data-run-text-page]'),buttons=[...panel.querySelectorAll('[data-run-text-mode]')];
@@ -204,6 +207,20 @@
    '</div><p class="run-chart-note">Counts follow the rune sequence on each page, ignoring spaces and punctuation.</p></figure>')+
    (task.criterion.kind==='word-affine-count'?wordPairExample(task,result):'')+'<p class="run-limit">'+esc(data.limit)+'</p><dl class="run-scope"><div><dt>Pages</dt><dd>'+esc(pageLabel(task.pages))+'</dd></div><div><dt>Runes checked</dt><dd>'+result.metrics.runes.toLocaleString('en-US')+'</dd></div></dl>'+inspector(task,result)+'</section>';
  }
+ function archivedModel(model){
+  const client=typeof module==='object'&&module.exports?require('./published-output-client.js'):root.PublishedOutputClient;
+  if(!client?.isVerified?.(model))throw Error('Load an authenticated archived calculation before display.');
+  return model;
+ }
+ function renderArchived(model){
+  const {task,run}=archivedModel(model),result=run.result;
+  if(task.criterion.kind==='exact-prefix-set')return openingSetView(task,result);
+  if(task.criterion.kind==='exact-prefix')return '<section class="local-run-result"><h2>What this check found</h2><p>'+result.matches.filter(page=>page.matched).length+' of '+task.pages.length+' pages begin with the supplied rune sequence.</p>'+prefixMismatch(task,result)+prefixChart(task,result)+'<p class="run-limit">A matching opening alone does not establish a decryption.</p>'+inspector(task,result)+'</section>';
+  if(task.criterion.kind==='word-affine-count')return '<section class="local-run-result"><h2>Matches inside words</h2><p>'+result.wordPairs.matches+' matches among '+result.wordPairs.opportunities.toLocaleString('en-US')+' pairs '+task.criterion.lag+' rune positions apart inside words.</p>'+wordPairChart(task,result)+wordPairExample(task,result)+'<p class="run-limit">The comparison describes this rule and these word boundaries. It does not identify an encryption method.</p>'+inspector(task,result)+'</section>';
+  if(task.criterion.kind==='measurement'&&!task.steps.length)return '<section class="local-run-result"><h2>Repeated neighbouring runes</h2><p>'+result.metrics.equalAdjacentPairs+' repeated pairs among '+result.metrics.adjacentPairs.toLocaleString('en-US')+' neighbouring rune pairs.</p><p class="run-limit">These counts describe the archived text. They do not identify a cipher.</p>'+inspector(task,result)+'</section>';
+  throw Error('This archived calculation has no supported output view.');
+ }
+ function bindArchived(host,model,options={}){const {task,run}=archivedModel(model);return bindOutput(host,task,run.result,options);}
  function renderPrefixComparison(task,result,criterion,pageId){
   E.summary(task,result);
   if(criterion?.kind!=='exact-prefix'||!Array.isArray(criterion.values)||criterion.values.length<1||criterion.values.length>256||criterion.values.some(v=>!Number.isInteger(v)||v<0||v>28)||!task.pages.some(p=>p.id===pageId)||!result.transformed.some(p=>p.page===pageId))throw Error('Use an explicit opening and an original output page.');
@@ -273,5 +290,5 @@
   if(verified!==true||unsaved!==false||hasNext!==false)return '';
   return '<p class="research-continuation"><a href="research.html?contribute=1">Find another check <span aria-hidden="true">→</span></a></p>';
  }
- const api={actionCopy,continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
+ const api={actionCopy,continuationHTML,prepareMeasurementComparison,renderMeasurementComparison,bindMeasurementComparison,renderArchived,bindArchived,render,bind,pageLabel,criterionLabel,prepareInspectionOutput,renderInspectionOutput,renderPrefixComparison,prepareLanguageComparison,renderLanguageComparison};if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalRunView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
