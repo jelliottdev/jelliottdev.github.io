@@ -188,8 +188,20 @@
   function operations(spec){return spec.method.status==='specified'?spec.method.value.operations:[];}
   function has(spec,id){return operations(spec).some(o=>o.id===id);}
   function specified(f,value){return f.status==='specified'&&(arguments.length===1||f.value===value);}
+  function sourceNoteId(spec,index){
+    // Exact snapshot identity, not a collision-prone hash or a quote lookup.
+    // Duplicate notes keep separate slots; any revision/source/list change
+    // invalidates a rendered choice instead of applying it to another note.
+    return 'source-note:'+index+':'+stable({revision:spec.revision,source:spec.source.text,unresolved:spec.unresolved,exceptionalCases:spec.rules.exceptionalCases});
+  }
   function questions(spec){
     const result=[];
+    spec.unresolved.forEach((note,index)=>{if(note?.kind==='source_note'&&typeof note.text==='string'&&note.text.trim()){
+      const previous=spec.rules.exceptionalCases,replace=previous.status!=='unspecified'&&!(previous.status==='specified'&&typeof previous.value==='string');
+      result.push({id:sourceNoteId(spec,index),prompt:'How should this part of your wording be used?',context:note.text+(replace?'\n\nEarlier exception rule: '+ruleText('exceptionalCases',previous):''),choices:[
+        {id:'background',label:'Background only — not part of the test'},
+        {id:'condition',label:replace?'Replace the earlier exception rule with this condition':'Keep it as a condition the test must follow'}]});
+    }});
     for(const constraint of spec.unresolved.filter(c=>c?.kind==='changed_method_rule'&&RULES.includes(c.field))){
       result.push({id:'rule-review:'+constraint.field,prompt:'Does this condition still apply?',
         context:ruleText(constraint.field,spec.rules[constraint.field]),choices:[
@@ -332,7 +344,23 @@
     if(!question||!question.choices.some(c=>c.id===choice))throw Error('Unavailable clarification');
     const provenance={kind:'user_clarification',refs:[id]};
     let next;
-    if(id==='evaluation'){
+    let sourceNoteReceipt;
+    if(id.startsWith('source-note:')){
+      const index=draft.unresolved.findIndex((note,index)=>note?.kind==='source_note'&&sourceNoteId(draft,index)===id);
+      if(index<0)throw Error('The source note changed; review the current wording.');
+      const note=copy(draft.unresolved[index]),previous=copy(draft.rules.exceptionalCases);
+      const refs=[...new Set([...(note.provenance?.refs||[]),'source:text',id])];
+      sourceNoteReceipt={sourceNote:note,sourceNoteIndex:index,sourceRefs:refs};
+      if(choice==='background'){
+        next=revise(draft,{});next.unresolved.splice(index,1);
+      }else if(choice==='condition'){
+        const append=previous.status==='specified'&&typeof previous.value==='string',value=append?previous.value+'\n'+note.text:note.text;
+        next=revise(draft,{rules:{exceptionalCases:field('specified',value,{kind:'user_clarification',refs:[...new Set([...(previous.provenance.refs||[]),...refs])]})}});
+        next.unresolved.splice(index,1);
+        sourceNoteReceipt.exceptionRuleAction=append?'append-condition':previous.status==='unspecified'?'set-condition':'replace-previous-rule';
+        sourceNoteReceipt.previousRule=previous;
+      }else throw Error('Choose how the source note belongs to this test.');
+    }else if(id==='evaluation'){
       next=revise(draft,{rules:{evaluation:field('specified',EVALUATION_CHOICES.find(item=>item.id===choice).value,provenance)}});
     }else if(id.startsWith('rule-review:')){
       const key=id.slice('rule-review:'.length);
@@ -360,7 +388,7 @@
     }else{
       next=revise(draft,{rules:{boundaryMode:field('specified',choice,provenance)}});
     }
-    next.clarifications.push({question:id,choice,...(['other','replace'].includes(choice)?{text}:{}),...(id==='evaluation'&&draft.rules.evaluation.status!=='unspecified'?{previousRule:copy(draft.rules.evaluation)}:{}),revision:next.revision});
+    next.clarifications.push({question:id,choice,...(sourceNoteReceipt||{}),...(['other','replace'].includes(choice)?{text}:{}),...(id==='evaluation'&&draft.rules.evaluation.status!=='unspecified'?{previousRule:copy(draft.rules.evaluation)}:{}),revision:next.revision});
     return next;
   }
   function completeness(spec){

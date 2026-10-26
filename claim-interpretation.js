@@ -220,7 +220,7 @@ function uncovered(raw,candidate){
   // quote was understood. In a method-bearing idea only compact maintained aim
   // aliases consume source text. Complete measurement/goal overlap still works:
   // its exact method quote below independently covers that instruction.
-  // Other goal prose remains visible as a condition rather than hiding a key,
+  // Other goal prose remains visible as an unresolved note rather than hiding a key,
   // skipped rune, extra step or qualifier under the broad outcome evidence.
   {
    const text=maskedKeys(raw).slice(s.start,s.start+s.quote.length),prefix=text.match(/^(?:\s*)(?:please\s+)?(?:try\s+)?(?:(?:I|we)\s+(?:want|would like|hope|aim|intend)\s+to\s+|(?:(?:my|our|the)\s+)?(?:goal|aim|objective)\s*(?:is\s+|:\s*)(?:to\s+)?)?/i)[0];
@@ -260,13 +260,10 @@ function toDraft(raw,input){
  });
  for(const [key,rule]of Object.entries(candidate.rules))rules[key]=C.field(rule.status,rule.value,references(rule.source));
  const remainder=uncovered(raw,candidate);
- if(remainder.length){
-  const kept='Uninterpreted original wording: '+remainder.map(s=>s.quote).join(' | '),previous=rules.exceptionalCases;
-  rules.exceptionalCases=C.field('specified',previous?.status==='specified'?previous.value+'\n'+kept:kept,{kind:'proposed',refs:[...(previous?.provenance?.refs||[]),...remainder.flatMap(s=>references(s).refs)]});
-  // Preserve an explicit prior state too; never silently turn unrestricted or
-  // not-applicable into a different claim while adding uncovered conditions.
-  if(previous&&previous.status!=='specified')unresolved.push({kind:'preserved_rule_state',field:'exceptionalCases',status:previous.status,source:previous.provenance,reason:'Uninterpreted source also remains visible as a condition.'});
- }
+ // Unparsed source is not an interpreted exception rule. Keep each exact
+ // span in order, visible and unresolved, so no compiler can discard it while
+ // the original wording and any explicitly extracted rules remain unchanged.
+ for(const span of remainder)unresolved.push({kind:'source_note',text:span.quote});
  const aim=candidate.outcome?C.field('specified',{outcomeId:candidate.outcome.id,wording:candidate.outcome.source.quote,detail:candidate.outcome.source.quote},references(candidate.outcome.source)):C.field();
  const scope=candidate.scope?C.field('specified',{...(candidate.scope.pages?{pages:candidate.scope.pages}:{}),...(candidate.scope.passage?{description:candidate.scope.passage}:{})},references(candidate.scope.source)):C.field();
  const draft=C.createDraft({source:{text:raw,origin:'proposed_interpretation'},aim,method:operations.length?C.field('specified',{operations},{kind:'proposed',refs:candidate.steps.flatMap(s=>references(s.source).refs)}):C.field(),scope,rules,unresolved});

@@ -67,4 +67,7 @@ test('bounded validation rejects malformed fields, unsafe/deep/oversized input a
  let read=false;const accessor={};Object.defineProperty(accessor,'card',{enumerable:true,get(){read=true;return make();}});assert.throws(()=>validateCard(accessor),/data/);assert.equal(read,false);
  const huge=make();huge.scope.value.description='x'.repeat(12000);assert.throws(()=>validateCard(huge),/size/);
 });
+test('reading unresolved legacy cards retains canonical identity without interactive confirmation or preparation',()=>{
+ const legacy=clone(make());legacy.unresolved=[{kind:'source_note',text:'Never alter F.'}];const before=C.serialize(legacy),card=validateCard(before);assert.equal(C.serialize(card),before);assert.equal(compareCards(card,legacy).relationship,'exact_same');assert.equal(compareCards(card,legacy).coverage,'not_assessed');const fragment='#idea='+Buffer.from(JSON.stringify(card)).toString('base64url'),draft=S.decode(fragment).draft;assert.equal(C.completeness(draft).executionReady,false);assert.equal(C.completeness(draft).researchReady,false);assert.throws(()=>C.confirm(draft,{id:'read-is-not-confirmation',at}));assert.equal(C.serialize(legacy),before);
+});
 console.log('PASS '+count+' pure idea-relation groups; no network, coverage lookup, UI, semantic novelty decision or mutation.');

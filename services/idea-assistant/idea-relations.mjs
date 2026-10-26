@@ -35,9 +35,7 @@ export function validateCard(input){
   try{input=JSON.parse(input);}catch{throw Error('Invalid card JSON');}
  }
  const text=JSON.stringify(boundedJSON(input));if(new TextEncoder().encode(text).length>S.MAX_BYTES)throw Error('Card exceeds size limit');
- const draft=S.decode('#idea='+encode(text)).draft;
- const confirmed=C.confirm(draft,{id:'card-comparison-validation',at:'2000-01-01T00:00:00.000Z'});
- return JSON.parse(C.serialize(S.cardData(confirmed)));
+ return JSON.parse(C.serialize(S.readCard('#idea='+encode(text))));
 }
 function diff(left,right,path='',result=[]){
  if(C.serialize(left)===C.serialize(right))return result;

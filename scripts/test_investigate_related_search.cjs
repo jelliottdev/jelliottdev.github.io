@@ -5,11 +5,11 @@ const fixtureSource=fs.readFileSync(require.resolve('./test_investigate_intake_f
 const {makeDocument}=new Function('require',fixtureSource.slice(0,fixtureSource.indexOf('async function fixture()'))+'\nreturn {makeDocument};')(require);
 const turn=()=>new Promise(r=>setImmediate(r));
 async function settle(){await turn();await turn();}
-async function fixture({config={},deferConfig=false,ask=null,session=null}={}){
+async function fixture({config={},deferConfig=false,ask=null,session=null,scheduler=null}={}){
  const doc=makeDocument(),requests=[];doc.defaultView.location.hash='';if(session)doc.defaultView.sessionStorage=session;
  let releaseConfig;
  const pendingConfig=new Promise(r=>{releaseConfig=r;});
- const app=I.createApp(doc,{fetcher:async(url,options={})=>{
+ const app=I.createApp(doc,{...(scheduler||{}),fetcher:async(url,options={})=>{
   requests.push({url,options});
   if(url==='data/assistant.json')return deferConfig?pendingConfig:config===null?Response.json({}, {status:503}):Response.json(config);
   if(url==='data/experiments.json')return Response.json(registry);
@@ -64,6 +64,12 @@ let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS 
   let resolve;const source=S.experimentDocs(registry.records).find(d=>d.kind==='experiment');
   const f=await fixture({config:{endpoint:'https://mock.example/ask'},ask:()=>new Promise(r=>{resolve=r;})});
   try{f.submit('null runes');await settle();const field=f.doc.getElementById('idea');field.focus();field.setSelectionRange(2,7);resolve(Response.json({comparisonKind:'related-research',answer:'A related record [1].',sources:[source]}));await settle();const restored=f.doc.getElementById('idea');assert.equal(f.doc.activeElement,restored);assert.equal(restored.value,'null runes');assert.equal(restored.selectionStart,2);assert.equal(restored.selectionEnd,7);f.noWrites();}finally{f.destroy();}
+ });
+ await test('a transport resolving after timeout cannot publish a late summary over local records',async()=>{
+  let resolve,signal;const timers=new Map(),source=S.experimentDocs(registry.records).find(d=>d.kind==='experiment');let timerId=0;
+  const scheduler={schedule(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},unschedule(id){timers.delete(id);}};
+  const f=await fixture({scheduler,config:{endpoint:'https://mock.example/ask'},ask:options=>{signal=options.signal;return new Promise(r=>{resolve=r;});}});
+  try{f.submit('null runes');await settle();assert.equal(signal.aborted,false);assert.equal(timers.size,1);const timer=[...timers.values()][0];assert.equal(timer.ms,30000);timer.fn();assert.equal(signal.aborted,true);resolve(Response.json({comparisonKind:'related-research',answer:'Too late summary [1].',sources:[source]}));await settle();assert(!f.doc.host.innerHTML.includes('Too late summary'));assert(f.doc.host.innerHTML.includes('library.html#/experiment/'));assert.equal(f.doc.getElementById('idea').value,'null runes');assert.equal(f.app.getSnapshot().confirmed,null);assert.equal(timers.size,0);f.noWrites();}finally{f.destroy();}
  });
  await test('only explicit Define a test enters existing formal clarification with original wording',async()=>{
   const f=await fixture();try{const text='Reverse prime values in rows';f.submit(text);assert.equal(f.app.getSnapshot().draft,null);f.doc.getElementById('define-test').fire('click');assert.equal(f.app.getSnapshot().stage,'review');assert.equal(f.app.getSnapshot().draft.source.text,text);assert(f.doc.getElementById('clarification'));assert.equal(f.app.getSnapshot().confirmed,null);f.noWrites();}finally{f.destroy();}

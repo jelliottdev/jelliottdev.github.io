@@ -38,8 +38,8 @@ export function validateExport(data,publishedIds){
   const card=validateCard(row.card_json);
   if(C.serialize(card)!==row.card_json)fail('Card JSON is not canonical active card data');
   if(!same(card,row.card))fail('Parsed card disagrees with immutable card_json');
-  const confirmed=C.confirm(Share.decode(text(row.fragment,Share.MAX_URL,'fragment')).draft,{id:'offline-reconciliation',at:'2000-01-01T00:00:00.000Z'});
-  if(!same(card,Share.cardData(confirmed)))fail('Fragment disagrees with immutable card');
+  const fragmentCard=Share.readCard(text(row.fragment,Share.MAX_URL,'fragment'));
+  if(!same(card,fragmentCard))fail('Fragment disagrees with immutable card');
   if(row.record_id!=null&&!publishedIds.has(row.record_id))fail('Stale related published-record ID: '+row.record_id);
   cards.push({...row,card});
  }
@@ -65,13 +65,14 @@ export function reconcile(data,registry,{inputHash,registryHash,generatedAt=new 
  for(const row of cards){
   let group=groups.find(g=>g.card_hash===row.card_hash);
   if(!group){
-   const confirmed=C.confirm(Share.decode(row.fragment).draft,{id:'offline-reconciliation',at:'2000-01-01T00:00:00.000Z'});
+   const draft=Share.decode(row.fragment).draft;
    // Deliberately exclude original wording, outcome and scope prose from ranking.
    // Ordered method parameters and specified rules remain method-search terms.
-   const ready=C.completeness(confirmed).researchReady;
+   const ready=C.completeness(draft).researchReady;
    const pages=row.card.scope.status==='specified'?(row.card.scope.value.pages||[]):[];
    let projection=null;
    if(ready){
+    const confirmed=C.confirm(draft,{id:'offline-reconciliation',at:'2000-01-01T00:00:00.000Z'});
     // Use the shared parameter/operand projection, without turning private
     // background, aims, passage prose or unresolved notes into ranking terms.
     // The complete original card remains below for the owner's comparison.

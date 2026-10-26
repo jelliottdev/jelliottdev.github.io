@@ -93,7 +93,7 @@ test('complete sentence boundaries and explicit limited reading criteria preserv
  const raw='Use Vigenere with key ABC. Reset the key at each word unless the word continues across a line.',first='Use Vigenere with key ABC.',tail='Reset the key at each word unless the word continues across a line.';
  const p=candidate(raw,[step(raw,first),step(raw,tail)]);p.steps[0].parameters.key={value:'ABC',source:at(raw,'ABC')};p.rules.reset={status:'specified',value:tail,source:at(raw,tail)};assert.equal(toDraft(raw,p).draft.rules.reset.value,tail);
  const goal='Recover only the first twelve runes.',q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};assert.equal(toDraft(goal,q).draft.aim.outcome.id,'decipher');assert.equal(toDraft(goal,q).draft.aim.outcome.detail,goal);
- for(const goal of ['Recover text only if the key is supplied.','Do not recover only the opening.']){const q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};const result=toDraft(goal,q);assert.equal(result.candidate.outcome,null);assert.equal(result.draft.aim.status,'unspecified');assert(result.draft.rules.exceptionalCases.value.includes(goal));}
+ for(const goal of ['Recover text only if the key is supplied.','Do not recover only the opening.']){const q=candidate(goal,[]);q.outcome={id:'decipher',source:at(goal,goal)};const result=toDraft(goal,q);assert.equal(result.candidate.outcome,null);assert.equal(result.draft.aim.status,'unspecified');assert(result.draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes(goal));}
  const negative='Reverse each row only if the key is supplied.',r=candidate(negative,[step(negative,'Reverse each row','reverse_row_runes')]);assert.throws(()=>validateCandidate(negative,r),/conditional/);
 });
 
@@ -126,7 +126,7 @@ test('normalization covers only its matched wording; by is grammar and other sou
  const raw='Decipher LP2-15 by reversing rune order within each row, preserving word boundaries.',p=candidate(raw,[step(raw,'reversing rune order within each row','reverse_row_runes')]);p.outcome={id:'decipher',source:at(raw,'Decipher')};p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};p.rules.wordBoundaries={status:'specified',value:'preserve',source:at(raw,raw)};
  const result=toDraft(raw,p);assert.deepEqual(result.uninterpreted,[]);assert.equal(result.draft.rules.exceptionalCases.status,'unspecified');assert.equal(result.draft.source.text,raw);
  const broad='Reverse each row, preserving word boundaries; preserve punctuation.',q=candidate(broad,[step(broad,'Reverse each row','reverse_row_runes')]);q.rules.wordBoundaries={status:'specified',value:'preserve',source:at(broad,broad)};
- const kept=toDraft(broad,q);assert(kept.draft.rules.exceptionalCases.value.includes('preserve punctuation'));assert(!kept.draft.rules.exceptionalCases.value.includes('preserving word boundaries'));assert.equal(kept.draft.source.text,broad);
+ const kept=toDraft(broad,q);assert(kept.draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes('preserve punctuation'));assert(!kept.draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes('preserving word boundaries'));assert.equal(kept.draft.source.text,broad);
 });
 test('digit versus value reversal stays distinct, with ambiguity reused from C.questions',()=>{
  for(const raw of ['Reverse decimal digits of each prime value.','Try reversing the digits of each value.']){
@@ -152,7 +152,7 @@ test('only isolated finite grammar spans are omitted; meaningful residuals and o
   const text='Use cipher; '+connector,r=toDraft(text,candidate(text,[step(text,'Use cipher')]));assert.deepEqual(r.uninterpreted,[],connector);assert.equal(r.draft.source.text,text);
  }
  for(const meaningful of ['not','if','after','only','but','unless','except','before','then apply an omitted transform','try again','on condition','please 2','only then','then, try']){
-  const text='Use cipher; '+meaningful,r=toDraft(text,candidate(text,[step(text,'Use cipher')]));assert(r.uninterpreted.some(s=>s.quote.includes(meaningful)),meaningful);assert(r.draft.rules.exceptionalCases.value.includes(meaningful));assert.equal(r.draft.source.text,text);
+  const text='Use cipher; '+meaningful,r=toDraft(text,candidate(text,[step(text,'Use cipher')]));assert(r.uninterpreted.some(s=>s.quote.includes(meaningful)),meaningful);assert(r.draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes(meaningful));assert.equal(r.draft.source.text,text);
  }
 });
 
@@ -170,9 +170,9 @@ test('negation and conditional context cannot be discarded into a positive opera
 });
 test('uninterpreted source remains visible even when broad rule/scope quotes cover it',()=>{
  const raw='On LP2-15 use key ABC; do not remove punctuation.',p=candidate(raw,[]);p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};p.rules.initialState={status:'specified',value:'key ABC',source:at(raw,'key ABC')};
- const result=toDraft(raw,p);assert(result.draft.rules.exceptionalCases.value.includes('do not remove punctuation'));assert(result.uninterpreted.some(s=>s.quote.includes('do not remove punctuation')));assert.equal(result.draft.method.status,'unspecified');
- const compound='Reverse each row then use a custom undefined transform.',q=candidate(compound,[step(compound,'Reverse each row','reverse_row_runes')]);const second=toDraft(compound,q);assert(second.draft.rules.exceptionalCases.value.includes('custom undefined transform'));assert.equal(second.draft.source.text,compound);
- const broad='On LP2-15 use key ABC; preserve punctuation.',r=candidate(broad,[]);r.rules.initialState={status:'specified',value:'key ABC',source:at(broad,broad)};r.scope={pages:['lp2-15'],passage:null,source:at(broad,broad)};assert(toDraft(broad,r).draft.rules.exceptionalCases.value.includes('preserve punctuation'));
+ const result=toDraft(raw,p);assert(result.draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes('do not remove punctuation'));assert(result.uninterpreted.some(s=>s.quote.includes('do not remove punctuation')));assert.equal(result.draft.method.status,'unspecified');
+ const compound='Reverse each row then use a custom undefined transform.',q=candidate(compound,[step(compound,'Reverse each row','reverse_row_runes')]);const second=toDraft(compound,q);assert(second.draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes('custom undefined transform'));assert.equal(second.draft.source.text,compound);
+ const broad='On LP2-15 use key ABC; preserve punctuation.',r=candidate(broad,[]);r.rules.initialState={status:'specified',value:'key ABC',source:at(broad,broad)};r.scope={pages:['lp2-15'],passage:null,source:at(broad,broad)};assert(toDraft(broad,r).draft.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ').includes('preserve punctuation'));
 });
 test('missing settings remain unknown; explicit literal rule values retain source provenance',()=>{
  const raw='Use Vigenere with key ABC on LP2-15; reset the key at each word.',p=candidate(raw,[step(raw,'Use Vigenere with key ABC on LP2-15','described_method','polyalphabetic')]);p.steps[0].parameters.key={value:'ABC',source:at(raw,'key ABC')};p.rules.reset={status:'specified',value:'reset the key at each word',source:at(raw,'reset the key at each word')};p.scope={pages:['lp2-15'],passage:null,source:at(raw,'LP2-15')};

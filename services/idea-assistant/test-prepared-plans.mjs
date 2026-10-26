@@ -34,6 +34,13 @@ await test('exact issued binding, timestamp-independent retries and no task/resu
  assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,1);
  assert.throws(()=>sqlite.prepare("UPDATE prepared_plans SET authority='remaining-lp2'").run(),/immutable/);
 });
+await test('legacy incomplete cards remain readable but consequential questions cannot issue or authorize preparations',async()=>{
+ const {sqlite,db,args}=await fixture(),{validateCard}=await import('./idea-relations.mjs');
+ for(const change of [c=>c.unresolved=[{kind:'source_note',text:'Keep every F rune unchanged.'}],c=>{c.method.value.operations=[{id:'reverse_row_runes',label:'Reverse each row'}];c.rules.wordBoundaries={status:'specified',value:'preserve'};c.rules.boundaryMode={status:'unspecified'};}]){
+  const card=structuredClone(args.card);change(card);const text=C.serialize(card),hash=sha(text),proposalId='p_'+hash;sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(proposalId,hash,text,'historical-unreviewed',at);assert.equal(C.serialize(validateCard(text)),text,'Read-only canonical identity must remain available');const request={...args,proposalId,card,basis:{kind:'compiled-card',normalizedCard:card}};await assert.rejects(issue(request),/Review consequential questions/);assert.equal(await authorize(request),null);assert.equal(C.serialize(card),text);
+ }
+ assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,0);
+});
 await test('genuine concurrent issuance is idempotent and cannot exceed the global daily cap',async()=>{
  const {sqlite,args}=await fixture(),receipts=await Promise.all(Array.from({length:12},()=>issue(args)));
  assert(receipts.every(r=>r.id===receipts[0].id));assert.equal(sqlite.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,1);

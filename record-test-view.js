@@ -22,5 +22,11 @@
   const level=Number.isInteger(headingLevel)&&headingLevel>=2&&headingLevel<=6?headingLevel:2;
   return '<section class="record-test" aria-label="What was tried"><h'+level+'>What was tried</h'+level+'><dl>'+fields.map(([key,label])=>'<div><dt>'+label+'</dt><dd>'+esc(value[key])+'</dd></div>').join('')+'</dl></section>';
  }
- const api={valid,render,title,intro,blurb,renderIntro};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordTestView=api;
+ function renderRelated(record){
+  const id=own(record,'id');if(typeof id!=='string'||!/^[a-z0-9][a-z0-9-]{0,127}$/.test(id))return '';
+  const excerpt=(value,max)=>{if(typeof value!=='string')return '';const text=value.replace(/\s+/gu,' ').trim();const units=Array.from(text);if(units.length<=max)return text;const head=units.slice(0,max).join(''),cut=head.lastIndexOf(' ');return head.slice(0,cut>head.length*.6?cut:head.length)+'…';};
+  const test=own(record,'reader_test'),scope=own(record,'scope'),action=excerpt(valid(test)?own(test,'action'):own(scope,'procedure'),260),finding=excerpt(own(record,'reader_finding')||own(record,'finding'),420),limit=excerpt(own(record,'reader_limit')||own(record,'limitations'),190);
+  return '<article class="source record-related"><h3><a href="library.html#/experiment/'+esc(id)+'">'+esc(String(title(record)))+'</a></h3>'+(action?'<p><strong>What was tried:</strong> '+esc(action)+'</p>':'')+(finding?'<p><strong>Result:</strong> '+esc(finding)+'</p>':'')+(limit?'<p class="small"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</article>';
+ }
+ const api={valid,render,title,intro,blurb,renderIntro,renderRelated};if(typeof module==='object'&&module.exports)module.exports=api;else root.RecordTestView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

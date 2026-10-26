@@ -6,7 +6,7 @@
  async function hash(v,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
  function canonical(card){
   const text=E.stable(card),bytes=new TextEncoder().encode(text);ensure(bytes.length<=H.MAX_BYTES,'The original question exceeds its card limit.');let binary='';for(const b of bytes)binary+=String.fromCharCode(b);
-  const draft=H.decode('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')).draft,checked=H.cardData(C.confirm(draft,{id:'question-coverage-context',at:'2000-01-01T00:00:00.000Z'}));ensure(same(checked,card),'Use the unchanged canonical original question.');return checked;
+  const checked=H.readCard('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));ensure(same(checked,card),'Use the unchanged canonical original question.');return checked;
  }
  async function verify(input,crypto=root.crypto){
   const value=capture(input),mapped=!!value&&Object.hasOwn(value,'reviewedProgram'),unchanged=()=>ensure(same(capture(input),value),'The question coverage request changed during verification.');

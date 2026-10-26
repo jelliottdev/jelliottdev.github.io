@@ -3,6 +3,7 @@ import {checkedAuthoredFiniteMember} from './authored-finite-origin.mjs';
 import {checkedOrdinaryPrefixEvidence,discoverOrdinaryPrefixEvidence,combineOrdinaryPrefixCoverage} from './ordinary-prefix-evidence.mjs';
 /* Immutable server-issued admission proof. No generation, inference or task writes. */
 import C from '../../claim-specification.js';
+import Share from '../../claim-share.js';
 import E from '../../local-experiment.js';
 import Controls from '../../local-plan-controls.js';
 import Variants from '../../task-variants.js';
@@ -43,6 +44,11 @@ async function binding({proposalId,card,task,inputVersion,parentTaskId,controls}
  require(typeof proposalId==='string'&&PROPOSAL.test(proposalId)&&['raw','reviewed'].includes(inputVersion)
   &&(parentTaskId===null||typeof parentTaskId==='string'&&HEX.test(parentTaskId)),'Invalid prepared plan binding');
  const canonical=validateCard(card),cardHash=await sha(C.serialize(canonical));
+ // Structural reading deliberately accepts legacy incomplete cards. Issuance
+ // and authorization retain their separate explicit meaning-review gate.
+ let binary='';for(const byte of new TextEncoder().encode(C.serialize(canonical)))binary+=String.fromCharCode(byte);
+ const review=Share.decode('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')).draft;
+ require(C.questions(review).length===0,'Review consequential questions before preparing an experiment');
  require(proposalId==='p_'+cardHash,'Prepared proposal does not match the canonical card');
  E.validateTask(task);const frozen=JSON.parse(E.stable(task));await E.checkIdentity(frozen);
  const suite=json(controls,2000000).value;await Controls.validate(suite,frozen);

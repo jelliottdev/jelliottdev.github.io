@@ -46,14 +46,18 @@
   if(bytes(JSON.stringify(p)).length>MAX_BYTES)throw Error('Shared idea exceeds 12,000 decoded bytes');
   return p;
  }
- function cardData(spec){
-  const s=C.validateConfirmed(spec),outcome=activeField(s.aim);
+ function cardPayload(s){
+  const outcome=activeField(s.aim);
   if(outcome.status==='specified'){const aim=C.normalizeOutcome(s.aim);outcome.value={outcomeId:aim.id,detail:aim.detail};}
   const method=activeField(s.method);if(method.status==='specified')method.value={operations:s.method.value.operations.map(cleanOperation)};
   const rules=Object.fromEntries(C.RULES.map(k=>[k,activeField(s.rules[k])]));
   const unresolved=s.unresolved.map(c=>{const v=json(c);delete v.provenance;return v;});
   return checkedPayload({version:VERSION,outcome,method,scope:activeField(s.scope),rules,unresolved});
  }
+ // Reading a saved canonical card never confirms its unresolved meaning.
+ // The encoded fragment enforces the same plain JSON/Unicode/byte boundaries.
+ function readCard(fragment){return cardPayload(decode(fragment).draft);}
+ function cardData(spec){return cardPayload(C.validateConfirmed(spec));}
  function encode(spec){
   const data=bytes(JSON.stringify(cardData(spec)));let binary='';for(const b of data)binary+=String.fromCharCode(b);
   return '#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
@@ -215,6 +219,6 @@
   if(!png)try{png=await renderPNG(spec,{document:doc});}catch(failure){imageError=failure.message;}
   return {status,url:complete,png,...(error?{error}:{}),imageError};
  }
- const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),finiteKeyBankLabel,finiteBoundsLabel,wordPrimeSumLabels,wordPrimeSumRuleLabel,evaluationText,protocolRuleLabel,operationParameters,encode,decode,link,renderPNG,prepare:renderPNG,share};
+ const api={VERSION,MAX_BYTES,MAX_URL,cardData,readCard,sections:p=>sections(checkedPayload(p)),finiteKeyBankLabel,finiteBoundsLabel,wordPrimeSumLabels,wordPrimeSumRuleLabel,evaluationText,protocolRuleLabel,operationParameters,encode,decode,link,renderPNG,prepare:renderPNG,share};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimShare=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

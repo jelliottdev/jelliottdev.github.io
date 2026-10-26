@@ -96,7 +96,10 @@ await test('review metadata changes append old/new audit rows; no-op updates pre
  assert.deepEqual(db.prepare('SELECT card_json, fragment, card_hash, created_at FROM proposals WHERE id=?').get(r.id),card);assert.deepEqual(db.prepare('SELECT * FROM proposal_submissions').all(),submissions);
 });
 await test('invalid bounds/content/source and unavailable storage/rate never persist or leak internal errors',async()=>{
- const f=fixture();for(const altered of [request({note:'x'.repeat(1201)}),request({sourceUrl:'https://127.0.0.1/x'}),request({sourceUrl:'http://10.0.0.1'}),request({sourceUrl:'https://user:pass@github.com/x'}),request({sourceUrl:'file:///private'}),request({sourceUrl:'https://localhost/x'}),request({sourceUrl:'https://example.test/x'}),request({fragment:'#idea=invalid'}),request({requestId:'not-a-uuid'}),request({originalPrompt:'forbidden'}),request({note:null}),request({sourceUrl:'x'.repeat(1501)})]){
+ const f=fixture();
+ // Structural legacy reads must never become new human confirmation at intake.
+ for(const change of [c=>c.unresolved=[{kind:'source_note',text:'Never change F.'}],c=>{c.method.value.operations=[{id:'reverse_row_runes'}];c.rules.wordBoundaries={status:'specified',value:'preserve'};c.rules.boundaryMode={status:'unspecified'};}]){const legacy=S.readCard(fragment());change(legacy);const encoded='#idea='+Buffer.from(JSON.stringify(legacy)).toString('base64url');assert.equal(C.serialize(S.readCard(encoded)),C.serialize(legacy));assert.equal((await f.handle(post(request({fragment:encoded})),f.env)).status,400);}
+ for(const altered of [request({note:'x'.repeat(1201)}),request({sourceUrl:'https://127.0.0.1/x'}),request({sourceUrl:'http://10.0.0.1'}),request({sourceUrl:'https://user:pass@github.com/x'}),request({sourceUrl:'file:///private'}),request({sourceUrl:'https://localhost/x'}),request({sourceUrl:'https://example.test/x'}),request({fragment:'#idea=invalid'}),request({requestId:'not-a-uuid'}),request({originalPrompt:'forbidden'}),request({note:null}),request({sourceUrl:'x'.repeat(1501)})]){
   assert.equal((await f.handle(post(altered),f.env)).status,400);
  }
  assert.equal((await f.handle(post(request(),{'content-type':'text/plain'}),f.env)).status,400);

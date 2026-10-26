@@ -72,9 +72,17 @@ test('scope prose and long custom goals cannot contaminate or block method-only 
  assert.deepEqual(second.candidates.map(c=>c.id),first.candidates.map(c=>c.id));assert(!second.retrieval.query.includes('PRIVATE'));
  assert.equal(second.card_json,scoped.card_json);assert.equal(second.card.scope.value.description,scoped.card.scope.value.description);
  assert.equal(second.contributions[0].original_idea,data.submissions[0].original_idea);assert.deepEqual(second.card.unresolved,scoped.card.unresolved);
- const unresolved=make(['lp2-15'],{unresolved:[{kind:'source_note',text:'Preserve this unresolved condition'}]});
+ // Existing generic unresolved constraints remain valid incomplete cards;
+ // source_note now requires its own explicit human disposition before a new
+ // confirmation, so this fixture must not fabricate that approval.
+ const unresolved=make(['lp2-15'],{unresolved:[{kind:'custom_interpretation',question:'unresolved-condition',text:'Preserve this unresolved condition'}]});
  const held=reconcile(exported([unresolved]),registry,evidence).groups[0];assert.equal(held.retrieval.state,'needs_clarification');
  assert.deepEqual(held.card.unresolved,unresolved.card.unresolved);assert.equal(held.retrieval.discovery,null);
+ // Reconstruct historical wire bytes without current C.confirm. The new
+ // source-note review gate must keep them readable but unconfirmed, never
+ // classify the text as background merely to make an offline export readable.
+ const legacy=clone(plain);legacy.card.unresolved=[{kind:'source_note',text:'Preserve this unresolved condition'}];legacy.card_json=C.serialize(legacy.card);legacy.card_hash=sha(legacy.card_json);legacy.id='p_'+legacy.card_hash;legacy.fragment='#idea='+Buffer.from(JSON.stringify(legacy.card)).toString('base64url');const unchanged=C.serialize(legacy);const retained=reconcile(exported([legacy]),registry,evidence).groups[0];assert.equal(retained.retrieval.state,'needs_clarification');assert.equal(retained.retrieval.discovery,null);assert.equal(retained.candidates.length,0);assert.deepEqual(retained.card.unresolved,legacy.card.unresolved);assert.equal(retained.card_json,legacy.card_json);assert.equal(C.serialize(legacy),unchanged);
+
 });
 test('overlong complete method projection remains explicitly bounded without changing the card',()=>{
  const row=make(['lp2-15'],{method:known({operations:[{id:'described_method',label:'Reverse rune order '.repeat(100)}]})});

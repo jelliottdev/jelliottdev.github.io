@@ -11,14 +11,14 @@ for(const item of INTERPRETATION_CASES){
  try{
   assert.equal(item.synthetic,true);const before=JSON.stringify(item),result=toDraft(item.text,item.candidate),d=result.draft,e=item.expect;
   assert.equal(d.source.text,item.text);assert.equal(d.status,'draft');assert.equal(d.execution,'not_run');assert.equal(d.confirmation,null);assert.equal(result.requiresConfirmation,true);assert.equal(result.meaningVerified,false);
-  assert.deepEqual(d.method.value?.operations.map(o=>o.id)||[],e.operationIds);assert.deepEqual(result.questions.map(q=>q.id),e.questionIds);
+  assert.deepEqual(d.method.value?.operations.map(o=>o.id)||[],e.operationIds);assert.deepEqual(result.questions.filter(q=>!q.id.startsWith('source-note:')).map(q=>q.id),e.questionIds);const noteQuestions=result.questions.filter(q=>q.id.startsWith('source-note:'));assert.deepEqual(noteQuestions.map(q=>q.context),d.unresolved.filter(n=>n.kind==='source_note').map(n=>n.text));assert(noteQuestions.every(q=>JSON.stringify(q.choices.map(c=>c.id))===JSON.stringify(['background','condition'])));if(noteQuestions.length)assert.throws(()=>C.confirm(d,{id:'unresolved-source-case',at:'2026-10-26T00:00:00.000Z'}),/Resolve consequential/);
   assert.equal(d.aim.status,item.candidate.outcome?'specified':'unspecified');
   assert.equal(d.scope.status,item.candidate.scope?'specified':'unspecified');
   for(const [index,operation]of (d.method.value?.operations||[]).entries()){
    assert.equal(operation.sourceText,item.candidate.steps[index].source.quote);assert.equal(operation.key??null,item.candidate.steps[index].parameters.key?.value??null);
    assert.equal(operation.provenance.kind,'proposed');
   }
-  for(const key of C.RULES)if(!Object.hasOwn(item.candidate.rules,key)&&key!=='exceptionalCases')assert.equal(d.rules[key].status,'unspecified','Unstated rule invented: '+key);
+  for(const key of C.RULES)if(!Object.hasOwn(item.candidate.rules,key))assert.equal(d.rules[key].status,'unspecified','Unstated rule invented: '+key);
   for(const field of [d.aim,d.method,d.scope,...Object.values(d.rules)].filter(f=>f.status!=='unspecified')){
    assert.equal(field.provenance.kind,'proposed');for(const reference of field.provenance.refs){const source=JSON.parse(reference);assert.equal(source.source,'original wording');assert.equal(source.end,source.start+source.quote.length);assert.equal(item.text.slice(source.start,source.end),source.quote);}
   }

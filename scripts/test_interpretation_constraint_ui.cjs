@@ -3,6 +3,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),I=require('../investigate.js'),P=require('../claim-interpretation.js'),C=require('../claim-specification.js'),H=require('../claim-share.js'),F=require('../fixed-plan-compiler.js');
 const harness=fs.readFileSync(require.resolve('./test_investigate_intake_focus.cjs'),'utf8');
 const {makeDocument}=new Function('require',harness.slice(0,harness.indexOf('async function fixture()'))+'\nreturn {makeDocument};')(require);
+const notes=d=>d.unresolved.filter(x=>x.kind==='source_note').map(x=>x.text).join(' | ');
 const raw='Decrypt LP2 by reversing each row, keeping every F rune unchanged.';
 const quote=(text,value)=>({start:text.indexOf(value),quote:value});
 function wire(text=raw){return {schema:P.SCHEMA,outcome:{id:'decipher',source:quote(text,text)},steps:[{id:'reverse_row_runes',familyId:'transposition',source:quote(text,'reversing each row')}],scope:null,rules:[]};}
@@ -27,15 +28,15 @@ async function fixture(candidate,binding){
   const f=await fixture(candidate,binding);try{
    f.submit();await until(()=>!f.app.getSnapshot().interpreting,'Interpretation did not settle');
    const snapshot=f.app.getSnapshot(),d=snapshot.draft;assert.equal(snapshot.stage,'review');assert.equal(d.source.text,raw);assert.equal(d.method.value.operations[0].sourceText,'reversing each row');assert.equal(d.aim.value.detail,raw);
-   assert.equal(d.rules.exceptionalCases.status,'specified');assert.match(d.rules.exceptionalCases.value,/keeping every F rune unchanged/,'A broad goal quote cannot launder an omitted method constraint');assert.equal(snapshot.confirmed,null);f.noResearch();
-   assert(I.intakeQuestions(d).some(q=>q.id==='scope'));f.answer('specific','LP2-15');assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'evaluation');f.answer('inspect-output');
-   const reviewed=f.app.getSnapshot().draft;assert.match(reviewed.rules.exceptionalCases.value,/keeping every F rune unchanged/);assert(f.doc.host.innerHTML.includes('Exceptional cases:'));assert(f.doc.host.innerHTML.includes('keeping every F rune unchanged'),'The retained constraint must be visible at confirmation, not only inside original prose');assert(f.doc.host.innerHTML.includes('<summary>Original idea</summary><pre>'+raw+'</pre>'));assert(f.doc.getElementById('confirm'));assert.equal(f.app.getSnapshot().confirmed,null);f.noResearch();
-   f.doc.getElementById('confirm').fire('click');await until(()=>f.calls.some(call=>call.url.endsWith('/ask')),'Explicit confirmation did not compare');const confirmed=f.app.getSnapshot().confirmed;assert(confirmed);assert.equal(confirmed.source.text,raw);assert.match(confirmed.rules.exceptionalCases.value,/keeping every F rune unchanged/);
-   const saved=f.calls.find(call=>call.url.endsWith('/proposals'));assert(saved);const body=JSON.parse(saved.options.body),card=H.cardData(C.confirm(H.decode(body.fragment).draft,{id:'retained-review',at:'2026-10-26T12:00:00.000Z'}));assert.match(card.rules.exceptionalCases.value,/keeping every F rune unchanged/);
-   const compiled=F.compile(card);assert.match(compiled.reason,/exceptionalCases condition needs an adapter/,'The retained omitted constraint itself must prevent execution as plain row reversal');
+   assert.equal(d.rules.exceptionalCases.status,'unspecified');assert.match(notes(d),/keeping every F rune unchanged/,'A broad goal quote cannot launder an omitted method constraint');assert.equal(snapshot.confirmed,null);f.noResearch();
+   const question=I.intakeQuestions(d)[0];assert(question.id.startsWith('source-note:'));assert(!f.doc.getElementById('confirm'));assert(f.doc.host.innerHTML.includes('keeping every F rune unchanged'));f.answer('condition');assert.match(f.app.getSnapshot().draft.rules.exceptionalCases.value,/keeping every F rune unchanged/);
+   assert(I.intakeQuestions(f.app.getSnapshot().draft).some(q=>q.id==='scope'));f.answer('specific','LP2-15');assert.equal(I.intakeQuestions(f.app.getSnapshot().draft)[0].id,'evaluation');f.answer('inspect-output');
+   const reviewed=f.app.getSnapshot().draft;assert.equal(notes(reviewed),'');assert.match(reviewed.rules.exceptionalCases.value,/keeping every F rune unchanged/);assert(f.doc.host.innerHTML.includes('keeping every F rune unchanged'),'The explicitly retained condition stays visible at review');assert(f.doc.host.innerHTML.includes('<summary>Original idea</summary><pre>'+raw+'</pre>'));assert(f.doc.getElementById('confirm'));assert.equal(f.app.getSnapshot().confirmed,null);f.noResearch();
+   const confirmed=C.confirm(reviewed,{id:'retained-review',at:'2026-10-26T12:00:00.000Z'}),card=H.cardData(confirmed);assert.equal(confirmed.source.text,raw);assert.match(card.rules.exceptionalCases.value,/keeping every F rune unchanged/);assert(confirmed.clarifications.some(item=>item.choice==='condition'&&item.sourceNote.text.includes('every F rune unchanged')));
+   const compiled=F.compile(card);assert.match(compiled.reason,/exceptionalCases/,'An explicitly retained unsupported condition cannot run as a plain row reversal');assert(!compiled.steps);
   }finally{f.app.destroy();}
  }
- console.log('PASS broad goal evidence cannot hide an omitted constraint in the reviewed, explicitly confirmed or saved idea');
+ console.log('PASS broad goal evidence cannot hide an omitted constraint in the reviewed source notes or their canonical serialization');
  for(const kind of ['wrong-source-binding','invented-constraint-source']){
   const bad=structuredClone(candidate);if(kind==='invented-constraint-source')bad.steps[0].source={start:raw.indexOf('reversing'),quote:'reversing each row while copying F'};
   const f=await fixture(bad,kind==='wrong-source-binding'?'0'.repeat(64):binding);try{

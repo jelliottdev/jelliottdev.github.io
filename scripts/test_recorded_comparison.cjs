@@ -50,7 +50,10 @@ test('only exact supported canonical operation and positive labels qualify',()=>
 });
 test('all explicit rule states, including retained gaps, fall back rather than match unknown settings',()=>{
  for(const key of C.RULES)for(const field of [known(key==='boundaryMode'?'fixed_spaces':'retain'),C.field('not_applicable'),C.field('unrestricted')])assert.equal(compare(make({rules:{[key]:field}})),null,key+':'+field.status);
- assert.equal(compare(make({unresolved:[{kind:'source_note',text:'Keep the word gaps'}]})),null);
+ // Reconstruct a historical confirmed snapshot without asking the current
+ // confirmation API to approve an unresolved source note. Current validation
+ // must decline an exact-overlap claim, not retroactively clear the note.
+ const legacy=structuredClone(make());legacy.unresolved=[{kind:'source_note',text:'Keep the word gaps'}];legacy.status='confirmed_incomplete';legacy.canonical=C.summary(legacy);const before=JSON.stringify(legacy);assert.equal(compare(legacy),null);assert.equal(JSON.stringify(legacy),before);
 });
 test('whole-page explicit scope and decipher category are required, with no unknown or qualified scope',()=>{
  for(const scope of [C.field(),known({pages:[]}),known({pages:['lp2-15'],description:'Only lines 2–3'}),known({pages:['lp2-15'],artifacts:[]}),known({pages:['lp2-15'],inputVersion:'other'})])assert.equal(compare(make({scope})),null);
@@ -112,7 +115,7 @@ test('numeric authored metadata and requested scope rules must be complete stric
   s=>s.method.value.operations[0].label='Word prime sums then Atbash',s=>s.method.value.operations[0].declaredFamilyId='feedback',
   s=>s.method.value.operations.push({id:'atbash',label:'Atbash'}),s=>s.unresolved.push({kind:'source_note',text:'retain'}),
   s=>s.scope=known({pages:['lp2-15'],description:'only a heading'})]){
-  const draft=C.revise(snapshot,{});change(draft);assert.equal(compare(C.confirm(draft,{id:'unsupported-numeric',at}),[base]),null);
+  const draft=C.revise(snapshot,{});change(draft);const historical=draft.unresolved.some(n=>n.kind==='source_note')?{...draft,status:'confirmed_incomplete',confirmation:{id:'unsupported-numeric',at},canonical:C.summary(draft)}:C.confirm(draft,{id:'unsupported-numeric',at});assert.equal(compare(historical,[base]),null);
  }
  const huge={...base,text:base.text+' '.repeat(9001)};assert.equal(compare(snapshot,[huge]),null,'Never truncate leading complete source evidence');
 });

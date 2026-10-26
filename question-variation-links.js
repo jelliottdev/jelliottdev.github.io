@@ -7,7 +7,7 @@
  async function hash(v,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
  function canonical(card){
   const text=E.stable(card);ensure(new TextEncoder().encode(text).length<=H.MAX_BYTES,'The question exceeds its card limit.');let binary='';for(const b of new TextEncoder().encode(text))binary+=String.fromCharCode(b);
-  const draft=H.decode('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')).draft,checked=H.cardData(C.confirm(draft,{id:'lineage-card-validation',at:'2000-01-01T00:00:00.000Z'}));ensure(same(checked,card),'The retained question is not canonical.');return checked;
+  const checked=H.readCard('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));ensure(same(checked,card),'The retained question is not canonical.');return checked;
  }
  function source(origin){
   const value=origin.source,mapped=origin.schema===MAPPED_SCHEMA,question=[QUESTION_SCHEMA,EVALUATION_SCHEMA].includes(origin.schema),reviewed=mapped||question&&Object.hasOwn(value||{},'reviewedProgram');

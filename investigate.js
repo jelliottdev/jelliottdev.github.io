@@ -662,14 +662,6 @@
    const q=intakeQuestions(draft)[0];if(!q)return '';
    return '<form id="clarification" class="question'+(q.id==='evaluation'?' evaluation-question':'')+'"><fieldset><legend class="sr-only">'+esc(q.prompt)+'</legend>'+(q.context?'<p class="condition-context">'+esc(q.context)+'</p>':'')+(q.example?'<p class="example">'+esc(q.example)+'</p>':'')+q.choices.map(c=>'<label><input type="radio" name="choice" value="'+esc(c.id)+'" required><span>'+esc(c.label)+(c.example?'<small class="example">'+esc(c.example)+'</small>':'')+'</span></label>').join('')+'</fieldset><label for="other-detail" id="other-label" hidden>Describe what you mean</label><textarea id="other-detail" hidden></textarea><div class="actions"><button class="primary" type="submit">Continue</button></div></form>';
   }
-  function roughSourceHTML(document){
-   const record=records.find(r=>r.id===document.id);if(!record)return '';
-   const excerpt=(value,max)=>{const text=String(value||'').replace(/\s+/gu,' ').trim();if(text.length<=max)return text;const head=text.slice(0,max),cut=head.lastIndexOf(' ');return head.slice(0,cut>max*.6?cut:max)+'…';};
-   const action=excerpt(record.reader_test?.action||record.scope?.procedure,260),finding=excerpt(record.reader_finding||record.finding,420),limit=excerpt(readerLimit(record),190);
-   return '<section class="source"><h3><a href="library.html#/experiment/'+esc(record.id)+'">'+esc(Reader?.title(record)||document.title)+'</a></h3>'+
-    (action?'<p><strong>What was tried:</strong> '+esc(action)+'</p>':'')+(finding?'<p><strong>Result:</strong> '+esc(finding)+'</p>':'')+
-    (limit?'<p class="small source-limit"><strong>Limit:</strong> '+esc(limit)+'</p>':'')+'</section>';
-  }
   function roughResearchHTML(){
    if(!searchedText)return '';
    const related=(S.related?S.related(documents,searchedText):S.select(documents,searchedText)).filter(d=>d.kind==='experiment'&&records.some(r=>r.id===d.id));
@@ -677,7 +669,7 @@
     (!loaded?'<p role="status">'+esc(loadError?'The research records could not be loaded. Your wording is kept.':'Loading research records…')+'</p>':
     '<p>These records may help with your idea. A related record does not mean the same test has been done.</p>'+
     (relatedAnswer?'<p class="small answer-note">AI summary of the linked research.</p><div class="answer">'+nativeLinks(M.render(relatedAnswer.answer,relatedAnswer.sources))+'</div>':'')+
-    (related.length?related.map(roughSourceHTML).join(''):'<p>No close match was found in this collection. That does not tell us whether someone has tried it elsewhere.</p><p><a href="research.html#mode=list">Explore the research map</a></p>'))+'</section>';
+    (related.length?related.map(document=>Reader.renderRelated(records.find(record=>record.id===document.id))).join(''):'<p>No close match was found in this collection. That does not tell us whether someone has tried it elsewhere.</p><p><a href="research.html#mode=list">Explore the research map</a></p>'))+'</section>';
   }
   async function searchRelated(){
    stop();const token=generation,text=raw;searchedText=text;relatedAnswer=null;stage='search';draft=null;confirmed=null;render();focus('#related-title');
@@ -688,7 +680,7 @@
    const timer=schedule(()=>requestController.abort(),30000);
    try{
     const data=await json(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:'related-research',query:text}),signal:requestController.signal});
-    if(destroyed||token!==generation||stage!=='search'||searchedText!==text||raw!==text)return;
+    if(destroyed||requestController.signal.aborted||token!==generation||stage!=='search'||searchedText!==text||raw!==text)return;
     if(data.kind!=='related-research'&&data.comparisonKind!=='related-research')return;
     const checked=validateAnswer({...data,kind:undefined},documents,null);
     if(checked.sources.some(d=>d.kind!=='experiment'))return;
