@@ -14,23 +14,27 @@ const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&
 const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
 const hash=async(value,crypto)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof value==='string'?value:E.stable(value))))].map(n=>n.toString(16).padStart(2,'0')).join('');
 
-export async function resolveParameterQuestion(input,{db,crypto=globalThis.crypto,fetcher=globalThis.fetch,registry,history,programIndex,signal}={}){
+export async function resolveParameterQuestionDetails(input,{db,crypto=globalThis.crypto,fetcher=globalThis.fetch,registry,history,programIndex,signal}={}){
  const value=J.capture(input,{maxBytes:65536,maxDepth:16,maxNodes:10000}),hasSettings=!!value&&Object.hasOwn(value,'parentSettings');
  ensure(exact(value,['source','selection',...(hasSettings?['parentSettings']:[])]),'Declare an exact source and selected parameter change.');
  const ref=value.source;
  ensure(ref&&typeof ref==='object'&&!Array.isArray(ref)&&typeof ref.proposalId==='string'&&PROPOSAL.test(ref.proposalId),'Use an exact public parent question.');
  if(ref.kind==='saved-task')ensure(exact(ref,['kind','proposalId','taskId'])&&typeof ref.taskId==='string'&&HEX.test(ref.taskId),'Use an exact saved-task source reference.');
- else ensure(ref.kind==='published-program'&&exact(ref,['kind','proposalId','recordId','revision','caseId'])&&typeof ref.recordId==='string'&&ref.recordId.length<=100&&SLUG.test(ref.recordId)&&typeof ref.revision==='string'&&HEX.test(ref.revision)&&typeof ref.caseId==='string'&&ref.caseId.length<=200&&/^[a-z0-9-]+$/.test(ref.caseId),'Use an exact pinned published-program reference.');
+ else ensure(['published-program','archived-program'].includes(ref.kind)&&exact(ref,['kind','proposalId','recordId','revision','caseId'])&&typeof ref.recordId==='string'&&ref.recordId.length<=100&&SLUG.test(ref.recordId)&&typeof ref.revision==='string'&&HEX.test(ref.revision)&&typeof ref.caseId==='string'&&ref.caseId.length<=200&&/^[a-z0-9-]+$/.test(ref.caseId),'Use an exact pinned published-program reference.');
  ensure(typeof db?.prepare==='function'&&crypto?.subtle,'Public source resolution is unavailable.');
  const live=()=>{ensure(!signal?.aborted,'Parameter-question source resolution was cancelled.');};
  const query=(sql,...args)=>db.prepare(sql).bind(...args).first();
  live();
- const publicRow=await query(`SELECT p.id,p.card_hash,p.card_json FROM proposals p
-  JOIN research_ideas public ON public.proposal_id=p.id WHERE p.id=?`,ref.proposalId);live();
- ensure(publicRow&&publicRow.id===ref.proposalId&&typeof publicRow.card_json==='string'&&typeof publicRow.card_hash==='string'&&HEX.test(publicRow.card_hash),'The public parent question is unavailable.');
- const parentCard=validateCard(publicRow.card_json),cardText=C.serialize(parentCard),cardSha256=await hash(cardText,crypto);live();
- ensure(publicRow.card_json===cardText&&publicRow.card_hash===cardSha256&&ref.proposalId==='p_'+cardSha256,'The public parent question changed its canonical identity.');
- let task,inputVersion,resultId,createdAt,publishedSource;
+ const archived=ref.kind==='archived-program';
+ ensure(!archived||!hasSettings,'An archived fixed program does not accept family settings.');
+ let parentCard,cardSha256,task,inputVersion,resultId,createdAt,publishedSource;
+ if(!archived){
+  const publicRow=await query(`SELECT p.id,p.card_hash,p.card_json FROM proposals p
+   JOIN research_ideas public ON public.proposal_id=p.id WHERE p.id=?`,ref.proposalId);live();
+  ensure(publicRow&&publicRow.id===ref.proposalId&&typeof publicRow.card_json==='string'&&typeof publicRow.card_hash==='string'&&HEX.test(publicRow.card_hash),'The public parent question is unavailable.');
+  parentCard=validateCard(publicRow.card_json);const cardText=C.serialize(parentCard);cardSha256=await hash(cardText,crypto);live();
+  ensure(publicRow.card_json===cardText&&publicRow.card_hash===cardSha256&&ref.proposalId==='p_'+cardSha256,'The public parent question changed its canonical identity.');
+ }
  if(ref.kind==='saved-task'){
   const row=await query(`SELECT t.id,t.task_hash,t.task_json,t.input_version,links.input_version AS linked_input_version
    FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id
@@ -47,9 +51,20 @@ export async function resolveParameterQuestion(input,{db,crypto=globalThis.crypt
   const published=await readPublishedEvidence({recordId:ref.recordId,revision:ref.revision,caseId:ref.caseId,crypto,fetcher,registry,history,programIndex,signal});live();
   ensure(published&&published.publishedSource?.recordId===ref.recordId&&published.publishedSource.revision===ref.revision&&published.publishedSource.caseId===ref.caseId,'The pinned published calculation is unavailable.');
   task=published.task;inputVersion=published.inputVersion;resultId=published.run.id;createdAt=published.run.createdAt;publishedSource=published.publishedSource;
+  if(archived){
+   const derived=await Question.archived({task,inputVersion},crypto);live();
+   ensure(derived.proposalId===ref.proposalId,'The archived program identifies another canonical parent question.');
+   parentCard=validateCard(derived.card);cardSha256=derived.cardSha256;
+   ensure(C.serialize(parentCard)===C.serialize(derived.card)&&cardSha256===await hash(C.serialize(parentCard),crypto)&&ref.proposalId==='p_'+cardSha256,'The archived parent changed its canonical identity.');live();
+   const existing=await query('SELECT id,card_hash,card_json FROM proposals WHERE id=?',ref.proposalId);live();
+   ensure(!existing||existing.id===ref.proposalId&&existing.card_hash===cardSha256&&existing.card_json===C.serialize(parentCard),'The retained archived parent changed its canonical content.');
+  }
+
  }
  const derivation=await Question.prepare({parentTask:task,parentCard,inputVersion,selection:value.selection,...(hasSettings?{parentSettings:value.parentSettings}:{})},crypto);live();
  ensure(derivation.parent.cardSha256===cardSha256&&derivation.parent.taskId===task.taskId,'The derived question changed its authenticated parent.');
  const taskSha256=await hash(task,crypto);live();
- return freeze({schema:'liberpedia-parameter-question-preview-v1',source:{reference:ref,receipt:{taskId:task.taskId,taskSha256,resultId,createdAt,inputVersion},...(publishedSource?{publishedSource}: {})},parentQuestion:{proposalId:ref.proposalId,cardSha256},derivation});
+ const preview={schema:'liberpedia-parameter-question-preview-v1',source:{reference:ref,receipt:{taskId:task.taskId,taskSha256,resultId,createdAt,inputVersion},...(publishedSource?{publishedSource}: {})},parentQuestion:{proposalId:ref.proposalId,cardSha256},derivation};
+ return freeze({preview,parentCard});
 }
+export async function resolveParameterQuestion(input,options){return (await resolveParameterQuestionDetails(input,options)).preview;}

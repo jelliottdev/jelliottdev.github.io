@@ -38,5 +38,20 @@
   return freeze({schema:SCHEMA,parent:{taskId:value.parentTask.taskId,taskSha256:await hash(value.parentTask,crypto),cardSha256:await hash(original,crypto),inputVersion:value.inputVersion,...(member?{settings:copy(member.settings)}:{})},selection:copy(value.selection),card,task});
  }
  async function validate(input,derived,crypto=root.crypto){const snapshot=J.capture(derived,{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000}),expected=await prepare(input,crypto);ensure(same(snapshot,expected),'The varied question or parent relationship changed.');return expected;}
- const api={SCHEMA,ALPHABET_SHA256,prepare,validate};if(node)module.exports=api;else root.TaskParameterQuestion=api;
+ // Reconstruct the literal archived opening check, not its author's intent or
+ // membership in a present-day recipe. The receipt is authenticated by caller.
+ async function archived(input,crypto=root.crypto){
+  const capture=value=>J.capture(value,{maxBytes:2*1024*1024,maxDepth:24,maxNodes:250000}),value=capture(input);
+  ensure(value&&Object.keys(value).length===2&&['task','inputVersion'].every(k=>Object.hasOwn(value,k))&&['raw','reviewed'].includes(value.inputVersion),'Use an exact archived task and input version.');
+  const unchanged=()=>ensure(same(capture(input),value),'The archived calculation changed during question preparation.');
+  await E.checkIdentity(value.task,crypto);unchanged();
+  ensure(['exact-prefix','exact-prefix-set'].includes(value.task.criterion.kind),'Only literal archived opening checks can become this question.');
+  ensure(await hash(value.task.alphabet,crypto)===ALPHABET_SHA256,'The archived calculation must use the canonical GP29 alphabet.');unchanged();
+  const operations=value.task.steps.map(operation),draft=C.createDraft({source:{text:'An exact supplied-opening check reconstructed from an archived calculation.'},aim:field({outcomeId:'decipher',wording:'Check the supplied opening after the declared transformations.',detail:'Check the supplied opening after the declared transformations.'}),method:field({operations}),scope:field({pages:value.task.pages.map(p=>p.id)}),rules:{inputVersion:field(value.inputVersion),representation:field('GP29'),unmapped:field('preserve'),wordBoundaries:field('preserve'),...(value.task.steps.some(s=>s.op==='cumulative-difference')?{initialState:field(0)}:{}),evaluation:field(copy(value.task.criterion))}}),card=H.cardData(C.confirm(draft,{id:'archived-opening-question',at:'2000-01-01T00:00:00.000Z'}));
+  canonical(card);const compiled=F.compile(card);
+  ensure(!compiled.reason&&!compiled.state&&same(compiled.steps,value.task.steps)&&same(compiled.criterion,value.task.criterion)&&same(compiled.pages,value.task.pages.map(p=>p.id))&&compiled.inputVersion===value.inputVersion,'The reconstructed question does not describe the exact archived calculation.');
+  const cardSha256=await hash(card,crypto);unchanged();const taskSha256=await hash(value.task,crypto);unchanged();
+  return freeze({card,proposalId:'p_'+cardSha256,cardSha256,taskSha256});
+ }
+ const api={SCHEMA,ALPHABET_SHA256,prepare,validate,archived};if(node)module.exports=api;else root.TaskParameterQuestion=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
