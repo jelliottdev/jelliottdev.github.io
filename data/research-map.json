@@ -5,7 +5,7 @@
     "source_commit": "a77a12224881126eca687c2d34917e4bcab5af47",
     "snapshot_experiments_sha256": "e0e3bb8852bd241729f8223dd3fde68902baa698c0f7ff5bda1825cfd4888616",
     "source_receipt_sha256": "08d365f7945105d8f7e41e27cd9b265b466a97d34c41cca53cbeea9854a24a99",
-    "current_experiments_sha256": "93a08807e5a39d598fd133dd6ce7cfbb0975171e51f2553ff6faf3bcb7235664",
+    "current_experiments_sha256": "ef8809857abbf1e7bc7d8bfec40ec49d289e80f6b1e1bc860922b38192ee76c8",
     "source_files": {
       "solving-hierarchy.json": {
         "handoff_path": "visualizations/lp2-solving/hierarchy-data.json",
@@ -114,6 +114,7 @@
       "public-multihistory-feedback",
       "public-wordlist-vigenere",
       "quagmirror-variant-continuations",
+      "rotating-folded-key-openings",
       "totient-map-route",
       "uniform-additive-doublets",
       "wholepage-progressive-caesar",
@@ -28964,10 +28965,12 @@
     "rotating-folded-key-openings": {
       "id": "rotating-folded-key-openings",
       "title": "Rotating and folded wordlist keys",
+      "reader_title": "Keys that move or run forwards and backwards",
+      "reader_intro": "A folded key runs forwards, then backwards: ABC becomes ABCCBA when the ends repeat, or ABCB when they do not. Moving where that sequence starts is a separate choice. Letters illustrate key positions, not manuscript text.",
       "reader_question": "Could changing the key as it repeats reveal a familiar opening?",
       "question": "Could changing the key as it repeats reveal a familiar opening?",
-      "finding": "Zero of 3,104,640 exact comparisons match; the longest shared prefix is four runes. Planted controls and independent census pass.",
-      "limitations": "Only four declared schedules, 43 keys, page starts and nine fixed openings. Different plaintexts, keys or key rules remain possible.",
+      "finding": "The full four-rule test checked 6,272 key settings on 55 LP2 pages containing runes. None matched any of the nine supplied 12-rune openings; the longest match was four runes.",
+      "limitations": "This check looks only for these nine openings at page starts. Other text, later positions, keys or ways of using them remain untested.",
       "pages": [
         "lp2-00",
         "lp2-01",
@@ -29095,9 +29098,17 @@
       },
       "outcome": "not-supported",
       "href": "#/experiments/rotating-folded-key-openings",
-      "current_sha256": "bccc4c45df2e9c0aedff03623aef3cd3f5e52cec3ea249750ab2c74328e9aab2",
+      "current_sha256": "feafc67421368352338d7bf7b1cfd90c4aded6650fec7c48b1e7b892e6249918",
       "snapshot_sha256": "bccc4c45df2e9c0aedff03623aef3cd3f5e52cec3ea249750ab2c74328e9aab2",
-      "changed_fields": [],
+      "changed_fields": [
+        "browser_followups",
+        "reader_finding",
+        "reader_intro",
+        "reader_limit",
+        "reader_test",
+        "reader_title",
+        "research_questions"
+      ],
       "classification": "draft"
     },
     "round19-decoder-baseline-control": {

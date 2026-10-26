@@ -4,6 +4,7 @@ import gzip
 import hashlib
 import json
 import tempfile
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -52,6 +53,9 @@ class DiscoveryProjectionTests(unittest.TestCase):
         self.assertEqual([r['id'] for r in self.projected], [r['id'] for r in self.original])
         for current, prior, source in zip(self.projected, self.original, self.records):
             for key, value in prior.items():
+                if key == 'followup_discovery' and not value['items']:
+                    self.assertNotIn(key, current)
+                    continue
                 self.assertEqual(current[key], value, source['id'] + '.' + key)
             self.assertEqual(current.get('reader_title', current['title']), source.get('reader_title', source['title']))
             self.assertEqual(current['source_finding'], source['finding'])
@@ -95,6 +99,9 @@ class DiscoveryProjectionTests(unittest.TestCase):
     def test_followups_are_bounded_discovery_descriptors_not_executable_recipes(self):
         count = 0
         for current, source in zip(self.projected, self.records):
+            if not source.get('browser_followups'):
+                self.assertNotIn('followup_discovery', current)
+                continue
             envelope = current['followup_discovery']
             self.assertEqual(set(envelope), {'schema', 'items'})
             self.assertEqual(envelope['schema'], 'liberpedia-followup-discovery-v1')
@@ -124,16 +131,35 @@ class DiscoveryProjectionTests(unittest.TestCase):
     def test_projection_size_remains_below_half_of_omnibus_even_with_all_recipe_hints(self):
         raw = (json.dumps({'schema': 'liberpedia-experiment-discovery-v1', 'records': self.projected},
                           ensure_ascii=False, indent=2) + '\n').encode()
-        hints = json.dumps([r['followup_discovery'] for r in self.projected], ensure_ascii=False,
+        hints = json.dumps([r['followup_discovery'] for r in self.projected if 'followup_discovery' in r], ensure_ascii=False,
                            separators=(',', ':')).encode()
         self.assertLess(len(raw), len(self.raw_registry) * .5)
         self.assertLess(len(gzip.compress(raw)), len(gzip.compress(self.raw_registry)) * .5)
         # Bound each hint independently so added families cannot hide oversized entries.
         for record in self.projected:
-            for item in record['followup_discovery']['items']:
+            for item in record.get('followup_discovery', {}).get('items', []):
                 self.assertLess(len(json.dumps(item, ensure_ascii=False).encode()), 4096)
         self.assertLess(len(hints), 65536)
         self.assertEqual(self.records, self.before)
+
+    def test_omitting_empty_envelopes_preserves_all38_actions_in_the_real_browser_consumer(self):
+        expected = {record['id']: [recipe['id'] for recipe in record.get('browser_followups', [])]
+                    for record in self.records}
+        self.assertEqual(sum(map(len, expected.values())), 38)
+        absent = [record for record in self.projected if 'followup_discovery' not in record]
+        self.assertGreater(len(absent), 300)
+        code = "const fs=require('node:fs'),D=require('./research-discovery.js'),input=JSON.parse(fs.readFileSync(0,'utf8')),records=D.normalize({schema:'liberpedia-experiment-discovery-v1',records:input}).records;console.log(JSON.stringify(Object.fromEntries(records.map(r=>[r.id,D.items(r).map(item=>item.id)]))));"
+        out = subprocess.run(['node', '-e', code], input=json.dumps(self.projected), cwd=ROOT,
+                             text=True, encoding='utf8', capture_output=True, check=True)
+        self.assertEqual(json.loads(out.stdout), expected)
+        # No descriptor text or authority pin is shortened to meet the cap.
+        for record in self.projected:
+            source = next(row for row in self.records if row['id'] == record['id'])
+            for hint, recipe in zip(record.get('followup_discovery', {}).get('items', []), source.get('browser_followups', [])):
+                self.assertEqual(hint.get('motivation'), recipe.get('motivation'))
+                self.assertEqual(hint['question'], recipe['question'])
+                self.assertEqual(hint['scope_change'], recipe['scope_change'])
+                self.assertEqual(hint['limitation'], recipe['limitation'])
 
     def test_tested_is_an_authored_hint_and_cannot_mutate_or_replace_source_protocol(self):
         record = copy.deepcopy(next(r for r in self.records if r.get('browser_followups')))

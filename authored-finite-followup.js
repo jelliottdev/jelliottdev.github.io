@@ -44,7 +44,7 @@
   return {...value,compiled,bundle:captured};
  }
  function render(plan){
-  const examples=node?require('./protocol-example-view.js'):root.ProtocolExampleView,first=plan.compiled.domain.programs[0],illustration=examples?.renderKeyed?.({alphabet:plan.compiled.domain.alphabet,steps:first.steps},{compact:true,settingCount:plan.domain.programs})||'';
+  const examples=node?require('./protocol-example-view.js'):root.ProtocolExampleView,first=plan.compiled.domain.programs[0],keyAxis=plan.card.rules.searchBounds?.value?.parameters?.find(axis=>axis.operation===0&&axis.name==='key'),illustration=examples?.renderKeyed?.({alphabet:plan.compiled.domain.alphabet,steps:first.steps},{compact:true,settingCount:plan.domain.programs,bankReference:keyAxis?.valuesFrom})||'';
   const description=View.workDescription({operations:plan.card.method.value.operations,parameters:plan.compiled.declaration.parameters,criterion:plan.compiled.domain.criterion}),ids=plan.compiled.domain.pages.map(p=>p.id),ranges=[];for(let i=0;i<ids.length;i++){let end=i;while(end+1<ids.length&&ids[end+1].slice(0,4)===ids[i].slice(0,4)&&Number(ids[end+1].slice(4))===Number(ids[end].slice(4))+1)end++;ranges.push(ids[i].toUpperCase()+(end>i?'–'+ids[end].slice(4):''));i=end;}const pages=ranges.join(', ');
   const offsets=plan.compiled.declaration.parameters.filter(axis=>axis.name==='offset'),offsetSummary=offsets.length===1?' · '+offsets[0].values.length+' starting '+(offsets[0].values.length===1?'place':'places'):'';
   const introduction=description?description.briefCheck:plan.motivation||plan.question;

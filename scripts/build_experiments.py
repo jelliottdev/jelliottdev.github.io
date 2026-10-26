@@ -103,7 +103,10 @@ def discovery_record(root, record, base='https://jelliottdev.github.io/'):
                     protocol_sha256=hashlib.sha256(json.dumps(originals[recipe['id']], ensure_ascii=False,
                         sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest())
         items.append(item)
-    value['followup_discovery'] = {'schema': 'liberpedia-followup-discovery-v1', 'items': items}
+    # Absence already means no actions to the browse-only consumer. Do not
+    # repeat an empty schema envelope on hundreds of records with no recipes.
+    if items:
+        value['followup_discovery'] = {'schema': 'liberpedia-followup-discovery-v1', 'items': items}
     if record.get('batch'):
         batch = record['batch']
         value['batch'] = {'suite_id': batch['suite_id'], 'case_count': batch['case_count'],

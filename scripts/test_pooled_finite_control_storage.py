@@ -31,8 +31,8 @@ class PooledControls(unittest.TestCase):
         cls.single = copy.deepcopy(cls.source)
         cls.single['members'] = cls.single['members'][:1]
 
-    def test_all17_sources_roundtrip_default_compatibility_and_javascript_exact_format(self):
-        self.assertEqual(len(self.sources), 17)
+    def test_all19_sources_roundtrip_default_compatibility_and_javascript_exact_format(self):
+        self.assertEqual(len(self.sources), 19)
         expected = []
         controls = []
         for identifier, recipe in self.sources:
@@ -51,6 +51,25 @@ class PooledControls(unittest.TestCase):
         code = "const fs=require('node:fs'),crypto=require('node:crypto'),S=require('./finite-control-storage.js'),E=require('./local-experiment.js');E.run=E.verify=()=>{throw Error('No execution');};const hash=v=>crypto.createHash('sha256').update(E.stable(v)).digest('hex');console.log(JSON.stringify(JSON.parse(fs.readFileSync(0,'utf8')).map(c=>({pooled:hash(S.compactPooled(c)),legacy:hash(S.expand(S.compactPooled(c)))}))));"
         out = subprocess.run(['node', '-e', code], input=json.dumps(controls, ensure_ascii=True), cwd=ROOT, encoding='utf8', capture_output=True, check=True)
         self.assertEqual(json.loads(out.stdout), expected)
+
+    def test_folded_sources_retain_complete_literal_controls_and_original_program_fields(self):
+        owned = {r['id']: r for record, r in self.sources if record == 'rotating-folded-key-openings'}
+        expected = {'folded-repeat-endpoints-nine-openings': ('public-wordlist-fold-repeat-endpoints-v1', 618, 36),
+                    'folded-skip-endpoints-nine-openings': ('public-wordlist-fold-skip-endpoints-v1', 532, 34)}
+        self.assertEqual(set(owned), set(expected))
+        for identifier, (bank, count, length) in expected.items():
+            recipe = owned[identifier]
+            axes = recipe['card']['rules']['searchBounds']['value']['parameters']
+            self.assertEqual(len(axes), 1)
+            self.assertEqual(axes[0]['valuesFrom']['bankId'], bank)
+            self.assertEqual(axes[0]['valuesFrom']['count'], count)
+            self.assertEqual(len(recipe['inputs']['pages']), 55)
+            self.assertNotIn('lp2-50', [p['id'] for p in recipe['inputs']['pages']])
+            legacy = codec.expand(recipe['control'])
+            self.assertEqual(len(legacy['members']), count)
+            self.assertEqual(max(len(m['control']['task']['steps'][0]['key']) for m in legacy['members']), length)
+            self.assertTrue(all(m['control']['task']['steps'][0]['direction'] == 'subtract' and len(m['control']['task']['criterion']['values']) == 184 for m in legacy['members']))
+            self.assertEqual(codec.expand(codec.compact_pooled(recipe['control'])), legacy)
 
     def test_unicode_dictionary_and_literal_fallback_preserve_exact_text_and_detachment(self):
         for text in ['😀ᚠ\t\n"\\\x00' * 3, ''.join(chr(0x400 + i) for i in range(65)), '']:

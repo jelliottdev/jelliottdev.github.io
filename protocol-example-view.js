@@ -27,8 +27,22 @@
    return {mode:step.mode,direction:step.direction,reset:step.reset,length:step.key.length,first:{position:1,input,key,output},next:{position:step.key.length+1,input:nextInput,key:nextKey,output:apply(nextInput,nextKey)}};
   }catch{return null;}
  }
- function renderKeyed(plan,{compact=false,settingCount}={}){
+ function foldedExample(plan,reference){
+  try{
+   if(!keyedExample(plan)||plan.steps[0].mode!=='repeat')return null;
+   const banks=typeof module==='object'&&module.exports?require('./repeating-key-banks.js'):root.RepeatingKeyBanks;if(!banks)return null;
+   const keys=banks.resolve(reference),bank=banks.list().find(item=>item.id===reference.bankId&&item.sha256===reference.bankSha256),mode=({'fold-repeat-endpoints-v1':'repeat','fold-skip-endpoints-v1':'skip'})[bank?.rule];
+   if(!mode||!keys.some(key=>key.length===plan.steps[0].key.length&&key.every((value,index)=>value===plan.steps[0].key[index])))return null;
+   return {mode};
+  }catch{return null;}
+ }
+ function renderFolded(example){
+  const chips=value=>'<span class="protocol-fold-cycle">'+Array.from(value,letter=>'<span'+(letter!=='B'?' class="protocol-fold-end"':'')+'>'+letter+'</span>').join('')+'</span>',row=(mode,label,cycle)=>'<div class="protocol-fold-row"><p>'+label+(example.mode===mode?' <strong>Used here</strong>':'')+'</p><div class="protocol-fold-cycles" role="img" aria-label="'+label+': '+cycle+', then '+cycle+'.">'+chips(cycle)+chips(cycle)+'</div></div>';
+  return '<figure class="protocol-example protocol-fold-example"><figcaption>How the key repeats</figcaption><p class="protocol-example-label">Illustration only. A, B and C mark three key positions.</p><div class="protocol-fold-start"><span>Starting key</span>'+chips('ABC')+'</div>'+row('repeat','Repeat the ends','ABCCBA')+row('skip','Skip repeated ends','ABCB')+'<p class="protocol-fold-note">Outlined A and C mark the ends. Starting elsewhere shifts the same cycle.</p></figure>';
+ }
+ function renderKeyed(plan,{compact=false,settingCount,bankReference}={}){
   const example=keyedExample(plan);if(!example)return '';
+  const folded=bankReference&&foldedExample(plan,bankReference);if(folded)return renderFolded(folded);
   const {first,next,mode,direction,reset,length}=example,cell=value=>'<td><span class="protocol-example-runes">'+esc(plan.alphabet[value].rune)+'</span><small>'+value+'</small></td>',raw=first.input+(direction==='add'?first.key:-first.key),source=mode==='repeat'?'return to the first key rune.':mode==='plaintext-autokey'?'take the next key rune from the first output above.':'take the next key rune from the first input above.';
   if(compact){const count=Number.isSafeInteger(settingCount)&&settingCount>1?'One of '+settingCount.toLocaleString('en-US')+' settings':'One example setting';return '<section class="protocol-example protocol-keyed-example" aria-label="Example rune change"><table><caption>'+count+' · invented input · rune numbers 0–28</caption><thead><tr><th scope="col">Rune in</th><th scope="col">Number used</th><th scope="col">Rune out</th></tr></thead><tbody><tr>'+cell(first.input)+'<td>'+first.key+'</td>'+cell(first.output)+'</tr></tbody></table><p class="protocol-example-equation">'+first.input+(direction==='add'?' + ':' − ')+first.key+(raw===first.output?' = '+first.output:': wrap around 29 to '+first.output)+'.</p><p>At each new '+reset+', start again with <strong>'+first.key+'</strong>.</p></section>';}
   return '<section class="protocol-example protocol-keyed-example" aria-label="Illustrative key calculation"><p class="protocol-example-label">Illustrative example · not manuscript evidence</p><table><caption>First rune · alphabet positions 0–28</caption><thead><tr><th scope="col">Input</th><th scope="col">Key</th><th scope="col">Output</th></tr></thead><tbody><tr>'+cell(first.input)+cell(first.key)+cell(first.output)+'</tr></tbody></table><p class="protocol-example-equation">'+first.input+(direction==='add'?' + ':' − ')+first.key+' = '+raw+(raw===first.output?'.':'; wrap to '+first.output+'.')+'</p><p>In a '+reset+' longer than '+length+' rune'+(length===1?'':'s')+', at rune '+next.position+' '+source+'</p></section>';
@@ -40,5 +54,5 @@
    return '<section class="protocol-example" aria-label="Illustrative worked example"><p class="protocol-example-label">Illustrative example · not manuscript evidence</p>'+(criterion.kind==='word-affine-count'?affine(criterion,alphabet):sums(criterion,alphabet))+'</section>';
   }catch{return '';}
  }
- const api={render,keyedExample,renderKeyed};if(typeof module==='object'&&module.exports)module.exports=api;else root.ProtocolExampleView=api;
+ const api={render,keyedExample,renderKeyed,foldedExample};if(typeof module==='object'&&module.exports)module.exports=api;else root.ProtocolExampleView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
