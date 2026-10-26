@@ -34615,13 +34615,39 @@
       "status": "published",
       "source_finding": "Full archived output matches in 2,494/2,494 cases across 58 pages and 43 keys. The original fixed-opening test remains 0/21,285 exact comparisons.",
       "next_steps": "For a new claim, specify key derivation, alignment, position and success criterion before inspecting plaintext; compare against this fixed sweep.",
+      "research_questions": [
+        {
+          "id": "public-wordlist-nine-openings",
+          "state": "open",
+          "note": "Replay the exact 43-key, nine-opening comparison in the browser. Historical findings remain unchanged; the separate source ZIP certificate is not imported as saved output.",
+          "records": [],
+          "followup": "public-wordlist-nine-openings",
+          "protocol": {
+            "id": "finite-settings-output",
+            "version": 1
+          }
+        }
+      ],
       "record_source": {
         "path": "reference/experiments/public-wordlist-vigenere.json",
-        "sha256": "c34a5f501df4c871467484ce31b6b9f432b98c7d967336dfc9a4ac320403285c"
+        "sha256": "7cf48e7939a6bc53d580f7e5b6e8ae3b4c7cff9722131b0323b90b8d0d8844f8"
       },
       "followup_discovery": {
         "schema": "liberpedia-followup-discovery-v1",
-        "items": []
+        "items": [
+          {
+            "id": "public-wordlist-nine-openings",
+            "title": "Check nine known openings with 43 archived rune keys",
+            "question": "Does any of the 43 archived rune keys recover one of nine complete 12-rune openings at a page start?",
+            "scope_change": "Repeat the same 43 literal keys, subtraction, phase zero, page restarts and nine named openings on LP2-00-55. Retain rune-empty LP2-50 as 43 no-rune cases, excluded from opening comparisons.",
+            "limitation": "Check all 2,408 page-and-key cases: 2,365 rune-bearing cases and 43 empty cases. The earlier negative finding covers 21,285 opening comparisons. This new browser replay has no results yet. It does not verify the separate 58-page ZIP comparison or test new keys, later starts, other restarts or language scores.",
+            "motivation": "A public attempt tried these 43 rune sequences as repeating keys. Repeat its exact opening check in your browser, comparing complete 12-rune beginnings with nine known passages.",
+            "kind": "finite-settings",
+            "evaluation_kind": "exact-prefix-set",
+            "available": true,
+            "protocol_sha256": "130ad7ecd00d877b1842b3bc3713adb29a4e5c4a8b05be584c8e81cbcbd5d1d1"
+          }
+        ]
       }
     },
     {

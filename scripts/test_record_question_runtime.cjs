@@ -7,7 +7,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 exportsByFile['finite-sequence-banks.js']=['FiniteSequenceBanks','resolve'];
 function setup(){
  const appended=[],timers=new Map();let timer=0,throwAppend=false;
- const c={URL,Map,Promise,TextEncoder,location:{href:'https://liberpedia.test/sub/library.html#/experiment/one'},setTimeout(fn,delay){assert.equal(delay,10000);timers.set(++timer,fn);return timer;},clearTimeout(id){timers.delete(id);},document:{createElement(tag){assert.equal(tag,'script');return {remove(){this.removed=true;}};},head:{appendChild(script){if(throwAppend)throw Error('append failed');appended.push(script);}}}};
+ const c={URL,Map,Promise,TextEncoder,TextDecoder,btoa,atob,location:{href:'https://liberpedia.test/sub/library.html#/experiment/one'},setTimeout(fn,delay){assert.equal(delay,10000);timers.set(++timer,fn);return timer;},clearTimeout(id){timers.delete(id);},document:{createElement(tag){assert.equal(tag,'script');return {remove(){this.removed=true;}};},head:{appendChild(script){if(throwAppend)throw Error('append failed');appended.push(script);}}}};
  vm.createContext(c);vm.runInContext(code,c);
  function complete(script,valid=true){script.done=true;const file=new URL(script.src).pathname.split('/').at(-1);if(valid){const [name,method]=exportsByFile[file];c[name]={[method](){}};}script.onload();}
  return {c,appended,timers,complete,setThrow:v=>{throwAppend=v;}};
@@ -16,7 +16,7 @@ async function finishStages(s,start=0){for(let i=start;i<stages.length;i++){awai
 (async()=>{
  const s=setup();assert.equal(s.appended.length,0);const first=s.c.RecordQuestionRuntime.load(),second=s.c.RecordQuestionRuntime.load();assert.equal(first,second);assert.equal(s.appended.length,1);
  await finishStages(s);assert.equal(await first,s.c.RecordQuestionLive);assert.equal(s.appended.length,18);assert.equal(s.timers.size,0);
- for(const script of s.appended){const url=new URL(script.src);assert.equal(url.origin,'https://liberpedia.test');assert.equal(url.pathname,'/sub/'+url.pathname.split('/').at(-1));assert.equal(url.search,'?v=20261026-numeric-archive');assert.equal(url.hash,'');assert.equal(script.async,true);assert(!/language|model|data/.test(url.pathname));}
+ for(const script of s.appended){const url=new URL(script.src);assert.equal(url.origin,'https://liberpedia.test');assert.equal(url.pathname,'/sub/'+url.pathname.split('/').at(-1));assert.equal(url.search,'?v=20261026-key-banks');assert.equal(url.hash,'');assert.equal(script.async,true);assert(!/language|model|data/.test(url.pathname));}
  await s.c.RecordQuestionRuntime.load();assert.equal(s.appended.length,18);console.log('PASS dormant, fixed same-origin assets, staged concurrent loading and completed reuse');
  for(const failure of ['network','timeout','export','append']){
   const f=setup();if(failure==='append')f.setThrow(true);const failed=f.c.RecordQuestionRuntime.load();const reject=assert.rejects(failed,/tools|tool/);
@@ -35,7 +35,7 @@ async function finishStages(s,start=0){for(let i=start;i<stages.length;i++){awai
  assert.equal(new URL(real.appended[0].src).pathname.split('/').at(-1),'finite-sequence-banks.js');assert.equal(real.timers.size,0);console.log('PASS actual browser module exports and trusted sequence bank initialize in the fixed dependency stages');
  for(const finite of [false,true]){
   const r=setup(),loaded=[];const ready=r.c.RecordQuestionRuntime.loadReadiness({finite});let settled=false;ready.then(()=>{settled=true;},()=>{settled=true;});
-  assert.deepEqual(r.appended.map(script=>new URL(script.src).pathname.split('/').at(-1)),['finite-sequence-banks.js']);
+  assert.deepEqual(r.appended.map(script=>new URL(script.src).pathname.split('/').at(-1)),finite?['finite-sequence-banks.js','repeating-key-banks.js']:['finite-sequence-banks.js']);
   for(let round=0;!settled&&round<30;round++){
    await tick();const pending=r.appended.filter(script=>!script.done&&!script.removed);assert(pending.length>0||settled,'readiness made no progress');
    for(const script of pending){const file=new URL(script.src).pathname.split('/').at(-1);if(file!=='finite-sequence-banks.js')assert.equal(typeof r.c.FiniteSequenceBanks?.resolve,'function','bank must finish before downstream browser modules');vm.runInContext(fs.readFileSync(require.resolve('../'+file),'utf8'),r.c,{filename:file});script.done=true;loaded.push(file);script.onload();}
@@ -43,6 +43,7 @@ async function finishStages(s,start=0){for(let i=start;i<stages.length;i++){awai
   assert.equal(await ready,r.c.FollowupReadiness);assert.equal(typeof r.c.FixedPlanCompiler.compile,'function');assert.equal(typeof r.c.RecordFollowups.describeCard,'function');
   assert.equal(loaded[0],'finite-sequence-banks.js');assert(loaded.indexOf('fixed-plan-compiler.js')>0);assert(loaded.indexOf('record-followups.js')>0);assert.equal(loaded.filter(file=>file==='finite-sequence-banks.js').length,1);assert.equal(r.timers.size,0);assert(!loaded.some(file=>/language-model-data|language-score/.test(file)));
   assert.deepEqual(Array.from(r.c.FiniteSequenceBanks.resolve(bank.id,bank.sha256,0)),bank.values);console.log('PASS actual '+(finite?'finite':'fixed')+' readiness loads trusted bank before compiler and followups without language data');
+  if(finite){assert(loaded.indexOf('repeating-key-banks.js')<loaded.indexOf('finite-settings.js'));const declaration=vm.runInContext("(()=>{const bank=RepeatingKeyBanks.list()[0],field=v=>ClaimSpecification.field('specified',v),card=ClaimShare.cardData(ClaimSpecification.confirm(ClaimSpecification.createDraft({source:{text:'Private loader fixture'},aim:field('Solve LP2'),method:field({operations:[{id:'repeating_key',direction:'subtract',reset:'page'}]}),scope:field({pages:['lp2-00']}),rules:{evaluation:field('measurement'),searchBounds:field({kind:'finite-settings',version:1,parameters:[{operation:0,name:'key',valuesFrom:{bankId:bank.id,bankSha256:bank.sha256,start:2,count:3}}]})}}),{id:'fixture',at:'2026-10-26T00:00:00.000Z'}));return FiniteSettings.inspect(card);})()",r.c);assert.equal(declaration.parameters[0].values.length,3);assert.equal(loaded.filter(file=>file==='repeating-key-banks.js').length,1);}
  }
  console.log('9 record question runtime groups passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

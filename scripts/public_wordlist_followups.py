@@ -10,6 +10,7 @@ import io
 import json
 from pathlib import Path
 
+import build_repeating_key_banks as banks
 import authored_finite_followups as authored
 import browser_followups as fixed
 import finite_control_storage as storage
@@ -131,12 +132,15 @@ def source(root=ROOT):
 
 def candidate(root=ROOT, *, declared=None):
     declared = source(root) if declared is None else declared
+    bank = next(b for b in banks.prepare(root)['banks'] if b['id'] == 'public-wordlist-keys-v1')
+    reference = {'bankId': bank['id'], 'bankSha256': bank['sha256'], 'start': 0, 'count': bank['total']}
+    fixed.require({tuple(k) for k in banks.resolve(reference)} == {tuple(k['indices']) for k in declared['keys']}, 'bank differs from audited source keys')
     specified = lambda value: {'status': 'specified', 'value': value}
     rules = {name: {'status': 'unspecified'} for name in fixed.RULES}
     for name, value in {'representation': 'GP29', 'wordBoundaries': 'preserve', 'unmapped': 'preserve',
                         'inputVersion': 'raw', 'evaluation': copy.deepcopy(declared['criterion']),
                         'searchBounds': {'kind': 'finite-settings', 'version': 1, 'parameters': [
-                            {'operation': 0, 'name': 'key', 'values': [key['indices'][:] for key in declared['keys']]}]}}.items():
+                            {'operation': 0, 'name': 'key', 'valuesFrom': reference}]}}.items():
         rules[name] = specified(value)
     card = {'version': 1, 'outcome': specified({'outcomeId': 'decipher', 'detail': 'Decipher the text'}),
             'method': specified({'operations': [{'id': 'repeating_key', 'direction': 'subtract', 'reset': 'page'}]}),

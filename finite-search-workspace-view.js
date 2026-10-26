@@ -21,7 +21,8 @@
   const openings=prefixSetOpenings(criterion);if(!openings)return '';
   return '<details class="experiment-details"><summary>Which openings are compared?</summary><ul>'+openings.map(item=>{const known=decodedOpening(item),label=known?known[0]:item.id;return '<li>'+(known?'<a href="index.html#/reader/'+decodedOpeningPages[item.id]+'">'+esc(label)+'</a>':esc(label))+' · '+item.values.length+' runes</li>';}).join('')+'</ul><p>Only the start of each page’s output is compared. A matching opening is not a complete reading.</p></details>';
  }
- function domainLabel(name,values){
+ function domainLabel(name,values,axis){
+  const bank=name==='key'&&axis?.valuesFrom?.count===values.length&&H.finiteKeyBankLabel?.(axis.valuesFrom);if(bank)return bank;
   if(values.length>=3&&values.every((v,i)=>Number.isInteger(v)&&(!i||v===values[i-1]+1)))return values[0]+'–'+values.at(-1);
   const literal=values.map(v=>typeof v==='string'?v:JSON.stringify(v)).join(', ');
   if(values.length<=6&&literal.length<=80)return literal;
@@ -33,8 +34,9 @@
   const operations=new Map();for(const setting of settings){if(!operations.has(setting.name))operations.set(setting.name,new Set());operations.get(setting.name).add(setting.operation);}
   return settings.map(setting=>{
    const name=(operations.get(setting.name).size>1?'step '+(setting.operation+1)+' ':'')+setting.name,value=setting.value;
+   const axis=parameters.find(p=>p.operation===setting.operation&&p.name===setting.name),ordinal=axis?.values.findIndex(v=>JSON.stringify(v)===JSON.stringify(value))??-1,bank=setting.name==='key'&&axis?.valuesFrom&&axis.valuesFrom.count===axis.values.length&&H.finiteKeyBankLabel?.(axis.valuesFrom);
+   if(bank&&ordinal>=0)return name+' '+(ordinal+1)+' of '+axis.values.length+' · '+bank+' · '+value.length+' rune numbers';
    if(setting.name==='key'&&Array.isArray(value)&&value.length>6){
-    const axis=parameters.find(p=>p.operation===setting.operation&&p.name===setting.name),ordinal=axis?.values.findIndex(v=>JSON.stringify(v)===JSON.stringify(value))??-1;
     return name+(ordinal>=0?' '+(ordinal+1)+' of '+axis.values.length:'')+' · '+value.length+' indices · starts ['+value.slice(0,6).join(', ')+', …]';
    }
    return name+' = '+(Array.isArray(value)?'['+value.join(', ')+']':typeof value==='object'?JSON.stringify(value):String(value));
@@ -50,6 +52,7 @@
    const values=name=>{const axis=axes.find(p=>p.operation===index&&p.name===name);return axis?.values||[op[name]];},directions=values('direction'),change=directions.length===1&&directions[0]==='subtract'?'Subtract these values from the manuscript rune numbers.':directions.length===1&&directions[0]==='add'?'Add these values to the manuscript rune numbers.':directions.length&&directions.every(v=>v==='add'||v==='subtract')?'Try both adding and subtracting these values.':'';
    if(['repeating_key','vigenere','plaintext_autokey','ciphertext_autokey','finite_key','finite_key_bank','interrupted_repeating_key'].includes(op.id)){
     parts.push(op.id==='plaintext_autokey'?'Begin with the supplied starting patterns, then use earlier decoded runes to keep decoding.':op.id==='ciphertext_autokey'?'Begin with the supplied starting patterns, then use earlier input runes, rather than decoding output, to keep decoding.':['finite_key','finite_key_bank'].includes(op.id)?'Use each supplied sequence of rune-number changes without repeating it.':'Repeat the supplied patterns of changes to rune numbers.');
+    const keyAxis=axes.find(axis=>axis.operation===index&&axis.name==='key'),bank=keyAxis?.valuesFrom&&keyAxis.valuesFrom.count===keyAxis.values?.length&&H.finiteKeyBankLabel?.(keyAxis.valuesFrom);if(bank)parts.push('Keys: '+bank+'.');
     if(change)parts.push(change);
     if(op.id==='finite_key_bank'){const offsets=values('offset');if(offsets.length===1&&Number.isInteger(offsets[0]))parts.push('Start '+offsets[0]+' places into the archived stream.');else if(offsets.length&&offsets.every(Number.isInteger))parts.push('Try every supplied starting place in the archived stream.');}
     if(op.id==='interrupted_repeating_key')parts.push(Array.isArray(op.interrupts)&&op.interrupts.length===1&&op.interrupts[0]===0?'Leave F runes unchanged and pause the pattern there.':'Leave the supplied pause runes unchanged without advancing the pattern.');

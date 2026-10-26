@@ -134,15 +134,29 @@ def _expand(input_card, include_compiled):
     operations = card['method']['value']['operations']
     parameters, seen, count = [], set(), 1
     for axis in axes:
-        require(exact(axis, ('operation', 'name', 'values')) and type(axis['operation']) is int
-                and 0 <= axis['operation'] < len(operations) and type(axis['name']) is str
-                and axis['name'] in NAMES and type(axis['values']) is list
-                and 1 <= len(axis['values']) <= LIMITS['programs'], 'axis needs an existing operation and supported explicit values')
+        referenced = type(axis) is dict and 'valuesFrom' in axis
+        require(exact(axis, ('operation', 'name', 'valuesFrom' if referenced else 'values'))
+                and type(axis['operation']) is int and 0 <= axis['operation'] < len(operations)
+                and type(axis['name']) is str and axis['name'] in NAMES
+                and (not referenced or axis['name'] == 'key'), 'axis needs an existing operation and explicit values or a pinned key bank')
+        alternatives = axis.get('values')
+        if referenced:
+            ref = axis['valuesFrom']
+            require(exact(ref, ('bankId', 'bankSha256', 'start', 'count'))
+                    and type(ref['bankId']) is str and type(ref['bankSha256']) is str
+                    and type(ref['start']) is int and ref['start'] >= 0
+                    and type(ref['count']) is int and 1 <= ref['count'] <= LIMITS['programs'],
+                    'exact bounded pinned key-bank range required')
+            from build_repeating_key_banks import resolve
+            alternatives = resolve(ref)
+            require(len(alternatives) == ref['count'], 'key-bank resolution changed')
+        require(type(alternatives) is list and 1 <= len(alternatives) <= LIMITS['programs'],
+                'one to 1024 alternatives required')
         identity = (axis['operation'], axis['name'])
         require(identity not in seen, 'repeated parameter')
         seen.add(identity)
         require(axis['name'] not in operations[axis['operation']], 'cannot replace supplied fixed parameter')
-        values = [literal(axis['name'], v) for v in axis['values']]
+        values = [literal(axis['name'], v) for v in alternatives]
         require(len({fixed.stable(v) for v in values}) == len(values), 'repeated alternative')
         # Each axis has one literal type; lists use numeric lexicographic order.
         values.sort()

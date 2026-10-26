@@ -1,6 +1,7 @@
 import {applyMigrations} from './sqlite-test-migrations.mjs';
 import Control from '../../local-control.js';
 import Storage from '../../finite-control-storage.js';
+import KeyBanks from '../../repeating-key-banks.js';
 import PlanControls from '../../local-plan-controls.js';
 import {issue as issuePreparation} from './prepared-plans.mjs';
 /* Offline official-source fixtures and real SQLite. No AI or target execution. */
@@ -90,6 +91,7 @@ await test('actual authored recipe compiles and verifies its control using pinne
 await test('every published authored declaration loads exact pins, task identity and matching control without target execution',async()=>{
  const recordsRoot=new URL('../../experiments/records/',import.meta.url);let declarations=0,finiteDeclarations=0;
  const finiteFamilies=new Map([
+  ['public-wordlist-vigenere',{programs:43,openingPrograms:43,pages:56,ids:['public-wordlist-nine-openings']}],
   ['lp2-known-vigenere-keys',{programs:42,pages:56,ids:['known-keys-language-comparison','known-keys-word-reset-language','known-keys-line-reset-language']}],
   ['lp2-panel-prime-openings',{programs:32,pages:56,ids:['panel-primes-language-comparison','panel-primes-word-reset-language','panel-primes-line-reset-language']}],
   ['dukotah-fixed-numeric-keys',{programs:54,pages:55,ids:['short-numeric-keys-reset-language']}],
@@ -107,14 +109,15 @@ await test('every published authored declaration loads exact pins, task identity
    if(recipe.kind==='finite-settings'){
     assert.equal(plan.state,'finite-plan-ready');assert(!Object.hasOwn(plan,'task'));assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.snapshot,recipe);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.equal(plan.inputVersion,recipe.inputs.version);
     const family=finiteFamilies.get(record.id);assert(family,'Every finite source family is explicitly covered');assert(family.ids.includes(recipe.id));const declaration=record.id+'/'+recipe.id;assert(!seenFinite.has(declaration));seenFinite.add(declaration);
-    const set=recipe.id.endsWith('-nine-openings'),programs=set?58:family.programs;assert.equal(plan.domain.programs,programs);assert.equal(plan.domain.pages,family.pages);assert.equal(plan.domain.totalCases,programs*family.pages);assert.equal(recipe.control.members.length,programs);assert.equal(plan.domain.criterion.kind,set?'exact-prefix-set':'language-score');if(set){assert.equal(plan.domain.criterion.openings.length,9);assert(plan.domain.criterion.openings.every(o=>o.values.length===12));}assert(Storage.expand(recipe.control).members.every(member=>member.control.task.criterion.kind==='exact-prefix'&&member.control.task.criterion.values.length===184));
+    const set=recipe.id.endsWith('-nine-openings'),programs=set?(family.openingPrograms||58):family.programs;assert.equal(plan.domain.programs,programs);assert.equal(plan.domain.pages,family.pages);assert.equal(plan.domain.totalCases,programs*family.pages);assert.equal(recipe.control.members.length,programs);assert.equal(plan.domain.criterion.kind,set?'exact-prefix-set':'language-score');if(set){assert.equal(plan.domain.criterion.openings.length,9);assert(plan.domain.criterion.openings.every(o=>o.values.length===12));}assert(Storage.expand(recipe.control).members.every(member=>member.control.task.criterion.kind==='exact-prefix'&&member.control.task.criterion.values.length===184));
+    if(record.id==='public-wordlist-vigenere'){const axis=recipe.card.rules.searchBounds.value.parameters[0];assert.deepEqual(Object.keys(axis).sort(),['name','operation','valuesFrom']);assert.equal(axis.name,'key');assert.equal(axis.valuesFrom.bankId,'public-wordlist-keys-v1');assert.equal(axis.valuesFrom.start,0);assert.equal(axis.valuesFrom.count,43);const keys=KeyBanks.resolve(axis.valuesFrom),members=Storage.expand(recipe.control).members;assert.deepEqual(members.map(member=>member.settings.find(setting=>setting.name==='key').value),keys);assert(members.every(member=>L.stable(member.control.task.steps[0].key)===L.stable(member.settings[0].value)));assert.equal(plan.domain.totalCases,2408);}
     finiteDeclarations++;declarations++;continue;
    }
    await L.checkIdentity(plan.task);assert.deepEqual(plan.card,recipe.card);assert.deepEqual(plan.control,recipe.control);assert.equal(plan.inputVersion,recipe.inputs.version);assert.equal(plan.origin.recordSha256,await sha(bytes));assert.equal(plan.origin.protocolSha256,await sha(L.stable(recipe)));assert.deepEqual(plan.task.pages.map(page=>page.id),recipe.inputs.pages.map(page=>page.id));assert.deepEqual(plan.task.steps,recipe.control.task.steps);assert.deepEqual(plan.task.alphabet,recipe.control.task.alphabet);assert(Control.compatible(recipe.control.task,plan.task));
    for(let i=0;i<plan.task.pages.length;i++)assert.equal(await sha(plan.task.pages[i].text),recipe.inputs.pages[i].text_sha256);declarations++;
   }
  }
- assert(declarations>=15,'The complete current authored catalog is exercised, including fixed and finite source modes');assert.equal(finiteDeclarations,15,'All declared finite source families are ready, including all numerical bank offsets and restart rules');assert.deepEqual([...seenFinite].sort(),[...finiteFamilies].flatMap(([id,family])=>family.ids.map(recipe=>id+'/'+recipe)).sort());
+ assert(declarations>=15,'The complete current authored catalog is exercised, including fixed and finite source modes');assert.equal(finiteDeclarations,16,'All declared finite source families are ready, including the43-key pinned public wordlist and numerical bank offsets');assert.deepEqual([...seenFinite].sort(),[...finiteFamilies].flatMap(([id,family])=>family.ids.map(recipe=>id+'/'+recipe)).sort());
 });
 await test('large scopes require exact bounded aggregate, reject corruption and never fall back to page fetches',async()=>{
  async function large(){const f=await fixture(),text=f.files.get('/data/pages/lp2-15.json').raw,ids=Array.from({length:41},(_,i)=>'lp2-'+String(i).padStart(2,'0'));f.card.scope.value.pages=ids;f.recipe.inputs.pages=await Promise.all(ids.map(async id=>({id,text_sha256:await sha(text)})));const pages=[...Array.from({length:17},(_,i)=>'lp1-'+String(i).padStart(2,'0')),...Array.from({length:58},(_,i)=>'lp2-'+String(i).padStart(2,'0'))].map(id=>({id,raw:text,reviewed_text:null}));f.aggregate={schema:'liberpedia-local-inputs-v1',alphabet,pages};f.files.set('/data/local-run-inputs.json',f.aggregate);return f;}

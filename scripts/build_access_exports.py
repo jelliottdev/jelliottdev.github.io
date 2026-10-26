@@ -116,6 +116,8 @@ for article in articles:
  documents.append((root/f'reference/articles/{article["id"]}.txt').read_text(encoding='utf-8'))
 register('data/index.json','Page and alphabet index')
 register('data/finite-sequence-banks.json','Pinned numerical sequence banks and source audit')
+register('data/repeating-key-banks.json','Archived repeating keys and source audit')
+register('repeating-key-banks.js','Archived repeating-key resolver')
 for name in ('data/published-program-source-index.json','data/published-panel-program-source-index.json','data/published-numeric-program-source-index.json','data/published-program-source-catalog.json'):
  register(name,'Published archived computation index')
 for retained in sorted((root / 'published-evidence/programs').glob('*.json')):

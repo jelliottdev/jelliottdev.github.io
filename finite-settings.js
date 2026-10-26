@@ -56,10 +56,18 @@
   const axes=bound.value.parameters;if(!Array.isArray(axes)||!axes.length||axes.length>LIMITS.parameters)throw Error('Declare a bounded nonempty list of finite parameters.');
   const seen=new Set();let programCount=1;
   const parameters=axes.map(axis=>{
-   if(!exact(axis,['operation','name','values'])||!Number.isSafeInteger(axis.operation)||axis.operation<0||axis.operation>=card.method.value.operations.length||!NAMES.has(axis.name)||!Array.isArray(axis.values)||!axis.values.length||axis.values.length>LIMITS.programs)throw Error('A finite parameter must name an existing operation, supported setting and explicit values.');
+   const referenced=Object.hasOwn(axis||{},'valuesFrom');
+   if(!exact(axis,['operation','name',referenced?'valuesFrom':'values'])||!Number.isSafeInteger(axis.operation)||axis.operation<0||axis.operation>=card.method.value.operations.length||!NAMES.has(axis.name)||referenced&&axis.name!=='key')throw Error('A finite parameter must name an existing operation, supported setting and explicit values or a pinned key bank.');
+   let alternatives=axis.values;
+   if(referenced){
+    const ref=axis.valuesFrom;if(!exact(ref,['bankId','bankSha256','start','count'])||typeof ref.bankId!=='string'||typeof ref.bankSha256!=='string'||!Number.isSafeInteger(ref.start)||ref.start<0||!Number.isSafeInteger(ref.count)||ref.count<1||ref.count>LIMITS.programs)throw Error('Use an exact bounded pinned key-bank range.');
+    const banks=node?require('./repeating-key-banks.js'):root.RepeatingKeyBanks;if(!banks?.resolve)throw Error('The maintained repeating-key banks are unavailable.');alternatives=banks.resolve(ref);
+    if(!Object.isFrozen(alternatives)||!Array.isArray(alternatives)||alternatives.some(value=>!Object.isFrozen(value))||alternatives.length!==ref.count)throw Error('The maintained key-bank resolution changed.');
+   }
+   if(!Array.isArray(alternatives)||!alternatives.length||alternatives.length>LIMITS.programs)throw Error('A finite parameter needs one to 1024 explicit alternatives.');
    const key=axis.operation+'|'+axis.name;if(seen.has(key))throw Error('A finite parameter is declared more than once.');seen.add(key);
    if(Object.hasOwn(card.method.value.operations[axis.operation],axis.name))throw Error('Finite settings cannot replace a supplied fixed method parameter.');
-   const values=axis.values.map(value=>literal(axis.name,value)),identities=new Set(values.map(stable));if(identities.size!==values.length)throw Error('A finite parameter repeats an alternative.');values.sort(compare);
+   const values=alternatives.map(value=>literal(axis.name,value)),identities=new Set(values.map(stable));if(identities.size!==values.length)throw Error('A finite parameter repeats an alternative.');values.sort(compare);
    programCount*=values.length;if(programCount>LIMITS.programs)throw Error('Finite settings exceed 1024 programs; no alternatives were truncated.');return {operation:axis.operation,name:axis.name,values};
   }).sort((a,b)=>a.operation-b.operation||(a.name<b.name?-1:a.name>b.name?1:0));
   const caseCount=programCount*card.scope.value.pages.length;if(caseCount>limits.cases)throw Error('Finite settings exceed '+limits.cases+' program-page cases; no cases were truncated.');

@@ -62,6 +62,14 @@
  const RULE_LABELS={representation:'Representation',wordBoundaries:'Word boundaries',boundaryMode:'Word handling',unmapped:'Unmapped values',inputVersion:'Input version',evaluation:'Evaluation',reset:'Restart rule',initialState:'Initial state',searchBounds:'Search bounds',searchProtocol:'Search protocol',exceptionalCases:'Exceptions'};
  const niceKey=s=>s.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
  const pretty=v=>typeof v==='string'?v:JSON.stringify(v);
+ function finiteKeyBankLabel(ref){
+  if(!ref||typeof ref!=='object'||Array.isArray(ref)||Object.keys(ref).length!==4||!['bankId','bankSha256','start','count'].every(key=>own(ref,key))||!Number.isSafeInteger(ref.start)||ref.start<0||!Number.isSafeInteger(ref.count)||ref.count<1||ref.count>1024)return null;
+  try{const banks=typeof module==='object'&&module.exports?require('./repeating-key-banks.js'):root.RepeatingKeyBanks,bank=banks?.list().find(bank=>bank.id===ref.bankId&&bank.sha256===ref.bankSha256);if(!bank||ref.start+ref.count>bank.total)return null;return bank.label+' · '+(ref.count===1?'entry '+(ref.start+1):'entries '+(ref.start+1)+'–'+(ref.start+ref.count))+' ('+ref.count+' '+(ref.count===1?'key':'keys')+')';}catch{return null;}
+ }
+ function finiteBoundsLabel(value){
+  if(!value||value.kind!=='finite-settings'||value.version!==1||Object.keys(value).length!==3||!Array.isArray(value.parameters)||!value.parameters.length||!value.parameters.some(axis=>axis&&own(axis,'valuesFrom')))return null;
+  const labels=[];for(const axis of value.parameters){if(!axis||!Number.isSafeInteger(axis.operation)||axis.operation<0||typeof axis.name!=='string')return null;const bank=own(axis,'valuesFrom')?axis.name==='key'&&Object.keys(axis).length===3&&finiteKeyBankLabel(axis.valuesFrom):null;if(own(axis,'valuesFrom')&&!bank)return null;if(!bank&&(!Array.isArray(axis.values)||Object.keys(axis).length!==3))return null;labels.push('Step '+(axis.operation+1)+' · '+niceKey(axis.name)+': '+(bank||axis.values.map(pretty).join(', ')));}return labels.join('\n');
+ }
  function wordPrimeSumLabels(table,boundaries){
   if(!['canonical','reversed'].includes(table)||!['non-rune','hyphen-period'].includes(boundaries))return null;
   const split=boundaries==='non-rune'?'Every non-rune character separates words.':"Only ASCII '-' and '.' separate groups; other non-rune characters are ignored.";
@@ -133,7 +141,7 @@
   for(const [k,f]of Object.entries(p.rules))if(f.status!=='unspecified'){
    const value=f.value,wordSum=k==='evaluation'&&f.status==='specified'&&value?.kind==='word-prime-sums'&&Object.keys(value).length===3&&['kind','table','boundaries'].every(name=>own(value,name))?wordPrimeSumLabels(value.table,value.boundaries):null;
    const wordSumRule=f.status==='specified'?protocolRuleLabel(p,k,f.value):null;
-   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule||(k==='evaluation'&&f.status==='specified'?evaluationText(f.value):null)|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
+   rows.push([RULE_LABELS[k],wordSum?wordSum.evaluation:wordSumRule||(k==='searchBounds'&&f.status==='specified'?finiteBoundsLabel(f.value):null)||(k==='evaluation'&&f.status==='specified'?evaluationText(f.value):null)|| (k==='boundaryMode'&&f.status==='specified'&&own(C.BOUNDARIES,f.value)?C.BOUNDARIES[f.value]:state(f))]);
   }
   if(p.unresolved.length)rows.push(['Unresolved',JSON.stringify(p.unresolved)]);
   const unknown=Object.entries(p.rules).filter(([,f])=>f.status==='unspecified').map(([k])=>k);
@@ -207,6 +215,6 @@
   if(!png)try{png=await renderPNG(spec,{document:doc});}catch(failure){imageError=failure.message;}
   return {status,url:complete,png,...(error?{error}:{}),imageError};
  }
- const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),wordPrimeSumLabels,wordPrimeSumRuleLabel,evaluationText,protocolRuleLabel,operationParameters,encode,decode,link,renderPNG,prepare:renderPNG,share};
+ const api={VERSION,MAX_BYTES,MAX_URL,cardData,sections:p=>sections(checkedPayload(p)),finiteKeyBankLabel,finiteBoundsLabel,wordPrimeSumLabels,wordPrimeSumRuleLabel,evaluationText,protocolRuleLabel,operationParameters,encode,decode,link,renderPNG,prepare:renderPNG,share};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ClaimShare=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
