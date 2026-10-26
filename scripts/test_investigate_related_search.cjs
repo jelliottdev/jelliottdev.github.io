@@ -36,6 +36,15 @@ let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS 
    assert.equal(f.requests.filter(r=>r.options.method==='POST').length,0);f.noWrites();
   }finally{f.destroy();}
  });
+ await test('a pasted filler-rune hypothesis remains exploratory with no invented scope or measurement',async()=>{
+  const text="Hello, ive been working with claude and we've tried, just a whole heap of stuff\nBut most recently, we're toying with the idea that the reason for the unexplained doubles, is that the first unsolved section has some sort of junk added to it\nLike there are extra runes that have been added to.make decryptopn that much harder\n\nIf anyone has any input thatd be amazing, im half flying blind here";
+  const local=I.initialDraft(text);assert.equal(local.source.text,text);assert.equal(local.aim.status,'unspecified');assert.equal(local.scope.status,'unspecified');assert.equal(local.rules.evaluation.status,'unspecified');assert.equal(local.rules.exceptionalCases.status,'unspecified');
+  for(const config of [null,{endpoint:'https://mock.example/ask',interpretationEndpoint:'https://mock.example/interpret',proposalEndpoint:'https://mock.example/proposals',researchIdeaEndpoint:'https://mock.example/ideas'}]){
+   const f=await fixture({config,ask:async()=>Response.json({}, {status:503})});try{
+    f.submit(text);await settle();const snapshot=f.app.getSnapshot();assert.equal(snapshot.stage,'search');assert.equal(snapshot.draft,null);assert.equal(snapshot.confirmed,null);assert.equal(f.doc.getElementById('idea').value,text);assert(f.doc.host.innerHTML.includes('Related research'));assert(f.doc.host.innerHTML.includes('library.html#/experiment/single-rune-null-doublets'));assert(!f.doc.getElementById('clarification'));assert(!f.doc.getElementById('confirm'));assert(!f.requests.some(r=>r.url.endsWith('/interpret')));f.noWrites();
+   }finally{f.destroy();}
+  }
+ });
  await test('configuration may remain stalled while local research is already usable',async()=>{
   const f=await fixture({deferConfig:true});try{f.submit('null runes');assert.equal(f.app.getSnapshot().stage,'search');assert(f.doc.host.innerHTML.includes('library.html#/experiment/'));f.noWrites();assert.equal(f.requests.filter(r=>r.options.method==='POST').length,0);}finally{f.destroy();f.releaseConfig();await settle();}
  });

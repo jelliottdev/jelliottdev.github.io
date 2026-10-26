@@ -15,16 +15,31 @@
   const mode={'repeat':['repeating_key','Repeating key'],'plaintext-autokey':['plaintext_autokey','Plaintext autokey'],'ciphertext-autokey':['ciphertext_autokey','Ciphertext autokey']}[s.mode];
   need(s.op==='keyed-shift'&&mode,'This unchanged operation needs a maintained canonical adapter.');return {id:mode[0],label:mode[1],...common};
  }
+ // Bound by exact detached input bytes, never by a user card or an alias.
+ // Custom crypto implementations always revalidate; only the unchanged platform
+ // digest can reuse an already verified immutable source snapshot.
+ const platformCrypto=root.crypto,platformSubtle=platformCrypto?.subtle,platformDigest=platformSubtle?.digest,verifiedParents=[],cacheLimits={entries:4,bytes:1024*1024};let cacheBytes=0;
+ function platform(crypto){return crypto===platformCrypto&&crypto?.subtle===platformSubtle&&platformSubtle?.digest===platformDigest;}
+ function parentToken(model){const token=freeze({state:'source-bound-planning-only',domainId:model.plan.domainId});bound.set(token,model);return token;}
  async function prepare(parentDomain,{bundle,crypto=root.crypto}={}){
   const domain=capture(parentDomain),source=capture(bundle);unicode(domain);unicode(source);
   const unchanged=()=>need(same(capture(parentDomain),domain)&&same(capture(bundle),source),'The parent domain or official source changed during binding.');
+  const identity=platform(crypto)?E.stable({domain,source}):null,cached=identity===null?null:verifiedParents.find(item=>item.identity===identity);
+  if(cached){await Promise.resolve();unchanged();need(platform(crypto),'The platform digest changed during source binding.');return parentToken(cached.model);}
   const plan=await P.prepare(domain,{crypto});unchanged();
   // Parse the complete official aggregate, then independently pin every declared
   // full-parent page. Unselected bundle pages never authorize a new scope.
   need(Array.isArray(source.pages)&&source.pages.every(p=>typeof p?.id==='string'&&p.id.length===6),'Use exact official source page identities.');
   const official=I.parse(source);need(await hash(official.alphabet,crypto)===ALPHABET&&domain.alphabetSha256===ALPHABET,'The canonical GP29 alphabet pin changed.');unchanged();
-  const pages=[];for(const pin of domain.pages){const page=official.pages.get(pin.id),text=page?.[domain.inputVersion==='raw'?'raw':'reviewed_text'];need(typeof text==='string'&&await hash(text,crypto,true)===pin.textSha256,'A complete parent page or input-edition pin changed.');unchanged();pages.push({id:pin.id,text});}
-  const token=freeze({state:'source-bound-planning-only',domainId:plan.domainId});bound.set(token,{domain:freeze(domain),plan,alphabet:freeze(copy(official.alphabet)),pages:freeze(pages),crypto});return token;
+  // Hash detached captured pages as one asynchronous phase. Rewalking the
+  // complete original bundle after each of75 independent hashes adds no source
+  // binding: none of the computations below reads the caller's mutable object.
+  const pages=domain.pages.map(pin=>{const page=official.pages.get(pin.id),text=page?.[domain.inputVersion==='raw'?'raw':'reviewed_text'];need(typeof text==='string','A complete parent page or input-edition pin changed.');return {id:pin.id,text};});
+  const pageHashes=await Promise.all(pages.map(page=>hash(page.text,crypto,true)));unchanged();
+  need(pageHashes.every((value,i)=>value===domain.pages[i].textSha256),'A complete parent page or input-edition pin changed.');
+  const model=Object.freeze({domain:freeze(domain),plan,alphabet:freeze(copy(official.alphabet)),pages:freeze(pages),crypto});
+  if(identity!==null&&platform(crypto)){const bytes=new TextEncoder().encode(identity+E.stable({domain:model.domain,plan:model.plan,alphabet:model.alphabet,pages:model.pages})).length;if(bytes<=cacheLimits.bytes){while(verifiedParents.length>=cacheLimits.entries||cacheBytes+bytes>cacheLimits.bytes){cacheBytes-=verifiedParents.shift().bytes;}verifiedParents.push({identity,model,bytes});cacheBytes+=bytes;}}
+  return parentToken(model);
  }
  function inspect(token){const value=bound.get(token);need(value,'Use an unchanged source-bound parent token.');return freeze({state:'source-bound-planning-only',domain:value.domain,plan:value.plan});}
  async function derive(token,selection){

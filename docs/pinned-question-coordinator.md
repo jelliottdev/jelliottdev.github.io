@@ -60,8 +60,8 @@ incomplete; it does not establish a complete manuscript reading.
 The HTTP adapter loads the exact canonical public parent. It supports one bounded
 read, discovery advancement, preparation, original-receipt import, or saved-result
 credit per request. It is registered before the broad `/ideas` handler; the browser
-path is still disabled in site configuration pending deployment verification and
-the required migrations.
+path is still disabled in site configuration pending sustained deployment
+verification. Migrations 0019–0023 are applied.
 Unsupported questions retain their existing flow; source outages must remain
 errors rather than being mislabeled unsupported.
 
@@ -110,3 +110,49 @@ trusted composition seam cannot make invented inputs eligible for the maintained
 production registry. Production admission is separately checked with synthetic
 controls and no new manuscript result. These local tests do not establish hosted
 CPU, memory, outbound-request, or whole-job HTTP budget headroom.
+
+## Deployment gate: sustained requests, not isolated success
+
+The full-search links remain disabled in `data/assistant.json`. Two maintained
+parent questions are published with no calculation tasks; their pages remain
+read-only while this gate is closed. Publication is not evidence that execution
+is available.
+
+Live verification found a failure that local correctness and SQL budgets did
+not detect. On Worker version `de38cfa5-0038-4b62-b725-cf34b8691d95`, isolated
+reads and discovery steps returned 200, but a sustained discovery request was
+terminated with `exceededCpu` after 217 ms. Earlier requests received temporary
+CPU flexibility; their larger successful timings are not a usable budget. The
+account's billing plan has not been independently established.
+
+Before enabling a complete search:
+
+- Measure cold and sustained requests for every operation, including source
+  binding, preparation, admission, import and credit. Count the complete HTTP
+  request, not only the final service call.
+- Require headroom within the actual configured hosting budget. Do not retry CPU
+  failures to force progress or infer capacity from transient burst allowance.
+- Verify browser pause, rate-limit waiting and saved-output recovery. A failed
+  request must preserve original question identity and existing work.
+- Keep unsupported work distinct from a service outage. Never route a complete
+  question through the smaller generic runner merely because its endpoint is off.
+
+Repeated source parsing, bank scans and full-parent construction are shared
+costs. Move immutable verified work out of repeated request paths, with exact
+source invalidation and independent parity tests. Cache no mutable coverage,
+receipts, admission decisions or execution authority. The eventual compiled
+source artifact must preserve the same source, card, domain and control bindings.
+
+The production HTTP budget fixture currently checks preparation (24 SQL
+statements, nine fetches) and fresh task admission (19 statements, sixteen
+fetches), using synthetic controls and no new manuscript calculations. These are
+useful limits, but do not establish live CPU capacity or a successful full loop.
+
+The current implementation batches detached page hashes, reuses verified parent
+snapshots within a four-entry/1 MiB bound, and memoizes the exact frozen default
+archive fingerprint. Every source-cache hit still captures and compares complete
+domain/source bytes, checks native crypto identity, and issues a fresh private
+planning token. Custom crypto and injected registries bypass shared memoization.
+Warm local GET CPU dropped from roughly 594 ms to 15–47 ms across profiling
+runs; cold requests remain much more expensive. These measurements justify the
+optimization, not feature activation.

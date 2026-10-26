@@ -75,8 +75,25 @@ const queryDefinition=(d,inputVersion,policy,includeSourceContext=false)=>({... 
 async function registryMetadata(programIndex){const index=await publishedProgramIndex({programIndex});return [...[...Counts.entries,...Programs.entries].map(v=>({recordId:v.recordId,revision:v.revision,caseId:v.caseId,inputVersion:v.inputVersion,task:v.task})),...(index?.entries||[]).map(item=>({...item,indexed:true}))].sort((a,b)=>E.stable([a.recordId,a.revision,a.caseId]).localeCompare(E.stable([b.recordId,b.revision,b.caseId])));}
 // Durable archive generations bind current and retained published authorities.
 // This is deliberately broader than a discovery page's current metadata hash.
+const registryPlatformCrypto=globalThis.crypto,registryPlatformSubtle=registryPlatformCrypto?.subtle,registryPlatformDigest=registryPlatformSubtle?.digest;let immutableRegistryFingerprint;
+function deepFrozenData(value,seen=new Set()){
+ if(value===null||typeof value!=='object')return typeof value!=='function';
+ if(seen.has(value))return true;seen.add(value);if(!Object.isFrozen(value))return false;
+ return Reflect.ownKeys(value).every(key=>{const d=Object.getOwnPropertyDescriptor(value,key);return typeof key==='string'&&Object.hasOwn(d,'value')&&deepFrozenData(d.value,seen);});
+}
 export async function readEvidenceRegistryHash({programIndex,crypto:c=globalThis.crypto}={}){
- const index=await publishedProgramIndex({programIndex});return hash({index,registries:[Counts,Programs],history:RetainedHistory},c);
+ const index=await publishedProgramIndex({programIndex});
+ // These exact generated modules and the default index are deep immutable for
+ // this deployment. Cache their byte fingerprint only, never evidence, epochs,
+ // query results, injected indexes or a caller's crypto implementation.
+ const reusable=programIndex===undefined&&c===registryPlatformCrypto&&c?.subtle===registryPlatformSubtle&&registryPlatformSubtle?.digest===registryPlatformDigest;
+ if(!reusable)return hash({index,registries:[Counts,Programs],history:RetainedHistory},c);
+ if(!immutableRegistryFingerprint){
+  if(![index,Counts,Programs,RetainedHistory].every(value=>deepFrozenData(value)))return hash({index,registries:[Counts,Programs],history:RetainedHistory},c);
+  const pending=hash({index,registries:[Counts,Programs],history:RetainedHistory},c);immutableRegistryFingerprint=pending;
+  pending.catch(()=>{if(immutableRegistryFingerprint===pending)immutableRegistryFingerprint=undefined;});
+ }
+ return immutableRegistryFingerprint;
 }
 export async function readEvidencePage(policy,{db,proposalId,domain,inputVersion,cursor=null,cursorKey,now=Date.now(),crypto:c=globalThis.crypto,programIndex,fetcher=globalThis.fetch,signal,includeSourceContext=false,snapshotFence,responseReserveBytes=0}){
  checkedPolicy(policy);if(!Number.isSafeInteger(responseReserveBytes)||responseReserveBytes<0||responseReserveBytes>1024*1024)throw fail('unavailable','Use a bounded internal response reserve.');if(typeof includeSourceContext!=='boolean')throw fail('unavailable','Use an explicit source-context mode.');const d=Q.inspect(domain);if(policy===INSPECTION_POLICY&&(d.schema!=='liberpedia-factored-finite-output-question-v1'||d.questionPolicy!==policy.mode||d.criterion.kind!=='measurement'))throw fail('unavailable','Use the maintained transformed-output inspection.');if(policy===OUTPUT_POLICY&&(d.schema!=='liberpedia-factored-finite-output-question-v1'||d.questionPolicy!==policy.mode))throw fail('unavailable','Use the maintained pinned language comparison.');if(policy===STRICT_POLICY&&d.schema!=='liberpedia-factored-finite-question-v2')throw fail('unavailable','Use a maintained prefix question.');if(policy===PREFIX_POLICY&&d.criterion.kind!=='exact-prefix')throw fail('unavailable','Derived prefix discovery requires an exact-prefix question.');if(!/^p_[a-f0-9]{64}$/.test(proposalId)||inputVersion!==d.inputVersion||!Number.isSafeInteger(now)||typeof db?.prepare!=='function')throw fail('unavailable','A bound original question and evidence store are required.');
