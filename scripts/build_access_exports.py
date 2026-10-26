@@ -116,6 +116,12 @@ for article in articles:
  documents.append((root/f'reference/articles/{article["id"]}.txt').read_text(encoding='utf-8'))
 register('data/index.json','Page and alphabet index')
 register('data/finite-sequence-banks.json','Pinned numerical sequence banks and source audit')
+for name in ('data/published-program-source-index.json','data/published-panel-program-source-index.json','data/published-numeric-program-source-index.json','data/published-program-source-catalog.json'):
+ register(name,'Published archived computation index')
+for retained in sorted((root / 'published-evidence/programs').glob('*.json')):
+ register(retained.relative_to(root).as_posix(),'Published archived computation data')
+for name in ('published-numeric-bank-source.js','scripts/published_numeric_bank_projection.py'):
+ register(name,'Archived computation verification code')
 for retained in sorted((root / 'published-sources/runtime').glob('*')):
  if retained.is_file():register(retained.relative_to(root).as_posix(),'Historical projection code')
 register('data/articles.json','Reference article index')

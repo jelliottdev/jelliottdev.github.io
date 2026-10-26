@@ -5,7 +5,7 @@ import CountRegistry from '../../published-count-evidence-data.js';
 import ProgramRegistry from '../../published-opening-evidence-data.js';
 import History from '../../published-evidence-history.js';
 import HistoryData from '../../published-evidence-history-data.js';
-import {checkedProgramIndex,readProgramPointer,checkProgramPointerReceipt} from './published-program-source-index.mjs';
+import {checkedProgramIndex,readProgramPointer,checkProgramPointerReceipt,validateProgramCriterion} from './published-program-source-index.mjs';
 const HEX=/^[a-f0-9]{64}$/,SLUG=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 const clone=v=>JSON.parse(E.stable(v));
@@ -47,7 +47,8 @@ async function checkRegistry(registry,cryptoAPI){
   // Imported source programs do not imply the existence of runnable browser
   // follow-ups. The two provenance associations are deliberately exclusive.
   const programReference=program&&Object.hasOwn(projection||{},'sourceProgramId')?'sourceProgramId':'followupId';
-  if(!exact(projection,['id','criterion','pages','alphabetSha256','taskId','resultId',...(program?['ownerRecordId',programReference,'inputVersion','steps']:[])])||!SLUG.test(projection.id)||projection.criterion?.kind!==(program?'exact-prefix':'word-affine-count')||!HEX.test(projection.alphabetSha256)||!HEX.test(projection.taskId)||!HEX.test(projection.resultId)||!Array.isArray(projection.pages)||!projection.pages.length||projection.pages.length>75||new Set(projection.pages).size!==projection.pages.length||projection.pages.some(id=>!/^lp[12]-[0-9]{2}$/.test(id)))throw Error('Published count projection is malformed.');
+  if(!exact(projection,['id','criterion','pages','alphabetSha256','taskId','resultId',...(program?['ownerRecordId',programReference,'inputVersion','steps']:[])])||!SLUG.test(projection.id)||(!program&&projection.criterion?.kind!=='word-affine-count')||!HEX.test(projection.alphabetSha256)||!HEX.test(projection.taskId)||!HEX.test(projection.resultId)||!Array.isArray(projection.pages)||!projection.pages.length||projection.pages.length>75||new Set(projection.pages).size!==projection.pages.length||projection.pages.some(id=>!/^lp[12]-[0-9]{2}$/.test(id)))throw Error('Published count projection is malformed.');
+  if(program)validateProgramCriterion(projection.criterion);
   if(program&&(![projection.ownerRecordId,projection[programReference]].every(value=>typeof value==='string'&&value.length<=100&&SLUG.test(value))||projection.inputVersion!=='raw'||!Array.isArray(projection.steps)))throw Error('Published program owner or settings are malformed.');
   if(!Array.isArray(p.sourcePins)||!p.sourcePins.length||p.sourcePins.length>100||p.sourcePins.some((pin,i)=>!exact(pin,['path','sha256'])||typeof pin.path!=='string'||!(/^[a-zA-Z0-9_./-]+$/.test(pin.path))||pin.path.startsWith('/')||pin.path.split('/').some(part=>!part||part==='.'||part==='..')||!HEX.test(pin.sha256)||i&&p.sourcePins[i-1].path>=pin.path))throw Error('Published source pins are malformed.');
   records.set(record.recordId+'|'+record.revision,record);

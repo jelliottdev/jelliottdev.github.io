@@ -94,6 +94,6 @@ test('owned display context escapes source text, uses only validated recipes and
  delete r.browser_followups[0].motivation;r.browser_followups[0].scope_change='Try a different starting place.';assert(V.render(r).includes('<p class="record-question-context">Try a different starting place.</p>'));r.browser_followups[0].scope_change='Long source scope. '.repeat(30);assert(!V.render(r).includes('class="record-question-context"'));
 });
 test('unowned Deor question retains its maintained wording without invented display context',()=>{
- const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/wulfic-autokey-seed-families/record.json'),'utf8')),html=V.render(r),question=r.research_questions[0].question;assert(html.indexOf(question)<html.indexOf('data-live-question'));assert(!html.includes('class="record-question-context"'));assert(!html.includes('class="record-question-exact"'));
+ const r=JSON.parse(fs.readFileSync(require.resolve('../experiments/records/wulfic-autokey-seed-families/record.json'),'utf8')),html=V.render(r),question=r.research_questions[0].question;assert(html.indexOf(question)<html.indexOf('data-live-question'));assert(!html.includes('class="record-question-context"'));assert(html.includes('class="record-question-exact"'));assert(html.indexOf('class="record-question-exact"')>html.indexOf('Exact question and background'));assert(!html.includes('Published as open'));
 });
 console.log(count+' record question view groups passed');

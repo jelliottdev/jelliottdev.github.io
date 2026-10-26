@@ -13,7 +13,8 @@ class CatalogTests(unittest.TestCase):
         before = copy.deepcopy(sources)
         value = catalog.merge(sources)
         self.assertEqual(value['entries'], [entry for source in sources for entry in source['entries']])
-        self.assertEqual(len(value['entries']), 74)
+        self.assertEqual(len(value['entries']), 306)
+        self.assertEqual(value['entries'][:74], [entry for source in sources[:2] for entry in source['entries']])
         self.assertEqual(sources, before)
         old = (catalog.ROOT / catalog.PROVIDERS[0]).read_bytes()
         self.assertEqual(catalog.prepare()['data/published-program-source-catalog.json'], catalog.stable(value) + '\n')
@@ -28,6 +29,24 @@ class CatalogTests(unittest.TestCase):
         for source in ({}, {'schema': 'other', 'entries': []}, {'schema': catalog.SCHEMA, 'entries': [{}]}):
             with self.assertRaises(ValueError):
                 catalog.merge([source])
+
+    def test_shared_matrix_paths_require_distinct_selectors_and_identical_source_binding(self):
+        source = json.loads((catalog.ROOT / catalog.PROVIDERS[2]).read_bytes())
+        self.assertEqual(len(source['entries']), 232)
+        self.assertEqual(len({entry['path'] for entry in source['entries']}), 4)
+        self.assertEqual(catalog.merge([source]), source)
+        first = source['entries'][0]
+        for mutate in (
+            lambda value: value.update(revision='0' * 64),
+            lambda value: value.update(programId='different-program', caseId='different-program--all-pages', sha256='0' * 64),
+            lambda value: value.update(sourceFormat='unknown'),
+            lambda value: value.update(bytes=True),
+            lambda value: value.pop('programId'),
+        ):
+            changed = copy.deepcopy(first)
+            mutate(changed)
+            with self.assertRaises(ValueError):
+                catalog.merge([source, {'schema': catalog.SCHEMA, 'entries': [changed]}])
 
     def test_bounded_catalog_drift_and_compiled_parity(self):
         value = catalog.build()

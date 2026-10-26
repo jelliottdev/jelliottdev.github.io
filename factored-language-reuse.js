@@ -3,7 +3,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,P=node?require('./finite-question-policy.js'):root.FiniteQuestionPolicy;
- const prepared=new WeakMap(),LIMITS=Object.freeze({sources:12,sourceBytes:8*1024*1024,metadataBytes:2*1024*1024,claims:900,memoRunes:20000}),kinds=new Set(['measurement','exact-prefix','word-affine-count','word-prime-sums','language-score']),HEX=/^[a-f0-9]{64}$/;
+ const prepared=new WeakMap(),LIMITS=Object.freeze({sources:12,sourceBytes:8*1024*1024,metadataBytes:2*1024*1024,claims:900,memoRunes:20000}),kinds=new Set(['measurement','exact-prefix','exact-prefix-set','word-affine-count','word-prime-sums','language-score']),HEX=/^[a-f0-9]{64}$/;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k)),freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;},capture=(v,maxBytes)=>J.capture(v,{maxBytes,maxDepth:24,maxNodes:500000}),hash=async(v,c)=>[...new Uint8Array(await c.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');
  const programKey=(engine,alphabet,steps)=>E.stable({engine,alphabet,steps});
  function inspect(token){const value=prepared.get(token);if(!value)throw Error('Use independently prepared original-output comparisons.');return value;}

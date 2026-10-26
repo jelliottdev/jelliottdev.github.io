@@ -3,6 +3,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const W=require('../research-work.js'),F=require('../record-followup-view.js'),B=require('../research-browser-model.js');
 const data=JSON.parse(fs.readFileSync('data/experiments.json','utf8')),prepared=data.records.find(r=>F.available(r).length);
 assert(prepared,'Real prepared record fixture must exist');
+assert.equal(W.describe(prepared).label,F.available(prepared).length===1?'1 prepared browser check':F.available(prepared).length+' prepared browser checks');
 const summary=(n,state='not-run')=>({id:String(n).padStart(64,'0'),title:'Synthetic experiment '+n,state});
 const proposal='p_'+'a'.repeat(64),record=(total,verified,tasks=[])=>({id:'idea-'+proposal.slice(2),community:true,proposal_id:proposal,task_count:total,verified_task_count:verified,task_summaries:tasks,evidence_state:verified?'computation-available':'untested'});
 const before=JSON.stringify(prepared),work=W.describe(prepared);assert.equal(work.kind,'prepared');assert.equal(work.count,F.available(prepared).length);assert.equal(work.href,'run.html#record='+prepared.id+'&followup='+F.available(prepared)[0].id);assert.equal(JSON.stringify(prepared),before);

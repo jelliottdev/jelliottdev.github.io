@@ -11,7 +11,7 @@ function fixture(indices=[multiIndex,singleIndex],source=records,{failFactory=fa
    if(!nodes.has(key))nodes.set(key,{textContent:'',hidden:true,dataset:{},...(key==='select'?{value:group.checks[0].id}:{}),...(key==='[data-help-review]'?{href:'run.html#record='+group.record.id+'&followup='+group.checks[0].id}:{})});return nodes.get(key);
   };return {dataset:{helpCheck:String(index)},querySelector:get,get,group};
  });
- const calls=[],top=new Map(),topGet=key=>{if(!top.has(key))top.set(key,{textContent:key==='[data-help-start-status]'?'Finding a check with work remaining…':'',hidden:['[data-help-start-choice]','[data-help-more]'].includes(key),open:false,dataset:{}});return top.get(key);};
+ const calls=[],top=new Map(),topGet=key=>{if(!top.has(key))top.set(key,{textContent:key==='[data-help-start-status]'?'Looking for a prepared check…':'',hidden:['[data-help-start-choice]','[data-help-more]'].includes(key),open:false,dataset:{}});return top.get(key);};
  const destroy=Help.bind({querySelectorAll:()=>rows,querySelector:topGet},source,{createReadiness(options){
   const call={...options,activated:0,retried:0,destroyed:0};calls.push(call);if(failFactory)throw Error('Unavailable');
   return {activate(){call.activated++;},retry(){call.retried++;},destroy(){call.destroyed++;}};
@@ -22,8 +22,8 @@ function settleInitial(f,states=[]){for(const [i,call]of f.initial.entries())cal
 function choose(row,check){row.get('select').value=check.id;row.get('select').onchange();}
 let count=0;async function test(name,fn){await fn();count++;console.log('PASS '+name);}
 (async()=>{
-await test('finite work is counted as page-and-setting checks, never pages',async()=>{
- const f=fixture([singleIndex]);try{const call=f.calls[0],row=f.rows[0];call.onState({state:'remaining',unit:'cases',remainingCount:2352,totalPages:56,programCount:42});assert.equal(row.get('[data-help-status]').textContent,'2352 checks remain.');call.onState({state:'results',unit:'cases'});assert.equal(row.get('[data-help-status]').textContent,'Results are saved for every declared page and setting.');}finally{f.destroy();}
+await test('finite result availability is counted as page-and-setting checks, never pages',async()=>{
+ const f=fixture([singleIndex]);try{const call=f.calls[0],row=f.rows[0];call.onState({state:'remaining',unit:'cases',remainingCount:2352,totalPages:56,programCount:42});assert.equal(row.get('[data-help-status]').textContent,'2352 checks have no verified result here.');call.onState({state:'results',unit:'cases'});assert.equal(row.get('[data-help-status]').textContent,'Verified results are available for every declared page and setting.');}finally{f.destroy();}
 });
 await test('maintained immutable source choices, exact links, escaped prose and empty catalogue',async()=>{
  assert(groups.length>0);assert.equal(JSON.stringify(records),before);assert(html.includes('No theory or coding needed'));assert(html.includes('data-help-more hidden>Look for another check</button>'));
@@ -47,20 +47,20 @@ await test('actual known-key choices keep authored titles, purposes and links al
 await test('selected-row states, retry, source-bound selection and old listeners unsubscribe without destroying cached probes',async()=>{
  const f=fixture(),row=f.rows[0],first=f.calls[0];assert.equal(f.calls.length,2);assert.equal(first.activated,1);
  for(const [value,message,label]of [
-  [{state:'remaining',remainingCount:2},'2 pages remain to check.','Review remaining check'],
-  [{state:'remaining',remainingCount:1},'1 page remains to check.','Review remaining check'],
-  [{state:'results'},'Results are saved for every declared page.','View results'],
-  [{state:'answered'},'This question already has an answer.','View answer'],
-  [{state:'unavailable'},'Saved results could not be checked.','Review check'],
-  [{state:'remaining',remainingCount:0},'Saved results could not be checked.','Review check'],
-  [{state:'remaining',remainingCount:'2'},'Saved results could not be checked.','Review check'],
-  [{state:'other'},'Saved results could not be checked.','Review check']]){
-  first.onState(value);assert.equal(row.get('[data-help-status]').textContent,message);assert.equal(row.get('[data-help-review]').textContent,label);assert.equal(row.get('[data-help-retry]').hidden,label!=='Review check');
+  [{state:'remaining',remainingCount:2},'2 pages have no verified result here.','Review check'],
+  [{state:'remaining',remainingCount:1},'1 page has no verified result here.','Review check'],
+  [{state:'results'},'Verified results are available for every declared page.','View results'],
+  [{state:'answered'},'Verified results answer this exact check.','View results'],
+  [{state:'unavailable'},'Available results could not be verified.','Review check'],
+  [{state:'remaining',remainingCount:0},'Available results could not be verified.','Review check'],
+  [{state:'remaining',remainingCount:'2'},'Available results could not be verified.','Review check'],
+  [{state:'other'},'Available results could not be verified.','Review check']]){
+  first.onState(value);assert.equal(row.get('[data-help-status]').textContent,message);assert.equal(row.get('[data-help-review]').textContent,label);assert.equal(row.get('[data-help-retry]').hidden,!message.includes('could not be verified'));
  }
- row.get('[data-help-retry]').onclick();assert.equal(first.retried,1);assert.equal(row.get('[data-help-status]').textContent,'Checking saved results…');
+ row.get('[data-help-retry]').onclick();assert.equal(first.retried,1);assert.equal(row.get('[data-help-status]').textContent,'Checking available results…');
  const changed=row.group.checks.at(-1);choose(row,changed);assert.equal(first.destroyed,0);assert.equal(f.calls.length,3);assert.equal(f.calls[2].check,changed);assert.equal(row.get('[data-help-question]').textContent,changed.question);assert.equal(row.get('[data-help-purpose]').textContent,changed.motivation);assert(row.get('[data-help-review]').href.endsWith(changed.id));
- first.onState({state:'answered'});assert.equal(row.get('[data-help-status]').textContent,'Checking saved results…','An unsubscribed old rule cannot replace the selected row');
- f.calls[2].onState({state:'results'});choose(row,row.group.checks[0]);assert.equal(f.calls.length,3);assert.equal(row.get('[data-help-status]').textContent,'This question already has an answer.','Switching back reuses a previously verified state');assert.equal(first.activated,1);
+ first.onState({state:'answered'});assert.equal(row.get('[data-help-status]').textContent,'Checking available results…','An unsubscribed old rule cannot replace the selected row');
+ f.calls[2].onState({state:'results'});choose(row,row.group.checks[0]);assert.equal(f.calls.length,3);assert.equal(row.get('[data-help-status]').textContent,'Verified results answer this exact check.','Switching back reuses a previously verified state');assert.equal(first.activated,1);
  row.get('select').value='unknown';row.get('select').onchange();assert.equal(row.get('select').value,first.check.id);assert.equal(f.calls.length,3);
  const oldRetry=row.get('[data-help-retry]').onclick;f.destroy();f.destroy();assert(f.calls.every(c=>c.destroyed===1));first.onState({state:'remaining',remainingCount:99});assert(row.get('[data-help-status]').hidden);oldRetry();assert.equal(first.retried,1);assert.equal(row.get('select').onchange,null);assert.equal(row.get('[data-help-retry]').onclick,null);
 });
@@ -68,16 +68,16 @@ await test('all displayed initial choices must settle before a sequential altern
  const f=fixture(),row=f.rows[0],initialHref=row.get('[data-help-review]').href,initialSelection=row.get('select').value;
  f.initial[0].onState({state:'results'});await tick();assert.equal(f.calls.length,2,'Do not start alternatives while another initial row is pending');
  f.initial[1].onState({state:'answered'});await tick();assert.equal(f.calls.length,3);const alternative=f.calls[2];assert.equal(alternative.check,row.group.checks[1]);assert.equal(alternative.record,row.group.record);
- await tick();assert.equal(f.calls.length,3,'Only one alternative may be probed at a time');assert(!f.topGet('[data-help-start-status]').textContent.includes('These prepared checks have saved results'));
+ await tick();assert.equal(f.calls.length,3,'Only one alternative may be probed at a time');assert(!f.topGet('[data-help-start-status]').textContent.includes('These prepared checks have verified results'));
  alternative.onState({state:'remaining',remainingCount:4});await tick();assert.equal(f.calls.length,3,'Stop the pass after a verified remaining check');
- assert.equal(f.topGet('[data-help-start-title]').textContent,alternative.check.title);assert.equal(f.topGet('[data-help-start-purpose]').textContent,alternative.check.motivation);assert.equal(f.topGet('[data-help-start-link]').href,'run.html#record='+alternative.record.id+'&followup='+alternative.check.id);assert.equal(f.topGet('[data-help-start-count]').textContent,'4 pages remain to check.');
- assert.equal(row.get('select').value,initialSelection);assert.equal(row.get('[data-help-review]').href,initialHref);assert.equal(row.get('[data-help-status]').textContent,'Results are saved for every declared page.','Background discovery cannot change the displayed rule');
+ assert.equal(f.topGet('[data-help-start-title]').textContent,alternative.check.title);assert.equal(f.topGet('[data-help-start-purpose]').textContent,alternative.check.motivation);assert.equal(f.topGet('[data-help-start-link]').href,'run.html#record='+alternative.record.id+'&followup='+alternative.check.id);assert.equal(f.topGet('[data-help-start-count]').textContent,'4 pages have no verified result here.');
+ assert.equal(row.get('select').value,initialSelection);assert.equal(row.get('[data-help-review]').href,initialHref);assert.equal(row.get('[data-help-status]').textContent,'Verified results are available for every declared page.','Background discovery cannot change the displayed rule');
  const chosen=f.topGet('[data-help-start-link]').href;f.initial[0].onState({state:'remaining',remainingCount:45});assert.equal(f.topGet('[data-help-start-link]').href,chosen,'A later result cannot redirect the captured recommendation');
- alternative.onState({state:'answered'});assert.equal(f.topGet('[data-help-start-link]').textContent,'View answer');assert.equal(f.topGet('[data-help-start-link]').href,chosen);
- choose(row,alternative.check);assert.equal(f.calls.length,3,'Selecting a background result reuses its source entry');assert.equal(row.get('[data-help-status]').textContent,'This question already has an answer.');assert.equal(f.topGet('[data-help-start-link]').href,chosen);f.destroy();
+ alternative.onState({state:'answered'});assert.equal(f.topGet('[data-help-start-link]').textContent,'View results');assert.equal(f.topGet('[data-help-start-link]').href,chosen);
+ choose(row,alternative.check);assert.equal(f.calls.length,3,'Selecting a background result reuses its source entry');assert.equal(row.get('[data-help-status]').textContent,'Verified results answer this exact check.');assert.equal(f.topGet('[data-help-start-link]').href,chosen);f.destroy();
 });
 await test('unavailable alternatives do not stop discovery or invent completion',async()=>{
- const f=fixture();settleInitial(f,[{state:'unavailable'},{state:'results'}]);await tick();f.calls[2].onState({state:'unavailable'});await tick();assert.equal(f.calls.length,4);const next=f.calls[3];next.onState({state:'remaining',remainingCount:1});await tick();assert.equal(f.topGet('[data-help-start-title]').textContent,next.check.title);assert.equal(f.topGet('[data-help-start-count]').textContent,'1 page remains to check.');assert.equal(f.calls.length,4);f.destroy();
+ const f=fixture();settleInitial(f,[{state:'unavailable'},{state:'results'}]);await tick();f.calls[2].onState({state:'unavailable'});await tick();assert.equal(f.calls.length,4);const next=f.calls[3];next.onState({state:'remaining',remainingCount:1});await tick();assert.equal(f.topGet('[data-help-start-title]').textContent,next.check.title);assert.equal(f.topGet('[data-help-start-count]').textContent,'1 page has no verified result here.');assert.equal(f.calls.length,4);f.destroy();
 });
 await test('two-choice families stop at their real boundary and retain unknown results',async()=>{
  for(const state of ['unavailable','remaining']){
@@ -89,18 +89,18 @@ await test('two-choice families stop at their real boundary and retain unknown r
    assert.equal(f.topGet('[data-help-start-title]').textContent,alternative.check.title);
    assert.equal(f.topGet('[data-help-start-purpose]').textContent,alternative.check.motivation);
    assert.equal(f.topGet('[data-help-start-link]').href,'run.html#record='+alternative.record.id+'&followup='+alternative.check.id);
-  }else{assert.match(f.topGet('[data-help-start-status]').textContent,/could not be checked/);assert(f.topGet('[data-help-start-choice]').hidden);}
+  }else{assert.match(f.topGet('[data-help-start-status]').textContent,/could not be verified/);assert(f.topGet('[data-help-start-choice]').hidden);}
   f.destroy();
  }
 });
 await test('automatic pass is capped at four alternatives; explicit next batch continues without duplicates and claims completion only after all choices',async()=>{
  const f=fixture();settleInitial(f);await tick();
  for(let i=0;i<4;i++){assert.equal(f.calls.length,3+i);assert.equal(f.calls[2+i].check,f.rows[0].group.checks[i+1]);f.calls[2+i].onState({state:i%2?'answered':'results'});await tick();}
- assert.equal(f.calls.length,6);assert.equal(f.topGet('[data-help-more]').hidden,false);assert.equal(f.topGet('[data-help-start-status]').textContent,'The checks reviewed so far have saved results or answers.');assert(f.topGet('[data-help-start-choice]').hidden);
+ assert.equal(f.calls.length,6);assert.equal(f.topGet('[data-help-more]').hidden,false);assert.equal(f.topGet('[data-help-start-status]').textContent,'The checks reviewed so far have verified results to inspect.');assert(f.topGet('[data-help-start-choice]').hidden);
  f.topGet('[data-help-more]').onclick();f.topGet('[data-help-more]').onclick();await tick();assert.equal(f.calls.length,7,'Duplicate activation cannot enqueue another batch');
  for(let i=4;i<7;i++){assert.equal(f.calls[2+i].check,f.rows[0].group.checks[i+1]);f.calls[2+i].onState({state:'answered'});await tick();}
- assert.equal(f.calls.length,9,'Two displayed initial choices plus all seven alternatives');assert(f.topGet('[data-help-more]').hidden);assert.equal(f.topGet('[data-help-start-status]').textContent,'These prepared checks have saved results or answers. Browse the full list to view them.');assert.equal(new Set(f.calls.map(c=>c.record.id+'|'+c.check.id)).size,f.calls.length);f.destroy();
- const unknown=fixture();settleInitial(unknown);await tick();for(let i=0;i<4;i++){unknown.calls[2+i].onState({state:i===1?'unavailable':'results'});await tick();}assert.equal(unknown.topGet('[data-help-start-status]').textContent,'No starting check was confirmed yet. Some saved results could not be checked.');assert(!unknown.topGet('[data-help-more]').hidden);unknown.destroy();
+ assert.equal(f.calls.length,9,'Two displayed initial choices plus all seven alternatives');assert(f.topGet('[data-help-more]').hidden);assert.equal(f.topGet('[data-help-start-status]').textContent,'These prepared checks have verified results to inspect. Browse the full list to view them.');assert.equal(new Set(f.calls.map(c=>c.record.id+'|'+c.check.id)).size,f.calls.length);f.destroy();
+ const unknown=fixture();settleInitial(unknown);await tick();for(let i=0;i<4;i++){unknown.calls[2+i].onState({state:i===1?'unavailable':'results'});await tick();}assert.equal(unknown.topGet('[data-help-start-status]').textContent,'No starting check was confirmed yet. Some available results could not be verified.');assert(!unknown.topGet('[data-help-more]').hidden);unknown.destroy();
 });
 await test('manual browse and rule selection stop automatic recommendations, including open-toggle races and in-flight alternatives',async()=>{
  for(const action of ['browse','toggle-race','select']){
@@ -120,7 +120,8 @@ await test('identical followup IDs in different records remain separate exact so
  settleInitial(f);await tick();const background=f.calls[2];background.onState({state:'results'});await tick();const sameIdOther=f.rows[1].group.checks[1];choose(f.rows[1],sameIdOther);const selected=f.calls.at(-1);assert.equal(selected.record.id,f.rows[1].group.record.id);assert.equal(selected.check,sameIdOther);assert.equal(selected.check.id,background.check.id);assert.notEqual(selected.record.id,background.record.id);selected.onState({state:'remaining',remainingCount:3});assert.equal(f.rows[1].get('[data-help-purpose]').textContent,sameIdOther.motivation);assert.equal(JSON.stringify(source),saved);f.destroy();
 });
 await test('factory errors keep an actionable retry and never change source data',async()=>{
- const f=fixture([singleIndex],records,{failFactory:true});assert.equal(f.rows[0].get('[data-help-status]').textContent,'Saved results could not be checked.');assert(!f.rows[0].get('[data-help-retry]').hidden);f.rows[0].get('[data-help-retry]').onclick();assert.equal(f.calls.length,2);await tick();assert.match(f.topGet('[data-help-start-status]').textContent,/could not be checked/);f.destroy();assert.equal(JSON.stringify(records),before);
+ const f=fixture([singleIndex],records,{failFactory:true});assert.equal(f.rows[0].get('[data-help-status]').textContent,'Available results could not be verified.');assert(!f.rows[0].get('[data-help-retry]').hidden);f.rows[0].get('[data-help-retry]').onclick();assert.equal(f.calls.length,2);await tick();assert.match(f.topGet('[data-help-start-status]').textContent,/could not be verified/);f.destroy();assert.equal(JSON.stringify(records),before);
 });
+await test('historical replay and expanded language comparison retain purpose while result availability includes any verified original',async()=>{const index=groups.findIndex(g=>g.record.id==='lp2-prime-openings');assert(index>=0);const f=fixture([index]);try{const row=f.rows[0],original=JSON.stringify(row.group.record),replay=row.group.checks.find(check=>check.card.rules.evaluation.value.kind==='exact-prefix-set');assert(replay);f.calls[0].onState({state:'remaining',unit:'cases',remainingCount:9744});assert.equal(row.get('[data-help-status]').textContent,'9744 checks have no verified result here.');choose(row,replay);f.calls.at(-1).onState({state:'remaining',unit:'cases',remainingCount:3248});assert.equal(row.get('[data-help-status]').textContent,'3248 checks have no verified result here.');assert(row.get('[data-help-purpose]').textContent.includes('This repeats the earlier opening test'));assert.equal(row.get('[data-help-review]').textContent,'Review check');assert(!/new research|untried|never tested/i.test(row.get('[data-help-status]').textContent));f.calls.at(-1).onState({state:'answered'});assert.equal(row.get('[data-help-review]').textContent,'View results');assert.equal(row.get('[data-help-status]').textContent,'Verified results answer this exact check.');assert.equal(JSON.stringify(row.group.record),original);}finally{f.destroy();}});
 console.log(count+' maintained chooser discovery groups passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

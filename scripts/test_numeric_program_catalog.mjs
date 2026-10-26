@@ -1,0 +1,50 @@
+/* Published archive reuse through real source admission and read-only discovery. */
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+import {webcrypto} from 'node:crypto';
+import E from '../local-experiment.js';
+import Client from '../factored-evidence-client.js';
+import Compiler from '../factored-finite-search-compiler.js';
+import Q from '../factored-finite-question.js';
+import {checkedProgramIndex,readProgramPointer} from '../services/idea-assistant/published-program-source-index.mjs';
+import {publishedProgramIndex,readPublishedEvidence} from '../services/idea-assistant/published-evidence.mjs';
+import {readFactoredEvidencePage,verifyFactoredSnapshot} from '../services/idea-assistant/factored-search-evidence.mjs';
+import {readFactoredOutputEvidencePage,verifyFactoredOutputSnapshot} from '../services/idea-assistant/factored-output-evidence.mjs';
+const root=new URL('../',import.meta.url),read=name=>JSON.parse(readFileSync(new URL(name,root),'utf8'));
+const numeric=read('data/published-numeric-program-source-index.json'),original=read('data/published-program-source-index.json'),panel=read('data/published-panel-program-source-index.json'),bundle=read('data/local-run-inputs.json');
+const requests=[],fetcher=async(url,options)=>{assert(url.startsWith('https://jelliottdev.github.io/published-evidence/programs/'));assert.equal(options.redirect,'manual');requests.push(url);const bytes=readFileSync(new URL(url.slice('https://jelliottdev.github.io/'.length),root));return new Response(bytes,{headers:{'content-type':'application/json','content-length':String(bytes.length)}});};
+let count=0;async function test(name,fn){await fn();count++;console.log('PASS '+name);}
+await test('all232 sources hydrate from four shared files while all74 existing pointers remain unchanged',async()=>{
+ const catalog=await publishedProgramIndex();assert.equal(catalog.entries.length,306);assert.deepEqual(catalog.entries.slice(0,74),[...original.entries,...panel.entries]);assert.deepEqual(catalog.entries.slice(74),numeric.entries);assert.equal(checkedProgramIndex(numeric).entries.length,232);
+ const run=E.run;E.run=()=>assert.fail('Published archive lookup must not run targets');let pages=0;
+ try{for(const pointer of numeric.entries){const receipt=await readPublishedEvidence({...pointer,fetcher});assert.equal(receipt.task.taskId,pointer.taskId);assert.equal(receipt.run.id,pointer.resultId);assert.equal(receipt.task.criterion.kind,'exact-prefix-set');assert.equal(receipt.task.criterion.openings.length,9);assert.equal(receipt.task.pages.length,56);assert(receipt.run.result.matches.every(row=>!row.matched&&row.matchingOpenings.length===0));assert.match(receipt.provenance.dateMeaning,/no historical browser execution date/);assert.match(receipt.provenance.verificationMeaning,/empty output is not a historical run/);pages+=receipt.task.pages.length;}}
+ finally{E.run=run;}
+ assert.equal(pages,12992);assert.equal(requests.length,4);assert.equal(new Set(requests).size,4);
+});
+function database(){const sql=new DatabaseSync(':memory:'),dir=new URL('services/idea-assistant/migrations/',root);for(const name of readdirSync(dir).filter(n=>/^\d{4}_.*\.sql$/.test(n)).sort())sql.exec(readFileSync(new URL(name,dir),'utf8'));return {sql,db:{prepare(text){assert(/^\s*SELECT\b/i.test(text),'Archive discovery cannot write');return {bind(...args){return {first:async()=>sql.prepare(text).get(...args)||null,all:async()=>({results:sql.prepare(text).all(...args)})};}};}}};}
+await test('the actual nine-opening replay is answered entirely by verified archived outputs',async()=>{
+ const fixture=database(),record=read('experiments/records/lp2-prime-openings/record.json'),recipe=record.browser_followups.find(r=>r.id==='prime-stream-nine-openings'),compiled=await Compiler.compile(recipe.card,bundle),options={db:fixture.db,proposalId:'p_'+'1'.repeat(64),domain:compiled.domain,inputVersion:'raw',cursorKey:'Private numerical archive integration test cursor key',now:Date.parse('2026-10-26T12:00:00.000Z'),fetcher},wire=[],run=E.run;E.run=()=>assert.fail('Archive coverage cannot execute targets');
+ try{const scan=Client.createScan({proposalId:options.proposalId,domain:compiled.domain,crypto:webcrypto,fetchPage:async body=>{const page=await readFactoredEvidencePage({...options,...body});wire.push(page);return page;}});let state;do{assert(wire.length<12);state=await scan.step();}while(state.status!=='complete');assert.equal(state.proof.totalCases,3248);assert.equal(state.proof.coveredCases,3248);assert.equal(state.proof.remainingCases,0);assert.equal(state.proof.matchingCases,0);assert.equal(state.proof.decision.answer,'prefix-not-found');assert.equal(wire.flatMap(p=>p.sources).length,58);assert(wire.every(p=>p.sources.length<=12));await verifyFactoredSnapshot({...options,snapshotToken:wire.at(-1).snapshotToken});for(const table of ['local_tasks','local_task_results','proposals'])assert.equal(fixture.sql.prepare('SELECT count(*) n FROM '+table).get().n,0);}
+ finally{E.run=run;fixture.sql.close();}
+});
+await test('the actual174-setting extension reuses page restarts and leaves line and word restarts open',async()=>{
+ const fixture=database(),record=read('experiments/records/lp2-prime-openings/record.json'),recipe=record.browser_followups.find(r=>r.id==='prime-stream-reset-language'),compiled=await Compiler.compileLanguageComparison(recipe.card,bundle),options={db:fixture.db,proposalId:'p_'+'2'.repeat(64),domain:compiled.domain,inputVersion:'raw',cursorKey:'Private numerical archive integration test cursor key',now:Date.parse('2026-10-26T12:00:00.000Z'),fetcher},wire=[],run=E.run;E.run=()=>assert.fail('Reusing archived outputs must not run target transforms');
+ try{const scan=Client.createOutputScan({proposalId:options.proposalId,domain:compiled.domain,crypto:webcrypto,fetchPage:async body=>{const page=await readFactoredOutputEvidencePage({...options,...body});wire.push(page);return page;}});let state;do{assert(wire.length<12);state=await scan.step();}while(state.status!=='complete');assert.equal(state.proof.totalCases,9744);assert.equal(state.proof.coveredCases,3248);assert.equal(state.proof.derivedCases,3248);assert.equal(state.proof.directCases,0);assert.equal(state.proof.usableCases,3190);assert.equal(state.proof.insufficientCases,58);assert.equal(state.proof.remainingCases,6496);assert.equal(state.proof.decision.state,'missing-evidence');assert(state.proof.nextCases.length>0);assert(state.proof.nextCases.every(ref=>compiled.domain.programs.find(p=>p.id===ref.programId).steps[0].reset!=='page'));assert(wire.every(p=>!Object.hasOwn(p,'usableCases')),'Only the client evaluates the new comparison');await verifyFactoredOutputSnapshot({...options,snapshotToken:wire.at(-1).snapshotToken});for(const table of ['local_tasks','local_task_results','proposals'])assert.equal(fixture.sql.prepare('SELECT count(*) n FROM '+table).get().n,0);}
+ finally{E.run=run;fixture.sql.close();}
+});
+await test('unrelated archive growth creates no empty lookup pages but remains snapshot-bound',async()=>{
+ const fixture=database(),record=read('experiments/records/lp2-prime-openings/record.json'),compiled=await Compiler.compile(record.browser_followups.find(r=>r.id==='prime-stream-nine-openings').card,bundle);
+ const domain=await Q.bind({engine:compiled.domain.engine,inputVersion:compiled.domain.inputVersion,alphabet:compiled.domain.alphabet,pages:compiled.domain.pages,criterion:compiled.domain.criterion,programs:[{steps:[{op:'affine',a:1,b:0}]}]});
+ const options={db:fixture.db,proposalId:'p_'+'3'.repeat(64),domain,inputVersion:'raw',cursorKey:'Private numeric archive no-match selection verification key',now:Date.parse('2026-10-26T12:00:00.000Z'),programIndex:numeric,fetcher:()=>assert.fail('Unrelated sources must not be fetched')};
+ try{const page=await readFactoredEvidencePage(options);assert.deepEqual(page.sources,[]);assert.equal(page.continuation.complete,true);assert.equal(page.continuation.nextCursor,null);await verifyFactoredSnapshot({...options,snapshotToken:page.snapshotToken});const changed=structuredClone(numeric);changed.entries[0].createdAt='2026-10-25T00:00:00.000Z';await assert.rejects(()=>verifyFactoredSnapshot({...options,programIndex:changed,snapshotToken:page.snapshotToken}),{code:'stale-scan'});}
+ finally{fixture.sql.close();}
+});
+await test('shared source selectors and metadata reject drift without fetching unpinned files',async()=>{
+ const pointer=numeric.entries[0];for(const mutate of [p=>p.sourceFormat='unknown',p=>delete p.programId,p=>p.programId='../escape',p=>p.path='published-evidence/programs/../escape.json',p=>p.criterion.openings[1].id=p.criterion.openings[0].id,p=>p.criterion.openings[1].values=p.criterion.openings[0].values,p=>p.criterion.openings[0].values=[29]]){const changed=structuredClone(pointer);mutate(changed);assert.throws(()=>checkedProgramIndex({schema:numeric.schema,entries:[changed]}));}
+ const duplicate=structuredClone(pointer);duplicate.revision='0'.repeat(64);assert.throws(()=>checkedProgramIndex({schema:numeric.schema,entries:[pointer,duplicate]}),/selector/);
+ const altered=structuredClone(pointer);altered.resultId='0'.repeat(64);await assert.rejects(()=>readPublishedEvidence({...altered,programIndex:{schema:numeric.schema,entries:[altered]},fetcher}),/metadata differs/);
+ const unknown=structuredClone(pointer);unknown.programId='unknown-program';unknown.caseId='unknown-program--all-pages';await assert.rejects(()=>readProgramPointer(unknown,{fetcher}),/program/i);
+ const crypto={subtle:webcrypto.subtle};await assert.rejects(()=>readProgramPointer(pointer,{crypto,fetcher:async()=>{const bytes=readFileSync(new URL(pointer.path,root));bytes[bytes.length-2]^=1;return new Response(bytes,{headers:{'content-type':'application/json'}});}}),/bytes changed/);
+});
+console.log(count+' numeric source catalog groups passed; no database writes or new target executions.');
