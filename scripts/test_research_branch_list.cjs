@@ -69,3 +69,18 @@ console.log('PASS map List: every branch exposes exactly one level, direct nativ
  c.state.saved='';c.preferencesChanged({saved:[],upvoted:[]});assert.equal(renders,1,'A bookmark change outside Saved does not replace the page');
  console.log('PASS vote acknowledgements and cross-tab vote changes preserve focused controls; only bookmark changes refresh an active Saved filter');
 }
+
+// Navigation descriptions explain the actual method and cannot revive legacy labels.
+{
+ const navigation=require('../research-method-navigation.js'),shown=render('solve-lp2');
+ for(const id of ['method:repeating-key','method:running-key','method:feedback','method:payload']){
+  assert(shown.container.innerHTML.includes(navigation.LABELS[id]));
+  assert(shown.container.innerHTML.includes(navigation.DESCRIPTIONS[id]));
+ }
+ assert(!shown.container.innerHTML.includes('Using another text as the key'));
+ assert(!shown.container.innerHTML.includes('Using the number grid'));
+ const node=data.views.all.nodes.find(n=>n.id==='method:running-key'),prior=node.description;
+ node.description='<img src=x onerror=bad>';const escaped=render('solve-lp2').container.innerHTML;
+ assert(escaped.includes('&lt;img src=x onerror=bad&gt;'));assert(!escaped.includes('<img src=x'));node.description=prior;
+ console.log('PASS branch descriptions use reviewed method labels, escape text and avoid legacy key-source headings.');
+}

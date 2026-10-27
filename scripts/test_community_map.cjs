@@ -50,3 +50,20 @@ console.log('PASS community map preserves evidence, routes active cards, separat
  const saved={...language,verifiedTaskCount:1,taskCount:1,tasks:[{id:'e'.repeat(64),title:'Synthetic saved check',state:'results-verified'}]},record=M.merge(base,[saved]).records['idea-'+saved.id.slice(2)];assert(record.reader_finding.includes('Open the idea'));assert(!/complete|matching|readable|passed/i.test(record.reader_finding));
  console.log('PASS community question labels distinguish evaluation and keep task availability separate from scientific findings.');
 }
+
+// Key material alone cannot select a cipher branch in the method navigation.
+{
+ const cases=[
+  [{id:'finite_key',label:'Finite key stream',key:[1,2],direction:'subtract',reset:'page'},'method:running-key'],
+  [{id:'repeating_key',label:'Repeating key',key:[1,2],direction:'subtract',reset:'page'},'method:repeating-key'],
+  [{id:'plaintext_autokey',label:'Plaintext autokey',key:[1,2],direction:'subtract',reset:'page'},'method:feedback'],
+  [{id:'family_selection',familyId:'number-streams',label:C.METHOD_FAMILIES['number-streams']},'solve-lp2'],
+  [{id:'book_code',label:'Book code'},'solve-lp2'],
+  [{id:'prime_value_mapping',label:'Prime value mapping'},'method:direct-mapping']
+ ];
+ for(let i=0;i<cases.length;i++){
+  const [op,parent]=cases[i],e=entry(100+i,{operations:[op]}),prior=JSON.stringify(e),mapped=M.merge(base,[e]),leaf=mapped.views.all.nodes.find(n=>n.record_id==='idea-'+e.id.slice(2));
+  assert.equal(leaf.parent,parent,op.id);assert.equal(JSON.stringify(e),prior);assert.equal(mapped.records[leaf.record_id].outcome,'');
+ }
+ console.log('PASS community method navigation separates finite, repeating and feedback application; source-only labels cannot imply a cipher.');
+}

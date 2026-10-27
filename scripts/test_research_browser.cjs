@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),load=name=>JSON.parse(fs.readFileSync(path.join(root,name),'utf8'));
-const Browser=require('../research-browser-model.js'),Index=require('../research-index.js');
+const Browser=require('../research-browser-model.js'),Index=require('../research-index.js'),MethodNavigation=require('../research-method-navigation.js');
 const source=load('data/research-map.json'),registry=load('data/experiments.json'),before=JSON.stringify(source);
 const data=Browser.build(source,registry),published=registry.records.filter(r=>r.status==='published');
 assert.equal(JSON.stringify(source),before,'Navigation building cannot rewrite source classification');
@@ -18,10 +18,12 @@ for(const record of published){
   assert.equal(target.pathname,'/library.html');assert.deepEqual([...target.searchParams.keys()],['v']);assert(target.searchParams.get('v'));
   assert.equal(target.hash,'#/experiment/'+encodeURIComponent(record.id));
 }
-for(const view of Object.values(source.views))for(const node of view.nodes){
-  if(!nodes.has(node.id)||!nodes.has(node.parent))continue;
-  assert.equal(nodes.get(node.id).parent,node.parent,'Keep every original relation below the editorial area roots');
-}
+for(const [name,view]of Object.entries(source.views))assert.deepEqual(data.views[name].nodes.map(n=>({id:n.id,parent:n.parent,children:n.children,members:n.members})),view.nodes.map(n=>({id:n.id,parent:n.parent,children:n.children,members:n.members})),'Specialist views retain their original scientific navigation: '+name);
+for(const node of data.views.all.nodes)for(const child of node.children)assert.equal(nodes.get(child).parent,node.id,'Graph and List share exact immediate-child relations');
+for(const [id,label]of Object.entries(MethodNavigation.LABELS))assert.equal(nodes.get(id).label,label,'Reviewed mechanism labels must survive legacy label aliases');
+for(const id of ['emerson-running-key','decimal-chain-opening-cribs','wulfic-systematic-stream-source','gp-prime-plaintext-feedback']){const record=data.records[id],classification=MethodNavigation.classification(record);assert(classification,id);let leaf=leaves.find(n=>n.record_id===id),found=false;while(leaf){if(leaf.id===classification.bucket)found=true;leaf=nodes.get(leaf.parent);}assert(found,'The actual reviewed method determines its branch: '+id);}
+assert(nodes.get('method:running-key'),'Existing community running-key parent remains addressable');
+assert(data.method_navigation&&Object.keys(data.method_navigation.aliases).length>0,'Removed source-name branches retain navigation aliases');
 const selected=Index.select(Object.values(data.records),Index.state(new URLSearchParams()));
 assert.equal(selected.allRecords.length,published.length);assert.equal(selected.records.length,20);
 const exact=Index.select(Object.values(data.records),Index.state(new URLSearchParams('q=LP2-15&sort=recent')));
@@ -37,6 +39,7 @@ assert.equal(Browser.read('#followups=1&mode=list&branch=solve-lp2','graph',Inde
 for(const value of ['','0','true','2','<img>'])assert.equal(Browser.read('#followups='+encodeURIComponent(value),'graph',Index.state).followups,'','Only explicit followups=1 activates the filter');
 const html=fs.readFileSync(path.join(root,'research.html'),'utf8');
 assert.equal((html.match(/src="research-index\.js/g)||[]).length,1);
+assert(html.indexOf('research-method-navigation.js?v=20261027-method-navigation')<html.indexOf('research-browser-model.js?v=20261027-method-navigation'),'The shared projection loads before the browser model');
 assert(!/map-index-model|map-search-engine|map-study-data|\/archive\//.test(html));
 console.log(`PASS unified research: ${published.length} current records, exact findings/scopes, every leaf once, preserved source parents, new-record access, shared selector/search and legacy state.`);
 

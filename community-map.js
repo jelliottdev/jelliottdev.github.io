@@ -43,6 +43,16 @@
    const draft=decodeCard(entry.card),aim=C.normalizeOutcome(draft.aim),classified=C.classifyMethod(draft.method),area=routes[aim.id]||'aim:unplaced';
    let parent=nodes.get(area)||nodes.get('aim:unplaced'),candidate=classified.familyIds.length===1?nodes.get(parents[classified.familyIds[0]]):null;
    if(classified.familyIds.length>1)candidate=nodes.get('method:combined');
+   if(data.method_navigation){
+    // Source material is not a cipher. Route literal finite streams by their
+    // explicit non-repeating operation, not a number/book source-family tag.
+    if(classified.familyIds.length===1&&classified.familyIds[0]==='number-streams'){
+     const ops=classified.operations.map(row=>row.operation);
+     candidate=ops.length&&ops.every(op=>['finite_key','finite_key_bank'].includes(op.id))?nodes.get('method:running-key'):null;
+    }
+    if(classified.familyIds.length===1&&classified.familyIds[0]==='book-codes')candidate=null;
+    if(classified.familyIds.length===1&&classified.familyIds[0]==='prime-indices')candidate=nodes.get('method:direct-mapping');
+   }
    if(!classified.complete)candidate=null;
    if(candidate){let ancestor=candidate;while(ancestor&&ancestor.id!==area)ancestor=nodes.get(ancestor.parent);if(ancestor)parent=candidate;}
    const id='idea-'+entry.id.slice(2);if(data.records[id]||nodes.has('record:'+id))throw Error('Community identity conflicts with a research record.');
