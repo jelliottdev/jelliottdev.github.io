@@ -242,3 +242,17 @@ for(const [route,method]of [['/parameter-questions/prepare','POST'],['/parameter
  }),proposalEnv)).status,503,'Task routes must use storage, never inference');
 }
 console.log('PASS: local task and result routes are isolated from inference and fail closed without storage.');
+
+// Implementation drafting and explicit preparation are separate production routes.
+// Neither is allowed to fall through to conversational /ask inference.
+for(const route of ['/implement-method','/prepare-implementation']){
+ const routeRequest=(method,body='{}',extra={})=>new Request('https://fixture.workers.dev'+route,{method,headers:{Origin:origin,'Content-Type':'application/json',...extra},...(method==='POST'?{body}:{})});
+ const noInference={SITE_ORIGIN:origin,AI:{run(){assert.fail('Invalid implementation routes cannot call inference');}}};
+ assert.equal((await production.fetch(routeRequest('POST'),noInference)).status,503);
+ assert.equal((await production.fetch(routeRequest('OPTIONS','',{'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'Content-Type'}),noInference)).status,204);
+ assert.equal((await production.fetch(routeRequest('GET'),noInference)).status,405);
+ assert.equal((await production.fetch(routeRequest('POST','{}',{Origin:'https://evil.invalid'}),noInference)).status,403);
+ const configured={...noInference,IDEA_LIMIT:{limit:async()=>({success:true})},TASK_LIMIT:{limit:async()=>({success:true})},PROPOSALS:{prepare(){assert.fail('Malformed review must not read or write storage');}}};
+ assert.equal((await production.fetch(routeRequest('POST'),configured)).status,400);
+}
+console.log('PASS: implementation drafting and reviewed preparation routes preserve CORS, method, budget and malformed-input guards without inference or persistence.');

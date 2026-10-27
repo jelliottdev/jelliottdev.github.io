@@ -20,4 +20,17 @@ for(const [owner,pattern,source]of checks){
  const actual=createHash('sha256').update(read(source)).digest('hex');
  if(matches[0][1]!==actual)throw Error('Staged runtime source pin differs from published Git bytes: '+source+' in '+owner);
 }
-console.log('PASS: '+checks.length+' runtime source pins match the staged Git bytes');
+// Read the package's declared closure from the index as data, never require a
+// working-tree module whose bytes could differ from what Git will publish.
+const packageOwner='declarative-run-package.js',packageText=read(packageOwner).toString('utf8');
+const declarations=[...packageText.matchAll(/const SOURCES=Object\.freeze\((\[[^\r\n]+\])\.map\(pin=>Object\.freeze\(pin\)\)\);/g)];
+if(declarations.length!==1)throw Error('Missing or ambiguous declarative runtime source declarations');
+const sources=JSON.parse(declarations[0][1]),expected=['local-experiment.js','finite-json.js','declarative-rune-program.js','declarative-plan-controls.js','language-score.js','language-model-data.js'];
+if(!Array.isArray(sources)||sources.length!==expected.length)throw Error('Invalid declarative runtime closure');
+for(let i=0;i<expected.length;i++){
+ const pin=sources[i];
+ if(!pin||typeof pin!=='object'||Array.isArray(pin)||Object.keys(pin).length!==3||pin.path!==expected[i]||!Number.isSafeInteger(pin.bytes)||pin.bytes<1||typeof pin.sha256!=='string'||!/^[a-f0-9]{64}$/.test(pin.sha256))throw Error('Invalid declarative runtime source pin: '+expected[i]);
+ const bytes=read(pin.path),actual=createHash('sha256').update(bytes).digest('hex');
+ if(bytes.length!==pin.bytes||actual!==pin.sha256)throw Error('Staged runtime source pin differs from published Git bytes: '+pin.path+' in '+packageOwner);
+}
+console.log('PASS: '+(checks.length+sources.length)+' runtime source pins match the staged Git bytes');

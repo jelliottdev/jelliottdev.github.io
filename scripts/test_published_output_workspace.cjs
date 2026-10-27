@@ -31,7 +31,7 @@ let count=0;async function test(name,fn){await fn();count++;console.log('PASS '+
   const html=V.render(archived,{renderArchived:()=>'<p>Saved baseline output</p>'});
   assert(html.includes('<h2>What was tried</h2><p>'+baseline+'</p>'));assert(html.indexOf(baseline)<html.indexOf('Saved baseline output'));assert(!html.includes('<ol></ol>'));assert(!html.includes('Try another setting'));
   const runtime=fs.readFileSync('run.js','utf8'),context={ProgramDescription:D,esc:x=>String(x),protocolDescription:()=>null,V:{pageLabel:()=> 'LP2-00'},criterionText:()=> 'Check the opening',ProtocolExample:null};
-  const review=runtime.slice(runtime.indexOf(' function reviewSummaryHTML('),runtime.indexOf(' function protocolLimitHTML('));vm.runInNewContext(review+';this.review=reviewSummaryHTML;',context);
+  const review=runtime.slice(runtime.indexOf(' function reviewSummaryHTML('),runtime.indexOf(' function protocolLimitHTML(')),dispatchGuard=runtime.match(/^ const declarative=.*;$/m);assert(dispatchGuard,'Use the actual version dispatch guard with the extracted formatter');vm.runInNewContext(dispatchGuard[0]+'\n'+review+';this.review=reviewSummaryHTML;',context);
   const plan={steps:[],pages:[{id:'lp2-00'}],alphabet:[{rune:'F'}],criterion:{kind:'exact-prefix',values:[0]}};
   const reviewed=context.review(plan,'raw');assert(reviewed.includes('<p class="reviewed-check-method">'+baseline+'</p>'));assert(!reviewed.includes('<ol'));assert(reviewed.includes('Check whether each page'));
   const start=runtime.indexOf('  function planHTML('),end=runtime.indexOf('\n',start);vm.runInNewContext(runtime.slice(start,end)+';this.planView=planHTML;',context);

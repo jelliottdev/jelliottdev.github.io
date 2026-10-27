@@ -294,3 +294,8 @@ The main research map groups decoding records by the operation actually tested, 
 ### Proposed-method review continuity
 
 A generated procedure remains one structured object through drafting, review, saving and reopening. Its hypothesis, key material and application, ordered steps, inputs, scope, evaluation, controls and assumptions must stay together. Review must not silently replace its evaluation with a generic measurement or opening check. Show the original saved idea as a link; do not present reconstructed card JSON or generated procedure prose as the visitor's original wording. Save only after the explicit review action. Applied edits must pass consistency and shared-card bounds before replacing the draft; failed edits and saves retain editable data. The review does not require a full archive download. Reopened proposals use the same view in read-only mode and clearly remain proposals until an independently validated executable implementation exists.
+
+
+### Reviewed programs and results
+
+A structured proposed method uses the same review flow regardless of its outcome category or existing calculations. Show its hypothesis and ordered steps first; keep full proposed settings secondary. Supported implementations require an explicit program review followed by an explicit Run action. Opening a shared calculation never grants execution permission. After a run, put the verified output and Save action first; move the already reviewed procedure and illustration into one Method and settings disclosure. Saved output remains visible on reload without another run. Unsupported requirements remain visible and block preparation rather than silently becoming a simpler check.

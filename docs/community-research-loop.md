@@ -766,3 +766,31 @@ proof. Existing v1 origins keep their original strict schema. Browser and servic
 checks reject omitted conditions or changed settings before creation. Preview and
 navigation perform no target execution or publication; creation, running and
 saving remain separate explicit actions.
+
+
+## Typed proposed-method execution
+
+A saved structured proposal can request an implementation through
+`/implement-method`. This drafts a bounded typed program, not arbitrary executable
+code. Every proposed step, evaluation, key use, representation, parameter and
+control has an explicit mapping or an unsupported state. Missing requirements
+block preparation. A supported mapping is still a proposed interpretation, not
+proof that the program scientifically tests its hypothesis.
+
+After explicit review, `/prepare-implementation` binds the full proposal, program,
+input edition, official page text and independent synthetic controls in immutable
+preparation metadata. The browser checks the same binding before offering Run.
+Run creates the exact task, checks three invented examples in the fixed worker,
+then executes the selected text. Saving is a separate action; server replay checks
+the entire output, measurements and retained/removed rune alignment.
+
+Historical reads verify the immutable implementation proof and saved calculation
+without refreshing against today's source text. New admission still reconstructs
+the current official inputs. A changed source must not erase historical findings
+or silently authorize a new run. Reproduction downloads contain pinned runtime
+files and an offline verifier; exporting never executes the target.
+
+This is a bounded execution path. It does not yet implement arbitrary algorithms,
+randomized hypothesis controls or multi-value parameter families. It also does
+not establish that every historical experiment has an automatic expansion.
+Those gaps must remain explicit rather than being represented as completed work.

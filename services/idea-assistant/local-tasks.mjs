@@ -13,6 +13,7 @@ import {loadInputBundle} from './official-inputs.mjs';
 import L from '../../local-experiment-dispatch.js';
 import V2 from '../../declarative-rune-program.js';
 import V2Controls from '../../declarative-plan-controls.js';
+import {readStoredMethodImplementation} from './method-implementation-origin.mjs';
 import PlanControls from '../../local-plan-controls.js';
 import {validateCard} from './idea-relations.mjs';
 import {loadRecordPlan,validOrigin as validRecordedOrigin} from './record-plans.mjs';
@@ -94,8 +95,8 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(isV2(task)){
     if(context.parent_task_id!==null)throw Error('A declarative task cannot inherit a legacy parent.');
     const authored=await query('SELECT COUNT(*) AS count FROM local_task_all_origins WHERE task_id=?',row.id).first();if(authored?.count!==0)throw Error('A declarative task cannot inherit a legacy authored origin.');
-    const controls=await controlsFor(task),result=latest?await readAdmittedResult(task,latest):null;
-    return {...projection(row,task,result?{id:latest.id,createdAt:latest.created_at,result}:null,context),origins:[],controls,relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:null}:{})};
+    const controls=await controlsFor(task),result=latest?await readAdmittedResult(task,latest):null,methodImplementation=await readStoredMethodImplementation({db,proposalId:context.proposal_id,card:validateCard(context.card_json),task,inputVersion:context.input_version});
+    return {...projection(row,task,result?{id:latest.id,createdAt:latest.created_at,result}:null,context),origins:[],controls,methodImplementation,relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:null}:{})};
    }
    const selectedOriginRow=linkedProposalId?await query(`SELECT o.origin_id,o.origin_json FROM local_task_all_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=? AND o.proposal_id=? ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,o.created_at,o.origin_id LIMIT 1`,row.id,linkedProposalId,preferredOriginId).first():null;
    if(selectedOriginRow)preferredOriginId=selectedOriginRow.origin_id;
