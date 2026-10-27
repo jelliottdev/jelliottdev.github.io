@@ -447,3 +447,16 @@ parent declaration by the client. Empty successful lookups add no page panel;
 read failures have an inline retry and never block reading the original idea.
 These links describe proposed checks, not evidence that the parent hypothesis
 has been tested. Opening the list never creates a proposal, task or result.
+
+
+### Typed choices proposed by the drafting service
+
+`POST /design-method` explicitly negotiates `proposalFormat: "typed-choices-v2"`
+for a provider wire whose maintained capability branches contain only `kind`.
+Unknown requirements retain the complete described branch. This contract returns
+canonical MD2 proposals with proposed choices; it does not prepare, run or save a
+task. Old `typed-v2` and MD1 request/response meanings are preserved. The public
+configuration opts in with `methodDesignContract`, so older clients remain valid.
+Fixed-language choices bind code-owned metadata; AI cannot supply model pins.
+Malformed extra choice fields are rejected rather than salvaged or ignored.
+Scientific comparison requirements remain unsupported unless actually implemented.

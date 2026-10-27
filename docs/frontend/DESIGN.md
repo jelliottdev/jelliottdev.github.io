@@ -335,3 +335,21 @@ clearly. Keep the output and Save action usable without opening secondary method
 details. No count or concentration change is a hypothesis verdict. Failed or
 unsupported requirements lead to review, not repeated AI requests or a silent
 replacement with a simpler comparison.
+
+
+### Developing a saved broad idea
+
+Show the original wording before creation controls. A saved question has one
+next-check area: a maintained first check is primary when available; drafting a
+different procedure is secondary. Editing the original is separate. Do not
+repeat a third “Define a test” route when the same page already offers method
+development. Keep derived checks close to the original and link back from each
+method. Related findings remain directly accessible below the next action.
+
+A generated method preview shows its proposed procedure, observable comparison
+and page scope first. Exact representation, key material, controls, parameters
+and assumptions remain together in one disclosure and in the subsequent full
+review. These are proposed choices, never supplied facts or passed checks.
+Supported typed choices must retain their exact maintained meaning; unfamiliar
+scientific comparisons remain described requirements, never a silent count-only
+substitute. Confirming a proposal does not execute or validate it.

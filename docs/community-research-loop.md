@@ -801,8 +801,8 @@ Those gaps must remain explicit rather than being represented as completed work.
 ## Reviewed check choices
 
 Version-two method proposals keep the requested evaluation, representation and
-controls as structural choices. AI drafting proposes the procedure and preserves
-its requested checks as descriptions. A familiar phrase such as GP29, a language
+controls as structural choices. The legacy `typed-v2` AI drafting contract proposes
+the procedure and preserves its requested checks as descriptions. A familiar phrase such as GP29, a language
 name or a statistical test does not automatically select a runnable capability.
 The visitor can choose exact supported checks in a focused review without
 rewriting the method, key, pages or assumptions. Replacing a scientific comparison
@@ -870,3 +870,28 @@ baseline receipt, rewrites no saved result and does not turn a descriptive chang
 into significance, filler, readability or question-wide coverage. Different
 reviewed questions may share the same computation only through separate checked
 associations. Scientific controls remain unresolved until implemented.
+
+
+## Proposed typed choices during AI drafting
+
+The explicit `typed-choices-v2` request retains the MD2 saved-card schema but
+lets the drafting model propose advertised capability choices directly. Known
+wire choices contain only `kind`; the described branch contains `kind` and its
+full requirement text. Extra conditions on a known choice reject the response;
+they are never discarded. Server code binds fixed language-model metadata and
+maintained comparison/control meanings. The old `typed-v2` prose contract and
+MD1 requests remain unchanged.
+
+These are proposed settings requiring full review, not facts supplied by the
+original author or proof of capability from prose. A requested scientific null,
+significance comparison or unknown representation remains described and blocks
+implementation. Before/after measurements describe changes without establishing
+filler, readability or a solution. A valid design still needs a faithful program
+mapping, explicit review, independent synthetic checks and normal task/result
+admission. Code does not establish semantic equivalence to an informal parent.
+
+The public draft preview shows procedure, comparison and scope. One exact-settings
+disclosure retains the complete key, representation, parameters, controls and
+assumptions; the subsequent full review retains every field before explicit save.
+Input transcription is distinct from key material; fixed clauses are procedure,
+not automatically parameter alternatives. No request runs or saves on opening.
