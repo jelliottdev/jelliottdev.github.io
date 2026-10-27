@@ -48,13 +48,18 @@
    const id='idea-'+entry.id.slice(2);if(data.records[id]||nodes.has('record:'+id))throw Error('Community identity conflicts with a research record.');
    const operations=draft.method.status==='specified'?draft.method.value.operations:[];
    const description=operations.map(o=>o.label||o.sourceText||o.id).join(', then '),letters=Array.from(description),title=description?letters.slice(0,157).join('')+(letters.length>157?'…':''):'Unspecified research method';
+   const evaluation=draft.rules.evaluation,check=evaluation.status==='specified'?C.evaluationText(evaluation.value):null;
+   const choice=check?C.EVALUATION_CHOICES.find(item=>C.serialize(item.value)===C.serialize(evaluation.value)):null;
+   const checkName=choice?choice.label:evaluation.status==='specified'&&evaluation.value?.kind==='exact-prefix-set'?'Compare supplied openings':null;
+   const readableTitle=checkName?checkName+' · '+title:null;
+   const readerTitle=readableTitle?Array.from(readableTitle).slice(0,109).join('')+(Array.from(readableTitle).length>109?'…':''):null;
    const pages=draft.scope.status==='specified'&&Array.isArray(draft.scope.value.pages)?draft.scope.value.pages:[];
    // Navigation metadata comes only from the decoded original card. It is not
    // a supplied feed flag or evidence that this finite question remains open.
    const bounds=draft.rules.searchBounds,finite=bounds.status==='specified'&&bounds.value?.kind==='finite-settings'&&bounds.value.version===1;
-   const record={id,title,question:aim.detail||aim.wording||description,summary:description,community:true,proposal_id:entry.id,
+   const record={id,title,...(readerTitle?{reader_title:readerTitle}:{}),...(check&&Array.from(check).length<=280?{reader_intro:check}:{}),question:aim.detail||aim.wording||description,summary:description,community:true,proposal_id:entry.id,
     evidence_state:finite?'question-review':entry.verifiedTaskCount>0||entry.hasSharedComputation===true?'computation-available':'untested',created_at:entry.createdAt,...(finite?{finite_search:{kind:'finite-settings',version:1}}:{}),
-    outcome:'',record_type:{id:'idea',label:'Community idea'},method_topics:classified.familyIds.map(id=>({id,title:C.METHOD_FAMILIES[id]})),
+    reader_finding:finite?'Open this question to see the saved evidence for its declared settings.':entry.verifiedTaskCount>0?'Saved checks are available. Open the idea to read their findings and exact page scope.':entry.hasSharedComputation===true?'Related saved calculations are available. Open the idea to check what they cover.':'No saved result is listed for this idea.',outcome:'',record_type:{id:'idea',label:'Community idea'},method_topics:classified.familyIds.map(id=>({id,title:C.METHOD_FAMILIES[id]})),
     pages,scope:{pages,representation:'',procedure:description,parameters:'',exclusions:''},href:'run.html#idea='+entry.id,task_count:entry.taskCount,verified_task_count:entry.verifiedTaskCount,task_summaries:structuredClone(entry.tasks)};
    data.records[id]=record;
    const node={id:'record:'+id,parent:parent.id,label:title,color:parent.color,kind:'record',record_id:id,children:[],members:[id],parent_basis:'confirmed idea navigation'};

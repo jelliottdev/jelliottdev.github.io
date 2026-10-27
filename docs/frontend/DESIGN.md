@@ -268,3 +268,7 @@ Reuse the shared variation review and evidence lookup before creation or running
 ### Record finding order
 
 All record surfaces place the authored result before the method description, regardless of whether the record has an introductory sentence. Full records keep the result, its limit and its visual together before the Used / Tried / Checked explanation. An optional introduction must never change this hierarchy. Missing reader metadata stays missing; do not infer a method or a finding from a title, filename or future check. Verify this with rendered real records, including introductions present, absent and malformed, rather than source-text position checks alone.
+
+### Returning to saved work
+
+A saved question shows verified question-wide evidence first. When no stronger answer is available, show a plain summary of one selected saved calculation: its check, finding, exact pages and text edition. Generate that summary through the shared saved-check verifier and view, never from a task count, task title, copied prose or a record-specific override. A selected calculation is not coverage of the entire question. Unknown coverage and a verified individual result can coexist; label those states separately. Preserve the chosen saved check across redraws, cancel stale reads on navigation, and share the same associated task response with the comparison and variation tools. A revisit or successful-save refresh must read current evidence again.

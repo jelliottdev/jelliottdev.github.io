@@ -40,3 +40,13 @@ for(const patch of [
 }
 const fabricated={...entry(21),finite_search:{kind:'finite-settings',version:1}};assert.throws(()=>M.validate({schema:'liberpedia-community-research-v1',entries:[fabricated],nextCursor:null}),'A caller flag cannot replace the decoded original card');
 console.log('PASS community map preserves evidence, routes active cards, separates computation state, filters and validates');
+
+// Same operation, different evaluation: distinguish the questions without a
+// fabricated finding or a claim that task counts establish question coverage.
+{
+ const check=criterion=>H.cardData(C.confirm(C.createDraft({source:{text:'Synthetic stated idea'},aim:known('Solve LP2'),method:known({operations:[{id:'reverse_runes',label:'Reverse each row',unit:'line'}]}),scope:known({pages:['lp2-15']}),rules:{evaluation:known(criterion)}}),{id:'purpose',at:'2026-10-25T12:00:00.000Z'}));
+ const opening={...entry(30),card:check(C.EVALUATION_CHOICES.find(c=>c.id==='warning-opening').value)},language={...entry(31),card:check(C.EVALUATION_CHOICES.find(c=>c.id==='language-samples').value)},before=JSON.stringify([opening,language]),mapped=M.merge(base,[opening,language]),a=mapped.records['idea-'+opening.id.slice(2)],b=mapped.records['idea-'+language.id.slice(2)];
+ assert.equal(a.title,b.title,'The original literal method titles stay unchanged');assert.notEqual(a.reader_title,b.reader_title,'The displayed question identities include their different checks');assert(a.reader_intro.includes('first 12 runes'));assert(b.reader_intro.includes('similarity is not a translation'));assert(a.reader_finding.includes('No saved result is listed'));assert(!/no match|not supported|unanswered|solved/i.test(a.reader_finding));assert.equal(JSON.stringify([opening,language]),before);
+ const saved={...language,verifiedTaskCount:1,taskCount:1,tasks:[{id:'e'.repeat(64),title:'Synthetic saved check',state:'results-verified'}]},record=M.merge(base,[saved]).records['idea-'+saved.id.slice(2)];assert(record.reader_finding.includes('Open the idea'));assert(!/complete|matching|readable|passed/i.test(record.reader_finding));
+ console.log('PASS community question labels distinguish evaluation and keep task availability separate from scientific findings.');
+}
