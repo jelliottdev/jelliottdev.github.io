@@ -91,7 +91,9 @@ CI checks new-record authoring across the whole push or pull request, including 
 
 For new-format records, changing status to `draft` removes the active index assignment and map leaf on the next build. Republishing restores them from the same record. Evidence files and the pinned historical map are retained. References from other published records still need explicit review; the build does not silently remove them.
 
-This command builds records, articles, checker data, downloads, the research map and its home preview in dependency order, then checks catalog hashes and map freshness. It does not run experiments, alter findings, commit or push. Batch related records into one build and release.
+This command builds records, articles, checker data, downloads, the research map and its home preview in dependency order, then checks catalog hashes and map freshness. It also refreshes the maintained program catalog, compiled parent bindings, Worker catalog and evidence fingerprints, and saved-calculation navigation. These are derived from existing evidence; the build does not run experiments, alter findings, commit or push. Batch related records into one build and release. A failed dependency stops the remaining stages.
+
+Adding a new historical result format still requires an audited adapter. The build does not infer an executable method, success criterion or page scope from prose. A generated navigation link is not evidence that a new calculation ran. Preview builds deliberately omit these publication stages.
 
 Existing records and archived bundles remain supported in their original format. They are not automatically rewritten or summarized. For a deliberate migration, embed the exact account bytes in `analysis` and verify every frozen dependency; never refresh an evidence hash just to make a conversion pass. The source schema is stricter for new records, while public export fields remain compatible with existing tools.
 

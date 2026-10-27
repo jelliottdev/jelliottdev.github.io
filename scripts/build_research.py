@@ -17,6 +17,11 @@ STAGES = (
     ('build_published_count_evidence.py',),
     ('build_published_evidence_history.py',),
     ('build_experiments.py',),
+    ('build_published_program_catalog.py', '--write'),
+    ('build_pinned_parent_artifacts.mjs', '--write'),
+    ('build_compiled_program_index.mjs',),
+    ('build_evidence_registry_fingerprint.mjs',),
+    ('build_published_program_discovery.mjs', '--write'),
     ('archive_authored_sources.py', '--write'),
     ('build_articles.py',),
     ('build_assistant.py',),
@@ -31,10 +36,11 @@ STAGES = (
 PREVIEW_STAGES = (('build_experiments.py',), ('build_research_map.py',), ('build_home_clusters.py', '.'))
 
 
-def build(root=ROOT, run=subprocess.run, preview=False):
+def build(root=ROOT, run=subprocess.run, preview=False, node_executable='node'):
     for script, *args in (PREVIEW_STAGES if preview else STAGES):
         print('Research build: ' + script, flush=True)
-        run([sys.executable, str(root / 'scripts' / script), *args], cwd=root, check=True)
+        interpreter = node_executable if script.endswith('.mjs') else sys.executable
+        run([interpreter, str(root / 'scripts' / script), *args], cwd=root, check=True)
 
 
 if __name__ == '__main__':

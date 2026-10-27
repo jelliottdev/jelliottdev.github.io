@@ -28,8 +28,11 @@
    const card=J.capture(input,{maxBytes:2*1024*1024,maxDepth:24,maxNodes:100000});H.sections(card);
    const operations=card.method.status==='specified'?card.method.value.operations:[],opaque=new Set(['described_method','family_selection','ambiguous_reversal']);
    const notes=(Array.isArray(card.unresolved)?card.unresolved:[]).filter(item=>item.kind==='source_note'&&typeof item.text==='string'&&item.text.trim());
-   const needsDefinition=!operations.length||operations.some(op=>opaque.has(op.id))||notes.length>0;
-   const exceptions=card.rules.exceptionalCases,prefix='Uninterpreted original wording: ',originalIdea=exceptions.status==='specified'&&typeof exceptions.value==='string'&&exceptions.value.startsWith(prefix)&&exceptions.value.length>prefix.length?exceptions.value.slice(prefix.length):notes.length?notes.map(note=>note.text).join('\n\n'):null;
+   const exceptions=card.rules.exceptionalCases,prefix='Uninterpreted original wording: ',legacyOriginal=exceptions.status==='specified'&&typeof exceptions.value==='string'&&exceptions.value.startsWith(prefix)&&exceptions.value.length>prefix.length;
+   // The historical intake wrapper explicitly says this prose was not interpreted.
+   // A recognized step elsewhere cannot make its remaining wording executable.
+   const needsDefinition=!operations.length||operations.some(op=>opaque.has(op.id))||notes.length>0||legacyOriginal;
+   const originalIdea=legacyOriginal?exceptions.value.slice(prefix.length):notes.length?notes.map(note=>note.text).join('\n\n'):null;
    return {needsDefinition,originalIdea,originalLabel:originalIdea?(exceptions.status==='specified'&&exceptions.value===prefix+originalIdea?'Original idea':'Retained wording'):null,sourceNotes:notes.map(note=>note.text)};
   }catch{return null;}
  }

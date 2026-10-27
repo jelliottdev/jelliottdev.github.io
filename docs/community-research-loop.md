@@ -624,10 +624,18 @@ includes saving; consent stays on the reviewed action.
 
 Published program imports own separate receipt files and indexes. The maintained
 catalog combines these providers without rewriting an existing provider or its
-audited receipt identities. Add a provider in build_published_program_catalog.py,
-then regenerate only the combined catalog. The server checks the same bounded
+audited receipt identities. Register a maintained provider in
+build_published_program_catalog.py, then run `python scripts/build_research.py`.
+The shared build refreshes the combined catalog, compiled Worker metadata and
+saved-calculation navigation in dependency order; these must not be separate
+remembered publication steps. The server checks the same bounded
 pointer schema and lazily reads matching receipts. Catalog changes invalidate
 scan cursors; they do not erase old source receipts.
+
+Provider registration remains necessary for a historical format that lacks a
+maintained adapter. This build integration does not make arbitrary result files
+executable or satisfy single-file experiment authoring by itself. It neither
+executes target calculations nor changes the original findings.
 
 The spiral-prime source contributes 32 repeating programs. Its 1,760 nonempty
 archived outputs remain distinct from 32 explicitly structural empty-page
@@ -684,6 +692,15 @@ the exact pinned source output. Missing or malformed relationships cannot be
 replaced with inferred links based on titles or categories.
 
 ## Keep ordinary written questions expandable
+
+Historical intake cards can contain a defaulted page scope, a prose method and
+an `Uninterpreted original wording:` wrapper in the exceptions field. A saved
+field being marked specified does not prove its wording has been interpreted.
+Without an actual retained calculation, this shape opens related research and
+keeps the original wording visible. Even a recognized operation beside that
+wrapper cannot make the whole idea executable. Review is explicit; viewing must
+not rewrite scope, prepare a task or publish a replacement idea. Existing genuine
+calculations remain reachable and retain their exact identities.
 
 A saved calculation whose original method is prose can expose the same maintained
 variations as a typed question. `reviewed-program.js` checks the complete source
