@@ -42,11 +42,23 @@
   return verificationDeadline(async budget=>{
   budgetCheck=budget.live;
   await E.checkIdentity(requestedTask,crypto);live();if(!(assessment?['language-score']:['exact-prefix','exact-prefix-set']).includes(requestedTask.criterion.kind))throw Error('Use an explicit literal opening check.');
-  const wanted=new Map(requestedTask.pages.map(p=>[p.id,p.text])),program=E.stable({engine:requestedTask.engine,alphabet:requestedTask.alphabet,steps:requestedTask.steps}),seen=new Set(),sources=[],sourceLinks=[],reloads=[];
+  const wanted=new Map(requestedTask.pages.map(p=>[p.id,p.text])),program=E.stable({engine:requestedTask.engine,alphabet:requestedTask.alphabet,steps:requestedTask.steps}),seen=new Set(),sources=[],sourceLinks=[],reloads=[],assessmentOriginals=new Map();let assessmentReplayRunes=0;
   for(const original of value.originals){
    if(!exact(original,['origin','source']))throw Error('Use an exact retained original and its typed origin.');const o=original.origin,s=original.source,published=o?.kind==='published';
    if(!exact(o,['kind','taskId','resultId','inputVersion','createdAt',...(published?['recordId','revision','caseId']:[])])||!['local','published'].includes(o.kind)||!['taskId','resultId'].every(k=>typeof o[k]==='string'&&/^[a-f0-9]{64}$/.test(o[k]))||o.inputVersion!==inputVersion||typeof o.createdAt!=='string'||!Number.isFinite(Date.parse(o.createdAt))||new Date(o.createdAt).toISOString()!==o.createdAt||!exact(s,['task','inputVersion','run',...(published?['publishedSource','provenance']:[])])||s.inputVersion!==inputVersion||s.task?.taskId!==o.taskId||s.run?.id!==o.resultId||s.run?.createdAt!==o.createdAt||seen.has(E.stable(o)))throw Error('The original output identity or origin changed.');seen.add(E.stable(o));
    if(E.stable({engine:s.task.engine,alphabet:s.task.alphabet,steps:s.task.steps})!==program||!s.task.pages.some(p=>wanted.get(p.id)===p.text))throw Error('The retained output belongs to another transformation or page input.');
+   if(assessment){
+    if(!A)throw Error('Saved-output assessments are unavailable.');
+    E.validateTask(s.task);
+    const runes=new Set(s.task.alphabet.map(entry=>entry.rune)),count=s.task.pages.reduce((total,page)=>total+[...page.text].filter(ch=>runes.has(ch)).length,0),key=E.stable([s.task.taskId,s.run.id]),taskBytes=E.stable(s.task),resultBytes=E.stable(s.run.result),prior=assessmentOriginals.get(key);
+    if(prior&&(prior.taskBytes!==taskBytes||prior.resultBytes!==resultBytes))throw Error('Conflicting original computation bytes.');
+    // Core verification reuses only exact task/result bytes. Each published
+    // reload independently verifies again, even for another archived pointer
+    // to the same original. Bound their combined work before starting I/O.
+    if(!prior){assessmentOriginals.set(key,{taskBytes,resultBytes});assessmentReplayRunes+=count;}
+    if(published)assessmentReplayRunes+=count;
+    if(assessmentReplayRunes>A.MAX_RUNES)throw Error('Saved-output assessment replay exceeds its 200,000-rune bound.');
+   }
    let href='run.html#task='+o.taskId,label='Original computation';
    if(published){
     if(!publishedOptions||!Published)throw Error('Archived output needs an authenticated published source transport.');
