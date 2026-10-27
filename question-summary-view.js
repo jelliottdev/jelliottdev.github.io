@@ -30,7 +30,7 @@
    const notes=(Array.isArray(card.unresolved)?card.unresolved:[]).filter(item=>item.kind==='source_note'&&typeof item.text==='string'&&item.text.trim());
    const needsDefinition=!operations.length||operations.some(op=>opaque.has(op.id))||notes.length>0;
    const exceptions=card.rules.exceptionalCases,prefix='Uninterpreted original wording: ',originalIdea=exceptions.status==='specified'&&typeof exceptions.value==='string'&&exceptions.value.startsWith(prefix)&&exceptions.value.length>prefix.length?exceptions.value.slice(prefix.length):notes.length?notes.map(note=>note.text).join('\n\n'):null;
-   return {needsDefinition,originalIdea,sourceNotes:notes.map(note=>note.text)};
+   return {needsDefinition,originalIdea,originalLabel:originalIdea?(exceptions.status==='specified'&&exceptions.value===prefix+originalIdea?'Original idea':'Retained wording'):null,sourceNotes:notes.map(note=>note.text)};
   }catch{return null;}
  }
  function model(input={}){
@@ -54,7 +54,7 @@
  }
  function render(input={},options={}){
   const m=model(input);if(!m)return '';
-  return '<section class="question-summary" aria-label="Research question">'+(options.heading===true?'<h1>'+esc(m.title)+'</h1>':'')+methodHTML(m,options)+'<dl class="question-summary-facts"><div><dt>Scope</dt><dd>'+esc(m.scope)+'</dd></div><div><dt>What it checks</dt><dd>'+esc(m.check)+'</dd></div></dl>'+(m.conditions.length?'<p class="question-summary-conditions"><strong>Conditions:</strong> '+m.conditions.map(item=>item.plain?esc(item.plain):esc(item.label)+': '+esc(item.value)).join(' · ')+'</p>':'')+(m.intent.originalIdea?'<details class="question-original"><summary>Original idea</summary><p>'+esc(m.intent.originalIdea)+'</p></details>':'')+(m.objective?'<p class="question-summary-objective"><strong>Aim:</strong> '+esc(m.objective)+'</p>':'')+(options.navigation!==false&&m.primary?'<a class="question-summary-primary" href="'+esc(m.primary.href)+'">'+esc(m.primary.label)+'</a>':'')+'</section>';
+  return '<section class="question-summary" aria-label="Research question">'+(options.heading===true?'<h1>'+esc(m.title)+'</h1>':'')+methodHTML(m,options)+'<dl class="question-summary-facts"><div><dt>Scope</dt><dd>'+esc(m.scope)+'</dd></div><div><dt>What it checks</dt><dd>'+esc(m.check)+'</dd></div></dl>'+(m.conditions.length?'<p class="question-summary-conditions"><strong>Conditions:</strong> '+m.conditions.map(item=>item.plain?esc(item.plain):esc(item.label)+': '+esc(item.value)).join(' · ')+'</p>':'')+(m.intent.originalIdea?'<details class="question-original"><summary>'+esc(m.intent.originalLabel)+'</summary><p>'+esc(m.intent.originalIdea)+'</p></details>':'')+(m.objective?'<p class="question-summary-objective"><strong>Aim:</strong> '+esc(m.objective)+'</p>':'')+(options.navigation!==false&&m.primary?'<a class="question-summary-primary" href="'+esc(m.primary.href)+'">'+esc(m.primary.label)+'</a>':'')+'</section>';
  }
  const api={questionIntent,model,render};if(node)module.exports=api;else root.QuestionSummaryView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
