@@ -50,7 +50,21 @@ await test('an incomplete lookup cannot create work but a complete verified orig
  }finally{f.close();}}
 });
 await test('request-local lookup deadlines and cancellation settle without loading later sources',async()=>{
- let queries=0;const db={prepare(){queries++;return {bind(){return {all:()=>new Promise(()=>{})};}};}};await assert.rejects(discoverOrdinaryOpeningEvidence({db,task,inputVersion:'raw',fetcher,timeoutMs:5}),/timed out/);assert.equal(queries,1);const abort=new AbortController();abort.abort();await assert.rejects(discoverOrdinaryOpeningEvidence({db,task,inputVersion:'raw',signal:abort.signal}),/cancelled/);assert.equal(queries,1);
+ // A five-millisecond wall clock may expire before task identity hashing on
+ // busy CI. Control the timer so this case specifically expires while the
+ // database is pending, then let its late response settle without more I/O.
+ let queries=0,fetches=0,entered,release,expire,cleared=0;
+ const started=new Promise(resolve=>entered=resolve),pending=new Promise(resolve=>release=resolve),timerHandle={},nativeSetTimeout=globalThis.setTimeout,nativeClearTimeout=globalThis.clearTimeout;
+ const db={prepare(){queries++;return {bind(){return {all(){entered();return pending;}};}};}},noLaterFetch=async()=>{fetches++;assert.fail('An expired lookup cannot load a later source');};
+ try{
+  globalThis.setTimeout=(callback,delay)=>{assert.equal(delay,5);assert.equal(expire,undefined);expire=callback;return timerHandle;};
+  globalThis.clearTimeout=handle=>{assert.equal(handle,timerHandle);cleared++;};
+  const lookup=discoverOrdinaryOpeningEvidence({db,task,inputVersion:'raw',fetcher:noLaterFetch,timeoutMs:5}),rejected=assert.rejects(lookup,/timed out/);
+  await Promise.race([started,lookup.then(()=>assert.fail('The held lookup cannot finish before its timer'),error=>{throw error;})]);
+  assert.equal(queries,1);assert.equal(fetches,0);expire();await rejected;assert.equal(cleared,1);
+  release({results:[]});await new Promise(resolve=>setImmediate(resolve));assert.equal(queries,1);assert.equal(fetches,0);
+ }finally{globalThis.setTimeout=nativeSetTimeout;globalThis.clearTimeout=nativeClearTimeout;release({results:[]});}
+ const abort=new AbortController();abort.abort();await assert.rejects(discoverOrdinaryOpeningEvidence({db,task,inputVersion:'raw',signal:abort.signal}),/cancelled/);assert.equal(queries,1);
  const f=fixture();try{const q=await Q.archived({task,inputVersion:'raw'}),id=f.publish(q.card),controller=new AbortController(),delayed=async(url,init)=>{if(new URL(url).pathname==='/data/local-run-inputs.json'){controller.abort();}return fetcher(url,init);},handler=createPrepareTaskHandler({fetcher:delayed}),response=await handler(new Request('https://worker.test/prepare-task',{method:'POST',headers:{origin:f.env.SITE_ORIGIN,'content-type':'application/json'},signal:controller.signal,body:JSON.stringify({proposalId:id,parentTaskId:null,includeDerivedOpeningEvidence:true})}),f.env);assert(response.status>=400);assert.equal(f.sql.prepare('SELECT COUNT(*) n FROM prepared_plans').get().n,0);}finally{f.close();}
 });
 }finally{E.run=oldRun;}
