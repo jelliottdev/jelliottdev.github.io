@@ -46,6 +46,7 @@
  const MethodDesigner=typeof module==='object'&&module.exports?require('./method-design-workspace.js'):root.MethodDesignWorkspace;
  const Implementation=typeof module==='object'&&module.exports?require('./method-implementation.js'):root.MethodImplementation;
  const ImplementationWorkspace=typeof module==='object'&&module.exports?require('./method-implementation-workspace.js'):root.MethodImplementationWorkspace;
+ const RepeatStartWorkspace=typeof module==='object'&&module.exports?require('./repeat-removal-start-workspace.js'):root.RepeatRemovalStartWorkspace;
  const DeclarativeWorkspace=typeof module==='object'&&module.exports?require('./declarative-task-workspace.js'):root.DeclarativeTaskWorkspace;
  const DeclarativeDescription=typeof module==='object'&&module.exports?require('./declarative-program-description.js'):root.DeclarativeProgramDescription;
  const DeclarativePackage=typeof module==='object'&&module.exports?require('./declarative-run-package.js'):root.DeclarativeRunPackage;
@@ -143,8 +144,9 @@ const descriptor=protocolDescription(plan.criterion),pages=V.pageLabel?V.pageLab
   let evaluationFollowupMount=null,evaluationFollowupElement=null,evaluationFollowupKey=null,questionSavedMount=null,questionSavedKey=null;
   let methodDesignMount=null,methodDesignKey=null,methodProposalMount=null,methodProposalKey=null;
   let methodImplementationMount=null,methodImplementationKey=null,declarativeTaskMount=null;
+  let repeatStartMount=null,repeatStartKey=null,repeatStartOpen=false;
   const questionTaskReads=new Map();
-  function clearQuestionVariations(){methodImplementationMount?.destroy();methodImplementationMount=methodImplementationKey=null;methodProposalMount?.destroy();methodProposalMount=methodProposalKey=null;relatedStore?.destroy();relatedStore=null;relatedRecords=relatedPromise=null;relatedError=false;methodDesignMount?.destroy();methodDesignMount=methodDesignKey=null;questionTaskReads.clear();questionSavedMount?.destroy();questionSavedMount=questionSavedKey=null;evaluationFollowupMount?.destroy();evaluationFollowupMount=evaluationFollowupElement=evaluationFollowupKey=null;questionVariationMount?.destroy();questionVariationContext=questionVariationMount=questionVariationElement=questionVariationKey=null;questionBundlePromise=questionSourcePromise=null;}
+  function clearQuestionVariations(){repeatStartMount?.destroy();repeatStartMount=repeatStartKey=null;repeatStartOpen=false;methodImplementationMount?.destroy();methodImplementationMount=methodImplementationKey=null;methodProposalMount?.destroy();methodProposalMount=methodProposalKey=null;relatedStore?.destroy();relatedStore=null;relatedRecords=relatedPromise=null;relatedError=false;methodDesignMount?.destroy();methodDesignMount=methodDesignKey=null;questionTaskReads.clear();questionSavedMount?.destroy();questionSavedMount=questionSavedKey=null;evaluationFollowupMount?.destroy();evaluationFollowupMount=evaluationFollowupElement=evaluationFollowupKey=null;questionVariationMount?.destroy();questionVariationContext=questionVariationMount=questionVariationElement=questionVariationKey=null;questionBundlePromise=questionSourcePromise=null;}
   function questionFetch(url,init={}){
    const route=entry(win.location.hash),prefix=config?.localTaskEndpoint+'/',pattern=typeof url==='string'&&url.startsWith(prefix)?url.slice(prefix.length):'';
    if(route?.kind!=='idea'||!['GET',undefined].includes(init.method)||!new RegExp('^[a-f0-9]{64}\\?idea='+route.id+'$').test(pattern))return fetcher(url,init);
@@ -173,11 +175,23 @@ const descriptor=protocolDescription(plan.criterion),pages=V.pageLabel?V.pageLab
    element.hidden=!!prepared;const key=idea.id+':'+C.serialize(idea.card);
    if(methodImplementationMount&&methodImplementationKey===key){methodImplementationMount.attach(element);return;}
    methodImplementationMount?.destroy();methodImplementationKey=key;const token=generation,id=idea.id;
-   methodImplementationMount=module.mount(element,{proposalId:id,card:idea.card,implementationEndpoint:config.methodImplementationEndpoint,preparationEndpoint:config.methodImplementationPreparationEndpoint,loadBundle:()=>readQuestionBundle(token,id),fetcher,crypto:cryptoAPI,pageURL:win.location.href,signal:controller.signal,isLive:()=>live(token,id),onPrepared:async(value,binding)=>{
+   methodImplementationMount=module.mount(element,{proposalId:id,card:idea.card,typedChoicesOnly:config.methodImplementationContract==='typed-v2',onEdit:()=>{if(live(token,id))win.location.href=ideaHref(idea.card);},implementationEndpoint:config.methodImplementationEndpoint,preparationEndpoint:config.methodImplementationPreparationEndpoint,loadBundle:()=>readQuestionBundle(token,id),fetcher,crypto:cryptoAPI,pageURL:win.location.href,signal:controller.signal,isLive:()=>live(token,id),onPrepared:async(value,binding)=>{
     const bound=Implementation.inspect(binding);if(!bound.ready||C.serialize(bound.proposal)!==C.serialize(context.proposal))throw Error('The prepared program changed its proposed method.');
     const controls=await planControls(value.task,value.controls,cryptoAPI),preparation=await checkPreparation(value.preparation,{proposalId:id,card:idea.card,task:value.task,inputVersion:value.inputVersion,parentTaskId:null,authority:'idea',controls},cryptoAPI);
     if(!live(token,id))throw new DOMException('Navigation changed.','AbortError');prepared={...value,controls,preparation};element.hidden=true;showPlan();
    }});
+  }
+  function repeatStartAvailable(){
+   if(!idea||idea.tasks.length||idea.tasksTruncated!==false||MethodDesign.readCard(idea.card))return false;
+   const intent=QuestionSummary.questionIntent(idea.card),families=C.classifyMethod(idea.card.method).familyIds;
+   return !!intent?.originalIdea&&families.length===1&&families[0]==='repetition';
+  }
+  function mountRepeatStart(){
+   const element=$('idea-repeat-start'),module=options.repeatRemovalStartWorkspace||RepeatStartWorkspace;
+   if(!element||!repeatStartOpen||!repeatStartAvailable()||!module?.mount)return;
+   const key=idea.id+':'+C.serialize(idea.card);if(repeatStartMount&&repeatStartKey===key){repeatStartMount.attach(element);return;}
+   repeatStartMount?.destroy();repeatStartKey=key;const token=generation,id=idea.id,card=structuredClone(idea.card);
+   repeatStartMount=module.mount(element,{onCancel:()=>{if(!live(token,id))return;repeatStartOpen=false;repeatStartMount?.destroy();repeatStartMount=repeatStartKey=null;drawIdea();$('choose-repeat-start')?.focus?.();},onReview:async(proposal,context)=>{const fragment=await MethodDesign.toFragment(proposal,{parentId:id,parentCard:card},cryptoAPI);if(live(token,id)&&repeatStartOpen&&context?.isLive?.()!==false)win.location.href='investigate.html?designed=1'+fragment;}});
   }
   function mountMethodDesigner(){
    const element=$('idea-method-design'),module=options.methodDesignWorkspace||MethodDesigner,model=options.methodDesign||MethodDesign;
@@ -702,6 +716,7 @@ const descriptor=protocolDescription(plan.criterion),pages=V.pageLabel?V.pageLab
    return guidedMethodChoice(idea.card)&&endpointFor(config?.taskPreparationEndpoint,'prepare-task')?'<button id="define-guided-check" class="primary" type="button">Define a test</button>':'<a id="review-idea-test" class="primary" href="'+esc(ideaHref(idea.card).replace('#idea=','&refine=1#idea='))+'">Define a test</a>';
   }
   function bindExploratoryIdea(){
+   if($('choose-repeat-start'))$('choose-repeat-start').onclick=()=>{if(!repeatStartAvailable())return;repeatStartOpen=true;drawIdea();};mountRepeatStart();
    if($('define-guided-check'))$('define-guided-check').onclick=()=>{if(exploratoryIdea()&&!ideaBusy&&guidedMethodChoice(idea.card))return prepareIdea();};
    if($('define-check'))$('define-check').onclick=()=>{if(!exploratoryIdea()||ideaBusy)return;evaluationDefinition={choice:null,error:'',controller:null};evaluationVersion++;drawIdea();$('definition-heading')?.focus?.();};
    if(!evaluationDefinition)return;
@@ -751,6 +766,7 @@ const descriptor=protocolDescription(plan.criterion),pages=V.pageLabel?V.pageLab
    const methods=rows.filter(([label])=>/^Step [0-9]+$/.test(label)||label==='Method'),intent=QuestionSummary.questionIntent(idea.card),unsupported=preparationOutcome?.state==='needs-adapter',defining=!!evaluationDefinition,summaryTitle=QuestionSummary.model({card:idea.card})?.title||'Research question',originalLabel=intent.originalLabel||'Retained wording',title=summaryTitle!=='Research question'?summaryTitle:originalLabel==='Original idea'&&intent.originalIdea&&Array.from(intent.originalIdea).length<=110&&!/[\r\n]/.test(intent.originalIdea)?intent.originalIdea:'Research idea';
    return '<nav class="run-links"><a id="explore-related-work" href="research.html#mode=list">Back to research map</a></nav><h1 id="question-title">'+esc(title)+'</h1><p id="idea-heading" class="question-state">'+(defining?'Define a check':unsupported?'This check is not available yet':'Saved idea')+'</p><div id="idea-reactions"></div>'+
     (defining?methods.map(([,text])=>'<p class="method-context">'+esc(text)+'</p>').join(''):'<p>'+(unsupported?'This test cannot run in the browser yet. Related research is below.':'This idea does not have an exact test yet. Explore related work below, or define a test.')+'</p>')+
+    (!defining&&repeatStartAvailable()?(repeatStartOpen?'<div id="idea-repeat-start"></div>':'<section class="question-next"><h2>A possible first check</h2><p>Choose a repeat-removal rule and compare the original and changed text. This is a proposed starting point, not a test that any runes were filler.</p><button id="choose-repeat-start" type="button">Choose a first check</button></section>'):'')+
     (!defining&&endpointFor(config?.methodDesignEndpoint,'design-method')?'<div id="idea-method-design"></div>':'')+
     (intent.originalIdea?'<details id="question-original" class="question-original" open><summary>'+originalLabel+'</summary><p>'+esc(intent.originalIdea)+'</p></details>':'')+
     (!defining&&methods.length&&(intent.originalIdea||methods.length>1||title==='Research idea')?'<details class="question-original"><summary>Saved interpretation</summary><p class="small">This wording may need clarification before it can define a test.</p>'+methods.map(([,text])=>'<p>'+esc(text)+'</p>').join('')+'</details>':'')+

@@ -43,7 +43,7 @@ async function setup(evaluation){
 async function status(response,expected){assert.equal(response.status,expected,await response.clone().text());return response.json();}
 let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
 await test('typed reviewed checks survive real issue create save and historical reload with exact code-owned facts',async()=>{
- for(const evaluation of [{kind:'output-measurements'},{kind:'exact-prefix',values:[0,0]},{kind:'exact-prefix-set',openings:[{id:'one',values:[0]},{id:'two',values:[1,2]}]},Language.criterion()]){
+ for(const evaluation of [{kind:'output-measurements'},{kind:'original-output-measurements'},{kind:'exact-prefix',values:[0,0]},{kind:'exact-prefix-set',openings:[{id:'one',values:[0]},{id:'two',values:[1,2]}]},Language.criterion()]){
   const x=await setup(evaluation),before=C.serialize(x.args.card),facts=MI.typedRequirements(x.proposal);
   assert.equal(x.bundle.pages.length,75);assert(x.bundle.pages.every(p=>p.raw.length<20),'Every official fixture page must be invented, never target data');assert.equal(x.proposal.schema,MD.TYPED_SCHEMA);assert.deepEqual(MD.readCard(x.args.card).proposal,x.proposal);
   assert.deepEqual(x.args.card.rules.searchProtocol.value.parentId,'p_'+hash(x.parent));
@@ -55,6 +55,18 @@ await test('typed reviewed checks survive real issue create save and historical 
   const loaded=await status(await x.call(x.taskPath+'?idea='+x.args.proposalId),200);assert.equal(x.reads(),reads,'Historical receipt reads must not refetch today’s source');assert.deepEqual(rows(),counts);assert.deepEqual(loaded.methodImplementation,projection.methodImplementation);assert.deepEqual(loaded.latestRun,saved.latestRun);assert.deepEqual(MD.readCard(loaded.card).proposal,x.proposal);assert.equal(C.serialize(x.args.card),before);
   await status(await x.call('/tasks','POST',x.body),409);assert.deepEqual(rows(),counts);x.sqlite.close();
  }
+});
+await test('original-output intent shares an exact calculation only after independent review and keeps no fabricated baseline receipt',async()=>{
+ const x=await setup({kind:'output-measurements'}),y=await fixture({kind:'original-output-measurements'});
+ assert.notEqual(x.args.proposalId,y.args.proposalId);assert.notEqual(hash(x.proposal),hash(y.proposal));assert.deepEqual(x.args.task,y.args.task,'The reviewed observation adds no transform or new result version');assert.deepEqual(y.implementation.criterion,{kind:'measurement'});
+ await assert.rejects(()=>MI.bind({proposal:y.proposal,implementation:x.implementation}));
+ x.sqlite.prepare('INSERT INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(y.args.proposalId,hash(y.args.card),C.serialize(y.args.card),'unused',at);x.sqlite.prepare('INSERT INTO research_ideas VALUES(?,?,?)').run(y.args.proposalId,at,at.slice(0,10));
+ await status(await x.call('/tasks','POST',{...x.body,proposalId:y.args.proposalId}),409);assert.equal(x.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,0);
+ await status(await x.call('/tasks','POST',x.body),200);const result=V.run(x.args.task),before=C.serialize(result);await status(await x.call(x.resultPath,'POST',{result}),200);
+ const receipt=await issue({...y.args,db:x.args.db}),body={proposalId:y.args.proposalId,task:y.args.task,inputVersion:'raw',parentTaskId:null,preparationId:receipt.id};
+ const linked=await status(await x.call('/tasks','POST',body),200);assert.equal(linked.state,'results-verified');assert.deepEqual(linked.latestRun.result,result);assert.equal(linked.linkedProposalId,y.args.proposalId);assert.deepEqual(linked.methodImplementation,{implementation:y.implementation,review:y.args.basis.review});
+ const loaded=await status(await x.call(x.taskPath+'?idea='+y.args.proposalId),200);assert.equal(MD.readCard(loaded.card).proposal.evaluation.kind,'original-output-measurements');assert.equal(C.serialize(loaded.latestRun.result),before);assert(!Object.hasOwn(loaded.latestRun.result,'baseline'));assert(!Object.hasOwn(loaded.latestRun.result,'originalMetrics'));assert.equal(loaded.latestRun.result.schema,V.RESULT);for(const key of ['coverage','derivedCoverage','derivedOpenings','derivedOutputAssessment'])assert(!Object.hasOwn(loaded,key),'A reviewed comparison link cannot manufacture borrowed coverage claims');
+ assert.equal(x.sqlite.prepare('SELECT COUNT(*) n FROM local_tasks').get().n,1);assert.equal(x.sqlite.prepare('SELECT COUNT(*) n FROM local_task_results').get().n,1,'A comparison must not invent an earlier baseline receipt');assert.equal(x.sqlite.prepare('SELECT COUNT(*) n FROM local_task_ideas').get().n,2);x.sqlite.close();y.sqlite.close();
 });
 await test('changed typed criterion or review binding cannot admit an old program or write tasks',async()=>{
  const x=await setup({kind:'exact-prefix',values:[0]});

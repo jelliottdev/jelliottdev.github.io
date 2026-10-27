@@ -69,3 +69,6 @@ for(const [hash,expectedPath,expectedHash] of [
  ['#/experiments/word-internal-affine-lags?tab=scope&section=exact','/library.html','#/experiment/word-internal-affine-lags?tab=scope&section=exact'],
  ['#/research-map?branch=method%3Alanguage&q=A%26B&mode=list','/research.html','#branch=method%3Alanguage&q=A%26B&mode=list']
 ]){const url=new URL(routes.destination(hash),'https://example.org/');assert.equal(url.pathname,expectedPath);assert.deepEqual([...url.searchParams.keys()],['v']);assert(url.searchParams.get('v'));assert.equal(url.hash,expectedHash);}
+
+const runHTML=fs.readFileSync(require.resolve('../run.html'),'utf8');
+for(const [before,after] of [['original-output-observation.js','original-output-observation-view.js'],['original-output-observation-view.js','declarative-task-workspace.js'],['repeat-removal-start.js','repeat-removal-start-workspace.js'],['repeat-removal-start-workspace.js','run.js']]){assert(runHTML.indexOf('src="'+before+'?')>=0,before+' is loaded');assert(runHTML.indexOf('src="'+before+'?')<runHTML.indexOf('src="'+after+'?'),before+' before '+after);}

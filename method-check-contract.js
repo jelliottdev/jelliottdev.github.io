@@ -14,7 +14,7 @@
  const values={type:'array',minItems:1,maxItems:LIMITS.prefix,items:{type:'integer',minimum:0,maximum:28}};
  // Intent metadata only: full scoring still requires the maintained runtime.
  const LANGUAGE_CRITERION=Object.freeze({kind:'language-score',modelId:'gp29-flores-trigram-v1',modelSha256:'8a5171ba8bfc5bea73e7ce7a38bca85cd99bc2175535a27e21450208dbdbaad4'}),pinned=LANGUAGE_CRITERION;
- const EVALUATION_SCHEMA=freeze({anyOf:[literal('output-measurements'),object({kind:{const:'exact-prefix'},values}),object({kind:{const:'exact-prefix-set'},openings:{type:'array',minItems:1,maxItems:LIMITS.openings,items:object({id:{type:'string',pattern:'^[a-z][a-z0-9-]{0,63}$'},values})}}),object({kind:{const:'language-score'},modelId:{const:pinned.modelId},modelSha256:{const:pinned.modelSha256}}),described(500)]});
+ const EVALUATION_SCHEMA=freeze({anyOf:[literal('output-measurements'),literal('original-output-measurements'),object({kind:{const:'exact-prefix'},values}),object({kind:{const:'exact-prefix-set'},openings:{type:'array',minItems:1,maxItems:LIMITS.openings,items:object({id:{type:'string',pattern:'^[a-z][a-z0-9-]{0,63}$'},values})}}),object({kind:{const:'language-score'},modelId:{const:pinned.modelId},modelSha256:{const:pinned.modelSha256}}),described(500)]});
  const CONTROL_SCHEMA=freeze({anyOf:[literal('implementation-sanity-v2'),described(400)]});
  const REPRESENTATION_SCHEMA=freeze({anyOf:[literal('gp29'),described(160)]});
  const JSON_SCHEMA=freeze({evaluation:EVALUATION_SCHEMA,control:CONTROL_SCHEMA,representation:REPRESENTATION_SCHEMA});
@@ -28,7 +28,7 @@
  function sequence(value){need(Array.isArray(value)&&value.length>=1&&value.length<=LIMITS.prefix&&value.every(n=>Number.isSafeInteger(n)&&n>=0&&n<=28),'Use one to 256 literal rune indices from zero through twenty-eight.');}
  function validateEvaluation(input){
   const value=capture(input);need(value&&typeof value==='object'&&!Array.isArray(value),'Use a typed evaluation choice.');
-  if(value.kind==='output-measurements')need(exact(value,['kind']),'Output measurements take no hidden conditions.');
+  if(['output-measurements','original-output-measurements'].includes(value.kind))need(exact(value,['kind']),'Output measurements take no hidden conditions.');
   else if(value.kind==='exact-prefix'){need(exact(value,['kind','values']),'Use the exact literal opening shape.');sequence(value.values);}
   else if(value.kind==='exact-prefix-set'){
    need(exact(value,['kind','openings'])&&Array.isArray(value.openings)&&value.openings.length>=1&&value.openings.length<=LIMITS.openings,'Use one to 32 named literal openings.');
@@ -44,6 +44,7 @@
  function describeEvaluation(input){
   const value=validateEvaluation(input);
   if(value.kind==='described')return value.description;
+  if(value.kind==='original-output-measurements')return 'Compare the same original and changed pages: rune counts, equal adjacent-pair counts and rates, and pooled index of coincidence. Pair counts ignore separators within each page; no pair crosses a page boundary. Use each side’s own pair denominator. This describes changes only; it does not test significance, filler, readability or decryption.';
   if(value.kind==='output-measurements')return 'Report aggregate output page and rune counts, adjacent rune-pair counts, equal adjacent rune-pair counts and index of coincidence. Adjacent pairs ignore separators within each page; no pair crosses a page boundary. Index of coincidence pools the output rune frequencies. No significance, readability or hypothesis verdict is requested.';
   if(value.kind==='exact-prefix')return 'Check each output page’s opening against these exact rune indices: '+value.values.join(', ')+'. A match is not a complete reading.';
   if(value.kind==='exact-prefix-set')return 'Check each output page’s opening against these exact named rune sequences: '+value.openings.map(opening=>opening.id+' ['+opening.values.join(', ')+']').join('; ')+'. A match is not a complete reading.';
@@ -52,6 +53,7 @@
  function summarizeEvaluation(input){
   const value=validateEvaluation(input);
   if(value.kind==='described')return value.description;
+  if(value.kind==='original-output-measurements')return 'Compare the original and changed text: rune counts, repeated pairs and rune concentration. A difference alone cannot establish filler, readable text or a solution.';
   if(value.kind==='output-measurements')return 'Count the output runes and repeated pairs. These counts alone cannot establish filler, readable text or a solution.';
   if(value.kind==='exact-prefix')return 'Check whether each output page starts with the specified rune sequence. A matching opening is not a complete reading.';
   if(value.kind==='exact-prefix-set')return 'Check whether each output page starts with one of the specified rune sequences. A matching opening is not a complete reading.';
@@ -59,7 +61,7 @@
  }
  function describeControl(input){const value=validateControl(input);return value.kind==='described'?value.description:'Plan to run the three independent version-two synthetic implementation checks before the selected text. They compare complete outputs, removal alignment and result arithmetic with an independent reference. This selection does not mean that the checks have passed or that the hypothesis has been tested.';}
  function describeRepresentation(input){const value=validateRepresentation(input);return value.kind==='described'?value.description:'Use the supplied ordered GP29 rune alphabet, represented by integer indices from 0 through 28.';}
- function resolveEvaluation(input){const value=validateEvaluation(input);if(value.kind==='described')return null;return value.kind==='output-measurements'?freeze({kind:'measurement'}):value;}
+ function resolveEvaluation(input){const value=validateEvaluation(input);if(value.kind==='described')return null;return ['output-measurements','original-output-measurements'].includes(value.kind)?freeze({kind:'measurement'}):value;}
  function resolveControl(input){const value=validateControl(input);return freeze({supported:value.kind==='implementation-sanity-v2',kind:value.kind,description:describeControl(value),limit:value.kind==='described'?'The described control has no maintained typed implementation.':FACTS.control.limit,...(value.kind==='implementation-sanity-v2'?{referenceVersion:2,state:'planned',caseIds:FACTS.control.caseIds}:{})});}
  function resolveRepresentation(input){const value=validateRepresentation(input);return freeze({supported:value.kind==='gp29',kind:value.kind,description:describeRepresentation(value),limit:value.kind==='described'?'The described representation has no maintained typed implementation.':FACTS.representation.limit,...(value.kind==='gp29'?{minimum:0,maximum:28}:{})});}
  const api=Object.freeze({LIMITS,LANGUAGE_CRITERION,EVALUATION_SCHEMA,CONTROL_SCHEMA,REPRESENTATION_SCHEMA,JSON_SCHEMA,FACTS,validateEvaluation,validateControl,validateRepresentation,describeEvaluation,summarizeEvaluation,describeControl,describeRepresentation,resolveEvaluation,resolveControl,resolveRepresentation});

@@ -67,3 +67,23 @@ console.log('PASS community map preserves evidence, routes active cards, separat
  }
  console.log('PASS community method navigation separates finite, repeating and feedback application; source-only labels cannot imply a cipher.');
 }
+
+// The maintained starter is classified by its exact typed recipe, not prose or
+// a familiar display title. Its parent's aim is never moved across map areas.
+(async()=>{
+ const MD=require('../method-design.js'),Starter=require('../repeat-removal-start.js'),{createHash,webcrypto}=require('node:crypto'),vm=require('node:vm');
+ async function first(n,aim,policy='all-but-first'){
+  const parent=entry(n,{aim}).card,parentId='p_'+createHash('sha256').update(C.serialize(parent)).digest('hex'),recipe=Starter.propose({policy,unit:'word',pages:['lp2-00'],inputVersion:'raw'}),draft=await MD.toDraft(recipe.proposal,{parentId,parentCard:parent},webcrypto),card=H.cardData(C.confirm(draft,{id:'starter-map',at:'2026-10-27T00:00:00.000Z'}));
+  return {id:'p_'+createHash('sha256').update(C.serialize(card)).digest('hex'),card,createdAt:'2026-10-27T00:00:00.000Z',tasks:[],taskCount:0,verifiedTaskCount:0};
+ }
+ const understand=await first(201,'Measure'),decipher=await first(202,'Solve LP2'),second=await first(203,'Solve LP2','non-overlapping-pairs'),original=JSON.stringify([understand,decipher,second]),result=M.merge(base,[understand,decipher,second]),lookup=new Map(result.views.all.nodes.map(n=>[n.id,n])),rid=e=>'idea-'+e.id.slice(2);
+ assert.equal(lookup.get('record:'+rid(understand)).parent,'method:rune-patterns');assert.equal(lookup.get('record:'+rid(decipher)).parent,'method:rune-removal');assert.equal(lookup.get('record:'+rid(second)).parent,'method:rune-removal');assert.equal(lookup.get('method:rune-removal').parent,'solve-lp2');assert.equal(lookup.get('method:rune-removal').color,lookup.get('solve-lp2').color);assert.equal(result.views.all.nodes.filter(n=>n.id==='method:rune-removal').length,1);assert.deepEqual(lookup.get('method:rune-removal').members,[rid(decipher),rid(second)]);assert.equal(lookup.get('solve-lp2').children.filter(id=>id==='method:rune-removal').length,1);
+ for(const e of [understand,decipher,second]){const record=result.records[rid(e)],leaf=lookup.get('record:'+rid(e));assert.equal(record.title,'Remove repeated runes');assert.equal(record.reader_title,'Remove repeated runes');assert.deepEqual(record.method_topics,[{id:'repetition',title:C.METHOD_FAMILIES.repetition}]);assert.equal(leaf.color,lookup.get(leaf.parent).color);assert.equal(result.views.all.nodes.filter(n=>n.record_id===record.id).length,1);assert.equal(record.href,'run.html#idea='+e.id);assert.equal(record.evidence_state,'untested');assert.equal(record.outcome,'');assert.equal(record.proposal_id,e.id);}
+ assert.equal(JSON.stringify([understand,decipher,second]),original);assert.equal(JSON.stringify(base),before);
+ assert.equal(I.select(Object.values(result.records),I.state(new URLSearchParams('type=idea'))).allRecords.length,3);
+ const changed=structuredClone(decipher);changed.card.rules.searchProtocol.value.proposal.assumptions[0]='An additional unreviewed condition.';const separate=M.merge(base,[changed]),changedLeaf=separate.views.all.nodes.find(n=>n.record_id===rid(changed));assert.equal(changedLeaf.parent,'solve-lp2');assert(!separate.views.all.nodes.some(n=>n.id==='method:rune-removal'));
+ const ordinary=M.merge(base,[entry(204,{operations:[{id:'described_method',label:'Remove repeated runes'}]})]);assert(!ordinary.views.all.nodes.some(n=>n.id==='method:rune-removal'));
+ const legacyContext={ResearchWork:Work,ClaimSpecification:C,ClaimShare:H,TextEncoder,btoa,structuredClone};vm.runInNewContext(fs.readFileSync(require.resolve('../community-map.js'),'utf8'),legacyContext);assert.doesNotThrow(()=>legacyContext.CommunityResearch.merge(base,[entry(205)]));
+ const html=fs.readFileSync(require('node:path').join(__dirname,'../research.html'),'utf8');for(const dependency of ['finite-json.js','method-check-contract.js','method-design.js','repeat-removal-start.js'])assert(html.indexOf('src="'+dependency+'?')<html.indexOf('src="community-map.js?'));
+ console.log('PASS exact typed starter navigation preserves aim, creates one shared deletion family, keeps names and works without optional browser helpers.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

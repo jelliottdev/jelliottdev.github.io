@@ -4,6 +4,8 @@
  const Work=typeof module==='object'&&module.exports?require('./research-work.js'):root.ResearchWork;
  const C=typeof module==='object'&&module.exports?require('./claim-specification.js'):root.ClaimSpecification;
  const H=typeof module==='object'&&module.exports?require('./claim-share.js'):root.ClaimShare;
+ const MD=typeof module==='object'&&module.exports?require('./method-design.js'):root.MethodDesign;
+ const Starter=typeof module==='object'&&module.exports?require('./repeat-removal-start.js'):root.RepeatRemovalStart;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/;
  const parents={'fixed-substitution':'method:substitution',polyalphabetic:'method:repeating-key',feedback:'method:feedback',transposition:'method:routes','prime-indices':'method:numeric','number-streams':'method:generated-key','book-codes':'method:running-key',repetition:'method:rune-patterns'};
  const routes={decipher:'solve-lp2',measure:'aim:understand',explain:'aim:understand',reproduce:'aim:validate',verify_source:'aim:sources'};
@@ -32,6 +34,10 @@
   }
   return feed;
  }
+ function maintainedStarter(card){
+  if(!MD?.readCard||!Starter?.match)return null;
+  try{const source=MD.readCard(card);return source&&Starter.match(source.proposal)?source.proposal:null;}catch{return null;}
+ }
  function label(record){return record.community?(Work.isFiniteQuestion(record)?'Review question':record.evidence_state==='computation-available'?'Computation available':'Untested idea'):null;}
  function merge(source,entries){
   // Validate in feed-sized batches without limiting previously loaded pages.
@@ -40,7 +46,7 @@
   if(!nodes.has('all-research'))throw Error('The research root is missing.');
   for(const entry of entries){
    if(seen.has(entry.id))throw Error('Repeated community idea.');seen.add(entry.id);
-   const draft=decodeCard(entry.card),aim=C.normalizeOutcome(draft.aim),classified=C.classifyMethod(draft.method),area=routes[aim.id]||'aim:unplaced';
+   const draft=decodeCard(entry.card),aim=C.normalizeOutcome(draft.aim),starter=maintainedStarter(entry.card),classified=starter?{familyIds:['repetition'],complete:true,operations:[]}:C.classifyMethod(draft.method),area=routes[aim.id]||'aim:unplaced';
    let parent=nodes.get(area)||nodes.get('aim:unplaced'),candidate=classified.familyIds.length===1?nodes.get(parents[classified.familyIds[0]]):null;
    if(classified.familyIds.length>1)candidate=nodes.get('method:combined');
    if(data.method_navigation){
@@ -53,15 +59,24 @@
     if(classified.familyIds.length===1&&classified.familyIds[0]==='book-codes')candidate=null;
     if(classified.familyIds.length===1&&classified.familyIds[0]==='prime-indices')candidate=nodes.get('method:direct-mapping');
    }
+   if(starter&&area==='solve-lp2'){
+    // A deletion rule is not a reordering, substitution or a different aim.
+    // Add one shared operation family only when a matching decoding idea needs it.
+    if(!nodes.has('method:rune-removal')){
+     const solve=nodes.get('solve-lp2');
+     if(solve){const family={id:'method:rune-removal',parent:solve.id,label:'Removing runes',color:solve.color,kind:'family',record_id:null,children:[],members:[],parent_basis:'maintained operation navigation'};solve.children.push(family.id);view.nodes.push(family);nodes.set(family.id,family);}
+    }
+    candidate=nodes.get('method:rune-removal');
+   }
    if(!classified.complete)candidate=null;
    if(candidate){let ancestor=candidate;while(ancestor&&ancestor.id!==area)ancestor=nodes.get(ancestor.parent);if(ancestor)parent=candidate;}
    const id='idea-'+entry.id.slice(2);if(data.records[id]||nodes.has('record:'+id))throw Error('Community identity conflicts with a research record.');
    const operations=draft.method.status==='specified'?draft.method.value.operations:[];
-   const description=operations.map(o=>o.label||o.sourceText||o.id).join(', then '),letters=Array.from(description),title=description?letters.slice(0,157).join('')+(letters.length>157?'…':''):'Unspecified research method';
+   const description=starter?starter.name:operations.map(o=>o.label||o.sourceText||o.id).join(', then '),letters=Array.from(description),title=description?letters.slice(0,157).join('')+(letters.length>157?'…':''):'Unspecified research method';
    const evaluation=draft.rules.evaluation,check=evaluation.status==='specified'?C.evaluationText(evaluation.value):null;
    const choice=check?C.EVALUATION_CHOICES.find(item=>C.serialize(item.value)===C.serialize(evaluation.value)):null;
    const checkName=choice?choice.label:evaluation.status==='specified'&&evaluation.value?.kind==='exact-prefix-set'?'Compare supplied openings':null;
-   const readableTitle=checkName?checkName+' · '+title:null;
+   const readableTitle=starter?starter.name:checkName?checkName+' · '+title:null;
    const readerTitle=readableTitle?Array.from(readableTitle).slice(0,109).join('')+(Array.from(readableTitle).length>109?'…':''):null;
    const pages=draft.scope.status==='specified'&&Array.isArray(draft.scope.value.pages)?draft.scope.value.pages:[];
    // Navigation metadata comes only from the decoded original card. It is not

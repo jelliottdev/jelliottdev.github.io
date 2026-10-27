@@ -318,3 +318,20 @@ run. Planned synthetic examples are implementation checks, not already-passed
 scientific controls. Keep technical precision available, but lead with what the
 visitor will learn. Bind saved identity to structural data so later copy polish
 does not break historical cards.
+
+
+### A concrete starting observation
+
+A broad idea should not leave a newcomer facing technical check configuration.
+Where a maintained starting observation is relevant, offer it before AI method
+design as an optional proposal. Use concrete choices and invented examples such
+as AAA becoming A or AA. Do not infer the author's rule, boundary or page scope.
+Keep the first entry compact; show the choices only after an explicit action.
+Preserve the original question and link the separately reviewed proposal to it.
+
+Paired descriptive results put the original and changed text beside one another
+on the same pages. Label denominators, empty observations and pooled aggregation
+clearly. Keep the output and Save action usable without opening secondary method
+details. No count or concentration change is a hypothesis verdict. Failed or
+unsupported requirements lead to review, not repeated AI requests or a silent
+replacement with a simpler comparison.

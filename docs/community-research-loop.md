@@ -830,8 +830,8 @@ explicit review, never a background migration or prose interpretation.
 
 Drafting has a bounded service deadline with a longer browser deadline for
 transport. Timeout, cancellation or invalid model output cannot save a proposal,
-create a task or authorize a run. Automatic implementation entry remains gated
-until the complete reviewed path is enabled and verified in production.
+create a task or authorize a run. The public implementation entry requires explicit typed choices. Older or
+unsupported choices offer review instead of an AI request or a retry loop.
 
 
 Before issuing a V2 task, shared validation bounds its complete compact result
@@ -840,3 +840,33 @@ opening matches and language-score rows. Work that cannot fit the existing 2 MiB
 submission limit is rejected before running, with a smaller-scope recovery;
 no pages are silently dropped. The full 75-page official scope fits this bound.
 This is a transport-size guarantee, not a Worker CPU or memory guarantee.
+
+
+## A maintained first observation
+
+Broad repeat-related ideas with retained original wording can offer an optional
+starting check. The existing family is only a relevance hint: it is not treated
+as the author's intended deletion rule or evidence of coverage. No public idea
+identifier is special-cased. The visitor explicitly chooses a repeat policy,
+boundary rule and page scope; none is preselected. LP2-00 is labeled a proposed
+one-page start, not an inferred meaning of the first unsolved section.
+
+The shared version-one recipe produces a new MD2 proposal bound to the original
+question. It uses alphabet indices, one exact removal step, a paired descriptive
+observation and the mandatory synthetic implementation checks. The original
+card, wider hypothesis and its requirements remain unchanged. Review, saving the
+proposal, preparing, running and saving output stay separate explicit actions.
+
+Exact maintained recipe proposals compile through code rather than an AI call.
+The whole canonical proposal must match the factory, including every condition;
+changed wording or added requirements cannot borrow its implementation. These
+versioned recipe strings are protocol data; display labels are separate. Other
+methods retain their independent implementation validation and review.
+
+The paired observation derives from the exact dispatcher-verified V2 certificate
+and original task bytes. It reports before/after rune counts, repeated-pair rates
+with separate denominators, and pooled index of coincidence. It creates no
+baseline receipt, rewrites no saved result and does not turn a descriptive change
+into significance, filler, readability or question-wide coverage. Different
+reviewed questions may share the same computation only through separate checked
+associations. Scientific controls remain unresolved until implemented.

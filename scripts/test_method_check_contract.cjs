@@ -14,6 +14,9 @@ const clone=structuredClone;let groups=0;async function test(name,fn){await fn()
   const unknown={kind:'described',description:'Compare a predeclared null model, including the specified threshold.'};assert.equal(M.summarizeEvaluation(unknown),unknown.description);
   assert.match(M.summarizeEvaluation({kind:'output-measurements'}),/cannot establish/);assert.match(M.summarizeEvaluation({kind:'exact-prefix',values:[0]}),/not a complete reading/);assert.match(M.summarizeEvaluation({kind:'exact-prefix-set',openings:[{id:'one',values:[0]}]}),/not a complete reading/);assert.match(M.summarizeEvaluation(M.LANGUAGE_CRITERION),/not a translation/);
  });
+ await test('paired descriptive observation is a separate explicit choice sharing the verified measurement computation',()=>{
+  const choice={kind:'original-output-measurements'};assert.deepEqual(M.validateEvaluation(choice),choice);assert.deepEqual(M.resolveEvaluation(choice),{kind:'measurement'});assert.match(M.describeEvaluation(choice),/each side’s own pair denominator/);assert.match(M.describeEvaluation(choice),/pooled/);assert.match(M.summarizeEvaluation(choice),/Compare the original and changed text/);assert.throws(()=>M.validateEvaluation({...choice,significance:true}));assert.throws(()=>M.validateEvaluation({...choice,baseline:'another-page'}));assert.equal(M.resolveEvaluation({kind:'described',description:'Compare original and changed text.'}),null);
+ });
  await test('aggregate named metrics and boundary semantics agree with invented actual V2 result',async()=>{
   const alphabet=require('../data/local-run-inputs.json').alphabet,A=alphabet[0].rune,B=alphabet[1].rune;
   const task=await V.prepare({title:'Invented typed measurement contract',alphabet,pages:[{id:'lp2-00',text:A+'!'+A+'\n'+B},{id:'lp2-01',text:B+B}],steps:[],criterion:M.resolveEvaluation({kind:'output-measurements'})},webcrypto),result=V.run(task);
