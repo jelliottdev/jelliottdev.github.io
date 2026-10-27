@@ -17,8 +17,23 @@ async function test(name,fn){await fn();count++;console.log('PASS '+name);}
   const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');
   const blocks=workflow.split(/(?=^      - )/m),batch=blocks.filter(b=>b.includes('run: node scripts/run_node_checks.cjs'));
   assert.equal(batch.length,1);assert(!/^        if:/m.test(batch[0]));
-  assert(workflow.indexOf('run: node scripts/run_node_checks.cjs')<workflow.indexOf('run: python scripts/test_finite_search_audit.py'));
-  assert(workflow.indexOf('name: Check current and retained authored source revisions')<workflow.indexOf('run: node scripts/run_node_checks.cjs'));
+  const node=workflow.split('  node:\n')[1].split('  science:\n')[0],science=workflow.split('  science:\n')[1].split('  validate:\n')[0],gate=workflow.split('  validate:\n')[1];
+  for(const lane of [node,science])assert(lane.includes('    needs: scope\n'),'Each independent lane waits for scope, not the other lane');
+  assert(node.includes('run: node scripts/check_node_test_coverage.cjs'));
+  assert(node.indexOf('run: node scripts/check_node_test_coverage.cjs')<node.indexOf('run: node scripts/run_node_checks.cjs'));
+  assert(!node.includes('Check current and retained authored source revisions'));
+  assert(!science.includes('run_node_checks.cjs'));
+  assert(science.indexOf('name: Check current and retained authored source revisions')<science.indexOf('run: python scripts/test_finite_search_audit.py'));
+  assert(science.includes('python -m unittest discover -s scripts -p test_archive_authored_sources.py'));
+  assert(science.includes('python -m unittest discover -s scripts -p test_archive_reproduction_code.py'));
+  assert(gate.includes('    if: ${{ always() }}\n')&&gate.includes('    needs: [scope, node, science]\n'));
+  assert(gate.includes('set -euo pipefail'));
+  for(const lane of ['scope','node','science']){
+   const variable=lane.toUpperCase()+'_RESULT';
+   assert(gate.includes(variable+': ${{ needs.'+lane+'.result }}'));
+   assert(gate.includes('test "$'+variable+'" = success'),'Skipped, canceled and failed lanes must fail the final gate');
+  }
+  assert(!gate.includes('continue-on-error'));
   assert(workflow.includes('id: scope\n        run: node scripts/ci_validation_scope.cjs'));
  });
  await test('manifest rejects duplicate malformed commands flags timeouts and resource declarations',()=>{

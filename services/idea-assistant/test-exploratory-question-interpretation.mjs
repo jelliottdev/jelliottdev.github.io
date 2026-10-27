@@ -1,0 +1,28 @@
+/* Source-role preservation, using mocked interpretation only. No network or runs. */
+import assert from 'node:assert/strict';
+import P from '../../claim-interpretation.js';
+import C from '../../claim-specification.js';
+import {fromWire,createInterpretHandler,WIRE_SCHEMA,WIRE_PROMPT,PROMPT_VERSION} from './interpret-handler.mjs';
+const raw="Hello, ive been working with claude and we've tried, just a whole heap of stuff\nBut most recently, we're toying with the idea that the reason for the unexplained doubles, is that the first unsolved section has some sort of junk added to it\nLike there are extra runes that have been added to.make decryptopn that much harder\n\nIf anyone has any input thatd be amazing, im half flying blind here";
+const source=(text,quote=text,start=text.indexOf(quote))=>({start,quote}),step=(text,quote=text,id='research_question')=>({id,familyId:null,source:source(text,quote),parameters:{}}),candidate=(text,steps=[step(text)])=>({schema:P.SCHEMA,outcome:null,steps,scope:null,rules:{}}),wire=input=>({...input,steps:input.steps.map(({parameters,...s})=>s),rules:[]});
+let groups=0;async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
+await test('linked original remains a question with exact wording and no invented method aim scope or evaluation',()=>{
+ const input=candidate(raw),before=JSON.stringify(input),value=P.toDraft(raw,input);assert.equal(value.draft.source.text,raw);assert.equal(value.draft.method.status,'unspecified');assert.equal(value.draft.aim.status,'unspecified');assert.equal(value.draft.scope.status,'unspecified');assert.equal(value.draft.rules.evaluation.status,'unspecified');assert.deepEqual(value.draft.unresolved,[{kind:'source_note',text:raw}]);assert.equal(JSON.stringify(input),before);assert(!JSON.stringify(value.draft).includes('research_question'));assert.equal(C.completeness(value.draft).executionReady,false);assert.throws(()=>C.confirm(value.draft,{id:'test',at:'2026-10-27T00:00:00.000Z'}));
+ const invented=candidate(raw,[{...step(raw),source:{start:0,quote:'Work backwards from the assumption that doublets are mistakes or filler'}}]);assert.throws(()=>P.toDraft(raw,invented),/source quote/);
+ const inferred=candidate(raw);inferred.scope={pages:Array.from({length:56},(_,n)=>'lp2-'+String(n).padStart(2,'0')),passage:null,source:source(raw,'the first unsolved section')};assert.throws(()=>P.toDraft(raw,inferred),/page set|page selection/);
+ const goal=candidate(raw);goal.outcome={id:'measure',source:source(raw)};assert.equal(P.toDraft(raw,goal).draft.aim.status,'unspecified');
+});
+await test('closed exploratory role rejects method families keys and source invention',()=>{
+ const text="Could a key 'ABC' explain the repeated runes?",input=candidate(text),parsed=fromWire(wire(input),text);assert.deepEqual(parsed.steps[0].parameters,{});assert.equal(P.toDraft(text,parsed).draft.method.status,'unspecified');
+ for(const change of [c=>c.steps[0].familyId='repetition',c=>c.steps[0].parameters={key:{value:'ABC',source:source(text,"key 'ABC'")}},c=>c.steps[0].source.quote='Delete all extra runes']){const bad=structuredClone(input);change(bad);assert.throws(()=>P.toDraft(text,bad));}
+ assert(WIRE_SCHEMA.properties.steps.items.properties.id.enum.includes('research_question'));assert(WIRE_PROMPT.includes('not an instruction to delete runes'));assert(PROMPT_VERSION.includes('exploratory-question'));
+});
+await test('unusual explicit procedures and mixed question plus actual instructions retain their exact roles',()=>{
+ for(const text of ['Remove every F rune then count doublets.','Apply the alternating mirror rule to every third word.','Use Vigenere with key \'ABC\'.']){const input=candidate(text,[step(text,text,'described_method')]),value=P.toDraft(text,input);assert.equal(value.draft.method.status,'specified');assert.equal(value.draft.method.value.operations[0].sourceText,text);assert.deepEqual(value.draft.unresolved,[]);}
+ const text='Could extra runes explain the doubles?\nReverse prime values in each row.',question='Could extra runes explain the doubles?',instruction='Reverse prime values in each row.',value=P.toDraft(text,candidate(text,[step(text,question),step(text,instruction,'ambiguous_reversal')]));assert.equal(value.draft.method.value.operations.length,1);assert.equal(value.draft.method.value.operations[0].sourceText,instruction);assert.deepEqual(value.draft.unresolved[0],{kind:'source_note',text:question});const ambiguity=value.draft.unresolved.find(n=>n.kind==='operation_ambiguity');assert.equal(ambiguity.operationIndex,0,'A preceding question does not shift the real operation index');
+});
+await test('mocked backend transports the explicit question role without saving or executing',async()=>{
+ const handler=createInterpretHandler(),origin='https://fixture.example',env={SITE_ORIGIN:origin,IDEA_LIMIT:{limit:async()=>({success:true})},AI:{run:async()=>({choices:[{message:{content:JSON.stringify(wire(candidate(raw)))}}]})}};
+ const response=await handler(new Request('https://worker.example/interpret',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({text:raw})}),env);assert.equal(response.status,200);const body=await response.json();assert.equal(body.candidate.steps[0].id,'research_question');assert.equal(body.requiresConfirmation,true);const value=P.toDraft(raw,body.candidate);assert.equal(value.draft.method.status,'unspecified');assert.equal(value.draft.scope.status,'unspecified');assert.equal(value.draft.source.text,raw);
+});
+console.log(groups+' exploratory interpretation groups passed; no historical card edits or target calculations.');

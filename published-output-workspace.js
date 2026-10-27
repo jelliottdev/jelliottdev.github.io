@@ -50,8 +50,8 @@
    variationAbort?.abort();variationAbort=new AbortController();variationPhase='loading';if(variationButton){variationButton.disabled=true;variationButton.textContent='Loading variation…';}if(status)status.innerHTML='<p role="status" aria-live="polite">Loading the calculation settings…</p>';
    try{
     const {Context,Mount}=variationDependencies();if(!Context?.load||!Mount?.mount)throw Error('Variation review is unavailable.');
-    const context=await Context.load(model,{baseURL:options.baseURL,fetcher:options.fetcher,crypto:options.crypto,pageURL:options.pageURL,signal:variationAbort.signal});if(!current())return;
-    const mounted=Mount.mount(workspace,{...options,context,signal:variationAbort.signal});variationMount=mounted;await mounted.ready;if(!current()){mounted.destroy();return;}variationPhase='ready';if(status)status.innerHTML='';if(variationButton)variationButton.hidden=true;
+    const request={baseURL:options.baseURL,fetcher:options.fetcher,crypto:options.crypto,pageURL:options.pageURL,signal:variationAbort.signal},review=Context.loadReview?await Context.loadReview(model,request):{context:await Context.load(model,request),navigationHints:null};if(!current())return;
+    const mounted=Mount.mount(workspace,{...options,context:review.context,navigationHints:review.navigationHints,signal:variationAbort.signal});variationMount=mounted;await mounted.ready;if(!current()){mounted.destroy();return;}variationPhase='ready';if(status)status.innerHTML='';if(variationButton)variationButton.hidden=true;
    }catch{
     if(!current())return;variationMount?.destroy();variationMount=null;variationPhase='error';if(status)status.innerHTML='<p role="alert">The variation settings could not be loaded. The archived output is still available.</p>';if(variationButton){variationButton.disabled=false;variationButton.textContent='Try again';}
    }

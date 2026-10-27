@@ -387,6 +387,30 @@ under `published_program_collections` and pin the input, importer and output in
 the record's reproduction inventory. The normal build publishes each member and
 updates navigation; no separate receipt or discovery adapter is needed.
 
+If the full arrays already exist in a pinned result JSON, a program may supply
+`outputRefs` instead of `outputs`. Each reference selects one complete saved
+array, in the same order as the declared pages:
+
+```json
+"outputRefs": [{
+  "page": "lp2-54",
+  "path": "results.json",
+  "sha256": "<SHA-256 of the exact result file bytes>",
+  "jsonPointer": "/cases/0/plain_indices"
+}]
+```
+
+Paths are relative to the input manifest's directory and must remain inside
+that record directory. The importer checks raw file hashes before reading JSON
+fields; it rejects symbolic links, duplicate JSON keys, traversal and missing or
+partial vectors. JSON pointers select existing data only: they cannot run code,
+expressions or templates. Programs can mix literal outputs and references, but
+each program must choose one form. All unique source files share an 8 MiB read
+budget; the expanded batch keeps the existing size and program limits. Pin both
+the referenced source files and the authoring manifest in reproduction inputs.
+The import still uses the same verifier and independent controls, and never
+creates missing output or changes the declared opening check.
+
 CI also extracts every declared retained-program bundle and runs its exact
 `reproduction.command`. Use pinned Python or Node scripts with `--check`, joining
 checks with `&&` when needed. These commands run without a shell, and missing
