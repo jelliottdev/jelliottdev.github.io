@@ -53510,8 +53510,8 @@
       "limitations": "The source proposes many unspecified functions and possible words; this bounded run implements only the two explicit one-step recurrences. It has no language score or calibrated null, and does not test whether another layer turns the output into text. Human review pending.",
       "next_steps": "Pin one additional recurrence, dictionary and rune conversion before searching; count all tried candidates, test known solved text under the same pipeline and score untouched continuation against matched controls.",
       "reproduction": {
-        "command": "python experiments/records/lp2-54-header-feedback/run.py --check && python experiments/records/lp2-54-header-feedback/check.py && python experiments/records/lp2-54-header-feedback/plot.py --check",
-        "environment": "Python 3.12 standard library; no network or API. Run from the repository or extracted bundle root.",
+        "command": "python experiments/records/lp2-54-header-feedback/run.py --check && python experiments/records/lp2-54-header-feedback/check.py --check && python experiments/records/lp2-54-header-feedback/plot.py --check && node scripts/retained_program_collection.mjs --check experiments/records/lp2-54-header-feedback/retained-feedback-programs.json",
+        "environment": "Python 3.12 and Node.js 24 standard libraries; no network or API. Run from the repository or extracted bundle root.",
         "script": "experiments/records/lp2-54-header-feedback/run.py",
         "script_sha256": "7cb6a8a8621b45cdcdadc889494db3db2421ca55a9621f86aac0fa35b7b4e462",
         "inputs": [
@@ -53530,6 +53530,42 @@
           {
             "path": "text/lp2-54.txt",
             "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "path": "experiments/records/lp2-54-header-feedback/saved-feedback-programs.json",
+            "sha256": "5e6b74d601196a6378306f03511d27f863b4f49f902fab64ecbcd624ac958849"
+          },
+          {
+            "path": "scripts/retain_saved_programs.mjs",
+            "sha256": "d93777ffe4aa5e4e91d382792713e386bc8b3fe318dab67053325de00e928ea1"
+          },
+          {
+            "path": "scripts/retained_program_collection.mjs",
+            "sha256": "c5860575c883492c4a1f37d1c61db1b32921c71d6b5b66e55e982cecb49e571a"
+          },
+          {
+            "path": "scripts/retained_program_output.mjs",
+            "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+          },
+          {
+            "path": "local-experiment.js",
+            "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+          },
+          {
+            "path": "local-plan-controls.js",
+            "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+          },
+          {
+            "path": "finite-json.js",
+            "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+          },
+          {
+            "path": "services/idea-assistant/published-program-source-index.mjs",
+            "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+          },
+          {
+            "path": "published-numeric-bank-source.js",
+            "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
           }
         ],
         "outputs": [
@@ -53540,6 +53576,10 @@
           {
             "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
             "sha256": "dc177d93febe77837c8e4a7aa5b10ffe31ae9af90584620ffdec2e9a07c1efd3"
+          },
+          {
+            "path": "experiments/records/lp2-54-header-feedback/retained-feedback-programs.json",
+            "sha256": "08f59f3e426ef9a34af170dea7d87ffa2977c44d8909421c800654ce23822448"
           }
         ]
       },
@@ -53567,6 +53607,12 @@
         {
           "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
           "caption": "The six A/I/O outputs under fixed ciphertext and plaintext feedback. The vertical rule separates the one-rune and eight-rune header words."
+        }
+      ],
+      "published_program_collections": [
+        {
+          "output": "experiments/records/lp2-54-header-feedback/retained-feedback-programs.json",
+          "checked_at": "2026-10-27T05:41:58.000Z"
         }
       ],
       "article": "# LP2-54: what do simple autokey rules make of the red header?\n\nThe [reported header-crib proposal](#/wiki/reported-attempts?section=lp2-54-header-autokey-crib) singles out the nine red runes on [LP2-54](#/reader/lp2-54): one rune, then eight. It suggests a first word such as **A**, **I** or **O**, followed by an eight-rune word. The discussion also corrects a consequential distinction: ciphertext feedback uses the previous **ciphertext** rune, while plaintext feedback uses the previous **plaintext** rune. Those are different recurrences even when both are called “autokey.”\n\nThis record tests just those two one-step recurrences, without changing the alphabet or selecting words after seeing output. It is a bounded baseline for the larger proposal, not a replay of the proposed search over hundreds of words and unspecified functions.\n\nThe clue-to-rule chain has an important break: the **red one-plus-eight layout is visible on the page**, while A/I/O and either feedback recurrence are solver hypotheses. The manuscript does not explicitly assign those letters or tell us to use autokey. That distinction matters when deciding whether a short output would count as evidence.\n\n## Inputs and fixed choices\n\nThe archived red prefix is `ᚪ-ᛗᛝᛞᛡᚦᛉᛁᛗ.`. The hyphen separates the first rune from the following eight, and the period ends the header. In the canonical zero-based Gematria Primus order the nine cipher indices are **24, 19, 21, 23, 27, 2, 14, 10, 19**. The index labels A, I and O are **24, 10 and 3**. A single primer `k` ranges over all 29 indices; each first-rune crib picks one primer, so the six displayed rows are not an open-ended key search.\n\nFor ciphertext feedback, `P[0] = C[0] − k` and `P[i] = C[i] − C[i−1]`. For plaintext feedback, `P[0] = C[0] − k` and `P[i] = C[i] − P[i−1]`. All subtraction is modulo 29. Neither rule resets at the word separator, line break or page edge. The complete run processes **all 232 runes on LP2-54**, not just the header. Punctuation is retained in the source but has no arithmetic slot.\n\nThe [frozen plan](experiments/records/lp2-54-header-feedback/plan.json) names the source-discussion hash, transcription hash, alphabet and exact bounds. The [full result](experiments/records/lp2-54-header-feedback/results.json) contains all **58** mode-and-primer combinations, including each full 232-rune output. The producer checks that re-encryption returns every original rune; an independent checker verifies the equations at every position.\n\n## Header outputs\n\n![The nine source positions above six fixed-rule outputs, with the separator after the first rune.](experiments/records/lp2-54-header-feedback/header-feedback.svg)\n\n[Open the comparison at full size](experiments/records/lp2-54-header-feedback/header-feedback.svg).\n\n| Feedback | First-rune crib | Primer | Nine output labels, separated after rune one |\n| --- | --- | ---: | --- |\n| Ciphertext | A | 0 | A · A TH TH R R EO AE N |\n| Ciphertext | I | 14 | I · A TH TH R R EO AE N |\n| Ciphertext | O | 21 | O · A TH TH R R EO AE N |\n| Plaintext | A | 0 | A · A Y Y U U P Y OE |\n| Plaintext | I | 14 | I · N EO J T S EA J H |\n| Plaintext | O | 21 | O · T C/K E N OE NG E U |\n\nThe ciphertext-feedback second word is the **same for all 29 primers**, because every position after the first subtracts two known cipher runes. Choosing A, I or O therefore changes only the first rune in that model. Plaintext feedback propagates the primer choice through later positions. This is why confusing the two clocks can produce a different purported header reading.\n\nThese rune-label strings are transparent outputs, not established English or a scored decryption. Even an apparent word from a larger search would require the complete search budget, a fixed word list and transliteration, a known-reading control, and an untouched continuation. An extra encryption layer, alphabet permutation, different lag, interruption rule or manually chosen function could change every output. None is tested here.\n\n## Reproduce\n\nFrom a checkout or the [downloadable bundle](downloads/experiments/lp2-54-header-feedback.zip):\n\n```text\npython experiments/records/lp2-54-header-feedback/run.py --check\npython experiments/records/lp2-54-header-feedback/check.py\npython experiments/records/lp2-54-header-feedback/plot.py --check\n```\n\nNo external service or Python package is needed. The run was not altered after inspecting output. This census **does not support a header reading by these six simple fixed-rule candidates**, but it does not rule out the broad autokey family or the original proposal’s other, unspecified C/K/D functions. The related [LP2-54–55 interruption tests](#/experiments/lp2-54-55-autokey-reset) ask a separate periodicity question and should not be counted as independent confirmation of this header test.\n",
@@ -319398,7 +319444,8 @@
           },
           {
             "path": "scripts/retain_saved_programs.mjs",
-            "sha256": "b57d3ac1a5f266fc0319883e861f2364b7d2bc7435d1e18b4cc2ea77f6a8d34b"
+            "sha256": "b57d3ac1a5f266fc0319883e861f2364b7d2bc7435d1e18b4cc2ea77f6a8d34b",
+            "source_path": "published-sources/code/b57d3ac1a5f266fc0319883e861f2364b7d2bc7435d1e18b4cc2ea77f6a8d34b.mjs"
           },
           {
             "path": "scripts/retained_program_collection.mjs",

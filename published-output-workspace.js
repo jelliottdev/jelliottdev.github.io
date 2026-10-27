@@ -16,13 +16,19 @@
   const human=parsed.getUTCDate()+' '+['January','February','March','April','May','June','July','August','September','October','November','December'][parsed.getUTCMonth()]+' '+parsed.getUTCFullYear();
   return label+human+'. This is not the original experiment date.';
  }
+ function startingKey(task,step,index){
+  if(!['keyed-shift','interrupted-keyed-shift','finite-shift'].includes(step.op)||!Array.isArray(step.key)||!step.key.length||step.key.length>256||!Array.isArray(task.alphabet)||task.alphabet.length!==29)return '';
+  if(step.key.some(value=>!Number.isInteger(value)||value<0||value>=29||typeof task.alphabet[value]?.latin!=='string'||typeof task.alphabet[value]?.rune!=='string'))return '';
+  const name=step.op==='finite-shift'?'Number sequence':'Starting key';
+  return '<details class="published-output-details"><summary>'+name+(task.steps.length>1?' · step '+(index+1):'')+' ('+step.key.length+' '+(step.key.length===1?'value':'values')+')</summary><p class="run-text-note">Rune labels, not translated text. Each label corresponds to one rune.</p><p style="overflow-wrap:anywhere">'+step.key.map(value=>esc(task.alphabet[value].latin)).join(' · ')+'</p><p class="small" style="overflow-wrap:anywhere">Exact numbers: '+step.key.map(value=>String(value)).join(', ')+'.</p></details>';
+ }
  function programDescription(task){
   if(!Array.isArray(task.steps))return '';
   const description=node?require('./published-program-description.js'):root.PublishedProgramDescription;
   if(!description?.step||!description?.program)return '';
   let descriptions;try{descriptions=task.steps.length?task.steps.map(description.step):[description.program(task.steps)];}catch{return '';}
   if(descriptions.some(value=>!value))return '';
-  return '<section class="published-output-method" aria-label="What was tried"><h2>What was tried</h2>'+(descriptions.length===1?'<p>'+esc(descriptions[0])+'</p>':'<ol>'+descriptions.map(value=>'<li>'+esc(value)+'</li>').join('')+'</ol>')+'</section>';
+  return '<section class="published-output-method" aria-label="What was tried"><h2>What was tried</h2>'+(descriptions.length===1?'<p>'+esc(descriptions[0])+'</p>'+startingKey(task,task.steps[0]||{},0):'<ol>'+descriptions.map((value,index)=>'<li>'+esc(value)+startingKey(task,task.steps[index],index)+'</li>').join('')+'</ol>')+'</section>';
  }
  function baselineHTML(model){
   const {Client}=dependencies();

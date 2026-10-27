@@ -13,6 +13,7 @@ import json
 import math
 import sys
 from pathlib import Path
+from reproduction_sources import read_pinned
 
 BASELINE = "lp2-row-column-routes"
 ENGLISH = "lp2-row-column-english"
@@ -58,9 +59,11 @@ def verify_hashes(root, record):
             relative = Path(entry["path"])
             path = (root / relative).resolve()
             need(not relative.is_absolute() and path.is_relative_to(root), "Dependency escapes root")
-            need(digest(path) == entry["sha256"], "Declared dependency hash mismatch: " + entry["path"])
+            reviewed, _ = read_pinned(root, entry)
+            need(hashlib.sha256(reviewed).hexdigest() == entry["sha256"], "Declared dependency hash mismatch: " + entry["path"])
             count += 1
-    need(digest(root / reproduction["script"]) == reproduction["script_sha256"], "Producer script hash mismatch")
+    reviewed, _ = read_pinned(root, {"path": reproduction["script"], "sha256": reproduction["script_sha256"]})
+    need(hashlib.sha256(reviewed).hexdigest() == reproduction["script_sha256"], "Producer script hash mismatch")
     return count + 1
 
 

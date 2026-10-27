@@ -4,14 +4,12 @@
  const node=typeof module==='object'&&module.exports,View=node?require('./finite-search-view.js'):root.FiniteSearchView,Output=node?require('./local-run-view.js'):root.LocalRunView,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare;
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  // Known passage names are display context only. Both ID and exact vector must match.
- const decodedOpenings={warning:['Warning',[24,7,24,4,9,21,17,18,20,10,18,1]],welcome:['Welcome',[7,18,20,5,3,19,18,7,18,20,5,3]],'some-wisdom':['Some Wisdom',[15,3,19,18,7,10,15,23,3,19,2,18]],'first-koan':['First Koan',[24,5,3,24,9,24,19,24,9,23,18,5]],'loss-of-divinity':['Loss of Divinity',[2,18,20,3,15,15,3,0,23,10,1,10]],'second-koan':['Second Koan',[24,5,3,24,9,23,1,4,21,24,20,18]],instruction:['Instruction',[24,9,10,9,15,16,4,1,5,16,27,9]],'lp2-56':['LP2 page 56',[24,9,18,9,23,7,10,2,10,9,2,18]],'lp2-57':['LP2 page 57',[13,24,4,24,17,20,18,20,10,5,18,2]]};
  function prefixSetOpenings(criterion){
   const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
   if(!exact(criterion,['kind','openings'])||criterion.kind!=='exact-prefix-set'||!Array.isArray(criterion.openings)||!criterion.openings.length||criterion.openings.length>32)return null;
   const ids=new Set(),vectors=new Set();for(const item of criterion.openings){if(!exact(item,['id','values'])||typeof item.id!=='string'||!/^[a-z][a-z0-9-]{0,63}$/.test(item.id)||ids.has(item.id)||!Array.isArray(item.values)||!item.values.length||item.values.length>256||Array.from(item.values).some(v=>!Number.isInteger(v)||v<0||v>28))return null;const vector=JSON.stringify(item.values);if(vectors.has(vector))return null;ids.add(item.id);vectors.add(vector);}return criterion.openings;
  }
- const decodedOpeningPages={warning:'lp1-01',welcome:'lp1-03','some-wisdom':'lp1-05','first-koan':'lp1-06','loss-of-divinity':'lp1-10','second-koan':'lp1-14',instruction:'lp1-16','lp2-56':'lp2-56','lp2-57':'lp2-57'};
- function decodedOpening(item){const known=Object.hasOwn(decodedOpenings,item.id)&&decodedOpenings[item.id];return known&&JSON.stringify(known[1])===JSON.stringify(item.values)?known:null;}
+ function decodedOpening(item){const value=(node?require('./output-evaluators.js'):root.OutputEvaluators)?.openingReference?.(item);return value?[value.label]:null;}
  function openingSetDescription(criterion){
   const openings=prefixSetOpenings(criterion);if(!openings)return null;
   const lengths=openings.map(item=>item.values.length),n=openings.length,count=n===9?'nine':n,known=openings.every(decodedOpening),subject=known?(n===1?'one already decoded passage':count+' already decoded passages'):(n===1?'the supplied opening':count+' supplied openings');
@@ -20,11 +18,11 @@
  function openingSetContext(criterion){
   const openings=prefixSetOpenings(criterion);if(!openings)return null;
   const known=openings.every(decodedOpening),description=openingSetDescription(criterion);
-  return {description:known?description.replace('with ','with the '+(openings.length===1?'beginning':'beginnings')+' of '):description.replace(/supplied openings/g,'fixed rune sequences').replace('the supplied opening','the fixed rune sequence'),openings:openings.map(item=>{const known=decodedOpening(item);return {label:known?known[0]:item.id,runes:item.values.length,...(known?{href:'index.html#/reader/'+decodedOpeningPages[item.id]}:{})};}),known:openings.every(decodedOpening)};
+  return {description:known?description.replace('with ','with the '+(openings.length===1?'beginning':'beginnings')+' of '):description.replace(/supplied openings/g,'fixed rune sequences').replace('the supplied opening','the fixed rune sequence'),openings:openings.map(item=>{const known=decodedOpening(item);return {label:known?known[0]:item.id,runes:item.values.length,...(known?{href:'index.html#/reader/'+(node?require('./output-evaluators.js'):root.OutputEvaluators).openingReference(item).page}:{})};}),known:openings.every(decodedOpening)};
  }
  function openingSetDetails(criterion){
   const openings=prefixSetOpenings(criterion);if(!openings)return '';
-  return '<details class="experiment-details"><summary>Which openings are compared?</summary><ul>'+openings.map(item=>{const known=decodedOpening(item),label=known?known[0]:item.id;return '<li>'+(known?'<a href="index.html#/reader/'+decodedOpeningPages[item.id]+'">'+esc(label)+'</a>':esc(label))+' · '+item.values.length+' runes</li>';}).join('')+'</ul><p>Only the start of each page’s output is compared. A matching opening is not a complete reading.</p></details>';
+  return '<details class="experiment-details"><summary>Which openings are compared?</summary><ul>'+openings.map(item=>{const known=decodedOpening(item),label=known?known[0]:item.id;return '<li>'+(known?'<a href="index.html#/reader/'+(node?require('./output-evaluators.js'):root.OutputEvaluators).openingReference(item).page+'">'+esc(label)+'</a>':esc(label))+' · '+item.values.length+' runes</li>';}).join('')+'</ul><p>Only the start of each page’s output is compared. A matching opening is not a complete reading.</p></details>';
  }
  function domainLabel(name,values,axis){
   const bank=name==='key'&&axis?.valuesFrom?.count===values.length&&H.finiteKeyBankLabel?.(axis.valuesFrom);if(bank)return bank;

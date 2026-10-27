@@ -1,3 +1,4 @@
+import {combineOrdinaryOpeningCoverage,strictOpeningMatchingPages} from './ordinary-opening-evidence.mjs';
 /* Bind ordinary preparation to a verified parameter preview's exact source bytes.
  * No new execution authority. Mismatched plans never expose their admission token. */
 import E from '../../local-experiment.js';
@@ -33,8 +34,8 @@ function coverageCheck(coverage,expected,inputVersion){
  return remaining;
 }
 export async function prepareParameterQuestion(input,{db,env,crypto=globalThis.crypto,fetcher=globalThis.fetch,signal,resolver=resolveParameterQuestion,prepareHandler,now=()=>new Date(),registry,history,programIndex,clientIP}={}){
- const value=J.capture(input,{maxBytes:65536,maxDepth:16,maxNodes:10000}),hasSettings=!!value&&Object.hasOwn(value,'parentSettings');
- ensure(value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===(hasSettings?4:3)&&['source','selection','childProposalId'].every(k=>Object.hasOwn(value,k))&&typeof value.childProposalId==='string'&&PROPOSAL.test(value.childProposalId),'Use an exact source, change and public child question.');
+ const value=J.capture(input,{maxBytes:65536,maxDepth:16,maxNodes:10000}),hasSettings=!!value&&Object.hasOwn(value,'parentSettings'),openings=!!value&&Object.hasOwn(value,'includeDerivedOpeningEvidence');
+ ensure(value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===3+(hasSettings?1:0)+(openings?1:0)&&(!openings||value.includeDerivedOpeningEvidence===true)&&['source','selection','childProposalId'].every(k=>Object.hasOwn(value,k))&&typeof value.childProposalId==='string'&&PROPOSAL.test(value.childProposalId),'Use an exact source, change and public child question.');
  db??=env?.PROPOSALS;ensure(db?.prepare&&env?.PROPOSALS===db&&typeof env.SITE_ORIGIN==='string'&&new URL(env.SITE_ORIGIN).origin===env.SITE_ORIGIN,'Parameter preparation is unavailable.');
  const live=()=>ensure(!signal?.aborted,'Parameter preparation was cancelled.');live();
  const preview=J.capture(await resolver({source:value.source,selection:value.selection,...(hasSettings?{parentSettings:value.parentSettings}:{})},{db,crypto,fetcher,signal,registry,history,programIndex}),{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});live();
@@ -51,15 +52,18 @@ export async function prepareParameterQuestion(input,{db,env,crypto=globalThis.c
  try{official=await loadInputBundle({fetcher,signal:controller.signal,read:(response,max)=>readJSON(response,max,controller.signal)});live();}
  finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
  if(!same(official.alphabet,expected.alphabet)||!['raw','reviewed'].includes(inputVersion)||expected.pages.some(page=>{const source=official.pages.get(page.id);return !source||source[inputVersion==='raw'?'raw':'reviewed_text']!==page.text;}))return changed();
- const handler=prepareHandler||createPrepareTaskHandler({fetcher,now});
- const response=await handler(new Request('https://parameter-preparation.invalid/prepare-task',{method:'POST',headers:{origin:env.SITE_ORIGIN,'Content-Type':'application/json',...(typeof clientIP==='string'&&clientIP.length<=128?{'CF-Connecting-IP':clientIP}:{})},body:JSON.stringify({proposalId:value.childProposalId,parentTaskId:null}),...(signal?{signal}:{})}),env);live();
+ const handler=prepareHandler||createPrepareTaskHandler({fetcher,now,registry,history,programIndex});
+ const response=await handler(new Request('https://parameter-preparation.invalid/prepare-task',{method:'POST',headers:{origin:env.SITE_ORIGIN,'Content-Type':'application/json',...(typeof clientIP==='string'&&clientIP.length<=128?{'CF-Connecting-IP':clientIP}:{})},body:JSON.stringify({proposalId:value.childProposalId,parentTaskId:null,...(openings?{includeDerivedOpeningEvidence:true}:{})}),...(signal?{signal}:{})}),env);live();
  const body=await readJSON(response,8*1024*1024,signal);live();
  if(!response.ok)return freeze({state:'preparation-unavailable',error:typeof body.error==='string'?body.error:'The variation could not be prepared. Please retry.'});
- if(!['plan-ready','scope-covered'].includes(body.state))return freeze({state:'preparation-unavailable',error:'The variation did not produce an exact runnable plan. Review the question again.'});
+ if(!['plan-ready','scope-covered',...(openings?['derived-prefix-answer']:[])].includes(body.state))return freeze({state:'preparation-unavailable',error:'The variation did not produce an exact runnable plan. Review the question again.'});
  try{
   ensure(body.proposalId===value.childProposalId&&body.parentTaskId===null&&body.inputVersion===inputVersion,'Parameter source changed');
   if(body.coverage?.requestedTask){await E.checkIdentity(body.coverage.requestedTask,crypto);live();}
-  const ids=expected.pages.map(p=>p.id),remaining=body.coverage?coverageCheck(body.coverage,expected,inputVersion):ids;
+  const ids=expected.pages.map(p=>p.id);let remaining=body.coverage?coverageCheck(body.coverage,expected,inputVersion):ids,matching=[];
+  if(body.derivedOpenings){const d=body.derivedOpenings,summary=d.summary,ordered=list=>Array.isArray(list)&&new Set(list).size===list.length&&same(list,ids.filter(id=>list.includes(id)));ensure(openings&&body.coverage&&d.schema==='liberpedia-ordinary-derived-openings-coverage-v1'&&d.provider==='public-opening-originals-v1'&&d.requestedTaskId===body.coverage.requestedTask.taskId&&d.inputVersion===inputVersion&&ordered(summary?.coveredPages)&&ordered(summary?.remainingPages)&&ordered(summary?.matchingPages)&&summary.matchingPages.every(id=>summary.coveredPages.includes(id))&&ids.every(id=>summary.coveredPages.includes(id)!==summary.remainingPages.includes(id)),'Derived opening proof changed');const union=combineOrdinaryOpeningCoverage(expected,body.coverage,summary);remaining=union.remainingPages;matching=union.matchingPages;}
+  if(body.state==='derived-prefix-answer'){const strict=await strictOpeningMatchingPages({db,task:body.coverage.requestedTask,inputVersion,evidence:body.coverage.evidence,crypto,fetcher,signal});ensure(body.derivedOpenings&&(matching.length||strict.matchingPages.length||!remaining.length)&&!Object.hasOwn(body,'task')&&!Object.hasOwn(body,'preparation'),'A derived opening answer needs an exact original proof');return freeze(body);}
+
   if(body.state==='scope-covered')ensure(body.coverage&&remaining.length===0&&!Object.hasOwn(body,'task')&&!Object.hasOwn(body,'preparation'),'Exact saved coverage is missing');
   else{
    ensure(remaining.length>0,'No uncovered page remains');taskMatches(body.task,expected,remaining);await E.checkIdentity(body.task,crypto);live();
@@ -91,8 +95,8 @@ export function createParameterQuestionPreparationHandler(options={}){
   const length=request.headers.get('content-length');if(length!==null&&(!/^\d+$/.test(length)||Number(length)>65536))return reply({error:'The preparation request exceeds its byte bound.'},400);
   const controller=new AbortController(),abort=()=>controller.abort();request.signal?.addEventListener('abort',abort,{once:true});if(request.signal?.aborted)controller.abort();const timer=setTimeout(()=>controller.abort(),45000);let bodyChecked=false;
   try{
-   const body=await readJSON(request,65536,controller.signal),hasSettings=!!body&&Object.hasOwn(body,'parentSettings');
-   ensure(body&&typeof body==='object'&&!Array.isArray(body)&&Object.keys(body).length===(hasSettings?4:3)&&['source','selection','childProposalId'].every(k=>Object.hasOwn(body,k))&&typeof body.childProposalId==='string'&&PROPOSAL.test(body.childProposalId),'Malformed preparation request');
+   const body=await readJSON(request,65536,controller.signal),hasSettings=!!body&&Object.hasOwn(body,'parentSettings'),openings=!!body&&Object.hasOwn(body,'includeDerivedOpeningEvidence');
+   ensure(body&&typeof body==='object'&&!Array.isArray(body)&&Object.keys(body).length===3+(hasSettings?1:0)+(openings?1:0)&&(!openings||body.includeDerivedOpeningEvidence===true)&&['source','selection','childProposalId'].every(k=>Object.hasOwn(body,k))&&typeof body.childProposalId==='string'&&PROPOSAL.test(body.childProposalId),'Malformed preparation request');
    const choice=Question.selection(body.selection);ensure(choice.parameter==='evaluation'||choice.step<8,'Malformed preparation request');bodyChecked=true;
    const clientIP=request.headers.get('CF-Connecting-IP')||'unknown';
    if(!(await rate.limit({key:clientIP}))?.success)return reply({error:'Please wait before trying again.'},429);

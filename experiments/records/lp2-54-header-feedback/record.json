@@ -42,8 +42,8 @@
   "limitations": "The source proposes many unspecified functions and possible words; this bounded run implements only the two explicit one-step recurrences. It has no language score or calibrated null, and does not test whether another layer turns the output into text. Human review pending.",
   "next_steps": "Pin one additional recurrence, dictionary and rune conversion before searching; count all tried candidates, test known solved text under the same pipeline and score untouched continuation against matched controls.",
   "reproduction": {
-    "command": "python experiments/records/lp2-54-header-feedback/run.py --check && python experiments/records/lp2-54-header-feedback/check.py && python experiments/records/lp2-54-header-feedback/plot.py --check",
-    "environment": "Python 3.12 standard library; no network or API. Run from the repository or extracted bundle root.",
+    "command": "python experiments/records/lp2-54-header-feedback/run.py --check && python experiments/records/lp2-54-header-feedback/check.py --check && python experiments/records/lp2-54-header-feedback/plot.py --check && node scripts/retained_program_collection.mjs --check experiments/records/lp2-54-header-feedback/retained-feedback-programs.json",
+    "environment": "Python 3.12 and Node.js 24 standard libraries; no network or API. Run from the repository or extracted bundle root.",
     "script": "experiments/records/lp2-54-header-feedback/run.py",
     "script_sha256": "7cb6a8a8621b45cdcdadc889494db3db2421ca55a9621f86aac0fa35b7b4e462",
     "inputs": [
@@ -62,6 +62,42 @@
       {
         "path": "text/lp2-54.txt",
         "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/saved-feedback-programs.json",
+        "sha256": "5e6b74d601196a6378306f03511d27f863b4f49f902fab64ecbcd624ac958849"
+      },
+      {
+        "path": "scripts/retain_saved_programs.mjs",
+        "sha256": "d93777ffe4aa5e4e91d382792713e386bc8b3fe318dab67053325de00e928ea1"
+      },
+      {
+        "path": "scripts/retained_program_collection.mjs",
+        "sha256": "c5860575c883492c4a1f37d1c61db1b32921c71d6b5b66e55e982cecb49e571a"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
       }
     ],
     "outputs": [
@@ -72,6 +108,10 @@
       {
         "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
         "sha256": "dc177d93febe77837c8e4a7aa5b10ffe31ae9af90584620ffdec2e9a07c1efd3"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/retained-feedback-programs.json",
+        "sha256": "08f59f3e426ef9a34af170dea7d87ffa2977c44d8909421c800654ce23822448"
       }
     ]
   },
@@ -99,6 +139,12 @@
     {
       "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
       "caption": "The six A/I/O outputs under fixed ciphertext and plaintext feedback. The vertical rule separates the one-rune and eight-rune header words."
+    }
+  ],
+  "published_program_collections": [
+    {
+      "output": "experiments/records/lp2-54-header-feedback/retained-feedback-programs.json",
+      "checked_at": "2026-10-27T05:41:58.000Z"
     }
   ]
 }

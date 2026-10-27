@@ -1,3 +1,4 @@
+import {discoverOrdinaryOpeningEvidence} from './ordinary-opening-evidence.mjs';
 /* Read-only prior-work lookup for one exact reviewed variation. No admission. */
 import E from '../../local-experiment.js';
 import J from '../../finite-json.js';
@@ -24,7 +25,7 @@ export function createParameterQuestionCoverageHandler({crypto=globalThis.crypto
   const db=env?.PROPOSALS,rates=[env?.TASK_LIMIT||env?.PROPOSAL_LIMIT].filter(Boolean);if(!db?.prepare||!rates.length||rates.some(r=>typeof r.limit!=='function'))return unavailable();
   const controller=new AbortController(),stop=()=>controller.abort();request.signal.addEventListener('abort',stop,{once:true});if(request.signal.aborted)stop();let rejectAbort;const aborted=new Promise((_,reject)=>{rejectAbort=()=>reject(Error('Cancelled'));controller.signal.addEventListener('abort',rejectAbort,{once:true});}),timer=setTimeout(stop,timeoutMs),live=()=>ensure(!controller.signal.aborted,'Cancelled');
   const work=async()=>{
-   let body;try{body=await readBody(request,controller.signal);ensure(exact(body,['source','selection',...(Object.hasOwn(body||{},'parentSettings')?['parentSettings']:[]),'expectedPreviewHash'])&&typeof body.expectedPreviewHash==='string'&&HEX.test(body.expectedPreviewHash),'Body fields');}catch{live();return reply({error:'The reviewed variation could not be read.'},400);}
+   let body;try{body=await readBody(request,controller.signal);ensure(exact(body,['source','selection',...(Object.hasOwn(body||{},'parentSettings')?['parentSettings']:[]),...(Object.hasOwn(body||{},'includeDerivedOpeningEvidence')?['includeDerivedOpeningEvidence']:[]),'expectedPreviewHash'])&&(!Object.hasOwn(body,'includeDerivedOpeningEvidence')||body.includeDerivedOpeningEvidence===true)&&typeof body.expectedPreviewHash==='string'&&HEX.test(body.expectedPreviewHash),'Body fields');}catch{live();return reply({error:'The reviewed variation could not be read.'},400);}
    for(const rate of rates){if(!(await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'}))?.success)return reply({error:'Please wait before trying again.'},429);live();}
    let preview;try{preview=await resolveParameterQuestion({source:body.source,selection:body.selection,...(Object.hasOwn(body,'parentSettings')?{parentSettings:body.parentSettings}:{})},{db,crypto,fetcher,registry,history,programIndex,signal:controller.signal});}catch{live();return review();}live();const previewHash=await sha(preview,crypto);live();if(previewHash!==body.expectedPreviewHash)return review();
    const task=preview.derivation.task,inputVersion=preview.derivation.parent.inputVersion,found=J.capture(await discoverEvidence({db,task,inputVersion,crypto,fetcher,signal:controller.signal}),{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000});live();
@@ -49,7 +50,7 @@ export function createParameterQuestionCoverageHandler({crypto=globalThis.crypto
     else{const local=await db.prepare(`SELECT t.id FROM local_tasks t JOIN local_task_results r ON r.task_id=t.id WHERE t.id=? AND t.input_version=? AND r.id=? AND r.created_at=? AND EXISTS(SELECT 1 FROM local_task_ideas links JOIN research_ideas i ON i.proposal_id=links.proposal_id WHERE links.task_id=t.id AND links.input_version=?)`).bind(ref.taskId,inputVersion,ref.resultId,ref.createdAt,inputVersion).first();live();ensure(local?.id===ref.taskId,'Missing local source association');source={kind:'saved-task'};}
     evidence.push({taskId:ref.taskId,resultId:ref.resultId,createdAt:ref.createdAt,pages:ref.pages,source});
    }
-   live();return reply({schema:'liberpedia-parameter-question-coverage-v1',previewHash,taskId:task.taskId,inputVersion,coveredPages:covered,remainingPages:remaining,lookupComplete:!found.truncated,finding,evidence});
+   const derivedOpenings=body.includeDerivedOpeningEvidence===true&&['exact-prefix','exact-prefix-set'].includes(task.criterion.kind)&&remaining.length?(await discoverOrdinaryOpeningEvidence({db,task,inputVersion,crypto,fetcher,signal:controller.signal,registry,history,programIndex})).wire:null;live();return reply({schema:'liberpedia-parameter-question-coverage-v1',previewHash,taskId:task.taskId,inputVersion,coveredPages:covered,remainingPages:remaining,lookupComplete:!found.truncated,finding,evidence,...(derivedOpenings?{derivedOpenings}:{})});
   };
   try{return await Promise.race([work(),aborted]);}catch{return unavailable();}finally{clearTimeout(timer);request.signal.removeEventListener('abort',stop);controller.signal.removeEventListener('abort',rejectAbort);}
  };
