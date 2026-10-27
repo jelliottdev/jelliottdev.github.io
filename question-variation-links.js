@@ -2,6 +2,7 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON,C=node?require('./claim-specification.js'):root.ClaimSpecification,H=node?require('./claim-share.js'):root.ClaimShare,F=node?require('./fixed-plan-compiler.js'):root.FixedPlanCompiler,S=node?require('./finite-settings.js'):root.FiniteSettings,V=node?require('./task-parameter-variants.js'):root.TaskParameterVariants,Reviewed=node?require('./reviewed-program.js'):root.ReviewedProgram;
+ const evaluationModels=new WeakMap();
  const SCHEMA='liberpedia-question-derivation-v1',MAPPED_SCHEMA='liberpedia-question-derivation-v2',QUESTION_SCHEMA='liberpedia-question-derivation-v3',EVALUATION_SCHEMA='liberpedia-question-derivation-v4',HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/,SLUG=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
  const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k)),same=(a,b)=>E.stable(a)===E.stable(b),ensure=(v,m)=>{if(!v)throw Error(m);},freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;},capture=v=>J.capture(v,{maxBytes:131072,maxDepth:24,maxNodes:20000}),iso=v=>typeof v==='string'&&Number.isFinite(Date.parse(v))&&new Date(v).toISOString()===v;
  async function hash(v,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
@@ -43,6 +44,9 @@
   else {label='Restart '+(step.op==='cumulative-difference'?'the running total':step.op==='finite-shift'?'the number sequence':'the key')+' at each '+to;description='Step '+number+': restart at each '+from+' → each '+to+'. The other calculation steps stay the same.';}
   return {label,description};
  }
+ function evaluationOrigin(model,{childProposalId,childCard}={}){
+  try{const value=evaluationModels.get(model);if(!value||model.direction!=='parents'||childProposalId!==value.childProposalId)return null;const captured=capture(childCard);if(!same(captured,value.childCard))return null;return value.fact;}catch{return null;}
+ }
  async function validate(entry,{ideaId,direction,crypto=root.crypto}={}){
   ensure(typeof ideaId==='string'&&IDEA.test(ideaId)&&['parents','children'].includes(direction)&&crypto?.subtle,'Choose an exact question and relationship direction.');
   const value=capture(entry),unchanged=()=>ensure(same(capture(entry),value),'The retained variation changed during validation.');
@@ -67,7 +71,9 @@
    text=selection.value==='language-samples'?{label:'Compare the output with language samples',description:'Keep the same calculation and pages; compare rune patterns with eight fixed language samples. Similarity does not establish a decryption.'}:{label:'Check for the decoded Warning opening',description:'Keep the same calculation and pages; compare the first 12 runes with the decoded Warning opening. This checks page starts only.'};
   }else {ensure(same(V.changedSteps(before.steps,selection),after.steps),'The variation changed more than the selected step parameter.');text=wording(before.steps[selection.step],selection);}
   const proposalId=direction==='parents'?o.parentProposalId:o.childProposalId;unchanged();
-  return freeze({id:value.id,createdAt:value.createdAt,direction,proposalId,href:'run.html#idea='+proposalId,...text,sourceHref});
+  const model=freeze({id:value.id,createdAt:value.createdAt,direction,proposalId,href:'run.html#idea='+proposalId,...text,sourceHref});
+  if(evaluation)evaluationModels.set(model,{childProposalId:o.childProposalId,childCard:child,fact:freeze({kind:'inherited-evaluation-aim',parentProposalId:o.parentProposalId,childProposalId:o.childProposalId,selection:{...selection}})});
+  return model;
  }
- const api={SCHEMA,MAPPED_SCHEMA,QUESTION_SCHEMA,EVALUATION_SCHEMA,validate};if(node)module.exports=api;else root.QuestionVariationLinks=api;
+ const api={SCHEMA,MAPPED_SCHEMA,QUESTION_SCHEMA,EVALUATION_SCHEMA,validate,evaluationOrigin};if(node)module.exports=api;else root.QuestionVariationLinks=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

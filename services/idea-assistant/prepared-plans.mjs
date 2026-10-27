@@ -1,4 +1,4 @@
-import {checkedOrdinaryOpeningEvidence,discoverOrdinaryOpeningEvidence,combineOrdinaryOpeningCoverage,strictOpeningMatchingPages} from './ordinary-opening-evidence.mjs';
+import {checkedOrdinaryOpeningEvidence,discoverOrdinaryOpeningEvidence,checkedOrdinaryOutputAssessment,discoverOrdinaryOutputAssessment,combineOrdinaryOpeningCoverage,strictOpeningMatchingPages} from './ordinary-opening-evidence.mjs';
 import {inspectPinnedQuestionRequestContext,assertPinnedQuestionContextDependencies} from './pinned-question-request-context.mjs';
 import {assertPinnedQuestionTaskUncovered} from './factored-selected-evidence.mjs';
 import {checkedPinnedQuestionMember} from './pinned-question-admission.mjs';
@@ -65,7 +65,7 @@ async function proposal(db,bound){
  if(!row)return false;
  try{return row.card_hash===bound.base.cardHash&&C.serialize(validateCard(row.card_json))===C.serialize(bound.card);}catch{return false;}
 }
-async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext){
+async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext,signal){
  const data=json(value,128000),basis=data.value;
  const contextDeps=pinnedQuestionContext===undefined?null:assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});
  if(contextDeps)require(authority==='idea'&&basis.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only admits its original pinned question.');
@@ -110,12 +110,22 @@ async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.
    require(described.pages.length===1&&described.pages[0].caseId===basis.caseId,'Finite settings case differs from the exact prepared page and program');
    return {text:data.text,hash:await sha(data.text)};
   }
-  const original=['evidence-remainder','ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1'].includes(basis.kind)?basis.originalBasis:basis;
+  const original=['evidence-remainder','ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1','ordinary-derived-assessment-remainder-v1'].includes(basis.kind)?basis.originalBasis:basis;
   require(exact(original,['kind','normalizedCard',...(original?.kind==='mapped-card'?['mapping']:[])])
    &&['compiled-card','mapped-card'].includes(original.kind),'Invalid idea preparation basis');
   const normalized=validateCard(original.normalizedCard);
   if(original.kind==='compiled-card')require(C.serialize(normalized)===C.serialize(bound.card),'Compiled basis changed the original card');
   else require(original.mapping&&typeof original.mapping==='object'&&!Array.isArray(original.mapping),'Mapped basis requires reviewed mapping evidence');
+  if(basis.kind==='ordinary-derived-assessment-remainder-v1'){
+   require(exact(basis,['kind','originalBasis','requestedTaskId','strictEvidence','derivedEvidence'])&&HEX.test(basis.requestedTaskId)&&original.kind==='compiled-card'&&bound.base.parentTaskId===null&&Array.isArray(basis.strictEvidence)&&Array.isArray(basis.derivedEvidence)&&basis.strictEvidence.length<=75&&basis.derivedEvidence.length<=75&&new Set([...basis.strictEvidence.map(r=>E.stable([r?.taskId,r?.resultId,r?.createdAt])),...basis.derivedEvidence.map(r=>E.stable([r?.origin?.taskId,r?.origin?.resultId,r?.origin?.createdAt]))]).size<=75,'Invalid derived-assessment remainder basis');
+   const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
+   require(row&&row.input_version===bound.base.inputVersion,'Derived assessment request is not associated with this idea');const requested=JSON.parse(row.requested_task_json);await E.checkIdentity(requested);
+   require(requested.taskId===basis.requestedTaskId&&await sha(E.stable(requested))===row.requested_task_hash,'Derived assessment request changed');
+   const plan=Compiler.compile(normalized);require(!plan.reason&&requested.criterion.kind==='language-score'&&plan.inputVersion===row.input_version&&E.stable(plan.pages)===E.stable(requested.pages.map(p=>p.id))&&E.stable(plan.steps)===E.stable(requested.steps)&&E.stable(plan.criterion)===E.stable(requested.criterion),'Derived assessment differs from the original question');
+   const strict=await checkedEvidence({db,task:requested,inputVersion:row.input_version,evidence:basis.strictEvidence,fetcher,signal}),derived=await checkedOrdinaryOutputAssessment({db,task:requested,inputVersion:row.input_version,evidence:basis.derivedEvidence,fetcher,signal}),covered=new Set([...strict.coveredPages,...derived.coveredPages]),remainingPages=requested.pages.filter(p=>!covered.has(p.id)).map(p=>p.id);
+   require(remainingPages.length>0,'An assessment remainder needs unassessed pages');const full=await Evidence.describe(requested,row.input_version),remaining=await Evidence.describe(bound.task,row.input_version);require(full.protocolId===remaining.protocolId&&E.stable(bound.task.pages)===E.stable(requested.pages.filter(p=>remainingPages.includes(p.id))),'Assessment remainder changed its exact pages or criterion');
+   if(fresh){const currentStrict=await findEvidence({db,task:requested,inputVersion:row.input_version,fetcher,signal}),currentDerived=await discoverOrdinaryOutputAssessment({db,task:requested,inputVersion:row.input_version,fetcher,signal}),currentCovered=new Set([...currentStrict.coveredPages,...currentDerived.wire.summary.coveredPages]),currentRemaining=requested.pages.filter(p=>!currentCovered.has(p.id)).map(p=>p.id);require(!(currentStrict.truncated||!currentDerived.wire.lookupComplete)&&E.stable(currentRemaining)===E.stable(remainingPages),'Saved original output changed; review the unassessed pages again');}
+  }
   if(basis.kind==='ordinary-derived-openings-remainder-v1'){
    require(exact(basis,['kind','originalBasis','requestedTaskId','strictEvidence','derivedEvidence'])&&HEX.test(basis.requestedTaskId)&&original.kind==='compiled-card'&&bound.base.parentTaskId===null&&Array.isArray(basis.strictEvidence)&&Array.isArray(basis.derivedEvidence)&&basis.strictEvidence.length<=75&&basis.derivedEvidence.length<=75&&new Set([...basis.strictEvidence.map(r=>E.stable([r?.taskId,r?.resultId,r?.createdAt])),...basis.derivedEvidence.map(r=>E.stable([r?.origin?.taskId,r?.origin?.resultId,r?.origin?.createdAt]))]).size<=75,'Invalid derived-opening remainder basis');
    const row=await query(db,'SELECT requested_task_json,requested_task_hash,input_version FROM idea_computation_evidence WHERE proposal_id=? AND requested_task_id=?',bound.base.proposalId,basis.requestedTaskId);
@@ -208,15 +218,15 @@ async function checked(row,bound){
  }catch{return null;}
  return p;
 }
-export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext}){
- const liveContext=()=>{if(pinnedQuestionContext!==undefined){inspectPinnedQuestionRequestContext(pinnedQuestionContext);assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});require(authority==='idea'&&basis?.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only admits its original pinned question.');}};liveContext();
+export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,controls,authority,basis,createdAt=new Date().toISOString(),storageLimits,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext,signal}){
+ const liveContext=()=>{require(!signal?.aborted,'Preparation cancelled');if(pinnedQuestionContext!==undefined){inspectPinnedQuestionRequestContext(pinnedQuestionContext);assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});require(authority==='idea'&&basis?.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only admits its original pinned question.');}};liveContext();
  const limits=checkedStorageLimits(storageLimits);
  const bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});
  require(await proposal(db,bound),'Confirmed proposal is unavailable or changed');
  if(parentTaskId!==null)require(await query(db,'SELECT t.id FROM local_tasks t JOIN local_task_ideas links ON links.task_id=t.id WHERE t.id=? AND links.proposal_id=?',parentTaskId,proposalId),
   'Prepared parent is not associated with this idea');
  require(['idea','remaining-lp2','word-boundaries'].includes(authority),'Invalid prepared authority');
- const source=await basisFor(db,basis,bound,authority,false,fetcher,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
+ const source=await basisFor(db,basis,bound,authority,false,fetcher,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext,signal),id='prep_'+await sha(E.stable(identity(bound.base,authority,source.hash)));
  let row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
  if(row){const receipt=await checked(row,bound);require(receipt,'Stored preparation differs from its binding');liveContext();return receipt;}
  require(typeof createdAt==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(createdAt)
@@ -230,8 +240,9 @@ export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,c
  if(!row){const error=Error('The daily prepared-plan limit has been reached');error.code='preparation-limit';throw error;}
  const receipt=await checked(row,bound);require(receipt,'Prepared plan could not be verified');liveContext();return receipt;
 }
-export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext}){
+export async function authorize({db,preparationId,proposalId,card,task,inputVersion,parentTaskId,controls,fetcher=globalThis.fetch,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext,signal}){
  let bound;
+ if(signal?.aborted)return null;
  try{if(preparationId!==undefined)require(typeof preparationId==='string'&&PREP.test(preparationId),'Invalid preparation ID');
   bound=await binding({proposalId,card,task,inputVersion,parentTaskId,controls});}catch{return null;}
  if(!await proposal(db,bound))return null;
@@ -239,6 +250,6 @@ export async function authorize({db,preparationId,proposalId,card,task,inputVers
   await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
   await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
  const receipt=await checked(row,bound);if(!receipt)return null;
- try{const basis=JSON.parse(row.basis_json);if(pinnedQuestionContext!==undefined){assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});require(row.authority==='idea'&&basis.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only authorizes its original pinned question.');}if(['pinned-domain-member-v1','pinned-question-member-v1'].includes(basis.kind)){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext);if(pinnedQuestionContext!==undefined)inspectPinnedQuestionRequestContext(pinnedQuestionContext);return receipt;}if(basis.kind==='authored-finite-member-v1'){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource);return {...receipt,reviewed:await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion,fetcher,loadAuthoredSource})};}if(['ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
- return receipt;
+ try{const basis=JSON.parse(row.basis_json);if(pinnedQuestionContext!==undefined){assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});require(row.authority==='idea'&&basis.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only authorizes its original pinned question.');}if(['pinned-domain-member-v1','pinned-question-member-v1'].includes(basis.kind)){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext);if(pinnedQuestionContext!==undefined)inspectPinnedQuestionRequestContext(pinnedQuestionContext);return receipt;}if(basis.kind==='authored-finite-member-v1'){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource);return {...receipt,reviewed:await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion,fetcher,loadAuthoredSource})};}if(['ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1','ordinary-derived-assessment-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher,undefined,undefined,undefined,undefined,signal);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
+ if(signal?.aborted)return null;return receipt;
 }

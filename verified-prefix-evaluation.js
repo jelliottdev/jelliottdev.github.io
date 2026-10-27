@@ -16,7 +16,7 @@
   const targetDescription=await Relations.describe(task,inputVersion,cryptoAPI),targetCases=new Map(targetDescription.pages.map(p=>[p.id,p.caseId])),targetPages=new Map(task.pages.map(p=>[p.id,p.text])),program=E.stable({engine:task.engine,alphabet:task.alphabet,steps:task.steps}),runes=new Map(task.alphabet.map((r,i)=>[r.rune,i])),claims=new Map(),verifiedSources=new Map(),replayed=new Map();
   for(const source of sources){
    if(!exact(source,['task','inputVersion','run'])||!['raw','reviewed'].includes(source.inputVersion)||!exact(source.run,['id','createdAt','result'])||!HEX.test(source.run.id)||typeof source.run.createdAt!=='string'||!Number.isFinite(Date.parse(source.run.createdAt)))throw Error('Use a complete original computation receipt.');
-   if(!(openings?['measurement','exact-prefix','exact-prefix-set']:['measurement','exact-prefix']).includes(source.task?.criterion?.kind))throw Error('Only measurement and exact-prefix source evaluations are supported in this derivation.');
+   if(!(openings?['measurement','exact-prefix','exact-prefix-set','language-score']:['measurement','exact-prefix']).includes(source.task?.criterion?.kind))throw Error('Only measurement and exact-prefix source evaluations are supported in this derivation.');
    await E.checkIdentity(source.task,cryptoAPI);
    const key=sourceKey(source),prior=verifiedSources.get(key),replayKey=E.stable([source.task.taskId,source.run.id]),taskBytes=E.stable(source.task),resultBytes=E.stable(source.run.result),cached=replayed.get(replayKey);
    if(cached&&(cached.taskBytes!==taskBytes||cached.resultBytes!==resultBytes))throw Error('Conflicting bytes for the same original computation identity.');

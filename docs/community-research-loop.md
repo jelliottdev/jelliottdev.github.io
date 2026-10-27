@@ -697,6 +697,38 @@ never executes the manuscript calculation. Archive origins can link back to
 the exact pinned source output. Missing or malformed relationships cannot be
 replaced with inferred links based on titles or categories.
 
+## Reuse output without inheriting a verdict
+
+A research aim, a transformation and a check are different things. Matching a
+literal opening answers that opening check; it does not establish a decipherment.
+An evaluation variation retains the original aim for provenance. Only validated
+evaluation lineage lets the interface label it "Original question's aim"; the
+current check remains visible and the canonical card is unchanged.
+
+`verified-output-assessment.js` separates verified output from the criterion that
+originally assessed it. A language comparison can reuse compatible saved output
+from measurement, opening, opening-set or language checks. It independently
+verifies the original receipt and input edition, then applies the pinned language
+models. It returns a descriptive assessment, never a new transformation receipt
+or a replacement historical finding. Short outputs are insufficient, not failed
+language tests. Similarity does not identify a language or a readable passage.
+
+The same proof-backed result component serves retained-output review and ordinary
+question pages. A complete assessment offers no duplicate task. Partial coverage
+retains the visible result and admits only the explicitly reviewed missing pages.
+Admission rechecks sources and coverage; incomplete discovery cannot authorize
+remaining work. Original opening-check lookup guards remain separate.
+
+Regression fixtures exercise archived output through preview, coverage and
+preparation, asserting no new target execution or database writes on read-only
+paths. They also test changed criteria, forged lineage, short text, cancellation,
+stale coverage and preservation of an already saved finding. This prevents fixing
+one page while leaving the same misunderstanding in another entry point.
+
+Saving a newly computed descriptive comparison as its own public question/link
+still needs a deliberate persistence flow. Rendering one does not imply that it
+has been published.
+
 ## Keep ordinary written questions expandable
 
 Historical intake cards can contain a defaulted page scope, a prose method and

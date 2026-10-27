@@ -13,7 +13,7 @@ const hash=async(v,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest(
 async function findSources(options,openings){
  const keys=['db','task','inputVersion',...(options&&Object.hasOwn(options,'crypto')?['crypto']:[])];if(!exact(options,keys))throw Error('Prefix source lookup needs explicit database, task and input version.');
  const {db,crypto:cryptoAPI=globalThis.crypto}=options,input=Json.capture({task:options.task,inputVersion:options.inputVersion},{maxBytes:2*1024*1024,maxDepth:20,maxNodes:100000}),{task,inputVersion}=input;
- if(!db?.prepare||!['raw','reviewed'].includes(inputVersion))throw Error('Public prefix source lookup is unavailable.');await E.checkIdentity(task,cryptoAPI);if(!(openings?['exact-prefix','exact-prefix-set']:['exact-prefix']).includes(task.criterion.kind))throw Error('The target must request an exact prefix.');
+ if(!db?.prepare||!['raw','reviewed'].includes(inputVersion))throw Error('Public prefix source lookup is unavailable.');await E.checkIdentity(task,cryptoAPI);if(!(openings==='assessment'?['language-score']:openings?['exact-prefix','exact-prefix-set']:['exact-prefix']).includes(task.criterion.kind))throw Error('The target must request an exact prefix.');
  const scope=E.stable(task.pages),alphabet=E.stable(task.alphabet),steps=E.stable(task.steps),wanted=new Map(task.pages.map(p=>[p.id,p.text]));
  const raw=await db.prepare(`SELECT t.id AS task_id,t.task_hash,r.id AS result_id,r.created_at,
   json_array_length(t.task_json,'$.pages') AS source_page_count,
@@ -24,7 +24,7 @@ async function findSources(options,openings){
      AND json_extract(saved.value,'$.text')=json_extract(requested.value,'$.text'))) AS matching_pages
  FROM local_tasks t JOIN local_task_results r ON r.id=(SELECT latest.id FROM local_task_results latest WHERE latest.task_id=t.id ORDER BY latest.created_at DESC,latest.id DESC LIMIT 1)
  WHERE t.input_version=? AND json_extract(t.task_json,'$.engine')=? AND json_extract(t.task_json,'$.alphabet')=? AND json_extract(t.task_json,'$.steps')=?
-  AND json_extract(t.task_json,'$.criterion.kind') IN (${openings?"'measurement','exact-prefix','exact-prefix-set'":"'measurement','exact-prefix'"})
+  AND json_extract(t.task_json,'$.criterion.kind') IN (${openings?"'measurement','exact-prefix','exact-prefix-set','language-score'":"'measurement','exact-prefix'"})
   AND EXISTS(SELECT 1 FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id WHERE links.task_id=t.id AND links.input_version=?)
   AND EXISTS(SELECT 1 FROM json_each(?) requested JOIN json_each(t.task_json,'$.pages') saved
    ON json_extract(saved.value,'$.id')=json_extract(requested.value,'$.id') AND json_extract(saved.value,'$.text')=json_extract(requested.value,'$.text'))
@@ -48,13 +48,16 @@ async function findSources(options,openings){
   const loaded=Json.capture(fetched?.results,{maxBytes:LIMITS.bytes,maxDepth:6,maxNodes:1000});if(!Array.isArray(loaded)||loaded.length!==selected.length)throw Error('A selected public prefix receipt is unavailable.');const byId=new Map();
   for(const row of loaded){const pin=selected.find(p=>p.task_id===row.task_id);if(!exact(row,['task_id','task_hash','task_json','input_version','result_id','result_json','created_at'])||!pin||byId.has(row.task_id)||row.task_hash!==pin.task_hash||row.result_id!==pin.result_id||row.created_at!==pin.created_at||row.input_version!==inputVersion||typeof row.task_json!=='string'||typeof row.result_json!=='string')throw Error('A pinned prefix source changed.');
    const saved=JSON.parse(row.task_json),result=JSON.parse(row.result_json);if(saved.taskId!==row.task_id||await hash(saved,cryptoAPI)!==row.task_hash)throw Error('An original prefix source task changed.');
-   await E.checkIdentity(saved,cryptoAPI);if(saved.engine!==task.engine||E.stable(saved.alphabet)!==alphabet||E.stable(saved.steps)!==steps||!(openings?['measurement','exact-prefix','exact-prefix-set']:['measurement','exact-prefix']).includes(saved.criterion.kind))throw Error('An original source changed its transformation.');
+   await E.checkIdentity(saved,cryptoAPI);if(saved.engine!==task.engine||E.stable(saved.alphabet)!==alphabet||E.stable(saved.steps)!==steps||!(openings?['measurement','exact-prefix','exact-prefix-set','language-score']:['measurement','exact-prefix']).includes(saved.criterion.kind))throw Error('An original source changed its transformation.');
    const intersection=task.pages.filter(requested=>saved.pages.some(p=>p.id===requested.id&&p.text===requested.text)).map(p=>p.id);if(E.stable(intersection)!==E.stable(pin.pages))throw Error('An original source changed its exact page intersection.');
    const source={task:saved,inputVersion,run:{id:row.result_id,createdAt:row.created_at,result}};
    // Validates original envelopes, geometry, criterion consistency and complete
    // hashes only. The client must replay via VerifiedPrefixEvaluation before
    // deriving any requested-prefix evidence or answer.
-   await Relations.compare(saved,inputVersion,[source],cryptoAPI);const size=new TextEncoder().encode(E.stable(source)).length;if(bytes+size>LIMITS.bytes-65536)throw Error('The selected prefix sources exceed the planned byte budget.');bytes+=size;byId.set(row.task_id,source);
+   // The assessment caller preflights the aggregate replay work and fully
+   // E.verify/hash-checks every returned original before exposing any wire.
+   // Avoid scoring original language receipts here before that aggregate gate.
+   if(openings!=='assessment')await Relations.compare(saved,inputVersion,[source],cryptoAPI);const size=new TextEncoder().encode(E.stable(source)).length;if(bytes+size>LIMITS.bytes-65536)throw Error('The selected prefix sources exceed the planned byte budget.');bytes+=size;byId.set(row.task_id,source);
   }
   for(const pin of selected){sources.push(byId.get(pin.task_id));sourceLocations.push({taskId:pin.task_id,href:'run.html#task='+pin.task_id,label:'Original computation'});}
  }
@@ -63,3 +66,5 @@ async function findSources(options,openings){
 
 export const findPrefixEvaluationSources=options=>findSources(options,false);
 export const findOpeningEvaluationSources=options=>findSources(options,true);
+
+export const findOutputAssessmentSources=options=>findSources(options,'assessment');
