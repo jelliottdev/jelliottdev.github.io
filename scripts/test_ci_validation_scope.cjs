@@ -90,9 +90,11 @@ test('operational documentation stays lightweight unless it is a declared resear
  }
  const workflow=fs.readFileSync(path.join(__dirname,'../.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');
  assert(!/^concurrency:/m.test(workflow),'A branch-wide cancellation must not erase required scientific replay');
- const lane=workflow.split('  validate:\n')[1].split('    steps:\n')[0];
+ const lane=workflow.split('  science:\n')[1].split('    steps:\n')[0];
  assert(lane.includes('needs: scope'));
- assert(lane.includes("needs.scope.outputs.science == 'true' && github.sha || github.ref"),'Science runs retain their commit while lightweight work can replace an older lightweight run');
+ assert(lane.includes('github.sha')&&lane.includes('cancel-in-progress: false'),'Science runs retain their commit even after a later push');
+ const node=workflow.split('  node:\n')[1].split('    steps:\n')[0];
+ assert(node.includes('needs: scope')&&node.includes('github.event.pull_request.number || github.ref')&&node.includes('cancel-in-progress: true'),'Only superseded Node test jobs are replaceable');
 });
 
 test('current reviewed allowlist does not silently include arbitrary future filenames',()=>{assert(!UI_PATHS.has('new-ui.js'));assert(!UI_PATHS.has('scripts/test_new_science.cjs'));assert(!UI_PATHS.has('.github/workflows/validate-experiments.yml'));});
@@ -102,11 +104,14 @@ test('actual checked-in registry/catalog allow app-only changes and workflow ret
  assert.equal(classifyChanges([entry('app.js')],r,c).science,false);assert.equal(classifyChanges([entry('home.js'),entry('scripts/test_home_preview.cjs')],r,c).science,false);
  const workflow=fs.readFileSync(path.join(root,'.github/workflows/validate-experiments.yml'),'utf8').replace(/\r\n/g,'\n');assert(workflow.includes('  workflow_dispatch:\n'));assert(workflow.includes('  validate:\n'));
  assert(workflow.includes('python scripts/check_experiment_authoring.py --github-event --fetch-base'),'Authoring policy must check the full push/PR, including a shallow baseline fetch');
- const blocks=workflow.split('  validate:\n')[1].split('    steps:\n')[1].split(/(?=^      - )/m).filter(s=>s.startsWith('      - '));
+ const science=workflow.split('  science:\n')[1].split('  validate:\n')[0],node=workflow.split('  node:\n')[1].split('  science:\n')[0];
+ const blocks=science.split('    steps:\n')[1].split(/(?=^      - )/m).filter(s=>s.startsWith('      - '));
  for(const b of blocks)assert((b.match(/^        if:/gm)||[]).length<=1,'Duplicate workflow condition makes YAML invalid: '+b.split('\n')[0]);
  const python=blocks.findIndex(s=>s.includes('actions/setup-python@'));assert(python>0);assert(!blocks[python].includes('        if:'),'The one Python setup is shared by retention and science checks');
- const archiveTests=blocks.findIndex(b=>b.startsWith('      - name: Test immutable authored source retention\n')),archiveGate=blocks.findIndex(b=>b.startsWith('      - name: Check current and retained authored source revisions\n')),nodeChecks=blocks.findIndex(b=>b.includes('run: node scripts/run_node_checks.cjs'));
- assert(archiveTests>python&&archiveGate>archiveTests&&nodeChecks>archiveGate,'Fast immutable-source checks precede the full Node suite');
+ const archiveTests=blocks.findIndex(b=>b.startsWith('      - name: Test immutable authored source retention\n')),archiveGate=blocks.findIndex(b=>b.startsWith('      - name: Check current and retained authored source revisions\n'));
+ assert(archiveTests>python&&archiveGate>archiveTests,'Immutable-source checks still precede scientific replay');
+ assert(!science.includes('run: node scripts/run_node_checks.cjs'),'Node checks do not delay the parallel science lane');
+ assert(node.includes('run: node scripts/run_node_checks.cjs')&&!node.includes('        if:'),'All Node checks remain unconditional');
  for(const index of [archiveTests,archiveGate])assert(!blocks[index].includes('        if:'),'Immutable-source retention is unconditional');
  assert(blocks[archiveTests].includes('python -m unittest discover -s scripts -p test_archive_authored_sources.py'));assert(blocks[archiveGate].includes('--baseline-manifest "$baseline"'));assert(!blocks[archiveGate].includes('--write'));
  for(const [i,b]of blocks.entries()){if(/run: node\b/.test(b))assert(!b.includes('        if:'),'The reviewed Node checks remain unconditional');if(i!==archiveTests&&(/run: python\b|git diff --exit-code/.test(b)))assert(b.includes("if: steps.scope.outputs.science == 'true'"),'Science gate removed: '+b.split('\n')[0]);}

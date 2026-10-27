@@ -25,13 +25,15 @@
  }
 
  function evaluationSelection(value){ensure(exact(value,['parameter','value'])&&value.parameter==='evaluation'&&['language-samples','warning-opening'].includes(value.value),'Choose a maintained output check.');return value;}
- function change(steps,selection){
-  const s=steps[selection.step],p=selection.parameter;ensure(s&&(p==='mode'?s.op==='keyed-shift':p==='unit'?s.op==='reverse':p==='direction'?['keyed-shift','interrupted-keyed-shift','finite-shift'].includes(s.op):['keyed-shift','interrupted-keyed-shift','finite-shift','cumulative-difference'].includes(s.op)),'The selected operation does not support that change.');ensure(s[p]!==selection.value,'The variation must change its selected parameter.');
-  const copy=JSON.parse(E.stable(steps));copy[selection.step][p]=selection.value;return copy;
- }
  function wording(step,selection){
   const p=selection.parameter,to=selection.value,from=step[p],number=selection.step+1;let label,description;
-  if(p==='mode'){
+  if(p==='phase'){
+   label='Start the repeating key at position '+(to+1);
+   description='Step '+number+': start at key position 1 → position '+(to+1)+', then wrap around. The same key values, restart boundaries and other steps stay unchanged.';
+  }else if(p==='a'||p==='b'){
+   label=p==='a'?'Multiply rune values by '+to:'Add '+to+' after multiplying';
+   description='Step '+number+': '+(p==='a'?'multiplier':'added number')+' '+from+' → '+to+'. The other number and calculation steps stay unchanged.';
+  }else if(p==='mode'){
    const names={repeat:'repeat the starting key','plaintext-autokey':'use decoded runes for later key numbers','ciphertext-autokey':'use input runes for later key numbers'};
    label=to==='repeat'?'Repeat the starting key':to==='plaintext-autokey'?'Continue the key with decoded runes':'Continue the key with input runes';description='Step '+number+': '+names[from]+' → '+names[to]+'.'+([from,to].includes('plaintext-autokey')?' Decoded runes are calculated output, not confirmed readable text.':'');
   }else if(p==='unit'){label='Reverse rune order within each '+to;description='Step '+number+': reverse runes within each '+from+' → each '+to+'. Spaces, punctuation and line breaks stay in place.';}
@@ -61,7 +63,7 @@
    ensure(parent.outcome.status==='specified'&&parent.outcome.value.outcomeId==='decipher'&&before.criterion.kind==='measurement'&&before.steps.length>0&&same(before.steps,after.steps),'An evaluation follow-up needs unchanged output-producing steps and a deciphering question.');
    const expected=JSON.parse(E.stable(reviewed?reviewed.mapped.card:parent)),choice=C.EVALUATION_CHOICES.find(item=>item.id===selection.value);expected.rules.evaluation={status:'specified',value:choice.value};ensure(same(expected,child),'The evaluation follow-up changed more than its maintained check.');
    text=selection.value==='language-samples'?{label:'Compare the output with language samples',description:'Keep the same calculation and pages; compare rune patterns with eight fixed language samples. Similarity does not establish a decryption.'}:{label:'Check for the decoded Warning opening',description:'Keep the same calculation and pages; compare the first 12 runes with the decoded Warning opening. This checks page starts only.'};
-  }else {ensure(same(change(before.steps,selection),after.steps),'The variation changed more than the selected step parameter.');text=wording(before.steps[selection.step],selection);}
+  }else {ensure(same(V.changedSteps(before.steps,selection),after.steps),'The variation changed more than the selected step parameter.');text=wording(before.steps[selection.step],selection);}
   const proposalId=direction==='parents'?o.parentProposalId:o.childProposalId;unchanged();
   return freeze({id:value.id,createdAt:value.createdAt,direction,proposalId,href:'run.html#idea='+proposalId,...text,sourceHref});
  }

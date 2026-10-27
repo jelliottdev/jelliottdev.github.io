@@ -12,16 +12,30 @@
  }
  function captureSelection(value){
   const selection=J.capture(value,{maxBytes:512,maxDepth:3,maxNodes:16}),keys=['version','step','parameter','value'];
-  if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).length!==keys.length||!keys.every(key=>own(selection,key))||selection.version!==1||!Number.isInteger(selection.step)||selection.step<0||!['direction','reset','unit','mode','a','b'].includes(selection.parameter)||!valuesFor(selection.parameter).includes(selection.value))throw Error('Choose one exact supported step parameter and destination.');
+  if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).length!==keys.length||!keys.every(key=>own(selection,key))||selection.version!==1||!Number.isInteger(selection.step)||selection.step<0||!['direction','reset','unit','mode','a','b','phase'].includes(selection.parameter)||(selection.parameter==='phase'?!(Number.isInteger(selection.value)&&selection.value>=1&&selection.value<=255):!valuesFor(selection.parameter).includes(selection.value)))throw Error('Choose one exact supported step parameter and destination.');
   return selection;
  }
  function unchanged(value,snapshot,capture){if(stable(capture(value))!==stable(snapshot))throw Error('The task or selected variation changed during preparation.');}
- function derive(parent,selection){
-  const step=parent.steps[selection.step],parameter=selection.parameter;
-  if(!step||!(['a','b'].includes(parameter)?step.op==='affine':parameter==='direction'?keyed.has(step.op):parameter==='unit'?step.op==='reverse':parameter==='mode'?step.op==='keyed-shift':keyed.has(step.op)||step.op==='cumulative-difference'))throw Error('The selected step does not support this parameter variation.');
+ // This structural helper grants no task, execution or evidence authority.
+ // Full task geometry and identities remain checked by derive/prepare/validate.
+ function changedSteps(input,chosen){
+  const original=J.capture(input,{maxBytes:2000000,maxDepth:8,maxNodes:200000}),selection=captureSelection(chosen);
+  if(!Array.isArray(original)||original.length>8||original.some(step=>!step||typeof step!=='object'||Array.isArray(step)))throw Error('Use at most eight plain method steps.');
+  const step=original[selection.step],parameter=selection.parameter;
+  if(step){
+   const keys=step.op==='affine'?['op','a','b']:step.op==='reverse'?['op','unit']:step.op==='cumulative-difference'?['op','reset']:step.op==='keyed-shift'?['op','key','mode','direction','reset']:step.op==='interrupted-keyed-shift'?['op','key','direction','reset','interrupts']:step.op==='finite-shift'?['op','key','direction','reset']:null;
+   const index=value=>Number.isInteger(value)&&value>=0&&value<=28;
+   if(!keys||Object.keys(step).length!==keys.length||!keys.every(key=>own(step,key))||step.op==='affine'&&(!index(step.a)||!index(step.b))||step.op==='reverse'&&!resets.includes(step.unit)||own(step,'reset')&&!resets.includes(step.reset)||keyed.has(step.op)&&(!Array.isArray(step.key)||step.key.length<1||step.key.length>(step.op==='finite-shift'?20000:256)||!step.key.every(index)||!directions.includes(step.direction))||step.op==='keyed-shift'&&!modes.includes(step.mode)||step.op==='interrupted-keyed-shift'&&(!Array.isArray(step.interrupts)||!step.interrupts.length||step.interrupts.length>29||!step.interrupts.every((n,i)=>index(n)&&(!i||n>step.interrupts[i-1]))))throw Error('The selected method step is invalid.');
+  }
+  if(!step||!(['a','b'].includes(parameter)?step.op==='affine':parameter==='phase'?step.op==='keyed-shift'&&step.mode==='repeat':parameter==='direction'?keyed.has(step.op):parameter==='unit'?step.op==='reverse':parameter==='mode'?step.op==='keyed-shift':keyed.has(step.op)||step.op==='cumulative-difference'))throw Error('The selected step does not support this parameter variation.');
+  if(parameter==='phase'&&selection.value>=step.key.length)throw Error('Choose a starting position within the saved repeating key.');
   if(step[parameter]===selection.value)throw Error('Choose a value different from the saved task.');
-  const steps=JSON.parse(stable(parent.steps));steps[selection.step][parameter]=selection.value;
-  const action=parameter==='a'?'multiply rune values by '+selection.value:parameter==='b'?'add '+selection.value+' to rune values':parameter==='direction'?(selection.value==='add'?'add key indices':'subtract key indices'):parameter==='unit'?'reverse runes within each '+selection.value:parameter==='mode'?'use '+selection.value:'restart at each '+selection.value;
+  const steps=JSON.parse(stable(original));if(parameter==='phase'){steps[selection.step].key=step.key.slice(selection.value).concat(step.key.slice(0,selection.value));if(stable(steps[selection.step].key)===stable(step.key))throw Error('This starting position repeats the unchanged key.');}else steps[selection.step][parameter]=selection.value;
+  return freeze(steps);
+ }
+ function derive(parent,selection){
+  const parameter=selection.parameter,steps=changedSteps(parent.steps,selection);
+  const action=parameter==='phase'?'start at key position '+(selection.value+1):parameter==='a'?'multiply rune values by '+selection.value:parameter==='b'?'add '+selection.value+' to rune values':parameter==='direction'?(selection.value==='add'?'add key indices':'subtract key indices'):parameter==='unit'?'reverse runes within each '+selection.value:parameter==='mode'?'use '+selection.value:'restart at each '+selection.value;
   const body={title:'Step '+(selection.step+1)+': '+action,pages:JSON.parse(stable(parent.pages)),alphabet:JSON.parse(stable(parent.alphabet)),steps,criterion:JSON.parse(stable(parent.criterion))};
   // The normal runner checks the entire resulting geometry, including all
   // finite-key segments. An unavailable restart is rejected, never shortened.
@@ -33,12 +47,14 @@
  function list(parent){
   const task=captureTask(parent),items=[];
   for(let step=0;step<task.steps.length;step++){
-   const operation=task.steps[step],parameters=operation.op==='affine'?['a','b']:operation.op==='keyed-shift'?['direction','reset','mode']:keyed.has(operation.op)?['direction','reset']:operation.op==='cumulative-difference'?['reset']:operation.op==='reverse'?['unit']:[];
-   for(const parameter of parameters)for(const value of valuesFor(parameter)){
+   const operation=task.steps[step],parameters=operation.op==='affine'?['a','b']:operation.op==='keyed-shift'?['direction','reset','mode',...(operation.mode==='repeat'?['phase']:[])]:keyed.has(operation.op)?['direction','reset']:operation.op==='cumulative-difference'?['reset']:operation.op==='reverse'?['unit']:[];
+   const seenPhases=new Set(operation.key?[stable(operation.key)]:[]);
+   for(const parameter of parameters)for(const value of parameter==='phase'?Array.from({length:operation.key.length-1},(_,i)=>i+1):valuesFor(parameter)){
     if(operation[parameter]===value)continue;
+    if(parameter==='phase'){const key=stable(operation.key.slice(value).concat(operation.key.slice(0,value)));if(seenPhases.has(key))continue;seenPhases.add(key);}
     const selection={version:1,step,parameter,value};
     try{derive(task,selection);}catch{continue;}
-    items.push({selection,from:operation[parameter],label:parameter==='a'?'Multiply rune values by '+value:parameter==='b'?'Add '+value+' to rune values':parameter==='direction'?(value==='add'?'Add the key values':'Subtract the key values'):parameter==='unit'?'Reverse runes within each '+value:parameter==='mode'?(value==='repeat'?'Repeat the starting key':value==='plaintext-autokey'?'Continue the key with decoded runes':'Continue the key with input runes'):'Restart at each '+value});
+    items.push({selection,from:parameter==='phase'?0:operation[parameter],label:parameter==='phase'?'Start at key position '+(value+1):parameter==='a'?'Multiply rune values by '+value:parameter==='b'?'Add '+value+' to rune values':parameter==='direction'?(value==='add'?'Add the key values':'Subtract the key values'):parameter==='unit'?'Reverse runes within each '+value:parameter==='mode'?(value==='repeat'?'Repeat the starting key':value==='plaintext-autokey'?'Continue the key with decoded runes':'Continue the key with input runes'):'Restart at each '+value});
    }
   }
   return freeze(items);
@@ -68,6 +84,7 @@
    const {step:index,parameter,value}=item.selection,step=task.steps[index],before=positions[step.reset];
    // A later constant affine substitution discards every earlier rune value.
    if(task.steps.slice(index+1).some(later=>later.op==='affine'&&later.a===0))return true;
+   if(parameter==='phase')return before.every(position=>step.key[position%step.key.length]===step.key[(position+value)%step.key.length]);
    if(parameter==='a'||parameter==='b'){
     // Compare the two complete substitutions over GP29, never actual page
     // outputs. Different coefficients are retained unless every residue agrees.
@@ -118,5 +135,5 @@
   if(stable(expected)!==stable(candidate))throw Error('The child changed more than the selected step parameter.');
   return freeze(candidate);
  }
- const api={list,suggestions,prepare,validate,selection:value=>freeze(captureSelection(value))};if(node)module.exports=api;else root.TaskParameterVariants=api;
+ const api={list,suggestions,prepare,validate,changedSteps,selection:value=>freeze(captureSelection(value))};if(node)module.exports=api;else root.TaskParameterVariants=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

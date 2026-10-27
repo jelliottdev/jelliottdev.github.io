@@ -17,6 +17,11 @@
   const lengths=openings.map(item=>item.values.length),n=openings.length,count=n===9?'nine':n,known=openings.every(decodedOpening),subject=known?(n===1?'one already decoded passage':count+' already decoded passages'):(n===1?'the supplied opening':count+' supplied openings');
   return lengths.every(length=>length===lengths[0])?'Compare the first '+lengths[0]+' output runes with '+subject+'.':'Compare the start of the output with '+subject+', using each opening’s full length ('+Math.min(...lengths)+'–'+Math.max(...lengths)+' runes).';
  }
+ function openingSetContext(criterion){
+  const openings=prefixSetOpenings(criterion);if(!openings)return null;
+  const known=openings.every(decodedOpening),description=openingSetDescription(criterion);
+  return {description:known?description.replace('with ','with the '+(openings.length===1?'beginning':'beginnings')+' of '):description.replace(/supplied openings/g,'fixed rune sequences').replace('the supplied opening','the fixed rune sequence'),openings:openings.map(item=>{const known=decodedOpening(item);return {label:known?known[0]:item.id,runes:item.values.length,...(known?{href:'index.html#/reader/'+decodedOpeningPages[item.id]}:{})};}),known:openings.every(decodedOpening)};
+ }
  function openingSetDetails(criterion){
   const openings=prefixSetOpenings(criterion);if(!openings)return '';
   return '<details class="experiment-details"><summary>Which openings are compared?</summary><ul>'+openings.map(item=>{const known=decodedOpening(item),label=known?known[0]:item.id;return '<li>'+(known?'<a href="index.html#/reader/'+decodedOpeningPages[item.id]+'">'+esc(label)+'</a>':esc(label))+' · '+item.values.length+' runes</li>';}).join('')+'</ul><p>Only the start of each page’s output is compared. A matching opening is not a complete reading.</p></details>';
@@ -143,5 +148,5 @@
    if(coveredCases)html+='<details class="experiment-details"><summary>Reproduce saved checks</summary><p>Download the original question, pinned inputs and saved results, with an offline audit. It checks these receipts without running missing settings.</p><button type="button" data-finite-work="download"'+disabled+'>Download search audit</button></details>';
    return html;
  }
- const api={renderInspected:(value)=>renderInspected(value),renderOutputInspected:(value)=>renderInspected(value,true),renderInspectionInspected:(value)=>renderInspected(value,'inspection'),updateActive:(host,model,options)=>updateActive(host,model,options),updateActiveOutput:(host,model,options)=>updateActive(host,model,options,true),updateActiveInspection:(host,model,options)=>updateActive(host,model,options,'inspection'),render,renderOutput,renderInspection,domainLabel,operationLabel,openingLabel,settingsLabel,workDescription};if(node)module.exports=api;else root.FiniteSearchWorkspaceView=api;
+ const api={openingSetContext,renderInspected:(value)=>renderInspected(value),renderOutputInspected:(value)=>renderInspected(value,true),renderInspectionInspected:(value)=>renderInspected(value,'inspection'),updateActive:(host,model,options)=>updateActive(host,model,options),updateActiveOutput:(host,model,options)=>updateActive(host,model,options,true),updateActiveInspection:(host,model,options)=>updateActive(host,model,options,'inspection'),render,renderOutput,renderInspection,domainLabel,operationLabel,openingLabel,settingsLabel,workDescription};if(node)module.exports=api;else root.FiniteSearchWorkspaceView=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

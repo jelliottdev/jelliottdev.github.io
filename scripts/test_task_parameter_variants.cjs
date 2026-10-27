@@ -11,7 +11,7 @@ async function rejectsMutation(start,change){let release;const blocked=new Promi
  await test('all six modes expose only supported other values and preserve every unrelated field',async()=>{
   const run=E.run;E.run=()=>assert.fail('No target execution in variant derivation');
   try{for(const mode of modes){
-   const parent=await task([mode]),before=E.stable(parent),descriptors=V.list(parent);assert.equal(descriptors.length,mode.op==='cumulative-difference'?2:mode.op==='keyed-shift'?5:3);assert(Object.isFrozen(descriptors));
+   const parent=await task([mode]),before=E.stable(parent),descriptors=V.list(parent).filter(d=>d.selection.parameter!=='phase');assert.equal(descriptors.length,mode.op==='cumulative-difference'?2:mode.op==='keyed-shift'?5:3);assert(Object.isFrozen(V.list(parent)));
    for(const descriptor of descriptors){assert(Object.isFrozen(descriptor));assert(Object.isFrozen(descriptor.selection));assert.equal(descriptor.from,parent.steps[0][descriptor.selection.parameter]);
     const child=await V.prepare(parent,descriptor.selection,webcrypto);assert.deepEqual(await V.validate(parent,child,descriptor.selection,webcrypto),child);assert(Object.isFrozen(child));assert.notEqual(child.taskId,parent.taskId);
     const expectedSteps=copy(parent.steps);expectedSteps[0][descriptor.selection.parameter]=descriptor.selection.value;assert.deepEqual(child.steps,expectedSteps);assert.deepEqual(child.pages,parent.pages);assert.deepEqual(child.alphabet,parent.alphabet);assert.deepEqual(child.criterion,parent.criterion);assert.equal(E.stable(parent),before);assert.deepEqual(await V.prepare(parent,descriptor.selection,webcrypto),child);assert.equal(Array.from(child.title).length<=300,true);

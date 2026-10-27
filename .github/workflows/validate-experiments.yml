@@ -20,13 +20,34 @@ jobs:
       - name: Select validation lane
         id: scope
         run: node scripts/ci_validation_scope.cjs
-  validate:
+  node:
     needs: scope
-    # Scientific checks include change-specific bundle replay. A later push must
-    # not cancel those checks; application-only updates can replace each other.
+    # Only superseded application test runs are replaceable. Scientific replay
+    # has a separate commit-specific lane below.
     concurrency:
-      group: validate-${{ github.workflow }}-${{ needs.scope.outputs.science == 'true' && github.sha || github.ref }}
+      group: node-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check every Node test has an execution policy
+        run: node scripts/check_node_test_coverage.cjs
+      - name: Run all unconditional Node checks
+        run: node scripts/run_node_checks.cjs
+  science:
+    needs: scope
+    # Keep every change-specific bundle replay, even after a newer push.
+    concurrency:
+      group: science-${{ github.workflow }}-${{ github.event_name }}-${{ github.sha }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -102,10 +123,6 @@ jobs:
               "$interpreter" "$checker" --check
             fi
           done
-      - name: Check every Node test has an execution policy
-        run: node scripts/check_node_test_coverage.cjs
-      - name: Run all unconditional Node checks
-        run: node scripts/run_node_checks.cjs
       - run: python scripts/test_finite_search_audit.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_factored_finite_search_audit.py
@@ -337,3 +354,18 @@ jobs:
       - name: Check that published exports match reviewed records
         if: steps.scope.outputs.science == 'true'
         run: git diff --exit-code -- data/index.json data/pages data/experiments.json data/experiment-index.json data/checker-records.json reference/experiments reference/experiments.html data/assistant-index.json data/articles.json data/article-search.json reference/articles articles/readings
+  validate:
+    if: ${{ always() }}
+    needs: [scope, node, science]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require both validation lanes
+        env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          NODE_RESULT: ${{ needs.node.result }}
+          SCIENCE_RESULT: ${{ needs.science.result }}
+        run: |
+          set -euo pipefail
+          test "$SCOPE_RESULT" = success
+          test "$NODE_RESULT" = success
+          test "$SCIENCE_RESULT" = success

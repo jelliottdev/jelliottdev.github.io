@@ -13,13 +13,24 @@
   if(criterion.kind==='word-prime-sums')return 'The totals measure words using the chosen number table. They do not establish a decryption.';
   return null;
  }
- function describe(parent,item){
+ function describe(parent,item){return describeMany(parent,[item])[0]||null;}
+ function describeMany(parent,items){
   try{
-   const task=J.capture(parent,{maxBytes:2000000,maxDepth:24,maxNodes:250000}),value=J.capture(item,{maxBytes:2048,maxDepth:4,maxNodes:32});
+   const task=J.capture(parent,{maxBytes:2000000,maxDepth:24,maxNodes:250000}),values=J.capture(items,{maxBytes:2000000,maxDepth:8,maxNodes:100000});
+   if(!Array.isArray(values)||values.length>4096)return [];
+   const choices=new Map(V.list(task).map(item=>[E.stable(item.selection)+'|'+E.stable(item.from),item]));return values.map(value=>describeCaptured(task,value,choices));
+  }catch{return Array.isArray(items)?items.map(()=>null):[];}
+ }
+ function describeCaptured(task,input,choices){
+  try{
+   const value=J.capture(input,{maxBytes:2048,maxDepth:4,maxNodes:32});
    if(!exact(value,['selection','from',...(Object.hasOwn(value||{},'label')?['label']:[])])||Object.hasOwn(value,'label')&&(typeof value.label!=='string'||value.label.length>300))return null;
-   const chosen=V.list(task).find(candidate=>E.stable(candidate.selection)===E.stable(value.selection)&&candidate.from===value.from);if(!chosen)return null;
+   const chosen=choices.get(E.stable(value.selection)+'|'+E.stable(value.from));if(!chosen)return null;
    const s=chosen.selection,step=task.steps[s.step],interpretation=reading(task.criterion);if(!interpretation)return null;let question,reason;
-   if(s.parameter==='a'||s.parameter==='b'){
+   if(s.parameter==='phase'){
+    question='What if we start the repeating key '+s.value+' '+(s.value===1?'rune':'runes')+' later?';
+    reason='Start at key position '+(s.value+1)+' instead of position 1. Continue through the same cyclic values, wrapping to the beginning after the last value. Use this starting place again at each '+step.reset+'. The addition or subtraction stays unchanged.'+(task.steps.length>1?' All other steps stay unchanged.':'');
+   }else if(s.parameter==='a'||s.parameter==='b'){
     question=s.parameter==='a'?'What if we multiply rune values by '+s.value+'?':'What if we add '+s.value+' after multiplying?';
     reason='Give each rune its alphabet number from 0 to 28. Multiply by '+(s.parameter==='a'?s.value:step.a)+', add '+(s.parameter==='b'?s.value:step.b)+', then take the remainder after dividing by 29. '+(s.parameter==='a'?'The added number stays '+step.b+'.':'The multiplier stays '+step.a+'.')+' Spaces and punctuation stay in place.'+((s.parameter==='a'?s.value:step.a)===0?' Multiplying by zero removes the differences between rune values at this step.':'')+(task.steps.length>1?' All other steps stay unchanged.':'');
    }else if(s.parameter==='unit'){
@@ -50,5 +61,5 @@
    return Object.freeze({question,reason,reading:interpretation});
   }catch{return null;}
  }
- const api={describe};if(node)module.exports=api;else root.ParameterVariationQuestion=api;
+ const api={describe,describeMany};if(node)module.exports=api;else root.ParameterVariationQuestion=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
