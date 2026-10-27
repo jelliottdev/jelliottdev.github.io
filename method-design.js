@@ -33,15 +33,43 @@
   const fragment='#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');const card=H.readCard(fragment);ensure(C.serialize(card)===C.serialize(parent.parentCard),'The parent card is not canonical.');
   ensure(crypto?.subtle,'SHA-256 is required for the parent identity.');const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(C.serialize(card))))).map(b=>b.toString(16).padStart(2,'0')).join('');ensure(parent.parentId==='p_'+digest,'The parent identity changed.');
   const full=format(p),supplied=value=>C.field('specified',value,{kind:'supplied',refs:['source:text']}),original=H.decode(fragment).draft;
-  return C.createDraft({source:{text:full+'\n\nParent question: '+parent.parentId+'\nParent canonical context (not a claim of equivalent procedure):\n'+original.source.text},aim:card.outcome,method:supplied({operations:[{id:'described_method',label:p.name,sourceText:full}]}),scope:supplied({pages:p.pages}),rules:{inputVersion:supplied(p.inputVersion),representation:supplied(p.representation),searchProtocol:supplied('Generated procedure proposal; parent question: '+parent.parentId+'\n'+full)},unresolved:[]});
+  return C.createDraft({source:{text:full+'\n\nParent question: '+parent.parentId+'\nParent canonical context (not a claim of equivalent procedure):\n'+original.source.text},aim:card.outcome,method:supplied({operations:[{id:'described_method',label:p.name,sourceText:full}]}),scope:supplied({pages:p.pages}),rules:{inputVersion:supplied(p.inputVersion),representation:supplied(p.representation),searchProtocol:supplied({kind:'method-design',version:1,parentId:parent.parentId,proposal:p}),evaluation:supplied({kind:'method-design-evaluation',description:p.evaluation})},unresolved:[]});
  }
- async function toFragment(input,options,crypto=root.crypto){
-  const draft=await toDraft(input,options,crypto),active=f=>f.status==='specified'?{status:f.status,value:f.value}:{status:f.status},outcome=active(draft.aim);
+ function readCaptured(value){
+  const protocol=value?.rules?.searchProtocol;
+  if(protocol?.status!=='specified'||!protocol.value||typeof protocol.value!=='object'||protocol.value.kind!=='method-design'){
+   ensure(value?.rules?.evaluation?.value?.kind!=='method-design-evaluation'&&!(protocol?.value&&typeof protocol.value==='object'&&(protocol.value.proposal?.schema===SCHEMA||typeof protocol.value.kind==='string'&&protocol.value.kind.startsWith('method-design'))),'A method-design evaluation needs its complete proposal.');return null;
+  }
+  const metadata=protocol.value;ensure(exact(metadata,['kind','version','parentId','proposal'])&&metadata.version===1&&typeof metadata.parentId==='string'&&metadata.parentId.length===66&&/^p_[a-f0-9]{64}$/.test(metadata.parentId),'Use exact method-design metadata.');
+  ensure(Array.isArray(value.unresolved)&&value.unresolved.length===0,'A structured proposal cannot hide unresolved conditions.');
+  const allowedRules=new Set(['inputVersion','representation','evaluation','searchProtocol']);ensure(exact(value.rules,C.RULES)&&Object.entries(value.rules).every(([key,field])=>allowedRules.has(key)||field?.status==='unspecified'),'A structured proposal cannot hide additional rules.');
+  const proposal=validate(metadata.proposal),specified=(field,expected)=>field?.status==='specified'&&C.serialize(field.value)===C.serialize(expected),operations=value.method?.value?.operations;
+  ensure(value.method?.status==='specified'&&exact(value.method.value,['operations'])&&Array.isArray(operations)&&operations.length===1,'The proposal method changed.');
+  const operation=operations[0],keys=Object.hasOwn(operation||{},'sourceText')?['id','label','sourceText']:['id','label'];
+  ensure(exact(operation,keys)&&operation.id==='described_method'&&operation.label===proposal.name&&(!Object.hasOwn(operation,'sourceText')||operation.sourceText===format(proposal)),'The proposal method changed.');
+  ensure(specified(value.scope,{pages:proposal.pages})&&specified(value.rules.inputVersion,proposal.inputVersion)&&specified(value.rules.representation,proposal.representation),'The proposal inputs or scope changed.');
+  ensure(specified(value.rules.evaluation,{kind:'method-design-evaluation',description:proposal.evaluation}),'The proposal evaluation changed.');
+  return freeze({parentId:metadata.parentId,proposal});
+ }
+ function readDraft(draft){const captured=J.capture(draft,{maxBytes:128*1024,maxDepth:24,maxNodes:10000});ensure(captured?.schema===C.SCHEMA&&typeof captured.source?.text==='string'&&captured.aim&&typeof captured.aim==='object','Use a complete proposal draft.');return readCaptured(captured);}
+ function readCard(input){
+  const card=J.capture(input,{maxBytes:H.MAX_BYTES,maxDepth:24,maxNodes:10000});let binary='';for(const byte of new TextEncoder().encode(JSON.stringify(card)))binary+=String.fromCharCode(byte);
+  const canonical=H.readCard('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));ensure(C.serialize(card)===C.serialize(canonical),'Use a canonical proposal card.');return readCaptured(canonical);
+ }
+ function reviseDraft(input,newProposal){
+  const original=J.capture(input,{maxBytes:128*1024,maxDepth:24,maxNodes:10000}),prior=readDraft(original);ensure(prior,'Review a structured method proposal before revising it.');
+  const proposal=validate(newProposal),full=format(proposal),supplied=value=>C.field('specified',value,{kind:'user_clarification',refs:['source:text']}),source={...original.source,text:full+'\n\nParent question: '+prior.parentId+'\nThis generated procedure is a proposal, not the original author’s stated method.'};
+  const draft=C.createDraft({source,aim:original.aim,method:supplied({operations:[{id:'described_method',label:proposal.name,sourceText:full}]}),scope:supplied({pages:proposal.pages}),rules:{inputVersion:supplied(proposal.inputVersion),representation:supplied(proposal.representation),evaluation:supplied({kind:'method-design-evaluation',description:proposal.evaluation}),searchProtocol:supplied({kind:'method-design',version:1,parentId:prior.parentId,proposal})},unresolved:[]});
+  readCaptured(draft);return draft;
+ }
+ function fragmentForDraft(input){
+  readDraft(input);const draft=J.capture(input,{maxBytes:128*1024,maxDepth:24,maxNodes:10000}),active=f=>f.status==='specified'?{status:f.status,value:f.value}:{status:f.status},outcome=active(draft.aim);
   if(outcome.status==='specified'){const aim=C.normalizeOutcome(draft.aim);outcome.value={outcomeId:aim.id,detail:aim.detail};}
   const method=active(draft.method);method.value={operations:method.value.operations.map(o=>({id:o.id,label:o.label}))};
   const payload={version:1,outcome,method,scope:active(draft.scope),rules:Object.fromEntries(C.RULES.map(k=>[k,active(draft.rules[k])])),unresolved:draft.unresolved};
   const bytes=new TextEncoder().encode(JSON.stringify(payload));ensure(bytes.length<=H.MAX_BYTES,'The proposed method exceeds the shared review byte bound.');let binary='';for(const b of bytes)binary+=String.fromCharCode(b);
-  const fragment='#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');ensure(fragment.length<=H.MAX_URL,'The proposed review link exceeds its bound.');H.readCard(fragment);ensure(H.decode(fragment).draft.status==='draft','Review must remain unconfirmed.');return fragment;
+  const fragment='#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');ensure(fragment.length<=H.MAX_URL,'The proposed review link exceeds its bound.');readCard(H.readCard(fragment));ensure(H.decode(fragment).draft.status==='draft','Review must remain unconfirmed.');return fragment;
  }
- const api=Object.freeze({SCHEMA,JSON_SCHEMA,validate,format,toDraft,toFragment});if(node)module.exports=api;else root.MethodDesign=api;
+ async function toFragment(input,options,crypto=root.crypto){return fragmentForDraft(await toDraft(input,options,crypto));}
+ const api=Object.freeze({SCHEMA,JSON_SCHEMA,validate,format,toDraft,toFragment,readDraft,readCard,reviseDraft,fragmentForDraft});if(node)module.exports=api;else root.MethodDesign=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

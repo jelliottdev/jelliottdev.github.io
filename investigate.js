@@ -13,6 +13,8 @@
  const WordSums=typeof module!=='undefined'?require('./word-sum-intake.js'):root.WordSumIntake;
  const WordAffine=typeof module!=='undefined'?require('./word-affine-intake.js'):root.WordAffineIntake;
  const Cumulative=typeof module!=='undefined'?require('./cumulative-intake.js'):root.CumulativeIntake;
+ const MethodDesign=typeof module!=='undefined'?require('./method-design.js'):root.MethodDesign;
+ const MethodReview=typeof module!=='undefined'?require('./method-design-review.js'):root.MethodDesignReview;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const prov={kind:'supplied',refs:['original wording']};
  const known=v=>C.field('specified',v,prov);
@@ -512,7 +514,7 @@
    return {raw:value.raw,stage:draft?'review':value.stage==='search'?'search':'input',draft,editing:!!baseline,baseline,overlay:overlay||{}};
   }catch{return null;}
  }
- function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout,sharer=H.share,renderCard=H.renderPNG}={}){
+ function createApp(doc,{fetcher=root.fetch.bind(root),now=()=>new Date().toISOString(),id=()=>root.crypto.randomUUID(),printer=()=>root.print(),schedule=setTimeout,unschedule=clearTimeout,sharer=H.share,renderCard=H.renderPNG,methodDesignReview=MethodReview}={}){
   const host=doc.getElementById('investigate'),printHost=doc.getElementById('print-snapshot');
   let stage='input',draft=null,confirmed=null,result=null,packet=null,editing=false,editingBackup=null,raw='',records=[],documents=[],endpoint=null,loaded=false,loadError='',message='',error='',busy=false,controller=null,generation=0,registryId='';
   const incoming=new URLSearchParams(doc.defaultView?.location?.search||'');
@@ -533,9 +535,9 @@
    savedIntake={version:1,at:current.at,body:current.body,receipt:current.receipt||null};
    try{const serialized=JSON.stringify(savedIntake);if(serialized.length<=INTAKE_LIMIT)session?.setItem(INTAKE_KEY,serialized);}catch{}
   }
-  let restoringOverlay=null;
+  let restoringOverlay=null,designContext=null,designReview=null,designHost=null;
   if(fragment.startsWith('#idea=')){
-   try{const shared=H.decode(fragment),refining=incoming.get('refine')==='1';draft=refining?refinementDraft(fragment):shared.draft;raw=draft.source.text;stage='review';message=refining?'':incoming.get('designed')==='1'?'Proposed method. Review its procedure and assumptions before saving.':'Shared idea. Review the wording before checking prior research.';}
+   try{const shared=H.decode(fragment),refining=incoming.get('refine')==='1';draft=refining?refinementDraft(fragment):shared.draft;raw=draft.source.text;designContext=MethodDesign?.readDraft(draft)||null;stage='review';message=refining?'':incoming.get('designed')==='1'?'Proposed method. Review its procedure and assumptions before saving.':'Shared idea. Review the wording before checking prior research.';}
    catch{error='This shared idea link could not be read. Ask for a new link or enter the idea below.';}
   }
   const pageHint=incoming.getAll('pages').join(',');
@@ -546,6 +548,7 @@
    if(editing)editingBackup={stage:'review',draft:recovered.baseline,confirmed:null,result:null,packet:null,message:'',error:''};
    message=stage==='search'?'Search restored.':'Draft restored.';
   }
+  if(draft){try{designContext=MethodDesign?.readDraft(draft)||null;}catch{draft=null;designContext=null;stage='input';error='The proposed method has conflicting details. Reopen the original idea and create a fresh draft.';}}
   function recoveryFields(){
    const fields={};
    for(const name of ['edit-aim','edit-objective','edit-scope','edit-rules','other-detail',...C.RULES.map(k=>'remove-rule-'+k),...(draft?.method.status==='specified'?draft.method.value.operations:[]).flatMap((_,i)=>[i?'edit-method-'+i:'edit-method','edit-method-family-'+i])]){
@@ -577,6 +580,8 @@
   function stopInterpretation(){guidedRecovery=null;interpretVersion++;interpretController?.abort();interpretController=null;interpreting=false;}
   function stopIntake(clear=false){intakeVersion++;intakeController?.abort();intakeController=null;if(intake)intake.busy=false;if(clear)intake=null;}
   function render(){
+   if(designContext&&stage==='review'){renderMethodReview();return;}
+   designReview?.destroy();designReview=null;designHost=null;
    if(stage==='review'&&!editing&&draft)draft=Cumulative?.complete(draft)||draft;
    const prior=doc.activeElement?.id;
    const sameResearch=stage==='research'&&confirmed&&renderedResearchCard===confirmed;
@@ -606,6 +611,28 @@
    renderedResearchCard=stage==='research'?confirmed:null;
    saveRecovery();
   }
+  function renderMethodReview(){
+   if(destroyed)return;
+   if(!designHost||!host.contains?.(designHost)){
+    host.innerHTML='<h1 id="review-title">Review proposed method</h1><div id="method-review"></div>';
+    designHost=doc.getElementById('method-review');
+   }
+   if(designReview){designReview.attach(designHost);return;}
+   if(!methodDesignReview?.mount){host.innerHTML='<h1>Review unavailable</h1><p>The method review could not be loaded. Reload this page to try again.</p>';return;}
+   designReview=methodDesignReview.mount(designHost,{proposal:designContext.proposal,parentId:designContext.parentId,goal:draft.aim.status==='specified'?C.outcomeLabel(draft.aim):'Not specified',isLive:()=>!destroyed&&stage==='review'&&!!designContext,
+    onChange:proposal=>{const next=MethodDesign.reviseDraft(draft,proposal);MethodDesign.fragmentForDraft(next);draft=next;designContext=MethodDesign.readDraft(draft);raw=draft.source.text;confirmed=null;stopIntake(true);saveRecovery();},
+    onSave:async proposal=>{
+     await loadConfig();if(destroyed||!designContext||stage!=='review')return;
+     if(!intakeEndpoint||!ideaEndpoint)throw Error('Saving is temporarily unavailable. Your proposed method is kept. Try again.');
+     const next=MethodDesign.reviseDraft(draft,proposal),snapshot=C.confirm(next,{id:id(),at:now()});
+     if(!confirmed||C.serialize(H.cardData(confirmed))!==C.serialize(H.cardData(snapshot))){stopIntake(true);draft=next;raw=draft.source.text;confirmed=snapshot;}
+     await saveIntake(confirmed,{quiet:true});
+     if(destroyed||stage!=='review'||!designContext)return;
+     if(!intake?.entrySaved||intake.snapshot!==confirmed)throw Error(intake?.saved?'The proposal was saved, but its page could not be opened. Try saving again to finish.':'The proposed method could not be saved. Your changes are kept. Try again.');
+     saveRecovery();doc.defaultView.location.href='run.html#idea='+intake.receipt.id;
+    }});
+   saveRecovery();
+  }
   function intakeHTML(){
    if(!intakeEndpoint||!intake||intake.snapshot!==confirmed)return '';
    return '<div class="idea-save" id="idea-save"><span id="idea-save-status" class="small" role="status" tabindex="-1">'+intakeStatus()+'</span><button id="retry-save" type="button"'+(intake.error||intake.entryError?'':' hidden')+'>'+(intake.entryError?'Retry creating entry':'Retry saving')+'</button><a class="idea-next-action" id="open-research-entry"'+(intake.entrySaved?' href="run.html#idea='+esc(intake.receipt.id)+'"':' hidden')+'>View idea and experiments</a></div>';
@@ -616,7 +643,7 @@
    status.textContent=intakeStatus();const held=doc.activeElement===retry;retry.hidden=!intake.error&&!intake.entryError;retry.textContent=intake.entryError?'Retry creating entry':'Retry saving';if(held&&retry.hidden)status.focus({preventScroll:true});
    const link=doc.getElementById('open-research-entry');if(link){link.hidden=!intake.entrySaved;if(intake.entrySaved)link.href='run.html#idea='+intake.receipt.id;}return true;
   }
-  async function saveIntake(snapshot=confirmed){
+  async function saveIntake(snapshot=confirmed,{quiet=false}={}){
    if(!intakeEndpoint||!snapshot||snapshot!==confirmed)return;
    if(!intake||intake.snapshot!==snapshot){
     stopIntake(true);
@@ -632,10 +659,10 @@
      intake.receipt=matches?prior.receipt:null;intake.saved=false;
      persistIntake(intake);
     }
-    catch{intake.error=true;render();return;}
+    catch{intake.error=true;if(!quiet)render();return;}
    }
    const current=intake;if(current.busy||current.saved&&(!ideaEndpoint||current.entrySaved)||!current.body)return;
-   const token=++intakeVersion,requestController=new AbortController();intakeController=requestController;current.busy=true;current.error=false;if(!updateIntake())render();
+   const token=++intakeVersion,requestController=new AbortController();intakeController=requestController;current.busy=true;current.error=false;if(!updateIntake()&&!quiet)render();
    const timer=schedule(()=>requestController.abort(),30000);
    try{
     if(!current.saved){
@@ -934,6 +961,7 @@
    return configAttempt;
   }
   async function load(){
+   if(designContext){try{await loadConfig();}catch{}return;}
    const token=++loadVersion;loadError='';loaded=false;availability();
    const configured=loadConfig();
    try{
@@ -988,7 +1016,7 @@
    finally{unschedule(timer);if(token===generation){busy=false;controller=null;render();}}
   }
   render();const ready=load();
-  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
+  return {ready,getSnapshot:()=>({stage,draft,confirmed,result,packet,busy,interpreting}),destroy:()=>{destroyed=true;designReview?.destroy();designReview=null;loadVersion++;stopInterpretation();stopIntake(true);stop();}};
  }
  const api={validServiceEndpoint,parseScope,initialDraft,refinementDraft,intakeQuestions,answerIntake,compactPages,validateAnswer,rowsHTML,observedFindingsHTML,sourceHTML,packetHTML,scopeEditorText,scopeEdit,ruleNotesText,ruleEdits,captureDisclosureState,restoreDisclosureState,readRecovery,readIntake,createApp};
  if(typeof module!=='undefined')module.exports=api;
