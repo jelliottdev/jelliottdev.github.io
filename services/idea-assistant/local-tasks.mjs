@@ -1,3 +1,6 @@
+import {createRequestControlMemo} from './request-control-memo.mjs';
+import {prepare as bindPinnedQuestion} from './pinned-domain-question.mjs';
+import {createPinnedQuestionRequestContext,inspectPinnedQuestionRequestContext,closePinnedQuestionRequestContext} from './pinned-question-request-context.mjs';
 import {readReviewedProgram} from './reviewed-program-source.mjs';
 import Compiler from '../../fixed-plan-compiler.js';
 import {prepareOriginWrite} from './finite-origin-storage.mjs';
@@ -65,8 +68,12 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    selectedIdea=url.searchParams.get('idea');
   }
   if(!env.PROPOSALS?.prepare||!env.PROPOSALS?.batch||!(env.TASK_LIMIT||env.PROPOSAL_LIMIT)?.limit)return reply({error:'Local experiments are unavailable.'},503);
+  let pinnedQuestionContext=null,pinnedTimer=null,pinnedSignal=null,pinnedFetcher=fetcher,authorizedPinnedTask=false;
+  const livePinned=()=>{if(pinnedSignal?.aborted)throw Error('Pinned task admission cancelled or timed out.');if(pinnedQuestionContext)inspectPinnedQuestionRequestContext(pinnedQuestionContext);};
+  const awaitPinned=async promise=>{if(!pinnedSignal)return promise;livePinned();let abort;try{return await Promise.race([promise,new Promise((_,reject)=>{abort=()=>reject(Error('Pinned task admission cancelled or timed out.'));pinnedSignal.addEventListener('abort',abort,{once:true});if(pinnedSignal.aborted)abort();})]);}finally{pinnedSignal.removeEventListener('abort',abort);}};
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
-  const controlsFor=async(task,readOnly=false)=>{if(readOnly&&prepareControls===originalPrepareControls)return readControls.read(task,crypto);const suite=await prepareControls(task,crypto);if(prepareControls!==originalPrepareControls)await PlanControls.validate(suite,task,crypto);else readControls.prime(task,suite);return suite;};
+  const requestControls=prepareControls===originalPrepareControls?createRequestControlMemo({prepare:prepareControls,crypto}):null;
+  const controlsFor=async(task,readOnly=false)=>{if(readOnly&&prepareControls===originalPrepareControls)return readControls.read(task,crypto);const suite=requestControls?await requestControls.read(task,crypto):await prepareControls(task,crypto);if(prepareControls!==originalPrepareControls)await PlanControls.validate(suite,task,crypto);else readControls.prime(task,suite);return suite;};
   const publicContext=row=>query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
    FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
    JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=?
@@ -119,6 +126,18 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     const proposal=await query('SELECT card_json FROM proposals WHERE id = ?',body.proposalId).first();
     if(!proposal)return reply({error:'Confirmed idea not found.'},404);
     const cardJson=L.stable(validateCard(proposal.card_json));
+    let preparedBasisRow=null;
+    if(body.preparationId&&!loadPinnedDomain&&!loadPinnedBundle&&!loadAuthoredSource){
+     preparedBasisRow=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();
+     if(preparedBasisRow&&JSON.parse(preparedBasisRow.basis_json).kind==='pinned-question-member-v1'){
+      const clock=new AbortController();pinnedSignal=AbortSignal.any([request.signal,clock.signal]);pinnedTimer=setTimeout(()=>clock.abort(),20000);
+      pinnedFetcher=(url,init={})=>{livePinned();return awaitPinned(Promise.resolve().then(()=>{livePinned();return fetcher(url,{...init,signal:init.signal?AbortSignal.any([pinnedSignal,init.signal]):pinnedSignal});}));};
+      try{const question=await awaitPinned(bindPinnedQuestion({card:JSON.parse(cardJson),proposalId:body.proposalId},{fetcher:pinnedFetcher,crypto}));livePinned();
+       pinnedQuestionContext=createPinnedQuestionRequestContext(question,{db,fetcher:pinnedFetcher,crypto,signal:pinnedSignal,timeoutMs:20000});
+      }catch(error){if(pinnedSignal.aborted)throw error;return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);}
+     }
+    }
+    const acceptPinnedAuthorization=receipt=>{if(!pinnedQuestionContext)return;if(!receipt||receipt.proposalId!==body.proposalId||receipt.cardHash!==body.proposalId.slice(2)||receipt.taskId!==task.taskId||receipt.taskHash!==taskHash||receipt.inputVersion!==body.inputVersion||receipt.parentTaskId!==body.parentTaskId||receipt.authority!=='idea')throw Error('Pinned task authorization changed its exact original binding.');livePinned();authorizedPinnedTask=true;};
     if(body.parentTaskId&&!await find(body.parentTaskId))return reply({error:'Parent task not found.'},404);
     let reviewed=null,originId=null;
     if(body.origin){
@@ -140,21 +159,21 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
      if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
      // A previously linked pending task is not permission to bypass the new
      // reviewed prefix-evidence snapshot. Legacy idempotent links stay unchanged.
-     if(body.preparationId&&!reviewed){const prepared=await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['pinned-domain-member-v1','pinned-question-member-v1','authored-finite-member-v1','ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
+     if(body.preparationId&&!reviewed){const prepared=preparedBasisRow||await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['pinned-domain-member-v1','pinned-question-member-v1','authored-finite-member-v1','ordinary-derived-prefix-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
       let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-      const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle});if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
+      const authorized=await awaitPinned(authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher:pinnedQuestionContext?pinnedFetcher:fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle,...(pinnedQuestionContext?{pinnedQuestionContext}:{})}));if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);acceptPinnedAuthorization(authorized);if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
      }}
-     existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');await saveOrigin();return reply(await view(existing,await storedTask(existing),body.proposalId,null,originId));
+     existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');livePinned();await saveOrigin();const visible=await awaitPinned(view(existing,await storedTask(existing),body.proposalId,null,originId));livePinned();return reply(visible);
     }
     if(!reviewed){
      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
-     const authorized=await authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle});
-     if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
+     const authorized=await awaitPinned(authorizePreparation({db,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher:pinnedQuestionContext?pinnedFetcher:fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle,...(pinnedQuestionContext?{pinnedQuestionContext}:{})}));
+     if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);acceptPinnedAuthorization(authorized);
      if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
     }
     // Identical bytes under the same already-verified input version can be reused.
     // A different version must independently match that version's official source.
-    if(!reviewed&&(!existing||existing.input_version!==body.inputVersion)){
+    if(!reviewed&&!authorizedPinnedTask&&(!existing||existing.input_version!==body.inputVersion)){
     const sourceController=new AbortController(),sourceTimer=setTimeout(()=>sourceController.abort(),20000);
     try{
      let fetched=0,next=0;
@@ -176,19 +195,19 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     }catch{return reply({error:'The selected manuscript text could not be verified.'},422);}
     finally{clearTimeout(sourceTimer);}
     }
-    await prepareOrigin();
-    await db.batch([query(`INSERT INTO local_tasks (id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day)
+    await prepareOrigin();livePinned();
+    const taskWrites=[query(`INSERT INTO local_tasks (id,task_hash,create_hash,proposal_id,card_json,task_json,input_version,parent_task_id,created_at,created_day)
      SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_tasks WHERE created_day=?)<?
      AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<?${originGate()} ON CONFLICT(id) DO NOTHING`,
      task.taskId,taskHash,createHash,body.proposalId,cardJson,taskJson,body.inputVersion,body.parentTaskId,at,day,day,limits.tasks,day,limits.taskIdeaLinks,...originArgs()),
      query(`INSERT INTO local_task_ideas (task_id,proposal_id,input_version,parent_task_id,created_at,created_day)
       SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM local_tasks WHERE id=? AND task_hash=? AND task_json=?)
       AND (SELECT COUNT(*) FROM local_task_ideas WHERE created_day=?)<?${originGate()} ON CONFLICT(task_id,proposal_id) DO NOTHING`,
-      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks,...originArgs()),...(originWrite?.statements||[])]);
+      task.taskId,body.proposalId,body.inputVersion,body.parentTaskId,at,day,task.taskId,taskHash,taskJson,day,limits.taskIdeaLinks,...originArgs()),...(originWrite?.statements||[])];livePinned();await db.batch(taskWrites);
     existing=await find(task.taskId);const accepted=await association();
     if(!existing||!accepted)return reply({error:'The daily experiment or idea-link limit has been reached.',code:'daily-quota',retryAt},429);
     if(!compatible(accepted))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
-    if(originWrite)await originWrite.verify();return reply(await view(existing,await storedTask(existing),body.proposalId,null,originId));
+    if(originWrite)await originWrite.verify();const visible=await awaitPinned(view(existing,await storedTask(existing),body.proposalId,null,originId));livePinned();return reply(visible);
    }
    const row=await find(match[1]);if(!row)return reply({error:'Experiment not found.'},404);
    const context=selectedIdea?await query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
@@ -216,6 +235,6 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    if(saved.task_id!==row.id||saved.id!==runId||saved.result_json!==resultJson)throw Error('Stored result mismatch');
    const savedResult=result;
    return reply({taskId:row.id,state:'results-verified',latestRun:{id:saved.id,createdAt:saved.created_at,result:savedResult},...(controls?{controls}:{}),verification:NOTICE});
-  }catch(error){if(error.code==='daily-quota'){const day=now().toISOString().slice(0,10),retryAt=new Date(Date.parse(day+'T00:00:00.000Z')+86400000).toISOString();return reply({error:error.message,code:'daily-quota',retryAt},429);}return reply({error:'Local experiments are temporarily unavailable.'},503);}
+  }catch(error){if(error.code==='daily-quota'){const day=now().toISOString().slice(0,10),retryAt=new Date(Date.parse(day+'T00:00:00.000Z')+86400000).toISOString();return reply({error:error.message,code:'daily-quota',retryAt},429);}return reply({error:'Local experiments are temporarily unavailable.'},503);}finally{if(pinnedTimer!==null)clearTimeout(pinnedTimer);if(pinnedQuestionContext)closePinnedQuestionRequestContext(pinnedQuestionContext);}
  };
 }
