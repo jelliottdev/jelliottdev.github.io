@@ -4,6 +4,7 @@ V2 record.json is the only authored content file. article.md and public aliases
 are derived views; this module never writes files or executes experiments.
 """
 import copy
+import datetime
 import json
 import re
 import unicodedata
@@ -12,6 +13,55 @@ SCHEMA = 'liberpedia-experiment-v2'
 DERIVED = {'summary', 'finding', 'limitations', 'next_steps', 'reader_finding',
            'reader_limit', 'reader_question', 'article', 'article_path', 'reader_sections',
            'record_type', 'method_topics', 'script_sha256', 'article_links'}
+
+
+def validate_published_programs(record):
+    """Declare retained outputs; the publication builder verifies their contents.
+
+    A declaration never supplies or infers a task, method, result or source hash.
+    The retained output's existing reproduction pin is the only source binding.
+    """
+    if 'published_programs' not in record:
+        return
+    declarations = record['published_programs']
+    identifier = record.get('id')
+    if (not isinstance(identifier, str)
+            or not re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)
+            or not isinstance(declarations, list) or not 1 <= len(declarations) <= 32):
+        raise ValueError('published_programs needs 1–32 declarations on a named record')
+    reproduction = record.get('reproduction')
+    outputs = reproduction.get('outputs') if isinstance(reproduction, dict) else None
+    if not isinstance(outputs, list):
+        raise ValueError('published_programs needs pinned reproduction.outputs')
+    ids, paths = set(), set()
+    prefix = 'experiments/records/' + identifier + '/'
+    for item in declarations:
+        if not isinstance(item, dict) or set(item) != {'id', 'output', 'checked_at'}:
+            raise ValueError('published_programs supports id, output and checked_at only')
+        name, path, checked_at = item['id'], item['output'], item['checked_at']
+        if (not isinstance(name, str) or len(name) > 80
+                or not re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', name)
+                or name in ids):
+            raise ValueError('published_programs needs distinct short program IDs')
+        if (not isinstance(path, str) or len(path) > 300
+                or not path.startswith(prefix) or not path.endswith('.json')
+                or not re.fullmatch(r'[a-zA-Z0-9_./-]+', path)
+                or any(part in ('', '.', '..') for part in path.split('/'))
+                or path in paths or path in (prefix + 'record.json', prefix + 'article.json')):
+            raise ValueError('published_programs needs distinct record-local JSON outputs')
+        pins = [entry for entry in outputs if isinstance(entry, dict) and entry.get('path') == path]
+        if (len(pins) != 1 or not isinstance(pins[0].get('sha256'), str)
+                or not re.fullmatch(r'[a-f0-9]{64}', pins[0]['sha256'])):
+            raise ValueError('published_programs output needs exactly one reproduction output pin')
+        if (not isinstance(checked_at, str)
+                or not re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z', checked_at)):
+            raise ValueError('published_programs.checked_at needs a canonical UTC timestamp')
+        try:
+            datetime.datetime.strptime(checked_at, '%Y-%m-%dT%H:%M:%S.%fZ')
+        except ValueError as error:
+            raise ValueError('published_programs.checked_at needs a valid UTC timestamp') from error
+        ids.add(name)
+        paths.add(path)
 
 
 def validate_reader_test(value):
@@ -47,6 +97,7 @@ def compile_content(raw):
                 raise ValueError(key + ' needs one plain trimmed paragraph of at most ' + str(limit) + ' characters')
     if 'reader_test' in record:
         validate_reader_test(record['reader_test'])
+    validate_published_programs(record)
     if 'schema' not in record:
         return record
     if record['schema'] != SCHEMA:

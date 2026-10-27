@@ -13,12 +13,36 @@ class CatalogTests(unittest.TestCase):
         before = copy.deepcopy(sources)
         value = catalog.merge(sources)
         self.assertEqual(value['entries'], [entry for source in sources for entry in source['entries']])
-        self.assertEqual(len(value['entries']), 306)
+        self.assertEqual(catalog.PROVIDERS[:3], ('data/published-program-source-index.json', 'data/published-panel-program-source-index.json', 'data/published-numeric-program-source-index.json'))
+        self.assertEqual(catalog.PROVIDERS[3:], ('data/published-declared-program-source-index.json',))
+        historical = [entry for source in sources[:3] for entry in source['entries']]
+        self.assertEqual(len(historical), 306)
+        self.assertEqual(value['entries'][:306], historical)
+        self.assertEqual(value['entries'][306:], sources[3]['entries'])
         self.assertEqual(value['entries'][:74], [entry for source in sources[:2] for entry in source['entries']])
         self.assertEqual(sources, before)
-        old = (catalog.ROOT / catalog.PROVIDERS[0]).read_bytes()
+        old = [(catalog.ROOT / name).read_bytes() for name in catalog.PROVIDERS[:3]]
         self.assertEqual(catalog.prepare()['data/published-program-source-catalog.json'], catalog.stable(value) + '\n')
-        self.assertEqual((catalog.ROOT / catalog.PROVIDERS[0]).read_bytes(), old)
+        self.assertEqual([(catalog.ROOT / name).read_bytes() for name in catalog.PROVIDERS[:3]], old)
+
+    def test_new_declared_provider_flows_through_default_build_without_rewriting_history(self):
+        sources = [json.loads((catalog.ROOT / name).read_bytes()) for name in catalog.PROVIDERS[:3]]
+        entry = copy.deepcopy(sources[0]['entries'][0])
+        entry.update(recordId='new-declared-record', caseId='new-declared-program', path='data/published-programs/new-declared-program.json')
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            for name in catalog.PROVIDERS[:3]:
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes((catalog.ROOT / name).read_bytes())
+            path = root / catalog.PROVIDERS[3]
+            path.write_text(catalog.stable({'schema': catalog.SCHEMA, 'entries': [entry]}), encoding='utf8')
+            value = catalog.build(root, write=True)
+            self.assertEqual(value['entries'][:-1], [e for source in sources for e in source['entries']])
+            self.assertEqual(value['entries'][-1], entry)
+            self.assertEqual(catalog.build(root), value)
+            for name in catalog.PROVIDERS[:3]:
+                self.assertEqual((root / name).read_bytes(), (catalog.ROOT / name).read_bytes())
 
     def test_duplicates_replacements_and_malformed_providers_reject(self):
         source = json.loads((catalog.ROOT / catalog.PROVIDERS[0]).read_bytes())

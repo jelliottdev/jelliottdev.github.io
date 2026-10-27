@@ -236,6 +236,55 @@ class ContentTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'reader_test.input'):
             compile_content(raw)
 
+    def test_program_publication_selects_one_existing_output_without_duplicating_a_plan(self):
+        output = 'experiments/records/test-record/retained-program.json'
+        declaration = {'id': 'fixed-word-reversal', 'output': output,
+                       'checked_at': '2026-10-25T12:30:00.000Z'}
+        for source in (self.record, self.source()):
+            raw = copy.deepcopy(source)
+            raw['reproduction']['outputs'].append({'path': output, 'sha256': 'a' * 64})
+            raw['published_programs'] = [declaration]
+            before = copy.deepcopy(raw)
+            compiled = compile_content(raw)
+            self.assertEqual(compiled['published_programs'], [declaration])
+            self.assertEqual(raw, before)
+            compiled['published_programs'][0]['id'] = 'different-program'
+            self.assertEqual(raw, before, 'Derived views must not mutate the author declaration')
+
+    def test_program_declarations_reject_unpinned_duplicate_escaped_and_invented_settings(self):
+        output = 'experiments/records/test-record/retained-program.json'
+        valid = {'id': 'fixed-word-reversal', 'output': output,
+                 'checked_at': '2026-10-25T12:30:00.000Z'}
+        mutations = [None, [], {}, [valid, valid], [valid] * 33,
+                     [{**valid, 'steps': [{'op': 'reverse', 'unit': 'word'}]}]]
+        for name in ('', 'Word Reversal', ' padded', 'a' * 81, '../outside', None):
+            mutations.append([{**valid, 'id': name}])
+        for path in ('../outside.json', output.replace('/test-record/', '/other-record/'),
+                     output.replace('/retained-', '/sub/../retained-'),
+                     output.replace('/', '\\'), 'https://example.com/result.json',
+                     'experiments/records/test-record/record.json',
+                     output.replace('.json', '.js'), output + '?query=1', None):
+            mutations.append([{**valid, 'output': path}])
+        for date in ('2026-10-25', '2026-10-25T12:30:00Z', '2026-02-30T12:30:00.000Z',
+                     '2026-10-25T25:30:00.000Z', '2026-10-25T12:30:00.000+00:00', None):
+            mutations.append([{**valid, 'checked_at': date}])
+        for source in (self.record, self.source()):
+            raw = copy.deepcopy(source)
+            raw['reproduction']['outputs'].append({'path': output, 'sha256': 'a' * 64})
+            for declaration in mutations:
+                bad = copy.deepcopy(raw)
+                bad['published_programs'] = declaration
+                with self.subTest(schema=source.get('schema', 'legacy'), declaration=declaration):
+                    with self.assertRaisesRegex(ValueError, 'published_programs'):
+                        compile_content(bad)
+            raw['published_programs'] = [valid]
+            for pins in ([], [{'path': output, 'sha256': 'bad'}],
+                         [{'path': output, 'sha256': 'a' * 64}] * 2):
+                invalid = copy.deepcopy(raw)
+                invalid['reproduction']['outputs'] = pins
+                with self.assertRaisesRegex(ValueError, 'published_programs'):
+                    compile_content(invalid)
+
 
 if __name__ == '__main__':
     unittest.main()

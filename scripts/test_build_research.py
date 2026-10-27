@@ -43,7 +43,8 @@ class BuildTests(unittest.TestCase):
         self.assertLess(names.index('build_repeating_key_banks.py'), names.index('build_experiments.py'))
         self.assertLess(names.index('build_published_count_evidence.py'), names.index('build_published_evidence_history.py'))
         self.assertLess(names.index('build_published_evidence_history.py'), names.index('build_experiments.py'))
-        self.assertLess(names.index('build_experiments.py'), names.index('build_published_program_catalog.py'))
+        self.assertLess(names.index('build_experiments.py'), names.index('build_declared_program_evidence.mjs'))
+        self.assertLess(names.index('build_declared_program_evidence.mjs'), names.index('build_published_program_catalog.py'))
         self.assertLess(names.index('build_published_program_catalog.py'), names.index('build_pinned_parent_artifacts.mjs'))
         self.assertLess(names.index('build_repeating_key_banks.py'), names.index('build_pinned_parent_artifacts.mjs'))
         self.assertLess(names.index('build_pinned_parent_artifacts.mjs'), names.index('build_compiled_program_index.mjs'))
@@ -89,6 +90,7 @@ class BuildTests(unittest.TestCase):
               node_executable=node)
         commands = {Path(command[1]).name: command for command, _ in calls}
         expected = {
+            'build_declared_program_evidence.mjs': (node, ['--write']),
             'build_published_program_catalog.py': (sys.executable, ['--write']),
             'build_pinned_parent_artifacts.mjs': (node, ['--write']),
             'build_compiled_program_index.mjs': (node, []),
@@ -103,7 +105,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(command[0], node if command[1].endswith('.mjs') else sys.executable)
 
     def test_each_program_derivative_failure_stops_before_archives_or_later_derivatives(self):
-        stages = ['build_published_program_catalog.py', 'build_pinned_parent_artifacts.mjs',
+        stages = ['build_declared_program_evidence.mjs', 'build_published_program_catalog.py', 'build_pinned_parent_artifacts.mjs',
                   'build_compiled_program_index.mjs',
                   'build_evidence_registry_fingerprint.mjs', 'build_published_program_discovery.mjs']
         for failed in stages:

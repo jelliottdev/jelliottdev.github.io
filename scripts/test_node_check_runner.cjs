@@ -22,8 +22,17 @@ async function test(name,fn){await fn();count++;console.log('PASS '+name);}
   assert(workflow.includes('id: scope\n        run: node scripts/ci_validation_scope.cjs'));
  });
  await test('manifest rejects duplicate malformed commands flags timeouts and resource declarations',()=>{
-  const good={schema:'liberpedia-node-checks-v1',migration:{count:1,sha256:'a'.repeat(64)},checks:[{args:['scripts/test_example.cjs']}]};validateManifest(good);
+  const first=['scripts/test_example.cjs'],digest=crypto.createHash('sha256').update(JSON.stringify([first])).digest('hex');
+  const good={schema:'liberpedia-node-checks-v1',migration:{count:1,sha256:digest},checks:[{args:first}]};validateManifest(good);
   for(const change of [v=>v.checks.push(v.checks[0]),v=>v.checks=[],v=>v.checks[0].args=['--eval','bad'],v=>v.checks[0].args=['scripts/../bad.cjs'],v=>v.checks[0].args=['scripts/x.cjs','--extra'],v=>v.checks[0].timeoutMs=0,v=>v.checks[0].timeoutMs=600001,v=>v.checks[0].resources=['same','same'],v=>v.checks[0].unknown=true,v=>v.schema='other',v=>v.migration.count=2]){const bad=structuredClone(good);change(bad);assert.throws(()=>validateManifest(bad));}
+ });
+ await test('migration drift fails before scheduling while appended checks preserve the frozen prefix',()=>{
+  const first=['scripts/test_example.cjs'],sha256=crypto.createHash('sha256').update(JSON.stringify([first])).digest('hex');
+  const fixture={schema:'liberpedia-node-checks-v1',migration:{count:1,sha256},checks:[{args:first}]};
+  const appended=structuredClone(fixture);appended.checks.push({args:['scripts/test_new_example.cjs']});assert.equal(validateManifest(appended),appended);
+  for(const edit of [v=>v.checks.unshift({args:['scripts/test_new_example.cjs']}),v=>v.checks[0].args=['scripts/test_replacement.cjs'],v=>v.migration.sha256='0'.repeat(64)]){
+   const changed=structuredClone(fixture);edit(changed);assert.throws(()=>validateManifest(changed),/Original Node checks changed/);
+  }
  });
  const tempRoot=fs.realpathSync(os.tmpdir()),folder=fs.mkdtempSync(path.join(tempRoot,'liberpedia-runner-test-'));
  try{

@@ -633,9 +633,15 @@ pointer schema and lazily reads matching receipts. Catalog changes invalidate
 scan cursors; they do not erase old source receipts.
 
 Provider registration remains necessary for a historical format that lacks a
-maintained adapter. This build integration does not make arbitrary result files
-executable or satisfy single-file experiment authoring by itself. It neither
-executes target calculations nor changes the original findings.
+maintained adapter. New supported fixed programs can instead select standardized
+retained outputs through `published_programs` in their existing `record.json`.
+The shared declared-program builder replays the supplied fixed result, validates
+independent synthetic controls and pins producer, verifier and input bytes.
+Missing output is an error, never a request to generate a replacement. It adds
+one generated provider without per-record registration; existing providers and
+their archived identities remain unchanged. This does not make arbitrary
+historical files executable or change the scientific findings. See the
+[experiment authoring guide](../experiments/README.md#publish-a-retained-browser-compatible-calculation).
 
 The spiral-prime source contributes 32 repeating programs. Its 1,760 nonempty
 archived outputs remain distinct from 32 explicitly structural empty-page

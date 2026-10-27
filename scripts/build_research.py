@@ -17,6 +17,7 @@ STAGES = (
     ('build_published_count_evidence.py',),
     ('build_published_evidence_history.py',),
     ('build_experiments.py',),
+    ('build_declared_program_evidence.mjs', '--write'),
     ('build_published_program_catalog.py', '--write'),
     ('build_pinned_parent_artifacts.mjs', '--write'),
     ('build_compiled_program_index.mjs',),

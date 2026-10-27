@@ -95,6 +95,46 @@ This command builds records, articles, checker data, downloads, the research map
 
 Adding a new historical result format still requires an audited adapter. The build does not infer an executable method, success criterion or page scope from prose. A generated navigation link is not evidence that a new calculation ran. Preview builds deliberately omit these publication stages.
 
+### Publish a retained browser-compatible calculation
+
+For a fixed program supported by the maintained browser runner, retain its task,
+complete result and calculation timestamp with
+`prepareRetainedProgramOutput` from `scripts/retained_program_output.mjs`.
+This helper verifies an existing result and adds independent synthetic controls;
+it refuses missing output. It does not search for a result or decide whether one
+is a solution. The first contract supports raw manuscript text and exact-prefix
+or named exact-prefix-set checks, using the existing runner operations.
+
+Save that generated JSON with the experiment's outputs and pin it in
+`reproduction.outputs` normally. Add only its publication selection to the same
+authored `record.json`:
+
+```json
+"published_programs": [{
+  "id": "fixed-word-reversal",
+  "output": "experiments/records/your-short-id/retained-program.json",
+  "checked_at": "2026-10-25T12:30:00.000Z"
+}]
+```
+
+Use the actual retained calculation timestamp; it must match `run.createdAt`
+exactly. The declaration does not repeat the task, criterion, pages, result or
+output hash. The shared build validates the pinned producer and source files,
+official text and alphabet, retained calculation and independent controls. It
+then generates the evidence receipt, catalog, saved-calculation links and the
+existing supported setting choices. There is no per-record browser code or
+provider registration for this format.
+
+Each record may select up to 32 distinct retained outputs. A program's pages
+must retain their original order and lie within the record's scope. Unsupported
+criteria and historical output formats fail explicitly rather than being
+translated from prose. Draft records leave the active program index; old
+content-addressed receipts remain available. Published receipt paths and the
+owner's `record.json` cannot be reproduction dependencies of their own receipts.
+Independent review of the scientific claim remains separate from checking a
+fixed calculation. No community proposal, task or result is created by this
+publication build.
+
 Existing records and archived bundles remain supported in their original format. They are not automatically rewritten or summarized. For a deliberate migration, embed the exact account bytes in `analysis` and verify every frozen dependency; never refresh an evidence hash just to make a conversion pass. The source schema is stricter for new records, while public export fields remain compatible with existing tools.
 
 Drafts do not enter public indexes, but committed drafts are still public files. Never commit private material. Review metadata must identify the actual computational reviewer; independent human review is complete only when its name, date and findings are recorded. A pending review has no implied assignee or deadline.

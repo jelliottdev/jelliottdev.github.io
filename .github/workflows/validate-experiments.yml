@@ -235,6 +235,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/published_known_key_projection.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_experiments.py
+        if: steps.scope.outputs.science == 'true'
       - name: Validate panel source work and program catalog
         if: steps.scope.outputs.science == 'true'
         run: |
@@ -244,6 +246,7 @@ jobs:
           python scripts/published_panel_prime_projection.py
           python scripts/test_published_numeric_bank_projection.py
           python scripts/published_numeric_bank_projection.py --check-installed
+          node scripts/build_declared_program_evidence.mjs --check
           python scripts/test_published_program_catalog.py
           python scripts/build_published_program_catalog.py
       - run: python scripts/build_published_count_evidence.py --check
@@ -253,8 +256,6 @@ jobs:
       - run: python scripts/build_published_evidence_history.py --check
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_discovery_projection.py
-        if: steps.scope.outputs.science == 'true'
-      - run: python scripts/test_experiments.py
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiment_article_links.py
         if: steps.scope.outputs.science == 'true'

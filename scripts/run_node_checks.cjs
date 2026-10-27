@@ -1,5 +1,5 @@
 'use strict';
-const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spawn}=require('node:child_process');
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{createHash}=require('node:crypto'),{spawn}=require('node:child_process');
 const ROOT=path.resolve(__dirname,'..'),DEFAULT_TIMEOUT=120000,MAX_TIMEOUT=600000;
 function keys(value,allowed){return value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(k=>allowed.includes(k));}
 function validateManifest(value){
@@ -14,6 +14,8 @@ function validateManifest(value){
   if(check.timeoutMs!==undefined&&(!Number.isInteger(check.timeoutMs)||check.timeoutMs<1||check.timeoutMs>MAX_TIMEOUT))throw Error('Invalid timeout');
   if(check.resources!==undefined&&(!Array.isArray(check.resources)||check.resources.some(r=>typeof r!=='string'||! /^[a-zA-Z0-9_-]+$/.test(r))||new Set(check.resources).size!==check.resources.length))throw Error('Invalid resource locks');
  }
+ const original=value.checks.slice(0,value.migration.count).map(check=>check.args);
+ if(createHash('sha256').update(JSON.stringify(original)).digest('hex')!==value.migration.sha256)throw Error('Original Node checks changed; append new checks after the frozen migration prefix.');
  return value;
 }
 async function runChecks(checks,{workers=4,cwd=ROOT,executable=process.execPath,timeoutMs=DEFAULT_TIMEOUT,onResult=()=>{}}={}){

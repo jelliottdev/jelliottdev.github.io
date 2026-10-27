@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = 'liberpedia-published-program-source-index-v1'
-PROVIDERS = ('data/published-program-source-index.json', 'data/published-panel-program-source-index.json', 'data/published-numeric-program-source-index.json')
+PROVIDERS = ('data/published-program-source-index.json', 'data/published-panel-program-source-index.json', 'data/published-numeric-program-source-index.json', 'data/published-declared-program-source-index.json')
 MAX_BYTES = 4 * 1024 * 1024
 MAX_ENTRIES = 1024
 
