@@ -1,0 +1,47 @@
+/* Explicit reviewed implementation preparation. Only durable preparation receipts are written. */
+import C from '../../claim-specification.js';
+import MD from '../../method-design.js';
+import MI from '../../method-implementation.js';
+import V from '../../declarative-rune-program.js';
+import Controls from '../../declarative-plan-controls.js';
+import J from '../../finite-json.js';
+import {validateCard} from './idea-relations.mjs';
+import {issue} from './prepared-plans.mjs';
+import {loadInputBundle} from './official-inputs.mjs';
+export const LIMITS=Object.freeze({bodyBytes:128000,sourceBytes:2*1024*1024,responseBytes:2*1024*1024,timeoutMs:20000});
+const SOURCE='https://jelliottdev.github.io/data/local-run-inputs.json',encoder=new TextEncoder(),need=(ok,message)=>{if(!ok)throw Error(message);},exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
+function parseJSON(text){const value=JSON.parse(text),stack=[];for(const match of text.matchAll(/"(?:[^"\\]|\\.)*"|[{}\[\]:,]|true|false|null|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g)){const token=match[0],top=stack.at(-1);if(token==='{')stack.push({object:true,key:true,seen:new Set()});else if(token==='[')stack.push({object:false});else if(token==='}'||token===']')stack.pop();else if(token===','&&top?.object)top.key=true;else if(token[0]==='"'&&top?.object&&top.key){const key=JSON.parse(token);need(!top.seen.has(key),'Duplicate JSON field');top.seen.add(key);top.key=false;}}return value;}
+async function bodyJSON(request,signal){
+ need(/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''),'JSON required');const length=request.headers.get('content-length');need(length===null||/^\d+$/.test(length)&&Number(length)<=LIMITS.bodyBytes,'Body too large');need(!signal.aborted,'Cancelled');const reader=request.body?.getReader();need(reader,'Body required');let bytes=0;const parts=[],cancel=()=>{try{void reader.cancel().catch(()=>{});}catch{}};signal.addEventListener('abort',cancel,{once:true});
+ try{for(;;){const part=await reader.read();need(!signal.aborted,'Cancelled');if(part.done)break;bytes+=part.value.byteLength;need(bytes<=LIMITS.bodyBytes,'Body too large');parts.push(part.value);}const joined=new Uint8Array(bytes);let at=0;for(const part of parts){joined.set(part,at);at+=part.byteLength;}return J.capture(parseJSON(new TextDecoder('utf-8',{fatal:true}).decode(joined)),{maxBytes:LIMITS.bodyBytes,maxDepth:24,maxNodes:10000});}
+ finally{signal.removeEventListener('abort',cancel);cancel();}
+}
+
+const hash=async(value,crypto)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',encoder.encode(C.serialize(value)))),n=>n.toString(16).padStart(2,'0')).join('');
+async function sourceBytes(response,signal){
+ need(!signal.aborted&&response.ok&&!response.redirected&&(!response.url||response.url===SOURCE)&&/^application\/json(?:\s*;|$)/i.test(response.headers.get('content-type')||''),'The official source is unavailable or changed location.');
+ const length=response.headers.get('content-length');need(length===null||/^\d+$/.test(length)&&Number(length)<=LIMITS.sourceBytes,'Official source bound');const reader=response.body?.getReader();need(reader,'Official source body');const parts=[];let size=0;const cancel=()=>{try{void reader.cancel().catch(()=>{});}catch{}};signal.addEventListener('abort',cancel,{once:true});
+ try{for(;;){const p=await reader.read();need(!signal.aborted,'Cancelled');if(p.done)break;size+=p.value.byteLength;need(size<=LIMITS.sourceBytes,'Official source bound');parts.push(p.value);}const bytes=new Uint8Array(size);let at=0;for(const p of parts){bytes.set(p,at);at+=p.byteLength;}return bytes;}finally{signal.removeEventListener('abort',cancel);cancel();}
+}
+export function createMethodImplementationPreparationHandler({fetcher=globalThis.fetch,now=()=>new Date(),schedule=setTimeout,unschedule=clearTimeout}={}){
+ need(typeof fetcher==='function'&&typeof now==='function'&&typeof schedule==='function'&&typeof unschedule==='function','Invalid preparation options');
+ return async(request,env={})=>{
+  const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',Vary:'Origin'},reply=(value,status=200)=>new Response(JSON.stringify(value),{status,headers}),unavailable=()=>reply({error:'This reviewed implementation could not be prepared. The saved question is unchanged.'},503),origin=env.SITE_ORIGIN;
+  try{need(typeof origin==='string'&&new URL(origin).origin===origin&&['https:','http:'].includes(new URL(origin).protocol),'Origin');}catch{return unavailable();}
+  if(request.headers.get('origin')!==origin)return reply({error:'Request is not allowed.'},403);headers['Access-Control-Allow-Origin']=origin;const url=new URL(request.url);if(url.pathname!=='/prepare-implementation'||url.search)return reply({error:'Not found.'},404);
+  if(request.method==='OPTIONS'){const keys=(request.headers.get('access-control-request-headers')||'').split(',').map(k=>k.trim().toLowerCase()).filter(Boolean);return request.headers.get('access-control-request-method')==='POST'&&keys.every(k=>k==='content-type')?new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}}):reply({error:'Request is not allowed.'},403);}
+  if(request.method!=='POST'){headers.Allow='POST, OPTIONS';return reply({error:'Method is not allowed.'},405);}const db=env.PROPOSALS,rate=env.TASK_LIMIT||env.PROPOSAL_LIMIT;if(typeof db?.prepare!=='function'||typeof rate?.limit!=='function')return unavailable();
+  const controller=new AbortController(),stop=()=>controller.abort(),live=()=>need(!controller.signal.aborted,'Cancelled');request.signal.addEventListener('abort',stop,{once:true});if(request.signal.aborted)stop();let abort;const cancelled=new Promise((_,reject)=>{abort=()=>reject(Error('Cancelled'));controller.signal.addEventListener('abort',abort,{once:true});if(controller.signal.aborted)abort();}),timer=schedule(stop,LIMITS.timeoutMs);
+  const work=async()=>{
+   let body,card,source,token;try{body=await bodyJSON(request,controller.signal);need(exact(body,['proposalId','card','implementation','review'])&&typeof body.proposalId==='string'&&/^p_[a-f0-9]{64}$/.test(body.proposalId),'Exact review request');card=validateCard(body.card);need(C.serialize(card)===C.serialize(body.card),'Canonical card');source=MD.readCard(card);need(source&&body.proposalId==='p_'+await hash(card,crypto),'Exact structured proposal');token=await MI.bind({proposal:source.proposal,implementation:body.implementation},crypto);need(MI.inspect(token).ready,'The implementation still has unsupported parts');need(exact(body.review,['schema','proposalSha256','implementationSha256'])&&body.review.schema==='liberpedia-method-implementation-review-v1'&&body.review.proposalSha256===await hash(source.proposal,crypto)&&body.review.implementationSha256===await hash(body.implementation,crypto),'Review the exact implementation');live();}catch{live();return reply({error:'Review the complete, exact implementation before preparing it.'},400);}
+   const allowed=await rate.limit({key:request.headers.get('CF-Connecting-IP')||'unknown'});live();if(!allowed?.success)return reply({error:'Please wait before preparing another experiment.'},429);
+   const saved=await db.prepare('SELECT card_hash,card_json FROM proposals WHERE id=?').bind(body.proposalId).first();live();need(saved&&saved.card_hash===body.proposalId.slice(2)&&C.serialize(validateCard(saved.card_json))===C.serialize(card),'Saved proposal unavailable');
+   let memo=null;const requestFetcher=async(url,options={})=>{need(url===SOURCE,'Only official aggregate source loading is allowed');live();if(memo===null)memo=Promise.resolve().then(()=>fetcher(SOURCE,{...options,redirect:'manual',signal:controller.signal})).then(response=>sourceBytes(response,controller.signal));const bytes=await memo;live();return new Response(bytes.slice(),{headers:{'Content-Type':'application/json'}});};
+   const bundle=await loadInputBundle({fetcher:requestFetcher,signal:controller.signal,read:async response=>parseJSON(new TextDecoder('utf-8',{fatal:true}).decode(new Uint8Array(await response.arrayBuffer())))});live();
+   const raw={schema:'liberpedia-local-inputs-v1',alphabet:bundle.alphabet,pages:[...bundle.pages.values()]},task=await V.prepare(MI.compileBody(token,{bundle:raw}),crypto);live();const controls=await Controls.prepare(task,crypto);live();
+   const result={state:'plan-ready',proposalId:body.proposalId,task,controls,inputVersion:source.proposal.inputVersion,parentTaskId:null,purpose:'A reviewed proposed computation; it does not establish the hypothesis or a decryption.',notes:[]};need(encoder.encode(JSON.stringify({...result,preparation:' '.repeat(2048)})).length<=LIMITS.responseBytes,'Prepared response exceeds its bound');
+   const preparation=await issue({db,proposalId:body.proposalId,card,task,controls,inputVersion:source.proposal.inputVersion,parentTaskId:null,authority:'idea',basis:{kind:'method-implementation-v1',implementation:body.implementation,review:body.review},createdAt:now().toISOString(),fetcher:requestFetcher,signal:controller.signal});live();return reply({...result,preparation});
+  };
+  try{return await Promise.race([work(),cancelled]);}catch{return unavailable();}finally{unschedule(timer);request.signal.removeEventListener('abort',stop);controller.signal.removeEventListener('abort',abort);controller.abort();}
+ };
+}

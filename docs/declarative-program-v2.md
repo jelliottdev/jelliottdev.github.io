@@ -1,6 +1,6 @@
 # Declarative rune programs, version 2
 
-Status: execution foundation, not yet a public idea-to-experiment path.
+Status: private integration tested; the public idea-to-experiment UI is not yet connected.
 
 The old runner preserves rune positions. It cannot represent removing filler
 runes without changing its evidence contract. Version 2 is a separate task,
@@ -29,6 +29,23 @@ converted or reinterpreted.
 - `declarative-program-description.js` explains the actual typed operations and
   illustrates them using invented input. It does not infer a key source from a
   title or turn proposed evaluations into supported ones.
+- `method-implementation.js` binds a separate program draft to the exact
+  structured proposal. Coverage must account for every step, parameter, control,
+  evaluation, representation and key-use statement. Ordered steps cannot be
+  silently reversed; one program cannot claim multiple parameter alternatives.
+  Complete coverage remains a proposed mapping, not proof of faithful meaning.
+- The implementation draft handler, review component and preparation workspace
+  preserve unsupported parts and never supply a missing evaluation. They are
+  separate from task creation and execution.
+- `method-implementation-origin.mjs` reconstructs the reviewed implementation
+  from the official aggregate during preparation and fresh authorization.
+  Preparation receipts bind the original card, program, full scope, source
+  edition and independent control suite. Version-two tasks cannot borrow a
+  legacy preparation authority or authored origin.
+- The task persistence path saves and independently replays shortened outputs
+  and their alignment. Shared legacy evidence and expansion paths remain closed
+  to version two. Device recovery and result views use the exact version
+  dispatcher; raw or self-hashed results cannot become verified findings.
 
 ## Required before public admission
 
@@ -36,22 +53,15 @@ The structured method proposal is intent, not executable authority. Do not parse
 its prose, choose a neighboring method, or substitute a supported measurement for
 an unsupported evaluation just to make it runnable.
 
-1. Translate into a separate bounded implementation draft, tied to the exact
-   saved proposal hash. An AI may propose typed operations; their shape alone
-   does not prove semantic agreement with the idea.
-2. Derive the explanation and invented example from that program. Show key
-   material separately from arithmetic, feedback and reset rules. Surface
-   differences and unsupported conditions/evaluations before explicit review.
-3. Bind reviewed implementation, original card/proposal, official input edition,
-   exact page scope, task and independent controls in durable preparation
-   authorization. Reconstruct and check the same binding at task creation.
-4. Dispatch task/result saving and replay by exact version. Add version-2
-   computation evidence and pinned reproduction sources. Leave old evidence,
-   archive and reuse paths closed to version 2 until their contracts support it.
-5. Verify the full visitor path: saved idea → implementation review → controls →
+1. Connect the drafted implementation and review components to the saved idea
+   and runnable task screens. Test the live model's schema support and ability
+   to preserve missing scientific evaluations, not only mocked responses.
+2. Verify the full visitor path: saved idea → implementation review → controls →
    local run → explicit save → reload and independent replay. No automatic
    execution or public test records during software verification.
-6. Measure maximum-size execution and verification in the deployed verifier's
+3. Add version-2 computation evidence and pinned reproduction sources. Leave
+   old evidence, archive and reuse paths closed until their contracts support it.
+4. Measure maximum-size execution and verification in the deployed verifier's
    memory budget, including the submitted result and request overhead. A passing
    Node heap probe does not establish that a Worker isolate has enough memory.
 

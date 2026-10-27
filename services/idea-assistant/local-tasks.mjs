@@ -10,7 +10,9 @@ import {readAdmittedFiniteSnapshotMember,createAuthoredFiniteSourceLoader} from 
 import {authorize as authorizePreparation} from './prepared-plans.mjs';
 import {loadInputBundle} from './official-inputs.mjs';
 /* Bounded declarative computation persistence. No user code or scientific verdicts. */
-import L from '../../local-experiment.js';
+import L from '../../local-experiment-dispatch.js';
+import V2 from '../../declarative-rune-program.js';
+import V2Controls from '../../declarative-plan-controls.js';
 import PlanControls from '../../local-plan-controls.js';
 import {validateCard} from './idea-relations.mjs';
 import {loadRecordPlan,validOrigin as validRecordedOrigin} from './record-plans.mjs';
@@ -19,6 +21,7 @@ import {boundaryComparison} from './boundary-comparison.mjs';
 import {storageLimits as checkedStorageLimits} from './storage-limits.mjs';
 import {scopeRelation} from './authored-prefix-remainder.mjs';
 const MAX_BODY=2*1024*1024, HEX=/^[a-f0-9]{64}$/, PROPOSAL=/^p_[a-f0-9]{64}$/;
+const isV2=task=>task?.schema===V2.TASK&&task?.engine===V2.ENGINE;
 const NOTICE='Verified computation only; this does not establish a correct reading or scientific conclusion.';
 const originalPrepareControls=PlanControls.prepare,readControls=createReadControlCache();
 const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -73,7 +76,7 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
   const awaitPinned=async promise=>{if(!pinnedSignal)return promise;livePinned();let abort;try{return await Promise.race([promise,new Promise((_,reject)=>{abort=()=>reject(Error('Pinned task admission cancelled or timed out.'));pinnedSignal.addEventListener('abort',abort,{once:true});if(pinnedSignal.aborted)abort();})]);}finally{pinnedSignal.removeEventListener('abort',abort);}};
   const db=env.PROPOSALS,query=(sql,...args)=>db.prepare(sql).bind(...args),find=id=>query('SELECT * FROM local_tasks WHERE id = ?',id).first();
   const requestControls=prepareControls===originalPrepareControls?createRequestControlMemo({prepare:prepareControls,crypto}):null;
-  const controlsFor=async(task,readOnly=false)=>{if(readOnly&&prepareControls===originalPrepareControls)return readControls.read(task,crypto);const suite=requestControls?await requestControls.read(task,crypto):await prepareControls(task,crypto);if(prepareControls!==originalPrepareControls)await PlanControls.validate(suite,task,crypto);else readControls.prime(task,suite);return suite;};
+  const controlsFor=async(task,readOnly=false)=>{if(isV2(task))return V2Controls.prepare(task,crypto);if(readOnly&&prepareControls===originalPrepareControls)return readControls.read(task,crypto);const suite=requestControls?await requestControls.read(task,crypto):await prepareControls(task,crypto);if(prepareControls!==originalPrepareControls)await PlanControls.validate(suite,task,crypto);else readControls.prime(task,suite);return suite;};
   const publicContext=row=>query(`SELECT links.proposal_id,links.input_version,links.parent_task_id,links.created_at,p.card_json
    FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
    JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=?
@@ -88,6 +91,12 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     SELECT links.proposal_id FROM local_task_ideas links JOIN research_ideas public ON public.proposal_id=links.proposal_id
     WHERE links.task_id=? ORDER BY links.created_at,links.proposal_id LIMIT 51)`,row.id).first();
    const publicIds=JSON.parse(publicRows?.ids||'[]');
+   if(isV2(task)){
+    if(context.parent_task_id!==null)throw Error('A declarative task cannot inherit a legacy parent.');
+    const authored=await query('SELECT COUNT(*) AS count FROM local_task_all_origins WHERE task_id=?',row.id).first();if(authored?.count!==0)throw Error('A declarative task cannot inherit a legacy authored origin.');
+    const controls=await controlsFor(task),result=latest?await readAdmittedResult(task,latest):null;
+    return {...projection(row,task,result?{id:latest.id,createdAt:latest.created_at,result}:null,context),origins:[],controls,relatedIdeaIds:publicIds.slice(0,50),...(publicIds.length>50?{relatedIdeasTruncated:true}:{}),...(linkedProposalId?{linkedProposalId,linkedInputVersion:context.input_version,linkedParentTaskId:null}:{})};
+   }
    const selectedOriginRow=linkedProposalId?await query(`SELECT o.origin_id,o.origin_json FROM local_task_all_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=? AND o.proposal_id=? ORDER BY CASE WHEN o.origin_id=? THEN 0 ELSE 1 END,o.created_at,o.origin_id LIMIT 1`,row.id,linkedProposalId,preferredOriginId).first():null;
    if(selectedOriginRow)preferredOriginId=selectedOriginRow.origin_id;
    const originRows=await query(`SELECT json_group_array(json_object('origin',json(origin_json),'snapshotText',snapshot_json,'storage',storage_kind)) AS entries FROM (
@@ -114,14 +123,15 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
    }
    const at=now().toISOString(),day=at.slice(0,10),retryAt=new Date(Date.parse(day+'T00:00:00.000Z')+86400000).toISOString();
    if(create){
-    let task,taskJson,taskHash,createHash;
+    let task,taskJson,taskHash,createHash,authorizedV2Task=false;
     try{
      exact(body,['proposalId','task','inputVersion','parentTaskId',...(Object.hasOwn(body,'origin')?['origin']:[]),...(Object.hasOwn(body,'preparationId')?['preparationId']:[])]);
      if(Object.hasOwn(body,'preparationId')&&(typeof body.preparationId!=='string'||!/^prep_[a-f0-9]{64}$/.test(body.preparationId)||Object.hasOwn(body,'origin')))throw Error();
      if(Object.hasOwn(body,'origin')&&!validRecordedOrigin(body.origin))throw Error();
      if(!PROPOSAL.test(body.proposalId)||!['raw','reviewed'].includes(body.inputVersion)||(body.parentTaskId!==null&&!HEX.test(body.parentTaskId)))throw Error();
-     task=await L.checkIdentity(body.task);taskJson=L.stable(task);taskHash=await digest(taskJson);createHash=await digest(L.stable(body));
+     task=await L.checkIdentity(body.task);if(isV2(task)&&(body.parentTaskId!==null||Object.hasOwn(body,'origin')))throw Error('Version-two tasks require their reviewed implementation.');taskJson=L.stable(task);taskHash=await digest(taskJson);createHash=await digest(L.stable(body));
     }catch{return reply({error:'The experiment plan is invalid or changed.'},400);}
+    if(isV2(task)&&!body.preparationId)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
     let existing=await find(task.taskId);
     const proposal=await query('SELECT card_json FROM proposals WHERE id = ?',body.proposalId).first();
     if(!proposal)return reply({error:'Confirmed idea not found.'},404);
@@ -157,6 +167,12 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     const linked=await association();
     if(linked){
      if(!compatible(linked))return reply({error:'This idea already links the computation with a different input version or parent.'},409);
+     if(isV2(task)){
+      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
+      const authorized=await authorizePreparation({db,signal:request.signal,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:null,controls,fetcher});
+      if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);
+      livePinned();existing=existing||await find(task.taskId);if(!existing)throw Error('Linked task unavailable');return reply(await view(existing,await storedTask(existing),body.proposalId));
+     }
      // A previously linked pending task is not permission to bypass the new
      // reviewed prefix-evidence snapshot. Legacy idempotent links stay unchanged.
      if(body.preparationId&&!reviewed){const prepared=preparedBasisRow||await query('SELECT basis_json FROM prepared_plans WHERE id=?',body.preparationId).first();if(prepared&&['pinned-domain-member-v1','pinned-question-member-v1','authored-finite-member-v1','ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1','ordinary-derived-assessment-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(JSON.parse(prepared.basis_json).kind)){
@@ -168,12 +184,12 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     if(!reviewed){
      let controls;try{controls=await controlsFor(task);}catch{return reply({error:'The implementation controls could not be verified. No experiment was saved.'},422);}
      const authorized=await awaitPinned(authorizePreparation({db,signal:request.signal,preparationId:body.preparationId,proposalId:body.proposalId,card:JSON.parse(cardJson),task,inputVersion:body.inputVersion,parentTaskId:body.parentTaskId,controls,fetcher:pinnedQuestionContext?pinnedFetcher:fetcher,loadAuthoredSource:sourceLoader,loadPinnedDomain,loadPinnedBundle,...(pinnedQuestionContext?{pinnedQuestionContext}:{})}));
-     if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);acceptPinnedAuthorization(authorized);
+     if(!authorized)return reply({error:'Review a freshly prepared plan before creating this experiment.'},409);acceptPinnedAuthorization(authorized);if(isV2(task))authorizedV2Task=true;
      if(authorized.reviewed){reviewed=authorized.reviewed;originId=await digest(L.stable(reviewed.origin));}
     }
     // Identical bytes under the same already-verified input version can be reused.
     // A different version must independently match that version's official source.
-    if(!reviewed&&!authorizedPinnedTask&&(!existing||existing.input_version!==body.inputVersion)){
+    if(!reviewed&&!authorizedPinnedTask&&!authorizedV2Task&&(!existing||existing.input_version!==body.inputVersion)){
     const sourceController=new AbortController(),sourceTimer=setTimeout(()=>sourceController.abort(),20000);
     try{
      let fetched=0,next=0;
@@ -215,19 +231,20 @@ export function createLocalTaskHandler({fetcher=globalThis.fetch,now=()=>new Dat
     JOIN proposals p ON p.id=links.proposal_id WHERE links.task_id=? AND links.proposal_id=?`,row.id,selectedIdea).first():await publicContext(row);
    if(!context)return reply({error:'Experiment not found.'},404);
    const task=await storedTask(row);
-   if(comparisonRoute){const comparison=await boundaryComparison({db,task,inputVersion:context.input_version,discoverEvidence});return comparison?reply(comparison):reply({error:'This experiment has no supported boundary comparison.'},422);}
+   if(comparisonRoute){if(isV2(task))return reply({error:'This experiment has no supported boundary comparison.'},422);const comparison=await boundaryComparison({db,task,inputVersion:context.input_version,discoverEvidence});return comparison?reply(comparison):reply({error:'This experiment has no supported boundary comparison.'},422);}
    if(method==='GET')return reply(await view(row,task,selectedIdea,context));
    let result,controls;
    try{
     exact(body,['result']);
     const authored=await query('SELECT COUNT(*) AS count FROM local_task_all_origins o JOIN research_ideas public ON public.proposal_id=o.proposal_id WHERE o.task_id=?',row.id).first();
     if(!Number.isSafeInteger(authored?.count)||authored.count<0)throw Error('Invalid reviewed origin count');
+    if(isV2(task)&&authored.count)throw Error('Legacy origins cannot authorize a declarative result.');
     if(!authored.count||task.criterion.kind==='language-score')controls=await controlsFor(task);
     result=await L.verify(task,body.result);
    }catch{return reply({error:'The implementation controls or results do not match this exact experiment.'},422);}
    const resultJson=L.stable(result),runId=await digest(resultJson);
    let saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();
-   if(!saved){await db.batch([query(`INSERT INTO local_task_results (id,task_id,result_json,created_at,created_day)
+   if(!saved){if(isV2(task))livePinned();await db.batch([query(`INSERT INTO local_task_results (id,task_id,result_json,created_at,created_day)
     SELECT ?,?,?,?,? WHERE (SELECT COUNT(*) FROM local_task_results WHERE created_day=?)<? ON CONFLICT(id) DO NOTHING`,runId,row.id,resultJson,at,day,day,limits.results)]);saved=await query('SELECT * FROM local_task_results WHERE id=?',runId).first();}
    if(!saved)return reply({error:'The daily result limit has been reached.',code:'daily-quota',retryAt},429);
    // Admission already independently replayed this exact result above. Read

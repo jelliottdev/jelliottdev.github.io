@@ -1,7 +1,7 @@
 /* Bounded unsaved fixed outputs. Storage is never a verification or run permission. */
 (function(root){
  'use strict';
- const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON;
+ const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment-dispatch.js'):(root.LocalExperimentDispatch||root.LocalExperiment),J=node?require('./finite-json.js'):root.FiniteJSON;
  const LIMITS=Object.freeze({entryBytes:4*1024*1024,totalBytes:32*1024*1024,entries:8}),HEX=/^[a-f0-9]{64}$/;
  const exact=(v,k)=>v&&typeof v==='object'&&!Array.isArray(v)&&Reflect.ownKeys(v).length===k.length&&k.every(key=>{const d=Object.getOwnPropertyDescriptor(v,key);return d&&d.enumerable&&Object.hasOwn(d,'value');});
  const capture=v=>J.capture(v,{maxBytes:LIMITS.entryBytes,maxDepth:24,maxNodes:500000}),size=v=>new TextEncoder().encode(E.stable(v)).byteLength;

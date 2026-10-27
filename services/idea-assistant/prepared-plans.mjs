@@ -8,8 +8,9 @@ import {checkedOrdinaryPrefixEvidence,discoverOrdinaryPrefixEvidence,combineOrdi
 /* Immutable server-issued admission proof. No generation, inference or task writes. */
 import C from '../../claim-specification.js';
 import Share from '../../claim-share.js';
-import E from '../../local-experiment.js';
-import Controls from '../../local-plan-controls.js';
+import E from '../../local-experiment-dispatch.js';
+import Controls from '../../local-plan-controls-dispatch.js';
+import {checkedMethodImplementation} from './method-implementation-origin.mjs';
 import Variants from '../../task-variants.js';
 import {validateCard} from './idea-relations.mjs';
 import Evidence from '../../computation-evidence.js';
@@ -69,6 +70,12 @@ async function basisFor(db,value,bound,authority,fresh=false,fetcher=globalThis.
  const data=json(value,128000),basis=data.value;
  const contextDeps=pinnedQuestionContext===undefined?null:assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});
  if(contextDeps)require(authority==='idea'&&basis.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only admits its original pinned question.');
+ if(bound.task.engine==='rune-program-v2'){
+  require(authority==='idea'&&basis.kind==='method-implementation-v1'&&!contextDeps,'Version-two tasks need their exact reviewed implementation.');
+  await checkedMethodImplementation({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,parentTaskId:bound.base.parentTaskId,fetcher,signal});
+  return {text:data.text,hash:await sha(data.text)};
+ }
+ require(basis.kind!=='method-implementation-v1','A reviewed declarative implementation needs its exact engine version.');
  if(authority==='idea'){
   if(basis.kind==='pinned-question-member-v1'){require(bound.base.parentTaskId===null,'Pinned question members preserve their complete original question');await checkedPinnedQuestionMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,loadDomain:loadPinnedDomain,loadBundle:loadPinnedBundle,fetcher,...(contextDeps?{requestContext:pinnedQuestionContext,signal:contextDeps.signal}:{})});require(basis.parentProposalId===bound.base.proposalId,'The complete parent question identity changed');if(fresh)await assertPinnedQuestionTaskUncovered({db,task:bound.task,inputVersion:bound.base.inputVersion,fetcher,...(contextDeps?{signal:contextDeps.signal}:{})});return {text:data.text,hash:await sha(data.text)};}
   if(basis.kind==='pinned-domain-member-v1'){require(bound.base.parentTaskId===null,'Pinned members preserve an independent parent-domain identity');await checkedPinnedDomainMember({basis,card:bound.card,task:bound.task,inputVersion:bound.base.inputVersion,loadDomain:loadPinnedDomain,loadBundle:loadPinnedBundle,fetcher});return {text:data.text,hash:await sha(data.text)};}
@@ -233,9 +240,10 @@ export async function issue({db,proposalId,card,task,inputVersion,parentTaskId,c
   &&Number.isFinite(Date.parse(createdAt))&&new Date(createdAt).toISOString()===createdAt,'Invalid preparation date');
  const b=bound.base,day=createdAt.slice(0,10);
  liveContext();
- await query(db,`INSERT INTO prepared_plans(id,binding_hash,proposal_id,card_hash,task_id,task_hash,input_version,parent_task_id,authority,controls_hash,basis_hash,basis_json,created_at,created_day)
+ const insert=db.prepare(`INSERT INTO prepared_plans(id,binding_hash,proposal_id,card_hash,task_id,task_hash,input_version,parent_task_id,authority,controls_hash,basis_hash,basis_json,created_at,created_day)
   SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM prepared_plans WHERE created_day=?)<?
-  ON CONFLICT(id) DO NOTHING RETURNING id`,id,bound.bindingHash,proposalId,b.cardHash,b.taskId,b.taskHash,inputVersion,parentTaskId,authority,b.controlsHash,source.hash,source.text,createdAt,day,day,limits.preparations);
+  ON CONFLICT(id) DO NOTHING RETURNING id`).bind(id,bound.bindingHash,proposalId,b.cardHash,b.taskId,b.taskHash,inputVersion,parentTaskId,authority,b.controlsHash,source.hash,source.text,createdAt,day,day,limits.preparations);
+ liveContext();await insert.first();
  row=await query(db,'SELECT * FROM prepared_plans WHERE id=?',id);
  if(!row){const error=Error('The daily prepared-plan limit has been reached');error.code='preparation-limit';throw error;}
  const receipt=await checked(row,bound);require(receipt,'Prepared plan could not be verified');liveContext();return receipt;
@@ -250,6 +258,6 @@ export async function authorize({db,preparationId,proposalId,card,task,inputVers
   await query(db,'SELECT * FROM prepared_plans WHERE binding_hash=? ORDER BY created_at,id LIMIT 1',bound.bindingHash):
   await query(db,'SELECT * FROM prepared_plans WHERE id=? AND binding_hash=?',preparationId,bound.bindingHash);
  const receipt=await checked(row,bound);if(!receipt)return null;
- try{const basis=JSON.parse(row.basis_json);if(pinnedQuestionContext!==undefined){assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});require(row.authority==='idea'&&basis.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only authorizes its original pinned question.');}if(['pinned-domain-member-v1','pinned-question-member-v1'].includes(basis.kind)){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext);if(pinnedQuestionContext!==undefined)inspectPinnedQuestionRequestContext(pinnedQuestionContext);return receipt;}if(basis.kind==='authored-finite-member-v1'){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource);return {...receipt,reviewed:await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion,fetcher,loadAuthoredSource})};}if(['ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1','ordinary-derived-assessment-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher,undefined,undefined,undefined,undefined,signal);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
+ try{const basis=JSON.parse(row.basis_json);if(bound.task.engine==='rune-program-v2'||basis.kind==='method-implementation-v1'){await basisFor(db,basis,bound,row.authority,true,fetcher,undefined,undefined,undefined,pinnedQuestionContext,signal);return signal?.aborted?null:receipt;}if(pinnedQuestionContext!==undefined){assertPinnedQuestionContextDependencies(pinnedQuestionContext,{db,fetcher,crypto:globalThis.crypto});require(row.authority==='idea'&&basis.kind==='pinned-question-member-v1'&&!loadPinnedDomain&&!loadPinnedBundle,'A request context only authorizes its original pinned question.');}if(['pinned-domain-member-v1','pinned-question-member-v1'].includes(basis.kind)){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource,loadPinnedDomain,loadPinnedBundle,pinnedQuestionContext);if(pinnedQuestionContext!==undefined)inspectPinnedQuestionRequestContext(pinnedQuestionContext);return receipt;}if(basis.kind==='authored-finite-member-v1'){await basisFor(db,basis,bound,row.authority,true,fetcher,loadAuthoredSource);return {...receipt,reviewed:await checkedAuthoredFiniteMember({basis,card:bound.card,task:bound.task,inputVersion,fetcher,loadAuthoredSource})};}if(['ordinary-derived-prefix-remainder-v1','ordinary-derived-openings-remainder-v1','ordinary-derived-assessment-remainder-v1','record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))await basisFor(db,basis,bound,row.authority,true,fetcher,undefined,undefined,undefined,undefined,signal);if(['record-derived-prefix-remainder-v1','record-strict-evidence-remainder-v1'].includes(basis.kind))return {...receipt,reviewed:await checkedRecordRemainder({basis,card:bound.card,task:bound.task,inputVersion,fetcher})};}catch{return null;}
  if(signal?.aborted)return null;return receipt;
 }

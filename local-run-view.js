@@ -1,7 +1,7 @@
 /* Shared result view. All conclusions and chart values come from replayed data. */
 (function(root){
  'use strict';
- const E=typeof module==='object'&&module.exports?require('./local-experiment.js'):root.LocalExperiment;
+ const E=typeof module==='object'&&module.exports?require('./local-experiment-dispatch.js'):(root.LocalExperimentDispatch||root.LocalExperiment);
  const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const bindings=new WeakMap(),languageComparisons=new WeakMap(),inspectionOutputs=new WeakMap();
  const LANGUAGE_REFERENCES=[['eng_Latn','English'],['cym_Latn','Welsh'],['deu_Latn','German'],['fra_Latn','French'],['spa_Latn','Spanish'],['ita_Latn','Italian'],['por_Latn','Portuguese'],['fin_Latn','Finnish']];

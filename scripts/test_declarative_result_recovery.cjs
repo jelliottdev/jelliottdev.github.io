@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('node:assert/strict'),{webcrypto,createHash}=require('node:crypto'),V=require('../declarative-rune-program.js'),D=require('../local-experiment-dispatch.js'),View=require('../local-run-view.js'),Store=require('../fixed-pending-store.js'),{fakeIDB}=require('./fixed-pending-test-idb.cjs'),alphabet=require('../data/local-run-inputs.json').alphabet;
+const hash=v=>createHash('sha256').update(D.stable(v)).digest('hex');
+(async()=>{
+ const a=alphabet[0].rune,b=alphabet[1].rune,task=await V.prepare({title:'Invented shortened output',alphabet,pages:[{id:'lp2-00',text:a+a+a+' '+b+b}],steps:[{op:'collapse-adjacent-repeats',unit:'word',policy:'all-but-first'}],criterion:{kind:'measurement'}},webcrypto),raw=V.run(task);
+ assert.throws(()=>View.render(task,raw),/verified/);const result=await D.verify(task,raw,webcrypto),summary=D.summary(task,result);assert.equal(summary.comparison[0].value,3);assert.equal(summary.comparison[1].value,0);assert(summary.limit.includes('by construction'));assert.throws(()=>D.summary(task,structuredClone(result)),/verified/);const different=structuredClone(task);different.steps[0].unit='page';assert.throws(()=>D.summary(different,result),/another exact/);const html=View.render(task,result);assert(html.includes('Rune counts'));assert(html.includes('3 to 0'));assert(!html.includes('decryption found'));
+ console.log('PASS shortened result display requires exact verified task/result and avoids treating constructed repeat removal as discovery');
+ const db=fakeIDB(),store=(await Store.open({indexedDB:db,crypto:webcrypto,name:'liberpedia-v2-recovery-test'})).store,descriptor=await store.put(task,'raw',result);assert.deepEqual(await store.inspect(task,'raw'),descriptor);const restored=await store.restore(task,'raw',descriptor);assert.deepEqual(restored,result);assert.doesNotThrow(()=>D.summary(task,restored));
+ const row=db.rows('liberpedia-v2-recovery-test','pending').get(task.taskId+'--raw');row.result.alignment.pages[0].removed[0].inputIndex=4;row.resultSha256=hash(row.result);const forged=await store.inspect(task,'raw');await assert.rejects(()=>store.restore(task,'raw',forged));store.close();
+ console.log('PASS explicit V2 device recovery replays exact shortened output and rejects even self-hashed alignment tampering');
+})().catch(error=>{console.error(error);process.exitCode=1;});

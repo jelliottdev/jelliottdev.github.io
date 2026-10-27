@@ -2,11 +2,17 @@
  * Not an admission API: callers supply a row selected from local_task_results.
  * Browser consumers independently replay before using any scientific claims. */
 import E from '../../local-experiment.js';
+import Dispatch from '../../local-experiment-dispatch.js';
+import V2 from '../../declarative-rune-program.js';
 const HEX=/^[a-f0-9]{64}$/;
 const exact=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 const ensure=(v,m)=>{if(!v)throw Error(m);};
 export async function readAdmittedResult(task,row,crypto=globalThis.crypto){
  ensure(row&&HEX.test(row.id)&&typeof row.result_json==='string'&&new TextEncoder().encode(row.result_json).length<=8*1024*1024&&Number.isFinite(Date.parse(row.created_at)),'Stored result row is invalid');
+ if(task?.schema===V2.TASK&&task?.engine===V2.ENGINE){
+  const result=await Dispatch.verify(task,JSON.parse(row.result_json),crypto),digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(Dispatch.stable(result)))),v=>v.toString(16).padStart(2,'0')).join('');
+  ensure(digest===row.id,'Stored result mismatch');return result;
+ }
  await E.checkIdentity(task,crypto);
  const result=JSON.parse(row.result_json),extra=task.criterion.kind==='language-score'?['languageScore']:task.criterion.kind==='word-prime-sums'?['wordSums']:task.criterion.kind==='word-affine-count'?['wordPairs']:[];
  ensure(exact(result,['schema','taskId','engine','runnerVersion','metrics','matches','transformed',...extra])&&result.schema===E.RESULT&&result.taskId===task.taskId&&result.engine===task.engine&&result.runnerVersion==='1','Stored result envelope changed');

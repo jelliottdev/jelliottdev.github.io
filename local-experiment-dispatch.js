@@ -17,5 +17,15 @@
  function run(task,options){return select(task).run(task,options);}
  async function verify(task,result,crypto=root.crypto){const engine=select(task);resultVersion(engine,result);const snapshot=freeze(J.capture(task,{maxBytes:2000000,maxDepth:24,maxNodes:500000})),receipt=await engine.verify(task,result,crypto);if(engine===E){verified.set(receipt,Object.freeze({task:snapshot,result:receipt}));return receipt;}const model=engine.inspect(receipt);verified.set(model.result,Object.freeze({token:receipt,engine}));return model.result;}
  function inspect(result){need(result&&typeof result==='object'&&verified.has(result),'Use a dispatcher-verified result object.');const receipt=verified.get(result);return receipt.engine?receipt.engine.inspect(receipt.token):receipt;}
- const api=Object.freeze({stable:E.stable,validateTask,identity,prepare,checkIdentity,run,verify,inspect});if(node)module.exports=api;else root.LocalExperimentDispatch=api;
+ function summary(task,result){
+  if(select(task)===E)return E.summary(task,result);
+  task=V.validateTask(task);
+  const receipt=inspect(result);need(E.stable(receipt.task)===E.stable(task),'The result belongs to another exact program.');
+  const limit='Verified calculation only. Removing repeats changes their counts by construction; this does not identify filler, statistical significance, readable text or a decryption.';
+  if(task.criterion.kind==='language-score'){const compared=result.languageScore.pages.filter(p=>p.status==='compared').length;return {finding:compared+' of '+task.pages.length+' pages compared with eight rune-language references.',comparison:[],limit:'These scores compare output rune order with fixed models and shuffled orders. They do not establish readability, identify a language or show decryption. Shuffle counts are not p-values.'};}
+  if(task.criterion.kind==='exact-prefix-set')return {finding:result.matches.filter(p=>p.matched).length+' of '+task.pages.length+' pages begin with a supplied opening.',comparison:[],limit:'Only the declared complete openings are checked. A prefix match alone does not establish a decryption.'};
+  const names=new Set(task.alphabet.map(a=>a.rune));let pairs=0,equal=0;for(const page of task.pages){let previous=null;for(const ch of page.text)if(names.has(ch)){if(previous!==null){pairs++;if(ch===previous)equal++;}previous=ch;}}
+  return {finding:task.criterion.kind==='exact-prefix'?result.matches.filter(p=>p.matched).length+' of '+task.pages.length+' pages begin with the supplied opening.':'The program changed equal adjacent rune pairs from '+equal+' to '+result.metrics.equalAdjacentPairs+'.',comparison:[{label:'Original text',value:equal,total:pairs},{label:'After the program',value:result.metrics.equalAdjacentPairs,total:result.metrics.adjacentPairs}],limit};
+ }
+ const api=Object.freeze({stable:E.stable,validateTask,identity,prepare,checkIdentity,run,verify,inspect,summary});if(node)module.exports=api;else root.LocalExperimentDispatch=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
