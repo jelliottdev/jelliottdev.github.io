@@ -97,7 +97,7 @@
    const element=$('question-result-comparison'),view=options.resultComparisonView||ResultComparisonView;if(!element||!view)return;
    questionComparisonCleanup?.();questionComparisonCleanup=null;
    if(questionComparisonToken){element.innerHTML=view.render(questionComparisonToken,{pageId:questionComparisonPage});questionComparisonCleanup=view.bind(element,questionComparisonToken,{pageId:questionComparisonPage,onPageChange:id=>{questionComparisonPage=id;}});}
-   else if(questionComparisonError){element.innerHTML='<p class="small" role="status">The earlier result could not be compared. Your saved result is still available.</p><button id="retry-result-comparison" type="button">Retry comparison</button>';const retry=$('retry-result-comparison');if(retry)retry.onclick=()=>{questionComparisonKey=null;questionComparisonError=false;questionBundlePromise=questionSourcePromise=null;void loadQuestionComparison();};}
+   else if(questionComparisonError){element.innerHTML='<p class="small" role="status">The earlier result could not be compared. Your saved result is still available.</p><button id="retry-result-comparison" type="button">Retry comparison</button>';const retry=$('retry-result-comparison');if(retry)retry.onclick=()=>{questionTaskReads.clear();questionComparisonKey=null;questionComparisonError=false;questionBundlePromise=questionSourcePromise=null;void loadQuestionComparison();};}
    else element.innerHTML=questionComparisonPending?'<p class="small" role="status">Comparing the saved results…</p>':'';
   }
   async function loadQuestionComparison(){
@@ -142,7 +142,7 @@
    const key=idea.id+':'+E.stable(idea.tasks)+':'+(idea.tasksTruncated===true);
    if(questionSavedMount&&questionSavedKey===key){questionSavedMount.attach(element);return;}
    questionSavedMount?.destroy();const token=generation,id=idea.id;questionSavedKey=key;
-   questionSavedMount=module.mount(element,{ideaId:id,card:idea.card,tasks:idea.tasks,tasksTruncated:idea.tasksTruncated===true,endpoint:config.localTaskEndpoint,pageURL:win.location.href,fetcher:questionFetch,crypto:cryptoAPI,signal:controller?.signal,isLive:()=>live(token,id)});
+   questionSavedMount=module.mount(element,{ideaId:id,card:idea.card,tasks:idea.tasks,tasksTruncated:idea.tasksTruncated===true,endpoint:config.localTaskEndpoint,pageURL:win.location.href,fetcher:questionFetch,onRetry:taskId=>{questionTaskReads.delete(config.localTaskEndpoint+'/'+taskId+'?idea='+id);questionSourcePromise=null;},crypto:cryptoAPI,signal:controller?.signal,isLive:()=>live(token,id)});
   }
   async function readQuestionBundle(token,id){if(!questionBundlePromise)questionBundlePromise=request('data/local-run-inputs.json',{cache:'no-cache',redirect:'error'}).then(response=>response.json());const bundle=await questionBundlePromise;if(!live(token,id))throw new DOMException('Navigation changed.','AbortError');return bundle;}
   async function readQuestionSource(value,token,id){
@@ -165,7 +165,7 @@
   async function loadQuestionVariations(value,token,id){
    const module=options.questionResultContext||QuestionResult;if(!module?.prepare||!value.tasks.some(item=>item.state==='results-verified'))return;
    try{const [bundle,current]=await Promise.all([readQuestionBundle(token,id),readQuestionSource(value,token,id)]),context=await module.prepare({proposalId:id,card:value.card,projection:current,bundle},cryptoAPI);if(!live(token,id))return;questionVariationContext=context;mountEvaluationFollowup();mountQuestionVariations();}
-   catch(error){if(!live(token,id))return;const element=$('question-next-variations');if(element){element.innerHTML='<p class="small" role="status">Variations could not be loaded.</p><button id="retry-question-variations" type="button">Retry variations</button>';const retry=$('retry-question-variations');if(retry)retry.onclick=()=>{questionBundlePromise=questionSourcePromise=null;element.innerHTML='';return loadQuestionVariations(value,token,id);};}}
+   catch(error){if(!live(token,id))return;const element=$('question-next-variations');if(element){element.innerHTML='<p class="small" role="status">Variations could not be loaded.</p><button id="retry-question-variations" type="button">Retry variations</button>';const retry=$('retry-question-variations');if(retry)retry.onclick=()=>{questionTaskReads.clear();questionBundlePromise=questionSourcePromise=null;element.innerHTML='';return loadQuestionVariations(value,token,id);};}}
   }
   let questionNavigation=null,questionNavigationId=null;
   function clearQuestionNavigation(){questionNavigation?.destroy();questionNavigation=null;questionNavigationId=null;}

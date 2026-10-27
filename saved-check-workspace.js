@@ -12,7 +12,7 @@
    if(!saved.length){host.innerHTML='';unbind=()=>{};return;}
    const picker=saved.length>1?'<label class="saved-check-picker">Saved computation <select data-saved-check-select>'+saved.map((t,i)=>'<option value="'+t.id+'"'+(t.id===selected?' selected':'')+'>Saved check '+(i+1)+(typeof t.title==='string'&&t.title?' — '+esc(t.title):'')+'</option>').join('')+'</select></label>':'';
    host.innerHTML=picker+(phase==='ready'?View.render(value.proof,value):View.renderState(phase))+(phase==='error'?'<button type="button" class="saved-check-retry" data-saved-check-retry>Try again</button>':'')+(truncated?'<p class="saved-check-state">Only part of this question’s saved computations is shown here.</p>':'');
-   const select=host.querySelector?.('[data-saved-check-select]'),retry=host.querySelector?.('[data-saved-check-retry]'),change=()=>{if(saved.some(t=>t.id===select.value)&&selected!==select.value){selected=select.value;void load();}},again=()=>{void load();};
+   const select=host.querySelector?.('[data-saved-check-select]'),retry=host.querySelector?.('[data-saved-check-retry]'),change=()=>{if(saved.some(t=>t.id===select.value)&&selected!==select.value){selected=select.value;void load();}},again=()=>{options.onRetry?.(selected);void load();};
    select?.addEventListener('change',change);retry?.addEventListener('click',again);unbind=()=>{select?.removeEventListener('change',change);retry?.removeEventListener('click',again);};if(restoreFocus)select?.focus?.();
   }
   async function load(){
