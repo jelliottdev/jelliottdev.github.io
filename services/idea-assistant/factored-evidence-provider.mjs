@@ -8,6 +8,7 @@ import Evidence from '../../computation-evidence.js';
 import Counts from '../../published-count-evidence-data.js';
 import Programs from '../../published-opening-evidence-data.js';
 import RetainedHistory from '../../published-evidence-history-data.js';
+import RegistryFingerprint from './evidence-registry-fingerprint-data.mjs';
 import {readPublishedEvidence,publishedProgramIndex} from './published-evidence.mjs';
 import {validateFamilyReceipt} from './family-evidence.mjs';
 import {chooseLocalMetadataQuery,LIMITS as QUERY_LIMITS} from './factored-query-strategy.mjs';
@@ -75,29 +76,19 @@ const queryDefinition=(d,inputVersion,policy,includeSourceContext=false)=>({... 
 async function registryMetadata(programIndex){const index=await publishedProgramIndex({programIndex});return [...[...Counts.entries,...Programs.entries].map(v=>({recordId:v.recordId,revision:v.revision,caseId:v.caseId,inputVersion:v.inputVersion,task:v.task})),...(index?.entries||[]).map(item=>({...item,indexed:true}))].sort((a,b)=>E.stable([a.recordId,a.revision,a.caseId]).localeCompare(E.stable([b.recordId,b.revision,b.caseId])));}
 // Durable archive generations bind current and retained published authorities.
 // This is deliberately broader than a discovery page's current metadata hash.
-const registryPlatformCrypto=globalThis.crypto,registryPlatformSubtle=registryPlatformCrypto?.subtle,registryPlatformDigest=registryPlatformSubtle?.digest;let immutableRegistryFingerprint;
-function deepFrozenData(value,seen=new Set()){
- if(value===null||typeof value!=='object')return typeof value!=='function';
- if(seen.has(value))return true;seen.add(value);if(!Object.isFrozen(value))return false;
- return Reflect.ownKeys(value).every(key=>{const d=Object.getOwnPropertyDescriptor(value,key);return typeof key==='string'&&Object.hasOwn(d,'value')&&deepFrozenData(d.value,seen);});
-}
+const registryPlatformCrypto=globalThis.crypto,registryPlatformSubtle=registryPlatformCrypto?.subtle,registryPlatformDigest=registryPlatformSubtle?.digest;
+const nativeRegistry=(programIndex,c)=>programIndex===undefined&&c===registryPlatformCrypto&&c?.subtle===registryPlatformSubtle&&registryPlatformSubtle?.digest===registryPlatformDigest;
 export async function readEvidenceRegistryHash({programIndex,crypto:c=globalThis.crypto}={}){
+ // Validate the default catalog once even on the compiled fingerprint path.
+ // Only this deployment's static imports use the build-checked fingerprint.
+ // Injected indexes/crypto retain independent full hashing; no wire hash is read.
  const index=await publishedProgramIndex({programIndex});
- // These exact generated modules and the default index are deep immutable for
- // this deployment. Cache their byte fingerprint only, never evidence, epochs,
- // query results, injected indexes or a caller's crypto implementation.
- const reusable=programIndex===undefined&&c===registryPlatformCrypto&&c?.subtle===registryPlatformSubtle&&registryPlatformSubtle?.digest===registryPlatformDigest;
- if(!reusable)return hash({index,registries:[Counts,Programs],history:RetainedHistory},c);
- if(!immutableRegistryFingerprint){
-  if(![index,Counts,Programs,RetainedHistory].every(value=>deepFrozenData(value)))return hash({index,registries:[Counts,Programs],history:RetainedHistory},c);
-  const pending=hash({index,registries:[Counts,Programs],history:RetainedHistory},c);immutableRegistryFingerprint=pending;
-  pending.catch(()=>{if(immutableRegistryFingerprint===pending)immutableRegistryFingerprint=undefined;});
- }
- return immutableRegistryFingerprint;
+ return nativeRegistry(programIndex,c)?RegistryFingerprint.archiveSha256:hash({index,registries:[Counts,Programs],history:RetainedHistory},c);
 }
+async function metadataFingerprint(metadata,programIndex,c){return nativeRegistry(programIndex,c)?RegistryFingerprint.discoverySha256:hash(metadata,c);}
 export async function readEvidencePage(policy,{db,proposalId,domain,inputVersion,cursor=null,cursorKey,now=Date.now(),crypto:c=globalThis.crypto,programIndex,fetcher=globalThis.fetch,signal,includeSourceContext=false,snapshotFence,responseReserveBytes=0}){
  checkedPolicy(policy);if(!Number.isSafeInteger(responseReserveBytes)||responseReserveBytes<0||responseReserveBytes>1024*1024)throw fail('unavailable','Use a bounded internal response reserve.');if(typeof includeSourceContext!=='boolean')throw fail('unavailable','Use an explicit source-context mode.');const d=Q.inspect(domain);if(policy===INSPECTION_POLICY&&(d.schema!=='liberpedia-factored-finite-output-question-v1'||d.questionPolicy!==policy.mode||d.criterion.kind!=='measurement'))throw fail('unavailable','Use the maintained transformed-output inspection.');if(policy===OUTPUT_POLICY&&(d.schema!=='liberpedia-factored-finite-output-question-v1'||d.questionPolicy!==policy.mode))throw fail('unavailable','Use the maintained pinned language comparison.');if(policy===STRICT_POLICY&&d.schema!=='liberpedia-factored-finite-question-v2')throw fail('unavailable','Use a maintained prefix question.');if(policy===PREFIX_POLICY&&d.criterion.kind!=='exact-prefix')throw fail('unavailable','Derived prefix discovery requires an exact-prefix question.');if(!/^p_[a-f0-9]{64}$/.test(proposalId)||inputVersion!==d.inputVersion||!Number.isSafeInteger(now)||typeof db?.prepare!=='function')throw fail('unavailable','A bound original question and evidence store are required.');
- const key=await keyFor(cursorKey,c),registrySnapshot=await registryMetadata(programIndex),registryHash=await hash(registrySnapshot,c),queryHash=await hash(queryDefinition(d,inputVersion,policy,includeSourceContext),c);
+ const key=await keyFor(cursorKey,c),registrySnapshot=await registryMetadata(programIndex),registryHash=await metadataFingerprint(registrySnapshot,programIndex,c),queryHash=await hash(queryDefinition(d,inputVersion,policy,includeSourceContext),c);
  const fixedFence=snapshotFence===undefined?null:await checkedFence(db,snapshotFence);
  let state=cursor===null?{schema:policy.cursor,proposalId,domainId:d.id,inputVersion,queryHash,registryHash,scanId:b64(c.getRandomValues(new Uint8Array(18))),issuedAt:now,sequence:0,previous:null,water:fixedFence||await boundary(db),stage:0,after:0,served:b64(new Uint8Array(Math.ceil(d.totalCases/8)))}:await open(cursor,key,c);
  if(fixedFence&&E.stable(state.water)!==E.stable(fixedFence))throw fail('stale-scan','This continuation belongs to a different evidence snapshot.');
@@ -182,6 +173,6 @@ export async function readEvidencePage(policy,{db,proposalId,domain,inputVersion
 export async function verifySnapshot(policy,{db,proposalId,domain,inputVersion,snapshotToken,cursorKey,now=Date.now(),crypto:c=globalThis.crypto,programIndex}){
  checkedPolicy(policy);const d=Q.inspect(domain);if(policy===INSPECTION_POLICY&&(d.schema!=='liberpedia-factored-finite-output-question-v1'||d.questionPolicy!==policy.mode||d.criterion.kind!=='measurement'))throw fail('unavailable','Use the maintained transformed-output inspection.');if(policy===OUTPUT_POLICY&&(d.schema!=='liberpedia-factored-finite-output-question-v1'||d.questionPolicy!==policy.mode))throw fail('unavailable','Use the maintained pinned language comparison.');if(policy===STRICT_POLICY&&d.schema!=='liberpedia-factored-finite-question-v2')throw fail('unavailable','Use a maintained prefix question.');if(policy===PREFIX_POLICY&&d.criterion.kind!=='exact-prefix')throw fail('unavailable','Derived prefix discovery requires an exact-prefix question.');const key=await keyFor(cursorKey,c),names=['schema','proposalId','domainId','inputVersion','queryHash','registryHash','scanId','issuedAt','water','stage','sequence','previousPageSha256'],value=await open(snapshotToken,key,c,names);
  const registry=await registryMetadata(programIndex);
- if(value.schema!==policy.snapshot||value.stage!==3||!Number.isSafeInteger(value.sequence)||value.sequence<0||value.sequence>1000000||(value.sequence===0?value.previousPageSha256!==null:!HEX.test(value.previousPageSha256))||value.proposalId!==proposalId||value.domainId!==d.id||inputVersion!==d.inputVersion||value.inputVersion!==inputVersion||!((await Promise.all([false,true].map(mode=>hash(queryDefinition(d,inputVersion,policy,mode),c)))).includes(value.queryHash))||value.registryHash!==await hash(registry,c)||!Number.isSafeInteger(now)||!Number.isSafeInteger(value.issuedAt)||value.issuedAt>now||now-value.issuedAt>LIMITS.ttlMs||typeof value.scanId!=='string'||!/^[a-zA-Z0-9_-]{24}$/.test(value.scanId)||!exact(value.water,['epoch','h0','h1','h2','h3','h4'])||Object.values(value.water).some(v=>!Number.isSafeInteger(v)||v<0))throw fail('stale-scan','This completed lookup no longer matches the declared question.');
+ if(value.schema!==policy.snapshot||value.stage!==3||!Number.isSafeInteger(value.sequence)||value.sequence<0||value.sequence>1000000||(value.sequence===0?value.previousPageSha256!==null:!HEX.test(value.previousPageSha256))||value.proposalId!==proposalId||value.domainId!==d.id||inputVersion!==d.inputVersion||value.inputVersion!==inputVersion||!((await Promise.all([false,true].map(mode=>hash(queryDefinition(d,inputVersion,policy,mode),c)))).includes(value.queryHash))||value.registryHash!==await metadataFingerprint(registry,programIndex,c)||!Number.isSafeInteger(now)||!Number.isSafeInteger(value.issuedAt)||value.issuedAt>now||now-value.issuedAt>LIMITS.ttlMs||typeof value.scanId!=='string'||!/^[a-zA-Z0-9_-]{24}$/.test(value.scanId)||!exact(value.water,['epoch','h0','h1','h2','h3','h4'])||Object.values(value.water).some(v=>!Number.isSafeInteger(v)||v<0))throw fail('stale-scan','This completed lookup no longer matches the declared question.');
  await epoch(db,value.water);return Object.freeze({proposalId,domainId:d.id,inputVersion,scanId:value.scanId,issuedAt:value.issuedAt,epoch:value.water.epoch});
 }

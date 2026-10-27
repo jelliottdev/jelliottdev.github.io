@@ -1,12 +1,20 @@
 /* Maintained server authority for complete domains. No request can replace pins. */
 import sources from './pinned-domain-sources.mjs';
 import E from '../../local-experiment.js';
+import M from '../../pinned-domain-members.js';
 import J from '../../finite-json.js';
 const BASE='https://jelliottdev.github.io/',MAX=2*1024*1024;
 const capture=v=>J.capture(v,{maxBytes:MAX,maxDepth:24,maxNodes:100000});
 const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
 const maintained=new Map(sources.map(source=>[source.sourceId,freeze(capture(source))]));
-const instances=new WeakMap();
+const instances=new WeakMap(),platformCrypto=globalThis.crypto,platformSubtle=platformCrypto?.subtle,platformDigest=platformSubtle?.digest;
+const native=()=>globalThis.crypto===platformCrypto&&globalThis.crypto?.subtle===platformSubtle&&platformSubtle?.digest===platformDigest;
+async function compiledEnvelope(source,rawWasNative){
+ if(!rawWasNative||!native())return false;let registered;try{registered=M.registeredDescriptor(source.sourceId);}catch{return false;}
+ if(registered.manifestSha256!==source.manifestSha256)return false;
+ const binding=await digest(new TextEncoder().encode(E.stable({sourceId:source.sourceId,domain:source.domain,template:source.template,manifestSha256:source.manifestSha256})));
+ return native()&&binding===registered.sourceBindingSha256;
+}
 async function bytes(response){
  if(!response.ok||!response.body)throw Error('Independent control commitments are unavailable.');
  const declared=response.headers.get('content-length');
@@ -27,10 +35,14 @@ export function createPinnedDomainSourceLoader(fetcher=globalThis.fetch){
   const result=raw=>({sourceId,domain:capture(source.domain),template:capture(source.template),manifestSha256:source.manifestSha256,manifestBytes:new Uint8Array(raw)});
   if(cached.has(sourceId))return result(cached.get(sourceId));
   if(!pending.has(sourceId)){
-   const work=(async()=>{const raw=await bytes(await fetcher(BASE+source.manifestPath,{redirect:'manual',signal:AbortSignal.timeout(15000)}));if(await digest(raw)!==source.manifestSha256)throw Error('Independent control commitments changed.');
-    // Validate the exact committed envelope before retaining immutable raw bytes.
-    const manifest=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(raw));
-    if(manifest.schema!=='liberpedia-pinned-control-commitments-v1'||manifest.entries?.length!==source.domain.bank.count||E.stable(manifest)!==new TextDecoder().decode(raw).trim())throw Error('Independent control commitment envelope changed.');
+   const work=(async()=>{const raw=await bytes(await fetcher(BASE+source.manifestPath,{redirect:'manual',signal:AbortSignal.timeout(15000)})),rawWasNative=native();if(await digest(raw)!==source.manifestSha256)throw Error('Independent control commitments changed.');
+    // The registered bytes' complete envelope/canonical checks were performed
+    // by the offline compiler. Reuse only after fresh native raw SHA and exact
+    // full source binding; every other source retains the original validation.
+    if(!await compiledEnvelope(source,rawWasNative)){
+     const manifest=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(raw));
+     if(manifest.schema!=='liberpedia-pinned-control-commitments-v1'||manifest.entries?.length!==source.domain.bank.count||E.stable(manifest)!==new TextDecoder().decode(raw).trim())throw Error('Independent control commitment envelope changed.');
+    }
     cached.set(sourceId,new Uint8Array(raw));return raw;})();
    pending.set(sourceId,work);work.finally(()=>pending.delete(sourceId)).catch(()=>{});
   }

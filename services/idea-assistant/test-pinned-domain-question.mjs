@@ -9,7 +9,7 @@ import E from '../../local-experiment.js';
 import M from '../../pinned-domain-members.js';
 import Settings from '../../finite-settings.js';
 const copy=structuredClone,raw=path=>readFileSync(new URL('../../'+path,import.meta.url)),bundle=JSON.parse(raw('data/local-run-inputs.json')),sha=v=>createHash('sha256').update(typeof v==='string'||v instanceof Uint8Array?v:E.stable(v)).digest('hex'),request=card=>({card,proposalId:'p_'+sha(C.serialize(card))});
-let reads=0,groups=0;const fetcher=async url=>{reads++;if(url==='https://jelliottdev.github.io/data/local-run-inputs.json')return Response.json(bundle);const source=sources.find(s=>url==='https://jelliottdev.github.io/'+s.manifestPath);assert(source,'Only maintained files can be read');return new Response(raw(source.manifestPath));},loader=createPinnedDomainSourceLoader(fetcher);
+let reads=0,groups=0;const fetcher=async url=>{reads++;if(url==='https://jelliottdev.github.io/data/local-run-inputs.json')return new Response(raw('data/local-run-inputs.json'));const source=sources.find(s=>url==='https://jelliottdev.github.io/'+s.manifestPath);assert(source,'Only maintained files can be read');return new Response(raw(source.manifestPath));},loader=createPinnedDomainSourceLoader(fetcher);
 async function test(name,fn){await fn();groups++;console.log('PASS '+name);}
 const originalRun=E.run;E.run=()=>{throw Error('Question binding must never execute');};
 try{

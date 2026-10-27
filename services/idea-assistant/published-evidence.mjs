@@ -16,7 +16,9 @@ let defaultProgramIndex;
 export async function publishedProgramIndex({registry,programIndex}={}){
  if(programIndex!==undefined)return programIndex===null?null:checkedProgramIndex(programIndex);
  if(registry!==undefined)return null;
- defaultProgramIndex??=import('../../published-program-source-catalog-data.js').then(module=>checkedProgramIndex(module.default));return defaultProgramIndex;
+ // The Worker-local generated module is build-validated against this exact
+ // frozen catalog and checker. Caller indexes above never enter this path.
+ defaultProgramIndex??=import('./compiled-program-index-data.mjs').then(module=>module.default);return defaultProgramIndex;
 }
 async function indexedReceipt(item,{fetcher,cryptoAPI,signal}){
  const manifest=await readProgramPointer(item,{fetcher,crypto:cryptoAPI,signal}),found=(await checkRegistry(manifest,cryptoAPI)).find(receipt=>receipt.publishedSource.recordId===item.recordId&&receipt.publishedSource.revision===item.revision&&receipt.publishedSource.caseId===item.caseId);

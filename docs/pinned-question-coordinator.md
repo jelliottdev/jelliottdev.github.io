@@ -156,3 +156,44 @@ planning token. Custom crypto and injected registries bypass shared memoization.
 Warm local GET CPU dropped from roughly 594 ms to 15–47 ms across profiling
 runs; cold requests remain much more expensive. These measurements justify the
 optimization, not feature activation.
+
+## Compiled deployment inputs
+
+Fixed parent planning and default archive metadata are now compiled before
+shipping the Worker. They are private deployment assets, not browser-supplied
+plans or evidence. Regenerate in this order when their dependencies change:
+
+```
+node scripts/build_pinned_parent_artifacts.mjs --write
+node scripts/build_compiled_program_index.mjs
+node scripts/build_evidence_registry_fingerprint.mjs
+```
+
+Each builder has a `--check` mode enforced by the Node manifest. Compilation
+checks the existing planner, all source pins, and the independent manifest
+format; it runs no manuscript calculations. Parity tests compare all 5,122
+setting identities, both complete page scopes, and the existing catalogue and
+registry fingerprints. Compiler text pins use explicit UTF-8/LF normalization;
+scientific data, official aggregate bytes and control manifests retain exact
+byte hashes.
+
+A default request fetches the official input aggregate afresh and verifies its
+complete raw-byte hash before receiving a new private planning token. It also
+checks the complete maintained domain/template/manifest binding. A changed
+Pages asset and an older Worker therefore fail closed, in either deployment
+order. There is no stale-plan fallback. Injected source loaders, explicit bundles
+and custom crypto retain the ordinary full validation path.
+
+The default source loader can omit repeated manifest parsing only after a fresh
+native hash and the complete registered source binding match the build-checked
+manifest. Other sources retain ordinary parsing. Selected Warning controls,
+ordinary controls, receipt replay, source selection, evidence epochs, generation
+fences and admission checks remain live. Compiled assets contain no tested-case
+counts, results, lookup completion or execution permission. Their build hash is
+not a new semantic question/coverage identity, so an equivalent compiler update
+does not discard saved work.
+
+This removes repeated whole-parent and fixed-index validation from cold
+requests. It does not prove the complete loop fits the deployment CPU budget.
+Selected-key expansion and controlled preparation still require measured cold
+and sustained verification before the existing feature gate can be opened.

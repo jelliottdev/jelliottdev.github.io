@@ -41,6 +41,31 @@
   if(identity!==null&&platform(crypto)){const bytes=new TextEncoder().encode(identity+E.stable({domain:model.domain,plan:model.plan,alphabet:model.alphabet,pages:model.pages})).length;if(bytes<=cacheLimits.bytes){while(verifiedParents.length>=cacheLimits.entries||cacheBytes+bytes>cacheLimits.bytes){cacheBytes-=verifiedParents.shift().bytes;}verifiedParents.push({identity,model,bytes});cacheBytes+=bytes;}}
   return parentToken(model);
  }
+ // Backend-only registered compilation. The generated module is a bundled
+ // maintained authority, never a caller-supplied plan or registration callback.
+ let registeredParents;
+ const typedArrayPrototype=Object.getPrototypeOf(Uint8Array.prototype),byteLengthGetter=Object.getOwnPropertyDescriptor(typedArrayPrototype,'byteLength').get,byteOffsetGetter=Object.getOwnPropertyDescriptor(typedArrayPrototype,'byteOffset').get,bufferGetter=Object.getOwnPropertyDescriptor(typedArrayPrototype,'buffer').get;
+ function registeredDescriptor(sourceId){
+  need(node&&typeof sourceId==='string','Compiled parent registrations are backend-only.');registeredParents??=require('./pinned-parent-artifacts.js');const matches=registeredParents.parents.filter(p=>p.sourceId===sourceId);need(matches.length===1,'Choose one registered maintained parent.');const entry=matches[0];
+  return Object.freeze({schema:'liberpedia-registered-parent-descriptor-v1',sourceId:entry.sourceId,parentDomainId:entry.parentDomainId,manifestSha256:entry.manifestSha256,templateSha256:entry.templateSha256,sourceBindingSha256:entry.sourceBindingSha256,official:registeredParents.official});
+ }
+ async function prepareRegistered(sourceId,options){
+  need(node,'Compiled parent registrations are backend-only.');
+  need(typeof sourceId==='string'&&sourceId.length>0&&sourceId.length<=128&&options&&typeof options==='object'&&!Array.isArray(options),'Use one maintained compiled source and exact official bytes.');
+  const descriptors=Object.getOwnPropertyDescriptors(options),keys=Reflect.ownKeys(descriptors);need(keys.length>=1&&keys.length<=2&&keys.every(k=>typeof k==='string'&&['officialBytes','crypto'].includes(k)&&descriptors[k].enumerable&&Object.hasOwn(descriptors[k],'value'))&&Object.hasOwn(descriptors,'officialBytes'),'Registered binding accepts official bytes and platform crypto only.');
+  const crypto=Object.hasOwn(descriptors,'crypto')?descriptors.crypto.value:root.crypto;need(platform(crypto),'Registered parent binding requires the unchanged platform digest.');
+  const bytes=descriptors.officialBytes.value;need(ArrayBuffer.isView(bytes)&&bytes instanceof Uint8Array,'Use exact detached-safe official byte data.');
+  const length=byteLengthGetter.call(bytes),offset=byteOffsetGetter.call(bytes),buffer=bufferGetter.call(bytes);need(length>0&&length<=2*1024*1024&&buffer instanceof ArrayBuffer,'Official compiled input bytes exceed their bound.');
+  const original=new Uint8Array(buffer,offset,length),snapshot=new Uint8Array(length);snapshot.set(original);
+  registeredParents??=require('./pinned-parent-artifacts.js');const artifact=registeredParents;
+  need(artifact.schema==='liberpedia-compiled-pinned-parents-v1'&&artifact.official.path==='data/local-run-inputs.json'&&Array.isArray(artifact.parents)&&artifact.parents.length<=4,'The maintained compiled parent registry changed.');
+  const matches=artifact.parents.filter(p=>p.sourceId===sourceId);need(matches.length===1,'Choose one registered maintained parent.');
+  const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',snapshot))].map(n=>n.toString(16).padStart(2,'0')).join('');
+  need(platform(crypto)&&byteLengthGetter.call(bytes)===length&&original.every((value,i)=>value===snapshot[i]),'The official source bytes changed during registered binding.');
+  need(length===artifact.official.bytes&&actual===artifact.official.sha256,'The exact official source bytes differ from this compiled parent.');
+  const entry=matches[0];need(entry.plan.domainId===entry.parentDomainId&&same(entry.domain,entry.plan.domain)&&entry.domain.pages.length===entry.pages.length&&entry.domain.pages.every((pin,i)=>pin.id===entry.pages[i].id),'The trusted compiled parent model changed.');
+  return parentToken(Object.freeze({domain:entry.domain,plan:entry.plan,alphabet:entry.alphabet,pages:entry.pages,crypto}));
+ }
  function inspect(token){const value=bound.get(token);need(value,'Use an unchanged source-bound parent token.');return freeze({state:'source-bound-planning-only',domain:value.domain,plan:value.plan});}
  async function derive(token,selection){
   const parent=bound.get(token);need(parent,'Use an unchanged source-bound parent token.');const chosen=capture(selection),unchanged=()=>need(same(capture(selection),chosen),'The selected domain member changed during compilation.');
@@ -62,5 +87,5 @@
   const memberId='m_'+await hash(basis,crypto);unchanged();const member=freeze({...basis,memberId,state:'compiled-only',checks:{admission:false,controls:false,execution:false,evidence:false},card,task,plan});members.set(member,token);return member;
  }
  function inspectMember(member,options={}){need(options&&typeof options==='object'&&!Array.isArray(options)&&Reflect.ownKeys(options).every(k=>k==='parent'),'Use an exact optional parent binding.');const parent=Object.getOwnPropertyDescriptor(options,'parent');need(members.has(member)&&(!parent||Object.hasOwn(parent,'value')&&parent.enumerable&&members.get(member)===parent.value),'Use an unchanged member compiled from this exact source-bound parent.');return member;}
- const api=Object.freeze({SCHEMA,prepare,inspect,derive,inspectMember});if(node)module.exports=api;else root.PinnedDomainMembers=api;
+ const api=Object.freeze({SCHEMA,prepare,prepareRegistered,registeredDescriptor,inspect,derive,inspectMember});if(node)module.exports=api;else root.PinnedDomainMembers=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
