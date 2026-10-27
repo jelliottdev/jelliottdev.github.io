@@ -37,6 +37,30 @@ class StagedCatalogTests(unittest.TestCase):
             self.assertEqual(verify(root), 1)
             self.assertEqual(verify(root, all_files=True), 1)
 
+    def test_local_retained_snapshot_must_exist_in_git_index_before_publication(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root, preserve=True)
+            raw = b'{"id":"historical-record","status":"published"}\n'
+            digest = hashlib.sha256(raw).hexdigest()
+            name = 'published-sources/records/' + digest + '.json'
+            snapshot = root / name
+            snapshot.parent.mkdir(parents=True)
+            snapshot.write_bytes(raw)
+            catalog = json.loads((root / 'data/catalog.json').read_text(encoding='utf-8'))
+            catalog['files'].append({'path': name, 'bytes': len(raw), 'sha256': digest})
+            (root / 'data/catalog.json').write_text(json.dumps(catalog), encoding='utf-8')
+            # A generated catalog and valid local object are insufficient: only
+            # indexed bytes will be present in the published checkout.
+            subprocess.run(['git', 'add', 'data/catalog.json'], cwd=root, check=True)
+            self.assertEqual(snapshot.read_bytes(), raw)
+            self.assertEqual(subprocess.check_output(['git', 'ls-files', '--', name], cwd=root), b'')
+            with self.assertRaisesRegex(AssertionError, 'Missing staged file: ' + name):
+                verify(root, all_files=True)
+            subprocess.run(['git', 'add', '--', name], cwd=root, check=True)
+            self.assertEqual(verify(root, all_files=True), 2)
+            self.assertEqual(snapshot.read_bytes(), raw)
+
 
 if __name__ == '__main__':
     unittest.main()

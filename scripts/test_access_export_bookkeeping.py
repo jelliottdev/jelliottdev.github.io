@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 from reproduction_sources import read_pinned
 import archive_reproduction_code as code_archive
+import archive_authored_sources as authored_archive
 
 
 BUILDER = Path(__file__).with_name('build_access_exports.py')
@@ -21,9 +22,12 @@ class BookkeepingTests(unittest.TestCase):
         self.tree = ast.parse(BUILDER.read_text(encoding='utf-8'))
         # Extract only pure local helpers; importing this script would rebuild exports.
         helpers = [node for node in self.tree.body
-                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'register_unique', 'register_program_binding_object', 'register_receipt_binding_objects', 'reproduction_dependency_paths')]
+                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'register_unique', 'register_authored_archive', 'register_program_binding_object', 'register_receipt_binding_objects', 'reproduction_dependency_paths')]
         self.env = {'root': self.root, 'base': 'https://example.test/',
-                    'json': json, 'hashlib': hashlib, 'files': [], 'registered_paths': set(), 'read_pinned': read_pinned}
+                    'json': json, 'hashlib': hashlib, 'files': [], 'registered_paths': set(), 'read_pinned': read_pinned,
+                    'AUTHORED_MANIFEST': authored_archive.MANIFEST, 'AUTHORED_MAX_SOURCE': authored_archive.MAX_SOURCE,
+                    'authored_manifest_entries': authored_archive.manifest_entries,
+                    'authored_entry': authored_archive.entry, 'parse_authored_archive': authored_archive.parse}
         exec(compile(ast.Module(body=helpers, type_ignores=[]), str(BUILDER), 'exec'), self.env)
 
     def test_save_preserves_exact_utf8_bytes_and_skips_unchanged_writes(self):
@@ -37,6 +41,52 @@ class BookkeepingTests(unittest.TestCase):
         self.assertEqual(output.stat().st_mtime_ns, before)
         self.env['save']('nested/output.txt', text + 'Changed\n')
         self.assertEqual(output.read_bytes(), (text + 'Changed\n').encode('utf-8'))
+
+    def test_unused_historical_authored_versions_stay_cataloged_without_duplicate_dependency_rows(self):
+        entries = []
+        for version in ('referenced', 'unused-historical'):
+            raw = json.dumps({'id': 'invented-owner', 'status': 'published',
+                              'browser_followups': [{'kind': 'finite-settings'}], 'version': version}).encode()
+            item = authored_archive.entry(raw)
+            path = self.root / item['path']
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(raw)
+            entries.append(item)
+        manifest = self.root / authored_archive.MANIFEST
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(json.dumps({'schema': 'liberpedia-authored-source-archive-v1', 'entries': entries}), encoding='utf8')
+        self.env['register'](entries[0]['path'], 'Experiment file')
+        self.env['register_authored_archive']()
+        self.env['register_authored_archive']()
+        rows = {row['path']: row for row in self.env['files']}
+        self.assertEqual(len(self.env['files']), 3)
+        self.assertEqual(set(rows), {authored_archive.MANIFEST, *(item['path'] for item in entries)})
+        self.assertEqual(rows[entries[0]['path']]['role'], 'Experiment file')
+        self.assertEqual(rows[entries[1]['path']]['role'], 'Historical authored experiment source')
+        for item in entries:
+            self.assertEqual(rows[item['path']]['sha256'], item['sha256'])
+            self.assertEqual(rows[item['path']]['bytes'], item['bytes'])
+
+    def test_missing_changed_and_misattributed_authored_objects_fail_before_registration(self):
+        raw = b'{"id":"invented-owner","status":"published","browser_followups":[{"kind":"finite-settings"}]}\n'
+        item = authored_archive.entry(raw)
+        manifest = self.root / authored_archive.MANIFEST
+        manifest.parent.mkdir(parents=True)
+        value = {'schema': 'liberpedia-authored-source-archive-v1', 'entries': [item]}
+        manifest.write_text(json.dumps(value), encoding='utf8')
+        with self.assertRaises(FileNotFoundError):
+            self.env['register_authored_archive']()
+        target = self.root / item['path']
+        target.parent.mkdir(parents=True)
+        target.write_bytes(raw.replace(b'invented-owner', b'invented-other'))
+        with self.assertRaisesRegex(ValueError, 'bytes or association'):
+            self.env['register_authored_archive']()
+        target.write_bytes(raw)
+        value['entries'][0] = {**item, 'recordId': 'different-owner'}
+        manifest.write_text(json.dumps(value), encoding='utf8')
+        with self.assertRaisesRegex(ValueError, 'bytes or association'):
+            self.env['register_authored_archive']()
+        self.assertEqual(self.env['files'], [])
 
     def test_immutable_explicit_pin_objects_are_validated_and_registered_once(self):
         pins = [{'path': 'local-experiment.js', 'sha256': 'a' * 64}]

@@ -11,6 +11,7 @@ from check_number_examples import report as number_report
 from rune_lag_matches import report as lag_report
 from reproduction_sources import read_pinned
 from archive_reproduction_code import manifest_entries as code_manifest_entries, read_entry as read_code_entry
+from archive_authored_sources import MANIFEST as AUTHORED_MANIFEST, MAX_SOURCE as AUTHORED_MAX_SOURCE, manifest_entries as authored_manifest_entries, entry as authored_entry, parse as parse_authored_archive
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -52,6 +53,24 @@ def register(path,role,page=None):
  files.append(row);registered_paths.add(path)
 def register_unique(path,role):
  if path not in registered_paths:register(path,role)
+
+def register_authored_archive():
+ # Historical source retention is independent of current dependency discovery.
+ # Validate the whole archive before adding any rows, including unused versions.
+ base=root.resolve()
+ def retained_bytes(name,expected_size=None):
+  target=(base/name).resolve()
+  if not target.is_relative_to(base):raise ValueError('Authored source archive escaped repository')
+  size=target.stat().st_size
+  if size>AUTHORED_MAX_SOURCE or expected_size is not None and size!=expected_size:raise ValueError('Authored source archive byte count changed')
+  raw=target.read_bytes()
+  if len(raw)>AUTHORED_MAX_SOURCE or expected_size is not None and len(raw)!=expected_size:raise ValueError('Authored source archive byte count changed')
+  return raw
+ entries=authored_manifest_entries(parse_authored_archive(retained_bytes(AUTHORED_MANIFEST)))
+ for item in entries.values():
+  if authored_entry(retained_bytes(item['path'],item['bytes']))!=item:raise ValueError('Authored source archive bytes or association changed')
+ register_unique(AUTHORED_MANIFEST,'Retained authored source index')
+ for item in entries.values():register_unique(item['path'],'Historical authored experiment source')
 
 def register_program_binding_object(path):
  target=(root/path).resolve()
@@ -172,6 +191,7 @@ for name in ('published-numeric-bank-source.js','scripts/published_numeric_bank_
  register(name,'Archived computation verification code')
 for retained in sorted((root / 'published-sources/runtime').glob('*')):
  if retained.is_file():register(retained.relative_to(root).as_posix(),'Historical projection code')
+register_authored_archive()
 # Retained implementation versions are downloadable provenance, never outputs.
 for name in ('data/maintained-reproduction-code-policy.json','data/reproduction-code-archive.json','data/published-declared-program-bindings.json'):
  register_unique(name,'Maintained reproduction provenance')

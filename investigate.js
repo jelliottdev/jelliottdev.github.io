@@ -184,10 +184,21 @@
    draft.source={...draft.source,text:wording};
   }
   const opaque=draft.method.status==='specified'&&draft.method.value.operations.some(op=>['described_method','family_selection','ambiguous_reversal'].includes(op.id));
-  draft.clarifications.push({question:'saved-refinement',choice:'review',...(opaque?{method:C.serialize(draft.method.value)}:{})});
+  const inheritedSuggestions={};
+  if(opaque&&draft.unresolved.some(item=>item.kind==='source_note')){
+   for(const [name,field]of [['aim',draft.aim],['scope',draft.scope],['evaluation',draft.rules.evaluation]])if(field.status==='specified')inheritedSuggestions[name]=JSON.parse(C.serialize(field));
+   if(Object.keys(inheritedSuggestions).length)draft=C.revise(draft,{...(inheritedSuggestions.aim?{aim:C.field()}:{}),...(inheritedSuggestions.scope?{scope:C.field()}:{}),...(inheritedSuggestions.evaluation?{rules:{evaluation:C.field()}}:{})});
+  }
+  draft.clarifications.push({question:'saved-refinement',choice:'review',...(opaque?{method:C.serialize(draft.method.value)}:{}),...(Object.keys(inheritedSuggestions).length?{inheritedSuggestions}:{})});
   return draft;
  }
  function refinementMethodReview(draft){const marker=draft.clarifications.find(item=>item.question==='saved-refinement'&&typeof item.method==='string');return !!marker&&draft.method.status==='specified'&&C.serialize(draft.method.value)===marker.method&&!draft.clarifications.some(item=>item.question==='method'&&item.choice!=='undecided');}
+ function refinementSuggestion(draft,name){return draft.clarifications.find(item=>item.question==='saved-refinement')?.inheritedSuggestions?.[name]||null;}
+ function reviewSuggestion(question,draft,name){
+  const field=refinementSuggestion(draft,name);if(!field)return question;
+  const label=name==='aim'?(C.OUTCOMES[C.normalizeOutcome(field).id]||field.value.detail||'Other outcome')+(field.value.detail?' — '+field.value.detail:''):name==='scope'?(field.value.description||compactPages(field.value.pages||[]).map(item=>item.text).join(', ')):C.evaluationText(field.value)||JSON.stringify(field.value);
+  return {...question,context:'Saved suggestion: '+label+'. Review it for this new test.',choices:[{id:'keep-saved',label:'Keep this saved suggestion'},...question.choices.filter(choice=>!(name==='aim'&&!field.value.detail&&choice.id===C.normalizeOutcome(field).id)&&!(name==='evaluation'&&C.EVALUATION_CHOICES.some(item=>item.id===choice.id&&C.serialize(item.value)===C.serialize(field.value)))&&!(name==='scope'&&choice.id==='unsolved-lp2'&&!field.value.description&&field.value.pages?.length===56&&field.value.pages.every((page,i)=>page==='lp2-'+String(i).padStart(2,'0'))))]};
+ }
  function intakeQuestions(draft){
   const result=C.questions(draft);
   const acknowledged=name=>draft.clarifications.some(c=>c.question===name&&c.choice==='undecided');
@@ -211,8 +222,8 @@
   // experiment. A deferral is local to this exact revision; it never supplies
   // a criterion or authorizes execution, and editing asks the question again.
   const deferred=draft.clarifications.some(item=>item.question==='evaluation'&&item.choice==='research-first'&&item.revision===draft.revision);
-  const evaluation=C.evaluationQuestion(draft);if(evaluation&&!deferred)result.push({...evaluation,context:'Choose a check if you have one in mind, or find related research first.',choices:[{id:'research-first',label:'Find related research first',example:'Leave this undecided. No experiment will run.'},...evaluation.choices]});
-  return result;
+  const evaluation=C.evaluationQuestion(draft)||(refinementSuggestion(draft,'evaluation')&&draft.rules.evaluation.status==='unspecified'?{id:'evaluation',prompt:'What should this check look for?',choices:C.EVALUATION_CHOICES.map(({value,...choice})=>({...choice}))}:null);if(evaluation&&!deferred)result.push({...evaluation,context:'Choose a check if you have one in mind, or find related research first.',choices:[{id:'research-first',label:'Find related research first',example:'Leave this undecided. No experiment will run.'},...evaluation.choices]});
+  return result.map(question=>['aim','scope','evaluation'].includes(question.id)?reviewSuggestion(question,draft,question.id):question);
  }
  function chosenScope(text){
   try{return parseScope(text,editProvenance);}catch(error){
@@ -268,6 +279,13 @@
   }).join('')+'</div>';
  }
  function answerIntake(draft,id,choice,text=''){
+  if(['aim','scope','evaluation'].includes(id)&&refinementSuggestion(draft,id)){
+   const question=intakeQuestions(draft).find(q=>q.id===id),option=question?.choices.find(c=>c.id===choice);if(!option)throw Error('Choose an available answer.');
+   if(choice==='keep-saved'||id==='evaluation'&&choice!=='research-first'){
+    const selected=choice==='keep-saved'?refinementSuggestion(draft,id).value:C.EVALUATION_CHOICES.find(item=>item.id===choice)?.value;if(selected===undefined)throw Error('Choose an available answer.');
+    const field=clarified(selected),next=C.revise(draft,id==='evaluation'?{rules:{evaluation:field}}:{[id]:field});next.clarifications.push({question:id,choice,previousSuggestion:refinementSuggestion(draft,id),revision:next.revision});return next;
+   }
+  }
   if(id==='evaluation'&&choice==='research-first'){
    if(!intakeQuestions(draft).some(question=>question.id===id&&question.choices.some(option=>option.id===choice)))throw Error('Choose an available answer.');
    const next=C.revise(draft,{});
