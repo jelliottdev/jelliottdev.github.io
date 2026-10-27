@@ -773,8 +773,11 @@ saving remain separate explicit actions.
 A saved structured proposal can request an implementation through
 `/implement-method`. This drafts a bounded typed program, not arbitrary executable
 code. Every proposed step, evaluation, key use, representation, parameter and
-control has an explicit mapping or an unsupported state. Missing requirements
-block preparation. A supported mapping is still a proposed interpretation, not
+control has an explicit mapping or an unsupported state. The service supplies
+the immutable proposal identity and exact coverage coordinates. The model returns
+only the ordered statuses, typed operations and explanations; it cannot invent
+new identifiers or coverage entries. Missing or extra responses fail validation
+rather than being repaired. Missing requirements block preparation. A supported mapping is still a proposed interpretation, not
 proof that the program scientifically tests its hypothesis.
 
 After explicit review, `/prepare-implementation` binds the full proposal, program,
