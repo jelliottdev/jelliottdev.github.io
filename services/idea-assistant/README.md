@@ -425,3 +425,25 @@ purpose and 55/1/2,296 coverage, and opened saved output. The request trace for
 that reload contains no record-plans request. Task/evidence reads still have
 high and variable CPU, including a later 816 ms evidence request. These samples
 establish behavior, not dependable CPU headroom; further profiling remains open.
+
+
+### Finding checks developed from an idea
+
+`GET /ideas/:id/methods` lists publicly saved method proposals whose canonical
+MD1/MD2 card names that public idea as its parent. Migration 0024 indexes that
+existing declaration; migration 0025 guards JSON expressions so malformed historical
+rows cannot break unrelated proposal writes. No copied relationship records or
+backfill are needed.
+Both parent and child must be public. The endpoint returns no private submission
+notes, original submission fields, tasks or execution claims.
+
+Pages inspect at most 11 indexed candidates and return at most 10 methods in
+proposal creation order. The parent-bound cursor advances over raw candidates,
+including malformed historical cards. Such omissions set `incomplete: true`;
+the client keeps valid entries and displays a short incomplete-list notice.
+New malformed method declarations are rejected before proposal persistence.
+Every returned card is independently checked against its content identity and
+parent declaration by the client. Empty successful lookups add no page panel;
+read failures have an inline retry and never block reading the original idea.
+These links describe proposed checks, not evidence that the parent hypothesis
+has been tested. Opening the list never creates a proposal, task or result.

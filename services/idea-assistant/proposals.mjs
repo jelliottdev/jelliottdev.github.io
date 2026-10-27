@@ -1,6 +1,7 @@
 /* Confirmed idea persistence only: no inference, network fetch or IP storage. */
 import ClaimShare from '../../claim-share.js';
 import ClaimSpecification from '../../claim-specification.js';
+import MethodDesign from '../../method-design.js';
 
 const MAX_BODY=32000,DAILY_CAP=50;
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -53,6 +54,9 @@ export async function canonicalProposal(data){
  const draft=JSON.parse(ClaimSpecification.serialize(imported.draft));
  const confirmed=ClaimSpecification.confirm(draft,{id:'proposal-validation',at:'2000-01-01T00:00:00.000Z'});
  const fragment=ClaimShare.encode(confirmed),cardJson=ClaimSpecification.serialize(ClaimShare.cardData(confirmed));
+ // Recognized structured declarations must retain every copied scope and check
+ // field coherently. Ordinary cards and legacy prose remain ordinary.
+ MethodDesign.readCard(JSON.parse(cardJson));
  const cardHash=await digest(cardJson),id='p_'+cardHash;
  const requestHash=await digest(JSON.stringify({requestId,cardHash,note,sourceUrl,originalIdea}));
  return {requestId,note,sourceUrl,originalIdea,fragment,cardJson,cardHash,id,requestHash};
