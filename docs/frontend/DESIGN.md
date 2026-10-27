@@ -264,3 +264,7 @@ untested. Authenticate the archived output before offering a supported setting
 change. Keep its full scope, source edition and output check; reconstructing a
 literal program question does not establish the original author's wider aim.
 Reuse the shared variation review and evidence lookup before creation or running.
+
+### Record finding order
+
+All record surfaces place the authored result before the method description, regardless of whether the record has an introductory sentence. Full records keep the result, its limit and its visual together before the Used / Tried / Checked explanation. An optional introduction must never change this hierarchy. Missing reader metadata stays missing; do not infer a method or a finding from a title, filename or future check. Verify this with rendered real records, including introductions present, absent and malformed, rather than source-text position checks alone.

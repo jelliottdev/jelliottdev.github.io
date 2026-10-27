@@ -29,6 +29,22 @@ function finish(f,section){f.c.finish({params:new URLSearchParams(section?'secti
  const record=JSON.parse(fs.readFileSync(require.resolve('../reference/experiments/grid-round-glyphs.json'),'utf8'));
  assert(record.visuals.length>=3);const c={compactPages:L.compactPages,readerLimit:L.readerLimit,recordFiles:L.recordFiles,recordArticleLinks:L.recordArticleLinks,readerSections:L.readerSections,esc:value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])),hasInteractive:L.hasInteractive,prepareAuthored:x=>x,renderExperimentMarkdown:L.renderMarkdown,experimentHref:(id,tab)=>'#/experiment/'+id+'?tab='+tab,familyMembers:()=>[]};
  vm.createContext(c);vm.runInContext(part(' function overview(',' function scope('),c);const html=c.overview(record),finding=html.indexOf('class="finding"'),limit=html.indexOf('<strong>Limit:</strong>'),figure=html.indexOf('<figure');assert(finding>=0&&finding<limit&&limit<figure);assert(html.includes(c.esc(L.readerLimit(record.reader_limit||record.limitations))));assert.equal((html.match(/<strong>Limit:<\/strong>/g)||[]).length,1);assert.equal((html.match(/class="source-visual"/g)||[]).length,record.visuals.length);
+ // All published records use the same finding-first hierarchy, independent of
+ // optional introduction text. Render real content and retain every method once.
+ c.RecordTestView=require('../record-test-view.js');
+ const published=JSON.parse(fs.readFileSync(require.resolve('../data/experiments.json'),'utf8')).records;
+ for(const original of published){
+  const snapshot=JSON.stringify(original);
+  for(const withIntro of [false,true,'invalid']){
+   const candidate={...original,reader_intro:withIntro==='invalid'?{unexpected:'invalid intro'}:withIntro?'A short source-authored introduction.':''},rendered=c.overview(candidate),resultAt=rendered.indexOf('id="experiment-finding"'),testHTML=c.RecordTestView.render(candidate),testAt=rendered.indexOf('class="record-test"');
+   assert(resultAt>=0,original.id+' retains its finding');
+   assert(rendered.includes(c.esc(original.reader_finding||original.finding)),original.id+' retains exact authored result');
+   if(testHTML){assert(testAt>resultAt,original.id+' finding precedes method with intro='+withIntro);assert.equal(rendered.split(testHTML).length-1,1,original.id+' method appears once');const firstFigure=rendered.indexOf('<figure');if(firstFigure>=0)assert(firstFigure<testAt,original.id+' visual precedes method');}
+   else assert.equal(testAt,-1,original.id+' does not invent a method description');
+  }
+  assert.equal(JSON.stringify(original),snapshot,original.id+' source remains unchanged');
+ }
+ console.log('PASS finding-first rendering across '+published.length+' real records with and without optional introductions.');
  const scientific='Not independently checked; uncertain language.';const annotated={...record,reader_limit:scientific+'; Human review pending.',limitations:scientific+' Human review is pending.',next_steps:'Check a separately fixed continuation. Human review pending.'},before=JSON.stringify(annotated),clean=c.overview(annotated);assert(clean.includes(scientific));assert(clean.includes('Check a separately fixed continuation.'));assert(!/human review(?: is)? pending/i.test(clean));vm.runInContext(part(' function scope(',' function reproduction('),c);const scope=c.scope(annotated);assert(scope.includes(scientific));assert(!/human review(?: is)? pending/i.test(scope));assert.equal(JSON.stringify(annotated),before);
  // The near-finding question link uses the maintained question model and the
  // same section route/jump callbacks as record tabs, never a bare DOM hash.
