@@ -535,7 +535,7 @@
   }
   let restoringOverlay=null;
   if(fragment.startsWith('#idea=')){
-   try{const shared=H.decode(fragment),refining=incoming.get('refine')==='1';draft=refining?refinementDraft(fragment):shared.draft;raw=draft.source.text;stage='review';message=refining?'':'Shared idea. Review the wording before checking prior research.';}
+   try{const shared=H.decode(fragment),refining=incoming.get('refine')==='1';draft=refining?refinementDraft(fragment):shared.draft;raw=draft.source.text;stage='review';message=refining?'':incoming.get('designed')==='1'?'Proposed method. Review its procedure and assumptions before saving.':'Shared idea. Review the wording before checking prior research.';}
    catch{error='This shared idea link could not be read. Ask for a new link or enter the idea below.';}
   }
   const pageHint=incoming.getAll('pages').join(',');

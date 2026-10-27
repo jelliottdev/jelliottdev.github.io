@@ -9,6 +9,7 @@ import RecordedComparison from '../../recorded-comparison.js';
 import {handleProposal} from './proposals.mjs';
 import {createUpvoteHandler} from './upvotes.mjs';
 import {createInterpretHandler} from './interpret-handler.mjs';
+import {createMethodDesignHandler} from './method-design-handler.mjs';
 import {createLocalTaskHandler} from './local-tasks.mjs';
 import {createPrepareTaskHandler} from './prepare-task.mjs';
 import {createCommunityIdeaHandler} from './community-ideas.mjs';
@@ -198,6 +199,7 @@ export function createHandler(loadRecords = records) {
 const upvotes=createUpvoteHandler();
 const ask=createHandler();
 const interpret=createInterpretHandler();
+const methodDesign=createMethodDesignHandler();
 const localTasks=createLocalTaskHandler();
 const prepareTask=createPrepareTaskHandler();
 const recordPlans=createRecordPlanHandler();
@@ -239,6 +241,7 @@ export default {fetch(request,env,ctx){
   if(path.startsWith('/parameter-questions/'))return parameterQuestions(request,env);
   if(path==='/prepare-task')return prepareTask(request,env);
   if(path==='/record-plans')return recordPlans(request,env);
+  if(path==='/design-method')return methodDesign(request,env);
   if(/^\/ideas\/p_[a-f0-9]{64}\/variations$/.test(path))return questionVariations(request,env);
   if(/^\/ideas\/p_[a-f0-9]{64}\/work$/.test(path))return pinnedQuestionWork(request,env);
   if(path==='/ideas'||path.startsWith('/ideas/'))return communityIdeas(request,env);
