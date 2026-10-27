@@ -10,11 +10,13 @@
   const checked=H.readCard('#idea='+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));ensure(same(checked,card),'The retained question is not canonical.');return checked;
  }
  function source(origin){
-  const value=origin.source,mapped=origin.schema===MAPPED_SCHEMA,question=[QUESTION_SCHEMA,EVALUATION_SCHEMA].includes(origin.schema),reviewed=mapped||question&&Object.hasOwn(value||{},'reviewedProgram');
+  const value=origin.source,mapped=origin.schema===MAPPED_SCHEMA,evaluation=origin.schema===EVALUATION_SCHEMA,question=origin.schema===QUESTION_SCHEMA||evaluation&&value?.reference?.kind==='saved-question-program',reviewed=mapped||[QUESTION_SCHEMA,EVALUATION_SCHEMA].includes(origin.schema)&&Object.hasOwn(value||{},'reviewedProgram');
   ensure(exact(value,['reference','receipt',...(Object.hasOwn(value||{},'publishedSource')?['publishedSource']:[]),...(reviewed?['reviewedProgram']:[]),...(question?['questionProgram']:[])]),'The variation source fields changed.');
   ensure(!(mapped||question)||!Object.hasOwn(origin,'parentSettings')&&!Object.hasOwn(value,'publishedSource'),'A saved program cannot use archived references or family settings.');
+  ensure(!evaluation||!Object.hasOwn(origin,'parentSettings'),'An output-check change cannot select a finite family member.');
   const r=value.reference,p=value.receipt;ensure(r&&r.proposalId===origin.parentProposalId&&(question?r.kind==='saved-question-program':['saved-task','published-program','archived-program'].includes(r.kind)),'The source identifies another parent.');
   ensure(!mapped||r.kind==='saved-task','A reviewed mapping needs an exact saved-task source.');
+  ensure(!reviewed||['saved-task','saved-question-program'].includes(r.kind),'A reviewed mapping requires its original saved-task source.');
   ensure(exact(p,['taskId','taskSha256','resultId','createdAt','inputVersion'])&&[p.taskId,p.taskSha256,p.resultId].every(v=>typeof v==='string'&&HEX.test(v))&&iso(p.createdAt)&&['raw','reviewed'].includes(p.inputVersion),'The retained source receipt changed.');
   if(question){const program=value.questionProgram;ensure(exact(program,['taskId','taskSha256','inputVersion'])&&[program.taskId,program.taskSha256].every(v=>typeof v==='string'&&HEX.test(v))&&program.inputVersion===p.inputVersion,'The complete question program changed.');}
   if(r.kind==='saved-task'||r.kind==='saved-question-program'){ensure(exact(r,['kind','proposalId','taskId'])&&r.taskId===p.taskId&&!Object.hasOwn(value,'publishedSource'),'The saved source reference changed.');return null;}
@@ -60,7 +62,7 @@
   ensure(![QUESTION_SCHEMA,EVALUATION_SCHEMA].includes(o.schema)||same(after.pages,before.pages),'A complete-question variation must keep every originally declared page.');
   let text;
   if(evaluation){
-   ensure(parent.outcome.status==='specified'&&parent.outcome.value.outcomeId==='decipher'&&before.criterion.kind==='measurement'&&before.steps.length>0&&same(before.steps,after.steps),'An evaluation follow-up needs unchanged output-producing steps and a deciphering question.');
+   ensure(parent.outcome.status==='specified'&&parent.outcome.value.outcomeId==='decipher'&&['measurement','exact-prefix','exact-prefix-set','language-score'].includes(before.criterion.kind)&&!same(before.criterion,after.criterion)&&before.steps.length>0&&same(before.steps,after.steps),'An evaluation follow-up needs a different maintained check over unchanged output-producing steps and a deciphering question.');
    const expected=JSON.parse(E.stable(reviewed?reviewed.mapped.card:parent)),choice=C.EVALUATION_CHOICES.find(item=>item.id===selection.value);expected.rules.evaluation={status:'specified',value:choice.value};ensure(same(expected,child),'The evaluation follow-up changed more than its maintained check.');
    text=selection.value==='language-samples'?{label:'Compare the output with language samples',description:'Keep the same calculation and pages; compare rune patterns with eight fixed language samples. Similarity does not establish a decryption.'}:{label:'Check for the decoded Warning opening',description:'Keep the same calculation and pages; compare the first 12 runes with the decoded Warning opening. This checks page starts only.'};
   }else {ensure(same(V.changedSteps(before.steps,selection),after.steps),'The variation changed more than the selected step parameter.');text=wording(before.steps[selection.step],selection);}

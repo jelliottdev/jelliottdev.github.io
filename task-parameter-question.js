@@ -10,7 +10,7 @@
  const field=value=>C.field('specified',value),copy=v=>JSON.parse(E.stable(v));
  const EVALUATIONS=['language-samples','warning-opening'];
  function selection(input){const value=J.capture(input,{maxBytes:1024,maxDepth:3,maxNodes:16});if(value?.parameter!=='evaluation')return V.selection(value);ensure(value&&Object.keys(value).length===2&&Object.hasOwn(value,'value')&&EVALUATIONS.includes(value.value),'Choose one maintained output check.');return freeze(value);}
- function evaluationChoices(task){E.validateTask(task);if(!same(task.criterion,{kind:'measurement'})||task.steps.length===0)return Object.freeze([]);return freeze(EVALUATIONS.map(id=>{const choice=C.EVALUATION_CHOICES.find(item=>item.id===id);return {selection:{parameter:'evaluation',value:id},label:choice.label,description:choice.example,criterion:copy(choice.value)};}));}
+ function evaluationChoices(task){E.validateTask(task);if(!['measurement','exact-prefix','exact-prefix-set','language-score'].includes(task.criterion.kind)||task.steps.length===0)return Object.freeze([]);return freeze(EVALUATIONS.map(id=>{const choice=C.EVALUATION_CHOICES.find(item=>item.id===id);return {selection:{parameter:'evaluation',value:id},label:choice.label,description:choice.example,criterion:copy(choice.value)};}).filter(choice=>!same(choice.criterion,task.criterion)));}
  async function hash(value,crypto){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(E.stable(value))))].map(n=>n.toString(16).padStart(2,'0')).join('');}
  function canonical(card){
   const text=E.stable(card),bytes=new TextEncoder().encode(text);ensure(bytes.length<=H.MAX_BYTES,'The original question exceeds the card limit.');let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
@@ -38,7 +38,7 @@
   if(evaluation){
    await E.checkIdentity(value.parentTask,crypto);
    ensure(!hasSettings&&original.outcome.status==='specified'&&original.outcome.value.outcomeId==='decipher'&&same(value.parentTask.pages.map(p=>p.id),parentPlan.pages),'An output-check follow-up needs the complete fixed decipher question.');
-   const choice=evaluationChoices(value.parentTask).find(item=>same(item.selection,chosen));ensure(choice,'The parent must show transformed output and counts without a readability verdict.');
+   const choice=evaluationChoices(value.parentTask).find(item=>same(item.selection,chosen));ensure(choice,'Choose a different maintained check for this unchanged transformed output.');
    const task=await E.prepare({title:'Check output: '+choice.label,pages:copy(value.parentTask.pages),alphabet:copy(value.parentTask.alphabet),steps:copy(value.parentTask.steps),criterion:copy(choice.criterion)},crypto),card=copy(reviewedProgram?reviewedProgram.normalizedCard:original);card.rules.evaluation={status:'specified',value:copy(choice.criterion)};canonical(card);
    const compiled=F.compile(card);ensure(!compiled.reason&&!compiled.state&&same(card.outcome,original.outcome)&&same(compiled.steps,value.parentTask.steps)&&same(compiled.pages,parentPlan.pages)&&same(compiled.criterion,task.criterion)&&compiled.inputVersion===value.inputVersion,'The output-check follow-up changed its declared calculation.');
    const parent={taskId:value.parentTask.taskId,taskSha256:await hash(value.parentTask,crypto),cardSha256:await hash(original,crypto),inputVersion:value.inputVersion};ensure(same(J.capture(input,{maxBytes:8*1024*1024,maxDepth:24,maxNodes:500000}),value),'The parent question changed during preparation.');

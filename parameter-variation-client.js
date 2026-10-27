@@ -13,6 +13,7 @@
   const origin=service(baseURL,pageURL),display=capture(context),settings=own(display,'parentSettings'),mapped=own(display,'reviewedProgram'),full=display.source?.kind==='saved-question-program',hasQuestion=own(display,'questionTask');ensure(exact(display,['task','card','source','inputVersion','run',...(settings?['parentSettings']:[]),...(mapped?['reviewedProgram']:[]),...(hasQuestion?['questionTask']:[])])&&full===hasQuestion&&!(settings&&(mapped||full))&&['raw','reviewed'].includes(display.inputVersion)&&exact(display.run,['id','createdAt','result'])&&HEX.test(display.run.id)&&iso(display.run.createdAt),'Use an authenticated displayed calculation and result.');E.validateTask(display.task);
   ensure(display.source&&exact(display.source,['saved-task','saved-question-program'].includes(display.source.kind)?['kind','proposalId','taskId']:['kind','proposalId','recordId','revision','caseId'])&&['saved-task','saved-question-program','published-program','archived-program'].includes(display.source.kind)&&IDEA.test(display.source.proposalId),'Use an exact public source reference.');ensure(!mapped||['saved-task','saved-question-program'].includes(display.source.kind),'A reviewed program requires its original saved-task association.');
   const program=full?display.questionTask:display.task;if(full)E.validateTask(program);
+  const canEvaluate=()=>!settings&&C.normalizeOutcome(display.card.outcome).id==='decipher'&&display.card.scope.status==='specified'&&same(program.pages.map(page=>page.id),display.card.scope.value.pages);
   let generation=0,controller=null,busy=false,phase='idle',review=null,coverage=null,effectiveCoverage=null,attempt=null,result=null,error=null;
   const openingTask=task=>['exact-prefix','exact-prefix-set'].includes(task.criterion.kind),effective=()=>effectiveCoverage||coverage;
   const openingOptions=()=>({baseURL:origin,fetcher,pageURL,signal:controller.signal});
@@ -59,7 +60,7 @@
    return freeze({...value,evidence});
   }
   async function preview(selection){
-   const chosen=capture(selection,512);ensure(chosen?.parameter!=='evaluation'||full,'Choose an evaluation from the complete saved question.');const token=begin('previewing');review=null;coverage=null;effectiveCoverage=null;result=null;
+   const chosen=capture(selection,512);ensure(chosen?.parameter!=='evaluation'||canEvaluate(),'Choose an evaluation from the complete fixed saved calculation or original question.');const token=begin('previewing');review=null;coverage=null;effectiveCoverage=null;result=null;
    try{await authenticated(token);const input={parentTask:program,parentCard:display.card,inputVersion:display.inputVersion,selection:chosen,...(settings?{parentSettings:display.parentSettings}:{}),...(mapped?{reviewedProgram:display.reviewedProgram}:{})},derivation=await Q.prepare(input,crypto);assertLive(token);
     const receipt={taskId:display.task.taskId,taskSha256:await hash(display.task,crypto),resultId:display.run.id,createdAt:display.run.createdAt,inputVersion:display.inputVersion},publishedSource=['published-program','archived-program'].includes(display.source.kind)?{taskId:display.task.taskId,resultId:display.run.id,recordId:display.source.recordId,revision:display.source.revision,caseId:display.source.caseId}:null,expected={schema:'liberpedia-parameter-question-preview-v1',source:{reference:display.source,receipt,...(publishedSource?{publishedSource}: {}),...(mapped?{reviewedProgram:display.reviewedProgram}:{}),...(full?{questionProgram:{taskId:program.taskId,taskSha256:await hash(program,crypto),inputVersion:display.inputVersion}}:{})},parentQuestion:{proposalId:display.source.proposalId,cardSha256:display.source.proposalId.slice(2)},derivation};assertLive(token);
     const childProposalId='p_'+await hash(C.serialize(derivation.card),crypto),previewHash=await hash(expected,crypto);assertLive(token);const value=await request('/parameter-questions/preview',sourceBody(chosen),token);
@@ -99,7 +100,7 @@
   }
   function cancel(){generation++;controller?.abort();controller=null;busy=false;review=null;coverage=null;effectiveCoverage=null;result=null;phase='cancelled';}
   function getState(){return freeze(capture({phase,busy,preview:review,coverage,effectiveCoverage,result,error,requestId:attempt?.requestId||null,progress:{committed:!!attempt?.committed}}));}
-  return Object.freeze({list:()=>V.suggestions(program),listEvaluations:()=>full&&C.normalizeOutcome(display.card.outcome).id==='decipher'?Q.evaluationChoices(program):[],preview,create:createVariation,cancel,getState,destroy:cancel});
+  return Object.freeze({list:()=>V.suggestions(program),listEvaluations:()=>canEvaluate()?Q.evaluationChoices(program):[],preview,create:createVariation,cancel,getState,destroy:cancel});
  }
  const api={create};if(node)module.exports=api;else root.ParameterVariationClient=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
