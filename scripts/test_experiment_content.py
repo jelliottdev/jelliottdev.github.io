@@ -286,5 +286,29 @@ class ContentTests(unittest.TestCase):
                     compile_content(invalid)
 
 
+    def test_retained_collections_share_file_bounds_and_never_repeat_member_settings_in_record(self):
+        output = 'experiments/records/test-record/retained-collection.json'
+        selection = {'output': output, 'checked_at': '2026-10-25T12:30:00.000Z'}
+        for source in (self.record, self.source()):
+            raw = copy.deepcopy(source)
+            raw['reproduction']['outputs'].append({'path': output, 'sha256': 'a' * 64})
+            raw['published_program_collections'] = [selection]
+            before = copy.deepcopy(raw)
+            self.assertEqual(compile_content(raw)['published_program_collections'], [selection])
+            self.assertEqual(raw, before)
+            malformed = [[], None, {}, [selection, selection], [selection] * 33,
+                         [{**selection, 'programs': []}], [{**selection, 'id': 'invented'}],
+                         [{**selection, 'output': '../outside.json'}],
+                         [{**selection, 'checked_at': '2026-02-30T12:30:00.000Z'}]]
+            for value in malformed:
+                bad = copy.deepcopy(raw)
+                bad['published_program_collections'] = value
+                with self.assertRaisesRegex(ValueError, 'published_program_collections'):
+                    compile_content(bad)
+            raw['published_programs'] = [{'id': 'different', **selection}]
+            with self.assertRaisesRegex(ValueError, 'published_program_collections'):
+                compile_content(raw)
+
+
 if __name__ == '__main__':
     unittest.main()

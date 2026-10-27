@@ -158,6 +158,44 @@ the first use of this path: only its 55 saved split-lines outputs are imported,
 with all nine original openings. Its join-lines variant and original finding
 remain unchanged.
 
+For a planned sweep with many complete saved outputs, use the shared collection
+format instead of making a file or a record for each setting:
+
+```json
+"published_program_collections": [{
+  "output": "experiments/records/your-short-id/retained-programs.json",
+  "checked_at": "2026-10-25T12:30:00.000Z"
+}]
+```
+
+`scripts/retained_program_collection.mjs` shares the exact alphabet, raw pages
+and criterion. Each ordered member supplies its ID, task identity, title, steps,
+complete saved page vectors, independent controls and import date. `prepare`
+captures the bounded collection; `inspect` lists its members; `hydrate` verifies
+one member using the unchanged single-program verifier. It never generates a
+missing target output. The collection has an 8 MiB, two-million-node and
+128-program limit; individual programs retain their existing tighter limits.
+Both declaration forms share the 32-file selection limit, with at most 128
+programs on one owner and the existing global catalog limits. The record never
+repeats the member settings or creates one experiment per setting.
+
+```text
+node scripts/retained_program_collection.mjs --check retained-programs.json
+```
+
+The alphabet/Warning-prefix archive is the first collection: 116 fixed programs
+and all 6,496 original page arrays, including the 116 stored empty arrays for
+LP2-50. These are variants of one existing experiment, not new experiments.
+The build emits ordinary verified receipts, so output inspection and supported
+variations use the same browser flow as single-program archives.
+
+An unchanged retained calculation keeps its original public receipt when only
+the publisher implementation changes. The build revalidates the pinned receipt
+and compares the complete task, result, date and scientific source pins before
+reusing it. Changed scientific bytes or calculations receive a new reference;
+conflicting content-addressed files fail publication. Explicit reproduction
+dependencies still require their exact pinned bytes.
+
 Existing records and archived bundles remain supported in their original format. They are not automatically rewritten or summarized. For a deliberate migration, embed the exact account bytes in `analysis` and verify every frozen dependency; never refresh an evidence hash just to make a conversion pass. The source schema is stricter for new records, while public export fields remain compatible with existing tools.
 
 When an experiment pins another record's earlier `record.json`, its original hash

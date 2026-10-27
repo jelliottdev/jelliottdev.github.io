@@ -2,7 +2,8 @@
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports,E=node?require('./local-experiment.js'):root.LocalExperiment,J=node?require('./finite-json.js'):root.FiniteJSON;
- const keyed=new Set(['keyed-shift','interrupted-keyed-shift','finite-shift']),resets=['page','line','word'],directions=['subtract','add'],modes=['repeat','plaintext-autokey','ciphertext-autokey'];
+ const keyed=new Set(['keyed-shift','interrupted-keyed-shift','finite-shift']),resets=['page','line','word'],directions=['subtract','add'],modes=['repeat','plaintext-autokey','ciphertext-autokey'],coefficients=Array.from({length:29},(_,i)=>i);
+ const valuesFor=parameter=>parameter==='a'||parameter==='b'?coefficients:parameter==='direction'?directions:parameter==='mode'?modes:resets;
  const own=(value,key)=>Object.prototype.hasOwnProperty.call(value,key),stable=value=>E.stable(value);
  function freeze(value){if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
  function captureTask(value){
@@ -11,16 +12,16 @@
  }
  function captureSelection(value){
   const selection=J.capture(value,{maxBytes:512,maxDepth:3,maxNodes:16}),keys=['version','step','parameter','value'];
-  if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).length!==keys.length||!keys.every(key=>own(selection,key))||selection.version!==1||!Number.isInteger(selection.step)||selection.step<0||!['direction','reset','unit','mode'].includes(selection.parameter)||!(selection.parameter==='direction'?directions:selection.parameter==='mode'?modes:resets).includes(selection.value))throw Error('Choose one exact supported step parameter and destination.');
+  if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).length!==keys.length||!keys.every(key=>own(selection,key))||selection.version!==1||!Number.isInteger(selection.step)||selection.step<0||!['direction','reset','unit','mode','a','b'].includes(selection.parameter)||!valuesFor(selection.parameter).includes(selection.value))throw Error('Choose one exact supported step parameter and destination.');
   return selection;
  }
  function unchanged(value,snapshot,capture){if(stable(capture(value))!==stable(snapshot))throw Error('The task or selected variation changed during preparation.');}
  function derive(parent,selection){
   const step=parent.steps[selection.step],parameter=selection.parameter;
-  if(!step||!(parameter==='direction'?keyed.has(step.op):parameter==='unit'?step.op==='reverse':parameter==='mode'?step.op==='keyed-shift':keyed.has(step.op)||step.op==='cumulative-difference'))throw Error('The selected step does not support this parameter variation.');
+  if(!step||!(['a','b'].includes(parameter)?step.op==='affine':parameter==='direction'?keyed.has(step.op):parameter==='unit'?step.op==='reverse':parameter==='mode'?step.op==='keyed-shift':keyed.has(step.op)||step.op==='cumulative-difference'))throw Error('The selected step does not support this parameter variation.');
   if(step[parameter]===selection.value)throw Error('Choose a value different from the saved task.');
   const steps=JSON.parse(stable(parent.steps));steps[selection.step][parameter]=selection.value;
-  const action=parameter==='direction'?(selection.value==='add'?'add key indices':'subtract key indices'):parameter==='unit'?'reverse runes within each '+selection.value:parameter==='mode'?'use '+selection.value:'restart at each '+selection.value;
+  const action=parameter==='a'?'multiply rune values by '+selection.value:parameter==='b'?'add '+selection.value+' to rune values':parameter==='direction'?(selection.value==='add'?'add key indices':'subtract key indices'):parameter==='unit'?'reverse runes within each '+selection.value:parameter==='mode'?'use '+selection.value:'restart at each '+selection.value;
   const body={title:'Step '+(selection.step+1)+': '+action,pages:JSON.parse(stable(parent.pages)),alphabet:JSON.parse(stable(parent.alphabet)),steps,criterion:JSON.parse(stable(parent.criterion))};
   // The normal runner checks the entire resulting geometry, including all
   // finite-key segments. An unavailable restart is rejected, never shortened.
@@ -32,12 +33,12 @@
  function list(parent){
   const task=captureTask(parent),items=[];
   for(let step=0;step<task.steps.length;step++){
-   const operation=task.steps[step],parameters=operation.op==='keyed-shift'?['direction','reset','mode']:keyed.has(operation.op)?['direction','reset']:operation.op==='cumulative-difference'?['reset']:operation.op==='reverse'?['unit']:[];
-   for(const parameter of parameters)for(const value of parameter==='direction'?directions:parameter==='mode'?modes:resets){
+   const operation=task.steps[step],parameters=operation.op==='affine'?['a','b']:operation.op==='keyed-shift'?['direction','reset','mode']:keyed.has(operation.op)?['direction','reset']:operation.op==='cumulative-difference'?['reset']:operation.op==='reverse'?['unit']:[];
+   for(const parameter of parameters)for(const value of valuesFor(parameter)){
     if(operation[parameter]===value)continue;
     const selection={version:1,step,parameter,value};
     try{derive(task,selection);}catch{continue;}
-    items.push({selection,from:operation[parameter],label:parameter==='direction'?(value==='add'?'Add the key values':'Subtract the key values'):parameter==='unit'?'Reverse runes within each '+value:parameter==='mode'?(value==='repeat'?'Repeat the starting key':value==='plaintext-autokey'?'Continue the key with decoded runes':'Continue the key with input runes'):'Restart at each '+value});
+    items.push({selection,from:operation[parameter],label:parameter==='a'?'Multiply rune values by '+value:parameter==='b'?'Add '+value+' to rune values':parameter==='direction'?(value==='add'?'Add the key values':'Subtract the key values'):parameter==='unit'?'Reverse runes within each '+value:parameter==='mode'?(value==='repeat'?'Repeat the starting key':value==='plaintext-autokey'?'Continue the key with decoded runes':'Continue the key with input runes'):'Restart at each '+value});
    }
   }
   return freeze(items);
@@ -67,6 +68,12 @@
    const {step:index,parameter,value}=item.selection,step=task.steps[index],before=positions[step.reset];
    // A later constant affine substitution discards every earlier rune value.
    if(task.steps.slice(index+1).some(later=>later.op==='affine'&&later.a===0))return true;
+   if(parameter==='a'||parameter==='b'){
+    // Compare the two complete substitutions over GP29, never actual page
+    // outputs. Different coefficients are retained unless every residue agrees.
+    const changed={...step,[parameter]:value};
+    return coefficients.every(rune=>(step.a*rune+step.b)%29===(changed.a*rune+changed.b)%29);
+   }
    if(parameter==='unit')return equal(reversal(step.unit),reversal(value));
    // All three modes use the literal seed until the segment exhausts it.
    // Once feedback is reached, no seed pattern alone proves equivalence.

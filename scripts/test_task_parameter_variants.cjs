@@ -31,7 +31,8 @@ async function rejectsMutation(start,change){let release;const blocked=new Promi
  await test('closed selections refuse no-op, unknown fields, unsupported steps and ambiguous indices',async()=>{
   const parent=await task([modes[0]]),selection={version:1,step:0,parameter:'direction',value:'add'};
   for(const patch of [{version:2},{step:-1},{step:1},{step:0.5},{step:true},{parameter:'key'},{value:'multiply'},{value:'subtract'},{extra:true}])await assert.rejects(V.prepare(parent,{...selection,...patch},webcrypto));
-  for(const steps of [[],[{op:'affine',a:1,b:0}]]){const t=await task(steps);assert.deepEqual(V.list(t),[]);await assert.rejects(V.prepare(t,selection,webcrypto));}
+  const empty=await task([]);assert.deepEqual(V.list(empty),[]);await assert.rejects(V.prepare(empty,selection,webcrypto));
+  const affine=await task([{op:'affine',a:1,b:0}]);assert.equal(V.list(affine).length,56);assert(V.list(affine).every(item=>['a','b'].includes(item.selection.parameter)));await assert.rejects(V.prepare(affine,selection,webcrypto));
   const corrupt=copy(parent);corrupt.taskId='0'.repeat(64);await assert.rejects(V.prepare(corrupt,selection,webcrypto),/changed/);
  });
  await test('safe capture rejects getters, sparse arrays, symbols and unsafe objects without invoking them',async()=>{

@@ -22,7 +22,7 @@ async function main(){
  async function fixture(options={}){
   let origin=initial;if(options.operations){const changed=clone(original);changed.method.value.operations=clone(options.operations);const draft=H.decode('#idea='+Buffer.from(JSON.stringify(changed)).toString('base64url')).draft;origin=await canonicalProposal({requestId:uuid,fragment:H.encode(C.confirm(draft,{id:'compound',at}))});}
   const doc=documentFixture('#idea='+origin.id),requests=[],proposals=[],published=[],executions=[],ids=new Map(),cards=new Map([[initial.id,clone(original)],[other.id,JSON.parse(other.cardJson)],[partial.id,JSON.parse(partial.cardJson)],[origin.id,JSON.parse(origin.cardJson)]]),settings={endpoint:base+'/ask',localTaskEndpoint:base+'/tasks',researchIdeaEndpoint:base+'/ideas',proposalEndpoint:base+'/proposals',taskPreparationEndpoint:base+'/prepare-task'};
-  const view=id=>({id,card:clone(cards.get(id)),createdAt:at,tasks:[],...(id===other.id?{tasksTruncated:true}:{})});
+  const view=id=>({id,card:clone(cards.get(id)),createdAt:at,tasks:[],tasksTruncated:id===other.id});
   const app=UI.createApp(doc,{crypto:webcrypto,executor:{start(task){executions.push(task);throw Error('Clarifying an idea must not run anything.');}},fetcher:async(url,init={})=>{
    const body=init.body?JSON.parse(init.body):null;requests.push({url,method:init.method||'GET',body,signal:init.signal});
    if(url==='data/assistant.json')return Response.json(settings);

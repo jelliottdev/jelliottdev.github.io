@@ -16,10 +16,18 @@
   const human=parsed.getUTCDate()+' '+['January','February','March','April','May','June','July','August','September','October','November','December'][parsed.getUTCMonth()]+' '+parsed.getUTCFullYear();
   return label+human+'. This is not the original experiment date.';
  }
+ function programDescription(task){
+  if(!Array.isArray(task.steps)||!task.steps.length)return '';
+  const description=node?require('./published-program-description.js'):root.PublishedProgramDescription;
+  if(!description?.step)return '';
+  let descriptions;try{descriptions=task.steps.map(description.step);}catch{return '';}
+  if(descriptions.some(value=>!value))return '';
+  return '<section class="published-output-method" aria-label="What was tried"><h2>What was tried</h2>'+(descriptions.length===1?'<p>'+esc(descriptions[0])+'</p>':'<ol>'+descriptions.map(value=>'<li>'+esc(value)+'</li>').join('')+'</ol>')+'</section>';
+ }
  function render(model,View,canVary=false){
   const {task,run,provenance}=model,id=sourceId(provenance?.schema==='liberpedia-published-program-projection-v1'?provenance.projection?.ownerRecordId:provenance?.recordId);if(!id||!task||!run?.result)throw Error('The archived calculation is incomplete.');
   const details=[['Input text',model.inputVersion],['Verification or import date',provenance.checkedAt],['Date meaning',provenance.dateMeaning],['Verification',provenance.verificationMeaning],['Comparison',provenance.expectationMeaning]].filter(([,value])=>typeof value==='string'&&value.length);
-  return '<article class="published-output"><header><h1>Archived calculation</h1><p class="published-output-date">'+esc(dateNote(provenance))+'</p><nav aria-label="Archived calculation sources"><a href="library.html#/experiment/'+esc(id)+'">Source experiment</a><a href="research.html">Research map</a></nav></header><div data-published-output-result>'+View.renderArchived(model)+'</div>'+(canVary?'<div class="published-output-variation"><button type="button" data-published-variation>Try another setting</button><div data-published-variation-status></div><div data-published-variation-workspace></div></div>':'')+'<details class="published-output-details"><summary>Calculation details</summary><p>'+esc(task.title)+'</p><dl>'+details.map(([label,value])=>'<div><dt>'+esc(label)+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl></details></article>';
+  return '<article class="published-output"><header><h1>Archived calculation</h1><p class="published-output-date">'+esc(dateNote(provenance))+'</p><nav aria-label="Archived calculation sources"><a href="library.html#/experiment/'+esc(id)+'">Source experiment</a><a href="research.html">Research map</a></nav></header>'+(provenance.schema==='liberpedia-published-program-projection-v1'?programDescription(task):'')+'<div data-published-output-result>'+View.renderArchived(model)+'</div>'+(canVary?'<div class="published-output-variation"><button type="button" data-published-variation>Try another setting</button><div data-published-variation-status></div><div data-published-variation-workspace></div></div>':'')+'<details class="published-output-details"><summary>Calculation details</summary><p>'+esc(task.title)+'</p><dl>'+details.map(([label,value])=>'<div><dt>'+esc(label)+'</dt><dd>'+esc(value)+'</dd></div>').join('')+'</dl></details></article>';
  }
  function mount(host,options={}){
   if(!host||typeof host.querySelector!=='function')throw Error('Choose an archived-output container.');

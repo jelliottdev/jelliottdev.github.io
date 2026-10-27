@@ -310,7 +310,7 @@ async function evaluationClarificationTests(){
  const methodId='p_'+createHash('sha256').update(C.serialize(methodCard)).digest('hex'),methodDoc=documentFixture('#idea='+methodId),{planCard}=await import('../services/idea-assistant/prepare-task.mjs');
  const methodApp=UI.createApp(methodDoc,{crypto:webcrypto,executor:{start(){assert.fail('Method clarification does not run anything');}},fetcher:async(url,options={})=>{
   if(url==='data/assistant.json')return Response.json({researchIdeaEndpoint:ideaEndpoint,taskPreparationEndpoint:prepareEndpoint,localTaskEndpoint:endpoint});
-  if(url===ideaEndpoint+'/'+methodId)return Response.json({id:methodId,card:methodCard,createdAt:at,tasks:[]});
+  if(url===ideaEndpoint+'/'+methodId)return Response.json({id:methodId,card:methodCard,createdAt:at,tasks:[],tasksTruncated:false});
   assert.equal(url,prepareEndpoint);assert.equal(options.method,'POST');return Response.json({...planCard(methodCard),proposalId:methodId});
  }});
  try{await methodApp.ready;assert.equal(methodApp.getState().preparationOutcome.state,'needs-clarification');assert.equal(methodDoc.getElementById('idea-heading').textContent,'Complete the check settings');assert(methodDoc.getElementById('method-heading'));assert(!methodDoc.getElementById('create-experiment'));}finally{methodApp.destroy();}

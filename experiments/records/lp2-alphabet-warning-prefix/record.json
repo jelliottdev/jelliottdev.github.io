@@ -100,7 +100,7 @@
     "human_review": "pending"
   },
   "reproduction": {
-    "command": "python experiments/records/lp2-alphabet-warning-prefix/run.py --check",
+    "command": "python experiments/records/lp2-alphabet-warning-prefix/run.py --check && node scripts/retained_program_collection.mjs --check experiments/records/lp2-alphabet-warning-prefix/retained-alphabet-programs.json",
     "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-alphabet-warning-prefix/check.py",
     "script": "experiments/records/lp2-alphabet-warning-prefix/run.py",
     "script_sha256": "0d5d6e1e90d6f2d990f962cde6be26747dc3730415d676b5227a63b8427b53fe",
@@ -344,12 +344,44 @@
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "scripts/retained_program_collection.mjs",
+        "sha256": "c5860575c883492c4a1f37d1c61db1b32921c71d6b5b66e55e982cecb49e571a"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
       }
     ],
     "outputs": [
       {
         "path": "experiments/records/lp2-alphabet-warning-prefix/results.json",
         "sha256": "5b0e48083cadd129e57efd035f92a719d1b0a0fc7141a49070d1b10c76e67f6d"
+      },
+      {
+        "path": "experiments/records/lp2-alphabet-warning-prefix/retained-alphabet-programs.json",
+        "sha256": "0817b825a9627db1afca4b6c5194837b6645f8c5b1a9c56cb1735082b0685079"
       }
     ]
   },
@@ -365,5 +397,11 @@
   ],
   "related": [],
   "reader_finding": "Alphabet shifts, Atbash-style reversals and backward text did not reproduce the warning’s 12-rune opening in any of 6,496 cases.",
-  "reader_limit": "Only that one page-start opening was checked, with headings included. Other beginnings, later positions, row-wise reversals or broader substitution alphabets remain untested."
+  "reader_limit": "Only that one page-start opening was checked, with headings included. Other beginnings, later positions, row-wise reversals or broader substitution alphabets remain untested.",
+  "published_program_collections": [
+    {
+      "output": "experiments/records/lp2-alphabet-warning-prefix/retained-alphabet-programs.json",
+      "checked_at": "2026-10-27T02:36:47.000Z"
+    }
+  ]
 }

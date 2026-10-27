@@ -17,7 +17,7 @@ function documentFixture(hash){
  const otherCard=clone(original);otherCard.scope.value.pages=['lp2-16'];const otherSnapshot=C.confirm(H.decode('#idea='+Buffer.from(JSON.stringify(otherCard)).toString('base64url')).draft,{id:'other',at}),other=await canonicalProposal({requestId:'22222222-2222-4222-8222-222222222222',fragment:H.encode(otherSnapshot)});
  async function fixture(options={}){
   const owner=options.owner||initial,ownerCard=JSON.parse(owner.cardJson),doc=documentFixture('#idea='+owner.id),requests=[],proposals=[],published=[],executions=[],cards=new Map([[owner.id,clone(ownerCard)],[other.id,JSON.parse(other.cardJson)]]),settings={endpoint:base+'/ask',localTaskEndpoint:base+'/tasks',researchIdeaEndpoint:base+'/ideas',proposalEndpoint:base+'/proposals',taskPreparationEndpoint:base+'/prepare-task',...(options.factored?{factoredSearchEndpoint:base+'/factored-search'}:{}),...(options.prefix?{factoredPrefixSearchEndpoint:base+'/factored-prefix-search'}:{})};
-  const view=id=>({id,card:clone(cards.get(id)),createdAt:at,tasks:[],...(id===other.id?{tasksTruncated:true}:{})});
+  const view=id=>({id,card:clone(cards.get(id)),createdAt:at,tasks:[],tasksTruncated:id===other.id});
   const app=UI.createApp(doc,{crypto:webcrypto,executor:{start(t){executions.push(t);throw Error('Clarification cannot execute a task.');}},fetcher:async(url,init={})=>{
    const body=init.body?JSON.parse(init.body):null;requests.push({url,method:init.method||'GET',body});
    if(url==='data/assistant.json')return Response.json(settings);
@@ -27,7 +27,7 @@ function documentFixture(hash){
    if(url===settings.researchIdeaEndpoint){published.push(body.proposalId);const value=view(body.proposalId);return options.publish?options.publish(value):Response.json(value);}
    throw Error('Unexpected request '+url);
   }});
-  const f={doc,app,requests,proposals,published,executions,cards,async click(id){const el=doc.getElementById(id);assert(el,'Missing '+id);assert(!el.disabled);return el.onclick();},async navigate(){doc.defaultView.location.hash='#idea='+other.id;await doc.events.hashchange();}};if(options.waitReady!==false)await app.ready;return f;
+  const f={doc,app,requests,proposals,published,executions,cards,async click(id){const el=doc.getElementById(id);assert(el,'Missing '+id);assert(!el.disabled);return el.onclick();},async navigate(){doc.defaultView.location.hash='#idea='+other.id;await doc.events.hashchange();}};if(options.waitReady!==false){await app.ready;if(!require('../fixed-plan-compiler.js').methodReadiness(ownerCard.method).supported)assert.equal(requests.filter(r=>r.method==='POST').length,0,'Opaque ideas never auto-prepare');if(doc.getElementById('define-guided-check'))await f.click('define-guided-check');}else{void app.ready.then(()=>f.click('define-guided-check'));}return f;
  }
 
  function noWork(f){assert.equal(f.executions.length,0);assert(!f.requests.some(r=>/\/(tasks|finite-search|factored-search|factored-prefix-search)(?:\/|$)/.test(r.url)));assert(!f.doc.getElementById('create-experiment'));assert.equal(f.cards.get(initial.id)===undefined?initial.cardJson:C.serialize(f.cards.get(initial.id)),initial.cardJson);}

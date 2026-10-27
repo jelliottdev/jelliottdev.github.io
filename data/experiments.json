@@ -54227,7 +54227,7 @@
         "human_review": "pending"
       },
       "reproduction": {
-        "command": "python experiments/records/lp2-alphabet-warning-prefix/run.py --check",
+        "command": "python experiments/records/lp2-alphabet-warning-prefix/run.py --check && node scripts/retained_program_collection.mjs --check experiments/records/lp2-alphabet-warning-prefix/retained-alphabet-programs.json",
         "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-alphabet-warning-prefix/check.py",
         "script": "experiments/records/lp2-alphabet-warning-prefix/run.py",
         "script_sha256": "0d5d6e1e90d6f2d990f962cde6be26747dc3730415d676b5227a63b8427b53fe",
@@ -54471,12 +54471,44 @@
           {
             "path": "text/lp2-55.txt",
             "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          },
+          {
+            "path": "scripts/retained_program_collection.mjs",
+            "sha256": "c5860575c883492c4a1f37d1c61db1b32921c71d6b5b66e55e982cecb49e571a"
+          },
+          {
+            "path": "scripts/retained_program_output.mjs",
+            "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+          },
+          {
+            "path": "local-experiment.js",
+            "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+          },
+          {
+            "path": "local-plan-controls.js",
+            "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+          },
+          {
+            "path": "finite-json.js",
+            "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+          },
+          {
+            "path": "services/idea-assistant/published-program-source-index.mjs",
+            "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+          },
+          {
+            "path": "published-numeric-bank-source.js",
+            "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
           }
         ],
         "outputs": [
           {
             "path": "experiments/records/lp2-alphabet-warning-prefix/results.json",
             "sha256": "5b0e48083cadd129e57efd035f92a719d1b0a0fc7141a49070d1b10c76e67f6d"
+          },
+          {
+            "path": "experiments/records/lp2-alphabet-warning-prefix/retained-alphabet-programs.json",
+            "sha256": "0817b825a9627db1afca4b6c5194837b6645f8c5b1a9c56cb1735082b0685079"
           }
         ]
       },
@@ -54493,6 +54525,12 @@
       "related": [],
       "reader_finding": "Alphabet shifts, Atbash-style reversals and backward text did not reproduce the warning’s 12-rune opening in any of 6,496 cases.",
       "reader_limit": "Only that one page-start opening was checked, with headings included. Other beginnings, later positions, row-wise reversals or broader substitution alphabets remain untested.",
+      "published_program_collections": [
+        {
+          "output": "experiments/records/lp2-alphabet-warning-prefix/retained-alphabet-programs.json",
+          "checked_at": "2026-10-27T02:36:47.000Z"
+        }
+      ],
       "article": "# Fixed alphabet transformations and the warning opening\n\n## Why test this?\n\nA newcomer can reasonably try reusing the warning's Atbash method, shifting the rune alphabet, or reversing the text. These are small, finite searches. The difficult part is deciding what counts as success without picking an attractive fragment after looking at the output.\n\nThis test uses one deliberately narrow criterion: the first 12 decoded rune indices must equal the first 12 decoded runes of LP1-01's warning. The criterion is motivated by an existing reading, but there is no evidence that an unsolved page must repeat that opening. This is not an English detector.\n\n## Plan and scope\n\nThe plan and runner were committed as `faab48f` before the first execution. All 56 archived pages LP2-00–55 are included, corresponding to their unsolved status in the source snapshot. This is not a claim about their present-day solving status.\n\nFor every page, keep all recognized runes, including headings, and remove other characters. Use indices 0–28. Try both original and whole-stream reversed order. For each order, evaluate both multipliers a = 1 and a = -1 with every additive offset b = 0–28, using `(a * index + b) % 29`.\n\nThe positive multiplier covers all constant shifts. The negative multiplier covers alphabet reversal with every shift; ordinary Atbash is a = -1, b = 28. The identity is included. Reversing a complete stream is not the same as reversing individual rows or words.\n\n| Transformation class | Orders | Offsets | Pages | Cases | Exact matches |\n| --- | --- | --- | --- | --- | --- |\n| Constant shift | 2 | 29 | 56 | 3248 | 0 |\n| Reversed alphabet plus offset | 2 | 29 | 56 | 3248 | 0 |\n| Total |  |  |  | 6496 | 0 |\n\nThese are parameter cases, not a promise that every resulting string is distinct.\n\n## Result and interpretation\n\nAll 6496 cases completed. No output began with the specified 12-rune warning prefix. Every full candidate sequence is retained in the JSON output, not only its prefix or an attractive excerpt. Each case records the page, order, multiplier, offset, output indices, and exact-match flag.\n\nThis finding is negative only for the declared opening at position zero. It does not rule out meaningful text beginning differently, a heading that needs separate treatment, another region, or an arbitrary substitution. There is no significance estimate because this is an exhaustive exact-match query, not a statistical test of whether the text is English.\n\n## Reproduce and inspect\n\nUse Python 3.12.10 and the repository checkout:\n\n```\npython experiments/records/lp2-alphabet-warning-prefix/run.py --check\npython experiments/records/lp2-alphabet-warning-prefix/check.py\n```\n\nThe first command regenerates and compares every candidate, input hash, and match flag. The second uses a separately constructed alphabet-walk lookup to verify all output indices and confirms that every parameter tuple is unique. It also checks the known warning's opening A,W,A against indices 24,7,24. Neither command uses a network service.\n\n[Download all candidate outputs](experiments/records/lp2-alphabet-warning-prefix/results.json). To save a fresh report, run the runner with `--output my-prefix-scan.json`; it refuses to overwrite an existing file. Read `alphabet` to map output indices back to runes. Latin transliteration involves additional conventions and is not applied here.\n\n## Retest and changes after inspection\n\nCodex reran the complete scan and the separate oracle on 20 October 2026. All 6496 candidates reproduced exactly. No input-selection rule, prefix length, transformation, or stopping rule changed after the first result. The independent oracle was added after the first run as a verification step, not used to select results. Human review remains pending.\n\n## Next variants\n\nA different known opening, prefix position, heading convention, or transformation range must be declared as a new variant with the changes visible. Do not append extra guesses to this baseline and report only the final combined search. An exact match in any later variant would still require checking the rest of the page.\n",
       "article_path": "experiments/records/lp2-alphabet-warning-prefix/article.md",
       "script_sha256": "0d5d6e1e90d6f2d990f962cde6be26747dc3730415d676b5227a63b8427b53fe",

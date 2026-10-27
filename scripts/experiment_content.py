@@ -76,6 +76,30 @@ def validate_reader_test(value):
             raise ValueError('reader_test.' + name + ' needs one plain trimmed paragraph of at most 320 characters')
 
 
+def validate_published_program_collections(record):
+    """Select bounded retained collections; member settings live only in output."""
+    if 'published_program_collections' not in record:
+        return
+    collections = record['published_program_collections']
+    if (not isinstance(collections, list) or not 1 <= len(collections) <= 32
+            or any(not isinstance(item, dict) or set(item) != {'output', 'checked_at'}
+                   for item in collections)):
+        raise ValueError('published_program_collections needs 1–32 output and checked_at selections')
+    singles = record.get('published_programs', [])
+    if not isinstance(singles, list) or len(singles) + len(collections) > 32:
+        raise ValueError('published_program_collections shares the 32 retained-file selection limit')
+    paths = [item.get('output') for item in singles if isinstance(item, dict)]
+    paths += [item['output'] for item in collections]
+    if any(not isinstance(path, str) for path in paths) or len(set(paths)) != len(paths):
+        raise ValueError('published_program_collections needs distinct retained-file selections')
+    for item in collections:
+        probe = {**record, 'published_programs': [{**item, 'id': 'retained-collection'}]}
+        try:
+            validate_published_programs(probe)
+        except ValueError as error:
+            raise ValueError('published_program_collections: ' + str(error)) from error
+
+
 def article_bytes(raw):
     if raw.get('schema') != SCHEMA:
         return None
@@ -98,6 +122,7 @@ def compile_content(raw):
     if 'reader_test' in record:
         validate_reader_test(record['reader_test'])
     validate_published_programs(record)
+    validate_published_program_collections(record)
     if 'schema' not in record:
         return record
     if record['schema'] != SCHEMA:

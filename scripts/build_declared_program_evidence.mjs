@@ -6,7 +6,9 @@ import {createHash} from 'node:crypto';
 import E from '../local-experiment.js';
 import J from '../finite-json.js';
 import {validateRetainedProgramOutput} from './retained_program_output.mjs';
-import {checkedProgramIndex} from '../services/idea-assistant/published-program-source-index.mjs';
+import * as Collection from './retained_program_collection.mjs';
+import {checkedProgramIndex, checkProgramPointerReceipt} from '../services/idea-assistant/published-program-source-index.mjs';
+import {readPublishedEvidence} from '../services/idea-assistant/published-evidence.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -52,18 +54,26 @@ function repositoryReader(base) {
 }
 
 function declarationsFor(record) {
-  const declarations = record.published_programs;
-  need(Array.isArray(declarations) && declarations.length >= 1 && declarations.length <= 32
-    && new Set(declarations.map(item => item.id)).size === declarations.length
+  const singles = record.published_programs || [];
+  const collections = record.published_program_collections || [];
+  for (const list of [singles, collections]) need(Array.isArray(list) && list.length <= 32,
+    'Declare at most32 retained outputs or collections');
+  need((!Object.hasOwn(record, 'published_programs') || singles.length > 0)
+    && (!Object.hasOwn(record, 'published_program_collections') || collections.length > 0),
+  'Published declarations cannot be empty');
+  const declarations = [...singles, ...collections];
+  need(declarations.length >= 1 && declarations.length <= 32
+    && new Set(singles.map(item => item.id)).size === singles.length
     && new Set(declarations.map(item => item.output)).size === declarations.length,
   'Declare at most32 unique published programs');
-  return declarations;
+  for (const declaration of declarations) validateDeclaration(record, declaration, collections.includes(declaration));
+  return declarations.map(item => ({...item, collection: collections.includes(item)}));
 }
 
-function validateDeclaration(record, declaration) {
-  need(exact(declaration, ['id', 'output', 'checked_at'])
-    && typeof declaration.id === 'string' && declaration.id.length <= 80
-    && /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?![\s\S])/.test(declaration.id)
+function validateDeclaration(record, declaration, collection = false) {
+  need(exact(declaration, [...(collection ? [] : ['id']), 'output', 'checked_at'])
+    && (collection || typeof declaration.id === 'string' && declaration.id.length <= 80
+    && /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?![\s\S])/.test(declaration.id))
     && date(declaration.checked_at) && typeof declaration.output === 'string'
     && declaration.output.length <= 300 && declaration.output.endsWith('.json')
     && !/\/(?:record|article)\.json$/.test(declaration.output)
@@ -109,9 +119,9 @@ function validateOwnerScope(record, task, official) {
   'Retained program pages differ from the ordered owner scope');
 }
 
-async function projectionSourcePins(task, scientificPins, officialPages, bytes) {
+async function projectionSourcePins(task, scientificPins, officialPages, bytes, collection = false) {
   const pins = new Map(scientificPins);
-  for (const path of CODE) {
+  for (const path of [...CODE, ...(collection ? ['scripts/retained_program_collection.mjs'] : [])]) {
     const hash = sha((await bytes(path)).toString('utf8').replaceAll('\r\n', '\n'));
     need(!pins.has(path) || pins.get(path) === hash, 'Maintained code pin conflicts with reproduction bytes');
     pins.set(path, hash);
@@ -127,6 +137,36 @@ async function projectionSourcePins(task, scientificPins, officialPages, bytes) 
   need(pins.size <= 100, 'Published provenance exceeds100 source pins');
   return [...pins].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)
     .map(([path, sha256]) => ({path, sha256}));
+}
+
+// Preserve the original public reference when a publisher implementation changes
+// but the exact retained calculation, date and scientific source bytes do not.
+// The old envelope is revalidated; it is never trusted merely for being on disk.
+async function preserveExistingProjection(record, declaration, retained, sourcePins, previous, bytes) {
+  const pointer = previous.find(item => item.recordId === record.id
+    && item.caseId === declaration.id + '--all-pages');
+  if (!pointer) return null;
+  need(pointer.path === 'published-evidence/programs/declared-' + pointer.revision + '.json',
+    'Existing declared receipt lost its content-addressed path');
+  const raw = await bytes(pointer.path);
+  need(raw.length === pointer.bytes && sha(raw) === pointer.sha256,
+    'Immutable declared receipt collision: existing published receipt bytes changed');
+  const envelope = JSON.parse(raw);
+  const checked = await readPublishedEvidence({recordId: pointer.recordId, revision: pointer.revision,
+    caseId: pointer.caseId, registry: envelope, history: null, programIndex: null});
+  need(checked, 'Existing published receipt could not be verified');
+  checkProgramPointerReceipt(pointer, {...checked, source: {task: checked.task, run: checked.run,
+    inputVersion: checked.inputVersion}});
+  const maintained = new Set([...CODE, 'scripts/retained_program_collection.mjs']);
+  const scientific = pins => pins.filter(pin => !maintained.has(pin.path));
+  if (!same(checked.task, retained.task) || !same(checked.run, retained.run)
+    || !same(scientific(checked.provenance.sourcePins), scientific(sourcePins))) return null;
+  // Metadata cannot redirect an otherwise valid retained source to another task.
+  const projection = checked.provenance.projection;
+  need(projection.ownerRecordId === record.id && projection.sourceProgramId === declaration.id
+    && pointer.taskId === retained.task.taskId && pointer.resultId === retained.run.id,
+    'Existing published pointer changed its declared calculation');
+  return {path: pointer.path, text: raw.toString('utf8'), pointer};
 }
 
 function publishedProjection(record, declaration, retained, sourcePins) {
@@ -173,6 +213,9 @@ export async function prepare({root = ROOT} = {}) {
     && Array.isArray(official.alphabet), 'Official raw input bundle is malformed');
   const officialPages = new Map(official.pages.map(page => [page.id, page.raw]));
   const files = new Map(), entries = [];
+  let previous = [];
+  try { previous = checkedProgramIndex(JSON.parse(await bytes('data/published-declared-program-source-index.json'))).entries; }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
   const folders = (await readdir(resolve(base, 'experiments/records'), {withFileTypes: true}))
     .filter(item => item.isDirectory()).map(item => item.name).sort();
   for (const folder of folders) {
@@ -184,24 +227,34 @@ export async function prepare({root = ROOT} = {}) {
     // Some historical reproduction folders have no canonical record source.
     if (recordBytes === null) continue;
     const record = capture(JSON.parse(recordBytes));
-    if (!Object.hasOwn(record, 'published_programs')) continue;
+    if (!Object.hasOwn(record, 'published_programs') && !Object.hasOwn(record, 'published_program_collections')) continue;
     need(['published', 'draft'].includes(record.status) && record.id === folder && slug(record.id),
       'Only canonical published or draft owners may declare programs');
     // Withdrawal removes active pointers but never deletes retained receipts.
     if (record.status === 'draft') continue;
     const declarations = declarationsFor(record);
     const sources = await reproductionSources(record, recordPath, declarations, bytes);
+    const identifiers = new Set();
     for (const declaration of declarations) {
-      validateDeclaration(record, declaration);
       // Parse the same detached bytes whose reproduction hash was checked.
-      const retained = await validateRetainedProgramOutput(JSON.parse(sources.retainedBytes.get(declaration.output)));
+      const raw = JSON.parse(sources.retainedBytes.get(declaration.output));
+      const handle = declaration.collection ? Collection.prepare(raw) : null;
+      const members = handle ? Collection.inspect(handle).programs : [{id: declaration.id}];
+      for (const member of members) {
+      need(!identifiers.has(member.id) && identifiers.size < 128, 'Repeated or excessive retained programs on one owner');
+      identifiers.add(member.id);
+      const selected = {...declaration, id: member.id};
+      const retained = handle ? await Collection.hydrate(handle, member.id)
+        : await validateRetainedProgramOutput(raw);
       need(declaration.checked_at === retained.run.createdAt,
         'Declaration date must equal the retained calculation date');
       validateOwnerScope(record, retained.task, official);
-      const sourcePins = await projectionSourcePins(retained.task, sources.pins, officialPages, bytes);
-      const published = publishedProjection(record, declaration, retained, sourcePins);
+      const sourcePins = await projectionSourcePins(retained.task, sources.pins, officialPages, bytes, declaration.collection);
+      const published = await preserveExistingProjection(record, selected, retained, sourcePins, previous, bytes)
+        || publishedProjection(record, selected, retained, sourcePins);
       files.set(published.path, published.text);
       entries.push(published.pointer);
+      }
     }
   }
   const index = checkedProgramIndex({schema: 'liberpedia-published-program-source-index-v1', entries});
