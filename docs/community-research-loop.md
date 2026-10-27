@@ -725,9 +725,19 @@ paths. They also test changed criteria, forged lineage, short text, cancellation
 stale coverage and preservation of an already saved finding. This prevents fixing
 one page while leaving the same misunderstanding in another entry point.
 
-Saving a newly computed descriptive comparison as its own public question/link
-still needs a deliberate persistence flow. Rendering one does not imply that it
-has been published.
+An answered evaluation can be retained with the explicit "Save comparison"
+action. The client shares the same idempotent question-commit helper as ordinary
+variations, but never calls preparation or task creation on this save-only path.
+It saves a canonical public question and v4 lineage to the original calculation;
+it does not persist descriptive scores as a historical result. Reopening derives
+the comparison from authenticated saved output again. Rendering a comparison
+alone still does not publish it.
+
+The result remains visible during and after saving. A separate share-button tap
+opens native sharing where supported, copies the saved-question URL otherwise,
+or exposes it for manual copying if permission is unavailable. Cancelling native
+sharing does not copy anything. The shared link points to the saved question,
+not an editable draft or a claim of a solution.
 
 ## Keep ordinary written questions expandable
 
