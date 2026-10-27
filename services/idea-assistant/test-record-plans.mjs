@@ -65,6 +65,16 @@ await test('strict route/origin/method/body and rate guard run before all source
  assert.equal((await handle(new Request('https://worker.example/record-plans?x=1',{headers:{origin}}),env)).status,404);
  const pre=new Request('https://worker.example/record-plans',{method:'OPTIONS',headers:{origin,'access-control-request-method':'POST','access-control-request-headers':'content-type'}});assert.equal((await handle(pre,env)).status,204);assert.equal(f.calls.length,0);
 });
+await test('read-only plans use their own bounded budget and preserve legacy fallbacks',async()=>{
+ const f=await fixture();let reads=0,writes=0,evidence=0;
+ const handle=createRecordPlanHandler({fetcher:f.fetcher,discoverEvidence:async()=>{evidence++;throw Error('Denied requests must not discover evidence');}});
+ const isolated={...env,RECORD_PLAN_LIMIT:{limit:async({key})=>{assert.equal(key,'unknown');reads++;return {success:true};}},TASK_LIMIT:{limit:async()=>{writes++;throw Error('Read plans must not spend task-write budget');}}};
+ assert.equal((await handle(request(args),isolated)).status,200);assert.equal(reads,1);assert.equal(writes,0);
+ const before=f.calls.length,denied=await handle(request({...args,includeExisting:true}),{...isolated,RECORD_PLAN_LIMIT:{limit:async()=>({success:false})}});
+ assert.equal(denied.status,429);assert.deepEqual(await denied.json(),{error:'Please wait before trying again.',code:'rate-limited',retryAfterSeconds:60});assert.equal(denied.headers.get('Retry-After'),'60');assert.equal(denied.headers.get('Access-Control-Expose-Headers'),'Retry-After');assert.equal(f.calls.length,before);assert.equal(evidence,0);assert.equal(writes,0);
+ let fallback=0;assert.equal((await handle(request(args),{...env,TASK_LIMIT:{limit:async()=>{fallback++;return {success:true};}}})).status,200);assert.equal(fallback,1);
+ assert.equal((await handle(request(args),{SITE_ORIGIN:origin,PROPOSAL_LIMIT:{limit:async()=>{fallback++;return {success:true};}}})).status,200);assert.equal(fallback,2);
+});
 await test('changed source, alphabet, rules, criterion and control cannot become reviewed plans',async()=>{
  const mutations=[f=>f.record.status='draft',f=>f.record.id='other',f=>f.record.browser_followups.push(structuredClone(f.recipe)),f=>f.recipe.extra=true,f=>f.recipe.inputs.pages[0].text_sha256='0'.repeat(64),f=>f.recipe.inputs.alphabet_sha256='0'.repeat(64),f=>f.recipe.inputs.version='reviewed',f=>f.recipe.card.rules.evaluation=C.field(),f=>f.recipe.card.rules.inputVersion=C.field(),f=>f.recipe.card.rules.representation=C.field(),f=>f.recipe.control.expected_result_sha256='0'.repeat(64),f=>f.recipe.control.task.title='tampered',f=>f.recipe.card.rules.exceptionalCases=known('Except F'),f=>f.recipe.card.method.value.operations[0].unit='word'];
  for(const mutate of mutations){const f=await fixture();mutate(f);assert.equal((await createRecordPlanHandler({fetcher:f.fetcher})(request(args),env)).status,422);}

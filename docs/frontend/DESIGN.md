@@ -272,3 +272,13 @@ All record surfaces place the authored result before the method description, reg
 ### Returning to saved work
 
 A saved question shows verified question-wide evidence first. When no stronger answer is available, show a plain summary of one selected saved calculation: its check, finding, exact pages and text edition. Generate that summary through the shared saved-check verifier and view, never from a task count, task title, copied prose or a record-specific override. A selected calculation is not coverage of the entire question. Unknown coverage and a verified individual result can coexist; label those states separately. Preserve the chosen saved check across redraws, cancel stale reads on navigation, and share the same associated task response with the comparison and variation tools. A revisit or successful-save refresh must read current evidence again.
+
+
+### Follow-up readiness and recovery
+
+A validated published plan remains readable when saved-work checks fail. Replace the run action and ready-to-run copy with one inline recovery state; a plan being defined does not establish current readiness. A retry revalidates current evidence and never starts or publishes work. Coalesce repeated loads, honor bounded service retry hints, clear timers on departure, and never let stale responses or old callbacks restore Run. Read-only plan inspection has its own bounded service budget, separate from creating work.
+
+
+### Developing a hypothesis into a method
+
+A standardized method describes a procedure, not just a topic or a renamed hypothesis. New methods are welcome. Use a short broad category name, usually four or five words or fewer; this is a writing guideline, not a hard validation limit. Keep parameters, scope and procedural detail in the test specification rather than its method name. A proposed test needs defined inputs, concrete steps, finite choices, observable outputs, a decision rule and appropriate controls. Keep the original hypothesis distinct from AI-proposed assumptions and from an executable test. Interpretation extracts what the visitor actually supplied; method design is a separate capability and must not pretend its choices came from the original text. A saved label, a method category or an untested idea is not evidence that this design work has happened.
