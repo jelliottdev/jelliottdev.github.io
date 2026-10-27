@@ -22,6 +22,18 @@ test('file inventory retains script, input and output hashes exactly once',()=>{
  const r={script_sha256:'script-hash',reproduction:{script:'script.py',inputs:[{path:'plan.json',sha256:'p'}],outputs:[{path:'result.json',sha256:'r'},{path:'script.py',sha256:'s'}]}};
  assert.deepEqual(L.recordFiles(r),[{path:'script.py',sha256:'script-hash'},{path:'plan.json',sha256:'p'},{path:'result.json',sha256:'r'}]);
 });
+
+test('pinned historical files link to verified snapshots without renaming their reproduction identity',()=>{
+ const file={path:'experiments/records/old-source/record.json',sha256:'a'.repeat(64),source_path:'published-sources/records/'+'a'.repeat(64)+'.json'};
+ const record={reproduction:{inputs:[file],outputs:[]},article_links:{'other.txt':'#/experiments/other'}},before=JSON.stringify(record);
+ assert.equal(L.recordFileHref(file),file.source_path);
+ assert.equal(L.recordFileHref({path:'current.json'}),'current.json');
+ const aliases=L.recordArticleLinks(record);assert.equal(aliases[file.path],file.source_path);assert.equal(aliases['other.txt'],'#/experiments/other');
+ const html=L.renderMarkdown('[Pinned source]('+file.path+')',[file.path],aliases);
+ assert(html.includes('href="'+file.source_path+'"'));assert(!html.includes('href="'+file.path+'"'));
+ for(const change of [{source_path:'https://example.com/evil'},{sha256:'b'.repeat(64)},{path:'text/lp2-00.txt'},{source_path:'../outside.json'}])assert.throws(()=>L.recordFileHref({...file,...change}),/retained/);
+ assert.equal(JSON.stringify(record),before);
+});
 test('reader sections retain exact authored content and exclude fenced fake headings',()=>{
  const md='# Title\n\n## Kept\nA\n### Nested\nB\n```\n## Kept\n```\n## Other\nC';
  const s=L.readerSections(md,['Kept']);assert.equal(s.selected[0].body,'A\n### Nested\nB\n```\n## Kept\n```');assert.ok(s.remaining.includes('## Other\nC'));assert.ok(!s.remaining.includes('Nested'));

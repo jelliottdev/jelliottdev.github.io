@@ -2,12 +2,12 @@
 import Catalog from '../../published-program-source-catalog-data.js';
 export const metadata=Object.freeze({
   "schema": "liberpedia-compiled-program-index-v1",
-  "indexSha256": "82886d2706f05902caa0927d5c91bf3021cb0e44c01dec133744bc132db017da",
-  "entries": 306,
+  "indexSha256": "0de94931510741c448c1de2b13fb2425d2eb9994e061ce3c72a7513223cfc271",
+  "entries": 307,
   "sourcePins": [
     {
       "path": "published-program-source-catalog-data.js",
-      "sha256": "83895a37fd6abc1d609f27b8b71bf7aa592ba5800e91d702dcce282f2473380c"
+      "sha256": "fa531a164ad221267ec3653566b03ba672fd2e0c2dbc9184c05cf9cbd63e4030"
     }
   ],
   "compilerSourceNormalization": "utf8-lf",

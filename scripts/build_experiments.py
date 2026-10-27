@@ -11,6 +11,7 @@ from experiment_taxonomy import apply_classifications
 from authored_finite_followups import validate_followups
 from research_questions import validate_research_questions, validate_research_question_refs
 from check_download_catalog import portable_line_ending_errors
+from reproduction_sources import read_pinned
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -248,7 +249,10 @@ def validate_plan_provenance(root, identifier, reproduction):
     for dependency in dependencies:
         require(isinstance(dependency, dict), 'Invalid plan dependency: ' + plan_path)
         name = dependency.get('path')
-        data = local(root, name).read_bytes()
+        try:
+            data, _ = read_pinned(root, {'path': name, 'sha256': dependency.get('sha256')})
+        except ValueError as error:
+            raise ValueError('Plan input SHA-256 mismatch: ' + plan_path + ' -> ' + str(name)) from error
         require(name in declared_inputs, 'Plan dependency must be a declared input: ' + name)
         require(hashlib.sha256(data).hexdigest() == dependency.get('sha256'),
                 'Plan input SHA-256 mismatch: ' + plan_path + ' -> ' + name)
@@ -370,10 +374,15 @@ def validate_record(root, path, pages):
             name = file.get('path', '')
             require('__pycache__' not in name.split('/') and not name.endswith(('.pyc', '.pyo')),
                     'Declare source files, not generated Python caches: ' + name)
-            data = (generated_article if generated_article is not None and file.get('path') == f'experiments/records/{identifier}/article.md'
-                    else local(root, file.get('path')).read_bytes())
+            require('source_path' not in file, 'Authored reproduction pins cannot supply source_path')
+            if generated_article is not None and name == f'experiments/records/{identifier}/article.md':
+                data, actual_path = generated_article, name
+            else:
+                data, actual_path = read_pinned(root, {'path': name, 'sha256': file.get('sha256')})
             require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                     'SHA-256 mismatch: ' + str(file.get('path')))
+            if actual_path != name:
+                file['source_path'] = actual_path
     command_files = set(re.findall(r'(?:experiments/records|scripts)/[\w./-]+\.py',
                                   reproduction['command']))
     bundled_files = {reproduction['script'],

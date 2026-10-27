@@ -117,8 +117,11 @@ authored `record.json`:
 }]
 ```
 
-Use the actual retained calculation timestamp; it must match `run.createdAt`
-exactly. The declaration does not repeat the task, criterion, pages, result or
+Use the explicit time recorded for the retained output; it must match
+`run.createdAt` exactly. When importing old output with no execution timestamp,
+record the current import and verification time and identify it as such. Never
+infer a date from file modification times or present an import as a historical
+execution. The declaration does not repeat the task, criterion, pages, result or
 output hash. The shared build validates the pinned producer and source files,
 official text and alphabet, retained calculation and independent controls. It
 then generates the evidence receipt, catalog, saved-calculation links and the
@@ -135,7 +138,36 @@ Independent review of the scientific claim remains separate from checking a
 fixed calculation. No community proposal, task or result is created by this
 publication build.
 
+When complete saved rune-index vectors are available, the shared converter can
+retain them without an experiment-specific publisher. Its input contains exactly
+`task`, `outputs` (ordered `{page, values}` entries) and `createdAt`. Every vector
+must cover its complete page. It restores separators from the task, calculates
+the original prefix decisions from the saved values, and verifies the fixed
+program and synthetic controls. It never fills a missing or incorrect vector.
+
+```text
+node scripts/retained_program_output.mjs --from-vectors retained-input.json --out retained-program.json
+node scripts/retained_program_output.mjs --check retained-program.json
+```
+
+Conversion refuses to overwrite files. Preserve and pin the original report as
+well as the typed input, retained output and required verifier modules. Keep the
+original report's page exclusions and opening definitions; a partial prefix or
+an aggregate score is not a complete saved output. The word-reversal record is
+the first use of this path: only its 55 saved split-lines outputs are imported,
+with all nine original openings. Its join-lines variant and original finding
+remain unchanged.
+
 Existing records and archived bundles remain supported in their original format. They are not automatically rewritten or summarized. For a deliberate migration, embed the exact account bytes in `analysis` and verify every frozen dependency; never refresh an evidence hash just to make a conversion pass. The source schema is stricter for new records, while public export fields remain compatible with existing tools.
+
+When an experiment pins another record's earlier `record.json`, its original hash
+continues to identify that version. The build can recover it only from the
+verified authored-source archive with the matching record identity. Generated
+file links use that snapshot; reproduction ZIPs place its bytes under the
+original filename so historical scripts still work. The current record remains
+available separately. This fallback never substitutes versions of manuscript
+text, plans, scripts or result files. Do not author `source_path` overrides or
+refresh a dependent experiment's hash after an unrelated metadata edit.
 
 Drafts do not enter public indexes, but committed drafts are still public files. Never commit private material. Review metadata must identify the actual computational reviewer; independent human review is complete only when its name, date and findings are recorded. A pending review has no implied assignee or deadline.
 

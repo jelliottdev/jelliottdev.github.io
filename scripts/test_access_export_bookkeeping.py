@@ -6,6 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
+from reproduction_sources import read_pinned
 
 
 BUILDER = Path(__file__).with_name('build_access_exports.py')
@@ -19,9 +20,9 @@ class BookkeepingTests(unittest.TestCase):
         self.tree = ast.parse(BUILDER.read_text(encoding='utf-8'))
         # Extract only pure local helpers; importing this script would rebuild exports.
         helpers = [node for node in self.tree.body
-                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register')]
+                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'reproduction_dependency_paths')]
         self.env = {'root': self.root, 'base': 'https://example.test/',
-                    'json': json, 'hashlib': hashlib, 'files': [], 'registered_paths': set()}
+                    'json': json, 'hashlib': hashlib, 'files': [], 'registered_paths': set(), 'read_pinned': read_pinned}
         exec(compile(ast.Module(body=helpers, type_ignores=[]), str(BUILDER), 'exec'), self.env)
 
     def test_save_preserves_exact_utf8_bytes_and_skips_unchanged_writes(self):
@@ -72,6 +73,49 @@ class BookkeepingTests(unittest.TestCase):
             raw = (self.root / row['path']).read_bytes()
             self.assertEqual(row['sha256'], hashlib.sha256(raw).hexdigest())
             self.assertEqual(row['bytes'], len(raw))
+
+    def test_retained_input_snapshot_is_downloadable_without_relabeling_current_canonical_bytes(self):
+        old=b'{"id":"word-reversal","status":"published","browser_followups":[{"kind":"finite-settings"}],"version":"old"}\n'
+        current=b'{"id":"word-reversal","status":"published","browser_followups":[{"kind":"finite-settings"}],"version":"current"}\n'
+        digest=hashlib.sha256(old).hexdigest()
+        canonical='experiments/records/word-reversal/record.json'
+        snapshot='published-sources/records/'+digest+'.json'
+        for name,raw in [(canonical,current),(snapshot,old),('article.md',b'article'),('run.py',b'run')]:
+            path=self.root/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(raw)
+        manifest={'schema':'liberpedia-authored-source-archive-v1','entries':[{'recordId':'word-reversal','sha256':digest,'bytes':len(old),'path':snapshot}]}
+        (self.root/'data').mkdir(exist_ok=True)
+        (self.root/'data/authored-source-archive.json').write_text(json.dumps(manifest),encoding='utf8')
+        pin={'path':canonical,'sha256':digest,'source_path':snapshot}
+        experiment={'article_path':'article.md','reproduction':{'script':'run.py','inputs':[pin],'outputs':[]}}
+        paths=self.env['reproduction_dependency_paths'](experiment)
+        self.assertEqual(paths,sorted(['article.md','run.py',canonical,snapshot]))
+        for name in paths:self.env['register'](name,'Experiment file')
+        rows={row['path']:row for row in self.env['files']}
+        self.assertEqual(rows[canonical]['sha256'],hashlib.sha256(current).hexdigest())
+        self.assertEqual(rows[snapshot]['sha256'],digest)
+        self.assertEqual(rows[snapshot]['url'],'https://example.test/'+snapshot)
+        self.assertEqual(rows[snapshot]['role'],'Experiment file')
+        (self.root/canonical).unlink()
+        self.assertEqual(self.env['reproduction_dependency_paths'](experiment),sorted(['article.md','run.py',snapshot]))
+        (self.root/canonical).write_bytes(current)
+        pin['source_path']=canonical
+        with self.assertRaises(ValueError):self.env['reproduction_dependency_paths'](experiment)
+        pin['source_path']=snapshot
+        (self.root/snapshot).write_bytes(b'tampered')
+        with self.assertRaises(ValueError):self.env['reproduction_dependency_paths'](experiment)
+        self.assertEqual((self.root/canonical).read_bytes(),current)
+
+    def test_real_earlier_word_reversal_pin_keeps_its_archived_download_path(self):
+        repository=BUILDER.resolve().parents[1]
+        record=json.loads((repository/'experiments/records/prepared-opening-evidence-gates/record.json').read_text(encoding='utf8'))
+        pin=next(p for p in record['reproduction']['inputs'] if p['path']=='experiments/records/lp2-word-reversal/record.json')
+        raw,actual=read_pinned(repository,pin)
+        self.assertEqual(hashlib.sha256(raw).hexdigest(),pin['sha256'])
+        self.assertEqual(actual,'published-sources/records/'+pin['sha256']+'.json')
+        compiled={'article_path':'article.md','reproduction':{'script':'run.py','inputs':[{**pin,'source_path':actual}],'outputs':[]}}
+        self.env['root']=repository
+        self.assertIn(actual,self.env['reproduction_dependency_paths'](compiled))
+        self.assertIn(pin['path'],self.env['reproduction_dependency_paths'](compiled))
 
     def test_registry_is_parsed_once_and_same_records_feed_all_three_loops(self):
         calls = [node for node in ast.walk(self.tree) if isinstance(node, ast.Call)

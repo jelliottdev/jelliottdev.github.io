@@ -128,7 +128,7 @@
     "human_review": "pending"
   },
   "reproduction": {
-    "command": "python experiments/records/lp2-word-reversal/run.py --check",
+    "command": "python experiments/records/lp2-word-reversal/run.py --check && node scripts/retained_program_output.mjs --check experiments/records/lp2-word-reversal/retained-word-reversal.json",
     "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-word-reversal/check.py",
     "script": "experiments/records/lp2-word-reversal/run.py",
     "script_sha256": "a59a085cfd1216aca8816d596244cc7622d947841fa4f1a08abb1d34572b7f6d",
@@ -408,6 +408,34 @@
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/lp2-word-reversal/retained-word-reversal-input.json",
+        "sha256": "93034fd0acd2b965fa66b4a0b9ac72a5e4f7aeb4733ea37709c7addc36bc7a3e"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
       }
     ],
     "outputs": [
@@ -418,6 +446,10 @@
       {
         "path": "experiments/records/lp2-word-reversal/boundary-trace.svg",
         "sha256": "12e0f80ad496e800f8eca3fb807379d8830851beae3f2e28680fe3380761e54d"
+      },
+      {
+        "path": "experiments/records/lp2-word-reversal/retained-word-reversal.json",
+        "sha256": "ccb9f16f07f09939c30ea9c6dfeb2b9a1cf88468b3b8e187ba7318e98918079e"
       }
     ]
   },
@@ -1061,6 +1093,13 @@
         "prepared-opening-evidence-gates"
       ],
       "followup": "word-reversal-atbash-warning"
+    }
+  ],
+  "published_programs": [
+    {
+      "id": "split-lines-word-reversal",
+      "output": "experiments/records/lp2-word-reversal/retained-word-reversal.json",
+      "checked_at": "2026-10-27T01:44:31.000Z"
     }
   ]
 }

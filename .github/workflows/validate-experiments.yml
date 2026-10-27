@@ -237,6 +237,8 @@ jobs:
         if: steps.scope.outputs.science == 'true'
       - run: python scripts/test_experiments.py
         if: steps.scope.outputs.science == 'true'
+      - run: python scripts/test_reproduction_sources.py
+        if: steps.scope.outputs.science == 'true'
       - name: Validate panel source work and program catalog
         if: steps.scope.outputs.science == 'true'
         run: |

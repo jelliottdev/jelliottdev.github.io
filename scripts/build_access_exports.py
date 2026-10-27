@@ -9,6 +9,7 @@ from rune_ioc import csv_report
 from export_alphanumeric_grids import report as grid_report, csv_report as grid_csv
 from check_number_examples import report as number_report
 from rune_lag_matches import report as lag_report
+from reproduction_sources import read_pinned
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -18,6 +19,19 @@ index=read('data/index.json'); files=[]; registered_paths=set(); documents=[]
 payloads=read('data/evidence/embedded-payloads.json')
 articles=read('data/articles.json')
 experiments=read('data/experiments.json')['records']
+def reproduction_dependency_paths(experiment):
+ paths={experiment['article_path'],experiment['reproduction']['script']}
+ for pin in [*experiment['reproduction']['inputs'],*experiment['reproduction']['outputs']]:
+  paths.add(pin['path'])
+  if 'source_path' in pin:
+   # Compiled records may cite an immutable earlier authored input. Keep its
+   # downloadable source separate from the canonical URL's current bytes.
+   _,actual=read_pinned(root,{'path':pin['path'],'sha256':pin['sha256']})
+   if actual!=pin['source_path']:raise ValueError('Compiled reproduction source differs from verified retained bytes')
+   paths.add(actual)
+   if not (root/pin['path']).is_file():paths.discard(pin['path'])
+ return sorted(paths)
+
 def register(path,role,page=None):
  f=root/path;data=f.read_bytes();row={'path':path,'url':base+path,'role':role,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
  if page:row.update(page=page['id'],release=page['release'])
@@ -118,7 +132,7 @@ register('data/index.json','Page and alphabet index')
 register('data/finite-sequence-banks.json','Pinned numerical sequence banks and source audit')
 register('data/repeating-key-banks.json','Archived repeating keys and source audit')
 register('repeating-key-banks.js','Archived repeating-key resolver')
-for name in ('data/published-program-source-index.json','data/published-panel-program-source-index.json','data/published-numeric-program-source-index.json','data/published-program-source-catalog.json'):
+for name in ('data/published-program-source-index.json','data/published-panel-program-source-index.json','data/published-numeric-program-source-index.json','data/published-declared-program-source-index.json','data/published-program-source-catalog.json'):
  register(name,'Published archived computation index')
 for retained in sorted((root / 'published-evidence/programs').glob('*.json')):
  register(retained.relative_to(root).as_posix(),'Published archived computation data')
@@ -805,7 +819,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Register experiment dependencies after normal exports, preserving their canonical roles.
 for experiment in experiments:
  # A set removes repeated dependencies, but hash order must not reach catalogs or ZIPs.
- for path in sorted({experiment['article_path'],experiment['reproduction']['script'],*[f['path'] for f in experiment['reproduction']['inputs']],*[f['path'] for f in experiment['reproduction']['outputs']]}):
+ for path in reproduction_dependency_paths(experiment):
   if path not in registered_paths:register(path,'Experiment file')
 
 # Bundles preserve each member's exact bytes and repository-relative path.

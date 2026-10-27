@@ -4,6 +4,7 @@ import json
 from pathlib import PurePosixPath
 import re
 import zipfile
+from reproduction_sources import read_pinned
 
 
 def build(root, record):
@@ -27,9 +28,15 @@ def build(root, record):
         source = (root / name).resolve()
         if not source.is_relative_to(root.resolve()):
             raise ValueError("Bundle member escapes repository: " + name)
-        data = source.read_bytes()
-        if name in expected and hashlib.sha256(data).hexdigest() != expected[name]:
-            raise ValueError('Bundle dependency differs from reviewed hash: ' + name)
+        if name in expected:
+            # Resolve the pin again; compiled source_path is a presentation hint,
+            # never authority. Keep the original member name for old scripts.
+            try:
+                data, _ = read_pinned(root, {'path': name, 'sha256': expected[name]})
+            except ValueError as error:
+                raise ValueError('Bundle dependency differs from reviewed hash: ' + name) from error
+        else:
+            data = source.read_bytes()
         shared_original = (name.startswith("images/") or
                            re.fullmatch(r"exports/sources/cicada-2014-seventh-onion/\d+\.jpg", name))
         if shared_original and path.suffix.lower() in (".jpg", ".jpeg", ".png"):

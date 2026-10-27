@@ -16,7 +16,9 @@ const CODE = [
   'local-experiment.js',
   'local-plan-controls.js',
   'finite-json.js',
-  'computation-evidence.js'
+  'computation-evidence.js',
+  'services/idea-assistant/published-program-source-index.mjs',
+  'published-numeric-bank-source.js'
 ];
 const need = (value, message) => { if (!value) throw Error(message); };
 const same = (a, b) => E.stable(a) === E.stable(b);
@@ -86,7 +88,8 @@ async function reproductionSources(record, recordPath, declarations, bytes) {
     need(pin(sha256), 'Invalid reproduction source hash');
     need(path !== recordPath && !/\/record\.json$/.test(path)
       && !path.startsWith('published-evidence/') && !/^data\/published/.test(path)
-      && !/^published-/.test(path), 'Published source pin would create a record or generated receipt cycle');
+      && (!/^published-/.test(path) || CODE.includes(path)),
+    'Published source pin would create a record or generated receipt cycle');
     // A dedicated script may also appear among the declared inputs, with the
     // same pin. Duplicate entries within either input/output list were rejected.
     need(!pins.has(path) || pins.get(path) === sha256, 'Conflicting reproduction source pins');
@@ -137,7 +140,7 @@ function publishedProjection(record, declaration, retained, sourcePins) {
   const provenance = {
     schema: 'liberpedia-published-program-projection-v1', recordId: record.id,
     projection, sourcePins, checkedAt: declaration.checked_at,
-    dateMeaning: 'Date declared in the retained calculation; not a historical browser submission or the current loading time.',
+    dateMeaning: 'Date recorded for the retained output or its explicit import and verification; not an authenticated historical execution timestamp, browser submission or the current loading time.',
     verificationMeaning: 'The retained output was verified against the exact fixed program and independent synthetic implementation controls. This does not establish a decryption. Maintained verifier code pins use UTF-8 with LF line endings; scientific source pins use exact bytes.'
   };
   const revision = sha(provenance);
