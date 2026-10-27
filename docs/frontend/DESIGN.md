@@ -249,3 +249,16 @@ Opening checks may derive exact matches from independently verified saved output
 Uncovered source prose is an unresolved note, not an invented exception rule. During explicit test definition, let the visitor identify it as background or a condition. Retain the exact wording and clarification history in the draft; only active test content belongs to the canonical public card. A retained condition continues to block unsupported execution. Casual research search never requires this clarification.
 
 Reading a saved question uses structural card validation, not the current interactive confirmation flow. Older unresolved wording remains readable and cannot become execution permission. New confirmations, task preparation and result admission retain their independent review and verification gates.
+
+
+### Published calculations and setting changes
+
+Discover saved calculations from the generated program directory, rather than
+copying them into per-record browser follow-up recipes. The directory is
+navigation only: keep the record finding first, preserve the exact selected
+source reference, and leave the record readable if the directory is unavailable.
+Do not rank cases by an attractive score or imply that listed variations remain
+untested. Authenticate the archived output before offering a supported setting
+change. Keep its full scope, source edition and output check; reconstructing a
+literal program question does not establish the original author's wider aim.
+Reuse the shared variation review and evidence lookup before creation or running.

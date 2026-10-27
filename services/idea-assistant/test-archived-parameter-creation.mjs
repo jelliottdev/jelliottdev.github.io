@@ -1,7 +1,7 @@
 /* Archived-parent admission into private SQLite only. No target calculations. */
 import assert from 'node:assert/strict';
-import {DatabaseSync} from 'node:sqlite';
-import {readFileSync,readdirSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
+import {fixture,counts} from './archived-parameter-test-fixture.mjs';
 import {createHash} from 'node:crypto';
 import E from '../../local-experiment.js';
 import C from '../../claim-specification.js';
@@ -11,11 +11,8 @@ import Q from '../../task-parameter-question.js';
 import Registry from '../../published-opening-evidence-data.js';
 import {readPublishedEvidence} from './published-evidence.mjs';
 const at='2026-10-26T00:00:00.000Z',origin='https://jelliottdev.github.io',sha=v=>createHash('sha256').update(typeof v==='string'?v:E.stable(v)).digest('hex');
-function fixture(){const sql=new DatabaseSync(':memory:'),dir=new URL('./migrations/',import.meta.url);for(const n of readdirSync(dir).filter(n=>/^\d{4}_.*\.sql$/.test(n)).sort())sql.exec(readFileSync(new URL(n,dir),'utf8'));let rates=0,rateAllowed=true;const db={prepare(text){return {bind(...args){return {text,args,async first(){return sql.prepare(text).get(...args)||null;},async all(){return {results:sql.prepare(text).all(...args)};},async run(){return sql.prepare(text).run(...args);}};}};},async batch(items){sql.exec('BEGIN');try{const results=items.map(x=>({success:true,meta:{changes:Number(sql.prepare(x.text).run(...x.args).changes)}}));sql.exec('COMMIT');return results;}catch(e){sql.exec('ROLLBACK');throw e;}}};const env={SITE_ORIGIN:origin,PROPOSALS:db,TASK_LIMIT:{async limit(){rates++;return {success:rateAllowed};}}};
- function publish(c,visible=true){const json=C.serialize(c),id='p_'+sha(json);sql.prepare('INSERT OR IGNORE INTO proposals(id,card_hash,card_json,fragment,created_at) VALUES(?,?,?,?,?)').run(id,id.slice(2),json,'unused',at);if(visible)sql.prepare('INSERT OR IGNORE INTO research_ideas VALUES(?,?,?)').run(id,at,at.slice(0,10));return id;}
- return {sql,db,env,publish,rates:()=>rates,deny:()=>rateAllowed=false,close:()=>sql.close()};}
 const uuid=n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0'),copy=structuredClone;
-const counts=f=>Object.fromEntries(['proposals','proposal_submissions','research_ideas','question_derivations','question_derivation_submissions','local_tasks','local_task_results','prepared_plans'].map(t=>[t,Number(f.sql.prepare('SELECT COUNT(*) n FROM '+t).get().n)]));
+
 async function noTargets(fn){const run=E.run,verify=E.verify;E.run=E.verify=()=>assert.fail('Archived parent resolution/creation must not execute targets');try{return await fn();}finally{E.run=run;E.verify=verify;}}
 async function setup(f,{index,registry=Registry,item}={}){
  const options={registry,history:null,...(index?{programIndex:{schema:index.schema,entries:[item]},fetcher:async url=>{assert.equal(url,origin+'/'+item.path);return new Response(readFileSync(new URL('../../'+item.path,import.meta.url)),{headers:{'Content-Type':'application/json'}});}}:{})},entry=item||registry.entries[0],reference={recordId:entry.recordId,revision:entry.revision,caseId:entry.caseId},published=await noTargets(()=>readPublishedEvidence({...reference,...options})),parent=await noTargets(()=>Q.archived({task:published.task,inputVersion:published.inputVersion})),source={kind:'archived-program',proposalId:parent.proposalId,...reference},step=published.task.steps[0],selection={version:1,step:0,parameter:step.op==='reverse'?'unit':'direction',value:step.op==='reverse'?'word':step.direction==='subtract'?'add':'subtract'},input={source,selection};
