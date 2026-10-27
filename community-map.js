@@ -44,6 +44,15 @@
   const seen=new Set();for(let i=0;i<entries.length;i+=50)validate({schema:'liberpedia-community-research-v1',entries:entries.slice(i,i+50),nextCursor:null});
   const data=structuredClone(source),view=data.views.all,nodes=new Map(view.nodes.map(n=>[n.id,n]));
   if(!nodes.has('all-research'))throw Error('The research root is missing.');
+  function solveFamily(id,label){
+   const solve=nodes.get('solve-lp2');if(!solve)return null;
+   if(nodes.has(id)){
+    const family=nodes.get(id);if(family.parent!==solve.id||!['method','family'].includes(family.kind)||family.record_id!==null||!Array.isArray(family.children)||!Array.isArray(family.members))throw Error('The shared decoding navigation conflicts with another area.');
+    return family;
+   }
+   const family={id,parent:solve.id,label,color:solve.color,kind:'family',record_id:null,children:[],members:[],parent_basis:'community method navigation'};
+   solve.children.push(id);view.nodes.push(family);nodes.set(id,family);return family;
+  }
   for(const entry of entries){
    if(seen.has(entry.id))throw Error('Repeated community idea.');seen.add(entry.id);
    const draft=decodeCard(entry.card),aim=C.normalizeOutcome(draft.aim),starter=maintainedStarter(entry.card),classified=starter?{familyIds:['repetition'],complete:true,operations:[]}:C.classifyMethod(draft.method),area=routes[aim.id]||'aim:unplaced';
@@ -62,14 +71,15 @@
    if(starter&&area==='solve-lp2'){
     // A deletion rule is not a reordering, substitution or a different aim.
     // Add one shared operation family only when a matching decoding idea needs it.
-    if(!nodes.has('method:rune-removal')){
-     const solve=nodes.get('solve-lp2');
-     if(solve){const family={id:'method:rune-removal',parent:solve.id,label:'Removing runes',color:solve.color,kind:'family',record_id:null,children:[],members:[],parent_basis:'maintained operation navigation'};solve.children.push(family.id);view.nodes.push(family);nodes.set(family.id,family);}
-    }
-    candidate=nodes.get('method:rune-removal');
+    candidate=solveFamily('method:rune-removal','Removing runes');
+   }else if(area==='solve-lp2'&&classified.complete&&classified.familyIds.length===1&&classified.familyIds[0]==='repetition'){
+    // A declared topic about repeated runes does not declare a deletion or a
+    // feedback algorithm. Keep it in the original aim with a shared topic.
+    candidate=solveFamily('method:repeat-structure','Repeated runes');
    }
    if(!classified.complete)candidate=null;
    if(candidate){let ancestor=candidate;while(ancestor&&ancestor.id!==area)ancestor=nodes.get(ancestor.parent);if(ancestor)parent=candidate;}
+   if(area==='solve-lp2'&&parent?.id===area)parent=solveFamily('method:other-decoding','Other decoding rules')||parent;
    const id='idea-'+entry.id.slice(2);if(data.records[id]||nodes.has('record:'+id))throw Error('Community identity conflicts with a research record.');
    const operations=draft.method.status==='specified'?draft.method.value.operations:[];
    const description=starter?starter.name:operations.map(o=>o.label||o.sourceText||o.id).join(', then '),letters=Array.from(description),title=description?letters.slice(0,157).join('')+(letters.length>157?'…':''):'Unspecified research method';

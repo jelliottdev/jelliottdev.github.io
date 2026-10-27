@@ -17,7 +17,7 @@ assert.equal(M.label(merged.records['idea-'+entries[0].id.slice(2)]),'Untested i
 assert.equal(merged.records['idea-'+entries[1].id.slice(2)].verified_task_count,1);assert.deepEqual(merged.records['idea-'+entries[1].id.slice(2)].task_summaries,[]);
 assert.equal(M.label(merged.records['idea-'+entries[1].id.slice(2)]),'Computation available','Older verified task counts even outside displayed summaries');
 assert.equal(nodes.get('record:idea-'+entries[2].id.slice(2)).parent,'aim:understand');
-assert.equal(nodes.get('record:idea-'+entries[3].id.slice(2)).parent,'solve-lp2','Partially classified combinations stay at their outcome');
+assert.equal(nodes.get('record:idea-'+entries[3].id.slice(2)).parent,'method:other-decoding','Partially classified combinations share a neutral decoding category');
 for(const [id,record]of Object.entries(base.records))assert.deepEqual(merged.records[id],record);
 assert.equal(I.select(Object.values(merged.records),I.state(new URLSearchParams('type=idea'))).allRecords.length,4);
 assert.throws(()=>M.merge(base,[entries[0],entries[0]]));
@@ -57,8 +57,8 @@ console.log('PASS community map preserves evidence, routes active cards, separat
   [{id:'finite_key',label:'Finite key stream',key:[1,2],direction:'subtract',reset:'page'},'method:running-key'],
   [{id:'repeating_key',label:'Repeating key',key:[1,2],direction:'subtract',reset:'page'},'method:repeating-key'],
   [{id:'plaintext_autokey',label:'Plaintext autokey',key:[1,2],direction:'subtract',reset:'page'},'method:feedback'],
-  [{id:'family_selection',familyId:'number-streams',label:C.METHOD_FAMILIES['number-streams']},'solve-lp2'],
-  [{id:'book_code',label:'Book code'},'solve-lp2'],
+  [{id:'family_selection',familyId:'number-streams',label:C.METHOD_FAMILIES['number-streams']},'method:other-decoding'],
+  [{id:'book_code',label:'Book code'},'method:other-decoding'],
   [{id:'prime_value_mapping',label:'Prime value mapping'},'method:direct-mapping']
  ];
  for(let i=0;i<cases.length;i++){
@@ -66,6 +66,39 @@ console.log('PASS community map preserves evidence, routes active cards, separat
   assert.equal(leaf.parent,parent,op.id);assert.equal(JSON.stringify(e),prior);assert.equal(mapped.records[leaf.record_id].outcome,'');
  }
  console.log('PASS community method navigation separates finite, repeating and feedback application; source-only labels cannot imply a cipher.');
+}
+
+// This is the immutable canonical public card, not an interpretation repaired
+// for the test. Its declared topic must not be lost across the aim boundary.
+{
+ const {createHash}=require('node:crypto');
+ const card={version:1,outcome:{status:'specified',value:{detail:'',outcomeId:'decipher'}},method:{status:'specified',value:{operations:[{declaredFamilyId:'repetition',id:'described_method',label:'Work backwards from the assumption that doublets are mistakes or filler'}]}},scope:{status:'specified',value:{pages:Array.from({length:56},(_,i)=>'lp2-'+String(i).padStart(2,'0'))}},rules:Object.fromEntries(['boundaryMode','evaluation','exceptionalCases','initialState','inputVersion','representation','reset','searchBounds','searchProtocol','unmapped','wordBoundaries'].map(key=>[key,{status:'unspecified'}])),unresolved:[]};
+ card.rules.evaluation={status:'specified',value:'measurement'};
+ card.rules.exceptionalCases={status:'specified',value:"Uninterpreted original wording: Hello, ive been working with claude and we've tried, just a whole heap of stuff\nBut most recently, we're toying with the idea that the reason for the unexplained doubles, is that the first unsolved section has some sort of junk added to it\nLike there are extra runes that have been added to.make decryptopn that much harder\n\nIf anyone has any input thatd be amazing, im half flying blind here"};
+ const publicId='p_46a5983d36a3989cfb6405f05528ab28077eedb450506dbd933dff2e3b7858eb';
+ assert.equal('p_'+createHash('sha256').update(C.serialize(card)).digest('hex'),publicId,'Keep the exact historical canonical card');
+ const original={id:publicId,card,createdAt:'2026-10-26T20:40:35.89Z',tasks:[],taskCount:0,verifiedTaskCount:0};
+ const repeated=[original,entry(301,{operations:[{id:'described_method',label:'Compare repeated rune groups',declaredFamilyId:'repetition'}]}),entry(302,{operations:[{id:'family_selection',familyId:'repetition',label:C.METHOD_FAMILIES.repetition}]})];
+ const other=[entry(303,{operations:[{id:'reverse_runes',label:'Reverse rune order',declaredFamilyId:'repetition'}]}),entry(304,{operations:[{id:'described_method',label:'A novel proposed decoding procedure'}]}),entry(305,{operations:[{id:'book_code',label:'Book code'}]})];
+ const input=JSON.stringify([...repeated,...other]),result=M.merge(base,[...repeated,...other]),lookup=new Map(result.views.all.nodes.map(node=>[node.id,node])),rid=e=>'idea-'+e.id.slice(2);
+ for(const [group,parent]of [[repeated,'method:repeat-structure'],[other,'method:other-decoding']]){
+  const family=lookup.get(parent);assert.equal(family.parent,'solve-lp2');assert.equal(family.color,lookup.get('solve-lp2').color);assert.equal(result.views.all.nodes.filter(node=>node.id===parent).length,1);assert.deepEqual(family.members,group.map(rid));assert.deepEqual(family.children,group.map(e=>'record:'+rid(e)));
+  assert.equal(lookup.get('solve-lp2').children.filter(id=>id===parent).length,1);
+  for(const e of group){const leaf=lookup.get('record:'+rid(e));assert.equal(leaf.parent,parent);assert.equal(leaf.color,family.color);assert.equal(result.views.all.nodes.filter(node=>node.record_id===rid(e)).length,1);assert(lookup.get('solve-lp2').members.includes(rid(e)));assert(!lookup.get('solve-lp2').children.includes(leaf.id));assert.equal(result.records[rid(e)].href,'run.html#idea='+e.id);assert.equal(result.records[rid(e)].evidence_state,'untested');}
+ }
+ assert.equal(lookup.get('method:repeat-structure').label,'Repeated runes');assert.equal(lookup.get('method:other-decoding').label,'Other decoding rules');assert(!lookup.has('method:rune-removal'));
+ assert.equal(JSON.stringify([...repeated,...other]),input);assert.equal(JSON.stringify(base),before);
+ // Reuse an existing neutral family without duplicating it or its root link.
+ const reused=M.merge(result,[entry(306,{operations:[{id:'custom',label:'Another unclassified proposal'}]})]);assert.equal(reused.views.all.nodes.filter(node=>node.id==='method:other-decoding').length,1);assert.equal(reused.views.all.nodes.find(node=>node.id==='method:other-decoding').members.length,4);
+ // The published navigation projection uses kind:method. Its existing name,
+ // color and archived children remain authoritative when community items join.
+ const published=structuredClone(base),solve=published.views.all.nodes.find(node=>node.id==='solve-lp2'),publishedLeaf=published.views.all.nodes.find(node=>node.kind==='record'&&node.parent==='method:routes'),priorParent=published.views.all.nodes.find(node=>node.id===publishedLeaf.parent);
+ priorParent.children=priorParent.children.filter(id=>id!==publishedLeaf.id);priorParent.members=priorParent.members.filter(id=>id!==publishedLeaf.record_id);
+ const neutral={id:'method:other-decoding',parent:solve.id,label:'Existing neutral rules',kind:'method',record_id:null,color:'#123456',children:[publishedLeaf.id],members:[publishedLeaf.record_id]};publishedLeaf.parent=neutral.id;publishedLeaf.color=neutral.color;solve.children.push(neutral.id);published.views.all.nodes.push(neutral);
+ const publishedBefore=JSON.stringify(published),next=entry(307,{operations:[{id:'custom',label:'A newly proposed procedure'}]}),joined=M.merge(published,[next]),shared=joined.views.all.nodes.find(node=>node.id===neutral.id),joinedLeaf=joined.views.all.nodes.find(node=>node.record_id===rid(next));
+ assert.equal(shared.kind,'method');assert.equal(shared.label,neutral.label);assert.equal(shared.color,neutral.color);assert.deepEqual(shared.children,[publishedLeaf.id,joinedLeaf.id]);assert.deepEqual(shared.members,[publishedLeaf.record_id,rid(next)]);assert.equal(joinedLeaf.parent,neutral.id);assert.equal(joinedLeaf.color,neutral.color);assert.deepEqual(joined.views.all.nodes.find(node=>node.id===publishedLeaf.id),publishedLeaf);assert.equal(joined.views.all.nodes.filter(node=>node.id===neutral.id).length,1);assert.equal(joined.views.all.nodes.find(node=>node.id===solve.id).children.filter(id=>id===neutral.id).length,1);assert.equal(JSON.stringify(published),publishedBefore);
+ for(const mutation of [node=>node.parent='aim:understand',node=>node.record_id='not-a-category',node=>node.children=null,node=>node.members=null]){const invalid=structuredClone(published);mutation(invalid.views.all.nodes.find(node=>node.id===neutral.id));assert.throws(()=>M.merge(invalid,[next]),/navigation conflicts/);}
+ console.log('PASS exact historical repetition and new ideas share aim-correct topic or neutral decoding families without inventing operations.');
 }
 
 // The maintained starter is classified by its exact typed recipe, not prose or
@@ -81,7 +114,7 @@ console.log('PASS community map preserves evidence, routes active cards, separat
  for(const e of [understand,decipher,second]){const record=result.records[rid(e)],leaf=lookup.get('record:'+rid(e));assert.equal(record.title,'Remove repeated runes');assert.equal(record.reader_title,'Remove repeated runes');assert.deepEqual(record.method_topics,[{id:'repetition',title:C.METHOD_FAMILIES.repetition}]);assert.equal(leaf.color,lookup.get(leaf.parent).color);assert.equal(result.views.all.nodes.filter(n=>n.record_id===record.id).length,1);assert.equal(record.href,'run.html#idea='+e.id);assert.equal(record.evidence_state,'untested');assert.equal(record.outcome,'');assert.equal(record.proposal_id,e.id);}
  assert.equal(JSON.stringify([understand,decipher,second]),original);assert.equal(JSON.stringify(base),before);
  assert.equal(I.select(Object.values(result.records),I.state(new URLSearchParams('type=idea'))).allRecords.length,3);
- const changed=structuredClone(decipher);changed.card.rules.searchProtocol.value.proposal.assumptions[0]='An additional unreviewed condition.';const separate=M.merge(base,[changed]),changedLeaf=separate.views.all.nodes.find(n=>n.record_id===rid(changed));assert.equal(changedLeaf.parent,'solve-lp2');assert(!separate.views.all.nodes.some(n=>n.id==='method:rune-removal'));
+ const changed=structuredClone(decipher);changed.card.rules.searchProtocol.value.proposal.assumptions[0]='An additional unreviewed condition.';const separate=M.merge(base,[changed]),changedLeaf=separate.views.all.nodes.find(n=>n.record_id===rid(changed));assert.equal(changedLeaf.parent,'method:other-decoding');assert(!separate.views.all.nodes.some(n=>n.id==='method:rune-removal'));
  const ordinary=M.merge(base,[entry(204,{operations:[{id:'described_method',label:'Remove repeated runes'}]})]);assert(!ordinary.views.all.nodes.some(n=>n.id==='method:rune-removal'));
  const legacyContext={ResearchWork:Work,ClaimSpecification:C,ClaimShare:H,TextEncoder,btoa,structuredClone};vm.runInNewContext(fs.readFileSync(require.resolve('../community-map.js'),'utf8'),legacyContext);assert.doesNotThrow(()=>legacyContext.CommunityResearch.merge(base,[entry(205)]));
  const html=fs.readFileSync(require('node:path').join(__dirname,'../research.html'),'utf8');for(const dependency of ['finite-json.js','method-check-contract.js','method-design.js','repeat-removal-start.js'])assert(html.indexOf('src="'+dependency+'?')<html.indexOf('src="community-map.js?'));
