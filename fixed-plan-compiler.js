@@ -6,6 +6,23 @@ const fail=reason=>({reason});
 const prefixSet=value=>value&&typeof value==='object'&&!Array.isArray(value)&&Reflect.ownKeys(value).length===2&&Object.hasOwn(value,'kind')&&Object.hasOwn(value,'openings')&&value.kind==='exact-prefix-set'&&Array.isArray(value.openings)&&value.openings.length>=1&&value.openings.length<=32&&Array.from(value.openings).every(o=>o&&typeof o==='object'&&!Array.isArray(o)&&Reflect.ownKeys(o).length===2&&Object.hasOwn(o,'id')&&Object.hasOwn(o,'values')&&typeof o.id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(o.id)&&Array.isArray(o.values)&&o.values.length>=1&&o.values.length<=256&&Array.from(o.values).every(n=>Number.isInteger(n)&&n>=0&&n<=28))&&new Set(value.openings.map(o=>o.id)).size===value.openings.length&&new Set(value.openings.map(o=>JSON.stringify(o.values))).size===value.openings.length;
 
 const MEASUREMENTS=Protocols.list(),MEASUREMENT_IDS=new Set(MEASUREMENTS.map(d=>d.operation.id)),MEASUREMENT_KINDS=new Set(MEASUREMENTS.map(d=>d.id));
+const OPERATION_LABELS={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference'],vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey'],finite_key:['Finite key stream'],finite_key_bank:['Pinned finite key stream'],interrupted_repeating_key:['Interrupted repeating key']};
+// Presentation metadata only. Parameter validation, controls and admission remain separate.
+function methodReadiness(input){
+ try{
+  const ownValue=(value,key)=>{const d=Object.getOwnPropertyDescriptor(value,key);if(!d||!Object.hasOwn(d,'value'))throw Error('Use data fields');return d.value;};
+  if(!input||typeof input!=='object'||Array.isArray(input)||ownValue(input,'status')!=='specified')throw Error('Missing method');
+  const value=ownValue(input,'value'),operations=ownValue(value,'operations');
+  if(!Array.isArray(operations)||!operations.length||operations.length>8)throw Error('Missing operations');
+  const unsupportedOperationIndices=[];
+  for(let i=0;i<operations.length;i++){
+   const op=ownValue(operations,String(i)),id=ownValue(op,'id');
+   if(typeof id!=='string'||!Object.hasOwn(OPERATION_LABELS,id)&&!MEASUREMENT_IDS.has(id))unsupportedOperationIndices.push(i);
+   else if(Object.hasOwn(op,'label')){const label=ownValue(op,'label'),allowed=OPERATION_LABELS[id]||MEASUREMENTS.filter(p=>p.operation.id===id).map(p=>p.operation.label);if(!allowed.includes(label))unsupportedOperationIndices.push(i);}
+  }
+  return Object.freeze({supported:unsupportedOperationIndices.length===0,unsupportedOperationIndices:Object.freeze(unsupportedOperationIndices)});
+ }catch{return Object.freeze({supported:false,unsupportedOperationIndices:Object.freeze([])});}
+}
 const KEYED_REASON='A keyed step needs explicit GP indices (0–28), add or subtract, and a page, line or word reset.';
 function missingLiteralKeyChoice(card,operation,operationIndex){
  // A validation-only probe checks the unchanged surrounding program. Its
@@ -74,8 +91,7 @@ function compile(card){
  const steps=[];let reverse=false,cumulative=false,keyed=false;
  const keyedModes={vigenere:'repeat',repeating_key:'repeat',plaintext_autokey:'plaintext-autokey',ciphertext_autokey:'ciphertext-autokey'};
  for(const [operationIndex,operation] of operations.entries()){
-  const labels={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference'],vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey'],finite_key:['Finite key stream'],finite_key_bank:['Pinned finite key stream'],interrupted_repeating_key:['Interrupted repeating key']};
-  if(Object.hasOwn(operation,'label')&&(!labels[operation.id]||!labels[operation.id].includes(operation.label)))return fail('The operation wording contains details that need an execution adapter.');
+  if(Object.hasOwn(operation,'label')&&(!OPERATION_LABELS[operation.id]||!OPERATION_LABELS[operation.id].includes(operation.label)))return fail('The operation wording contains details that need an execution adapter.');
   if(Object.keys(operation).some(k=>!['id','label','a','b','reset','unit','declaredFamilyId','key','direction','interrupts','bankId','bankSha256','offset'].includes(k)))return fail('An operation contains parameters the runner cannot represent.');
   if(operation.id!=='interrupted_repeating_key'&&Object.hasOwn(operation,'interrupts'))return fail('Only an interrupted repeating key accepts literal interrupter indices.');
   if(operation.id!=='finite_key_bank'&&['bankId','bankSha256','offset'].some(k=>Object.hasOwn(operation,k)))return fail('Only a pinned sequence key accepts bank references and offsets.');
@@ -135,5 +151,5 @@ function compile(card){
  if(card.outcome.status==='specified'&&card.outcome.value.outcomeId==='decipher')notes.push('This is a preliminary measurement for the deciphering idea, not a test of whether the output is readable.');
  return {pages:card.scope.value.pages,steps,inputVersion,criterion,notes};
 }
- const api={compile};if(node)module.exports=api;else root.FixedPlanCompiler=api;
+ const api={compile,methodReadiness};if(node)module.exports=api;else root.FixedPlanCompiler=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
