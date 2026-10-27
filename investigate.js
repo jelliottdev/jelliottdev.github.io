@@ -189,7 +189,7 @@
    for(const [name,field]of [['aim',draft.aim],['scope',draft.scope],['evaluation',draft.rules.evaluation]])if(field.status==='specified')inheritedSuggestions[name]=JSON.parse(C.serialize(field));
    if(Object.keys(inheritedSuggestions).length)draft=C.revise(draft,{...(inheritedSuggestions.aim?{aim:C.field()}:{}),...(inheritedSuggestions.scope?{scope:C.field()}:{}),...(inheritedSuggestions.evaluation?{rules:{evaluation:C.field()}}:{})});
   }
-  draft.clarifications.push({question:'saved-refinement',choice:'review',...(opaque?{method:C.serialize(draft.method.value)}:{}),...(Object.keys(inheritedSuggestions).length?{inheritedSuggestions}:{})});
+  draft.clarifications.push({question:'saved-refinement',choice:'review',revision:draft.revision,...(opaque?{method:C.serialize(draft.method.value)}:{}),...(Object.keys(inheritedSuggestions).length?{inheritedSuggestions}:{})});
   return draft;
  }
  function refinementMethodReview(draft){const marker=draft.clarifications.find(item=>item.question==='saved-refinement'&&typeof item.method==='string');return !!marker&&draft.method.status==='specified'&&C.serialize(draft.method.value)===marker.method&&!draft.clarifications.some(item=>item.question==='method'&&item.choice!=='undecided');}
@@ -450,12 +450,48 @@
    return value;
   }catch{return null;}
  }
+ function recoverySuggestion(name,field){
+  if(!['aim','scope','evaluation'].includes(name)||!field||field.status!=='specified'||C.serialize(field).length>4*H.MAX_BYTES)throw Error('Invalid saved suggestion');
+  const checked=C.createDraft({source:{text:''},...(name==='evaluation'?{rules:{evaluation:field}}:{[name]:field})}),normalized=name==='evaluation'?checked.rules.evaluation:checked[name];
+  if(C.serialize(field)!==C.serialize(normalized))throw Error('Saved suggestion is not normalized');
+  const card=H.cardData(C.confirm(checked,{id:'saved-suggestion-validation',at:'2000-01-01T00:00:00.000Z'})),active=name==='aim'?card.outcome:name==='evaluation'?card.rules.evaluation:card.scope;
+  if(C.serialize(field.value)!==C.serialize(active.value))throw Error('Saved suggestion changed its canonical meaning');
+  return normalized;
+ }
+ function recoveryRefinementAnswers(answers){
+  const markers=answers.filter(answer=>answer.question==='saved-refinement');
+  if(markers.length>1)throw Error('Repeated saved refinement marker');
+  const marker=markers[0];
+  if(marker){
+   if(marker.choice!=='review'||Object.keys(marker).some(key=>!['question','choice','revision','method','inheritedSuggestions'].includes(key)))throw Error('Invalid saved refinement marker');
+   if(marker.method!==undefined){
+    if(typeof marker.method!=='string'||marker.method.length>H.MAX_BYTES)throw Error('Invalid saved method review');
+    const method=C.field('specified',JSON.parse(marker.method)),checked=C.createDraft({source:{text:''},method});
+    H.cardData(C.confirm(checked,{id:'saved-method-validation',at:'2000-01-01T00:00:00.000Z'}));
+    if(C.serialize(checked.method.value)!==marker.method)throw Error('Saved method review is not normalized');
+   }
+   if(marker.inheritedSuggestions!==undefined){
+    const suggestions=marker.inheritedSuggestions;
+    if(!suggestions||typeof suggestions!=='object'||Array.isArray(suggestions)||!Object.keys(suggestions).length||Object.keys(suggestions).some(name=>!['aim','scope','evaluation'].includes(name)))throw Error('Invalid saved suggestion fields');
+    for(const [name,field]of Object.entries(suggestions))recoverySuggestion(name,field);
+   }
+  }
+  for(const answer of answers){
+   if(answer.question!=='saved-refinement'&&Object.hasOwn(answer,'inheritedSuggestions'))throw Error('Misplaced saved suggestions');
+   if(Object.hasOwn(answer,'previousSuggestion')){
+    recoverySuggestion(answer.question,answer.previousSuggestion);
+    if(answer.choice!=='keep-saved'&&!(answer.question==='evaluation'&&C.EVALUATION_CHOICES.some(choice=>choice.id===answer.choice)))throw Error('Invalid saved suggestion answer');
+    if(!marker?.inheritedSuggestions?.[answer.question]||C.serialize(answer.previousSuggestion)!==C.serialize(marker.inheritedSuggestions[answer.question])||answer.revision<marker.revision)throw Error('Saved suggestion answer changed its source');
+   }
+  }
+ }
  function recoveryDraft(value){
   if(!value||value.schema!==C.SCHEMA||typeof value.source?.text!=='string'||value.source.text.length>32000)throw Error('Invalid saved draft');
   const draft=C.createDraft(value);
   if(!Number.isInteger(value.revision)||value.revision<1||value.revision>100000)throw Error('Invalid saved revision');
   if(!Array.isArray(value.clarifications)||value.clarifications.length>128)throw Error('Invalid saved answers');
   for(const answer of value.clarifications)if(!answer||typeof answer.question!=='string'||typeof answer.choice!=='string'||!Number.isInteger(answer.revision)||answer.revision<1||answer.revision>value.revision||(answer.text!==undefined&&typeof answer.text!=='string'))throw Error('Invalid saved answer');
+  recoveryRefinementAnswers(value.clarifications);
   draft.revision=value.revision;draft.clarifications=JSON.parse(JSON.stringify(value.clarifications));return draft;
  }
  function readRecovery(serialized,entry,at){
