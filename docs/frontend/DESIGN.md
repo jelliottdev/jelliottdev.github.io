@@ -299,3 +299,22 @@ A generated procedure remains one structured object through drafting, review, sa
 ### Reviewed programs and results
 
 A structured proposed method uses the same review flow regardless of its outcome category or existing calculations. Show its hypothesis and ordered steps first; keep full proposed settings secondary. Supported implementations require an explicit program review followed by an explicit Run action. Opening a shared calculation never grants execution permission. After a run, put the verified output and Save action first; move the already reviewed procedure and illustration into one Method and settings disclosure. Saved output remains visible on reload without another run. Unsupported requirements remain visible and block preparation rather than silently becoming a simpler check.
+
+
+### Choosing a proposed check
+
+Keep the procedure and the question it aims to answer distinct. AI-proposed
+comparisons remain explicit descriptions until a visitor confirms an exact check.
+Offer a focused Choose what to check editor alongside full method editing. It
+changes only evaluation, representation and controls; pages, procedure, key and
+assumptions stay intact. Keep an unfamiliar scientific comparison visible when
+someone chooses a simpler descriptive check, and state that Apply replaces it.
+Changing a dropdown alone never saves or rewrites the proposal. Cancel restores
+it exactly. Preserve keyboard focus when conditional choice fields redraw.
+
+Known implementation facts come from shared code, not an AI capability verdict.
+Show unsupported requirements and a useful recovery action without promising a
+run. Planned synthetic examples are implementation checks, not already-passed
+scientific controls. Keep technical precision available, but lead with what the
+visitor will learn. Bind saved identity to structural data so later copy polish
+does not break historical cards.

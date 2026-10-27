@@ -11,6 +11,26 @@
  const STEP_SCHEMA={anyOf:[object({op:{const:'reverse'},unit:reset}),object({op:{const:'affine'},a:integer(0,28),b:integer(0,28)}),object({op:{const:'cumulative-difference'},reset}),object({op:{const:'keyed-shift'},key,mode:enumOf(['repeat','plaintext-autokey','ciphertext-autokey']),direction,reset}),object({op:{const:'interrupted-keyed-shift'},key,direction,reset,interrupts:array(integer(0,28),1,29)}),object({op:{const:'finite-shift'},key:array(integer(0,28),1,20000),direction,reset}),object({op:{const:'remove-rune-types'},values:array(integer(0,28),1,29)}),object({op:{const:'collapse-adjacent-repeats'},unit:reset,policy:enumOf(['all-but-first','non-overlapping-pairs'])})]};
  const CRITERION_SCHEMA={anyOf:[{type:'null'},object({kind:{const:'measurement'}}),object({kind:{const:'exact-prefix'},values:array(integer(0,28),1,256)}),object({kind:{const:'exact-prefix-set'},openings:array(object({id:{type:'string',pattern:'^[a-z][a-z0-9-]{0,63}$'},values:array(integer(0,28),1,256)}),1,32)}),object({kind:{const:'language-score'},modelId:str(100),modelSha256:{type:'string',pattern:'^[a-f0-9]{64}$'}})]};
  const JSON_SCHEMA=freeze(object({schema:{const:SCHEMA},proposalSha256:{type:'string',pattern:'^[a-f0-9]{64}$'},steps:array(STEP_SCHEMA,0,8),criterion:CRITERION_SCHEMA,coverage:array(object({part:enumOf(['step','evaluation','key-use','representation','parameter','control']),index:integer(0,7),status:enumOf(['implemented','unsupported']),programSteps:array(integer(1,8),0,8),note:str(500)}),1,23),issues:array(str(500),0,16)}));
+ const TYPED_SCHEMA='liberpedia-method-design-v2',UNRESOLVED='Some proposed requirements remain unresolved. See their individual notes.';
+ function checks(){const value=node?require('./method-check-contract.js'):root.MethodCheckContract;ensure(value,'Typed check definitions are unavailable.');return value;}
+ function typedRequirements(input){
+  const p=MD.validate(input);ensure(p.schema===TYPED_SCHEMA,'Use a reviewed typed method proposal.');const K=checks(),criterion=K.resolveEvaluation(p.evaluation),owned=[],requirements=[];
+  const put=(part,index,supported,note)=>owned.push({part,index,status:supported?'implemented':'unsupported',programSteps:[],note});
+  const evaluationNotes={'output-measurements':'Report aggregate output rune counts, adjacent and equal-adjacent rune pairs, and pooled index of coincidence. No significance or hypothesis verdict is requested.','exact-prefix':'Compare each output page with the exact reviewed opening rune sequence.','exact-prefix-set':'Compare each output page with the exact reviewed named opening rune sequences.','language-score':'Apply the exact reviewed fixed language reference criterion. A short output is insufficient, not a failed reading.'};
+  put('evaluation',0,criterion!==null,evaluationNotes[p.evaluation.kind]||'The described evaluation has no maintained executable comparator.');
+  if(p.keyUse.kind==='not-used')put('key-use',0,true,'The reviewed proposal uses no key material.');else requirements.push({part:'key-use',index:0});
+  const representation=K.resolveRepresentation(p.representation);put('representation',0,representation.supported,representation.supported?representation.description:'The described representation has no maintained typed implementation.');
+  p.parameters.forEach((parameter,index)=>{if(parameter.values.length>1)put('parameter',index,false,'This single-program runtime does not execute every alternative value for parameter '+parameter.name+'.');else requirements.push({part:'parameter',index});});
+  p.controls.forEach((control,index)=>{const fact=K.resolveControl(control);put('control',index,fact.supported,fact.supported?fact.description:'The described control has no maintained typed implementation.');});
+  return freeze({criterion,owned,draft:{steps:p.steps.map((_,index)=>({part:'step',index})),requirements}});
+ }
+ async function fromTypedDraft(proposalInput,input,crypto=root.crypto){
+  const p=MD.validate(proposalInput),facts=typedRequirements(p),value=capture(input);
+  ensure(exact(value,['steps','coverage'])&&exact(value.coverage,['steps','requirements']),'Use the exact typed procedure draft fields.');
+  const rows=(items,inventory,procedure)=>{ensure(Array.isArray(items)&&items.length===inventory.length,'The typed draft inventory changed.');return items.map((item,index)=>{ensure(exact(item,procedure?['status','programSteps','note']:['status','note']),'Typed draft metadata is compiler-owned.');return {...inventory[index],status:item.status,programSteps:procedure?item.programSteps:[],note:item.note};});};
+  const coverage=[...rows(value.coverage.steps,facts.draft.steps,true),...facts.owned,...rows(value.coverage.requirements,facts.draft.requirements,false)],implementation={schema:SCHEMA,proposalSha256:await hash(p,crypto),steps:value.steps,criterion:facts.criterion,coverage,issues:coverage.some(item=>item.status==='unsupported')?[UNRESOLVED]:[]};
+  return validateBinding(p,implementation,crypto);
+ }
  function text(value){ensure(typeof value==='string'&&value.trim()&&Array.from(value).length<=500&&!/[\u0000-\u001f\u007f-\u009f\u2028\u2029\ud800-\udfff]/u.test(value),'Use bounded plain implementation notes.');}
  function syntax(steps,criterion){
   let labels=null;if(criterion?.kind==='language-score'){const scorer=node?require('./language-score.js'):root.RuneLanguageScore;labels=scorer?.data?.payload?.alphabet;ensure(labels,'The maintained language model is unavailable.');}
@@ -42,7 +62,19 @@
    const previous=ordered[i-1].programSteps,current=ordered[i].programSteps;
    ensure(stable(previous)===stable(current)||previous[previous.length-1]<=current[0],'Implemented proposal steps must preserve their declared procedure order.');
   }
-  ensure(value.steps.every((_,i)=>referenced.has(i+1)),'Every program step must be accounted for by a proposal step.');return freeze(value);
+  ensure(value.steps.every((_,i)=>referenced.has(i+1)),'Every program step must be accounted for by a proposal step.');
+  if(proposal.schema===TYPED_SCHEMA){
+   const facts=typedRequirements(proposal);ensure(stable(value.criterion)===stable(facts.criterion),'The program changed the reviewed typed evaluation.');
+   for(const fact of facts.owned){
+    const actual=value.coverage.find(item=>item.part===fact.part&&item.index===fact.index);
+    // Persisted notes are bounded annotations, not freshly generated identity or
+    // capability facts. Copy changes must not invalidate an admitted binding.
+    ensure(actual.part===fact.part&&actual.index===fact.index&&actual.status===fact.status&&stable(actual.programSteps)===stable(fact.programSteps),'Typed runtime capability facts cannot be changed by a draft.');
+   }
+   if(proposal.keyUse.kind==='not-used')ensure(!value.steps.some(step=>Array.isArray(step.key)),'A keyless typed proposal cannot add a keyed operation.');
+   const unresolved=value.coverage.some(item=>item.status==='unsupported');ensure(unresolved===(value.issues.length>0),'Typed unresolved state must follow exact requirement coverage.');
+  }
+  return freeze(value);
  }
  async function hash(value,crypto){ensure(crypto?.subtle,'SHA-256 is required.');return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(stable(value)))),v=>v.toString(16).padStart(2,'0')).join('');}
  async function validateBinding(proposalInput,input,crypto=root.crypto){
@@ -58,5 +90,5 @@
   const bundle=Bundle.parse(input.bundle),proposal=binding.proposal,pages=proposal.pages.map(id=>{const page=bundle.pages.get(id),text=proposal.inputVersion==='raw'?page?.raw:page?.reviewed_text;ensure(typeof text==='string','The proposed input edition is unavailable.');return {id,text};});
   const body={title:proposal.name,alphabet:bundle.alphabet,pages,steps:binding.implementation.steps,criterion:binding.implementation.criterion};V.validateTask({...body,schema:V.TASK,engine:V.ENGINE,taskId:'0'.repeat(64)});return freeze(capture(body));
  }
- const api=Object.freeze({SCHEMA,LIMITS,JSON_SCHEMA,validate,validateBinding,bind,inspect,compileBody});if(node)module.exports=api;else root.MethodImplementation=api;
+ const api=Object.freeze({SCHEMA,LIMITS,JSON_SCHEMA,typedRequirements,fromTypedDraft,validate,validateBinding,bind,inspect,compileBody});if(node)module.exports=api;else root.MethodImplementation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

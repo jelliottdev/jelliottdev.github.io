@@ -797,3 +797,46 @@ This is a bounded execution path. It does not yet implement arbitrary algorithms
 randomized hypothesis controls or multi-value parameter families. It also does
 not establish that every historical experiment has an automatic expansion.
 Those gaps must remain explicit rather than being represented as completed work.
+
+## Reviewed check choices
+
+Version-two method proposals keep the requested evaluation, representation and
+controls as structural choices. AI drafting proposes the procedure and preserves
+its requested checks as descriptions. A familiar phrase such as GP29, a language
+name or a statistical test does not automatically select a runnable capability.
+The visitor can choose exact supported checks in a focused review without
+rewriting the method, key, pages or assumptions. Replacing a scientific comparison
+with descriptive counts is an explicit change to the proposed test, not an
+implementation of the original comparison. Cancel leaves the proposal unchanged.
+
+The implementation model maps procedure steps and unresolved key/parameter
+requirements only. Shared code supplies the exact criterion and known capability
+facts from the reviewed choices. Generic synthetic checks test implementation;
+they never stand in for a scientific null comparison. Unknown requirements remain
+unsupported and block preparation. No model opinion can override these facts.
+
+The maintained measurement reports aggregate page/rune counts, adjacent and equal
+adjacent pairs, and pooled index of coincidence. Adjacency uses each page's
+rune-only stream, ignoring separators and never crossing a page boundary. It is
+not a histogram, a per-page result table or a significance/readability verdict.
+Literal opening checks require exact supplied vectors; language comparisons bind
+the maintained model identity. Runtime checks independently validate these facts.
+
+Canonical MD2 identity binds the structural choices, not their current display
+wording. Human-readable snapshots remain historical text. Polishing a caption
+must not invalidate a saved proposal; changing a real check changes its identity.
+MD1 historical proposals retain their original schema and meaning. Conversion is
+explicit review, never a background migration or prose interpretation.
+
+Drafting has a bounded service deadline with a longer browser deadline for
+transport. Timeout, cancellation or invalid model output cannot save a proposal,
+create a task or authorize a run. Automatic implementation entry remains gated
+until the complete reviewed path is enabled and verified in production.
+
+
+Before issuing a V2 task, shared validation bounds its complete compact result
+submission, including retained input slots, deletion trace, escaped text, metrics,
+opening matches and language-score rows. Work that cannot fit the existing 2 MiB
+submission limit is rejected before running, with a smaller-scope recovery;
+no pages are silently dropped. The full 75-page official scope fits this bound.
+This is a transport-size guarantee, not a Worker CPU or memory guarantee.
