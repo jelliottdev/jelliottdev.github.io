@@ -1,7 +1,7 @@
 """Publish stable reader exports, a file catalog, and non-JavaScript AI references."""
 from reproduce_reading import reproduce, check as check_reading, trace_csv
 from pathlib import Path
-import json,hashlib,zipfile,html,csv,io
+import json,hashlib,zipfile,html,csv,io,re
 from urllib.parse import urljoin
 from build_articles import manuscript_reference_html, guide_discovery_index
 from build_experiment_bundles import build as build_experiment_bundle
@@ -53,6 +53,27 @@ def register(path,role,page=None):
  files.append(row);registered_paths.add(path)
 def register_unique(path,role):
  if path not in registered_paths:register(path,role)
+
+def register_program_navigation():
+ # Every owner shard is part of the release, even when no article currently
+ # links to it. The aggregate is an offline listing, not a browser fetch.
+ name='data/published-program-discovery.json'
+ raw=(root/name).read_bytes()
+ if len(raw)>4*1024*1024:raise ValueError('Saved-calculation listing exceeds its build bound')
+ value=json.loads(raw)
+ if not isinstance(value,dict) or set(value)!={'schema','groups'} or value['schema']!='liberpedia-published-program-discovery-v1' or not isinstance(value['groups'],list) or len(value['groups'])>1024:raise ValueError('Invalid saved-calculation listing')
+ paths=[];seen=set()
+ for group in value['groups']:
+  owner=group.get('recordId') if isinstance(group,dict) else None
+  if not isinstance(owner,str) or len(owner)>100 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',owner) or owner in seen or set(group)!={'recordId','calculations'} or not isinstance(group['calculations'],list) or not 1<=len(group['calculations'])<=1024:raise ValueError('Invalid saved-calculation owner')
+  seen.add(owner);path='data/published-program-discovery/'+owner+'.json'
+  expected=(json.dumps({'schema':value['schema'],'groups':[group]},ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n').encode('utf8')
+  target=(root/path).resolve()
+  if not target.is_relative_to(root.resolve()) or len(expected)>256*1024 or target.read_bytes()!=expected:raise ValueError('Saved-calculation shard is missing or changed: '+path)
+  paths.append(path)
+ register_unique(name,'Offline saved-calculation navigation')
+ register_unique('published-program-discovery-owners.js','Saved-calculation navigation index')
+ for path in paths:register_unique(path,'Saved-calculation navigation shard')
 
 def register_authored_archive():
  # Historical source retention is independent of current dependency discovery.
@@ -192,6 +213,7 @@ for name in ('published-numeric-bank-source.js','scripts/published_numeric_bank_
 for retained in sorted((root / 'published-sources/runtime').glob('*')):
  if retained.is_file():register(retained.relative_to(root).as_posix(),'Historical projection code')
 register_authored_archive()
+register_program_navigation()
 # Retained implementation versions are downloadable provenance, never outputs.
 for name in ('data/maintained-reproduction-code-policy.json','data/reproduction-code-archive.json','data/published-declared-program-bindings.json'):
  register_unique(name,'Maintained reproduction provenance')

@@ -20,6 +20,15 @@ let groups=0;async function test(label,fn){await fn();groups++;console.log('PASS
  if(dom.openingSelect){dom.openingSelect.value='lp2-50';dom.openingSelect.dispatch('change');assert(dom.content.innerHTML.includes('No runes'));assert.equal(dom.original.textContent,model.task.pages.find(p=>p.id==='lp2-50').text);assert.equal(dom.after.textContent,model.run.result.transformed.find(p=>p.page==='lp2-50').text);assert.equal(dom.textSelect.value,'lp2-50');}
  cleanup();assert.equal(dom.listenerCount(),0);const another=View.bindArchived(dom.h,model);assert(dom.listenerCount()>0);another();assert.equal(dom.listenerCount(),0);
  });
+ await test('shared archived next-action slot follows the verified finding and limit before all opening diagnostics',async()=>{
+  const marker='<button type="button" data-qa-next>Try another setting</button>';
+  for(const fixture of fixtures.slice(0,2)){
+   const model=await load(fixture),before=JSON.stringify(model),html=View.renderArchived(model,{afterFindingHTML:marker});
+   assert.equal(html.split(marker).length-1,1);assert(html.indexOf('class="run-limit"')<html.indexOf(marker));assert(html.indexOf(marker)<html.indexOf('run-text-inspector'));
+   if(model.task.criterion.kind==='exact-prefix-set'){assert(html.indexOf(marker)<html.indexOf('data-run-opening-set'));assert.equal((html.match(/id="local-run-finding"/g)||[]).length,1);assert.equal((html.match(/class="run-prefix-table"/g)||[]).length,1);}else assert(html.indexOf(marker)<html.indexOf('class="run-prefix'));
+   assert.equal(JSON.stringify(model),before);assert(!View.renderArchived(model).includes('data-qa-next'));assert.throws(()=>View.renderArchived(model,{afterFindingHTML:{}}),/rendered next-action/);
+  }
+ });
  await test('raw, cloned, shallow-frozen and forged archive models cannot render or attach listeners',async()=>{for(const f of fixtures){const model=await load(f);for(const fake of [f.body,structuredClone(model),Object.freeze({...model}),{task:model.task,run:model.run},null]){const dom=host(model.task);assert(!Client.isVerified(fake));assert.throws(()=>View.renderArchived(fake),/authenticated archived/);assert.throws(()=>View.bindArchived(dom.h,fake),/authenticated archived/);assert.equal(dom.listenerCount(),0);}assert.throws(()=>View.bindArchived(host(model.task).h,model,{pageId:'lp2-99'}),/original output/);}});
  console.log(groups+' authenticated published-output view groups passed; maintained numeric/program/count receipts only, no target replay or writes.');
 }finally{E.run=run;E.verify=verify;E.summary=summary;}})().catch(error=>{console.error(error);process.exitCode=1;});

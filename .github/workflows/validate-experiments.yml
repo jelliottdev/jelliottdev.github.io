@@ -102,6 +102,8 @@ jobs:
               "$interpreter" "$checker" --check
             fi
           done
+      - name: Check every Node test has an execution policy
+        run: node scripts/check_node_test_coverage.cjs
       - name: Run all unconditional Node checks
         run: node scripts/run_node_checks.cjs
       - run: python scripts/test_finite_search_audit.py

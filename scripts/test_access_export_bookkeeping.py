@@ -2,6 +2,7 @@
 import ast
 import hashlib
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -22,13 +23,43 @@ class BookkeepingTests(unittest.TestCase):
         self.tree = ast.parse(BUILDER.read_text(encoding='utf-8'))
         # Extract only pure local helpers; importing this script would rebuild exports.
         helpers = [node for node in self.tree.body
-                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'register_unique', 'register_authored_archive', 'register_program_binding_object', 'register_receipt_binding_objects', 'reproduction_dependency_paths')]
+                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'register_unique', 'register_program_navigation', 'register_authored_archive', 'register_program_binding_object', 'register_receipt_binding_objects', 'reproduction_dependency_paths')]
         self.env = {'root': self.root, 'base': 'https://example.test/',
-                    'json': json, 'hashlib': hashlib, 'files': [], 'registered_paths': set(), 'read_pinned': read_pinned,
+                    'json': json, 're': re, 'hashlib': hashlib, 'files': [], 'registered_paths': set(), 'read_pinned': read_pinned,
                     'AUTHORED_MANIFEST': authored_archive.MANIFEST, 'AUTHORED_MAX_SOURCE': authored_archive.MAX_SOURCE,
                     'authored_manifest_entries': authored_archive.manifest_entries,
                     'authored_entry': authored_archive.entry, 'parse_authored_archive': authored_archive.parse}
         exec(compile(ast.Module(body=helpers, type_ignores=[]), str(BUILDER), 'exec'), self.env)
+
+    def navigation_fixture(self):
+        group = {'recordId': 'example-owner', 'calculations': [{'reference': {'recordId': 'example-owner', 'caseId': 'baseline', 'revision': 'a' * 64}, 'label': 'Original order', 'settings': 'Keep the original order.'}]}
+        value = {'schema': 'liberpedia-published-program-discovery-v1', 'groups': [group]}
+        (self.root / 'data').mkdir()
+        raw = (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n').encode('utf8')
+        (self.root / 'data/published-program-discovery.json').write_bytes(raw)
+        (self.root / 'published-program-discovery-owners.js').write_text('/* fixture index */\n', encoding='utf8')
+        shard = self.root / 'data/published-program-discovery/example-owner.json'
+        shard.parent.mkdir()
+        return shard, raw
+
+    def test_navigation_registers_all_declared_shards_once(self):
+        shard, raw = self.navigation_fixture()
+        shard.write_bytes(raw)
+        self.env['register_program_navigation']()
+        self.env['register_program_navigation']()
+        rows = self.env['files']
+        self.assertEqual(len(rows), 3)
+        self.assertEqual({row['path'] for row in rows}, {'data/published-program-discovery.json', 'published-program-discovery-owners.js', 'data/published-program-discovery/example-owner.json'})
+        self.assertEqual(next(row for row in rows if row['path'].endswith('/example-owner.json'))['sha256'], hashlib.sha256(raw).hexdigest())
+
+    def test_missing_or_changed_owner_shard_blocks_export_before_any_registration(self):
+        shard, raw = self.navigation_fixture()
+        with self.assertRaises(FileNotFoundError):
+            self.env['register_program_navigation']()
+        shard.write_bytes(raw.replace(b'example-owner', b'example-other'))
+        with self.assertRaisesRegex(ValueError, 'shard is missing or changed'):
+            self.env['register_program_navigation']()
+        self.assertEqual(self.env['files'], [])
 
     def test_save_preserves_exact_utf8_bytes_and_skips_unchanged_writes(self):
         text = 'Rune \u16a0 and \u2014\nSecond line\n'

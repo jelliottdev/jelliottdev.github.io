@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from unittest import mock
+from reproduction_sources import read_pinned
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('archived_program_projection', ROOT / 'scripts/published_program_projection.py')
@@ -101,7 +102,7 @@ class ArchivedRecipePresentationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'input pin changed'):
                 projection.reproduce_archive(self.root)
 
-    def test_record_documents_wrapper_and_exact_current_presentation_dependencies(self):
+    def test_record_documents_wrapper_and_exact_reviewed_presentation_dependencies(self):
         record = json.loads((ROOT / projection.BASE / 'record.json').read_bytes())
         self.assertEqual(record['reproduction']['command'],
                          'python scripts/published_program_projection.py --reproduce-archive')
@@ -116,7 +117,13 @@ class ArchivedRecipePresentationTests(unittest.TestCase):
         for name in ['scripts/published_program_projection.py',
                      'experiments/records/cumulative-autokey-literal/record.json',
                      'experiments/records/lp2-row-column-routes/record.json']:
-            self.assertEqual(inputs[name], hashlib.sha256((ROOT / name).read_bytes()).hexdigest())
+            reviewed, actual = read_pinned(ROOT, {'path': name, 'sha256': inputs[name]})
+            self.assertEqual(inputs[name], hashlib.sha256(reviewed).hexdigest())
+            self.assertEqual((ROOT / actual).read_bytes(), reviewed)
+            if name.endswith('/record.json'):
+                self.assertEqual(json.loads(reviewed)['id'], Path(name).parent.name)
+                if hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != inputs[name]:
+                    self.assertEqual(actual, 'published-sources/records/' + inputs[name] + '.json')
         for name, digest in projection.DECLARATION['sourceSha256'].items():
             self.assertEqual(hashlib.sha256((ROOT / name).read_bytes()).hexdigest(), digest)
 
