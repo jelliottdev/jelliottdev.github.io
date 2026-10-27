@@ -44,7 +44,9 @@ jobs:
           cache: 'pip'
           cache-dependency-path: scripts/requirements-line-gap-measurements.txt
       - name: Test immutable authored source retention
-        run: python -m unittest discover -s scripts -p test_archive_authored_sources.py
+        run: |
+          python -m unittest discover -s scripts -p test_archive_authored_sources.py
+          python -m unittest discover -s scripts -p test_archive_reproduction_code.py
       - name: Check current and retained authored source revisions
         shell: bash
         env:
@@ -85,6 +87,21 @@ jobs:
           else
             python scripts/archive_authored_sources.py
           fi
+          # Build-only shared-code and explicit pin-role histories are append-only too.
+          for spec in 'data/reproduction-code-archive.json|python|scripts/archive_reproduction_code.py|2097152' 'data/published-declared-program-bindings.json|node|scripts/published_program_bindings.mjs|4194304' 'data/published-declared-program-history.json|node|scripts/published_program_history.mjs|4194304'; do
+            IFS='|' read -r manifest interpreter checker max_bytes <<< "$spec"
+            if [[ -n "$base" && ! "$base" =~ ^0{40}$ ]] && git cat-file -e "$base:$manifest" 2>/dev/null; then
+              baseline_bytes="$(git cat-file -s "$base:$manifest")"
+              [[ "$baseline_bytes" =~ ^[0-9]+$ && "$baseline_bytes" -le "$max_bytes" ]] || { echo 'Reproduction baseline manifest exceeds its bound'; exit 1; }
+              baseline="$(mktemp "${RUNNER_TEMP}/reproduction-baseline.XXXXXX.json")"
+              trap 'rm -f -- "$baseline"' EXIT
+              git show "$base:$manifest" > "$baseline"
+              "$interpreter" "$checker" --check --baseline-manifest "$baseline"
+              rm -f -- "$baseline"
+            else
+              "$interpreter" "$checker" --check
+            fi
+          done
       - name: Run all unconditional Node checks
         run: node scripts/run_node_checks.cjs
       - run: python scripts/test_finite_search_audit.py

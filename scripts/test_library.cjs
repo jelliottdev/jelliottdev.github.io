@@ -100,6 +100,13 @@ test('combined search passes the complete query rather than a shortened research
  const html=fs.readFileSync(path.join(root,'library.html'),'utf8');
  for(const script of ['search-engine.js','research-index.js'])assert.equal([...html.matchAll(/src="([^"]+)"/g)].filter(m=>m[1].split('?')[0]===script).length,1);
 });
+test('retained maintained-code links bind original path class hash and exact extension without changing identity',()=>{
+ const hash='b'.repeat(64),make=path=>({path,sha256:hash,source_path:'published-sources/code/'+hash+path.slice(path.lastIndexOf('.'))});
+ for(const path of ['local-experiment.js','scripts/retained_program_output.mjs','services/idea-assistant/published-program-source-index.mjs']){const file=make(path),before=JSON.stringify(file),record={reproduction:{inputs:[file],outputs:[]}};assert.equal(L.recordFileHref(file),file.source_path);assert.equal(L.recordFiles(record)[0].path,path);assert.equal(L.recordArticleLinks(record)[path],file.source_path);assert.equal(JSON.stringify(file),before);}
+ for(const path of ['experiments/records/test/run.js','data/source.js','text/source.mjs','../local-experiment.js','scripts/../local-experiment.js','services//source.mjs','scripts/.hidden.js','scripts/tool.py','https://example.test/code.js','/local-experiment.js','scripts\\source.mjs'])assert.throws(()=>L.recordFileHref(make(path)),path);
+ const valid=make('local-experiment.js');for(const source_path of ['https://example.test/'+hash+'.js','published-sources/code/'+hash+'.mjs','published-sources/code/'+'c'.repeat(64)+'.js','published-sources/code/'+hash+'.js?download=1','published-sources/code/../'+hash+'.js','published-sources/records/'+hash+'.json'])assert.throws(()=>L.recordFileHref({...valid,source_path}),source_path);
+ assert.throws(()=>L.recordFileHref({...valid,sha256:hash.toUpperCase()}));assert.equal(L.recordFileHref({path:'local-experiment.js',sha256:hash}),'local-experiment.js');
+});
 console.log('Library checks:',groups,'groups PASS');
 
 test('visitor limits strip only the trailing editorial review suffix',()=>{

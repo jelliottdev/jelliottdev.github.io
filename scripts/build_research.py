@@ -16,6 +16,7 @@ STAGES = (
     ('build_repeating_key_banks.py', '--check'),
     ('build_published_count_evidence.py',),
     ('build_published_evidence_history.py',),
+    ('archive_reproduction_code.py', '--write'),
     ('build_experiments.py',),
     ('build_declared_program_evidence.mjs', '--write'),
     ('build_published_program_catalog.py', '--write'),

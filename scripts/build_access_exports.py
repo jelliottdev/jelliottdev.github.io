@@ -10,6 +10,7 @@ from export_alphanumeric_grids import report as grid_report, csv_report as grid_
 from check_number_examples import report as number_report
 from rune_lag_matches import report as lag_report
 from reproduction_sources import read_pinned
+from archive_reproduction_code import manifest_entries as code_manifest_entries, read_entry as read_code_entry
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -49,6 +50,35 @@ def register(path,role,page=None):
  elif 'emerson' in path:
   row.update(title='Emerson Self-Reliance book cipher',aliases=['Self Reliance','Dartmouth','book cipher'],guide='emerson-self-reliance')
  files.append(row);registered_paths.add(path)
+def register_unique(path,role):
+ if path not in registered_paths:register(path,role)
+
+def register_program_binding_object(path):
+ target=(root/path).resolve()
+ if not target.is_relative_to(root.resolve()):raise ValueError('Explicit program binding object escapes repository')
+ if target.stat().st_size>65536:raise ValueError('Explicit program binding object exceeds its byte bound')
+ raw=target.read_bytes()
+ if not raw or len(raw)>65536:raise ValueError('Explicit program binding object exceeds its byte bound')
+ pins=json.loads(raw.decode('utf8'))
+ if not isinstance(pins,list) or not 1<=len(pins)<=100:raise ValueError('Invalid explicit program binding object')
+ previous=None
+ for pin in pins:
+  if not isinstance(pin,dict) or set(pin)!={'path','sha256'} or not isinstance(pin['path'],str) or len(pin['path'])>350 or not isinstance(pin['sha256'],str) or len(pin['sha256'])!=64 or any(ch not in '0123456789abcdef' for ch in pin['sha256']):raise ValueError('Invalid explicit program binding pin')
+  if any(ch not in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_./-' for ch in pin['path']) or any(part in ('','.','..') for part in pin['path'].split('/')) or previous is not None and previous>=pin['path']:raise ValueError('Invalid ordered explicit program binding paths')
+  previous=pin['path']
+ canonical=json.dumps(pins,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf8')
+ expected='published-sources/program-bindings/'+hashlib.sha256(canonical).hexdigest()+'.json'
+ if path!=expected or raw!=canonical+b'\n':raise ValueError('Explicit program binding object changed')
+ register_unique(path,'Declared reproduction pin roles')
+
+def register_receipt_binding_objects(receipt):
+ for record in receipt.get('records',[]):
+  for pin in record.get('provenance',{}).get('sourcePins',[]):
+   if isinstance(pin.get('path'),str) and pin['path'].startswith('published-sources/program-bindings/'):
+    register_program_binding_object(pin['path'])
+    if hashlib.sha256((root/pin['path']).read_bytes()).hexdigest()!=pin.get('sha256'):
+     raise ValueError('Historical receipt explicit source roles changed')
+
 register('images/message-2016.jpg','Historical later-message image')
 register('data/evidence/later-messages.json','Historical later-message provenance')
 register('images/second-chance-2012.jpg','Historical second-chance image')
@@ -136,10 +166,22 @@ for name in ('data/published-program-source-index.json','data/published-panel-pr
  register(name,'Published archived computation index')
 for retained in sorted((root / 'published-evidence/programs').glob('*.json')):
  register(retained.relative_to(root).as_posix(),'Published archived computation data')
+ # Historical receipts remain reproducible after their owner is withdrawn.
+ register_receipt_binding_objects(read(retained.relative_to(root).as_posix()))
 for name in ('published-numeric-bank-source.js','scripts/published_numeric_bank_projection.py'):
  register(name,'Archived computation verification code')
 for retained in sorted((root / 'published-sources/runtime').glob('*')):
  if retained.is_file():register(retained.relative_to(root).as_posix(),'Historical projection code')
+# Retained implementation versions are downloadable provenance, never outputs.
+for name in ('data/maintained-reproduction-code-policy.json','data/reproduction-code-archive.json','data/published-declared-program-bindings.json'):
+ register_unique(name,'Maintained reproduction provenance')
+for retained_code in code_manifest_entries(read('data/reproduction-code-archive.json')).values():
+ read_code_entry(root,retained_code)
+ register_unique(retained_code['path'],'Historical reproduction code')
+for name in ('data/published-declared-program-history.json','published-declared-program-history-data.js'):
+ register_unique(name,'Retained published computation index')
+for binding_object in sorted((root/'published-sources/program-bindings').glob('*.json')):
+ register_program_binding_object(binding_object.relative_to(root).as_posix())
 register('data/articles.json','Reference article index')
 register('data/article-search.json','Reference article index')
 save('data/guide-index.json',json.dumps(guide_discovery_index(articles),ensure_ascii=False,indent=2)+'\n')

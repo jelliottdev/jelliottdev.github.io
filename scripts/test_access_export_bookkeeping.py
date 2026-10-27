@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from reproduction_sources import read_pinned
+import archive_reproduction_code as code_archive
 
 
 BUILDER = Path(__file__).with_name('build_access_exports.py')
@@ -20,7 +21,7 @@ class BookkeepingTests(unittest.TestCase):
         self.tree = ast.parse(BUILDER.read_text(encoding='utf-8'))
         # Extract only pure local helpers; importing this script would rebuild exports.
         helpers = [node for node in self.tree.body
-                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'reproduction_dependency_paths')]
+                   if isinstance(node, ast.FunctionDef) and node.name in ('read', 'save', 'register', 'register_unique', 'register_program_binding_object', 'register_receipt_binding_objects', 'reproduction_dependency_paths')]
         self.env = {'root': self.root, 'base': 'https://example.test/',
                     'json': json, 'hashlib': hashlib, 'files': [], 'registered_paths': set(), 'read_pinned': read_pinned}
         exec(compile(ast.Module(body=helpers, type_ignores=[]), str(BUILDER), 'exec'), self.env)
@@ -36,6 +37,31 @@ class BookkeepingTests(unittest.TestCase):
         self.assertEqual(output.stat().st_mtime_ns, before)
         self.env['save']('nested/output.txt', text + 'Changed\n')
         self.assertEqual(output.read_bytes(), (text + 'Changed\n').encode('utf-8'))
+
+    def test_immutable_explicit_pin_objects_are_validated_and_registered_once(self):
+        pins = [{'path': 'local-experiment.js', 'sha256': 'a' * 64}]
+        canonical = json.dumps(pins, sort_keys=True, separators=(',', ':')).encode()
+        name = 'published-sources/program-bindings/' + hashlib.sha256(canonical).hexdigest() + '.json'
+        target = self.root / name
+        target.parent.mkdir(parents=True)
+        target.write_bytes(canonical + b'\n')
+        self.env['register_program_binding_object'](name)
+        self.env['register_program_binding_object'](name)
+        self.env['register_unique'](name, 'Later duplicate role')
+        self.assertEqual(len(self.env['files']), 1)
+        self.assertEqual(self.env['files'][0]['role'], 'Declared reproduction pin roles')
+        self.assertEqual(self.env['files'][0]['sha256'], hashlib.sha256(canonical + b'\n').hexdigest())
+        receipt={'records':[{'provenance':{'sourcePins':[{'path':name,'sha256':hashlib.sha256(canonical+b'\n').hexdigest()}]}}]}
+        self.env['register_receipt_binding_objects'](receipt)
+        receipt['records'][0]['provenance']['sourcePins'][0]['sha256']='b'*64
+        with self.assertRaises(ValueError):self.env['register_receipt_binding_objects'](receipt)
+        target.unlink()
+        with self.assertRaises(FileNotFoundError):self.env['register_receipt_binding_objects'](receipt)
+        for raw in [canonical + b'\n\n', b'[]\n', b'[{"path":"../escape.js","sha256":"' + b'a' * 64 + b'"}]\n']:
+            target.write_bytes(raw)
+            with self.assertRaises(ValueError):
+                self.env['register_program_binding_object'](name)
+        self.assertEqual(len(self.env['files']), 1)
 
     def test_crlf_existing_output_is_replaced_by_proposed_lf_bytes(self):
         output = self.root / 'output.txt'
@@ -104,6 +130,28 @@ class BookkeepingTests(unittest.TestCase):
         (self.root/snapshot).write_bytes(b'tampered')
         with self.assertRaises(ValueError):self.env['reproduction_dependency_paths'](experiment)
         self.assertEqual((self.root/canonical).read_bytes(),current)
+
+    def test_retained_code_dependency_registers_old_object_separately_from_current_module(self):
+        repository=BUILDER.resolve().parents[1]
+        name='local-plan-controls.js';old=b'// old exact code\r\nmodule.exports=1;\r\n';current=b'// current implementation\nmodule.exports=2;\n'
+        item=code_archive.entry(name,old)
+        for path,raw in [(name,current),(item['path'],old),('article.md',b'article'),('run.py',b'run')]:
+            target=self.root/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+        (self.root/'data').mkdir(exist_ok=True)
+        (self.root/code_archive.POLICY).write_bytes((repository/code_archive.POLICY).read_bytes())
+        (self.root/code_archive.MANIFEST).write_text(json.dumps({'schema':code_archive.SCHEMA,'entries':[item]}),encoding='utf8')
+        pin={'path':name,'sha256':item['sha256'],'source_path':item['path']}
+        record={'article_path':'article.md','reproduction':{'script':'run.py','inputs':[pin],'outputs':[]}}
+        paths=self.env['reproduction_dependency_paths'](record)
+        self.assertEqual(paths,sorted(['article.md','run.py',name,item['path']]))
+        for path in paths:self.env['register'](path,'Experiment file')
+        rows={r['path']:r for r in self.env['files']}
+        self.assertEqual(rows[name]['sha256'],hashlib.sha256(current).hexdigest())
+        self.assertEqual(rows[item['path']]['sha256'],item['sha256'])
+        self.assertEqual(rows[item['path']]['url'],'https://example.test/'+item['path'])
+        pin['source_path']=name
+        with self.assertRaises(ValueError):self.env['reproduction_dependency_paths'](record)
+        self.assertEqual((self.root/name).read_bytes(),current)
 
     def test_real_earlier_word_reversal_pin_keeps_its_archived_download_path(self):
         repository=BUILDER.resolve().parents[1]

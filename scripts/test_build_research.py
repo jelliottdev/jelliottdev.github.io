@@ -33,7 +33,7 @@ class BuildTests(unittest.TestCase):
                 raise subprocess.CalledProcessError(1, command)
         with self.assertRaises(subprocess.CalledProcessError):
             build(Path('/fixture'), run=failing)
-        self.assertEqual(names, ['build_local_run_inputs.py', 'build_finite_sequence_banks.py', 'build_repeating_key_banks.py', 'build_published_count_evidence.py', 'build_published_evidence_history.py', 'build_experiments.py'])
+        self.assertEqual(names, ['build_local_run_inputs.py', 'build_finite_sequence_banks.py', 'build_repeating_key_banks.py', 'build_published_count_evidence.py', 'build_published_evidence_history.py', 'archive_reproduction_code.py', 'build_experiments.py'])
         names.clear()
         build(Path('/fixture'), run=lambda command, **options: names.append(Path(command[1]).name))
         self.assertEqual(names[0], 'build_local_run_inputs.py')
@@ -43,6 +43,7 @@ class BuildTests(unittest.TestCase):
         self.assertLess(names.index('build_repeating_key_banks.py'), names.index('build_experiments.py'))
         self.assertLess(names.index('build_published_count_evidence.py'), names.index('build_published_evidence_history.py'))
         self.assertLess(names.index('build_published_evidence_history.py'), names.index('build_experiments.py'))
+        self.assertLess(names.index('archive_reproduction_code.py'), names.index('build_experiments.py'))
         self.assertLess(names.index('build_experiments.py'), names.index('build_declared_program_evidence.mjs'))
         self.assertLess(names.index('build_declared_program_evidence.mjs'), names.index('build_published_program_catalog.py'))
         self.assertLess(names.index('build_published_program_catalog.py'), names.index('build_pinned_parent_artifacts.mjs'))

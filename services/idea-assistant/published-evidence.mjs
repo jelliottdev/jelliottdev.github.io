@@ -12,13 +12,20 @@ const clone=v=>JSON.parse(E.stable(v));
 const hash=async(v,cryptoAPI)=>[...new Uint8Array(await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(typeof v==='string'?v:E.stable(v))))].map(n=>n.toString(16).padStart(2,'0')).join('');
 const checkedDefault=new WeakMap();
 const checkedHistorical=new WeakMap();let defaultHistory;
-let defaultProgramIndex;
+let defaultProgramIndex,defaultProgramHistory;
 export async function publishedProgramIndex({registry,programIndex}={}){
  if(programIndex!==undefined)return programIndex===null?null:checkedProgramIndex(programIndex);
  if(registry!==undefined)return null;
  // The Worker-local generated module is build-validated against this exact
  // frozen catalog and checker. Caller indexes above never enter this path.
  defaultProgramIndex??=import('./compiled-program-index-data.mjs').then(module=>module.default);return defaultProgramIndex;
+}
+async function publishedProgramHistory({registry,programIndex,programHistory}){
+ if(programHistory!==undefined)return programHistory===null?null:checkedProgramIndex(programHistory);
+ // Explicit fixtures and caller indexes do not inherit production history.
+ if(registry!==undefined||programIndex!==undefined)return null;
+ defaultProgramHistory??=import('../../published-declared-program-history-data.js').then(module=>checkedProgramIndex(module.default));
+ return defaultProgramHistory;
 }
 async function indexedReceipt(item,{fetcher,cryptoAPI,signal}){
  const manifest=await readProgramPointer(item,{fetcher,crypto:cryptoAPI,signal}),found=(await checkRegistry(manifest,cryptoAPI)).find(receipt=>receipt.publishedSource.recordId===item.recordId&&receipt.publishedSource.revision===item.revision&&receipt.publishedSource.caseId===item.caseId);
@@ -91,23 +98,26 @@ export async function findPublishedEvidence({task,inputVersion,crypto:cryptoAPI=
  }
  return {sources,publishedSources};
 }
-export async function resolvePublishedEvidence({taskId,resultId,inputVersion,createdAt,crypto:cryptoAPI=globalThis.crypto,registry,history,programIndex,fetcher=globalThis.fetch,signal}){
+export async function resolvePublishedEvidence({taskId,resultId,inputVersion,createdAt,crypto:cryptoAPI=globalThis.crypto,registry,history,programIndex,programHistory,fetcher=globalThis.fetch,signal}){
  if(!HEX.test(taskId)||!HEX.test(resultId)||!['raw','reviewed'].includes(inputVersion)||createdAt!==undefined&&(typeof createdAt!=='string'||!Number.isFinite(Date.parse(createdAt))))throw Error('Pinned published source reference is invalid.');
  const matches=r=>r.source.task.taskId===taskId&&r.source.run.id===resultId&&r.source.inputVersion===inputVersion&&(createdAt===undefined||r.source.run.createdAt===createdAt);
  const current=(await receipts(registry,cryptoAPI)).find(matches);if(current)return clone(current);
  const index=await publishedProgramIndex({registry,programIndex}),item=index?.entries.find(item=>item.taskId===taskId&&item.resultId===resultId&&item.inputVersion===inputVersion&&(createdAt===undefined||item.createdAt===createdAt));if(item)return clone(await indexedReceipt(item,{fetcher,cryptoAPI,signal}));
+ const retainedIndex=await publishedProgramHistory({registry,programIndex,programHistory}),retainedItem=retainedIndex?.entries.find(item=>item.taskId===taskId&&item.resultId===resultId&&item.inputVersion===inputVersion&&(createdAt===undefined||item.createdAt===createdAt));
+ if(retainedItem)return clone(await indexedReceipt(retainedItem,{fetcher,cryptoAPI,signal}));
  const archive=historicalArchive(registry,history),manifest=archive?.findSource({taskId,resultId,inputVersion,...(createdAt===undefined?{}:{createdAt})}),found=(await historicalReceipts(manifest,cryptoAPI,registry===undefined&&history===undefined)).find(matches);
  return found?clone(found):null;
 }
-export async function readPublishedEvidence({recordId,revision,caseId,crypto:cryptoAPI=globalThis.crypto,registry,history,programIndex,fetcher=globalThis.fetch,signal}){
+export async function readPublishedEvidence({recordId,revision,caseId,crypto:cryptoAPI=globalThis.crypto,registry,history,programIndex,programHistory,fetcher=globalThis.fetch,signal}){
  if(!SLUG.test(recordId)||!HEX.test(revision)||typeof caseId!=='string'||caseId.length>200||!/^[a-z0-9-]+$/.test(caseId))throw Error('Published source reference is invalid.');
  const matches=r=>r.publishedSource.recordId===recordId&&r.publishedSource.revision===revision&&r.publishedSource.caseId===caseId;
  let found=(await receipts(registry,cryptoAPI)).find(matches);
  if(!found){const index=await publishedProgramIndex({registry,programIndex}),item=index?.entries.find(item=>item.recordId===recordId&&item.revision===revision&&item.caseId===caseId);if(item)found=await indexedReceipt(item,{fetcher,cryptoAPI,signal});}
+ if(!found){const retainedIndex=await publishedProgramHistory({registry,programIndex,programHistory}),item=retainedIndex?.entries.find(item=>item.recordId===recordId&&item.revision===revision&&item.caseId===caseId);if(item)found=await indexedReceipt(item,{fetcher,cryptoAPI,signal});}
  if(!found){const archive=historicalArchive(registry,history),manifest=archive?.find({recordId,revision,caseId});found=(await historicalReceipts(manifest,cryptoAPI,registry===undefined&&history===undefined)).find(matches);}
  return found?{...clone(found.source),publishedSource:clone(found.publishedSource),provenance:clone(found.provenance)}:null;
 }
-export function createPublishedEvidenceHandler({crypto:cryptoAPI=globalThis.crypto,registry,history,programIndex,fetcher=globalThis.fetch}={}){
+export function createPublishedEvidenceHandler({crypto:cryptoAPI=globalThis.crypto,registry,history,programIndex,programHistory,fetcher=globalThis.fetch}={}){
  return async(request,env)=>{
   const allowed=env?.SITE_ORIGIN,origin=request.headers.get('origin'),headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Vary':'Origin'},reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
   let valid=false;try{valid=typeof allowed==='string'&&new URL(allowed).origin===allowed&&['http:','https:'].includes(new URL(allowed).protocol);}catch{}
@@ -120,6 +130,6 @@ export function createPublishedEvidenceHandler({crypto:cryptoAPI=globalThis.cryp
    return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Max-Age':'600'}});
   }
   if(request.method!=='GET')return reply({error:'Method not allowed.'},405);
-  try{const found=await readPublishedEvidence({recordId:match[1],caseId:match[2],revision:url.searchParams.get('revision'),crypto:cryptoAPI,registry,history,programIndex,fetcher});return found?reply(found):reply({error:'Published source was not found.'},404);}catch{return reply({error:'Published computation evidence could not be verified.'},503);}
+  try{const found=await readPublishedEvidence({recordId:match[1],caseId:match[2],revision:url.searchParams.get('revision'),crypto:cryptoAPI,registry,history,programIndex,programHistory,fetcher});return found?reply(found):reply({error:'Published source was not found.'},404);}catch{return reply({error:'Published computation evidence could not be verified.'},503);}
  };
 }

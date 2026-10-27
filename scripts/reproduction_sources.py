@@ -1,12 +1,14 @@
 """Resolve reviewed reproduction bytes without changing their original identity.
 
-Only canonical record.json dependencies may use the maintained authored-source
-archive. Scientific inputs and result files never fall back to other versions.
+Canonical record.json dependencies and explicitly maintained implementation
+modules may use their respective immutable archives. Scientific inputs and
+result files never fall back to other versions.
 """
 import hashlib
 import re
 from pathlib import Path
 from archive_authored_sources import MANIFEST, MAX_SOURCE, entry, manifest_entries, parse
+import archive_reproduction_code as code_archive
 
 RECORD = re.compile(r'experiments/records/([a-z0-9]+(?:-[a-z0-9]+)*)/record\.json')
 HEX = re.compile(r'[a-f0-9]{64}')
@@ -43,6 +45,20 @@ def read_pinned(root, pin):
         return data, name
     record = RECORD.fullmatch(name)
     if not record:
+        if code_archive.maintained_path(name):
+            try:
+                allowed = code_archive.policy(root)
+                if name in allowed:
+                    manifest = code_archive.manifest_entries(code_archive.parse(
+                        code_archive.bounded_read(root, code_archive.MANIFEST)))
+                    if any(item['sourcePath'] not in allowed for item in manifest.values()):
+                        raise ValueError('Retained code association is outside maintained policy')
+                    retained = manifest.get((name, expected))
+                    if retained is None:
+                        raise ValueError('No exact retained maintained code version: ' + name)
+                    return code_archive.read_entry(root, retained), retained['path']
+            except FileNotFoundError as error:
+                raise ValueError('A stale maintained code dependency needs its retained source manifest') from error
         raise ValueError('Reproduction source SHA-256 mismatch: ' + name)
 
     manifest_path = _contained(root, MANIFEST)

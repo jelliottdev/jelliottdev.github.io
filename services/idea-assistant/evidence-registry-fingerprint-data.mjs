@@ -37,7 +37,7 @@ export default Object.freeze({
     },
     {
       "path": "services/idea-assistant/compiled-program-index-data.mjs",
-      "sha256": "3890c5d96a79cc9bb39bc17b96d194db4b7db575dfcc805512da81e378056935"
+      "sha256": "3dc30b07e2b86117bd44c92d145f9433b35c0539463bad4301d547f4fec89c20"
     },
     {
       "path": "services/idea-assistant/factored-evidence-provider.mjs",
@@ -45,7 +45,7 @@ export default Object.freeze({
     },
     {
       "path": "services/idea-assistant/published-evidence.mjs",
-      "sha256": "be2774203bc25c6dc9a2475338bb87d6edd7bbc03f266d923a4f7be4a314cb24"
+      "sha256": "ad4d1ccc845fbbd5f3e16d421a4a6ea2fa5a1ae178ef687eea62277f76859de5"
     },
     {
       "path": "services/idea-assistant/published-program-source-index.mjs",

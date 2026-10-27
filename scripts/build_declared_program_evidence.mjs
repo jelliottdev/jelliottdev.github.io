@@ -7,6 +7,9 @@ import E from '../local-experiment.js';
 import J from '../finite-json.js';
 import {validateRetainedProgramOutput} from './retained_program_output.mjs';
 import * as Collection from './retained_program_collection.mjs';
+import {readRetainedCode} from './reproduction_code_sources.mjs';
+import * as Bindings from './published_program_bindings.mjs';
+import * as ProgramHistory from './published_program_history.mjs';
 import {checkedProgramIndex, checkProgramPointerReceipt} from '../services/idea-assistant/published-program-source-index.mjs';
 import {readPublishedEvidence} from '../services/idea-assistant/published-evidence.mjs';
 
@@ -14,6 +17,9 @@ const ROOT = new URL('../', import.meta.url);
 const MAX_BYTES = 8 * 1024 * 1024;
 const CODE = [
   'scripts/build_declared_program_evidence.mjs',
+  'scripts/reproduction_code_sources.mjs',
+  'scripts/published_program_bindings.mjs',
+  'scripts/published_program_history.mjs',
   'scripts/retained_program_output.mjs',
   'local-experiment.js',
   'local-plan-controls.js',
@@ -82,7 +88,7 @@ function validateDeclaration(record, declaration, collection = false) {
   'Published output must be a record-local pinned reproduction output');
 }
 
-async function reproductionSources(record, recordPath, declarations, bytes) {
+async function reproductionSources(record, recordPath, declarations, bytes, base) {
   const rep = record.reproduction;
   need(rep && typeof rep.script === 'string' && pin(rep.script_sha256)
     && Array.isArray(rep.inputs) && Array.isArray(rep.outputs),
@@ -104,7 +110,15 @@ async function reproductionSources(record, recordPath, declarations, bytes) {
     // same pin. Duplicate entries within either input/output list were rejected.
     need(!pins.has(path) || pins.get(path) === sha256, 'Conflicting reproduction source pins');
     pins.set(path, sha256);
-    const raw = await bytes(path);
+    let raw;
+    try { raw = await bytes(path); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+    if (!raw || sha(raw) !== sha256) {
+      // Only policy-listed implementation modules have immutable code versions.
+      // Plans, results and other scientific sources still require exact bytes.
+      const restored = await readRetainedCode(base, {path, sha256});
+      raw = restored.bytes;
+    }
     need(sha(raw) === sha256, 'Reproduction source bytes changed: ' + path);
     if (declarations.some(declaration => declaration.output === path)) retainedBytes.set(path, raw);
   }
@@ -122,9 +136,9 @@ function validateOwnerScope(record, task, official) {
 async function projectionSourcePins(task, scientificPins, officialPages, bytes, collection = false) {
   const pins = new Map(scientificPins);
   for (const path of [...CODE, ...(collection ? ['scripts/retained_program_collection.mjs'] : [])]) {
-    const hash = sha((await bytes(path)).toString('utf8').replaceAll('\r\n', '\n'));
-    need(!pins.has(path) || pins.get(path) === hash, 'Maintained code pin conflicts with reproduction bytes');
-    pins.set(path, hash);
+    // Explicit authored dependencies retain their exact original raw bytes.
+    // Only publisher-added verifier metadata describes the current code.
+    if (!pins.has(path)) pins.set(path, sha((await bytes(path)).toString('utf8').replaceAll('\r\n', '\n')));
   }
   for (const page of task.pages) {
     need(officialPages.has(page.id) && officialPages.get(page.id) === page.text,
@@ -142,7 +156,7 @@ async function projectionSourcePins(task, scientificPins, officialPages, bytes, 
 // Preserve the original public reference when a publisher implementation changes
 // but the exact retained calculation, date and scientific source bytes do not.
 // The old envelope is revalidated; it is never trusted merely for being on disk.
-async function preserveExistingProjection(record, declaration, retained, sourcePins, previous, bytes) {
+async function preserveExistingProjection(record, declaration, retained, sourcePins, previous, bytes, bindings, explicitPins) {
   const pointer = previous.find(item => item.recordId === record.id
     && item.caseId === declaration.id + '--all-pages');
   if (!pointer) return null;
@@ -157,8 +171,21 @@ async function preserveExistingProjection(record, declaration, retained, sourceP
   need(checked, 'Existing published receipt could not be verified');
   checkProgramPointerReceipt(pointer, {...checked, source: {task: checked.task, run: checked.run,
     inputVersion: checked.inputVersion}});
+  const reference = {recordId: pointer.recordId, revision: pointer.revision, caseId: pointer.caseId};
+  const boundPins = Bindings.sourceFor(bindings, reference);
+  // Without an explicit historical role binding we cannot infer which code was
+  // an authored dependency. Never silently classify it as publisher metadata.
+  if (!boundPins || !same(boundPins, explicitPins)) return null;
+  const rolePins = checked.provenance.sourcePins.filter(pin => pin.path.startsWith('published-sources/program-bindings/'));
+  if (rolePins.length) {
+    const roleText = E.stable(boundPins) + '\n';
+    need(rolePins.length === 1 && rolePins[0].path === 'published-sources/program-bindings/' + sha(boundPins) + '.json'
+      && rolePins[0].sha256 === sha(roleText) && (await bytes(rolePins[0].path)).equals(Buffer.from(roleText)),
+    'Retained explicit source role bytes changed');
+  }
   const maintained = new Set([...CODE, 'scripts/retained_program_collection.mjs']);
-  const scientific = pins => pins.filter(pin => !maintained.has(pin.path));
+  const scientific = pins => pins.filter(pin => !maintained.has(pin.path)
+    && !/^published-sources\/program-bindings\/[a-f0-9]{64}\.json$/.test(pin.path));
   if (!same(checked.task, retained.task) || !same(checked.run, retained.run)
     || !same(scientific(checked.provenance.sourcePins), scientific(sourcePins))) return null;
   // Metadata cannot redirect an otherwise valid retained source to another task.
@@ -181,7 +208,7 @@ function publishedProjection(record, declaration, retained, sourcePins) {
     schema: 'liberpedia-published-program-projection-v1', recordId: record.id,
     projection, sourcePins, checkedAt: declaration.checked_at,
     dateMeaning: 'Date recorded for the retained output or its explicit import and verification; not an authenticated historical execution timestamp, browser submission or the current loading time.',
-    verificationMeaning: 'The retained output was verified against the exact fixed program and independent synthetic implementation controls. This does not establish a decryption. Maintained verifier code pins use UTF-8 with LF line endings; scientific source pins use exact bytes.'
+    verificationMeaning: 'The retained output was revalidated against its fixed typed program and independent synthetic implementation controls using the current verifier. Explicit reproduction dependencies identify the original exact raw code and scientific bytes; additional verifier metadata uses UTF-8 with LF line endings. This does not establish a decryption or claim that the original producer was executed during publication.'
   };
   const revision = sha(provenance);
   const entry = {
@@ -213,7 +240,18 @@ export async function prepare({root = ROOT} = {}) {
     && Array.isArray(official.alphabet), 'Official raw input bundle is malformed');
   const officialPages = new Map(official.pages.map(page => [page.id, page.raw]));
   const files = new Map(), entries = [];
-  let previous = [];
+  let previous = [], bindings = Bindings.empty(), programHistory = ProgramHistory.empty();
+  try {
+    const raw = await bytes(ProgramHistory.PATH);
+    programHistory = ProgramHistory.validate(JSON.parse(raw));
+    need(raw.toString('utf8') === E.stable(programHistory) + '\n', 'Program history must use canonical JSON bytes');
+  } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  try {
+    const raw = await bytes(Bindings.PATH);
+    bindings = Bindings.validate(JSON.parse(raw));
+    need(raw.toString('utf8') === E.stable(bindings) + '\n', 'Bindings file must use canonical JSON bytes');
+  }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
   try { previous = checkedProgramIndex(JSON.parse(await bytes('data/published-declared-program-source-index.json'))).entries; }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   const folders = (await readdir(resolve(base, 'experiments/records'), {withFileTypes: true}))
@@ -233,7 +271,9 @@ export async function prepare({root = ROOT} = {}) {
     // Withdrawal removes active pointers but never deletes retained receipts.
     if (record.status === 'draft') continue;
     const declarations = declarationsFor(record);
-    const sources = await reproductionSources(record, recordPath, declarations, bytes);
+    const sources = await reproductionSources(record, recordPath, declarations, bytes, base);
+    const explicitPins = [...sources.pins].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)
+      .map(([path, sha256]) => ({path, sha256}));
     const identifiers = new Set();
     for (const declaration of declarations) {
       // Parse the same detached bytes whose reproduction hash was checked.
@@ -250,14 +290,33 @@ export async function prepare({root = ROOT} = {}) {
         'Declaration date must equal the retained calculation date');
       validateOwnerScope(record, retained.task, official);
       const sourcePins = await projectionSourcePins(retained.task, sources.pins, officialPages, bytes, declaration.collection);
-      const published = await preserveExistingProjection(record, selected, retained, sourcePins, previous, bytes)
-        || publishedProjection(record, selected, retained, sourcePins);
+      let published = await preserveExistingProjection(record, selected, retained, sourcePins, previous, bytes, bindings, explicitPins);
+      if (!published) {
+        // Source roles affect identity even when a removed authored code pin
+        // happens to equal a current publisher-added implementation pin.
+        const rolePath = 'published-sources/program-bindings/' + sha(explicitPins) + '.json';
+        const roleText = E.stable(explicitPins) + '\n';
+        const boundSourcePins = [...sourcePins, {path: rolePath, sha256: sha(roleText)}]
+          .sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+        need(boundSourcePins.length <= 100, 'Published provenance exceeds100 source pins');
+        files.set(rolePath, roleText);
+        published = publishedProjection(record, selected, retained, boundSourcePins);
+      }
+      bindings = Bindings.append(bindings, {recordId: published.pointer.recordId,
+        revision: published.pointer.revision, caseId: published.pointer.caseId}, explicitPins);
       files.set(published.path, published.text);
       entries.push(published.pointer);
       }
     }
   }
   const index = checkedProgramIndex({schema: 'liberpedia-published-program-source-index-v1', entries});
+  programHistory = ProgramHistory.append(ProgramHistory.append(programHistory, previous), entries);
+  const retainedReferences = new Set(programHistory.entries.map(item => [item.recordId, item.revision, item.caseId].join('|')));
+  need(bindings.bindings.every(item => retainedReferences.has([item.recordId, item.revision, item.caseId].join('|'))),
+    'An explicitly bound historical program lost its retained pointer');
+  files.set(ProgramHistory.PATH, E.stable(programHistory) + '\n');
+  files.set(ProgramHistory.SCRIPT_PATH, ProgramHistory.script(programHistory));
+  files.set(Bindings.PATH, E.stable(bindings) + '\n');
   files.set('data/published-declared-program-source-index.json', E.stable(index) + '\n');
   return {root: base, files, index};
 }
@@ -293,7 +352,7 @@ async function writeOrCheck(base, path, text, write) {
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
   }
-  if (/^published-evidence\/programs\/declared-[a-f0-9]{64}\.json$/.test(path)) {
+  if (/^(?:published-evidence\/programs\/declared-|published-sources\/program-bindings\/)[a-f0-9]{64}\.json$/.test(path)) {
     // A content-addressed receipt is an immutable historical artifact. Repairing
     // a conflicting file requires investigation, never silent regeneration.
     try {

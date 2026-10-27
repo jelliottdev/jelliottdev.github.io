@@ -209,6 +209,25 @@ refresh a dependent experiment's hash after an unrelated metadata edit.
 
 Drafts do not enter public indexes, but committed drafts are still public files. Never commit private material. Review metadata must identify the actual computational reviewer; independent human review is complete only when its name, date and findings are recorded. A pending review has no implied assignee or deadline.
 
+### Keep exact maintained implementation versions
+
+Published experiments keep their original code hashes when shared JavaScript
+helpers change. Only paths listed in
+`data/maintained-reproduction-code-policy.json` may use this fallback. The
+archive manifest binds the original source path and SHA-256 to exact bytes at
+`published-sources/code/<sha256>.js` or `.mjs`; CRLF bytes are not normalized.
+The build checks the retained version instead of repinning the experiment to
+new code. File links download those bytes, while reproduction ZIPs keep the
+original filename and directory so existing imports continue to work.
+
+Before replacing a pinned implementation, run
+`python scripts/archive_reproduction_code.py --write` to retain its exact
+current bytes, then check with
+`python scripts/archive_reproduction_code.py --check`. A missing, corrupt or
+unlisted version must fail verification. This mechanism does not replace
+scientific inputs or results, change expected outputs, or make a new
+implementation equivalent to an old one.
+
 ## Linked research questions
 
 A published record may author `research_questions` in its own `record.json`.

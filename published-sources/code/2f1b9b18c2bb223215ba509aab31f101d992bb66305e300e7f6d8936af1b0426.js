@@ -1,0 +1,329 @@
+/* Declarative local experiments. No generated code, I/O, inference or execution of source text. */
+(function(root){
+ 'use strict';
+ const TASK='liberpedia-local-task-v1',RESULT='liberpedia-local-result-v1',ENGINE='rune-program-v1';
+ const verifiedResults=new WeakMap();
+ const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+ const length=s=>Array.from(s).length;
+ function scalarText(s){return typeof s==='string'&&!/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(s);}
+ function object(value,keys){
+  if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).some(k=>!keys.includes(k)))throw Error('Unexpected experiment fields.');
+  if(keys.some(k=>!own(value,k)))throw Error('Missing experiment fields.');
+ }
+ function integer(v,min,max){if(!Number.isInteger(v)||v<min||v>max)throw Error('Experiment number is outside its bounds.');}
+ function languageScorer(){
+  // Old computations do not parse or hash the optional model asset.
+  const scorer=typeof module==='object'&&module.exports?require('./language-score.js'):root.RuneLanguageScore;
+  if(!scorer?.validateCriterion||!scorer?.evaluate||!scorer?.data)throw Error('The pinned rune-language comparison could not be loaded.');
+  return scorer;
+ }
+ function stable(value){
+  if(Array.isArray(value))return '['+value.map(stable).join(',')+']';
+  if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stable(value[k])).join(',')+'}';
+  return JSON.stringify(value);
+ }
+ function validateTask(task){
+  object(task,['schema','engine','taskId','title','pages','alphabet','steps','criterion']);
+  if(task.schema!==TASK||task.engine!==ENGINE||!/^[a-f0-9]{64}$/.test(task.taskId))throw Error('Unsupported experiment version or identity.');
+  if(!scalarText(task.title)||!task.title.trim()||length(task.title)>300)throw Error('Give the experiment a short title.');
+  if(!Array.isArray(task.alphabet)||task.alphabet.length!==29)throw Error('The task needs an ordered 29-rune alphabet.');
+  const runes=new Set();
+  for(const entry of task.alphabet){
+   object(entry,['rune','latin','prime']);
+   if(!scalarText(entry.rune)||length(entry.rune)!==1||/\s/.test(entry.rune)||runes.has(entry.rune))throw Error('Alphabet runes must be distinct characters.');
+   runes.add(entry.rune);
+   if(!scalarText(entry.latin)||!entry.latin||length(entry.latin)>8)throw Error('Invalid rune label.');
+   integer(entry.prime,2,1000000);
+  }
+  if(!Array.isArray(task.pages)||!task.pages.length||task.pages.length>75)throw Error('Select between one and 75 pages.');
+  const ids=new Set();let count=0,total=0;
+  for(const page of task.pages){
+   object(page,['id','text']);
+   if(typeof page.id!=='string'||!/^lp[12]-\d{2}$/.test(page.id)||ids.has(page.id)||Number(page.id.slice(4))>(page.id[2]==='1'?16:57))throw Error('Invalid or repeated manuscript page.');
+   ids.add(page.id);
+   if(!scalarText(page.text))throw Error('Missing page text.');
+   total+=length(page.text);
+   for(const ch of page.text)if(runes.has(ch))count++;
+  }
+  if(count>20000||total>300000)throw Error('The task exceeds the local runner bounds.');
+  if(!Array.isArray(task.steps)||task.steps.length>8)throw Error('Use at most eight method steps.');
+  for(const step of task.steps){
+   if(step?.op==='reverse'){object(step,['op','unit']);if(!['line','word','page'].includes(step.unit))throw Error('Choose a reversal boundary.');}
+   else if(step?.op==='affine'){object(step,['op','a','b']);integer(step.a,0,28);integer(step.b,0,28);}
+   else if(step?.op==='cumulative-difference'){object(step,['op','reset']);if(!['page','line','word'].includes(step.reset))throw Error('Choose a feedback reset.');}
+   else if(step?.op==='keyed-shift'){
+    object(step,['op','key','mode','direction','reset']);
+    if(!Array.isArray(step.key)||!step.key.length||step.key.length>256)throw Error('Give one to 256 key indices.');
+    for(const value of step.key)integer(value,0,28);
+    if(!['repeat','plaintext-autokey','ciphertext-autokey'].includes(step.mode)||!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the key mode, arithmetic direction and reset.');
+   }
+   else if(step?.op==='interrupted-keyed-shift'){
+    object(step,['op','key','direction','reset','interrupts']);
+    if(!Array.isArray(step.key)||!step.key.length||step.key.length>256)throw Error('Give one to 256 key indices.');
+    for(const value of step.key)integer(value,0,28);
+    if(!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the interrupted key direction and reset.');
+    if(!Array.isArray(step.interrupts)||!step.interrupts.length||step.interrupts.length>29)throw Error('Give one to 29 sorted interrupt indices.');
+    for(let i=0;i<step.interrupts.length;i++){integer(step.interrupts[i],0,28);if(i&&step.interrupts[i]<=step.interrupts[i-1])throw Error('Interrupt indices must be unique and sorted.');}
+   }
+   else if(step?.op==='finite-shift'){
+    object(step,['op','key','direction','reset']);
+    if(!Array.isArray(step.key)||!step.key.length||step.key.length>20000)throw Error('Give one to 20,000 finite key indices.');
+    for(const value of step.key)integer(value,0,28);
+    if(!['subtract','add'].includes(step.direction)||!['page','line','word'].includes(step.reset))throw Error('Choose the finite stream direction and reset.');
+    // Every supported step preserves rune positions and separators, so the
+    // original geometry proves sufficiency even after reversals or shifts.
+    for(const page of task.pages){
+     let position=0;
+     for(const ch of page.text){
+      if(runes.has(ch)){if(++position>step.key.length)throw Error('The finite key stream is shorter than a reset segment on '+page.id+'.');}
+      else if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;
+     }
+    }
+   }
+   else throw Error('This method needs an execution adapter before it can run.');
+  }
+  if(task.criterion?.kind==='measurement')object(task.criterion,['kind']);
+  else if(task.criterion?.kind==='exact-prefix'){
+   object(task.criterion,['kind','values']);
+   if(!Array.isArray(task.criterion.values)||!task.criterion.values.length||task.criterion.values.length>256)throw Error('Give a prefix of one to 256 rune indices.');
+   task.criterion.values.forEach(v=>integer(v,0,28));
+  }else if(task.criterion?.kind==='exact-prefix-set'){
+   object(task.criterion,['kind','openings']);
+   const openings=task.criterion.openings,names=new Set(),vectors=new Set();
+   if(!Array.isArray(openings)||!openings.length||openings.length>32)throw Error('Give one to 32 named opening passages.');
+   for(const opening of openings){
+    object(opening,['id','values']);
+    if(typeof opening.id!=='string'||!/^[a-z][a-z0-9-]{0,63}$/.test(opening.id)||names.has(opening.id))throw Error('Opening names must be unique lowercase identifiers.');
+    if(!Array.isArray(opening.values)||!opening.values.length||opening.values.length>256)throw Error('Give each opening one to 256 rune indices.');
+    for(const value of opening.values)integer(value,0,28);
+    const vector=stable(opening.values);if(vectors.has(vector))throw Error('Opening rune sequences must be distinct.');
+    names.add(opening.id);vectors.add(vector);
+   }
+  }else if(task.criterion?.kind==='word-prime-sums'){
+   object(task.criterion,['kind','table','boundaries']);
+   if(!['canonical','reversed'].includes(task.criterion.table)||!['non-rune','hyphen-period'].includes(task.criterion.boundaries))throw Error('Choose the prime table and word boundary rule.');
+  }else if(task.criterion?.kind==='word-affine-count'){
+   object(task.criterion,['kind','lag','a','b','boundaries']);
+   integer(task.criterion.lag,1,12);integer(task.criterion.a,0,28);integer(task.criterion.b,0,28);
+   if(!['non-rune','hyphen-period'].includes(task.criterion.boundaries))throw Error('Choose the word boundary rule.');
+   // Transforms preserve rune/separator positions; bound the complete count before running.
+   let opportunities=0;
+   for(const page of task.pages)for(const word of measurementWords(page.text,runes,task.criterion.boundaries))opportunities+=Math.max(0,word.length-task.criterion.lag);
+   if(opportunities>2000000)throw Error('The word-pair measurement exceeds its work limit.');
+  }else if(task.criterion?.kind==='language-score'){
+   const scorer=languageScorer();scorer.validateCriterion(task.criterion);
+   if(stable(task.alphabet.map(entry=>entry.latin))!==stable(scorer.data.payload.alphabet))throw Error('The rune-language comparison needs the canonical GP29 alphabet order.');
+  }else throw Error('Choose a supported result criterion.');
+  if(new TextEncoder().encode(stable(task)).length>2000000)throw Error('The task exceeds the local runner file limit.');
+  return task;
+ }
+ async function identity(task,cryptoAPI=root.crypto){
+  const body={...task};delete body.taskId;
+  const hash=await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(stable(body)));
+  return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('');
+ }
+ async function prepare(body,cryptoAPI=root.crypto){
+  const task=JSON.parse(JSON.stringify({...body,schema:TASK,engine:ENGINE,taskId:'0'.repeat(64)}));
+  validateTask(task);task.taskId=await identity(task,cryptoAPI);return task;
+ }
+ async function checkIdentity(task,cryptoAPI=root.crypto){validateTask(task);if(await identity(task,cryptoAPI)!==task.taskId)throw Error('The experiment changed after it was prepared.');return task;}
+ function transform(text,steps,alphabet){
+  const index=new Map(alphabet.map((r,i)=>[r.rune,i])),mod=n=>(n%29+29)%29;
+  let chars=Array.from(text);
+  for(const step of steps){
+   if(step.op==='reverse'){
+    let positions=[];
+    const flush=()=>{const values=positions.map(i=>chars[i]).reverse();positions.forEach((i,n)=>{chars[i]=values[n];});positions=[];};
+    for(let i=0;i<chars.length;i++){
+     if(index.has(chars[i]))positions.push(i);
+     else if(step.unit==='word'||step.unit==='line'&&/[\r\n]/.test(chars[i]))flush();
+    }flush();
+   }else if(step.op==='affine')chars=chars.map(ch=>index.has(ch)?alphabet[mod(step.a*index.get(ch)+step.b)].rune:ch);
+   else if(step.op==='cumulative-difference'){
+    let sum=0;
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))sum=0;return ch;}
+     const p=mod(index.get(ch)-sum);sum=mod(sum+p);return alphabet[p].rune;
+    });
+   }else if(step.op==='interrupted-keyed-shift'){
+    let position=0;const interrupts=new Set(step.interrupts);
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;return ch;}
+     const value=index.get(ch);
+     if(interrupts.has(value))return ch;
+     const k=step.key[position++%step.key.length];
+     return alphabet[mod(value+(step.direction==='add'?k:-k))].rune;
+    });
+   }else if(step.op==='finite-shift'){
+    let position=0;
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch))position=0;return ch;}
+     const k=step.key[position++];
+     return alphabet[mod(index.get(ch)+(step.direction==='add'?k:-k))].rune;
+    });
+   }else if(step.op==='keyed-shift'){
+    let input=[],output=[];
+    chars=chars.map(ch=>{
+     if(!index.has(ch)){if(step.reset==='word'||step.reset==='line'&&/[\r\n]/.test(ch)){input=[];output=[];}return ch;}
+     const c=index.get(ch),j=input.length,m=step.key.length;
+     const k=j<m?step.key[j]:step.mode==='repeat'?step.key[j%m]:step.mode==='plaintext-autokey'?output[j-m]:input[j-m];
+     const p=mod(c+(step.direction==='add'?k:-k));input.push(c);output.push(p);return alphabet[p].rune;
+    });
+   }
+  }
+  return chars.join('');
+ }
+ function measurementWords(text,runes,boundaries){
+  const words=[];let word=[];
+  for(const ch of text){
+   if(runes.has(ch))word.push(ch);
+   else if(boundaries==='non-rune'||ch==='-'||ch==='.'){
+    if(word.length)words.push(word);word=[];
+   }
+  }
+  if(word.length)words.push(word);
+  return words;
+ }
+ function gcd(a,b){while(b){const r=a%b;a=b;b=r;}return a;}
+ function fraction(n,d=1n){const g=gcd(n,d);return [n/g,d/g];}
+ function plusFraction(a,b){const g=gcd(a[1],b[1]);return fraction(a[0]*(b[1]/g)+b[0]*(a[1]/g),a[1]*(b[1]/g));}
+ function rationalJSON(f){return {numerator:String(f[0]),denominator:String(f[1])};}
+ function countWordPairs(text,index,criterion){
+  let opportunities=0,matches=0,expected=[0n,1n];
+  for(const chars of measurementWords(text,index,criterion.boundaries)){
+   const word=chars.map(ch=>index.get(ch)),n=word.length,k=Math.max(0,n-criterion.lag);
+   if(!k)continue;
+   opportunities+=k;
+   for(let i=0;i<k;i++)if(word[i+criterion.lag]===(criterion.a*word[i]+criterion.b)%29)matches++;
+   const counts=Array(29).fill(0);for(const v of word)counts[v]++;
+   let ordered=0;
+   for(let i=0;i<29;i++){const j=(criterion.a*i+criterion.b)%29;ordered+=counts[i]*(counts[j]-(i===j?1:0));}
+   expected=plusFraction(expected,fraction(BigInt(k)*BigInt(ordered),BigInt(n)*BigInt(n-1)));
+  }
+  return {opportunities,matches,expected};
+ }
+ function run(task,{onProgress}={}){
+  validateTask(task);
+  const index=new Map(task.alphabet.map((r,i)=>[r.rune,i])),frequencies=Array(29).fill(0);
+  let runes=0,adjacentPairs=0,equalAdjacentPairs=0;const transformed=[],matches=[],wordPages=[],languagePages=[];let wordExpected=[0n,1n],wordOpportunities=0,wordMatches=0;const sumPages=[];let sumWords=0,sumTotal=0;
+  for(const page of task.pages){
+   const text=transform(page.text,task.steps,task.alphabet),values=Array.from(text).filter(ch=>index.has(ch)).map(ch=>index.get(ch));
+   values.forEach(v=>frequencies[v]++);runes+=values.length;adjacentPairs+=Math.max(0,values.length-1);
+   for(let i=1;i<values.length;i++)if(values[i]===values[i-1])equalAdjacentPairs++;
+   transformed.push({page:page.id,text});
+   if(task.criterion.kind==='exact-prefix')matches.push({page:page.id,matched:task.criterion.values.every((v,i)=>values[i]===v)});
+   if(task.criterion.kind==='exact-prefix-set'){
+    const matchingOpenings=task.criterion.openings.filter(opening=>opening.values.every((v,i)=>values[i]===v)).map(opening=>opening.id);
+    matches.push({page:page.id,matched:matchingOpenings.length>0,matchingOpenings});
+   }
+   if(task.criterion.kind==='language-score')languagePages.push({page:page.id,...languageScorer().evaluate(values)});
+   if(task.criterion.kind==='word-affine-count'){
+    const measured=countWordPairs(text,index,task.criterion);
+    wordPages.push({page:page.id,opportunities:measured.opportunities,matches:measured.matches,expected:rationalJSON(measured.expected)});
+    wordExpected=plusFraction(wordExpected,measured.expected);wordOpportunities+=measured.opportunities;wordMatches+=measured.matches;
+   }
+   if(task.criterion.kind==='word-prime-sums'){
+    const words=measurementWords(text,index,task.criterion.boundaries).map(chars=>{
+     const sum=chars.reduce((total,ch)=>total+task.alphabet[task.criterion.table==='reversed'?28-index.get(ch):index.get(ch)].prime,0);
+     sumWords++;sumTotal+=sum;return {runes:chars.join(''),sum};
+    });
+    sumPages.push({page:page.id,words});
+   }
+   if(onProgress)onProgress({phase:'running',completed:transformed.length,total:task.pages.length});
+  }
+  const result={schema:RESULT,taskId:task.taskId,engine:ENGINE,runnerVersion:'1',
+   metrics:{pages:task.pages.length,runes,adjacentPairs,equalAdjacentPairs,ioc:runes>1?frequencies.reduce((s,n)=>s+n*(n-1),0)/(runes*(runes-1)):0},matches,transformed};
+  if(task.criterion.kind==='word-affine-count')result.wordPairs={opportunities:wordOpportunities,matches:wordMatches,expected:rationalJSON(wordExpected),pages:wordPages};
+  if(task.criterion.kind==='word-prime-sums')result.wordSums={words:sumWords,total:sumTotal,pages:sumPages};
+  if(task.criterion.kind==='language-score')result.languageScore={modelId:task.criterion.modelId,modelSha256:task.criterion.modelSha256,pages:languagePages};
+  return result;
+ }
+ function sameResult(actual,expected){
+  if(typeof actual!==typeof expected||actual===null||expected===null)return actual===expected;
+  if(typeof expected==='number')return Number.isFinite(actual)&&(Number.isInteger(expected)?actual===expected:Math.abs(actual-expected)<=1e-12);
+  if(Array.isArray(expected))return Array.isArray(actual)&&actual.length===expected.length&&expected.every((v,i)=>sameResult(actual[i],v));
+  if(typeof expected==='object')return !Array.isArray(actual)&&Object.keys(actual).length===Object.keys(expected).length&&Object.keys(expected).every(k=>own(actual,k)&&sameResult(actual[k],expected[k]));
+  return actual===expected;
+ }
+ // Only our independently computed result is trusted for later display. All
+ // descendants are data objects created by run(), so freezing leaves no caller
+ // owned task, submitted result or nested input behind a mutable trusted handle.
+ function freezeResult(value){
+  if(value&&typeof value==='object'){for(const child of Object.values(value))freezeResult(child);Object.freeze(value);}
+  return value;
+ }
+ function plainObjectPrototype(proto){
+  if(proto===Object.prototype)return true;
+  if(!proto||Object.getPrototypeOf(proto)!==null)return false;
+  const ctor=Object.getOwnPropertyDescriptor(proto,'constructor');
+  return ctor&&own(ctor,'value')&&typeof ctor.value==='function'&&ctor.value.prototype===proto
+   &&Function.prototype.toString.call(ctor.value)===Function.prototype.toString.call(Object)
+   &&Reflect.ownKeys(proto).every(key=>typeof key==='string')
+   &&JSON.stringify(Object.getOwnPropertyNames(proto).sort())===JSON.stringify(Object.getOwnPropertyNames(Object.prototype).sort());
+ }
+ function plainArrayPrototype(proto){
+  if(proto===Array.prototype)return true;
+  if(!Array.isArray(proto)||!plainObjectPrototype(Object.getPrototypeOf(proto)))return false;
+  const ctor=Object.getOwnPropertyDescriptor(proto,'constructor');
+  return ctor&&own(ctor,'value')&&typeof ctor.value==='function'&&ctor.value.prototype===proto
+   &&Function.prototype.toString.call(ctor.value)===Function.prototype.toString.call(Array)
+   &&JSON.stringify(Object.getOwnPropertyNames(proto).sort())===JSON.stringify(Object.getOwnPropertyNames(Array.prototype).sort())
+   &&Reflect.ownKeys(proto).filter(key=>typeof key==='symbol').length===Reflect.ownKeys(Array.prototype).filter(key=>typeof key==='symbol').length;
+ }
+ function plainTaskData(value){
+  if(!value||typeof value!=='object')return;
+  if(!(Array.isArray(value)?plainArrayPrototype(Object.getPrototypeOf(value)):plainObjectPrototype(Object.getPrototypeOf(value))))throw Error('Experiment data must use plain objects.');
+  for(const key of Reflect.ownKeys(value)){
+   if(typeof key!=='string')throw Error('Experiment data must use ordinary fields.');
+   const field=Object.getOwnPropertyDescriptor(value,key);
+   if(!own(field,'value')||(!field.enumerable&&!(Array.isArray(value)&&key==='length')))throw Error('Experiment fields must contain plain data.');
+   plainTaskData(field.value);
+  }
+ }
+ async function verify(task,result,cryptoAPI=root.crypto){
+  plainTaskData(task);const signature=stable(task);
+  await checkIdentity(task,cryptoAPI);
+  plainTaskData(task);if(stable(task)!==signature)throw Error('The experiment changed during verification.');
+  const expected=run(task);
+  if(!sameResult(result,expected))throw Error('The returned results do not match this exact experiment.');
+  freezeResult(expected);
+  verifiedResults.set(expected,{signature,baseline:null});
+  return expected;
+ }
+ function summary(task,result){
+  plainTaskData(task);validateTask(task);
+  const receipt=result&&verifiedResults.get(result);
+  if(!receipt||receipt.signature!==stable(task))throw Error('Results must be verified before display.');
+  if(task.criterion.kind==='language-score'){
+   const compared=result.languageScore.pages.filter(page=>page.status==='compared').length,short=result.languageScore.pages.length-compared;
+   return {finding:compared+' '+(compared===1?'page compared':'pages compared')+' with eight rune-language references.'+(short?' '+short+' '+(short===1?'page has':'pages have')+' fewer than 40 runes and was not scored.':''),comparison:[],limit:'These scores compare rune order with fixed reference models and 32 shuffled orders. They do not identify a language, establish readability or show a decryption. Shuffle counts are not p-values.'};
+  }
+  if(task.criterion.kind==='exact-prefix-set'){
+   const matched=result.matches.filter(page=>page.matched).length;
+   return {finding:matched+' of '+result.metrics.pages+' pages begin with at least one of the '+task.criterion.openings.length+' named passages.',
+    comparison:[],limit:'Only complete opening sequences count. A prefix match alone does not establish a decryption.'};
+  }
+  if(task.criterion.kind==='word-prime-sums')return {
+   finding:result.wordSums.words.toLocaleString('en-US')+' words measured with the '+task.criterion.table+' prime table.',
+   comparison:[],limit:'These sums use only the declared prime table and word boundaries. They are not a decoding or a statistical test.'};
+  if(task.criterion.kind==='word-affine-count'){
+   const p=result.wordPairs,e=p.expected,n=BigInt(e.numerator),d=BigInt(e.denominator),approx=Number(n/d)+Number((n%d)*1000000000000n/d)/1000000000000;
+   // Exact rational values remain authoritative; the chart is a display approximation.
+   return {finding:p.matches+' matches among '+p.opportunities.toLocaleString('en-US')+' rune pairs '+task.criterion.lag+' positions apart inside words; '+(Number.isFinite(approx)?approx.toFixed(2):e.numerator+'/'+e.denominator)+' expected when each word’s runes are shuffled.',
+    comparison:[{label:'Observed matches',value:p.matches,total:p.opportunities},{label:'Word-shuffle expectation',value:Number.isFinite(approx)?approx:0,total:p.opportunities}],
+    limit:'This comparison does not tell us how unlikely the count is. It does not account for choosing the rule, spacing or word boundaries after seeing the data, and it does not identify a cipher.'};
+  }
+  const baseline=receipt.baseline||(receipt.baseline=freezeResult(run({...task,steps:[],criterion:{kind:'measurement'}}).metrics));
+  const matched=result.matches.filter(v=>v.matched).length;
+  return {finding:task.criterion.kind==='measurement'
+   ?(baseline.equalAdjacentPairs===result.metrics.equalAdjacentPairs
+    ?'The method left neighbouring rune repeats unchanged: '+result.metrics.equalAdjacentPairs+' across '+result.metrics.adjacentPairs.toLocaleString('en-US')+' pairs.'
+    :'The method changed neighbouring rune repeats from '+baseline.equalAdjacentPairs+' to '+result.metrics.equalAdjacentPairs+' across '+result.metrics.adjacentPairs.toLocaleString('en-US')+' pairs.')
+   :matched+' of '+result.metrics.pages+' pages begin with the exact rune sequence specified before the run. A prefix match alone does not establish a decryption.',
+   comparison:[{label:'Original text',value:baseline.equalAdjacentPairs,total:baseline.adjacentPairs},
+    {label:'After the method',value:result.metrics.equalAdjacentPairs,total:result.metrics.adjacentPairs}],
+   limit:task.criterion.kind==='measurement'?'This run measures repeat patterns. It does not test readability or identify a cipher.':'The result covers only the specified starting sequence, pages and method.'};
+ }
+ const api={TASK,RESULT,ENGINE,stable,validateTask,identity,prepare,checkIdentity,run,verify,summary};
+ if(typeof module==='object'&&module.exports)module.exports=api;else root.LocalExperiment=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
