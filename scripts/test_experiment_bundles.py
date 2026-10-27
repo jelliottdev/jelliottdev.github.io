@@ -9,6 +9,7 @@ import sys
 import tempfile
 import zipfile
 from verify_bundle import verify
+from retained_bundle_checks import run_checks as run_retained_checks
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -181,8 +182,12 @@ def main(argv=None):
                     else:
                         data = (target / name).read_bytes()
                         assert hashlib.sha256(data).hexdigest() == dependency["sha256"], (experiment_id, name)
+            declared_retained = ('published_programs' in record or 'published_program_collections' in record)
+            if declared_retained:
+                run_retained_checks(target, record, members)
             if experiment_id in ("lp2-word-order-reversal", "lp2-prime-openings", "lp2-fibonacci-openings", "lp2-totient-openings", "lp2-trigram-repeats", "prime-distance-reverse-add", "word-sum-corpus-control"):
-                for script, args in (("run.py", ["--check"]), ("check.py", [])):
+                representative_checks = (("check.py", []),) if declared_retained else (("run.py", ["--check"]), ("check.py", []))
+                for script, args in representative_checks:
                     result = subprocess.run(
                         [sys.executable, str(target / f"experiments/records/{experiment_id}/{script}"), *args],
                         cwd=target, capture_output=True, text=True, encoding="utf-8", timeout=60)
@@ -194,7 +199,7 @@ def main(argv=None):
                                             capture_output=True, text=True, encoding="utf-8", timeout=60)
                     assert result.returncode == 0, (experiment_id, script, result.stdout + result.stderr)
         print(f"PASS: selected {len(selected)}/{len(records)} experiment bundles preserve declared files and hashes; "
-              "applicable representative runners/checkers pass in isolated extractions.")
+              "all declared retained-output commands and applicable representative checks pass in isolated extractions.")
 
 
 if __name__ == "__main__":

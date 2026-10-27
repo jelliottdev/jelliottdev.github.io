@@ -352597,8 +352597,8 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "human_review": "pending"
   },
   "reproduction": {
-    "command": "python experiments/records/lp2-row-column-routes/run.py --check",
-    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-row-column-routes/check.py",
+    "command": "python experiments/records/lp2-row-column-routes/run.py --check && node experiments/records/lp2-row-column-routes/retain-programs.mjs --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-row-column-routes/check.py Retained-output declaration: only original row order, within-line reversal and whole-page reversal (3 of the 16 historical routes), on the 55 pages with saved cases; LP2-50 has no saved route and is not filled. Other column, alternating and ragged row-order routes are not represented. The recorded import date is not a historical execution timestamp.",
     "script": "experiments/records/lp2-row-column-routes/run.py",
     "script_sha256": "7db305eae184041f3bd4732625f7f240aa1da82170a722e94b6d72dae87c421c",
     "inputs": [
@@ -352877,6 +352877,46 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/retain-programs.mjs",
+        "sha256": "aa73b61aa7eeeb87824cefe88de5158350fa7b23902ba824709161e4f67010ed"
+      },
+      {
+        "path": "scripts/retain_saved_programs.mjs",
+        "sha256": "b57d3ac1a5f266fc0319883e861f2364b7d2bc7435d1e18b4cc2ea77f6a8d34b"
+      },
+      {
+        "path": "scripts/retained_program_collection.mjs",
+        "sha256": "c5860575c883492c4a1f37d1c61db1b32921c71d6b5b66e55e982cecb49e571a"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
+      },
+      {
+        "path": "data/local-run-inputs.json",
+        "sha256": "6cef1997c783e41f1a7bd0b2247ef4c461d8a3de41e1cf49e1e49c30db89c0c4"
       }
     ],
     "outputs": [
@@ -352887,6 +352927,10 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       {
         "path": "experiments/records/lp2-row-column-routes/source-trace.svg",
         "sha256": "8a417a4e513b276e3ae7bcd4a58be799c3eb336d57f96c01d2d4339b29ddec6c"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/retained-row-programs.json",
+        "sha256": "d485d7623b5d53823af90aef2e1737f32d811e57b9c78c2bd55846c37d491c05"
       }
     ]
   },
@@ -353615,6 +353659,12 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "id": "fixed-program-prefix",
         "version": 1
       }
+    }
+  ],
+  "published_program_collections": [
+    {
+      "output": "experiments/records/lp2-row-column-routes/retained-row-programs.json",
+      "checked_at": "2026-10-27T03:46:53.000Z"
     }
   ],
   "article": "# Simple row and column transposition routes\n\n## Why this test?\n\nReading a page backwards or down its columns is a natural first attempt. But “try transposition” leaves many decisions unstated: the alignment of uneven rows, which corner to start from, whether direction alternates, and whether symbols are also substituted.\n\nThis record tests a small, explicit set of pure rearrangements. Its success criterion is exact agreement with one of nine known 12-rune openings at the start of the output. It does not score English or assume every valid plaintext must reuse an existing opening.\n\n## Plan and input layout\n\nThe plan and runner were committed as `26802b6` before execution. Use all archived LP2-00–55 text, retaining recognized runes and grouping them by source line. Headings remain included. Non-rune characters and lines without runes are ignored. LP2-50 remains an explicit zero-rune page and produces no routes.\n\nRows are left-aligned by rune ordinal, not by measured image coordinates. The first rune of every nonempty line is in ordinal column zero. Short rows remain short; missing cells are skipped, not padded. This convention can differ from the manuscript's physical column alignment.\n\n## The sixteen route choices\n\n| Choice | Options | Meaning |\n| --- | --- | --- |\n| Main axis | Rows / columns | Visit a complete row or ordinal column at a time |\n| Outer direction | Forward / reversed | Top-to-bottom versus bottom-to-top rows; left-to-right versus right-to-left columns |\n| Initial inner direction | Forward / reversed | Left-to-right versus right-to-left within a row; top-to-bottom versus bottom-to-top within a column |\n| Alternate inner direction | No / yes | Keep the same direction, or reverse it on every other visited row/column |\n\nThe product is 2 × 2 × 2 × 2 = 16 parameter routes per nonempty page. Alternation begins with the selected initial direction and changes by visited-group ordinal, not by the original printed row number. Some routes or output strings can coincide; 16 is a parameter count, not a claim of 16 distinct texts on every page.\n\nOne of these routes reverses the runes within every archived row while keeping row order unchanged, including on [LP2-15](#/page/lp2-15). A schematic example is `ABC / DE → CBA / ED`, where `/` separates rows; these letters are invented, not manuscript text. Keeping rune values unchanged means their order may change; it does not mean their positions stay fixed. No substitution, fixed shift or repeating key is applied.\n\n## Hand-checkable ragged-row controls\n\nFor the invented rows `ABC`, `DE`, `F`, ordinary column-first reading gives `ADFBEC`. Row-first reading with alternating directions gives `ABCEDF`. These are implementation controls only, not manuscript inputs or results.\n\nThe independent checker verifies those controls and constructs every real route by sorting source coordinates with a separate ordering-key implementation. It checks that each saved route is a complete permutation and every output index comes from its declared source position.\n\n## Results and limits\n\nAll 880 parameter routes completed across the 55 pages with eligible runes. No output's first 12 indices matched any of the nine fixed known-reading openings. There are 7920 exact opening comparisons in total.\n\nThe nine opening vectors come from Warning, Welcome, Some Wisdom, first koan, Loss of Divinity, second koan, Instruction, LP2-56 and LP2-57. Their exact values and source-trace hashes are recorded in the plan. They were fixed before this search.\n\nThis negative result is limited to those openings, these routes and the archived layout convention. It does not rule out other beginnings, arbitrary column permutations, spirals, rectangular reflow, physical coordinate alignment, a different region, or transposition combined with substitution. There is no probability claim or general readability score.\n\n## Follow an output back to its source\n\nEach page has a `source_positions` array. Every entry gives its zero-based source ordinal, one-based archived line, one-based rune position within that line, and alphabet index. Each candidate's `source_ordinals` array is the output-to-input mapping: its first number tells you which original position supplied output position zero.\n\nThe accompanying `output_indices` array contains the corresponding rune indices. The `alphabet` list maps indices back to rune symbols. Original whitespace and punctuation are not part of the permutation.\n\nThe diagram shows the first six positions of the ordinary column-first route on LP2-31. It is extracted from the saved result, not an invented grid. All 269 positions are retained in that route's complete trace.\n\n## Reproduce\n\nUse Python 3.12.10 and the repository checkout. No third-party package or network service is required.\n\n```\npython experiments/records/lp2-row-column-routes/run.py --check\npython experiments/records/lp2-row-column-routes/check.py\n```\n\nThe first command regenerates and compares every source position, route, output index and match decision. The second uses the independent ordering-key checker. Both reject discrepancies rather than silently replacing the saved result.\n\n[Download all routes and source traces](experiments/records/lp2-row-column-routes/results.json). To save another report, run the main script with `--output my-routes.json`; it refuses an existing filename. The plot script reads the saved result and draws one trace without searching again.\n\n## Verification\n\nOn 20 October 2026, a complete rerun reproduced all 880 saved candidates. A separate ordering-key implementation checked every route against its source positions. The route rules, layout convention, opening vectors and matching criterion stayed fixed after the first run. The checker and diagram were added afterward to make the result easier to verify.\n\n## Related work and next variants\n\nThe [fixed-alphabet experiment](#/experiments/lp2-alphabet-warning-prefix) includes whole-stream reversal with shifts and a different opening criterion. The [transposition guide](#/wiki/transposition) explains the documented historical 14-column permutation. Neither record establishes that every transposition on an unsolved page has been searched.\n\nA physically aligned column model, a justified spiral, a new region or an added substitution needs a separately planned variant. Preserve its source-coordinate trace so another reader can tell exactly which operation was performed.\n",
@@ -436379,7 +436429,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "limitations": "Only nine exact beginnings are tested, not general readability. Segments are transcription-defined, not established plaintext words. Prior sibling results were known. Algebraic consistency is not independent evidence. Human review pending.",
   "next_steps": "Declare row-local reversal, heading removal, other boundaries or combined substitution as separate scopes. Broader language evaluation needs a predeclared scoring and validation procedure.",
   "reproduction": {
-    "command": "python experiments/records/lp2-word-order-reversal/run.py --check",
+    "command": "python experiments/records/lp2-word-order-reversal/run.py --check && node scripts/retained_program_output.mjs --check experiments/records/lp2-word-order-reversal/retained-word-order.json",
     "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-word-order-reversal/check.py",
     "script": "experiments/records/lp2-word-order-reversal/run.py",
     "script_sha256": "1d7ddb0b3a60a9077993535361b65c3d0cce3e4eb0a938d88d210355ec0e941a",
@@ -436663,6 +436713,34 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       {
         "path": "experiments/records/lp2-word-reversal/results.json",
         "sha256": "6889f6f4c691bf2a3968f1a65ac14eb9691b9b8c5bc551e786579e0d96784556"
+      },
+      {
+        "path": "experiments/records/lp2-word-order-reversal/retained-word-order-input.json",
+        "sha256": "ddd8a0874e20d44a36626a3d6e04cc2966f665da2ae5d5edbfdfb975c7f6d1e9"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
       }
     ],
     "outputs": [
@@ -436677,6 +436755,10 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       {
         "path": "experiments/records/lp2-word-order-reversal/page-summary.csv",
         "sha256": "e16c2ff90b9abb1472a78f38a78b718f851d2977ca1f5204414b6cce06083209"
+      },
+      {
+        "path": "experiments/records/lp2-word-order-reversal/retained-word-order.json",
+        "sha256": "334a822347df924aad35a7b79ebb7b80be5d93403f6bd924670dec93aeb6b79c"
       }
     ]
   },
@@ -436719,6 +436801,13 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "known-opening"
     ]
   },
+  "published_programs": [
+    {
+      "id": "split-lines-word-order-reversal",
+      "output": "experiments/records/lp2-word-order-reversal/retained-word-order.json",
+      "checked_at": "2026-10-27T03:45:45.000Z"
+    }
+  ],
   "article": "# Reversing the order of word-like segments\n\n“Read the words backwards” can mean two different operations. You might reverse the runes inside each word, or read the last word first while leaving its runes alone. This experiment tests the second interpretation across each complete page.\n\nThe archive gives us rune runs separated by punctuation and line markers. Calling these runs “segments” avoids assuming that they are established plaintext words. The input is LP2-00–55, including headings. LP2-50 has no recognized runes and contributes no candidates.\n\n## What changes?\n\nThe [within-segment reversal experiment](#/experiments/lp2-word-reversal) keeps segment order and reverses their contents. Here the contents stay in their original order and the segment order reverses.\n\nUsing invented letters as single symbols:\n\n```text\nSegments:                 AB | C | D | EF\nReverse inside segments:  BA | C | D | FE  -> BACDFE\nReverse segment order:    EF | D | C | AB  -> EFDCAB\nReverse the whole stream: FE | D | C | BA  -> FEDCBA\n```\n\nThese are three distinct transformations. Applying both segment-order reversal and within-segment reversal gives whole-stream reversal. That identity helps detect duplicated search coverage; the combined operation does not need to be advertised as a new method.\n\n## Declare the boundaries\n\n| Convention | Rule | Toy input `AB/C-D` followed by a newline and `EF.` |\n| --- | --- | --- |\n| Split lines | Every non-rune ends the current segment. | Segments AB, C, D, EF produce EFDCAB. |\n| Join lines | Ignore slash, carriage return and newline before locating segments; every other non-rune remains a boundary. | Segments ABC, DEF produce DEFABC. |\n\nHyphens, periods and spaces remain boundaries in both conventions. There is no reversal limited to an individual row: the segment sequence spans the complete page. Headings are not removed, and their segments move with the rest. No additional alphabet substitution is applied.\n\nThis record belongs to the reading-route family. Its formal comparison is against the [row/column baseline](#/experiments/lp2-row-column-routes), so multiple scope fields change. For the closer comparison with its within-segment sibling, the pages, boundary rules and nine expected beginnings stay the same; the reversal operation changes.\n\n## Inspect the source trace\n\n![First six LP2-31 output positions under segment-order reversal, showing the last segment read forwards before the preceding segment.](experiments/records/lp2-word-order-reversal/source-trace.svg)\n\nLP2-31 contains 269 runes. Under both conventions its final three-rune segment occupies original rune positions 266, 267 and 268, counted from zero. Those positions appear first and keep their internal order. The next output position jumps back to source rune 258. This is not the sequence 268, 267, 266 that whole-page reversal would produce.\n\nBoth conventions agree on these six positions but produce different full outputs. The report retains every source rune ordinal, source character offset and output index. Character offsets refer to Unicode characters in the decoded input, not UTF-8 bytes.\n\n## Findings and limits\n\n| Quantity | Result |\n| --- | --- |\n| Declared pages | 56 |\n| Pages containing recognized runes | 55 |\n| Boundary conventions per nonempty page | 2 |\n| Completed cases | 110 |\n| Distinct full outputs, counted within page | 110 |\n| Exact opening comparisons | 990 |\n| Matching cases | 0 |\n\nEach case compares its first twelve output rune indices with nine fixed known beginnings: Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. The plan records the exact vectors and hashed source traces.\n\nNo case begins with those specified sequences. This does not establish that reversing segment order cannot work: other beginnings, regions and combined ciphers remain untested. There is no general language score or significance test. The [candidate-reading guide](#/wiki/candidate-readings) explains this distinction.\n\nThe [page summary CSV](experiments/records/lp2-word-order-reversal/page-summary.csv) includes LP2-50 with zero cases. Counts of distinct outputs do not imply statistically independent evidence.\n\n## Plan and verification\n\nThe plan, runner and checker were committed as `0429f5a` before generating the full result. The earlier within-segment and row/column results were already known; this is a declared exploratory follow-up. No boundary or acceptance rule changed after the run.\n\nThe runner scans characters to form segments and reverses the list of segments. The checker instead finds regex spans, assigns segment numbers, and sorts positions by descending segment number and ascending position within the segment. It checks all 110 source permutations, full outputs and match decisions, plus source hashes and the reference beginnings. Hand-calculated examples cover both boundary conventions.\n\nFor every page and convention, a second check confirms that the new output is the whole-stream reversal of the saved within-segment output. This is an algebraic consistency check, not independent support for a decoding. A complete rerun reproduces the saved report. Review is computational by Codex; human review remains pending.\n\n## Reproduce\n\nExtract the reference-data bundle with its folders intact, or use the repository checkout. From its root, with Python 3:\n\n```sh\npython experiments/records/lp2-word-order-reversal/run.py --check\npython experiments/records/lp2-word-order-reversal/check.py\n```\n\nThe summary should report 110 cases, 110 distinct page outputs, 990 comparisons and zero matching cases. All scripts use the standard library and local files.\n\nTo save a fresh result without overwriting the reviewed one:\n\n```sh\npython experiments/records/lp2-word-order-reversal/run.py --output word-order-rerun.json\n```\n\nThe destination must not already exist. In each page's `cases`, `segment_lengths` describes the original segment order. `source_ordinals` and `source_character_offsets` give the actual output traversal. `output_indices` contains the full result, not only its opening.\n\nRegenerate the chart and summary CSV from the saved report:\n\n```sh\npython experiments/records/lp2-word-order-reversal/plot.py\n```\n\n## What would be a new test?\n\nReversing segment order within each row, excluding headings, choosing other boundaries, or combining reversal with substitution changes the scope. Declare those choices and an acceptance criterion before inspecting outputs. An alternate reading rule should not be judged by whole-stream IoC: every pure permutation preserves it. See [cipher invariants](#/wiki/cipher-invariants) and [planning a follow-up](#/wiki/reproducibility?section=follow-up).\n",
   "article_path": "experiments/records/lp2-word-order-reversal/article.md",
   "script_sha256": "1d7ddb0b3a60a9077993535361b65c3d0cce3e4eb0a938d88d210355ec0e941a",
@@ -448480,7 +448569,8 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       },
       {
         "path": "experiments/records/lp2-row-column-routes/record.json",
-        "sha256": "ffc552b8611d4f61b79736edaf302213808d341cae53a3a0e978b0f2deed05e2"
+        "sha256": "ffc552b8611d4f61b79736edaf302213808d341cae53a3a0e978b0f2deed05e2",
+        "source_path": "published-sources/records/ffc552b8611d4f61b79736edaf302213808d341cae53a3a0e978b0f2deed05e2.json"
       },
       {
         "path": "experiments/records/lp2-word-reversal/record.json",

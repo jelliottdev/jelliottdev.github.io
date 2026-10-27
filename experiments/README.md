@@ -368,3 +368,27 @@ do not change the pinned recipe or task identity. `record-question-model.js`
 provides the common question state used by the record view, recipe actions and
 available-work filter. Tested reproductions remain directly accessible but are
 not counted as new prepared follow-up work.
+
+### Import a batch of saved programs
+
+For programs sharing an alphabet, pages and opening check, use one input JSON
+with `alphabet`, `pages`, `criterion` and `programs`. Each program supplies only
+`id`, `title`, `steps`, `createdAt` and its complete saved `outputs`. The shared
+importer builds task identities and independent controls for every program:
+
+```sh
+node scripts/retain_saved_programs.mjs --input saved-programs.json --output retained-programs.json
+node scripts/retained_program_collection.mjs --check retained-programs.json
+```
+
+It refuses missing, truncated or incorrect outputs and never fills omitted page
+cases. Existing output files are not overwritten. Declare the resulting file
+under `published_program_collections` and pin the input, importer and output in
+the record's reproduction inventory. The normal build publishes each member and
+updates navigation; no separate receipt or discovery adapter is needed.
+
+CI also extracts every declared retained-program bundle and runs its exact
+`reproduction.command`. Use pinned Python or Node scripts with `--check`, joining
+checks with `&&` when needed. These commands run without a shell, and missing
+dependencies or failed checks fail validation. No per-record CI allowlist is
+needed for this check.

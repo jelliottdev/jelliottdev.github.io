@@ -12,5 +12,9 @@
  if(step.op==='cumulative-difference')return 'Subtract the total of all rune values already decoded in the sequence. '+reset;
  throw Error('A published operation has no maintained discovery description');
 }
- const api={step};if(typeof module==='object'&&module.exports)module.exports=api;else root.PublishedProgramDescription=api;
+ function program(steps){
+  if(!Array.isArray(steps))throw Error('Use an ordered typed program');
+  return steps.length?steps.map(step).join(' → '):'Keep all runes and separators in their original positions.';
+ }
+ const api={step,program};if(typeof module==='object'&&module.exports)module.exports=api;else root.PublishedProgramDescription=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

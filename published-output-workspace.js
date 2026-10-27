@@ -17,10 +17,10 @@
   return label+human+'. This is not the original experiment date.';
  }
  function programDescription(task){
-  if(!Array.isArray(task.steps)||!task.steps.length)return '';
+  if(!Array.isArray(task.steps))return '';
   const description=node?require('./published-program-description.js'):root.PublishedProgramDescription;
-  if(!description?.step)return '';
-  let descriptions;try{descriptions=task.steps.map(description.step);}catch{return '';}
+  if(!description?.step||!description?.program)return '';
+  let descriptions;try{descriptions=task.steps.length?task.steps.map(description.step):[description.program(task.steps)];}catch{return '';}
   if(descriptions.some(value=>!value))return '';
   return '<section class="published-output-method" aria-label="What was tried"><h2>What was tried</h2>'+(descriptions.length===1?'<p>'+esc(descriptions[0])+'</p>':'<ol>'+descriptions.map(value=>'<li>'+esc(value)+'</li>').join('')+'</ol>')+'</section>';
  }

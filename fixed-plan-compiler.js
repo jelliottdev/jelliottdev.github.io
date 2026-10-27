@@ -6,7 +6,7 @@ const fail=reason=>({reason});
 const prefixSet=value=>value&&typeof value==='object'&&!Array.isArray(value)&&Reflect.ownKeys(value).length===2&&Object.hasOwn(value,'kind')&&Object.hasOwn(value,'openings')&&value.kind==='exact-prefix-set'&&Array.isArray(value.openings)&&value.openings.length>=1&&value.openings.length<=32&&Array.from(value.openings).every(o=>o&&typeof o==='object'&&!Array.isArray(o)&&Reflect.ownKeys(o).length===2&&Object.hasOwn(o,'id')&&Object.hasOwn(o,'values')&&typeof o.id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(o.id)&&Array.isArray(o.values)&&o.values.length>=1&&o.values.length<=256&&Array.from(o.values).every(n=>Number.isInteger(n)&&n>=0&&n<=28))&&new Set(value.openings.map(o=>o.id)).size===value.openings.length&&new Set(value.openings.map(o=>JSON.stringify(o.values))).size===value.openings.length;
 
 const MEASUREMENTS=Protocols.list(),MEASUREMENT_IDS=new Set(MEASUREMENTS.map(d=>d.operation.id)),MEASUREMENT_KINDS=new Set(MEASUREMENTS.map(d=>d.id));
-const OPERATION_LABELS={reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference'],vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey'],finite_key:['Finite key stream'],finite_key_bank:['Pinned finite key stream'],interrupted_repeating_key:['Interrupted repeating key']};
+const OPERATION_LABELS={as_written:['Keep the original rune order'],reverse_row_runes:['Reverse rune order within rows','Reverse rune order within each row'],reverse_runes:['Reverse rune order within each line','Reverse rune order within each word','Reverse rune order within each page'],affine:['Affine','Affine substitution'],cumulative_difference:['Cumulative difference'],vigenere:['Vigenere','Vigenère'],repeating_key:['Repeating key','Repeating-key','Vigenere','Vigenère'],plaintext_autokey:['Plaintext autokey','Plaintext-autokey'],ciphertext_autokey:['Ciphertext autokey','Ciphertext-autokey'],finite_key:['Finite key stream'],finite_key_bank:['Pinned finite key stream'],interrupted_repeating_key:['Interrupted repeating key']};
 // Presentation metadata only. Parameter validation, controls and admission remain separate.
 function methodReadiness(input){
  try{
@@ -18,6 +18,7 @@ function methodReadiness(input){
   for(let i=0;i<operations.length;i++){
    const op=ownValue(operations,String(i)),id=ownValue(op,'id');
    if(typeof id!=='string'||!Object.hasOwn(OPERATION_LABELS,id)&&!MEASUREMENT_IDS.has(id))unsupportedOperationIndices.push(i);
+   else if(id==='as_written'&&(operations.length!==1||Object.keys(op).length!==2||ownValue(op,'label')!=='Keep the original rune order'))unsupportedOperationIndices.push(i);
    else if(Object.hasOwn(op,'label')){const label=ownValue(op,'label'),allowed=OPERATION_LABELS[id]||MEASUREMENTS.filter(p=>p.operation.id===id).map(p=>p.operation.label);if(!allowed.includes(label))unsupportedOperationIndices.push(i);}
   }
   return Object.freeze({supported:unsupportedOperationIndices.length===0,unsupportedOperationIndices:Object.freeze(unsupportedOperationIndices)});
@@ -77,6 +78,14 @@ function compile(card){
   else return fail('The requested evaluation needs an adapter.');
  }else notes.push('Proposed evaluation: measure rune frequencies and adjacent repeats; no readability decision.');
  for(const key of ['searchBounds','searchProtocol','exceptionalCases'])if(specified(key))return fail('The specified '+key+' condition needs an adapter.');
+ if(operations.some(op=>op.id==='as_written')){
+  const operation=operations[0];
+  if(operations.length!==1||operation.id!=='as_written'||Object.keys(card.method.value).some(key=>key!=='operations')||Object.keys(operation).length!==2||operation.label!=='Keep the original rune order')return fail('Keeping the original rune order must be one explicit standalone method without extra parameters.');
+  if(!['inputVersion','representation','unmapped','wordBoundaries','evaluation'].every(specified)||!['exact-prefix','exact-prefix-set'].includes(criterion.kind))return fail('The unchanged-input baseline requires explicit preserved input and a literal opening check.');
+  if(['boundaryMode','reset','initialState'].some(specified))return fail('The unchanged-input baseline cannot contain transformation boundaries or state.');
+  notes.push('Keep every rune and separator in its original position. Compare only the stated opening; this does not establish readability or a decryption.');
+  return {pages:card.scope.value.pages,steps:[],inputVersion,criterion,notes};
+ }
  if(operations.some(op=>MEASUREMENT_IDS.has(op.id))){
   const op=operations[0],withoutFamily={...op};delete withoutFamily.declaredFamilyId;
   if(Object.hasOwn(op,'declaredFamilyId')&&(typeof op.declaredFamilyId!=='string'||!Object.hasOwn(C.METHOD_FAMILIES,op.declaredFamilyId)))return fail('A declared method family must use the maintained vocabulary.');

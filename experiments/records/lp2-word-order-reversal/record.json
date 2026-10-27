@@ -117,7 +117,7 @@
   "limitations": "Only nine exact beginnings are tested, not general readability. Segments are transcription-defined, not established plaintext words. Prior sibling results were known. Algebraic consistency is not independent evidence. Human review pending.",
   "next_steps": "Declare row-local reversal, heading removal, other boundaries or combined substitution as separate scopes. Broader language evaluation needs a predeclared scoring and validation procedure.",
   "reproduction": {
-    "command": "python experiments/records/lp2-word-order-reversal/run.py --check",
+    "command": "python experiments/records/lp2-word-order-reversal/run.py --check && node scripts/retained_program_output.mjs --check experiments/records/lp2-word-order-reversal/retained-word-order.json",
     "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-word-order-reversal/check.py",
     "script": "experiments/records/lp2-word-order-reversal/run.py",
     "script_sha256": "1d7ddb0b3a60a9077993535361b65c3d0cce3e4eb0a938d88d210355ec0e941a",
@@ -401,6 +401,34 @@
       {
         "path": "experiments/records/lp2-word-reversal/results.json",
         "sha256": "6889f6f4c691bf2a3968f1a65ac14eb9691b9b8c5bc551e786579e0d96784556"
+      },
+      {
+        "path": "experiments/records/lp2-word-order-reversal/retained-word-order-input.json",
+        "sha256": "ddd8a0874e20d44a36626a3d6e04cc2966f665da2ae5d5edbfdfb975c7f6d1e9"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
       }
     ],
     "outputs": [
@@ -415,6 +443,10 @@
       {
         "path": "experiments/records/lp2-word-order-reversal/page-summary.csv",
         "sha256": "e16c2ff90b9abb1472a78f38a78b718f851d2977ca1f5204414b6cce06083209"
+      },
+      {
+        "path": "experiments/records/lp2-word-order-reversal/retained-word-order.json",
+        "sha256": "334a822347df924aad35a7b79ebb7b80be5d93403f6bd924670dec93aeb6b79c"
       }
     ]
   },
@@ -456,5 +488,12 @@
     "evaluation": [
       "known-opening"
     ]
-  }
+  },
+  "published_programs": [
+    {
+      "id": "split-lines-word-order-reversal",
+      "output": "experiments/records/lp2-word-order-reversal/retained-word-order.json",
+      "checked_at": "2026-10-27T03:45:45.000Z"
+    }
+  ]
 }

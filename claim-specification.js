@@ -11,7 +11,7 @@
     fixed_spaces:'Reverse the rune sequence; keep space positions.',
     word_blocks:'Reverse whole-word order; keep each word unchanged.'
   };
-  const OPERATIONS={reverse_row_runes:'Reverse rune order within rows',
+  const OPERATIONS={as_written:'Keep the original rune order',reverse_row_runes:'Reverse rune order within rows',
     reverse_value_digits:'Reverse decimal digits of each value'};
   // Intent categories, never success criteria or findings. Expand by editing
   // this registry deliberately; visitor wording cannot mint another category.

@@ -2,6 +2,7 @@
 (function(root){
  'use strict';
  const Followups=typeof module==='object'&&module.exports?require('./record-followup-view.js'):root.RecordFollowupView;
+ const Programs=typeof module==='object'&&module.exports?require('./published-program-discovery.js'):root.PublishedProgramDiscovery;
  const HEX=/^[a-f0-9]{64}$/,IDEA=/^p_[a-f0-9]{64}$/;
  function isFiniteQuestion(record){const marker=record?.finite_search;return record?.community===true&&marker&&typeof marker==='object'&&!Array.isArray(marker)&&Object.keys(marker).length===2&&marker.kind==='finite-settings'&&marker.version===1;}
  function communityTasks(value){
@@ -15,6 +16,10 @@
   const pendingCount=value.taskCount-value.verifiedTaskCount;
   if(verified>value.verifiedTaskCount||pending>pendingCount)return null;
   return {taskCount:value.taskCount,verifiedTaskCount:value.verifiedTaskCount,pendingCount,tasks};
+ }
+ function savedCalculation(record){
+  if(!record||record.community===true||record.status!=='published'||!Programs?.hasRecord?.(record.id))return null;
+  return {kind:'saved',count:1,label:'Explore saved calculations',href:'library.html#/experiment/'+record.id+'?section=record-saved-calculations'};
  }
  function describe(record){
   if(!record||typeof record!=='object')return null;
@@ -34,14 +39,14 @@
     href:first?'run.html#task='+first.id:'run.html#idea='+record.proposal_id};
   }
   const Discovery=typeof module==='object'&&module.exports?require('./research-discovery.js'):root.ResearchDiscovery;
-  const recipes=Discovery?.isRecord(record)?Discovery.available(record):Followups.available(record);if(!recipes.length)return null;
+  const recipes=Discovery?.isRecord(record)?Discovery.available(record):Followups.available(record);if(!recipes.length)return savedCalculation(record);
   return {kind:'prepared',count:recipes.length,label:recipes.length===1?'1 prepared browser check':recipes.length+' prepared browser checks',href:'run.html#record='+record.id+'&followup='+recipes[0].id};
  }
  function matches(record,filter){
   if(filter===''||filter==='all'||filter===undefined)return true;
   const kind=filter==='1'||filter==='prepared'?'prepared':filter==='pending'||filter==='unfinished'?'unfinished':filter==='questions'?'question':null;
-  return kind!==null&&describe(record)?.kind===kind;
+  const work=describe(record);return kind!==null&&(work?.kind===kind||kind==='prepared'&&work?.kind==='saved');
  }
- const api={communityTasks,isFiniteQuestion,describe,matches};
+ const api={communityTasks,isFiniteQuestion,savedCalculation,describe,matches};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.ResearchWork=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

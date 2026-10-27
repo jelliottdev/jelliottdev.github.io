@@ -106,8 +106,8 @@
     "human_review": "pending"
   },
   "reproduction": {
-    "command": "python experiments/records/lp2-row-column-routes/run.py --check",
-    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-row-column-routes/check.py",
+    "command": "python experiments/records/lp2-row-column-routes/run.py --check && node experiments/records/lp2-row-column-routes/retain-programs.mjs --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp2-row-column-routes/check.py Retained-output declaration: only original row order, within-line reversal and whole-page reversal (3 of the 16 historical routes), on the 55 pages with saved cases; LP2-50 has no saved route and is not filled. Other column, alternating and ragged row-order routes are not represented. The recorded import date is not a historical execution timestamp.",
     "script": "experiments/records/lp2-row-column-routes/run.py",
     "script_sha256": "7db305eae184041f3bd4732625f7f240aa1da82170a722e94b6d72dae87c421c",
     "inputs": [
@@ -386,6 +386,46 @@
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/retain-programs.mjs",
+        "sha256": "aa73b61aa7eeeb87824cefe88de5158350fa7b23902ba824709161e4f67010ed"
+      },
+      {
+        "path": "scripts/retain_saved_programs.mjs",
+        "sha256": "b57d3ac1a5f266fc0319883e861f2364b7d2bc7435d1e18b4cc2ea77f6a8d34b"
+      },
+      {
+        "path": "scripts/retained_program_collection.mjs",
+        "sha256": "c5860575c883492c4a1f37d1c61db1b32921c71d6b5b66e55e982cecb49e571a"
+      },
+      {
+        "path": "scripts/retained_program_output.mjs",
+        "sha256": "26719210350c1ad3871e64dd2f80f3984840c1418aef2018042e35cdbd9cb4df"
+      },
+      {
+        "path": "local-experiment.js",
+        "sha256": "2f1b9b18c2bb223215ba509aab31f101d992bb66305e300e7f6d8936af1b0426"
+      },
+      {
+        "path": "local-plan-controls.js",
+        "sha256": "3b73bd262305435b8ff69b23021c21928edc306683143941e7c754ca6230853d"
+      },
+      {
+        "path": "finite-json.js",
+        "sha256": "84c7856112dbda25b672cc69d6f6b6ef134652f69ca411ffbacbf97b4d5257eb"
+      },
+      {
+        "path": "services/idea-assistant/published-program-source-index.mjs",
+        "sha256": "0eb43ed94aa01b15194bda4f2e2f6665d5f3d3abe7bb60b9d55e22bba3cf2687"
+      },
+      {
+        "path": "published-numeric-bank-source.js",
+        "sha256": "f2f88880ad52496dff583352544a6aaa443547ede96a4ed850bba3ca61f6530f"
+      },
+      {
+        "path": "data/local-run-inputs.json",
+        "sha256": "6cef1997c783e41f1a7bd0b2247ef4c461d8a3de41e1cf49e1e49c30db89c0c4"
       }
     ],
     "outputs": [
@@ -396,6 +436,10 @@
       {
         "path": "experiments/records/lp2-row-column-routes/source-trace.svg",
         "sha256": "8a417a4e513b276e3ae7bcd4a58be799c3eb336d57f96c01d2d4339b29ddec6c"
+      },
+      {
+        "path": "experiments/records/lp2-row-column-routes/retained-row-programs.json",
+        "sha256": "d485d7623b5d53823af90aef2e1737f32d811e57b9c78c2bd55846c37d491c05"
       }
     ]
   },
@@ -1124,6 +1168,12 @@
         "id": "fixed-program-prefix",
         "version": 1
       }
+    }
+  ],
+  "published_program_collections": [
+    {
+      "output": "experiments/records/lp2-row-column-routes/retained-row-programs.json",
+      "checked_at": "2026-10-27T03:46:53.000Z"
     }
   ]
 }

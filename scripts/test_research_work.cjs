@@ -26,4 +26,4 @@ assert(!W.matches(unfinished,'questions'));assert(!W.isFiniteQuestion({...record
 assert.equal(B.read('#followups=questions','graph',selector).followups,'questions');
 console.log('PASS prepared declarations, exact pending task counts, partial summaries, safe links, state separation, consistency rejection, legacy filters and browser export');
 
-for(const record of data.records.filter(r=>F.recipes(r).length&&!F.available(r).length)){assert.equal(W.describe(record),null);assert(!W.matches(record,'prepared'));assert(F.render(record).includes('Review reproduction'));}
+for(const record of data.records.filter(r=>F.recipes(r).length&&!F.available(r).length)){const saved=W.savedCalculation(record);assert.deepEqual(W.describe(record),saved);assert.equal(W.matches(record,'prepared'),Boolean(saved));assert(F.render(record).includes('Review reproduction'));if(saved)assert.equal(saved.label,'Explore saved calculations');}

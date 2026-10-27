@@ -11,7 +11,7 @@ function fixture(indices=[multiIndex,singleIndex],source=records,{failFactory=fa
    if(!nodes.has(key))nodes.set(key,{textContent:'',hidden:true,dataset:{},...(key==='select'?{value:group.checks[0].id}:{}),...(key==='[data-help-review]'?{href:'run.html#record='+group.record.id+'&followup='+group.checks[0].id}:{})});return nodes.get(key);
   };return {dataset:{helpCheck:String(index)},querySelector:get,get,group};
  });
- const calls=[],top=new Map(),topGet=key=>{if(!top.has(key))top.set(key,{textContent:key==='[data-help-start-status]'?'Looking for a prepared check…':'',hidden:['[data-help-start-choice]','[data-help-more]'].includes(key),open:false,dataset:{}});return top.get(key);};
+ const calls=[],top=new Map(),topGet=key=>{if(!top.has(key))top.set(key,{textContent:key==='[data-help-start-status]'?'Looking for a prepared check…':'',hidden:['[data-help-start-choice]','[data-help-more]'].includes(key),open:false,dataset:{},listeners:new Map(),addEventListener(type,listener){this.listeners.set(type,listener);},removeEventListener(type,listener){if(this.listeners.get(type)===listener)this.listeners.delete(type);}});return top.get(key);};
  const destroy=Help.bind({querySelectorAll:()=>rows,querySelector:topGet},source,{createReadiness(options){
   const call={...options,activated:0,retried:0,destroyed:0};calls.push(call);if(failFactory)throw Error('Unavailable');
   return {activate(){call.activated++;},retry(){call.retried++;},destroy(){call.destroyed++;}};
@@ -38,7 +38,7 @@ await test('actual known-key choices keep authored titles, purposes and links al
   const row=f.rows[0],group=row.group;assert(group.checks.some(c=>c.kind==='finite-settings'));assert(group.checks.some(c=>c.kind!=='finite-settings'));
   choose(row,group.checks.at(-1));
   for(const check of group.checks){choose(row,check);assert.equal(row.get('[data-help-title]').textContent,check.title);assert.equal(row.get('[data-help-purpose]').textContent,check.motivation);assert.equal(row.get('[data-help-review]').href,'run.html#record='+group.record.id+'&followup='+check.id);assert(f.calls.some(call=>call.check.id===check.id&&call.record.id===group.record.id));}
-  assert(html.includes('Choose a prepared check and review what it will do before running it.'));assert(!html.includes('choose whether to save'));assert(html.includes('Choose a check</label>'));assert(!html.includes('Choose a rule</label>'));
+  assert(html.includes('Review a prepared check before running, or explore an existing result.'));assert(!html.includes('choose whether to save'));assert(html.includes('Choose a check</label>'));assert(!html.includes('Choose a rule</label>'));
   for(const {checks}of groups)assert(html.includes('<h3 data-help-title>'+checks[0].title+'</h3>'));
   const altered=structuredClone(records);altered[group.record.id].browser_followups[0].title='<img src=x onerror=bad> & title';const escaped=Help.render(altered);assert(escaped.includes('&lt;img src=x onerror=bad&gt; &amp; title'));assert(!escaped.includes('<img'));
   assert.equal(JSON.stringify(records),before,'Selecting a title cannot mutate authored sources');
